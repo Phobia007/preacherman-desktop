@@ -10,6 +10,7 @@ import type {
 import { bridgeSurfaceTokens, surfaceTokenStyle } from "../tokens/bridge";
 import { SurfaceFallback } from "../renderers/SurfaceFallback";
 import { SurfaceRenderer } from "../renderers/SurfaceRenderer";
+import { WorkspaceConversationSurface } from "../surfaces/workspace/WorkspaceConversationSurface";
 
 const supportedSurfaceTypes = new Set<SurfaceType>([
   "home",
@@ -21,6 +22,10 @@ const supportedSurfaceTypes = new Set<SurfaceType>([
   "monitor",
   "skill",
 ]);
+
+const builtInRenderers: Partial<Record<SurfaceType, ComponentType<SurfaceViewProps>>> = {
+  workspace: WorkspaceConversationSurface,
+};
 
 function isSurfaceType(value: string): value is SurfaceType {
   return supportedSurfaceTypes.has(value as SurfaceType);
@@ -61,7 +66,7 @@ export function createSurfaceSkinAdapter(options: CreateSurfaceSkinAdapterOption
         return { kind: "fallback", component: bindRenderer(SurfaceFallback, options) };
       }
       const surfaceType = manifest.surfaceType as SurfaceType;
-      const renderer = options.renderers?.[surfaceType] ?? SurfaceRenderer;
+      const renderer = options.renderers?.[surfaceType] ?? builtInRenderers[surfaceType] ?? SurfaceRenderer;
       return { kind: "renderer", component: bindRenderer(renderer, options) };
     },
     dispatch(command) {

@@ -1,0 +1,31 @@
+{
+  "productName": "Preacherman Desktop Demo",
+  "version": "0.1.0",
+  "identifier": "ai.preacherman.demo",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Preacherman Desktop Demo",
+        "width": 1440,
+        "height": 900,
+        "center": true,
+        "resizable": true,
+        "decorations": false,
+        "backgroundColor": "#F7F5F1"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false
+  }
+}

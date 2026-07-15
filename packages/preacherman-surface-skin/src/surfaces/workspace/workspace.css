@@ -1,0 +1,304 @@
+.pm-workspace {
+  position: relative;
+  width: 1440px;
+  height: 900px;
+  overflow: hidden;
+  color: #111111;
+  background: #f7f5f1;
+  font-family: Inter, sans-serif;
+  font-synthesis: none;
+  isolation: isolate;
+}
+
+.pm-workspace button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font-family: Inter, sans-serif;
+  cursor: pointer;
+}
+
+.pm-workspace button:focus-visible {
+  outline: 2px solid #111111;
+  outline-offset: 2px;
+}
+
+.pm-workspace__window-controls {
+  position: absolute;
+  inset: 0 auto auto 0;
+  z-index: 5;
+}
+
+.pm-workspace__window-control {
+  position: absolute;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+}
+
+.pm-workspace__window-control img {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+.pm-workspace__window-control--close {
+  left: 14px;
+}
+
+.pm-workspace__window-control--minimize {
+  left: 37px;
+}
+
+.pm-workspace__window-control--maximize {
+  left: 60px;
+}
+
+.pm-workspace__live-status {
+  position: absolute;
+  top: 19px;
+  left: 670px;
+  z-index: 5;
+  width: 104px;
+  height: 20px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.pm-workspace__live-status img {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+}
+
+.pm-workspace__live-status span {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  width: 90px;
+  white-space: nowrap;
+}
+
+.pm-workspace__account-area {
+  position: absolute;
+  inset: 0 0 auto auto;
+  z-index: 5;
+}
+
+.pm-workspace__bell {
+  position: absolute;
+  top: 24px;
+  right: 174px;
+  width: 18px;
+  height: 18px;
+}
+
+.pm-workspace__bell img {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.pm-workspace__account-divider {
+  position: absolute;
+  top: 17px;
+  right: 161px;
+  width: 1px;
+  height: 34px;
+  background: rgb(217 212 204 / 95%);
+}
+
+.pm-workspace__identity {
+  position: absolute;
+  top: 18px;
+  right: 11px;
+  width: 125px;
+  height: 32px;
+  text-align: left;
+}
+
+.pm-workspace__avatar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.pm-workspace__initials {
+  position: absolute;
+  top: 8px;
+  left: 5px;
+  width: 20px;
+  height: 14px;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 12px;
+  text-align: center;
+}
+
+.pm-workspace__name {
+  position: absolute;
+  top: 0;
+  left: 36px;
+  width: 104px;
+  height: 17px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.pm-workspace__role {
+  position: absolute;
+  top: 17px;
+  left: 36px;
+  width: 80px;
+  height: 15px;
+  color: #6e6962;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.pm-workspace__caret {
+  position: absolute;
+  top: 13px;
+  left: 107px;
+  width: 18px;
+  height: 17px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.pm-workspace__state-vessel,
+.pm-workspace__orbits {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pm-workspace__orbit {
+  position: absolute;
+  display: block;
+  max-width: none;
+  transform-origin: 0 0;
+}
+
+.pm-workspace__orbit--slow {
+  top: 348.7617px;
+  left: 402px;
+  width: 577.0176px;
+  height: 205px;
+  transform: rotate(-8deg);
+}
+
+.pm-workspace__orbit--secondary {
+  top: 375px;
+  left: 429.9431px;
+  width: 552px;
+  height: 142px;
+  transform: rotate(13deg);
+}
+
+.pm-workspace__human {
+  position: absolute;
+  top: 92px;
+  left: 542px;
+  display: block;
+  width: 296px;
+  height: 671px;
+  opacity: 0.42;
+}
+
+.pm-workspace__skill-halo {
+  position: absolute;
+  display: block;
+  width: 72px;
+  height: 72px;
+  max-width: none;
+}
+
+.pm-workspace__bottom-navigation {
+  position: absolute;
+  top: 850px;
+  left: 0;
+  z-index: 5;
+  width: 1440px;
+  height: 50px;
+  background: #fbfaf7;
+}
+
+.pm-workspace__bottom-divider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1440px;
+  height: 1px;
+  background: rgb(217 212 204 / 92%);
+}
+
+.pm-workspace__nav-item {
+  position: absolute;
+  top: 17px;
+  height: 18px;
+  color: #0d0d0d;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.pm-workspace__nav-item--home {
+  top: 7px;
+  left: 312px;
+  width: 112px;
+  height: 38px;
+  border: 1px solid rgb(230 222 204 / 55%);
+  border-radius: 30px;
+  background: rgb(255 255 255 / 82%);
+  box-shadow: 0 8px 20px -8px rgb(0 0 0 / 8%);
+  color: #000000;
+  font-weight: 600;
+}
+
+.pm-workspace__nav-item--workspace {
+  left: 446px;
+  width: 88px;
+}
+
+.pm-workspace__nav-item--lab {
+  left: 568px;
+  width: 80px;
+}
+
+.pm-workspace__nav-item--gallery {
+  left: 674px;
+  width: 104px;
+}
+
+.pm-workspace__nav-item--test {
+  left: 803px;
+  width: 92px;
+}
+
+.pm-workspace__nav-item--ledger {
+  left: 920px;
+  width: 104px;
+}
+
+.pm-workspace__nav-item--settings {
+  left: 1042px;
+  width: 86px;
+}

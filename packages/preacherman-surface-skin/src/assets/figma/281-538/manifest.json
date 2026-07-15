@@ -1,0 +1,175 @@
+{
+  "frame": {
+    "fileKey": "USA27mjAybt1oSFyhwwDaz",
+    "nodeId": "281:538",
+    "name": "Page 6 工作区 / conversation workspace",
+    "width": 1440,
+    "height": 900,
+    "topLevelCount": 47,
+    "descendantCount": 52
+  },
+  "hiddenTopLevelNodeIds": [
+    "281:539",
+    "287:710",
+    "287:711",
+    "281:541",
+    "281:542",
+    "281:543",
+    "281:549",
+    "281:553",
+    "281:580",
+    "281:586",
+    "281:590",
+    "281:595",
+    "281:600",
+    "281:605",
+    "281:609",
+    "281:620",
+    "281:621"
+  ],
+  "assets": [
+    {
+      "nodeId": "281:563",
+      "name": "State Vessel / orbit line slow rotation",
+      "localPath": "orbit-slow.svg",
+      "format": "svg",
+      "originalWidth": 577.018,
+      "originalHeight": 205,
+      "sha256": "d901b9e8483a685d9ee326441a5e1638ca0e94575037b4f2021ff1f2ba1ec0e6"
+    },
+    {
+      "nodeId": "281:564",
+      "name": "State Vessel / secondary orbit line",
+      "localPath": "orbit-secondary.svg",
+      "format": "svg",
+      "originalWidth": 552,
+      "originalHeight": 142,
+      "sha256": "6b697b55af3243a1148e61e75d0e93998a2b2cf09799bd72ef2371f4f0e941bd"
+    },
+    {
+      "nodeId": "281:565",
+      "name": "State Vessel / translucent human figure",
+      "localPath": "human.png",
+      "format": "png",
+      "originalWidth": 592,
+      "originalHeight": 1342,
+      "sha256": "8bc400f8b54603f2a655c25c3e24192bdb0d8feec4cf80d45d7d6a48d1169282"
+    },
+    {
+      "nodeId": "281:566",
+      "name": "State Vessel / skill halo Memory Core",
+      "localPath": "halo-memory.svg",
+      "format": "svg",
+      "originalWidth": 72,
+      "originalHeight": 72,
+      "sha256": "2792a1c912ee65779b4daaad13710e669993b6c6950eb9117a3582ebcf50dd16"
+    },
+    {
+      "nodeId": "281:567",
+      "name": "State Vessel / skill halo Code Copilot",
+      "localPath": "halo-skill.svg",
+      "format": "svg",
+      "originalWidth": 72,
+      "originalHeight": 72,
+      "sha256": "237e5d03b69803e8dfad97eec4a8b75fcb11244bfc66c408ce6c5761be0cadae"
+    },
+    {
+      "nodeId": "281:568",
+      "name": "State Vessel / skill halo Research Scout",
+      "localPath": "halo-skill.svg",
+      "format": "svg",
+      "originalWidth": 72,
+      "originalHeight": 72,
+      "sha256": "237e5d03b69803e8dfad97eec4a8b75fcb11244bfc66c408ce6c5761be0cadae"
+    },
+    {
+      "nodeId": "281:569",
+      "name": "State Vessel / skill halo Insight Miner",
+      "localPath": "halo-skill.svg",
+      "format": "svg",
+      "originalWidth": 72,
+      "originalHeight": 72,
+      "sha256": "237e5d03b69803e8dfad97eec4a8b75fcb11244bfc66c408ce6c5761be0cadae"
+    },
+    {
+      "nodeId": "295:25",
+      "name": "Synced Shell / top status dot",
+      "localPath": "status-dot.svg",
+      "format": "svg",
+      "originalWidth": 7,
+      "originalHeight": 7,
+      "sha256": "fed0f2ef6d51ad809033fea7275a922de95b9b062de9536411e452cb92d1b2df"
+    },
+    {
+      "nodeId": "281:546",
+      "name": "Window control / close",
+      "localPath": "window-close.svg",
+      "format": "svg",
+      "originalWidth": 14,
+      "originalHeight": 14,
+      "sha256": "5a10c34bff223b8bb3b7b1f80517cc9b608c66e3cf0eaeaafb0ad26809ae3141"
+    },
+    {
+      "nodeId": "281:547",
+      "name": "Window control / minimize",
+      "localPath": "window-minimize.svg",
+      "format": "svg",
+      "originalWidth": 14,
+      "originalHeight": 14,
+      "sha256": "e0a7c1852d0e6a57ecd6bf8e0c2082d3ae1af756daece5eb0ca4f1c400503d17"
+    },
+    {
+      "nodeId": "281:548",
+      "name": "Window control / maximize",
+      "localPath": "window-maximize.svg",
+      "format": "svg",
+      "originalWidth": 14,
+      "originalHeight": 14,
+      "sha256": "0cda0a2a9cc3504a07ef3fcf8cab91c971c101b2f5ed0666a5a8e07dc069b4ab"
+    },
+    {
+      "nodeId": "281:554",
+      "name": "Top Right / bell",
+      "localPath": "bell.svg",
+      "format": "svg",
+      "originalWidth": 18,
+      "originalHeight": 18,
+      "sha256": "4d9773d19c6509722711a3987d28a2599e3c636ebf10ac5e1734427540e878d7"
+    },
+    {
+      "nodeId": "281:558",
+      "name": "Top Right / PM avatar",
+      "localPath": "avatar.svg",
+      "format": "svg",
+      "originalWidth": 30,
+      "originalHeight": 30,
+      "sha256": "db6607d2e35bf45d9fb0f73e73d63bbb8a0125dda2080893d3b9c0fc8f01d9d3"
+    }
+  ],
+  "fonts": [
+    {
+      "family": "Inter",
+      "weight": 400,
+      "format": "woff2",
+      "localPath": "../../fonts/inter-latin-400-normal.woff2",
+      "sourcePackage": "@fontsource/inter@5.2.8",
+      "sha256": "8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc"
+    },
+    {
+      "family": "Inter",
+      "weight": 600,
+      "format": "woff2",
+      "localPath": "../../fonts/inter-latin-600-normal.woff2",
+      "sourcePackage": "@fontsource/inter@5.2.8",
+      "sha256": "f9a06e79cd3a2a20951c0f0e28f66dd0e6d3fda73911d640a2125c8fcb78f21a"
+    },
+    {
+      "family": "Inter",
+      "weight": 700,
+      "format": "woff2",
+      "localPath": "../../fonts/inter-latin-700-normal.woff2",
+      "sourcePackage": "@fontsource/inter@5.2.8",
+      "sha256": "6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491"
+    }
+  ]
+}
