@@ -37,8 +37,8 @@ test("TypeScript contracts regenerate deterministically and typecheck", async ()
   assert.match(events, /export interface EventPayloadMap/);
   assert.doesNotMatch(`${http}\n${events}`, /\bany\b/);
 
-  const tsc = join(contractsRoot, "node_modules/.bin/tsc");
+  const tsc = join(contractsRoot, "node_modules/typescript/bin/tsc");
   assert.equal(await exists(tsc), true, "pinned TypeScript compiler must be installed");
-  const result = spawnSync(tsc, ["--project", join(temporaryRoot, "tsconfig.json")], { encoding: "utf8" });
+  const result = spawnSync(process.execPath, [tsc, "--project", join(temporaryRoot, "tsconfig.json")], { encoding: "utf8" });
   assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
 });

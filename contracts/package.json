@@ -11,7 +11,7 @@
     "contracts:check": "npm run contracts:lint && npm run contracts:bundle && npm run contracts:registry && npm run contracts:http-examples && npm run contracts:event-check && npm run generate:typescript && npm run generated:typecheck && npm run contracts:provider && npm run contracts:compatibility && npm run contracts:secrets && node --test tests/*.test.mjs",
     "contracts:event-check": "npm run generate:events && node scripts/check-event-coverage.mjs && npm run contracts:event-examples",
     "contracts:event-examples": "node scripts/validate-event-fixtures.mjs",
-    "contracts:compatibility": "node scripts/check-breaking-changes.mjs ${BASELINE_OPENAPI:-dist/openapi.bundle.yaml} dist/openapi.bundle.yaml",
+    "contracts:compatibility": "node scripts/check-breaking-changes.mjs",
     "contracts:http-examples": "node scripts/validate-openapi-examples.mjs",
     "contracts:lint": "redocly lint core@v1 --config redocly.yaml",
     "contracts:registry": "node scripts/check-api-coverage.mjs --registry-only && node scripts/check-error-coverage.mjs --registry-only && node scripts/check-event-coverage.mjs --registry-only",
