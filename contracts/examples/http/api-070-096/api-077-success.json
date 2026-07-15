@@ -1,0 +1,32 @@
+{
+  "summary": "List Skill draft sources",
+  "value": {
+    "data": [
+      {
+        "source_id": "source_skill_examples",
+        "owner_type": "skill_draft",
+        "owner_id": "skd_research_scout_plus",
+        "upload_id": null,
+        "source_type": "url",
+        "title": "Public research examples",
+        "original_filename": null,
+        "uri": "https://docs.example.invalid/research/examples",
+        "mime_type": "text/html",
+        "size_bytes": null,
+        "scan_status": "clean",
+        "processing_status": "ready",
+        "parse_status": "ready",
+        "parse_error_code": null,
+        "metadata": {
+          "pages": 3
+        },
+        "created_at": "2026-07-15T09:00:00Z"
+      }
+    ],
+    "meta": {
+      "request_id": "req_task6_77",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/monitor/usage-changed.schema.json",
+  "title": "monitor.usage_changed",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "monitor.usage_changed"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "state"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "token_balance",
+            "token_limit",
+            "window"
+          ],
+          "properties": {
+            "token_balance": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "token_limit": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "window": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

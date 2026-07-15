@@ -1,0 +1,16 @@
+{
+  "summary": "Check Skill compatibility with a State draft",
+  "value": {
+    "data": {
+      "skill_version_id": "skv_pricing_v10",
+      "compatibility_status": "compatible",
+      "reasons": [
+        "Required permissions are available.",
+        "No capability conflicts detected."
+      ]
+    },
+    "meta": {
+      "request_id": "req_task5_63"
+    }
+  }
+}

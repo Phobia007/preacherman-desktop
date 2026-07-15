@@ -1,0 +1,11 @@
+{
+  "summary": "Sanitized success example for API-007",
+  "value": {
+    "data": {
+      "onboarding_status": "completed"
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

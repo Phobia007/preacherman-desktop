@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/common/operation-stage-changed.schema.json",
+  "title": "operation.stage_changed",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "operation.stage_changed"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "task_run",
+            "test_run",
+            "validation_run",
+            "import_job",
+            "export_job",
+            "response_run",
+            "generation_job"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "previous_stage",
+            "stage",
+            "stage_label"
+          ],
+          "properties": {
+            "previous_stage": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stage": {
+              "type": "string",
+              "minLength": 1
+            },
+            "stage_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

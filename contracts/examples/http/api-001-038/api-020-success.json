@@ -1,0 +1,21 @@
+{
+  "summary": "Sanitized success example for API-020",
+  "value": {
+    "data": [
+      {
+        "skill_version_id": "skv_example_001",
+        "name": "Research Scout",
+        "version": "v1.2",
+        "capabilities": [
+          "research"
+        ],
+        "compatibility_status": "compatible"
+      }
+    ],
+    "meta": {
+      "request_id": "req_example_001",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

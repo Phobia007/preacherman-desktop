@@ -1,0 +1,18 @@
+{
+  "summary": "Add a context tag to a task draft",
+  "value": {
+    "data": {
+      "context_tag": {
+        "context_tag_id": "ctag_board",
+        "owner_type": "task_draft",
+        "owner_id": "td_board_brief",
+        "label": "Strategy",
+        "value": "product_strategy"
+      },
+      "draft_revision": 9
+    },
+    "meta": {
+      "request_id": "req_task5_45"
+    }
+  }
+}

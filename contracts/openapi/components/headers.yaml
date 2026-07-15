@@ -1,0 +1,28 @@
+XRequestId:
+  description: Final request identifier generated or accepted by the gateway.
+  required: true
+  schema:
+    type: string
+    minLength: 8
+    maxLength: 128
+    pattern: ^req_[A-Za-z0-9_-]+$
+  example: req_example_001
+ETag:
+  description: Opaque revision validator for the returned resource.
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 128
+  example: '"revision_12"'
+RetryAfter:
+  description: Seconds the client should wait before retrying the request.
+  schema:
+    type: integer
+    minimum: 1
+  example: 30
+Location:
+  description: Relative URL of the created or accepted resource.
+  schema:
+    type: string
+    pattern: ^/api/v1/
+  example: /api/v1/operations/op_example_001

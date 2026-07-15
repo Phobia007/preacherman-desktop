@@ -1,0 +1,23 @@
+{
+  "summary": "Get a system validation review item",
+  "value": {
+    "data": {
+      "review_item_id": "review_citation_quality",
+      "validation_run_id": "vr_research_scout_01",
+      "category": "citation_quality",
+      "severity": "warning",
+      "title": "Strengthen two references",
+      "detail": "Two test cases need stronger primary references.",
+      "evidence": {
+        "test_case_ids": [
+          "tcase_12",
+          "tcase_18"
+        ]
+      },
+      "status": "open"
+    },
+    "meta": {
+      "request_id": "req_task6_89"
+    }
+  }
+}

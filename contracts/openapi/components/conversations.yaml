@@ -1,0 +1,208 @@
+Conversation:
+  type: object
+  additionalProperties: false
+  required:
+    - conversation_id
+    - state_id
+    - state_version_id
+    - title
+    - status
+    - message_count
+    - last_message_at
+    - created_at
+    - updated_at
+  properties:
+    conversation_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    title:
+      type: [string, 'null']
+      maxLength: 240
+    status:
+      type: string
+      enum: [active, archived, deleted]
+    message_count:
+      type: integer
+      minimum: 0
+    last_message_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+    updated_at:
+      $ref: ./common.yaml#/Timestamp
+Message:
+  type: object
+  additionalProperties: false
+  required:
+    - message_id
+    - conversation_id
+    - role
+    - content
+    - content_type
+    - attachment_source_ids
+    - status
+    - created_at
+  properties:
+    message_id:
+      $ref: ./common.yaml#/Id
+    client_message_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    conversation_id:
+      $ref: ./common.yaml#/Id
+    role:
+      type: string
+      enum: [user, state, system, tool]
+    content:
+      type: string
+      maxLength: 50000
+    content_type:
+      type: string
+      enum: [text, markdown, json]
+    attachment_source_ids:
+      type: array
+      maxItems: 50
+      items:
+        $ref: ./common.yaml#/Id
+    status:
+      type: string
+      enum: [pending, streaming, completed, failed]
+    response_run_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    token_usage:
+      type: [object, 'null']
+      additionalProperties: true
+    error_code:
+      type: [string, 'null']
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+    completed_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+CreateConversationRequest:
+  type: object
+  additionalProperties: false
+  required: [state_id, mode]
+  properties:
+    state_id:
+      $ref: ./common.yaml#/Id
+    mode:
+      type: string
+      enum: [free_chat, guided]
+CreateMessageRequest:
+  type: object
+  additionalProperties: false
+  required: [client_message_id, content, attachment_source_ids]
+  properties:
+    client_message_id:
+      $ref: ./common.yaml#/Id
+    content:
+      type: string
+      minLength: 1
+      maxLength: 50000
+    attachment_source_ids:
+      type: array
+      maxItems: 50
+      items:
+        $ref: ./common.yaml#/Id
+RetryConversationResponseRequest:
+  type: object
+  additionalProperties: false
+  required: [retry_mode]
+  properties:
+    retry_mode:
+      type: string
+      enum: [continue, restart]
+AudioTranscriptionRequest:
+  type: object
+  additionalProperties: false
+  required: [audio_asset_id]
+  properties:
+    audio_asset_id:
+      $ref: ./common.yaml#/Id
+    language:
+      type: [string, 'null']
+      maxLength: 35
+ConversationActionRequest:
+  type: object
+  additionalProperties: false
+  required: [action_type]
+  properties:
+    action_type:
+      type: string
+      enum: [summarize, brainstorm, help_me_plan]
+    prompt:
+      type: [string, 'null']
+      maxLength: 4000
+CreateTaskDraftFromConversationRequest:
+  type: object
+  additionalProperties: false
+  required: [selected_message_ids]
+  properties:
+    selected_message_ids:
+      type: array
+      minItems: 1
+      maxItems: 100
+      items:
+        $ref: ./common.yaml#/Id
+    goal_hint:
+      type: [string, 'null']
+      maxLength: 2000
+ConversationListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Conversation'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+ConversationResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/Conversation'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+MessageListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Message'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+ConversationMessageAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [user_message, response_run_id, operation]
+      properties:
+        user_message:
+          $ref: '#/Message'
+        response_run_id:
+          $ref: ./common.yaml#/Id
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta

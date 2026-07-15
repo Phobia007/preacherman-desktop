@@ -1,0 +1,37 @@
+{
+  "name": "preacherman-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "contracts:bundle": "redocly bundle core@v1 --config redocly.yaml --output dist/openapi.bundle.yaml",
+    "contracts:check": "npm run contracts:lint && npm run contracts:bundle && npm run contracts:registry && npm run contracts:http-examples && npm run contracts:event-check && npm run generate:typescript && npm run generated:typecheck && npm run contracts:provider && npm run contracts:compatibility && npm run contracts:secrets && node --test tests/*.test.mjs",
+    "contracts:event-check": "npm run generate:events && node scripts/check-event-coverage.mjs && npm run contracts:event-examples",
+    "contracts:event-examples": "node scripts/validate-event-fixtures.mjs",
+    "contracts:compatibility": "node scripts/check-breaking-changes.mjs ${BASELINE_OPENAPI:-dist/openapi.bundle.yaml} dist/openapi.bundle.yaml",
+    "contracts:http-examples": "node scripts/validate-openapi-examples.mjs",
+    "contracts:lint": "redocly lint core@v1 --config redocly.yaml",
+    "contracts:registry": "node scripts/check-api-coverage.mjs --registry-only && node scripts/check-error-coverage.mjs --registry-only && node scripts/check-event-coverage.mjs --registry-only",
+    "contracts:provider": "node scripts/validate-provider-fixtures.mjs examples/provider/samples",
+    "contracts:secrets": "node scripts/scan-contract-secrets.mjs",
+    "generate:events": "node scripts/generate-event-contracts.mjs",
+    "generate:typescript": "node scripts/generate-typescript.mjs",
+    "generated:typecheck": "tsc --project generated/typescript/tsconfig.json",
+    "mock:smoke": "node --test tests/mock-server.test.mjs",
+    "mock:start": "node scripts/mock-server.mjs",
+    "mock:sse": "node scripts/sse-fixture-server.mjs",
+    "test:examples": "node --test tests/examples.test.mjs",
+    "test:root": "node --test tests/api-registry.test.mjs",
+    "test:registry": "node --test tests/registry.test.mjs"
+  },
+  "devDependencies": {
+    "@redocly/cli": "2.39.0",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "typescript": "5.8.3",
+    "yaml": "2.9.0"
+  }
+}

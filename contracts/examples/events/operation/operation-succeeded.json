@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_operation_succeeded_01",
+  "stream_id": "task_run:task_run_01",
+  "sequence": 1,
+  "event_type": "operation.succeeded",
+  "schema_version": 1,
+  "resource_type": "task_run",
+  "resource_id": "task_run_01",
+  "operation_id": "task_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "succeeded",
+  "domain_status": "running",
+  "stage": "completed",
+  "progress": 1,
+  "payload": {
+    "result_url": "/api/v1/task-runs/task_run_01/result",
+    "summary": "Operation completed"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

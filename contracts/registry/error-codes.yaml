@@ -1,0 +1,186 @@
+AUTH_INVALID_CREDENTIALS:
+  http_status: [401]
+  retryable_default: false
+  details_schema: null
+  frontend_action: reenter_password
+  sensitive_details: false
+AUTH_SESSION_EXPIRED:
+  http_status: [401]
+  retryable_default: false
+  details_schema: null
+  frontend_action: sign_in
+  sensitive_details: false
+RESOURCE_FORBIDDEN:
+  http_status: [403]
+  retryable_default: false
+  details_schema: null
+  frontend_action: go_back
+  sensitive_details: false
+RESOURCE_NOT_FOUND:
+  http_status: [404]
+  retryable_default: false
+  details_schema: null
+  frontend_action: go_back
+  sensitive_details: false
+REVISION_CONFLICT:
+  http_status: [412]
+  retryable_default: false
+  details_schema: RevisionConflictDetails
+  frontend_action: review_latest
+  sensitive_details: false
+IDEMPOTENCY_CONFLICT:
+  http_status: [409]
+  retryable_default: false
+  details_schema: IdempotencyConflictDetails
+  frontend_action: refresh_status
+  sensitive_details: false
+VALIDATION_FAILED:
+  http_status: [422]
+  retryable_default: false
+  details_schema: ValidationErrorDetails
+  frontend_action: correct_fields
+  sensitive_details: false
+INSUFFICIENT_QUOTA:
+  http_status: [422, 429]
+  retryable_default: false
+  details_schema: QuotaDetails
+  frontend_action: manage_quota
+  sensitive_details: false
+SOURCE_PARSE_FAILED:
+  http_status: [422]
+  retryable_default: true
+  details_schema: SourceFailureDetails
+  frontend_action: retry_source
+  sensitive_details: false
+SOURCE_UNSAFE:
+  http_status: [422]
+  retryable_default: false
+  details_schema: SourceSafetyDetails
+  frontend_action: remove_source
+  sensitive_details: true
+UPLOAD_TOO_LARGE:
+  http_status: [413]
+  retryable_default: false
+  details_schema: UploadLimitDetails
+  frontend_action: replace_file
+  sensitive_details: false
+UPLOAD_UNSUPPORTED_TYPE:
+  http_status: [415]
+  retryable_default: false
+  details_schema: UploadTypeDetails
+  frontend_action: replace_file
+  sensitive_details: false
+UPLOAD_EXPIRED:
+  http_status: [410]
+  retryable_default: true
+  details_schema: UploadExpiryDetails
+  frontend_action: upload_again
+  sensitive_details: false
+UPLOAD_INCOMPLETE:
+  http_status: [409]
+  retryable_default: true
+  details_schema: UploadProgressDetails
+  frontend_action: resume_upload
+  sensitive_details: false
+UPLOAD_CHECKSUM_MISMATCH:
+  http_status: [422]
+  retryable_default: true
+  details_schema: UploadChecksumDetails
+  frontend_action: upload_again
+  sensitive_details: false
+MALWARE_DETECTED:
+  http_status: [422]
+  retryable_default: false
+  details_schema: MalwareDetectionDetails
+  frontend_action: remove_file
+  sensitive_details: true
+URL_FETCH_BLOCKED:
+  http_status: [422]
+  retryable_default: false
+  details_schema: UrlFetchBlockDetails
+  frontend_action: replace_link
+  sensitive_details: true
+PREVIEW_UNAVAILABLE:
+  http_status: [422]
+  retryable_default: false
+  details_schema: PreviewDetails
+  frontend_action: download_file
+  sensitive_details: false
+DOWNLOAD_URL_EXPIRED:
+  http_status: [410]
+  retryable_default: true
+  details_schema: DownloadExpiryDetails
+  frontend_action: generate_download_link
+  sensitive_details: false
+SHARE_LINK_EXPIRED:
+  http_status: [410]
+  retryable_default: false
+  details_schema: null
+  frontend_action: go_back
+  sensitive_details: false
+SHARE_LINK_REVOKED:
+  http_status: [404, 410]
+  retryable_default: false
+  details_schema: null
+  frontend_action: go_back
+  sensitive_details: false
+RUN_FAILED:
+  http_status: [422, 500]
+  retryable_default: true
+  details_schema: RunFailureDetails
+  frontend_action: retry_run
+  sensitive_details: true
+RUN_NOT_RETRYABLE:
+  http_status: [409]
+  retryable_default: false
+  details_schema: RunFailureDetails
+  frontend_action: create_new_run
+  sensitive_details: false
+VERSION_CONFLICT:
+  http_status: [409]
+  retryable_default: false
+  details_schema: VersionConflictDetails
+  frontend_action: refresh_version
+  sensitive_details: false
+ALREADY_INSTALLED:
+  http_status: [409]
+  retryable_default: false
+  details_schema: InstallationDetails
+  frontend_action: open_in_lab
+  sensitive_details: false
+STATE_NOT_ACTIVATABLE:
+  http_status: [422]
+  retryable_default: false
+  details_schema: ActivationRequirementDetails
+  frontend_action: view_requirements
+  sensitive_details: false
+EXPORT_FORMAT_UNAVAILABLE:
+  http_status: [422]
+  retryable_default: false
+  details_schema: ExportFormatDetails
+  frontend_action: select_export_format
+  sensitive_details: false
+EXPORT_FAILED:
+  http_status: [422, 500]
+  retryable_default: true
+  details_schema: ExportFailureDetails
+  frontend_action: retry_export
+  sensitive_details: false
+RATE_LIMITED:
+  http_status: [429]
+  retryable_default: true
+  details_schema: RateLimitDetails
+  frontend_action: wait_and_retry
+  sensitive_details: false
+EVENT_CURSOR_EXPIRED:
+  http_status: [409]
+  retryable_default: true
+  details_schema: EventCursorDetails
+  frontend_action: refresh_latest_state
+  sensitive_details: false
+DEPENDENCY_UNAVAILABLE:
+  http_status: [503]
+  retryable_default: true
+  details_schema: DependencyDetails
+  frontend_action: retry_request
+  sensitive_details: false

@@ -1,0 +1,24 @@
+{
+  "summary": "Get a Skill version diff",
+  "value": {
+    "data": {
+      "skill_version_id": "skv_research_scout_v13",
+      "base_version_id": "skv_research_scout_v12",
+      "changes": [
+        {
+          "section": "capabilities",
+          "change_type": "added",
+          "summary": "Added structured market insight extraction."
+        },
+        {
+          "section": "guardrails",
+          "change_type": "modified",
+          "summary": "Strengthened source citation requirements."
+        }
+      ]
+    },
+    "meta": {
+      "request_id": "req_task6_95"
+    }
+  }
+}

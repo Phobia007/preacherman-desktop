@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/event.schema.json",
+  "title": "Preacherman Event",
+  "oneOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-queued.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-started.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-stage-changed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-progress.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-log.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/artifact-created.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-succeeded.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-failed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-cancelled.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/common/operation-timed-out.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/task/stage-started.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/task/stage-completed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/task/stage-skipped.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/task/checkpoint-saved.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/task/metric-updated.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/test/stage-started.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/test/stage-completed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/test/metric-updated.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/test/takeaway-created.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/test/result-created.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/validation/test-started.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/validation/test-completed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/validation/counters-updated.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/validation/metric-updated.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/validation/review-item-created.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/validation/summary-created.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/import/source-read.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/import/check-started.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/import/check-completed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/import/capability-detected.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/import/readiness-updated.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/import/ready.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/import/needs-review.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/export/render-started.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/export/file-processed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/export/package-created.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/export/file-ready.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/export/failed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/reply/started.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/reply/delta.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/reply/citation-added.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/reply/tool-status.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/reply/completed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/reply/failed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/monitor/snapshot.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/monitor/health-changed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/monitor/usage-changed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/monitor/api-changed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/monitor/activity-created.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/monitor/log.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/monitor/connection-state.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/runtime/connection-changed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/runtime/autosave-started.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/runtime/autosave-succeeded.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/runtime/autosave-failed.schema.json"
+    },
+    {
+      "$ref": "https://schemas.preacherman.ai/events/runtime/revision-changed.schema.json"
+    }
+  ]
+}

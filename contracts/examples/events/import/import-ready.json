@@ -1,0 +1,19 @@
+{
+  "event_id": "evt_import_ready_01",
+  "stream_id": "import_job:import_job_01",
+  "sequence": 1,
+  "event_type": "import.ready",
+  "schema_version": 1,
+  "resource_type": "import_job",
+  "resource_id": "import_job_01",
+  "operation_id": "import_job_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "succeeded",
+  "domain_status": "ready",
+  "stage": "ready",
+  "progress": 1,
+  "payload": {
+    "convert_to_draft_url": "/api/v1/import-jobs/import_job_01/skill-draft"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

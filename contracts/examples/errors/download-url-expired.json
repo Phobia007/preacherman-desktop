@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "DOWNLOAD_URL_EXPIRED",
+    "message": "This download link has expired.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "artifact_id": "art_example_001"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

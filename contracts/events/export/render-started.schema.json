@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/export/render-started.schema.json",
+  "title": "export.render_started",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "export.render_started"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "export_job"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "format"
+          ],
+          "properties": {
+            "format": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "UPLOAD_EXPIRED",
+    "message": "The upload session expired.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "upload_id": "upl_example_001"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

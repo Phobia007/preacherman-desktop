@@ -1,0 +1,21 @@
+{
+  "event_id": "evt_validation_test_completed_01",
+  "stream_id": "validation_run:validation_run_01",
+  "sequence": 1,
+  "event_type": "validation.test_completed",
+  "schema_version": 1,
+  "resource_type": "validation_run",
+  "resource_id": "validation_run_01",
+  "operation_id": "validation_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "run_tests",
+  "progress": 0.3,
+  "payload": {
+    "test_case_id": "test_case_01",
+    "result": "pass",
+    "duration_ms": 840
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

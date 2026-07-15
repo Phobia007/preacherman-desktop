@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/runtime/revision-changed.schema.json",
+  "title": "runtime.revision_changed",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "runtime.revision_changed"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "runtime"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "resource_type",
+            "resource_id",
+            "revision",
+            "actor_type"
+          ],
+          "properties": {
+            "resource_type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "resource_id": {
+              "type": "string",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "actor_type": {
+              "enum": [
+                "user",
+                "system"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

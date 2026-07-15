@@ -1,0 +1,16 @@
+{
+  "summary": "Sanitized success example for API-033",
+  "value": {
+    "data": {
+      "task_draft_id": "td_example_001",
+      "state_id": "st_example_001",
+      "conversation_id": "con_example_001",
+      "goal": "Create an example board brief.",
+      "status": "editing",
+      "revision": 1
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

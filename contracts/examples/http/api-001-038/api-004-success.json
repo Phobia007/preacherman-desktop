@@ -1,0 +1,39 @@
+{
+  "summary": "Sanitized success example for API-004",
+  "value": {
+    "data": {
+      "session": {
+        "session_id": "ses_example_001",
+        "user_id": "usr_example_001",
+        "expires_at": "2026-07-14T18:21:32Z",
+        "revoked_at": null,
+        "created_at": "2026-07-14T10:21:32Z"
+      },
+      "user": {
+        "user_id": "usr_example_001",
+        "email": "user@example.invalid",
+        "email_verified": true,
+        "account_status": "active",
+        "onboarding_status": "completed",
+        "last_login_at": "2026-07-14T10:21:32Z",
+        "created_at": "2026-07-14T10:21:32Z",
+        "updated_at": "2026-07-14T10:21:32Z"
+      },
+      "profile": {
+        "user_id": "usr_example_001",
+        "display_name": "Example User",
+        "avatar_asset_id": null,
+        "role_label": "Founder",
+        "locale": "zh-CN",
+        "timezone": "Asia/Shanghai",
+        "preferences": {
+          "theme": "system"
+        },
+        "revision": 12
+      }
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "summary": "Sanitized success example for API-009",
+  "value": {
+    "data": {
+      "notification_id": "ntf_example_001",
+      "type": "task_completed",
+      "title": "Task completed",
+      "body": "Your example task is ready.",
+      "resource_type": "task_run",
+      "resource_id": "tr_example_001",
+      "read_at": "2026-07-14T10:21:32Z",
+      "created_at": "2026-07-14T10:21:32Z"
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

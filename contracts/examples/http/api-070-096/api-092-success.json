@@ -1,0 +1,17 @@
+{
+  "summary": "Update Skill publish settings",
+  "value": {
+    "data": {
+      "publish_settings": {
+        "mount_mode": "add_to_state_draft",
+        "destination": {
+          "state_draft_id": "std_strategy_adjustment"
+        }
+      },
+      "draft_revision": 9
+    },
+    "meta": {
+      "request_id": "req_task6_92"
+    }
+  }
+}

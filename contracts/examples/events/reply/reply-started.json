@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_reply_started_01",
+  "stream_id": "conversation:conversation_01",
+  "sequence": 1,
+  "event_type": "reply.started",
+  "schema_version": 1,
+  "resource_type": "conversation",
+  "resource_id": "conversation_01",
+  "operation_id": "response_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "response",
+  "progress": null,
+  "payload": {
+    "response_run_id": "response_run_01",
+    "assistant_message_id": "message_assistant_01"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

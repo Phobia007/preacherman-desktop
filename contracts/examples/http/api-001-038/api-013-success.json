@@ -1,0 +1,21 @@
+{
+  "summary": "Sanitized success example for API-013",
+  "value": {
+    "data": {
+      "snapshot_id": "shs_example_001",
+      "state_id": "st_example_001",
+      "state_version_id": "sv_example_001",
+      "health_status": "excellent",
+      "token_balance": 314580,
+      "token_limit": 500000,
+      "active_api_count": 3,
+      "api_limit": 5,
+      "error_rate": 0.01,
+      "latency_ms": 1020,
+      "checked_at": "2026-07-14T10:21:32Z"
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

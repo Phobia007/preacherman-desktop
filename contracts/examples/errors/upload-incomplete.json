@@ -1,0 +1,15 @@
+{
+  "error": {
+    "code": "UPLOAD_INCOMPLETE",
+    "message": "The upload did not finish.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "uploaded_parts": 2,
+      "expected_parts": 3
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

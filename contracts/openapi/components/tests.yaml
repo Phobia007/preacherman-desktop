@@ -1,0 +1,517 @@
+TestDraft:
+  type: object
+  additionalProperties: false
+  oneOf:
+    - required: [state_version_id, state_draft_id]
+      properties:
+        state_version_id:
+          $ref: ./common.yaml#/Id
+        state_draft_id:
+          type: 'null'
+    - required: [state_version_id, state_draft_id]
+      properties:
+        state_version_id:
+          type: 'null'
+        state_draft_id:
+          $ref: ./common.yaml#/Id
+  required:
+    - test_draft_id
+    - state_id
+    - state_version_id
+    - state_draft_id
+    - task
+    - source_ids
+    - mode
+    - settings
+    - revision
+  properties:
+    test_draft_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    state_draft_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    task:
+      type: string
+      maxLength: 20000
+    source_ids:
+      type: array
+      maxItems: 100
+      items:
+        $ref: ./common.yaml#/Id
+    mode:
+      type: string
+      enum: [quick, deep, stress]
+    settings:
+      type: object
+      additionalProperties: true
+    revision:
+      $ref: ./common.yaml#/Revision
+TestRunInputSnapshot:
+  type: object
+  additionalProperties: false
+  readOnly: true
+  required: [task, source_ids, mode, settings, test_draft_revision]
+  properties:
+    task:
+      type: string
+      maxLength: 20000
+    source_ids:
+      type: array
+      maxItems: 100
+      items:
+        $ref: ./common.yaml#/Id
+    mode:
+      type: string
+      enum: [quick, deep, stress]
+    settings:
+      type: object
+      additionalProperties: true
+    test_draft_revision:
+      $ref: ./common.yaml#/Revision
+TestRun:
+  type: object
+  additionalProperties: false
+  required:
+    - test_run_id
+    - test_draft_id
+    - previous_test_run_id
+    - state_id
+    - state_version_id
+    - state_draft_id
+    - input_snapshot
+    - mode
+    - status
+    - current_stage
+    - progress
+    - result_id
+    - error_code
+    - started_at
+    - completed_at
+  properties:
+    test_run_id:
+      $ref: ./common.yaml#/Id
+    test_draft_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    previous_test_run_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    state_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    state_draft_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    input_snapshot:
+      $ref: '#/TestRunInputSnapshot'
+    mode:
+      type: string
+      enum: [quick, deep, stress]
+    status:
+      type: string
+      enum: [queued, running, succeeded, failed, cancelled, timed_out]
+    current_stage:
+      type: [string, 'null']
+      enum: [understand, plan, research, synthesize, validate, output, null]
+    progress:
+      type: number
+      minimum: 0
+      maximum: 1
+    result_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    error_code:
+      type: [string, 'null']
+      maxLength: 80
+    started_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    completed_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+TestTakeaway:
+  type: object
+  additionalProperties: false
+  required: [title, detail]
+  properties:
+    title:
+      type: string
+      minLength: 1
+      maxLength: 240
+    detail:
+      type: string
+      maxLength: 2000
+TestImprovementItem:
+  type: object
+  additionalProperties: false
+  required: [code, title, detail, severity]
+  properties:
+    code:
+      type: string
+      pattern: ^[A-Z][A-Z0-9_]+$
+      maxLength: 80
+    title:
+      type: string
+      minLength: 1
+      maxLength: 240
+    detail:
+      type: string
+      maxLength: 2000
+    severity:
+      type: string
+      enum: [suggestion, review, blocking]
+TestResult:
+  type: object
+  additionalProperties: false
+  description: Test output only. A successful result never publishes or activates a State.
+  required:
+    - test_result_id
+    - test_run_id
+    - overall_score
+    - accuracy
+    - usefulness
+    - clarity
+    - risk_level
+    - outcome
+    - key_takeaways
+    - improvement_items
+    - artifact_ids
+    - duration_ms
+    - created_at
+  properties:
+    test_result_id:
+      $ref: ./common.yaml#/Id
+    test_run_id:
+      $ref: ./common.yaml#/Id
+    overall_score:
+      type: number
+      minimum: 0
+      maximum: 100
+    accuracy:
+      type: number
+      minimum: 0
+      maximum: 100
+    usefulness:
+      type: number
+      minimum: 0
+      maximum: 100
+    clarity:
+      type: number
+      minimum: 0
+      maximum: 100
+    risk_level:
+      type: string
+      enum: [low, medium, high]
+    outcome:
+      type: string
+      enum: [pass, review, fail]
+    key_takeaways:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/TestTakeaway'
+    improvement_items:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/TestImprovementItem'
+    artifact_ids:
+      type: array
+      maxItems: 100
+      items:
+        $ref: ./common.yaml#/Id
+    duration_ms:
+      type: integer
+      minimum: 0
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+ArtifactPreview:
+  type: object
+  additionalProperties: false
+  required: [artifact_id, preview_status, preview_type, preview_url, open_url, expires_at]
+  properties:
+    artifact_id:
+      $ref: ./common.yaml#/Id
+    preview_status:
+      type: string
+      enum: [pending, ready, failed]
+    preview_type:
+      type: string
+      enum: [document, image, data, none]
+    preview_url:
+      type: [string, 'null']
+      format: uri
+      maxLength: 2048
+    open_url:
+      type: [string, 'null']
+      format: uri
+      maxLength: 2048
+    expires_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+WorkspaceItemReference:
+  type: object
+  additionalProperties: false
+  required: [workspace_item_id, workspace_id, parent_item_id, artifact_id, name, created_at]
+  properties:
+    workspace_item_id:
+      $ref: ./common.yaml#/Id
+    workspace_id:
+      $ref: ./common.yaml#/Id
+    parent_item_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    artifact_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 240
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+CreateTestDraftRequest:
+  type: object
+  additionalProperties: false
+  oneOf:
+    - required: [state_version_id]
+      properties:
+        state_version_id:
+          $ref: ./common.yaml#/Id
+        state_draft_id:
+          type: 'null'
+    - required: [state_draft_id]
+      properties:
+        state_version_id:
+          type: 'null'
+        state_draft_id:
+          $ref: ./common.yaml#/Id
+  required: [state_id, mode]
+  properties:
+    state_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    state_draft_id:
+      $ref: ./common.yaml#/Id
+    task:
+      type: string
+      minLength: 1
+      maxLength: 20000
+    mode:
+      type: string
+      enum: [quick, deep, stress]
+    settings:
+      type: object
+      additionalProperties: true
+AddTestDraftSourceRequest:
+  type: object
+  additionalProperties: false
+  required: [source_type, title, test_draft_revision]
+  properties:
+    source_type:
+      type: string
+      enum: [file, text, url, data_connector]
+    title:
+      type: string
+      minLength: 1
+      maxLength: 240
+    upload_id:
+      $ref: ./common.yaml#/Id
+    text:
+      type: string
+      maxLength: 100000
+    uri:
+      type: string
+      format: uri
+      maxLength: 2048
+    test_draft_revision:
+      $ref: ./common.yaml#/Revision
+CreateTestRunRequest:
+  type: object
+  additionalProperties: false
+  required: [test_draft_id, test_draft_revision]
+  properties:
+    test_draft_id:
+      $ref: ./common.yaml#/Id
+    test_draft_revision:
+      $ref: ./common.yaml#/Revision
+    previous_test_run_id:
+      $ref: ./common.yaml#/Id
+CreateTestStateAdjustmentDraftRequest:
+  type: object
+  additionalProperties: false
+  required: [selected_improvement_codes]
+  properties:
+    selected_improvement_codes:
+      type: array
+      minItems: 1
+      maxItems: 100
+      uniqueItems: true
+      items:
+        type: string
+        maxLength: 80
+CreateWorkspaceItemFromArtifactRequest:
+  type: object
+  additionalProperties: false
+  required: [destination, name]
+  properties:
+    destination:
+      type: object
+      additionalProperties: false
+      description: Stable target selected by the user in the save-location picker.
+      required: [workspace_id, parent_item_id]
+      properties:
+        workspace_id:
+          $ref: ./common.yaml#/Id
+        parent_item_id:
+          oneOf:
+            - $ref: ./common.yaml#/Id
+            - type: 'null'
+    name:
+      type: string
+      minLength: 1
+      maxLength: 240
+TestDraftResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/TestDraft'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+TestDraftDetailResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [test_draft, recent_test_runs]
+      properties:
+        test_draft:
+          $ref: '#/TestDraft'
+        recent_test_runs:
+          type: array
+          maxItems: 20
+          items:
+            $ref: '#/TestRun'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+TestDraftSourceAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [source, test_draft_revision, operation]
+      properties:
+        source:
+          $ref: ./tasks.yaml#/Source
+        test_draft_revision:
+          $ref: ./common.yaml#/Revision
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+TestRunAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [test_run, operation]
+      properties:
+        test_run:
+          $ref: '#/TestRun'
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+TestRunResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/TestRun'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+TestResultResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [test_result, artifacts]
+      properties:
+        test_result:
+          $ref: '#/TestResult'
+        artifacts:
+          type: array
+          items:
+            $ref: ./tasks.yaml#/Artifact
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ArtifactPreviewResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/ArtifactPreview'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateAdjustmentDraftResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [state_draft, recommendations]
+      properties:
+        state_draft:
+          $ref: ./states.yaml#/StateDraft
+        recommendations:
+          type: array
+          maxItems: 100
+          items:
+            $ref: ./states.yaml#/StateRecommendation
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+WorkspaceItemResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/WorkspaceItemReference'
+    meta:
+      $ref: ./common.yaml#/RequestMeta

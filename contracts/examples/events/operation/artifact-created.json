@@ -1,0 +1,22 @@
+{
+  "event_id": "evt_artifact_created_01",
+  "stream_id": "task_run:task_run_01",
+  "sequence": 1,
+  "event_type": "artifact.created",
+  "schema_version": 1,
+  "resource_type": "task_run",
+  "resource_id": "task_run_01",
+  "operation_id": "task_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "output",
+  "progress": 0.94,
+  "payload": {
+    "artifact_id": "artifact_01",
+    "artifact_type": "document",
+    "name": "Board Brief",
+    "mime_type": "text/markdown"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

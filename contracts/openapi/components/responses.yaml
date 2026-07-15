@@ -1,0 +1,316 @@
+NoContent:
+  description: The operation completed successfully and has no response body.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+OperationAccepted:
+  description: The asynchronous operation was accepted.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+    Location:
+      $ref: ./headers.yaml#/Location
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/OperationAcceptedResponse
+Error:
+  description: The request failed with a stable application error code.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+BadRequest:
+  description: The request structure is invalid.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: VALIDATION_FAILED
+          message: Check the highlighted fields.
+          field_errors: []
+          retryable: false
+          details: null
+        meta:
+          request_id: req_example_001
+InvalidCredentials:
+  description: The supplied credentials are not valid.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: AUTH_INVALID_CREDENTIALS
+          message: Email or password is incorrect.
+          field_errors: []
+          retryable: false
+          details: null
+        meta:
+          request_id: req_example_001
+Unauthorized:
+  description: Authentication is missing or expired.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: AUTH_SESSION_EXPIRED
+          message: Your session has expired.
+          field_errors: []
+          retryable: false
+          details: null
+        meta:
+          request_id: req_example_001
+Forbidden:
+  description: The authenticated user cannot perform this action.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: RESOURCE_FORBIDDEN
+          message: You do not have access to this.
+          field_errors: []
+          retryable: false
+          details: null
+        meta:
+          request_id: req_example_001
+NotFound:
+  description: The resource does not exist or is not visible to this user.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: RESOURCE_NOT_FOUND
+          message: This item is no longer available.
+          field_errors: []
+          retryable: false
+          details: null
+        meta:
+          request_id: req_example_001
+Conflict:
+  description: The action conflicts with current resource or idempotency state.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: IDEMPOTENCY_CONFLICT
+          message: This action could not be safely repeated.
+          field_errors: []
+          retryable: false
+          details:
+            existing_operation_id: op_example_001
+        meta:
+          request_id: req_example_001
+Gone:
+  description: The requested temporary resource has expired or was revoked.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: SHARE_LINK_EXPIRED
+          message: This shared link has expired.
+          field_errors: []
+          retryable: false
+          details: null
+        meta:
+          request_id: req_example_001
+EventCursorExpired:
+  description: The requested event replay cursor is outside the retained window.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: EVENT_CURSOR_EXPIRED
+          message: The event replay window has expired. Refresh the run status.
+          field_errors: []
+          retryable: false
+          details:
+            recovery: refresh_status
+        meta:
+          request_id: req_example_001
+DownloadUrlExpired:
+  description: The temporary artifact download URL has expired.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: DOWNLOAD_URL_EXPIRED
+          message: This download link has expired. Request a new one.
+          field_errors: []
+          retryable: true
+          details: null
+        meta:
+          request_id: req_example_001
+PreconditionFailed:
+  description: The supplied revision no longer matches the resource.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: REVISION_CONFLICT
+          message: This draft changed in another session.
+          field_errors: []
+          retryable: false
+          details:
+            current_revision: 12
+        meta:
+          request_id: req_example_001
+PayloadTooLarge:
+  description: The supplied upload exceeds the configured size limit.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: UPLOAD_TOO_LARGE
+          message: This file is larger than the allowed limit.
+          field_errors: []
+          retryable: false
+          details:
+            maximum_size_bytes: 10485760
+        meta:
+          request_id: req_example_001
+UnsupportedMediaType:
+  description: The supplied media type is not supported.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: UPLOAD_UNSUPPORTED_TYPE
+          message: This file type is not supported here.
+          field_errors: []
+          retryable: false
+          details: null
+        meta:
+          request_id: req_example_001
+UnprocessableEntity:
+  description: The request is structurally valid but fails business validation.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: VALIDATION_FAILED
+          message: Check the highlighted fields.
+          field_errors:
+            - field: goal
+              code: REQUIRED
+              message: Goal is required.
+          retryable: false
+          details:
+            invalid_field_count: 1
+        meta:
+          request_id: req_example_001
+TooManyRequests:
+  description: The request was rate limited or exceeded a current quota.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+    Retry-After:
+      $ref: ./headers.yaml#/RetryAfter
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+InternalServerError:
+  description: The operation failed unexpectedly.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: RUN_FAILED
+          message: The run stopped before it finished.
+          field_errors: []
+          retryable: true
+          details:
+            failed_stage: output
+        meta:
+          request_id: req_example_001
+ServiceUnavailable:
+  description: A required dependency is temporarily unavailable.
+  headers:
+    X-Request-ID:
+      $ref: ./headers.yaml#/XRequestId
+  content:
+    application/json:
+      schema:
+        $ref: ./common.yaml#/ErrorResponse
+      example:
+        error:
+          code: DEPENDENCY_UNAVAILABLE
+          message: A required service is temporarily unavailable.
+          field_errors: []
+          retryable: true
+          details:
+            dependency_category: model_provider
+        meta:
+          request_id: req_example_001

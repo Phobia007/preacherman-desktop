@@ -1,0 +1,53 @@
+{
+  "summary": "Get the State Market",
+  "value": {
+    "data": {
+      "featured": [
+        {
+          "state_id": "sta_strategy_operator",
+          "state_version_id": "stv_strategy_121",
+          "name": "Strategy Operator",
+          "description": "Turns ambiguity into executable strategy.",
+          "category": "strategy",
+          "version": "1.2.1",
+          "builder_name": "Preacherman",
+          "verified": true,
+          "install_count": 18200,
+          "tags": [
+            "strategy",
+            "planning",
+            "research"
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": "sta_strategy_operator",
+          "state_version_id": "stv_strategy_121",
+          "name": "Strategy Operator",
+          "description": "Turns ambiguity into executable strategy.",
+          "category": "strategy",
+          "version": "1.2.1",
+          "builder_name": "Preacherman",
+          "verified": true,
+          "install_count": 18200,
+          "tags": [
+            "strategy",
+            "planning",
+            "research"
+          ]
+        }
+      ],
+      "categories": [
+        "strategy",
+        "research"
+      ],
+      "installations": []
+    },
+    "meta": {
+      "request_id": "req_task7_107",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

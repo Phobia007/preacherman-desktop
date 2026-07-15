@@ -1,0 +1,8 @@
+node_modules/
+packages/preacherman-surface-skin/dist/
+apps/*/dist/
+apps/*/node_modules/
+apps/*/src-tauri/target/
+*.log
+.DS_Store
+Thumbs.db

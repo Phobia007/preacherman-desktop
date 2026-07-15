@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/runtime/connection-changed.schema.json",
+  "title": "runtime.connection_changed",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "runtime.connection_changed"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "runtime"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "connection_state",
+            "checked_at"
+          ],
+          "properties": {
+            "connection_state": {
+              "enum": [
+                "live",
+                "reconnecting",
+                "offline"
+              ]
+            },
+            "checked_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

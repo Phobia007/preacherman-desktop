@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/monitor/snapshot.schema.json",
+  "title": "monitor.snapshot",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "monitor.snapshot"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "state"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "health",
+            "usage",
+            "apis",
+            "activity"
+          ],
+          "properties": {
+            "health": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "usage": {
+              "type": "object",
+              "required": [
+                "token_balance",
+                "token_limit"
+              ],
+              "properties": {
+                "token_balance": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "token_limit": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "apis": {
+              "type": "object",
+              "required": [
+                "active_count",
+                "limit"
+              ],
+              "properties": {
+                "active_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            },
+            "activity": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

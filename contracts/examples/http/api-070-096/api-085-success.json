@@ -1,0 +1,35 @@
+{
+  "summary": "Create a Skill validation run",
+  "value": {
+    "data": {
+      "validation_run": {
+        "validation_run_id": "vr_research_scout_01",
+        "skill_draft_id": "skd_research_scout_plus",
+        "draft_revision": 8,
+        "test_set_ids": [
+          "tset_market_analysis"
+        ],
+        "mode": "full",
+        "status": "queued",
+        "tests_count": 50,
+        "pass_count": 0,
+        "review_count": 0,
+        "fail_count": 0,
+        "metrics": {},
+        "review_item_ids": [],
+        "started_at": null,
+        "completed_at": null
+      },
+      "operation": {
+        "operation_type": "validation_run",
+        "operation_id": "vr_research_scout_01",
+        "status": "queued",
+        "status_url": "/api/v1/validation-runs/vr_research_scout_01",
+        "events_url": "/api/v1/validation-runs/vr_research_scout_01/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task6_85"
+    }
+  }
+}

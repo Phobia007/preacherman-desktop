@@ -1,0 +1,23 @@
+{
+  "summary": "Get State proof",
+  "value": {
+    "data": {
+      "state_version_id": "stv_strategy_121",
+      "verified": true,
+      "run_count": 18200,
+      "metrics": {
+        "accuracy": 96,
+        "usefulness": 94,
+        "clarity": 95
+      },
+      "provenance": {
+        "builder": "Preacherman",
+        "verification": "continuous"
+      },
+      "updated_at": "2026-07-15T10:21:32Z"
+    },
+    "meta": {
+      "request_id": "req_task7_110"
+    }
+  }
+}

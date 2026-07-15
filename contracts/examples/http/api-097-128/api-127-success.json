@@ -1,0 +1,4 @@
+{
+  "summary": "Stream generic operation events",
+  "value": "id: 8\nevent: operation.progress\ndata: {\"operation_id\":\"op_state_match_108\",\"sequence\":8,\"progress\":0.72}\n\n"
+}

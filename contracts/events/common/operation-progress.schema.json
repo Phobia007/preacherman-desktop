@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/common/operation-progress.schema.json",
+  "title": "operation.progress",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "operation.progress"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "task_run",
+            "test_run",
+            "validation_run",
+            "import_job",
+            "export_job",
+            "response_run",
+            "generation_job"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "message": {
+              "type": "string",
+              "minLength": 1
+            },
+            "completed_units": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "total_units": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

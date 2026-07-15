@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/event-envelope.schema.json",
+  "title": "Preacherman Event Envelope",
+  "type": "object",
+  "required": [
+    "event_id",
+    "stream_id",
+    "sequence",
+    "event_type",
+    "schema_version",
+    "resource_type",
+    "resource_id",
+    "payload",
+    "occurred_at"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stream_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "event_type": {
+      "enum": [
+        "operation.queued",
+        "operation.started",
+        "operation.stage_changed",
+        "operation.progress",
+        "operation.log",
+        "artifact.created",
+        "operation.succeeded",
+        "operation.failed",
+        "operation.cancelled",
+        "operation.timed_out",
+        "task.stage_started",
+        "task.stage_completed",
+        "task.stage_skipped",
+        "task.checkpoint_saved",
+        "task.metric_updated",
+        "test.stage_started",
+        "test.stage_completed",
+        "test.metric_updated",
+        "test.takeaway_created",
+        "test.result_created",
+        "validation.test_started",
+        "validation.test_completed",
+        "validation.counters_updated",
+        "validation.metric_updated",
+        "validation.review_item_created",
+        "validation.summary_created",
+        "import.source_read",
+        "import.check_started",
+        "import.check_completed",
+        "import.capability_detected",
+        "import.readiness_updated",
+        "import.ready",
+        "import.needs_review",
+        "export.render_started",
+        "export.file_processed",
+        "export.package_created",
+        "export.file_ready",
+        "export.failed",
+        "reply.started",
+        "reply.delta",
+        "reply.citation_added",
+        "reply.tool_status",
+        "reply.completed",
+        "reply.failed",
+        "monitor.snapshot",
+        "monitor.health_changed",
+        "monitor.usage_changed",
+        "monitor.api_changed",
+        "monitor.activity_created",
+        "monitor.log",
+        "monitor.connection_state",
+        "runtime.connection_changed",
+        "runtime.autosave_started",
+        "runtime.autosave_succeeded",
+        "runtime.autosave_failed",
+        "runtime.revision_changed"
+      ]
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "resource_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resource_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "operation_status": {
+      "enum": [
+        "queued",
+        "running",
+        "succeeded",
+        "failed",
+        "cancelled",
+        "timed_out",
+        null
+      ]
+    },
+    "domain_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "progress": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "payload": {
+      "type": "object"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,4 @@
+{
+  "summary": "Sanitized success example for API-029",
+  "value": "id: evt_example_002\nevent: reply.delta\ndata: {\"sequence\":2,\"delta\":\"Example\"}\n\n"
+}

@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "VERSION_CONFLICT",
+    "message": "The selected version has changed.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "current_version_id": "sv_example_002"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

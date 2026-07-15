@@ -1,0 +1,22 @@
+{
+  "summary": "List Skill templates",
+  "value": {
+    "data": [
+      {
+        "skill_template_id": "sktpl_research",
+        "name": "Research Assistant",
+        "description": "A source-aware research Skill starter.",
+        "category": "research",
+        "capabilities": [
+          "analyze",
+          "cite_sources"
+        ]
+      }
+    ],
+    "meta": {
+      "request_id": "req_task6_71",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

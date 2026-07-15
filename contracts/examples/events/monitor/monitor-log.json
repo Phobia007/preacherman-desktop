@@ -1,0 +1,22 @@
+{
+  "event_id": "evt_monitor_log_01",
+  "stream_id": "state:state_01",
+  "sequence": 1,
+  "event_type": "monitor.log",
+  "schema_version": 1,
+  "resource_type": "state",
+  "resource_id": "state_01",
+  "operation_id": null,
+  "correlation_id": "correlation_01",
+  "operation_status": null,
+  "domain_status": "live",
+  "stage": null,
+  "progress": null,
+  "payload": {
+    "level": "info",
+    "code": "SYSTEM_NORMAL",
+    "message": "All systems normal",
+    "timestamp": "2026-07-15T10:21:32Z"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

@@ -1,0 +1,27 @@
+{
+  "summary": "Sanitized success example for API-027",
+  "value": {
+    "data": [
+      {
+        "message_id": "msg_example_001",
+        "client_message_id": "cmsg_example_001",
+        "conversation_id": "con_example_001",
+        "role": "user",
+        "content": "[example content omitted]",
+        "content_type": "text",
+        "attachment_source_ids": [],
+        "status": "completed",
+        "response_run_id": null,
+        "token_usage": null,
+        "error_code": null,
+        "created_at": "2026-07-14T10:21:32Z",
+        "completed_at": "2026-07-14T10:21:32Z"
+      }
+    ],
+    "meta": {
+      "request_id": "req_example_001",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

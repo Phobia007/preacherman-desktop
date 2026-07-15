@@ -1,0 +1,15 @@
+{
+  "summary": "Sanitized success example for API-021",
+  "value": {
+    "data": {
+      "state_draft_id": "sd_example_001",
+      "state_id": "st_example_001",
+      "name": "Strategy Operator draft",
+      "status": "editing",
+      "revision": 12
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

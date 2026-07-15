@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/import/needs-review.schema.json",
+  "title": "import.needs_review",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "import.needs_review"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "import_job"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "review_count",
+            "review_url"
+          ],
+          "properties": {
+            "review_count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "review_url": {
+              "type": "string",
+              "format": "uri-reference"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

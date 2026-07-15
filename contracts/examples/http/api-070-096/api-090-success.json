@@ -1,0 +1,14 @@
+{
+  "summary": "Check Skill publish readiness",
+  "value": {
+    "data": {
+      "ready": true,
+      "validation_run_id": "vr_research_scout_01",
+      "draft_revision": 8,
+      "issues": []
+    },
+    "meta": {
+      "request_id": "req_task6_90"
+    }
+  }
+}

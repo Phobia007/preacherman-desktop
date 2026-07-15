@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/reply/tool-status.schema.json",
+  "title": "reply.tool_status",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "reply.tool_status"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "conversation"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "tool_name",
+            "status",
+            "label"
+          ],
+          "properties": {
+            "tool_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "status": {
+              "enum": [
+                "started",
+                "running",
+                "completed",
+                "failed"
+              ]
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

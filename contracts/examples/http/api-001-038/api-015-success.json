@@ -1,0 +1,4 @@
+{
+  "summary": "Sanitized success example for API-015",
+  "value": "id: evt_example_001\nevent: monitor.snapshot\ndata: {\"sequence\":1}\n\n"
+}

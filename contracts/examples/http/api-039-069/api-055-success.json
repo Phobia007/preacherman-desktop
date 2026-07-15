@@ -1,0 +1,15 @@
+{
+  "summary": "Create a short-lived artifact download URL",
+  "value": {
+    "data": {
+      "artifact_id": "artifact_board_brief",
+      "download_url": "https://download.example.invalid/artifacts/artifact_board_brief",
+      "expires_at": "2026-07-15T08:10:00Z",
+      "filename": "board-brief.docx",
+      "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    },
+    "meta": {
+      "request_id": "req_task5_55"
+    }
+  }
+}

@@ -1,0 +1,283 @@
+openapi: 3.1.0
+info:
+  title: Preacherman Product API
+  version: 1.0.0
+  description: Machine-readable contract for the Preacherman application.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: /api/v1
+    description: Current API base path
+security:
+  - bearerAuth: []
+tags:
+  - name: Auth
+    description: Authentication, sessions, profiles, and notifications.
+  - name: Home
+    description: Home summaries and current State entry points.
+  - name: Monitor
+    description: State health, usage, runtime status, and live monitoring.
+  - name: Conversations
+    description: Conversations, messages, streaming replies, sharing, and exports.
+  - name: Tasks
+    description: Task drafts, task runs, results, and artifacts.
+  - name: StateLab
+    description: State drafts, recommendations, skill mounts, and Lab testing.
+  - name: Skills
+    description: Skill creation, import, configuration, validation, and publishing.
+  - name: StateTests
+    description: State test drafts, runs, results, and workspace actions.
+  - name: Market
+    description: State discovery, matching, passports, sandboxing, and installation.
+  - name: Ledger
+    description: State versions, branches, restores, evolution, and timelines.
+  - name: Uploads
+    description: Shared upload sessions, Source processing, and runtime event access.
+paths:
+  /auth/session:
+    $ref: ./paths/auth-notifications.yaml#/~1auth~1session
+  /auth/login:
+    $ref: ./paths/auth-notifications.yaml#/~1auth~1login
+  /auth/logout:
+    $ref: ./paths/auth-notifications.yaml#/~1auth~1logout
+  /users:
+    $ref: ./paths/auth-notifications.yaml#/~1users
+  /users/me/profile:
+    $ref: ./paths/auth-notifications.yaml#/~1users~1me~1profile
+  /users/me/onboarding/complete:
+    $ref: ./paths/auth-notifications.yaml#/~1users~1me~1onboarding~1complete
+  /notifications:
+    $ref: ./paths/auth-notifications.yaml#/~1notifications
+  /notifications/{notification_id}/read:
+    $ref: ./paths/auth-notifications.yaml#/~1notifications~1{notification_id}~1read
+  /home:
+    $ref: ./paths/home-monitor.yaml#/~1home
+  /runtime/status:
+    $ref: ./paths/home-monitor.yaml#/~1runtime~1status
+  /operations/{operation_id}:
+    $ref: ./paths/home-monitor.yaml#/~1operations~1{operation_id}
+  /states/{state_id}/health-summary:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1health-summary
+  /states/{state_id}/monitor:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1monitor
+  /states/{state_id}/monitor/events:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1monitor~1events
+  /states/current:
+    $ref: ./paths/home-monitor.yaml#/~1states~1current
+  /states/{state_id}:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}
+  /states/{state_id}/passport:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1passport
+  /states/{state_id}/learnings:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1learnings
+  /states/{state_id}/available-skills:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1available-skills
+  /states/{state_id}/editable-draft:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1editable-draft
+  /states/{state_id}/test-summary:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1test-summary
+  /states/{state_id}/ledger-summary:
+    $ref: ./paths/home-monitor.yaml#/~1states~1{state_id}~1ledger-summary
+  /conversations/recent:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1conversations~1recent
+  /conversations:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1conversations
+  /conversations/{conversation_id}:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1conversations~1{conversation_id}
+  /conversations/{conversation_id}/messages:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1conversations~1{conversation_id}~1messages
+  /conversations/{conversation_id}/events:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1conversations~1{conversation_id}~1events
+  /conversations/{conversation_id}/responses/{response_run_id}/retry:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1conversations~1{conversation_id}~1responses~1{response_run_id}~1retry
+  /audio/transcriptions:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1audio~1transcriptions
+  /conversations/{conversation_id}/actions:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1conversations~1{conversation_id}~1actions
+  /conversations/{conversation_id}/task-drafts:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1conversations~1{conversation_id}~1task-drafts
+  /share-links:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1share-links
+  /share-links/{share_link_id}:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1share-links~1{share_link_id}
+  /exports/formats:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1exports~1formats
+  /export-jobs:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1export-jobs
+  /export-jobs/{export_job_id}:
+    $ref: ./paths/conversations-sharing-exports.yaml#/~1export-jobs~1{export_job_id}
+  /task-drafts/{task_draft_id}:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-drafts~1{task_draft_id}
+  /task-templates:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-templates
+  /task-drafts/{task_draft_id}/apply-template:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-drafts~1{task_draft_id}~1apply-template
+  /task-drafts/{task_draft_id}/sources:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-drafts~1{task_draft_id}~1sources
+  /task-drafts/{task_draft_id}/sources/{source_id}:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-drafts~1{task_draft_id}~1sources~1{source_id}
+  /task-drafts/{task_draft_id}/context-tags:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-drafts~1{task_draft_id}~1context-tags
+  /task-drafts/{task_draft_id}/context-tags/{context_tag_id}:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-drafts~1{task_draft_id}~1context-tags~1{context_tag_id}
+  /task-drafts/{task_draft_id}/actions:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-drafts~1{task_draft_id}~1actions
+  /task-runs:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-runs
+  /task-runs/{task_run_id}:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-runs~1{task_run_id}
+  /task-runs/{task_run_id}/events:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-runs~1{task_run_id}~1events
+  /task-runs/{task_run_id}/retry:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-runs~1{task_run_id}~1retry
+  /task-runs/{task_run_id}/result:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-runs~1{task_run_id}~1result
+  /task-runs/{task_run_id}/refine-draft:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-runs~1{task_run_id}~1refine-draft
+  /task-runs/{task_run_id}/state-adjustment-draft:
+    $ref: ./paths/tasks-artifacts.yaml#/~1task-runs~1{task_run_id}~1state-adjustment-draft
+  /artifacts/{artifact_id}/download-url:
+    $ref: ./paths/tasks-artifacts.yaml#/~1artifacts~1{artifact_id}~1download-url
+  /state-lab:
+    $ref: ./paths/state-lab.yaml#/~1state-lab
+  /state-templates:
+    $ref: ./paths/state-lab.yaml#/~1state-templates
+  /state-drafts:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts
+  /state-drafts/{state_draft_id}:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}
+  /state-drafts/{state_draft_id}/analyze-intent:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1analyze-intent
+  /state-drafts/{state_draft_id}/recommendations:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1recommendations
+  /state-drafts/{state_draft_id}/skill-compatibility:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1skill-compatibility
+  /state-drafts/{state_draft_id}/skill-mounts:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1skill-mounts
+  /state-drafts/{state_draft_id}/skill-mounts/order:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1skill-mounts~1order
+  /state-drafts/{state_draft_id}/imports:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1imports
+  /state-drafts/{state_draft_id}/save-and-retest:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1save-and-retest
+  /state-drafts/{state_draft_id}/lab-tests:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1lab-tests
+  /state-drafts/{state_draft_id}/save-unpublished:
+    $ref: ./paths/state-lab.yaml#/~1state-drafts~1{state_draft_id}~1save-unpublished
+  /skills:
+    $ref: ./paths/skills.yaml#/~1skills
+  /skill-templates:
+    $ref: ./paths/skills.yaml#/~1skill-templates
+  /skill-drafts:
+    $ref: ./paths/skills.yaml#/~1skill-drafts
+  /skill-drafts/{skill_draft_id}:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}
+  /skill-drafts/{skill_draft_id}/files/{file_path}:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1files~1{file_path}
+  /skill-drafts/{skill_draft_id}/sources:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1sources
+  /skill-drafts/{skill_draft_id}/versions:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1versions
+  /import-jobs:
+    $ref: ./paths/skills.yaml#/~1import-jobs
+  /import-jobs/{import_job_id}:
+    $ref: ./paths/skills.yaml#/~1import-jobs~1{import_job_id}
+  /import-jobs/{import_job_id}/checks/{check_id}:
+    $ref: ./paths/skills.yaml#/~1import-jobs~1{import_job_id}~1checks~1{check_id}
+  /import-jobs/{import_job_id}/save-for-later:
+    $ref: ./paths/skills.yaml#/~1import-jobs~1{import_job_id}~1save-for-later
+  /import-jobs/{import_job_id}/convert-to-draft:
+    $ref: ./paths/skills.yaml#/~1import-jobs~1{import_job_id}~1convert-to-draft
+  /skill-drafts/{skill_draft_id}/validation-runs:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1validation-runs
+  /validation-runs/{validation_run_id}:
+    $ref: ./paths/skills.yaml#/~1validation-runs~1{validation_run_id}
+  /validation-runs/{validation_run_id}/events:
+    $ref: ./paths/skills.yaml#/~1validation-runs~1{validation_run_id}~1events
+  /skill-drafts/{skill_draft_id}/test-sets:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1test-sets
+  /validation-runs/{validation_run_id}/review-items/{review_item_id}:
+    $ref: ./paths/skills.yaml#/~1validation-runs~1{validation_run_id}~1review-items~1{review_item_id}
+  /skill-drafts/{skill_draft_id}/publish-check:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1publish-check
+  /skill-drafts/{skill_draft_id}/eligible-state-drafts:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1eligible-state-drafts
+  /skill-drafts/{skill_draft_id}/publish-settings:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1publish-settings
+  /skill-drafts/{skill_draft_id}/publish:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1publish
+  /skill-drafts/{skill_draft_id}/exportable-versions:
+    $ref: ./paths/skills.yaml#/~1skill-drafts~1{skill_draft_id}~1exportable-versions
+  /skill-versions/{skill_version_id}/diff:
+    $ref: ./paths/skills.yaml#/~1skill-versions~1{skill_version_id}~1diff
+  /skill-versions/{skill_version_id}/mounts:
+    $ref: ./paths/skills.yaml#/~1skill-versions~1{skill_version_id}~1mounts
+  /test-drafts:
+    $ref: ./paths/state-tests.yaml#/~1test-drafts
+  /test-drafts/{test_draft_id}:
+    $ref: ./paths/state-tests.yaml#/~1test-drafts~1{test_draft_id}
+  /test-drafts/{test_draft_id}/sources:
+    $ref: ./paths/state-tests.yaml#/~1test-drafts~1{test_draft_id}~1sources
+  /test-runs:
+    $ref: ./paths/state-tests.yaml#/~1test-runs
+  /test-runs/{test_run_id}:
+    $ref: ./paths/state-tests.yaml#/~1test-runs~1{test_run_id}
+  /test-runs/{test_run_id}/events:
+    $ref: ./paths/state-tests.yaml#/~1test-runs~1{test_run_id}~1events
+  /test-runs/{test_run_id}/result:
+    $ref: ./paths/state-tests.yaml#/~1test-runs~1{test_run_id}~1result
+  /artifacts/{artifact_id}/preview:
+    $ref: ./paths/state-tests.yaml#/~1artifacts~1{artifact_id}~1preview
+  /test-runs/{test_run_id}/state-adjustment-draft:
+    $ref: ./paths/state-tests.yaml#/~1test-runs~1{test_run_id}~1state-adjustment-draft
+  /artifacts/{artifact_id}/workspace-items:
+    $ref: ./paths/state-tests.yaml#/~1artifacts~1{artifact_id}~1workspace-items
+  /state-market:
+    $ref: ./paths/market-installations.yaml#/~1state-market
+  /state-matches:
+    $ref: ./paths/market-installations.yaml#/~1state-matches
+  /state-versions/{state_version_id}/market-summary:
+    $ref: ./paths/market-installations.yaml#/~1state-versions~1{state_version_id}~1market-summary
+  /state-versions/{state_version_id}/proof:
+    $ref: ./paths/market-installations.yaml#/~1state-versions~1{state_version_id}~1proof
+  /sandbox-sessions:
+    $ref: ./paths/market-installations.yaml#/~1sandbox-sessions
+  /state-installations:
+    $ref: ./paths/market-installations.yaml#/~1state-installations
+  /state-installations/{installation_id}/activate:
+    $ref: ./paths/market-installations.yaml#/~1state-installations~1{installation_id}~1activate
+  /state-installations/{installation_id}/deactivate:
+    $ref: ./paths/market-installations.yaml#/~1state-installations~1{installation_id}~1deactivate
+  /state-installations/{installation_id}:
+    $ref: ./paths/market-installations.yaml#/~1state-installations~1{installation_id}
+  /states/{state_id}/ledger:
+    $ref: ./paths/ledger.yaml#/~1states~1{state_id}~1ledger
+  /state-versions/{state_version_id}:
+    $ref: ./paths/ledger.yaml#/~1state-versions~1{state_version_id}
+  /state-versions/{state_version_id}/diff/{other_version_id}:
+    $ref: ./paths/ledger.yaml#/~1state-versions~1{state_version_id}~1diff~1{other_version_id}
+  /states/{state_id}/branches:
+    $ref: ./paths/ledger.yaml#/~1states~1{state_id}~1branches
+  /states/{state_id}/restores:
+    $ref: ./paths/ledger.yaml#/~1states~1{state_id}~1restores
+  /states/{state_id}/evolution:
+    $ref: ./paths/ledger.yaml#/~1states~1{state_id}~1evolution
+  /states/{state_id}/timeline:
+    $ref: ./paths/ledger.yaml#/~1states~1{state_id}~1timeline
+  /uploads:
+    $ref: ./paths/uploads-sources-runtime.yaml#/~1uploads
+  /uploads/{upload_id}/complete:
+    $ref: ./paths/uploads-sources-runtime.yaml#/~1uploads~1{upload_id}~1complete
+  /sources/{source_id}:
+    $ref: ./paths/uploads-sources-runtime.yaml#/~1sources~1{source_id}
+  /sources/{source_id}/retry-parse:
+    $ref: ./paths/uploads-sources-runtime.yaml#/~1sources~1{source_id}~1retry-parse
+  /operations/{operation_id}/events:
+    $ref: ./paths/uploads-sources-runtime.yaml#/~1operations~1{operation_id}~1events
+  /runtime/events:
+    $ref: ./paths/uploads-sources-runtime.yaml#/~1runtime~1events
+components:
+  securitySchemes:
+    bearerAuth:
+      $ref: ./components/security.yaml#/bearerAuth

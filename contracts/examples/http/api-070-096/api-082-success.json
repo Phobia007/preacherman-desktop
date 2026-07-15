@@ -1,0 +1,19 @@
+{
+  "summary": "Get a Skill import check",
+  "value": {
+    "data": {
+      "check_id": "icheck_dependencies",
+      "check_type": "dependencies",
+      "result": "review",
+      "title": "Optional dependency",
+      "summary": "One optional dependency is unresolved.",
+      "evidence": {
+        "dependency_count": 1
+      },
+      "suggested_fix": "Declare or remove the optional dependency before publishing."
+    },
+    "meta": {
+      "request_id": "req_task6_82"
+    }
+  }
+}

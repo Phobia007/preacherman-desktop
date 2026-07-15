@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "IDEMPOTENCY_CONFLICT",
+    "message": "This action could not be safely repeated.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "existing_operation_id": "op_example_001"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

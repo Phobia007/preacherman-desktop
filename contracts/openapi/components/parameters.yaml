@@ -1,0 +1,96 @@
+XRequestId:
+  name: X-Request-ID
+  in: header
+  required: false
+  description: Optional client request identifier. Invalid values are replaced by the gateway.
+  schema:
+    type: string
+    minLength: 8
+    maxLength: 128
+    pattern: ^req_[A-Za-z0-9_-]+$
+  example: req_example_001
+IdempotencyKey:
+  name: Idempotency-Key
+  in: header
+  required: true
+  description: Opaque key that identifies one user write intent.
+  schema:
+    type: string
+    minLength: 16
+    maxLength: 128
+  example: idem_example_0001
+IdempotencyKeyOptional:
+  name: Idempotency-Key
+  in: header
+  required: false
+  description: Optional opaque key used to make retries safe for this endpoint.
+  schema:
+    type: string
+    minLength: 16
+    maxLength: 128
+  example: idem_example_0001
+IfMatch:
+  name: If-Match
+  in: header
+  required: true
+  description: Revision validator obtained from the latest representation.
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 128
+  example: '"revision_12"'
+Cursor:
+  name: cursor
+  in: query
+  required: false
+  description: Opaque cursor returned by a previous list response.
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 512
+  example: cursor_example_001
+Limit:
+  name: limit
+  in: query
+  required: false
+  description: Maximum number of records to return.
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 20
+Sort:
+  name: sort
+  in: query
+  required: false
+  description: Stable field name used to sort this resource collection.
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 64
+Order:
+  name: order
+  in: query
+  required: false
+  description: Sort direction.
+  schema:
+    type: string
+    enum: [asc, desc]
+    default: asc
+AfterSequence:
+  name: after_sequence
+  in: query
+  required: false
+  description: Replay events beginning after this sequence number.
+  schema:
+    type: integer
+    minimum: 0
+LastEventId:
+  name: Last-Event-ID
+  in: header
+  required: false
+  description: Last SSE event ID applied by the client before reconnecting.
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 128

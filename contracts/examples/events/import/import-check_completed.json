@@ -1,0 +1,21 @@
+{
+  "event_id": "evt_import_check_completed_01",
+  "stream_id": "import_job:import_job_01",
+  "sequence": 1,
+  "event_type": "import.check_completed",
+  "schema_version": 1,
+  "resource_type": "import_job",
+  "resource_id": "import_job_01",
+  "operation_id": "import_job_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "checking_schema",
+  "progress": 0.42,
+  "payload": {
+    "check_id": "check_schema",
+    "result": "passed",
+    "summary": "Schema and structure are valid"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

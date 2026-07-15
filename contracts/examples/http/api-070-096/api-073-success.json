@@ -1,0 +1,65 @@
+{
+  "summary": "Get a Skill draft",
+  "value": {
+    "data": {
+      "skill_draft_id": "skd_research_scout_plus",
+      "skill_id": "skill_research_scout",
+      "base_version_id": "skv_research_scout_v12",
+      "creation_mode": "blank",
+      "current_step": 1,
+      "name": "Research Scout+",
+      "purpose": "Find credible sources and produce structured research briefs.",
+      "category": "research",
+      "capabilities": [
+        {
+          "capability_id": "cap_analyze",
+          "code": "analyze",
+          "name": "Analyze",
+          "description": "Analyze source material and identify relevant evidence.",
+          "input_schema": {
+            "type": "object"
+          },
+          "output_schema": {
+            "type": "object"
+          },
+          "required_permissions": [
+            "web_search"
+          ],
+          "is_deprecated": false
+        }
+      ],
+      "behavior": {
+        "output_style": "structured",
+        "reasoning": "evidence_first"
+      },
+      "guardrails": {
+        "cite_evidence": true,
+        "flag_uncertainty": true
+      },
+      "permissions": [
+        {
+          "permission": "web_search",
+          "access": "read",
+          "required": true,
+          "reason": "Retrieve public sources for evidence-backed research."
+        }
+      ],
+      "output_contract": {
+        "format": "markdown",
+        "version": "1.0"
+      },
+      "publish_settings": {
+        "mount_mode": "add_to_state_draft",
+        "destination": {
+          "state_draft_id": "std_strategy_adjustment"
+        }
+      },
+      "status": "editing",
+      "revision": 1,
+      "autosaved_at": "2026-07-15T09:00:00Z"
+    },
+    "meta": {
+      "request_id": "req_task6_73"
+    }
+  }
+}

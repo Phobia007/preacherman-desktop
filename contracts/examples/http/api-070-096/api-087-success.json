@@ -1,0 +1,4 @@
+{
+  "summary": "Stream Skill validation events",
+  "value": "id: validation_event_087\nevent: validation.counters_updated\ndata: {\"run_id\":\"vr_research_scout_01\",\"sequence\":12,\"pass_count\":48,\"review_count\":2,\"fail_count\":0}\n\n"
+}

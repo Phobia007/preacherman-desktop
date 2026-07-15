@@ -1,0 +1,20 @@
+{
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "Check the highlighted fields.",
+    "field_errors": [
+      {
+        "field": "goal",
+        "code": "REQUIRED",
+        "message": "Goal is required."
+      }
+    ],
+    "retryable": false,
+    "details": {
+      "invalid_field_count": 1
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

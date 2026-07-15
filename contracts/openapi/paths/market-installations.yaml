@@ -1,0 +1,541 @@
+/state-market:
+  get:
+    summary: Get the State Market
+    description: Get the State Market. See API-107 in the API registry for product context.
+    operationId: getStateMarket
+    tags:
+      - Market
+    x-api-id: API-107
+    x-interaction-ids:
+      - INT-130
+    x-permissions:
+      - state.passport.public.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateMarketResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-107-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/state-matches:
+  post:
+    summary: Create a State match
+    description: Create a State match. See API-108 in the API registry for product context.
+    operationId: createStateMatch
+    tags:
+      - Market
+    x-api-id: API-108
+    x-interaction-ids:
+      - INT-131
+      - INT-132
+    x-permissions:
+      - state.passport.public.read
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/CreateStateMatchRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateMatchAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-108-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/state-versions/{state_version_id}/market-summary:
+  get:
+    summary: Get a State Market summary
+    description: Get a State Market summary. See API-109 in the API registry for product context.
+    operationId: getStateMarketSummary
+    tags:
+      - Market
+    x-api-id: API-109
+    x-interaction-ids:
+      - INT-133
+    x-permissions:
+      - state.passport.public.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_version_id
+        in: path
+        required: true
+        description: Opaque state version id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: state_match_id
+        in: query
+        required: false
+        description: Optional State match context.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateMarketSummaryResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-109-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/state-versions/{state_version_id}/proof:
+  get:
+    summary: Get State proof
+    description: Get State proof. See API-110 in the API registry for product context.
+    operationId: getStateProof
+    tags:
+      - Market
+    x-api-id: API-110
+    x-interaction-ids:
+      - INT-134
+    x-permissions:
+      - state.passport.public.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_version_id
+        in: path
+        required: true
+        description: Opaque state version id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: state_match_id
+        in: query
+        required: false
+        description: Optional State match context.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateProofResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-110-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/sandbox-sessions:
+  post:
+    summary: Create a State Sandbox session
+    description: Create a State Sandbox session. See API-111 in the API registry for product context.
+    operationId: createSandboxSession
+    tags:
+      - Market
+    x-api-id: API-111
+    x-interaction-ids:
+      - INT-137
+    x-permissions:
+      - sandbox.create
+      - state.use
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/CreateSandboxSessionRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/SandboxSessionAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-111-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/state-installations:
+  post:
+    summary: Install a State without activating it
+    description: Install a State without activating it. See API-112 in the API registry for product context.
+    operationId: createStateInstallation
+    tags:
+      - Market
+    x-api-id: API-112
+    x-interaction-ids:
+      - INT-138
+    x-permissions:
+      - state.install
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - state.installed
+    x-event-schema: null
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - VERSION_CONFLICT
+      - STATE_NOT_ACTIVATABLE
+      - ALREADY_INSTALLED
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/CreateStateInstallationRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateInstallationResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-112-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/state-installations/{installation_id}/activate:
+  post:
+    summary: Activate an installed State
+    description: Activate an installed State. See API-113 in the API registry for product context.
+    operationId: activateStateInstallation
+    tags:
+      - Market
+    x-api-id: API-113
+    x-interaction-ids:
+      - INT-139
+    x-permissions:
+      - state.installation.activate
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - state.activated
+    x-event-schema: null
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+      - IDEMPOTENCY_CONFLICT
+      - VERSION_CONFLICT
+      - STATE_NOT_ACTIVATABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: installation_id
+        in: path
+        required: true
+        description: Opaque installation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/ActivateStateInstallationRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/ActivatedStateInstallationResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-113-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/state-installations/{installation_id}/deactivate:
+  post:
+    summary: Deactivate a State installation
+    description: Deactivate a State installation. See API-114 in the API registry for product context.
+    operationId: deactivateStateInstallation
+    tags:
+      - Market
+    x-api-id: API-114
+    x-interaction-ids:
+      - INT-139
+    x-permissions:
+      - state.installation.deactivate
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - state.deactivated
+    x-event-schema: null
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - VERSION_CONFLICT
+      - STATE_NOT_ACTIVATABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: installation_id
+        in: path
+        required: true
+        description: Opaque installation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/DeactivateStateInstallationRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateInstallationResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-114-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/state-installations/{installation_id}:
+  delete:
+    summary: Delete a State installation
+    description: Delete a State installation. See API-115 in the API registry for product context.
+    operationId: deleteStateInstallation
+    tags:
+      - Market
+    x-api-id: API-115
+    x-interaction-ids:
+      - INT-139
+    x-permissions:
+      - state.installation.delete
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - state.uninstalled
+    x-event-schema: null
+    x-owner: state-market-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - VERSION_CONFLICT
+      - STATE_NOT_ACTIVATABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: installation_id
+        in: path
+        required: true
+        description: Opaque installation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    responses:
+      "204":
+        description: The operation completed successfully and has no response body.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity

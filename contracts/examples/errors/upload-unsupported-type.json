@@ -1,0 +1,17 @@
+{
+  "error": {
+    "code": "UPLOAD_UNSUPPORTED_TYPE",
+    "message": "This file type is not supported here.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "supported_types": [
+        "application/pdf",
+        "text/plain"
+      ]
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

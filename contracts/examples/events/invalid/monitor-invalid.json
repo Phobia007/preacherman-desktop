@@ -1,0 +1,27 @@
+{
+  "event_id": "evt_monitor_snapshot_01",
+  "stream_id": "state:state_01",
+  "sequence": 1,
+  "event_type": "monitor.snapshot",
+  "schema_version": 1,
+  "resource_type": "state",
+  "resource_id": "state_01",
+  "operation_id": null,
+  "correlation_id": "correlation_01",
+  "operation_status": null,
+  "domain_status": "live",
+  "stage": null,
+  "progress": null,
+  "payload": {
+    "usage": {
+      "token_balance": 314580,
+      "token_limit": 500000
+    },
+    "apis": {
+      "active_count": 3,
+      "limit": 5
+    },
+    "activity": []
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

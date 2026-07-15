@@ -1,0 +1,6 @@
+apis:
+  core@v1:
+    root: ./openapi/openapi.yaml
+
+extends:
+  - recommended-strict

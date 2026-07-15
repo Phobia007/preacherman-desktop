@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "RUN_NOT_RETRYABLE",
+    "message": "This run cannot be resumed.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "failed_stage": "output"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

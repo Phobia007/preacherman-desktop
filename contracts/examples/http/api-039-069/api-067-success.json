@@ -1,0 +1,21 @@
+{
+  "summary": "Save a State draft and create a TestRun atomically",
+  "value": {
+    "data": {
+      "state_draft_id": "std_strategy_adjustment",
+      "draft_revision": 13,
+      "test_run_id": "testrun_strategy_02",
+      "test_run_status": "queued",
+      "operation": {
+        "operation_type": "test_run",
+        "operation_id": "testrun_strategy_02",
+        "status": "queued",
+        "status_url": "/api/v1/test-runs/testrun_strategy_02",
+        "events_url": "/api/v1/test-runs/testrun_strategy_02/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task5_67"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "summary": "List State templates",
+  "value": {
+    "data": [
+      {
+        "state_template_id": "stpl_strategy_operator",
+        "name": "Strategy Operator",
+        "description": "Build evidence-backed strategy and operating plans.",
+        "goal_template": "Turn a business goal into an executable strategy.",
+        "capabilities": [
+          "research",
+          "planning",
+          "prioritization"
+        ]
+      }
+    ],
+    "meta": {
+      "request_id": "req_task5_57",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

@@ -1,0 +1,787 @@
+/home:
+  get:
+    summary: Get the Home summary
+    description: Get the Home summary. See API-010 in the API registry for product context.
+    operationId: getHome
+    tags:
+      - Home
+    x-api-id: API-010
+    x-interaction-ids:
+      - INT-001
+      - INT-015
+      - INT-016
+      - INT-148
+    x-permissions:
+      - authenticated_user
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/HomeResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-010-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/runtime/status:
+  get:
+    summary: Get runtime status
+    description: Get runtime status. See API-011 in the API registry for product context.
+    operationId: getRuntimeStatus
+    tags:
+      - Monitor
+    x-api-id: API-011
+    x-interaction-ids:
+      - INT-006
+    x-permissions:
+      - resource.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: resource_type
+        in: query
+        required: false
+        description: Optional resource type to inspect.
+        schema:
+          type: string
+          maxLength: 120
+      - name: resource_id
+        in: query
+        required: false
+        description: Opaque resource identifier.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/RuntimeStatusResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-011-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/operations/{operation_id}:
+  get:
+    summary: Get an asynchronous operation
+    description: Get an asynchronous operation. See API-012 in the API registry for product context.
+    operationId: getOperation
+    tags:
+      - Monitor
+    x-api-id: API-012
+    x-interaction-ids:
+      - INT-007
+    x-permissions:
+      - operation.parent.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: operation_id
+        in: path
+        required: true
+        description: Opaque operation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/OperationResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-012-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/health-summary:
+  get:
+    summary: Get State health summary
+    description: Get State health summary. See API-013 in the API registry for product context.
+    operationId: getStateHealthSummary
+    tags:
+      - Monitor
+    x-api-id: API-013
+    x-interaction-ids:
+      - INT-017
+    x-permissions:
+      - state.monitor.summary.read
+      - state.monitor.detail.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/StateHealthSummaryResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-013-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/monitor:
+  get:
+    summary: Get State monitor details
+    description: Get State monitor details. See API-014 in the API registry for product context.
+    operationId: getStateMonitor
+    tags:
+      - Monitor
+    x-api-id: API-014
+    x-interaction-ids:
+      - INT-018
+      - INT-149
+      - INT-150
+    x-permissions:
+      - state.monitor.summary.read
+      - state.monitor.detail.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: time_range
+        in: query
+        required: false
+        description: Requested monitoring window.
+        schema:
+          type: string
+          maxLength: 120
+          enum:
+            - 10m
+            - 1h
+            - 24h
+            - 7d
+      - name: sections
+        in: query
+        required: false
+        description: Monitor sections to include.
+        schema:
+          type: array
+          items:
+            type: string
+            maxLength: 64
+        style: form
+        explode: false
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/MonitorResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-014-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/monitor/events:
+  get:
+    summary: Stream State monitor events
+    description: Stream State monitor events. See API-015 in the API registry for product context.
+    operationId: streamStateMonitorEvents
+    tags:
+      - Monitor
+    x-api-id: API-015
+    x-interaction-ids:
+      - INT-018
+      - INT-019
+      - INT-151
+      - INT-152
+      - INT-153
+    x-permissions:
+      - state.monitor.detail.read
+      - state.monitor.logs.read
+    x-execution-mode: sse
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - EVENT_CURSOR_EXPIRED
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/AfterSequence
+      - $ref: ../components/parameters.yaml#/LastEventId
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          text/event-stream:
+            schema:
+              type: string
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-015-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/states/current:
+  get:
+    summary: Get the current State
+    description: Get the current State. See API-016 in the API registry for product context.
+    operationId: getCurrentState
+    tags:
+      - StateLab
+    x-api-id: API-016
+    x-interaction-ids:
+      - INT-020
+    x-permissions:
+      - installation_owner
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/CurrentStateResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-016-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}:
+  get:
+    summary: Get a State
+    description: Get a State. See API-017 in the API registry for product context.
+    operationId: getState
+    tags:
+      - StateLab
+    x-api-id: API-017
+    x-interaction-ids:
+      - INT-021
+      - INT-133
+    x-permissions:
+      - state.private.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/StateResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-017-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/passport:
+  get:
+    summary: Get a State passport
+    description: Get a State passport. See API-018 in the API registry for product context.
+    operationId: getStatePassport
+    tags:
+      - StateLab
+    x-api-id: API-018
+    x-interaction-ids:
+      - INT-024
+      - INT-136
+    x-permissions:
+      - state.passport.public.read
+      - state.private.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: need
+        in: query
+        required: false
+        description: Optional need statement used to explain fit.
+        schema:
+          type: string
+          maxLength: 2000
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/StatePassportResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-018-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/learnings:
+  get:
+    summary: List State learnings
+    description: List State learnings. See API-019 in the API registry for product context.
+    operationId: listStateLearnings
+    tags:
+      - StateLab
+    x-api-id: API-019
+    x-interaction-ids:
+      - INT-025
+    x-permissions:
+      - state.private.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+      - name: type
+        in: query
+        required: false
+        description: Learning type filter.
+        schema:
+          type: string
+          maxLength: 120
+          enum:
+            - insight
+            - preference
+            - style
+            - source_pattern
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/StateLearningListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-019-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/available-skills:
+  get:
+    summary: List available State skills
+    description: List available State skills. See API-020 in the API registry for product context.
+    operationId: listAvailableStateSkills
+    tags:
+      - StateLab
+    x-api-id: API-020
+    x-interaction-ids:
+      - INT-022
+    x-permissions:
+      - state.private.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+      - name: capability
+        in: query
+        required: false
+        description: Required capability filters.
+        schema:
+          type: array
+          items:
+            type: string
+            maxLength: 64
+        style: form
+        explode: false
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/AvailableSkillListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-020-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/editable-draft:
+  get:
+    summary: Get or create an editable State draft
+    description: Get or create an editable State draft. See API-021 in the API registry for product context.
+    operationId: getEditableStateDraft
+    tags:
+      - StateLab
+    x-api-id: API-021
+    x-interaction-ids:
+      - INT-023
+    x-permissions:
+      - state.draft.read
+      - state.draft.create
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+      - name: source_version_id
+        in: query
+        required: false
+        description: Opaque resource identifier.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/StateDraftSummaryResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-021-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+/states/{state_id}/test-summary:
+  get:
+    summary: Get State test summary
+    description: Get State test summary. See API-022 in the API registry for product context.
+    operationId: getStateTestSummary
+    tags:
+      - StateLab
+    x-api-id: API-022
+    x-interaction-ids:
+      - INT-026
+      - INT-116
+    x-permissions:
+      - state.test.run
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/StateTestSummaryResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-022-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/ledger-summary:
+  get:
+    summary: Get State ledger summary
+    description: Get State ledger summary. See API-023 in the API registry for product context.
+    operationId: getStateLedgerSummary
+    tags:
+      - StateLab
+    x-api-id: API-023
+    x-interaction-ids:
+      - INT-027
+    x-permissions:
+      - state.ledger.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/LedgerSummaryResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-023-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound

@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_operation_queued_01",
+  "stream_id": "task_run:task_run_01",
+  "sequence": 1,
+  "event_type": "operation.queued",
+  "schema_version": 1,
+  "resource_type": "task_run",
+  "resource_id": "task_run_01",
+  "operation_id": "task_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "queued",
+  "domain_status": "running",
+  "stage": "queued",
+  "progress": 0,
+  "payload": {
+    "queue_position": 2,
+    "estimated_start_at": "2026-07-15T10:21:35Z"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

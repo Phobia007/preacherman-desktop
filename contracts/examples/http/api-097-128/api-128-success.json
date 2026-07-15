@@ -1,0 +1,4 @@
+{
+  "summary": "Stream Runtime events",
+  "value": "id: 12\nevent: runtime.live_status\ndata: {\"resource_type\":\"state\",\"resource_id\":\"sta_example_001\",\"sequence\":12,\"status\":\"live\"}\n\n"
+}

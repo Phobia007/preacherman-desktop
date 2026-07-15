@@ -1,0 +1,19 @@
+{
+  "summary": "Compare two State versions",
+  "value": {
+    "data": {
+      "left_state_version_id": "stv_example_018",
+      "right_state_version_id": "stv_example_019_restore",
+      "operation": {
+        "operation_type": "generation_job",
+        "operation_id": "op_state_diff_118",
+        "status": "queued",
+        "status_url": "/api/v1/operations/op_state_diff_118",
+        "events_url": "/api/v1/operations/op_state_diff_118/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task7_118"
+    }
+  }
+}

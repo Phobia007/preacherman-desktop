@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_import_readiness_updated_01",
+  "stream_id": "import_job:import_job_01",
+  "sequence": 1,
+  "event_type": "import.readiness_updated",
+  "schema_version": 1,
+  "resource_type": "import_job",
+  "resource_id": "import_job_01",
+  "operation_id": "import_job_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "checking_dependencies",
+  "progress": 0.82,
+  "payload": {
+    "score": 86,
+    "blocking_count": 0
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

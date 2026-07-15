@@ -1,0 +1,44 @@
+{
+  "summary": "Get a task run",
+  "value": {
+    "data": {
+      "task_run_id": "trun_board_brief_01",
+      "task_draft_id": "td_board_brief",
+      "state_version_id": "stv_strategy_v18",
+      "previous_task_run_id": null,
+      "input_snapshot": {
+        "task_draft_revision": 8,
+        "goal": "Prepare a board brief for Q2 performance and Q3 outlook.",
+        "description": "Synthesize the supplied sources into an executive-ready brief.",
+        "source_ids": [
+          "source_q2_notes"
+        ],
+        "context_tags": [
+          {
+            "context_tag_id": "ctag_strategy",
+            "owner_type": "task_draft",
+            "owner_id": "td_board_brief",
+            "label": "Strategy",
+            "value": "product_strategy"
+          }
+        ],
+        "state_version_id": "stv_strategy_v18"
+      },
+      "status": "running",
+      "current_stage": "research",
+      "progress": 0.45,
+      "error_code": null,
+      "artifact_ids": [],
+      "metrics": {
+        "elapsed_ms": 72000
+      },
+      "attempt": 1,
+      "started_at": "2026-07-15T08:00:00Z",
+      "completed_at": null,
+      "created_at": "2026-07-15T08:00:00Z"
+    },
+    "meta": {
+      "request_id": "req_task5_49"
+    }
+  }
+}

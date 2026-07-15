@@ -1,0 +1,15 @@
+{
+  "summary": "Sanitized success example for API-037",
+  "value": {
+    "data": {
+      "operation_type": "export_job",
+      "operation_id": "exp_example_001",
+      "status": "queued",
+      "status_url": "/api/v1/operations/exp_example_001",
+      "events_url": "/api/v1/operations/exp_example_001/events"
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

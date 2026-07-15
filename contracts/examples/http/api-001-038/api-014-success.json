@@ -1,0 +1,50 @@
+{
+  "summary": "Sanitized success example for API-014",
+  "value": {
+    "data": {
+      "health": {
+        "snapshot_id": "shs_example_001",
+        "state_id": "st_example_001",
+        "state_version_id": "sv_example_001",
+        "health_status": "excellent",
+        "token_balance": 314580,
+        "token_limit": 500000,
+        "active_api_count": 3,
+        "api_limit": 5,
+        "error_rate": 0.01,
+        "latency_ms": 1020,
+        "checked_at": "2026-07-14T10:21:32Z"
+      },
+      "usage": {
+        "window": "10m",
+        "token_usage": 68420
+      },
+      "active_apis": [
+        {
+          "api_id": "api_example_001",
+          "label": "Research",
+          "status": "active"
+        }
+      ],
+      "recent_activity": [
+        {
+          "activity_id": "act_example_001",
+          "type": "task_completed",
+          "summary": "Example task completed.",
+          "occurred_at": "2026-07-14T10:21:32Z"
+        }
+      ],
+      "system_stream": [
+        {
+          "level": "info",
+          "code": "SYSTEM_OK",
+          "message": "All systems normal.",
+          "occurred_at": "2026-07-14T10:21:32Z"
+        }
+      ]
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

@@ -1,0 +1,822 @@
+StateSummary:
+  type: object
+  additionalProperties: false
+  required: [state_id, name, description, lifecycle_status]
+  properties:
+    state_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 2000
+    lifecycle_status:
+      type: string
+      enum: [draft_only, published, archived]
+    current_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+StateVersionSummary:
+  type: object
+  additionalProperties: false
+  required: [state_version_id, state_id, version, name, publish_status]
+  properties:
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    version:
+      type: string
+      maxLength: 32
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    publish_status:
+      type: string
+      enum: [private, published, deprecated]
+    capabilities:
+      type: array
+      items:
+        type: string
+        maxLength: 80
+State:
+  type: object
+  additionalProperties: false
+  required:
+    - state_id
+    - owner_user_id
+    - name
+    - description
+    - visibility
+    - lifecycle_status
+    - builder_user_id
+    - created_at
+    - updated_at
+  properties:
+    state_id:
+      $ref: ./common.yaml#/Id
+    owner_user_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 2000
+    visibility:
+      type: string
+      enum: [private, workspace, public]
+    current_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    latest_draft_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    lifecycle_status:
+      type: string
+      enum: [draft_only, published, archived]
+    builder_user_id:
+      $ref: ./common.yaml#/Id
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+    updated_at:
+      $ref: ./common.yaml#/Timestamp
+StateHealthSnapshot:
+  type: object
+  additionalProperties: false
+  required:
+    - snapshot_id
+    - state_id
+    - state_version_id
+    - health_status
+    - token_balance
+    - token_limit
+    - active_api_count
+    - api_limit
+    - error_rate
+    - latency_ms
+    - checked_at
+  properties:
+    snapshot_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    health_status:
+      type: string
+      enum: [excellent, healthy, degraded, offline]
+    token_balance:
+      type: integer
+      minimum: 0
+    token_limit:
+      type: integer
+      minimum: 0
+    active_api_count:
+      type: integer
+      minimum: 0
+    api_limit:
+      type: integer
+      minimum: 0
+    error_rate:
+      type: number
+      minimum: 0
+      maximum: 1
+    latency_ms:
+      type: integer
+      minimum: 0
+    checked_at:
+      $ref: ./common.yaml#/Timestamp
+RuntimeStatus:
+  type: object
+  additionalProperties: false
+  required: [live, connection_state, autosaved_at]
+  properties:
+    live:
+      type: boolean
+    connection_state:
+      type: string
+      enum: [connected, reconnecting, offline]
+    autosaved_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    resource_type:
+      type: [string, 'null']
+      maxLength: 64
+    resource_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    revision:
+      oneOf:
+        - $ref: ./common.yaml#/Revision
+        - type: 'null'
+Operation:
+  type: object
+  additionalProperties: false
+  required:
+    - operation_id
+    - operation_type
+    - status
+    - progress
+    - status_url
+    - events_url
+    - created_at
+  properties:
+    operation_id:
+      $ref: ./common.yaml#/Id
+    operation_type:
+      type: string
+      enum: [task_run, test_run, validation_run, import_job, export_job, response_run, generation_job]
+    status:
+      type: string
+      enum: [queued, preparing, running, succeeded, failed, cancelled, timed_out]
+    stage:
+      type: [string, 'null']
+      maxLength: 80
+    progress:
+      type: number
+      minimum: 0
+      maximum: 1
+    resource_type:
+      type: [string, 'null']
+      maxLength: 64
+    resource_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    status_url:
+      type: string
+      pattern: ^/api/v1/
+    events_url:
+      type: string
+      pattern: ^/api/v1/
+    latest_sequence:
+      type: integer
+      minimum: 0
+    error_code:
+      type: [string, 'null']
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+    completed_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+MonitorSummary:
+  type: object
+  additionalProperties: false
+  required: [health, usage, active_apis, recent_activity, system_stream]
+  properties:
+    health:
+      $ref: '#/StateHealthSnapshot'
+    usage:
+      type: object
+      additionalProperties: false
+      required: [window, token_usage]
+      properties:
+        window:
+          type: string
+          maxLength: 32
+        token_usage:
+          type: integer
+          minimum: 0
+    active_apis:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [api_id, label, status]
+        properties:
+          api_id:
+            $ref: ./common.yaml#/Id
+          label:
+            type: string
+            maxLength: 120
+          status:
+            type: string
+            enum: [active, degraded, offline]
+    recent_activity:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [activity_id, type, summary, occurred_at]
+        properties:
+          activity_id:
+            $ref: ./common.yaml#/Id
+          type:
+            type: string
+            maxLength: 64
+          summary:
+            type: string
+            maxLength: 240
+          occurred_at:
+            $ref: ./common.yaml#/Timestamp
+    system_stream:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [level, code, message, occurred_at]
+        properties:
+          level:
+            type: string
+            enum: [info, warning, error]
+          code:
+            type: string
+            maxLength: 64
+          message:
+            type: string
+            maxLength: 500
+          occurred_at:
+            $ref: ./common.yaml#/Timestamp
+StatePassport:
+  type: object
+  additionalProperties: false
+  required: [state, version, capabilities, permissions, validation_summary]
+  properties:
+    state:
+      $ref: '#/StateSummary'
+    version:
+      $ref: '#/StateVersionSummary'
+    capabilities:
+      type: array
+      items:
+        type: string
+        maxLength: 120
+    permissions:
+      type: array
+      items:
+        type: string
+        maxLength: 120
+    validation_summary:
+      type: object
+      additionalProperties: true
+    match_reason:
+      type: [string, 'null']
+      maxLength: 1000
+StateLearning:
+  type: object
+  additionalProperties: false
+  required: [state_learning_id, state_id, learning_type, summary, status, created_at]
+  properties:
+    state_learning_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    learning_type:
+      type: string
+      enum: [insight, preference, style, source_pattern]
+    summary:
+      type: string
+      maxLength: 1000
+    status:
+      type: string
+      enum: [active, compacted, removed]
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+SkillVersionSummary:
+  type: object
+  additionalProperties: false
+  required: [skill_version_id, name, version, compatibility_status]
+  properties:
+    skill_version_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      maxLength: 160
+    version:
+      type: string
+      maxLength: 32
+    capabilities:
+      type: array
+      items:
+        type: string
+        maxLength: 80
+    compatibility_status:
+      type: string
+      enum: [compatible, review_required, incompatible]
+StateDraftSummary:
+  type: object
+  additionalProperties: false
+  required: [state_draft_id, state_id, name, status, revision]
+  properties:
+    state_draft_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      maxLength: 160
+    status:
+      type: string
+      enum: [editing, testing, validated, discarded]
+    revision:
+      $ref: ./common.yaml#/Revision
+TestRunSummary:
+  type: object
+  additionalProperties: false
+  required: [test_run_id, status, progress, created_at]
+  properties:
+    test_run_id:
+      $ref: ./common.yaml#/Id
+    status:
+      type: string
+      enum: [queued, running, succeeded, failed, cancelled, timed_out]
+    progress:
+      type: number
+      minimum: 0
+      maximum: 1
+    overall_score:
+      type: [number, 'null']
+      minimum: 0
+      maximum: 100
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+StateTestSummary:
+  type: object
+  additionalProperties: false
+  required: [state_id, testable_versions, recent_tests, default_settings]
+  properties:
+    state_id:
+      $ref: ./common.yaml#/Id
+    testable_versions:
+      type: array
+      items:
+        $ref: '#/StateVersionSummary'
+    recent_tests:
+      type: array
+      items:
+        $ref: '#/TestRunSummary'
+    default_settings:
+      type: object
+      additionalProperties: true
+LedgerSummary:
+  type: object
+  additionalProperties: false
+  required: [state_id, versions, branches, latest_events]
+  properties:
+    state_id:
+      $ref: ./common.yaml#/Id
+    versions:
+      type: array
+      items:
+        $ref: '#/StateVersionSummary'
+    branches:
+      type: array
+      items:
+        $ref: '#/StateDraftSummary'
+    latest_events:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [ledger_event_id, event_type, summary, created_at]
+        properties:
+          ledger_event_id:
+            $ref: ./common.yaml#/Id
+          event_type:
+            type: string
+            maxLength: 64
+          summary:
+            type: string
+            maxLength: 240
+          created_at:
+            $ref: ./common.yaml#/Timestamp
+TaskDraftSummary:
+  type: object
+  additionalProperties: false
+  required: [task_draft_id, state_id, goal, status, revision]
+  properties:
+    task_draft_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    conversation_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    goal:
+      type: string
+      maxLength: 4000
+    status:
+      type: string
+      enum: [editing, saved, submitted, discarded]
+    revision:
+      $ref: ./common.yaml#/Revision
+ShareLink:
+  type: object
+  additionalProperties: false
+  description: Share metadata. Token hashes are never returned by this API.
+  required:
+    - share_link_id
+    - resource_type
+    - resource_id
+    - permission
+    - expires_at
+    - revoked_at
+    - created_at
+  properties:
+    share_link_id:
+      $ref: ./common.yaml#/Id
+    resource_type:
+      type: string
+      enum: [conversation, artifact, skill_version]
+    resource_id:
+      $ref: ./common.yaml#/Id
+    permission:
+      type: string
+      enum: [view, download]
+    share_url:
+      type: string
+      format: uri
+      description: Returned only at creation time. Treat as sensitive and do not log.
+    expires_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    revoked_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+ExportFormat:
+  type: object
+  additionalProperties: false
+  required: [format, label, format_version, options_schema, maximum_size_bytes]
+  properties:
+    format:
+      type: string
+      maxLength: 32
+    label:
+      type: string
+      maxLength: 80
+    format_version:
+      type: string
+      maxLength: 32
+    options_schema:
+      type: object
+      additionalProperties: true
+    maximum_size_bytes:
+      type: integer
+      minimum: 1
+ExportJob:
+  type: object
+  additionalProperties: false
+  required:
+    - export_job_id
+    - resource_type
+    - resource_id
+    - resource_revision
+    - format
+    - format_version
+    - status
+    - progress
+    - created_at
+  properties:
+    export_job_id:
+      $ref: ./common.yaml#/Id
+    resource_type:
+      type: string
+      enum: [conversation, artifact, skill_version]
+    resource_id:
+      $ref: ./common.yaml#/Id
+    resource_revision:
+      oneOf:
+        - type: integer
+          minimum: 0
+        - type: string
+          minLength: 1
+          maxLength: 64
+    format:
+      type: string
+      maxLength: 32
+    format_version:
+      type: string
+      maxLength: 32
+    status:
+      type: string
+      enum: [queued, processing, completed, failed, expired]
+    progress:
+      type: number
+      minimum: 0
+      maximum: 1
+    artifact_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    download_url:
+      type: [string, 'null']
+      format: uri
+      description: Short-lived signed URL. Never log or persist this value.
+    expires_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    error_code:
+      type: [string, 'null']
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+    completed_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+CreateShareLinkRequest:
+  type: object
+  additionalProperties: false
+  required: [resource_type, resource_id, permission, expires_at]
+  properties:
+    resource_type:
+      type: string
+      enum: [conversation, artifact, skill_version]
+    resource_id:
+      $ref: ./common.yaml#/Id
+    permission:
+      type: string
+      enum: [view, download]
+    expires_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+CreateExportJobRequest:
+  type: object
+  additionalProperties: false
+  required: [resource_type, resource_id, resource_revision, format, options]
+  properties:
+    resource_type:
+      type: string
+      enum: [conversation, artifact, skill_version]
+    resource_id:
+      $ref: ./common.yaml#/Id
+    resource_revision:
+      oneOf:
+        - type: integer
+          minimum: 0
+        - type: string
+          minLength: 1
+          maxLength: 64
+    format:
+      type: string
+      minLength: 1
+      maxLength: 32
+    options:
+      type: object
+      additionalProperties: true
+HomeResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [current_state, health, usage, recent_activity, unread_notification_count]
+      properties:
+        current_state:
+          oneOf:
+            - $ref: '#/StateSummary'
+            - type: 'null'
+        health:
+          oneOf:
+            - $ref: '#/StateHealthSnapshot'
+            - type: 'null'
+        usage:
+          type: object
+          additionalProperties: true
+        recent_activity:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        unread_notification_count:
+          type: integer
+          minimum: 0
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+RuntimeStatusResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/RuntimeStatus'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+OperationResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/Operation'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateHealthSummaryResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/StateHealthSnapshot'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+MonitorResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/MonitorSummary'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+CurrentStateResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [state, active_version]
+      properties:
+        state:
+          $ref: '#/State'
+        active_version:
+          $ref: '#/StateVersionSummary'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [state, current_version, skills, permissions]
+      properties:
+        state:
+          $ref: '#/State'
+        current_version:
+          oneOf:
+            - $ref: '#/StateVersionSummary'
+            - type: 'null'
+        skills:
+          type: array
+          items:
+            $ref: '#/SkillVersionSummary'
+        permissions:
+          type: array
+          items:
+            type: string
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StatePassportResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/StatePassport'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateLearningListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/StateLearning'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+AvailableSkillListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/SkillVersionSummary'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+StateDraftSummaryResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/StateDraftSummary'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateTestSummaryResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/StateTestSummary'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+LedgerSummaryResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/LedgerSummary'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+TaskDraftSummaryResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/TaskDraftSummary'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ShareLinkResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/ShareLink'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ExportFormatListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/ExportFormat'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ExportJobResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/ExportJob'
+    meta:
+      $ref: ./common.yaml#/RequestMeta

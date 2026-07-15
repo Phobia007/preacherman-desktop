@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "SOURCE_UNSAFE",
+    "message": "This source did not pass the safety check.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "reason_code": "SAFETY_CHECK_FAILED"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

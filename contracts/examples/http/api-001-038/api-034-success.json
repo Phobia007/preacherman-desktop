@@ -1,0 +1,17 @@
+{
+  "summary": "Sanitized success example for API-034",
+  "value": {
+    "data": {
+      "share_link_id": "shr_example_001",
+      "resource_type": "conversation",
+      "resource_id": "con_example_001",
+      "permission": "view",
+      "expires_at": "2026-07-21T10:21:32Z",
+      "revoked_at": null,
+      "created_at": "2026-07-14T10:21:32Z"
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

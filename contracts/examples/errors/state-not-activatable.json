@@ -1,0 +1,16 @@
+{
+  "error": {
+    "code": "STATE_NOT_ACTIVATABLE",
+    "message": "This State cannot be activated yet.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "unmet_requirement_codes": [
+        "VALIDATION_REQUIRED"
+      ]
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

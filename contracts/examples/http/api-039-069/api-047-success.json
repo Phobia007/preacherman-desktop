@@ -1,0 +1,15 @@
+{
+  "summary": "Run a task draft quick action",
+  "value": {
+    "data": {
+      "operation_type": "generation_job",
+      "operation_id": "op_task_action_047",
+      "status": "queued",
+      "status_url": "/api/v1/operations/op_task_action_047",
+      "events_url": "/api/v1/operations/op_task_action_047/events"
+    },
+    "meta": {
+      "request_id": "req_task5_47"
+    }
+  }
+}

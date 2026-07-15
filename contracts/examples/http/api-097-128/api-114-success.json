@@ -1,0 +1,19 @@
+{
+  "summary": "Deactivate a State installation",
+  "value": {
+    "data": {
+      "installation_id": "ins_example_112",
+      "state_id": "sta_strategy_operator",
+      "state_version_id": "stv_strategy_121",
+      "status": "disabled",
+      "is_current": false,
+      "installed_at": "2026-07-15T10:21:32Z",
+      "activated_at": "2026-07-15T11:21:32Z",
+      "deactivated_at": "2026-07-15T11:21:32Z",
+      "revision": 3
+    },
+    "meta": {
+      "request_id": "req_task7_114"
+    }
+  }
+}

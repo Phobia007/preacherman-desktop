@@ -1,0 +1,15 @@
+{
+  "error": {
+    "code": "INSUFFICIENT_QUOTA",
+    "message": "Not enough capacity to run this.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "remaining_units": 0,
+      "required_units": 10
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

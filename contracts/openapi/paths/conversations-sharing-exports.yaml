@@ -1,0 +1,954 @@
+/conversations/recent:
+  get:
+    summary: List recent conversations
+    description: List recent conversations. See API-024 in the API registry for product context.
+    operationId: listRecentConversations
+    tags:
+      - Conversations
+    x-api-id: API-024
+    x-interaction-ids:
+      - INT-028
+    x-permissions:
+      - conversation.owner
+      - state.use
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: query
+        required: false
+        description: Opaque resource identifier.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/conversations.yaml#/ConversationListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-024-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/conversations:
+  post:
+    summary: Create a conversation
+    description: Create a conversation. See API-025 in the API registry for product context.
+    operationId: createConversation
+    tags:
+      - Conversations
+    x-api-id: API-025
+    x-interaction-ids:
+      - INT-029
+    x-permissions:
+      - conversation.owner
+      - state.use
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/conversations.yaml#/CreateConversationRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/conversations.yaml#/ConversationResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-025-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/conversations/{conversation_id}:
+  get:
+    summary: Get a conversation
+    description: Get a conversation. See API-026 in the API registry for product context.
+    operationId: getConversation
+    tags:
+      - Conversations
+    x-api-id: API-026
+    x-interaction-ids:
+      - INT-029
+      - INT-034
+    x-permissions:
+      - conversation.owner
+      - state.use
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: conversation_id
+        in: path
+        required: true
+        description: Opaque conversation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/conversations.yaml#/ConversationResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-026-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/conversations/{conversation_id}/messages:
+  get:
+    summary: List conversation messages
+    description: List conversation messages. See API-027 in the API registry for product context.
+    operationId: listConversationMessages
+    tags:
+      - Conversations
+    x-api-id: API-027
+    x-interaction-ids:
+      - INT-034
+      - INT-035
+    x-permissions:
+      - conversation.owner
+      - state.use
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: conversation_id
+        in: path
+        required: true
+        description: Opaque conversation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+      - name: query
+        in: query
+        required: false
+        description: Search term matched against message text.
+        schema:
+          type: string
+          maxLength: 500
+      - name: before
+        in: query
+        required: false
+        description: Return messages before this UTC time.
+        schema:
+          type: string
+          format: date-time
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/conversations.yaml#/MessageListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-027-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+  post:
+    summary: Create a conversation message
+    description: Create a conversation message. See API-028 in the API registry for product context.
+    operationId: createConversationMessage
+    tags:
+      - Conversations
+    x-api-id: API-028
+    x-interaction-ids:
+      - INT-030
+    x-permissions:
+      - conversation.owner
+      - state.use
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: conversation_id
+        in: path
+        required: true
+        description: Opaque conversation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/conversations.yaml#/CreateMessageRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/conversations.yaml#/ConversationMessageAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-028-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/conversations/{conversation_id}/events:
+  get:
+    summary: Stream conversation events
+    description: Stream conversation events. See API-029 in the API registry for product context.
+    operationId: streamConversationEvents
+    tags:
+      - Conversations
+    x-api-id: API-029
+    x-interaction-ids:
+      - INT-032
+    x-permissions:
+      - conversation.owner
+      - state.use
+    x-execution-mode: sse
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - EVENT_CURSOR_EXPIRED
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: conversation_id
+        in: path
+        required: true
+        description: Opaque conversation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/AfterSequence
+      - $ref: ../components/parameters.yaml#/LastEventId
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          text/event-stream:
+            schema:
+              type: string
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-029-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/conversations/{conversation_id}/responses/{response_run_id}/retry:
+  post:
+    summary: Retry a conversation response
+    description: Retry a conversation response. See API-030 in the API registry for product context.
+    operationId: retryConversationResponse
+    tags:
+      - Conversations
+    x-api-id: API-030
+    x-interaction-ids:
+      - INT-033
+    x-permissions:
+      - conversation.owner
+      - state.use
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: conversation_id
+        in: path
+        required: true
+        description: Opaque conversation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: response_run_id
+        in: path
+        required: true
+        description: Opaque response run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/conversations.yaml#/RetryConversationResponseRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/common.yaml#/OperationAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-030-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/audio/transcriptions:
+  post:
+    summary: Create an audio transcription
+    description: Create an audio transcription. See API-031 in the API registry for product context.
+    operationId: createAudioTranscription
+    tags:
+      - Conversations
+    x-api-id: API-031
+    x-interaction-ids:
+      - INT-031
+    x-permissions:
+      - audio_asset.owner
+    x-execution-mode: async
+    x-idempotency: supported
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKeyOptional
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/conversations.yaml#/AudioTranscriptionRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/common.yaml#/OperationAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-031-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/conversations/{conversation_id}/actions:
+  post:
+    summary: Run a conversation quick action
+    description: Run a conversation quick action. See API-032 in the API registry for product context.
+    operationId: createConversationAction
+    tags:
+      - Conversations
+    x-api-id: API-032
+    x-interaction-ids:
+      - INT-039
+    x-permissions:
+      - conversation.owner
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: conversation_id
+        in: path
+        required: true
+        description: Opaque conversation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/conversations.yaml#/ConversationActionRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/common.yaml#/OperationAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-032-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/conversations/{conversation_id}/task-drafts:
+  post:
+    summary: Create a task draft from a conversation
+    description: Create a task draft from a conversation. See API-033 in the API registry for product context.
+    operationId: createTaskDraftFromConversation
+    tags:
+      - Conversations
+    x-api-id: API-033
+    x-interaction-ids:
+      - INT-038
+    x-permissions:
+      - conversation.owner
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: conversation_id
+        in: path
+        required: true
+        description: Opaque conversation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/conversations.yaml#/CreateTaskDraftFromConversationRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/TaskDraftSummaryResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-033-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/share-links:
+  post:
+    summary: Create a share link
+    description: Create a share link. See API-034 in the API registry for product context.
+    operationId: createShareLink
+    tags:
+      - Conversations
+    x-api-id: API-034
+    x-interaction-ids:
+      - INT-036
+      - INT-113
+    x-permissions:
+      - resource.share
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - share_link.created
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - SHARE_LINK_EXPIRED
+      - SHARE_LINK_REVOKED
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/content.yaml#/CreateShareLinkRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/ShareLinkResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-034-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "410":
+        $ref: ../components/responses.yaml#/Gone
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/share-links/{share_link_id}:
+  delete:
+    summary: Revoke a share link
+    description: Revoke a share link. See API-035 in the API registry for product context.
+    operationId: revokeShareLink
+    tags:
+      - Conversations
+    x-api-id: API-035
+    x-interaction-ids:
+      - INT-036
+    x-permissions:
+      - resource.share
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - share_link.revoked
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - SHARE_LINK_EXPIRED
+      - SHARE_LINK_REVOKED
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: share_link_id
+        in: path
+        required: true
+        description: Opaque share link id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    responses:
+      "204":
+        $ref: ../components/responses.yaml#/NoContent
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "410":
+        $ref: ../components/responses.yaml#/Gone
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/exports/formats:
+  get:
+    summary: List export formats
+    description: List export formats. See API-036 in the API registry for product context.
+    operationId: listExportFormats
+    tags:
+      - Conversations
+    x-api-id: API-036
+    x-interaction-ids:
+      - INT-037
+      - INT-112
+      - INT-126
+    x-permissions:
+      - resource.export
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - EXPORT_FORMAT_UNAVAILABLE
+      - EXPORT_FAILED
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: resource_type
+        in: query
+        required: false
+        description: Resource type being exported.
+        schema:
+          type: string
+          maxLength: 120
+          enum:
+            - conversation
+            - artifact
+            - skill_version
+      - name: resource_id
+        in: query
+        required: true
+        description: Opaque resource identifier.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/ExportFormatListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-036-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "500":
+        $ref: ../components/responses.yaml#/InternalServerError
+/export-jobs:
+  post:
+    summary: Create an export job
+    description: Create an export job. See API-037 in the API registry for product context.
+    operationId: createExportJob
+    tags:
+      - Conversations
+    x-api-id: API-037
+    x-interaction-ids:
+      - INT-037
+      - INT-113
+      - INT-126
+    x-permissions:
+      - resource.export
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions:
+      - export.sensitive_created
+    x-event-schema: events/event.schema.json
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+      - EXPORT_FORMAT_UNAVAILABLE
+      - EXPORT_FAILED
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/content.yaml#/CreateExportJobRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/common.yaml#/OperationAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-037-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "500":
+        $ref: ../components/responses.yaml#/InternalServerError
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/export-jobs/{export_job_id}:
+  get:
+    summary: Get an export job
+    description: Get an export job. See API-038 in the API registry for product context.
+    operationId: getExportJob
+    tags:
+      - Conversations
+    x-api-id: API-038
+    x-interaction-ids:
+      - INT-037
+      - INT-113
+      - INT-126
+    x-permissions:
+      - resource.export
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - EXPORT_FORMAT_UNAVAILABLE
+      - EXPORT_FAILED
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: export_job_id
+        in: path
+        required: true
+        description: Opaque export job id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/content.yaml#/ExportJobResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-038-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "500":
+        $ref: ../components/responses.yaml#/InternalServerError

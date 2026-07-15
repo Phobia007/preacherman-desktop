@@ -1,0 +1,26 @@
+{
+  "summary": "Create a State Sandbox session",
+  "value": {
+    "data": {
+      "sandbox_session": {
+        "sandbox_session_id": "sbs_example_111",
+        "state_version_id": "stv_strategy_121",
+        "status": "preparing",
+        "expires_at": "2026-07-15T11:21:32Z",
+        "test_run_ids": [],
+        "is_persistent": false,
+        "created_at": "2026-07-15T10:21:32Z"
+      },
+      "operation": {
+        "operation_type": "generation_job",
+        "operation_id": "op_sandbox_111",
+        "status": "queued",
+        "status_url": "/api/v1/operations/op_sandbox_111",
+        "events_url": "/api/v1/operations/op_sandbox_111/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task7_111"
+    }
+  }
+}

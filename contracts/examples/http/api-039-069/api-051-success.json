@@ -1,0 +1,19 @@
+{
+  "summary": "Retry a task run as a new run",
+  "value": {
+    "data": {
+      "task_run_id": "trun_board_brief_02",
+      "previous_task_run_id": "trun_board_brief_01",
+      "operation": {
+        "operation_type": "task_run",
+        "operation_id": "trun_board_brief_02",
+        "status": "queued",
+        "status_url": "/api/v1/task-runs/trun_board_brief_02",
+        "events_url": "/api/v1/task-runs/trun_board_brief_02/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task5_51"
+    }
+  }
+}

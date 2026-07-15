@@ -1,0 +1,295 @@
+DeviceInfo:
+  type: object
+  additionalProperties: false
+  properties:
+    platform:
+      type: string
+      maxLength: 64
+    browser:
+      type: string
+      maxLength: 64
+    client_version:
+      type: string
+      maxLength: 32
+User:
+  type: object
+  additionalProperties: false
+  required:
+    - user_id
+    - email
+    - email_verified
+    - account_status
+    - onboarding_status
+    - created_at
+    - updated_at
+  properties:
+    user_id:
+      $ref: ./common.yaml#/Id
+    email:
+      type: string
+      format: email
+      maxLength: 320
+    email_verified:
+      type: boolean
+    account_status:
+      type: string
+      enum: [pending, active, suspended, deleted]
+    onboarding_status:
+      type: string
+      enum: [not_started, in_progress, completed]
+    last_login_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+    updated_at:
+      $ref: ./common.yaml#/Timestamp
+UserProfile:
+  type: object
+  additionalProperties: false
+  required:
+    - user_id
+    - display_name
+    - locale
+    - timezone
+    - preferences
+    - revision
+  properties:
+    user_id:
+      $ref: ./common.yaml#/Id
+    display_name:
+      type: string
+      minLength: 1
+      maxLength: 120
+    avatar_asset_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    role_label:
+      type: [string, 'null']
+      maxLength: 120
+    locale:
+      type: string
+      minLength: 2
+      maxLength: 35
+    timezone:
+      type: string
+      minLength: 1
+      maxLength: 64
+    preferences:
+      type: object
+      additionalProperties: true
+    revision:
+      $ref: ./common.yaml#/Revision
+Session:
+  type: object
+  additionalProperties: false
+  required: [session_id, user_id, expires_at, created_at]
+  properties:
+    session_id:
+      $ref: ./common.yaml#/Id
+    user_id:
+      $ref: ./common.yaml#/Id
+    expires_at:
+      $ref: ./common.yaml#/Timestamp
+    revoked_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+Notification:
+  type: object
+  additionalProperties: false
+  required:
+    - notification_id
+    - type
+    - title
+    - body
+    - read_at
+    - created_at
+  properties:
+    notification_id:
+      $ref: ./common.yaml#/Id
+    type:
+      type: string
+      enum: [task_completed, test_completed, publish_completed, system]
+    title:
+      type: string
+      minLength: 1
+      maxLength: 160
+    body:
+      type: string
+      minLength: 1
+      maxLength: 1000
+    resource_type:
+      type: [string, 'null']
+      maxLength: 64
+    resource_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    read_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+LoginRequest:
+  type: object
+  additionalProperties: false
+  required: [email, password]
+  properties:
+    email:
+      type: string
+      format: email
+      maxLength: 320
+    password:
+      type: string
+      minLength: 12
+      maxLength: 256
+      writeOnly: true
+    device_info:
+      $ref: '#/DeviceInfo'
+LogoutRequest:
+  type: object
+  additionalProperties: false
+  properties:
+    session_id:
+      $ref: ./common.yaml#/Id
+CreateUserRequest:
+  type: object
+  additionalProperties: false
+  required: [email, password, agreement_acceptance]
+  properties:
+    email:
+      type: string
+      format: email
+      maxLength: 320
+    password:
+      type: string
+      minLength: 12
+      maxLength: 256
+      writeOnly: true
+    agreement_acceptance:
+      type: object
+      additionalProperties: false
+      required: [terms_version, privacy_version, accepted_at]
+      properties:
+        terms_version:
+          type: string
+          maxLength: 32
+        privacy_version:
+          type: string
+          maxLength: 32
+        accepted_at:
+          $ref: ./common.yaml#/Timestamp
+    device_info:
+      $ref: '#/DeviceInfo'
+UpdateUserProfileRequest:
+  type: object
+  additionalProperties: false
+  minProperties: 1
+  properties:
+    display_name:
+      type: string
+      minLength: 1
+      maxLength: 120
+    avatar_asset_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    role_label:
+      type: [string, 'null']
+      maxLength: 120
+    locale:
+      type: string
+      minLength: 2
+      maxLength: 35
+    timezone:
+      type: string
+      minLength: 1
+      maxLength: 64
+    preferences:
+      type: object
+      additionalProperties: true
+CompleteOnboardingRequest:
+  type: object
+  additionalProperties: false
+  required: [profile_revision]
+  properties:
+    profile_revision:
+      $ref: ./common.yaml#/Revision
+AuthContext:
+  type: object
+  additionalProperties: false
+  required: [session, user, profile]
+  properties:
+    session:
+      $ref: '#/Session'
+    user:
+      $ref: '#/User'
+    profile:
+      $ref: '#/UserProfile'
+AuthContextResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/AuthContext'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+UserProfileResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/UserProfile'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+NotificationResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/Notification'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+NotificationListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [notifications, unread_count]
+      properties:
+        notifications:
+          type: array
+          items:
+            $ref: '#/Notification'
+        unread_count:
+          type: integer
+          minimum: 0
+    meta:
+      $ref: ./common.yaml#/ListMeta
+OnboardingCompleteResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [onboarding_status]
+      properties:
+        onboarding_status:
+          type: string
+          const: completed
+    meta:
+      $ref: ./common.yaml#/RequestMeta

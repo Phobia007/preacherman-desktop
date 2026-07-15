@@ -1,0 +1,49 @@
+{
+  "summary": "Get a State Market summary",
+  "value": {
+    "data": {
+      "state": {
+        "state_id": "sta_strategy_operator",
+        "state_version_id": "stv_strategy_121",
+        "name": "Strategy Operator",
+        "description": "Turns ambiguity into executable strategy.",
+        "category": "strategy",
+        "version": "1.2.1",
+        "builder_name": "Preacherman",
+        "verified": true,
+        "install_count": 18200,
+        "tags": [
+          "strategy",
+          "planning",
+          "research"
+        ]
+      },
+      "fit_score": 96,
+      "match_reasons": [
+        {
+          "capability": "planning",
+          "score": 98,
+          "explanation": "Strong alignment with board planning and prioritization."
+        }
+      ],
+      "proof_summary": {
+        "state_version_id": "stv_strategy_121",
+        "verified": true,
+        "run_count": 18200,
+        "metrics": {
+          "accuracy": 96,
+          "usefulness": 94,
+          "clarity": 95
+        },
+        "provenance": {
+          "builder": "Preacherman",
+          "verification": "continuous"
+        },
+        "updated_at": "2026-07-15T10:21:32Z"
+      }
+    },
+    "meta": {
+      "request_id": "req_task7_109"
+    }
+  }
+}

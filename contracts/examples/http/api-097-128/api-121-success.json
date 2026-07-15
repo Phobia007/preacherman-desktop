@@ -1,0 +1,23 @@
+{
+  "summary": "Get State evolution events",
+  "value": {
+    "data": [
+      {
+        "ledger_event_id": "led_example_120",
+        "state_id": "sta_example_001",
+        "event_type": "restored",
+        "source_version_id": "stv_example_018",
+        "target_version_id": "stv_example_019_restore",
+        "branch_id": null,
+        "source_task_run_id": null,
+        "summary": "Restored version 1.8.0 as a new version 1.9.0.",
+        "created_at": "2026-07-15T11:21:32Z"
+      }
+    ],
+    "meta": {
+      "request_id": "req_task7_121",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

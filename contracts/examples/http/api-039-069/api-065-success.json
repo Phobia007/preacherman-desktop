@@ -1,0 +1,15 @@
+{
+  "summary": "Reorder State draft Skill mounts",
+  "value": {
+    "data": {
+      "mount_ids": [
+        "mount_research_scout",
+        "mount_pricing"
+      ],
+      "draft_revision": 14
+    },
+    "meta": {
+      "request_id": "req_task5_65"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "summary": "Import configuration into a State draft",
+  "value": {
+    "data": {
+      "import_job": {
+        "import_job_id": "import_state_066",
+        "target_type": "state_draft",
+        "source_type": "repository",
+        "repository_url": "https://code.example.invalid/example/state-config",
+        "branch": "main",
+        "source_id": null,
+        "status": "queued",
+        "checks": [],
+        "readiness_score": null,
+        "error_code": null,
+        "created_at": "2026-07-15T08:00:00Z"
+      },
+      "operation": {
+        "operation_type": "import_job",
+        "operation_id": "import_state_066",
+        "status": "queued",
+        "status_url": "/api/v1/operations/import_state_066",
+        "events_url": "/api/v1/operations/import_state_066/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task5_66"
+    }
+  }
+}

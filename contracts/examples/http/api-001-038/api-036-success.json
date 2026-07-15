@@ -1,0 +1,19 @@
+{
+  "summary": "Sanitized success example for API-036",
+  "value": {
+    "data": [
+      {
+        "format": "pdf",
+        "label": "PDF",
+        "format_version": "1.0",
+        "options_schema": {
+          "type": "object"
+        },
+        "maximum_size_bytes": 52428800
+      }
+    ],
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

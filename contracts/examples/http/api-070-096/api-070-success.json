@@ -1,0 +1,23 @@
+{
+  "summary": "List visible Skills",
+  "value": {
+    "data": [
+      {
+        "skill_id": "skill_research_scout",
+        "name": "Research Scout",
+        "description": "Find and synthesize credible sources.",
+        "category": "research",
+        "visibility": "private",
+        "latest_version_id": "skv_research_scout_v12",
+        "latest_draft_id": "skd_research_scout_plus",
+        "lifecycle_status": "published",
+        "created_at": "2026-07-15T09:00:00Z"
+      }
+    ],
+    "meta": {
+      "request_id": "req_task6_70",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "event_id": "evt_export_failed_01",
+  "stream_id": "export_job:export_job_01",
+  "sequence": 1,
+  "event_type": "export.failed",
+  "schema_version": 1,
+  "resource_type": "export_job",
+  "resource_id": "export_job_01",
+  "operation_id": "export_job_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "failed",
+  "domain_status": "failed",
+  "stage": "rendering",
+  "progress": 0.44,
+  "payload": {
+    "error": {
+      "code": "EXPORT_FAILED",
+      "message": "The export could not be completed.",
+      "retryable": true,
+      "failed_stage": "validate",
+      "details": {}
+    }
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

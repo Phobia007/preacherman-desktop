@@ -1,0 +1,80 @@
+{
+  "summary": "Publish a Skill and atomically mount it to a State draft",
+  "value": {
+    "data": {
+      "skill_version": {
+        "skill_version_id": "skv_research_scout_v13",
+        "skill_id": "skill_research_scout",
+        "version": "v1.3.0",
+        "based_on_version_id": "skv_research_scout_v12",
+        "source_draft_id": "skd_research_scout_plus",
+        "capabilities": [
+          {
+            "capability_id": "cap_analyze",
+            "code": "analyze",
+            "name": "Analyze",
+            "description": "Analyze source material and identify relevant evidence.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "required_permissions": [
+              "web_search"
+            ],
+            "is_deprecated": false
+          }
+        ],
+        "behavior_snapshot": {
+          "output_style": "structured",
+          "reasoning": "evidence_first"
+        },
+        "guardrails_snapshot": {
+          "cite_evidence": true,
+          "flag_uncertainty": true
+        },
+        "permissions_snapshot": [
+          {
+            "permission": "web_search",
+            "access": "read",
+            "required": true,
+            "reason": "Retrieve public sources for evidence-backed research."
+          }
+        ],
+        "output_contract": {
+          "format": "markdown",
+          "version": "1.0"
+        },
+        "validation_summary": {
+          "tests_count": 50,
+          "pass_count": 48,
+          "review_count": 2,
+          "fail_count": 0,
+          "metrics": {
+            "accuracy": 91,
+            "completeness": 89,
+            "clarity": 94
+          }
+        },
+        "publish_status": "published",
+        "published_at": "2026-07-15T09:00:00Z"
+      },
+      "mount": {
+        "state_skill_mount_id": "mount_research_scout_plus",
+        "state_draft_id": "std_strategy_adjustment",
+        "skill_version_id": "skv_research_scout_v13",
+        "position": 1,
+        "configuration": {
+          "source_policy": "verified_only"
+        },
+        "is_enabled": true,
+        "mounted_at": "2026-07-15T09:00:00Z"
+      },
+      "state_draft_revision": 13
+    },
+    "meta": {
+      "request_id": "req_task6_93"
+    }
+  }
+}

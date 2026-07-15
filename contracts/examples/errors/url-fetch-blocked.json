@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "URL_FETCH_BLOCKED",
+    "message": "This link cannot be accessed safely.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "reason_code": "DESTINATION_NOT_ALLOWED"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

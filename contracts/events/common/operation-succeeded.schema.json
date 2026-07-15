@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/common/operation-succeeded.schema.json",
+  "title": "operation.succeeded",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "operation.succeeded"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "task_run",
+            "test_run",
+            "validation_run",
+            "import_job",
+            "export_job",
+            "response_run",
+            "generation_job"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "result_url"
+          ],
+          "properties": {
+            "result_url": {
+              "type": "string",
+              "format": "uri-reference"
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

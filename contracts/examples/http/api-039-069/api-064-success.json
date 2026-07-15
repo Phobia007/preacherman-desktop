@@ -1,0 +1,22 @@
+{
+  "summary": "Mount a Skill version on a State draft",
+  "value": {
+    "data": {
+      "mount": {
+        "state_skill_mount_id": "mount_pricing",
+        "state_draft_id": "std_strategy_adjustment",
+        "skill_version_id": "skv_pricing_v10",
+        "position": 1,
+        "configuration": {
+          "source_policy": "verified_only"
+        },
+        "is_enabled": true,
+        "mounted_at": "2026-07-15T08:00:00Z"
+      },
+      "draft_revision": 13
+    },
+    "meta": {
+      "request_id": "req_task5_64"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "EVENT_CURSOR_EXPIRED",
+    "message": "Refreshing the latest status.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "latest_sequence": 42
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

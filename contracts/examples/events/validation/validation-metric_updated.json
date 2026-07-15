@@ -1,0 +1,22 @@
+{
+  "event_id": "evt_validation_metric_updated_01",
+  "stream_id": "validation_run:validation_run_01",
+  "sequence": 1,
+  "event_type": "validation.metric_updated",
+  "schema_version": 1,
+  "resource_type": "validation_run",
+  "resource_id": "validation_run_01",
+  "operation_id": "validation_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "aggregate",
+  "progress": 0.86,
+  "payload": {
+    "metric": "accuracy",
+    "base_value": 72,
+    "draft_value": 91,
+    "change": 19
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

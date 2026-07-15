@@ -1,0 +1,17 @@
+{
+  "summary": "Get a Skill draft file",
+  "value": {
+    "data": {
+      "skill_file_id": "skfile_skill_md",
+      "skill_draft_id": "skd_research_scout_plus",
+      "path": "skill.md",
+      "content": "# Research Scout+\n\nProduce evidence-backed research briefs.",
+      "content_hash": "sha256_example_075",
+      "revision": 3,
+      "updated_at": "2026-07-15T09:00:00Z"
+    },
+    "meta": {
+      "request_id": "req_task6_75"
+    }
+  }
+}

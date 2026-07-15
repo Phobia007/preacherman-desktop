@@ -1,0 +1,1094 @@
+SkillPermissionDeclaration:
+  type: object
+  additionalProperties: false
+  description: Declares required access without containing credentials or secret values.
+  required: [permission, access, required, reason]
+  properties:
+    permission:
+      type: string
+      minLength: 1
+      maxLength: 160
+    access:
+      type: string
+      enum: [read, write, execute]
+    required:
+      type: boolean
+    reason:
+      type: string
+      maxLength: 500
+SkillCapability:
+  type: object
+  additionalProperties: false
+  required:
+    - capability_id
+    - code
+    - name
+    - description
+    - input_schema
+    - output_schema
+    - required_permissions
+    - is_deprecated
+  properties:
+    capability_id:
+      $ref: ./common.yaml#/Id
+    code:
+      type: string
+      pattern: ^[a-z][a-z0-9_]*$
+      maxLength: 120
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 1000
+    input_schema:
+      type: object
+      additionalProperties: true
+    output_schema:
+      type: object
+      additionalProperties: true
+    required_permissions:
+      type: array
+      maxItems: 100
+      items:
+        type: string
+        maxLength: 160
+    is_deprecated:
+      type: boolean
+Skill:
+  type: object
+  additionalProperties: false
+  required:
+    - skill_id
+    - name
+    - description
+    - category
+    - visibility
+    - lifecycle_status
+    - created_at
+  properties:
+    skill_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 2000
+    category:
+      type: string
+      maxLength: 120
+    visibility:
+      type: string
+      enum: [private, workspace, public]
+    latest_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    latest_draft_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    lifecycle_status:
+      type: string
+      enum: [draft_only, published, deprecated, archived]
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+SkillTemplate:
+  type: object
+  additionalProperties: false
+  required: [skill_template_id, name, description, category, capabilities]
+  properties:
+    skill_template_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 2000
+    category:
+      type: string
+      maxLength: 120
+    capabilities:
+      type: array
+      maxItems: 100
+      items:
+        type: string
+        maxLength: 120
+SkillDraft:
+  type: object
+  additionalProperties: false
+  required:
+    - skill_draft_id
+    - skill_id
+    - creation_mode
+    - current_step
+    - name
+    - purpose
+    - category
+    - capabilities
+    - behavior
+    - guardrails
+    - permissions
+    - output_contract
+    - publish_settings
+    - status
+    - revision
+    - autosaved_at
+  properties:
+    skill_draft_id:
+      $ref: ./common.yaml#/Id
+    skill_id:
+      $ref: ./common.yaml#/Id
+    base_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    creation_mode:
+      type: string
+      enum: [blank, template, import]
+    current_step:
+      type: integer
+      minimum: 1
+      maximum: 5
+      description: Current step in the confirmed Blank Skill 1-5 workflow.
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    purpose:
+      type: string
+      maxLength: 10000
+    category:
+      type: string
+      maxLength: 120
+    capabilities:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/SkillCapability'
+    behavior:
+      type: object
+      additionalProperties: true
+    guardrails:
+      type: object
+      additionalProperties: true
+    permissions:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/SkillPermissionDeclaration'
+    output_contract:
+      type: object
+      additionalProperties: true
+    publish_settings:
+      $ref: '#/SkillPublishSettings'
+    status:
+      type: string
+      enum: [editing, validating, validated, discarded]
+    revision:
+      $ref: ./common.yaml#/Revision
+    autosaved_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+SkillFile:
+  type: object
+  additionalProperties: false
+  required:
+    - skill_file_id
+    - skill_draft_id
+    - path
+    - content
+    - content_hash
+    - revision
+    - updated_at
+  properties:
+    skill_file_id:
+      $ref: ./common.yaml#/Id
+    skill_draft_id:
+      $ref: ./common.yaml#/Id
+    path:
+      type: string
+      minLength: 1
+      maxLength: 1024
+    content:
+      type: string
+      maxLength: 1000000
+    content_hash:
+      type: string
+      minLength: 16
+      maxLength: 128
+    revision:
+      $ref: ./common.yaml#/Revision
+    updated_at:
+      $ref: ./common.yaml#/Timestamp
+ValidationSummary:
+  type: object
+  additionalProperties: false
+  required: [tests_count, pass_count, review_count, fail_count, metrics]
+  properties:
+    tests_count:
+      type: integer
+      minimum: 0
+    pass_count:
+      type: integer
+      minimum: 0
+    review_count:
+      type: integer
+      minimum: 0
+      description: Count of system validation results requiring attention; not an approval state.
+    fail_count:
+      type: integer
+      minimum: 0
+    metrics:
+      type: object
+      additionalProperties:
+        type: number
+SkillVersion:
+  type: object
+  additionalProperties: false
+  description: Immutable Skill version. Changes require a new SkillDraft and a new version.
+  required:
+    - skill_version_id
+    - skill_id
+    - version
+    - source_draft_id
+    - capabilities
+    - behavior_snapshot
+    - guardrails_snapshot
+    - permissions_snapshot
+    - output_contract
+    - validation_summary
+    - publish_status
+    - published_at
+  properties:
+    skill_version_id:
+      allOf:
+        - $ref: ./common.yaml#/Id
+      readOnly: true
+    skill_id:
+      allOf:
+        - $ref: ./common.yaml#/Id
+      readOnly: true
+    version:
+      type: string
+      minLength: 1
+      maxLength: 32
+      readOnly: true
+    based_on_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+      readOnly: true
+    source_draft_id:
+      allOf:
+        - $ref: ./common.yaml#/Id
+      readOnly: true
+    capabilities:
+      type: array
+      items:
+        $ref: '#/SkillCapability'
+      readOnly: true
+    behavior_snapshot:
+      type: object
+      additionalProperties: true
+      readOnly: true
+    guardrails_snapshot:
+      type: object
+      additionalProperties: true
+      readOnly: true
+    permissions_snapshot:
+      type: array
+      items:
+        $ref: '#/SkillPermissionDeclaration'
+      readOnly: true
+    output_contract:
+      type: object
+      additionalProperties: true
+      readOnly: true
+    validation_summary:
+      allOf:
+        - $ref: '#/ValidationSummary'
+      readOnly: true
+    publish_status:
+      type: string
+      enum: [private, published, deprecated]
+      readOnly: true
+    published_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+      readOnly: true
+ImportCheck:
+  type: object
+  additionalProperties: false
+  required: [check_id, check_type, result, title, summary, evidence, suggested_fix]
+  properties:
+    check_id:
+      $ref: ./common.yaml#/Id
+    check_type:
+      type: string
+      enum: [schema, permissions, dependencies, unsafe_actions, source_integrity]
+    result:
+      type: string
+      enum: [pass, review, fail]
+    title:
+      type: string
+      maxLength: 240
+    summary:
+      type: string
+      maxLength: 2000
+    evidence:
+      type: object
+      additionalProperties: true
+    suggested_fix:
+      type: [string, 'null']
+      maxLength: 2000
+SkillImportJob:
+  type: object
+  additionalProperties: false
+  required:
+    - import_job_id
+    - target_type
+    - source_type
+    - status
+    - checks
+    - detected_capabilities
+    - readiness_score
+    - error_code
+    - created_at
+  properties:
+    import_job_id:
+      $ref: ./common.yaml#/Id
+    target_type:
+      type: string
+      enum: [skill_draft]
+    target_skill_draft_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    source_type:
+      type: string
+      enum: [repository, file]
+    repository_url:
+      type: [string, 'null']
+      format: uri
+      maxLength: 2048
+    branch:
+      type: [string, 'null']
+      maxLength: 255
+    source_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    status:
+      type: string
+      enum: [queued, reading, checking, ready, needs_review, saved_for_later, converted, failed]
+    checks:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/ImportCheck'
+    detected_capabilities:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/SkillCapability'
+    readiness_score:
+      type: [number, 'null']
+      minimum: 0
+      maximum: 100
+    error_code:
+      type: [string, 'null']
+      maxLength: 80
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+ValidationRun:
+  type: object
+  additionalProperties: false
+  required:
+    - validation_run_id
+    - skill_draft_id
+    - draft_revision
+    - test_set_ids
+    - mode
+    - status
+    - tests_count
+    - pass_count
+    - review_count
+    - fail_count
+    - metrics
+    - review_item_ids
+  properties:
+    validation_run_id:
+      $ref: ./common.yaml#/Id
+    skill_draft_id:
+      $ref: ./common.yaml#/Id
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    test_set_ids:
+      type: array
+      maxItems: 100
+      items:
+        $ref: ./common.yaml#/Id
+    mode:
+      type: string
+      enum: [quick, full, regression]
+    status:
+      type: string
+      enum: [queued, running, completed, failed, cancelled]
+    tests_count:
+      type: integer
+      minimum: 0
+    pass_count:
+      type: integer
+      minimum: 0
+    review_count:
+      type: integer
+      minimum: 0
+      description: Number of system-generated review results, not a publishing approval state.
+    fail_count:
+      type: integer
+      minimum: 0
+    metrics:
+      type: object
+      additionalProperties:
+        type: number
+    review_item_ids:
+      type: array
+      maxItems: 1000
+      items:
+        $ref: ./common.yaml#/Id
+    started_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    completed_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+TestSet:
+  type: object
+  additionalProperties: false
+  required: [test_set_id, name, description, case_count, visibility, updated_at]
+  properties:
+    test_set_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 1000
+    case_count:
+      type: integer
+      minimum: 0
+    visibility:
+      type: string
+      enum: [private, workspace]
+    updated_at:
+      $ref: ./common.yaml#/Timestamp
+ReviewItem:
+  type: object
+  additionalProperties: false
+  description: System validation finding that can be resolved or ignored by the Skill editor.
+  required:
+    - review_item_id
+    - validation_run_id
+    - category
+    - severity
+    - title
+    - detail
+    - evidence
+    - status
+  properties:
+    review_item_id:
+      $ref: ./common.yaml#/Id
+    validation_run_id:
+      $ref: ./common.yaml#/Id
+    category:
+      type: string
+      maxLength: 120
+    severity:
+      type: string
+      enum: [info, warning, blocking]
+    title:
+      type: string
+      maxLength: 240
+    detail:
+      type: string
+      maxLength: 4000
+    evidence:
+      type: object
+      additionalProperties: true
+    status:
+      type: string
+      enum: [open, resolved, ignored]
+SkillPublishSettings:
+  type: object
+  additionalProperties: false
+  required: [mount_mode, destination]
+  properties:
+    mount_mode:
+      type: string
+      enum: [add_to_state_draft, publish_only]
+      description: Controls whether publishing also mounts to a StateDraft; it never activates a State.
+    destination:
+      type: [object, 'null']
+      additionalProperties: false
+      properties:
+        state_draft_id:
+          $ref: ./common.yaml#/Id
+PublishIssue:
+  type: object
+  additionalProperties: false
+  required: [code, severity, message, field]
+  properties:
+    code:
+      type: string
+      pattern: ^[A-Z][A-Z0-9_]+$
+    severity:
+      type: string
+      enum: [review, blocking]
+    message:
+      type: string
+      maxLength: 1000
+    field:
+      type: [string, 'null']
+      maxLength: 160
+CreateSkillDraftRequest:
+  type: object
+  additionalProperties: false
+  required: [creation_mode]
+  properties:
+    creation_mode:
+      type: string
+      enum: [blank, template, import]
+    skill_template_id:
+      $ref: ./common.yaml#/Id
+    import_job_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      maxLength: 160
+UpdateSkillDraftRequest:
+  type: object
+  additionalProperties: false
+  required: [draft_revision]
+  properties:
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    current_step:
+      type: integer
+      minimum: 1
+      maximum: 5
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    purpose:
+      type: string
+      maxLength: 10000
+    category:
+      type: string
+      maxLength: 120
+    capabilities:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/SkillCapability'
+    behavior:
+      type: object
+      additionalProperties: true
+    guardrails:
+      type: object
+      additionalProperties: true
+    permissions:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/SkillPermissionDeclaration'
+    output_contract:
+      type: object
+      additionalProperties: true
+UpdateSkillDraftFileRequest:
+  type: object
+  additionalProperties: false
+  required: [content, content_hash, file_revision]
+  properties:
+    content:
+      type: string
+      maxLength: 1000000
+    content_hash:
+      type: string
+      minLength: 16
+      maxLength: 128
+    file_revision:
+      $ref: ./common.yaml#/Revision
+AddSkillDraftSourceRequest:
+  type: object
+  additionalProperties: false
+  required: [source_type, title, draft_revision]
+  properties:
+    source_type:
+      type: string
+      enum: [file, text, url, repository, data_connector]
+    title:
+      type: string
+      minLength: 1
+      maxLength: 240
+    upload_id:
+      $ref: ./common.yaml#/Id
+    text:
+      type: string
+      maxLength: 100000
+    uri:
+      type: string
+      format: uri
+      maxLength: 2048
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+CreateSkillDraftVersionRequest:
+  type: object
+  additionalProperties: false
+  required: [version_name, notes, draft_revision]
+  properties:
+    version_name:
+      type: string
+      minLength: 1
+      maxLength: 80
+    notes:
+      type: string
+      maxLength: 4000
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+CreateImportJobRequest:
+  type: object
+  additionalProperties: false
+  required: [source_type]
+  properties:
+    source_type:
+      type: string
+      enum: [repository, file]
+    repository_url:
+      type: string
+      format: uri
+      maxLength: 2048
+    branch:
+      type: string
+      maxLength: 255
+    source_id:
+      $ref: ./common.yaml#/Id
+    target_skill_draft_id:
+      $ref: ./common.yaml#/Id
+SaveImportJobForLaterRequest:
+  type: object
+  additionalProperties: false
+  properties:
+    note:
+      type: [string, 'null']
+      maxLength: 1000
+ConvertImportToSkillDraftRequest:
+  type: object
+  additionalProperties: false
+  required: [selected_capability_ids]
+  properties:
+    selected_capability_ids:
+      type: array
+      maxItems: 100
+      uniqueItems: true
+      items:
+        $ref: ./common.yaml#/Id
+CreateValidationRunRequest:
+  type: object
+  additionalProperties: false
+  required: [draft_revision, test_set_ids, mode]
+  properties:
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    test_set_ids:
+      type: array
+      minItems: 1
+      maxItems: 100
+      uniqueItems: true
+      items:
+        $ref: ./common.yaml#/Id
+    mode:
+      type: string
+      enum: [quick, full, regression]
+CreateSkillTestSetRequest:
+  type: object
+  additionalProperties: false
+  required: [mode]
+  properties:
+    mode:
+      type: string
+      enum: [create, link]
+    existing_test_set_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 1000
+    cases:
+      type: array
+      maxItems: 500
+      items:
+        type: object
+        additionalProperties: true
+CheckSkillPublishReadinessRequest:
+  type: object
+  additionalProperties: false
+  required: [draft_revision, validation_run_id]
+  properties:
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    validation_run_id:
+      $ref: ./common.yaml#/Id
+UpdateSkillPublishSettingsRequest:
+  type: object
+  additionalProperties: false
+  required: [draft_revision, mount_mode, destination]
+  properties:
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    mount_mode:
+      type: string
+      enum: [add_to_state_draft, publish_only]
+    destination:
+      type: [object, 'null']
+      additionalProperties: false
+      properties:
+        state_draft_id:
+          $ref: ./common.yaml#/Id
+PublishSkillDraftRequest:
+  type: object
+  additionalProperties: false
+  required: [version, draft_revision, validation_run_id, destination]
+  properties:
+    version:
+      type: string
+      minLength: 1
+      maxLength: 32
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    validation_run_id:
+      $ref: ./common.yaml#/Id
+    destination:
+      type: object
+      additionalProperties: false
+      required: [state_draft_id, state_draft_revision]
+      properties:
+        state_draft_id:
+          $ref: ./common.yaml#/Id
+        state_draft_revision:
+          $ref: ./common.yaml#/Revision
+        position:
+          type: integer
+          minimum: 0
+        configuration:
+          type: object
+          additionalProperties: true
+CreateExportableSkillVersionRequest:
+  type: object
+  additionalProperties: false
+  required: [version, notes, draft_revision]
+  properties:
+    version:
+      type: string
+      minLength: 1
+      maxLength: 32
+    notes:
+      type: string
+      maxLength: 4000
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+CreateSkillVersionMountRequest:
+  type: object
+  additionalProperties: false
+  required: [state_draft_id, state_draft_revision, position, configuration]
+  properties:
+    state_draft_id:
+      $ref: ./common.yaml#/Id
+    state_draft_revision:
+      $ref: ./common.yaml#/Revision
+    position:
+      type: integer
+      minimum: 0
+    configuration:
+      type: object
+      additionalProperties: true
+SkillListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Skill'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+SkillTemplateListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/SkillTemplate'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+SkillDraftResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/SkillDraft'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SkillFileResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/SkillFile'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SkillSourceListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: ./tasks.yaml#/Source
+    meta:
+      $ref: ./common.yaml#/ListMeta
+SkillDraftVersionResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/SkillVersion'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ImportJobAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [import_job, operation]
+      properties:
+        import_job:
+          $ref: '#/SkillImportJob'
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ImportJobResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/SkillImportJob'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ImportCheckResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/ImportCheck'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ValidationRunAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [validation_run, operation]
+      properties:
+        validation_run:
+          $ref: '#/ValidationRun'
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ValidationRunResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/ValidationRun'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+TestSetResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/TestSet'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ReviewItemResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/ReviewItem'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+PublishReadinessResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [ready, validation_run_id, draft_revision, issues]
+      properties:
+        ready:
+          type: boolean
+        validation_run_id:
+          $ref: ./common.yaml#/Id
+        draft_revision:
+          $ref: ./common.yaml#/Revision
+        issues:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/PublishIssue'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+EligibleStateDraftListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: ./content.yaml#/StateDraftSummary
+    meta:
+      $ref: ./common.yaml#/ListMeta
+SkillPublishSettingsResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [publish_settings, draft_revision]
+      properties:
+        publish_settings:
+          $ref: '#/SkillPublishSettings'
+        draft_revision:
+          $ref: ./common.yaml#/Revision
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+PublishSkillDraftResponse:
+  type: object
+  additionalProperties: false
+  description: SkillVersion creation and StateDraft mounting are committed or rolled back together.
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [skill_version, mount, state_draft_revision]
+      properties:
+        skill_version:
+          $ref: '#/SkillVersion'
+        mount:
+          $ref: ./states.yaml#/StateSkillMount
+        state_draft_revision:
+          $ref: ./common.yaml#/Revision
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SkillVersionResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/SkillVersion'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SkillVersionDiffResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [skill_version_id, base_version_id, changes]
+      properties:
+        skill_version_id:
+          $ref: ./common.yaml#/Id
+        base_version_id:
+          oneOf:
+            - $ref: ./common.yaml#/Id
+            - type: 'null'
+        changes:
+          type: array
+          maxItems: 1000
+          items:
+            type: object
+            additionalProperties: false
+            required: [section, change_type, summary]
+            properties:
+              section:
+                type: string
+                maxLength: 160
+              change_type:
+                type: string
+                enum: [added, removed, modified]
+              summary:
+                type: string
+                maxLength: 1000
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SkillVersionMountResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [mount, state_draft_revision]
+      properties:
+        mount:
+          $ref: ./states.yaml#/StateSkillMount
+        state_draft_revision:
+          $ref: ./common.yaml#/Revision
+    meta:
+      $ref: ./common.yaml#/RequestMeta

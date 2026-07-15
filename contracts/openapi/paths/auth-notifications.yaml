@@ -1,0 +1,466 @@
+/auth/session:
+  get:
+    summary: Get the current authentication session
+    description: Get the current authentication session. See API-001 in the API registry for product context.
+    operationId: getAuthSession
+    tags:
+      - Auth
+    x-api-id: API-001
+    x-interaction-ids:
+      - INT-008
+    x-permissions:
+      - self
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/identity.yaml#/AuthContextResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-001-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/auth/login:
+  post:
+    summary: Log in
+    description: Log in. See API-002 in the API registry for product context.
+    operationId: login
+    tags:
+      - Auth
+    x-api-id: API-002
+    x-interaction-ids:
+      - INT-010
+    x-permissions:
+      - public
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_INVALID_CREDENTIALS
+      - VALIDATION_FAILED
+      - RATE_LIMITED
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/identity.yaml#/LoginRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/identity.yaml#/AuthContextResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-002-success.json
+      "401":
+        $ref: ../components/responses.yaml#/InvalidCredentials
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+/auth/logout:
+  post:
+    summary: Log out
+    description: Log out. See API-003 in the API registry for product context.
+    operationId: logout
+    tags:
+      - Auth
+    x-api-id: API-003
+    x-interaction-ids:
+      - INT-004
+    x-permissions:
+      - self
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - auth.session_revoked
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/identity.yaml#/LogoutRequest
+    responses:
+      "204":
+        $ref: ../components/responses.yaml#/NoContent
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/users:
+  post:
+    summary: Create a user account
+    description: Create a user account. See API-004 in the API registry for product context.
+    operationId: createUser
+    tags:
+      - Auth
+    x-api-id: API-004
+    x-interaction-ids:
+      - INT-012
+    x-permissions:
+      - public
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - RATE_LIMITED
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/identity.yaml#/CreateUserRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/identity.yaml#/AuthContextResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-004-success.json
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+/users/me/profile:
+  get:
+    summary: Get the current user profile
+    description: Get the current user profile. See API-005 in the API registry for product context.
+    operationId: getMyProfile
+    tags:
+      - Auth
+    x-api-id: API-005
+    x-interaction-ids:
+      - INT-001
+    x-permissions:
+      - self
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/identity.yaml#/UserProfileResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-005-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+  patch:
+    summary: Update the current user profile
+    description: Update the current user profile. See API-006 in the API registry for product context.
+    operationId: updateMyProfile
+    tags:
+      - Auth
+    x-api-id: API-006
+    x-interaction-ids:
+      - INT-014
+    x-permissions:
+      - self
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IfMatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/identity.yaml#/UpdateUserProfileRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/identity.yaml#/UserProfileResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-006-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/users/me/onboarding/complete:
+  post:
+    summary: Complete onboarding
+    description: Complete onboarding. See API-007 in the API registry for product context.
+    operationId: completeOnboarding
+    tags:
+      - Auth
+    x-api-id: API-007
+    x-interaction-ids:
+      - INT-015
+    x-permissions:
+      - self
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/identity.yaml#/CompleteOnboardingRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/identity.yaml#/OnboardingCompleteResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-007-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/notifications:
+  get:
+    summary: List notifications
+    description: List notifications. See API-008 in the API registry for product context.
+    operationId: listNotifications
+    tags:
+      - Auth
+    x-api-id: API-008
+    x-interaction-ids:
+      - INT-002
+      - INT-016
+    x-permissions:
+      - notification.self
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+      - name: unread_only
+        in: query
+        required: false
+        description: Return unread notifications only.
+        schema:
+          type: boolean
+          default: false
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/identity.yaml#/NotificationListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-008-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/notifications/{notification_id}/read:
+  post:
+    summary: Mark a notification as read
+    description: Mark a notification as read. See API-009 in the API registry for product context.
+    operationId: markNotificationRead
+    tags:
+      - Auth
+    x-api-id: API-009
+    x-interaction-ids:
+      - INT-002
+    x-permissions:
+      - notification.self
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: product-api
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P2
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: notification_id
+        in: path
+        required: true
+        description: Opaque notification id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/identity.yaml#/NotificationResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-001-038/api-009-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity

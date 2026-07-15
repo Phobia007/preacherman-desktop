@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/validation/counters-updated.schema.json",
+  "title": "validation.counters_updated",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "validation.counters_updated"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "validation_run"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "tests_count",
+            "pass_count",
+            "review_count",
+            "fail_count"
+          ],
+          "properties": {
+            "tests_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "pass_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "review_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "fail_count": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "summary": "Create a State test draft",
+  "value": {
+    "data": {
+      "test_draft_id": "tdr_example_097",
+      "state_id": "sta_example_001",
+      "state_version_id": "stv_example_018",
+      "state_draft_id": null,
+      "task": "Prepare a board brief for Q2 performance and Q3 outlook.",
+      "source_ids": [],
+      "mode": "quick",
+      "settings": {
+        "include_trace": true
+      },
+      "revision": 1
+    },
+    "meta": {
+      "request_id": "req_task7_97"
+    }
+  }
+}

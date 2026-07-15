@@ -1,0 +1,67 @@
+{
+  "summary": "Get the State Lab workspace",
+  "value": {
+    "data": {
+      "drafts": [
+        {
+          "state_draft_id": "std_strategy_adjustment",
+          "state_id": "state_strategy_operator",
+          "base_version_id": "stv_strategy_v18",
+          "name": "Strategy Operator",
+          "goal": "Turn ambiguous goals into executable strategy.",
+          "capabilities": [
+            "research",
+            "planning",
+            "prioritization"
+          ],
+          "behavior": {
+            "output_style": "structured",
+            "reasoning": "evidence_first"
+          },
+          "skill_mounts": [
+            {
+              "state_skill_mount_id": "mount_research_scout",
+              "state_draft_id": "std_strategy_adjustment",
+              "skill_version_id": "skv_research_scout_v13",
+              "position": 0,
+              "configuration": {
+                "source_policy": "verified_only"
+              },
+              "is_enabled": true,
+              "mounted_at": "2026-07-15T08:00:00Z"
+            }
+          ],
+          "status": "editing",
+          "last_test_run_id": null,
+          "revision": 12,
+          "autosaved_at": "2026-07-15T08:00:00Z"
+        }
+      ],
+      "templates": [
+        {
+          "state_template_id": "stpl_strategy_operator",
+          "name": "Strategy Operator",
+          "description": "Build evidence-backed strategy and operating plans.",
+          "goal_template": "Turn a business goal into an executable strategy.",
+          "capabilities": [
+            "research",
+            "planning",
+            "prioritization"
+          ]
+        }
+      ],
+      "recent_test_runs": [
+        {
+          "test_run_id": "testrun_strategy_01",
+          "status": "succeeded",
+          "progress": 1,
+          "overall_score": 96,
+          "created_at": "2026-07-15T08:00:00Z"
+        }
+      ]
+    },
+    "meta": {
+      "request_id": "req_task5_56"
+    }
+  }
+}

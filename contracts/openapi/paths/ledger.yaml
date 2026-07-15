@@ -1,0 +1,454 @@
+/states/{state_id}/ledger:
+  get:
+    summary: Get a State ledger
+    description: Get a State ledger. See API-116 in the API registry for product context.
+    operationId: getStateLedger
+    tags:
+      - Ledger
+    x-api-id: API-116
+    x-interaction-ids:
+      - INT-140
+      - INT-141
+    x-permissions:
+      - state.ledger.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-ledger-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+      - name: view
+        in: query
+        required: false
+        description: Ledger view mode.
+        schema:
+          type: string
+          enum:
+            - map
+            - timeline
+            - branches
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateLedgerResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-116-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/state-versions/{state_version_id}:
+  get:
+    summary: Get a State version
+    description: Get a State version. See API-117 in the API registry for product context.
+    operationId: getStateVersion
+    tags:
+      - Ledger
+    x-api-id: API-117
+    x-interaction-ids:
+      - INT-142
+    x-permissions:
+      - state.ledger.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-ledger-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_version_id
+        in: path
+        required: true
+        description: Opaque state version id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateVersionResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-117-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/state-versions/{state_version_id}/diff/{other_version_id}:
+  get:
+    summary: Compare two State versions
+    description: Compare two State versions. See API-118 in the API registry for product context.
+    operationId: getStateVersionDiff
+    tags:
+      - Ledger
+    x-api-id: API-118
+    x-interaction-ids:
+      - INT-143
+    x-permissions:
+      - state.ledger.read
+    x-execution-mode: async
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: state-ledger-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_version_id
+        in: path
+        required: true
+        description: Opaque state version id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: other_version_id
+        in: path
+        required: true
+        description: Opaque other version id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateVersionDiffAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-118-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/states/{state_id}/branches:
+  post:
+    summary: Create a State branch
+    description: Create a State branch. See API-119 in the API registry for product context.
+    operationId: createStateBranch
+    tags:
+      - Ledger
+    x-api-id: API-119
+    x-interaction-ids:
+      - INT-144
+    x-permissions:
+      - state.version.branch
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - state.branched
+    x-event-schema: null
+    x-owner: state-ledger-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/CreateStateBranchRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/StateBranchResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-119-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/states/{state_id}/restores:
+  post:
+    summary: Restore a State into a new draft
+    description: Restore a State into a new draft without changing the Current State. See API-120 in the API registry for product context.
+    operationId: restoreStateVersion
+    tags:
+      - Ledger
+    x-api-id: API-120
+    x-interaction-ids:
+      - INT-145
+    x-permissions:
+      - state.version.restore
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions:
+      - state.restored
+    x-event-schema: null
+    x-owner: state-ledger-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/RestoreStateVersionRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/RestoredStateDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-120-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/states/{state_id}/evolution:
+  get:
+    summary: Get State evolution events
+    description: Get State evolution events. See API-121 in the API registry for product context.
+    operationId: getStateEvolution
+    tags:
+      - Ledger
+    x-api-id: API-121
+    x-interaction-ids:
+      - INT-146
+    x-permissions:
+      - state.ledger.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-ledger-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P2
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+      - name: from_state_version_id
+        in: query
+        required: false
+        description: Optional first version in the replay range.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: to_state_version_id
+        in: query
+        required: false
+        description: Optional final version in the replay range.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/LedgerEventListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-121-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/states/{state_id}/timeline:
+  get:
+    summary: Get the full State timeline
+    description: Get the full State timeline. See API-122 in the API registry for product context.
+    operationId: getStateTimeline
+    tags:
+      - Ledger
+    x-api-id: API-122
+    x-interaction-ids:
+      - INT-147
+    x-permissions:
+      - state.ledger.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-ledger-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_id
+        in: path
+        required: true
+        description: Opaque state id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+      - name: event_type
+        in: query
+        required: false
+        description: Optional ledger event filter.
+        schema:
+          type: string
+          enum:
+            - version_created
+            - published
+            - branched
+            - restored
+            - activated
+      - name: from
+        in: query
+        required: false
+        description: Optional inclusive start time.
+        schema:
+          $ref: ../components/common.yaml#/Timestamp
+      - name: to
+        in: query
+        required: false
+        description: Optional inclusive end time.
+        schema:
+          $ref: ../components/common.yaml#/Timestamp
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/LedgerEventListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-122-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound

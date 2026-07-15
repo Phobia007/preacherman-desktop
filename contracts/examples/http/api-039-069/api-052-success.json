@@ -1,0 +1,70 @@
+{
+  "summary": "Get a task run result",
+  "value": {
+    "data": {
+      "task_run": {
+        "task_run_id": "trun_board_brief_01",
+        "task_draft_id": "td_board_brief",
+        "state_version_id": "stv_strategy_v18",
+        "previous_task_run_id": null,
+        "input_snapshot": {
+          "task_draft_revision": 8,
+          "goal": "Prepare a board brief for Q2 performance and Q3 outlook.",
+          "description": "Synthesize the supplied sources into an executive-ready brief.",
+          "source_ids": [
+            "source_q2_notes"
+          ],
+          "context_tags": [
+            {
+              "context_tag_id": "ctag_strategy",
+              "owner_type": "task_draft",
+              "owner_id": "td_board_brief",
+              "label": "Strategy",
+              "value": "product_strategy"
+            }
+          ],
+          "state_version_id": "stv_strategy_v18"
+        },
+        "status": "succeeded",
+        "current_stage": "output",
+        "progress": 1,
+        "error_code": null,
+        "artifact_ids": [
+          "artifact_board_brief"
+        ],
+        "metrics": {
+          "elapsed_ms": 72000
+        },
+        "attempt": 1,
+        "started_at": "2026-07-15T08:00:00Z",
+        "completed_at": "2026-07-15T08:00:00Z",
+        "created_at": "2026-07-15T08:00:00Z"
+      },
+      "artifacts": [
+        {
+          "artifact_id": "artifact_board_brief",
+          "owner_type": "task_run",
+          "owner_id": "trun_board_brief_01",
+          "artifact_type": "document",
+          "title": "Board Brief",
+          "filename": "board-brief.docx",
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "size_bytes": 24576,
+          "scan_status": "clean",
+          "preview_status": "ready",
+          "preview_artifact_id": "artifact_board_brief_preview",
+          "retention_class": "workspace",
+          "metadata": {
+            "pages": 1
+          },
+          "created_at": "2026-07-15T08:00:00Z",
+          "expires_at": null
+        }
+      ],
+      "summary": "Board brief generated with three evidence-backed recommendations."
+    },
+    "meta": {
+      "request_id": "req_task5_52"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_import_needs_review_01",
+  "stream_id": "import_job:import_job_01",
+  "sequence": 1,
+  "event_type": "import.needs_review",
+  "schema_version": 1,
+  "resource_type": "import_job",
+  "resource_id": "import_job_01",
+  "operation_id": "import_job_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "succeeded",
+  "domain_status": "needs_review",
+  "stage": "review",
+  "progress": 1,
+  "payload": {
+    "review_count": 1,
+    "review_url": "/api/v1/import-jobs/import_job_01/review"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

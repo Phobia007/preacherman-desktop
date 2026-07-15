@@ -1,0 +1,21 @@
+{
+  "summary": "Sanitized success example for API-019",
+  "value": {
+    "data": [
+      {
+        "state_learning_id": "sl_example_001",
+        "state_id": "st_example_001",
+        "state_version_id": "sv_example_001",
+        "learning_type": "insight",
+        "summary": "Example learning summary.",
+        "status": "active",
+        "created_at": "2026-07-14T10:21:32Z"
+      }
+    ],
+    "meta": {
+      "request_id": "req_example_001",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

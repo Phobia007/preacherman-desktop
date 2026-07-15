@@ -1,0 +1,18 @@
+{
+  "summary": "Create a task run",
+  "value": {
+    "data": {
+      "task_run_id": "trun_board_brief_01",
+      "operation": {
+        "operation_type": "task_run",
+        "operation_id": "trun_board_brief_01",
+        "status": "queued",
+        "status_url": "/api/v1/task-runs/trun_board_brief_01",
+        "events_url": "/api/v1/task-runs/trun_board_brief_01/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task5_48"
+    }
+  }
+}

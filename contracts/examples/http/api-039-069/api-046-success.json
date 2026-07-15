@@ -1,0 +1,11 @@
+{
+  "summary": "Remove a context tag from a task draft",
+  "value": {
+    "data": {
+      "revision": 10
+    },
+    "meta": {
+      "request_id": "req_task5_46"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "summary": "Sanitized success example for API-031",
+  "value": {
+    "data": {
+      "operation_type": "generation_job",
+      "operation_id": "gen_example_001",
+      "status": "queued",
+      "status_url": "/api/v1/operations/gen_example_001",
+      "events_url": "/api/v1/operations/gen_example_001/events"
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

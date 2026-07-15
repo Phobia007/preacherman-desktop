@@ -1,0 +1,16 @@
+{
+  "summary": "Create or link a Skill test set",
+  "value": {
+    "data": {
+      "test_set_id": "tset_market_analysis",
+      "name": "Market Analysis",
+      "description": "Evaluates research accuracy and source quality.",
+      "case_count": 20,
+      "visibility": "private",
+      "updated_at": "2026-07-15T09:00:00Z"
+    },
+    "meta": {
+      "request_id": "req_task6_88"
+    }
+  }
+}

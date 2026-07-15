@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/monitor/connection-state.schema.json",
+  "title": "monitor.connection_state",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "monitor.connection_state"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "state"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "state",
+            "checked_at"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "live",
+                "reconnecting",
+                "offline",
+                "degraded"
+              ]
+            },
+            "checked_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "event_id": "evt_runtime_autosave_failed_01",
+  "stream_id": "runtime:runtime_01",
+  "sequence": 1,
+  "event_type": "runtime.autosave_failed",
+  "schema_version": 1,
+  "resource_type": "runtime",
+  "resource_id": "runtime_01",
+  "operation_id": null,
+  "correlation_id": "correlation_01",
+  "operation_status": null,
+  "domain_status": "save_failed",
+  "stage": "autosave",
+  "progress": null,
+  "payload": {
+    "resource_type": "state_draft",
+    "resource_id": "state_draft_01",
+    "revision": 5,
+    "error": {
+      "code": "REVISION_CONFLICT",
+      "message": "The draft changed before autosave completed.",
+      "retryable": true,
+      "failed_stage": "validate",
+      "details": {}
+    }
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

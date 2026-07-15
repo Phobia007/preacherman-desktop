@@ -1,0 +1,32 @@
+{
+  "summary": "Create an upload session",
+  "value": {
+    "data": {
+      "upload_session": {
+        "upload_id": "upl_example_123",
+        "purpose": "test_source",
+        "owner_type": "test_draft",
+        "owner_id": "tdr_example_097",
+        "original_filename": "q2-notes.pdf",
+        "declared_mime_type": "application/pdf",
+        "detected_mime_type": null,
+        "declared_size_bytes": 204800,
+        "verified_size_bytes": null,
+        "checksum_sha256": null,
+        "status": "created",
+        "multipart": false,
+        "expires_at": "2026-07-15T11:21:32Z",
+        "created_at": "2026-07-15T10:21:32Z",
+        "completed_at": null
+      },
+      "upload_url": "https://uploads.example.invalid/upl_example_123",
+      "upload_headers": {
+        "Content-Type": "application/pdf",
+        "X-Content-Checksum": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    "meta": {
+      "request_id": "req_task7_123"
+    }
+  }
+}

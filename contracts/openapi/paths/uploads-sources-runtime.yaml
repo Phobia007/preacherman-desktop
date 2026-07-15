@@ -1,0 +1,431 @@
+/uploads:
+  post:
+    summary: Create an upload session
+    description: Create an upload session. See API-123 in the API registry for product context.
+    operationId: createUploadSession
+    tags:
+      - Uploads
+    x-api-id: API-123
+    x-interaction-ids:
+      - INT-013
+      - INT-043
+      - INT-093
+      - INT-118
+    x-permissions:
+      - upload.create
+      - parent_resource.write
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: content-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - UPLOAD_TOO_LARGE
+      - UPLOAD_UNSUPPORTED_TYPE
+      - UPLOAD_EXPIRED
+      - UPLOAD_INCOMPLETE
+      - UPLOAD_CHECKSUM_MISMATCH
+      - MALWARE_DETECTED
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/CreateUploadSessionRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/CreateUploadSessionResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-123-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "410":
+        $ref: ../components/responses.yaml#/Gone
+      "413":
+        $ref: ../components/responses.yaml#/PayloadTooLarge
+      "415":
+        $ref: ../components/responses.yaml#/UnsupportedMediaType
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/uploads/{upload_id}/complete:
+  post:
+    summary: Complete and verify an upload session
+    description: Complete and verify an upload session. See API-124 in the API registry for product context.
+    operationId: completeUploadSession
+    tags:
+      - Uploads
+    x-api-id: API-124
+    x-interaction-ids:
+      - INT-013
+      - INT-043
+      - INT-093
+      - INT-118
+    x-permissions:
+      - upload.create
+      - parent_resource.write
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions:
+      - upload.malware_blocked
+    x-event-schema: events/event.schema.json
+    x-owner: content-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+      - UPLOAD_TOO_LARGE
+      - UPLOAD_UNSUPPORTED_TYPE
+      - UPLOAD_EXPIRED
+      - UPLOAD_INCOMPLETE
+      - UPLOAD_CHECKSUM_MISMATCH
+      - MALWARE_DETECTED
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: upload_id
+        in: path
+        required: true
+        description: Opaque upload id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/CompleteUploadSessionRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/CompleteUploadSessionAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-124-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "410":
+        $ref: ../components/responses.yaml#/Gone
+      "413":
+        $ref: ../components/responses.yaml#/PayloadTooLarge
+      "415":
+        $ref: ../components/responses.yaml#/UnsupportedMediaType
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/sources/{source_id}:
+  get:
+    summary: Get a Source
+    description: Get a Source. See API-125 in the API registry for product context.
+    operationId: getSource
+    tags:
+      - Uploads
+    x-api-id: API-125
+    x-interaction-ids:
+      - INT-043
+      - INT-044
+      - INT-071
+      - INT-093
+      - INT-118
+      - INT-119
+    x-permissions:
+      - source.read
+      - parent_resource.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: content-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - SOURCE_PARSE_FAILED
+      - SOURCE_UNSAFE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: source_id
+        in: path
+        required: true
+        description: Opaque source id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/SourceResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-125-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/sources/{source_id}/retry-parse:
+  post:
+    summary: Retry Source parsing
+    description: Retry Source parsing. See API-126 in the API registry for product context.
+    operationId: retrySourceParse
+    tags:
+      - Uploads
+    x-api-id: API-126
+    x-interaction-ids:
+      - INT-043
+      - INT-044
+      - INT-071
+      - INT-093
+      - INT-118
+      - INT-119
+    x-permissions:
+      - source.write
+      - parent_resource.write
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: content-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+      - SOURCE_PARSE_FAILED
+      - SOURCE_UNSAFE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: source_id
+        in: path
+        required: true
+        description: Opaque source id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: ../components/governance.yaml#/RetrySourceParseRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/governance.yaml#/SourceParseAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-126-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/operations/{operation_id}/events:
+  get:
+    summary: Stream generic operation events
+    description: Stream generic operation events. See API-127 in the API registry for product context.
+    operationId: streamOperationEvents
+    tags:
+      - Monitor
+    x-api-id: API-127
+    x-interaction-ids:
+      - INT-037
+      - INT-048
+      - INT-068
+      - INT-092
+      - INT-093
+      - INT-113
+      - INT-131
+    x-permissions:
+      - operation.parent.read
+    x-execution-mode: sse
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: runtime-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - EVENT_CURSOR_EXPIRED
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: operation_id
+        in: path
+        required: true
+        description: Opaque operation id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/AfterSequence
+      - $ref: ../components/parameters.yaml#/LastEventId
+    responses:
+      "200":
+        description: Server-sent events with resumable sequence identifiers.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          text/event-stream:
+            schema:
+              type: string
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-127-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/EventCursorExpired
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/runtime/events:
+  get:
+    summary: Stream Runtime events
+    description: Stream Runtime events. See API-128 in the API registry for product context.
+    operationId: streamRuntimeEvents
+    tags:
+      - Monitor
+    x-api-id: API-128
+    x-interaction-ids:
+      - INT-006
+    x-permissions:
+      - resource.read
+    x-execution-mode: sse
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: runtime-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - EVENT_CURSOR_EXPIRED
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/AfterSequence
+      - $ref: ../components/parameters.yaml#/LastEventId
+      - name: resource_type
+        in: query
+        required: true
+        description: Parent resource type.
+        schema:
+          type: string
+          maxLength: 80
+      - name: resource_id
+        in: query
+        required: true
+        description: Parent resource id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: Server-sent events with resumable sequence identifiers.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          text/event-stream:
+            schema:
+              type: string
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-128-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/EventCursorExpired
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable

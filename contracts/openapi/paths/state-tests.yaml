@@ -1,0 +1,598 @@
+/test-drafts:
+  post:
+    summary: Create a State test draft
+    description: Create a State test draft. See API-097 in the API registry for product context.
+    operationId: createTestDraft
+    tags:
+      - StateTests
+    x-api-id: API-097
+    x-interaction-ids:
+      - INT-116
+      - INT-135
+    x-permissions:
+      - state.test.run
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tests.yaml#/CreateTestDraftRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/TestDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-097-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/test-drafts/{test_draft_id}:
+  get:
+    summary: Get a State test draft
+    description: Get a State test draft. See API-098 in the API registry for product context.
+    operationId: getTestDraft
+    tags:
+      - StateTests
+    x-api-id: API-098
+    x-interaction-ids:
+      - INT-116
+    x-permissions:
+      - state.test.run
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: test_draft_id
+        in: path
+        required: true
+        description: Opaque test draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/TestDraftDetailResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-098-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/test-drafts/{test_draft_id}/sources:
+  post:
+    summary: Add a source to a State test draft
+    description: Add a source to a State test draft. See API-099 in the API registry for product context.
+    operationId: addTestDraftSource
+    tags:
+      - StateTests
+    x-api-id: API-099
+    x-interaction-ids:
+      - INT-118
+      - INT-119
+    x-permissions:
+      - state.test.run
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+      - SOURCE_PARSE_FAILED
+      - SOURCE_UNSAFE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: test_draft_id
+        in: path
+        required: true
+        description: Opaque test draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tests.yaml#/AddTestDraftSourceRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/TestDraftSourceAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-099-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/test-runs:
+  post:
+    summary: Create a State test run
+    description: Create a State test run. See API-100 in the API registry for product context.
+    operationId: createTestRun
+    tags:
+      - StateTests
+    x-api-id: API-100
+    x-interaction-ids:
+      - INT-122
+      - INT-127
+    x-permissions:
+      - state.test.run
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tests.yaml#/CreateTestRunRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/TestRunAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-100-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/test-runs/{test_run_id}:
+  get:
+    summary: Get a State test run
+    description: Get a State test run. See API-101 in the API registry for product context.
+    operationId: getTestRun
+    tags:
+      - StateTests
+    x-api-id: API-101
+    x-interaction-ids:
+      - INT-007
+      - INT-062
+      - INT-123
+    x-permissions:
+      - state.test.result.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: test_run_id
+        in: path
+        required: true
+        description: Opaque test run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/TestRunResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-101-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/test-runs/{test_run_id}/events:
+  get:
+    summary: Stream State test run events
+    description: Stream State test run events. See API-102 in the API registry for product context.
+    operationId: streamTestRunEvents
+    tags:
+      - StateTests
+    x-api-id: API-102
+    x-interaction-ids:
+      - INT-062
+      - INT-123
+    x-permissions:
+      - state.test.result.read
+    x-execution-mode: sse
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - EVENT_CURSOR_EXPIRED
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: test_run_id
+        in: path
+        required: true
+        description: Opaque test run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/AfterSequence
+      - $ref: ../components/parameters.yaml#/LastEventId
+    responses:
+      "200":
+        description: Server-sent events with resumable sequence identifiers.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          text/event-stream:
+            schema:
+              type: string
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-102-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/EventCursorExpired
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/test-runs/{test_run_id}/result:
+  get:
+    summary: Get a State test result
+    description: Get a State test result. See API-103 in the API registry for product context.
+    operationId: getTestRunResult
+    tags:
+      - StateTests
+    x-api-id: API-103
+    x-interaction-ids:
+      - INT-063
+      - INT-124
+    x-permissions:
+      - state.test.result.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: test_run_id
+        in: path
+        required: true
+        description: Opaque test run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/TestResultResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-103-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/artifacts/{artifact_id}/preview:
+  get:
+    summary: Get an Artifact preview
+    description: Get an Artifact preview. See API-104 in the API registry for product context.
+    operationId: getArtifactPreview
+    tags:
+      - StateTests
+    x-api-id: API-104
+    x-interaction-ids:
+      - INT-125
+    x-permissions:
+      - artifact.preview
+      - state.test.result.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - PREVIEW_UNAVAILABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: artifact_id
+        in: path
+        required: true
+        description: Opaque artifact id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/ArtifactPreviewResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-104-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/test-runs/{test_run_id}/state-adjustment-draft:
+  post:
+    summary: Create a State adjustment draft from a test result
+    description: Create a State adjustment draft from a test result. See API-105 in the API registry for product context.
+    operationId: createTestStateAdjustmentDraft
+    tags:
+      - StateTests
+    x-api-id: API-105
+    x-interaction-ids:
+      - INT-128
+    x-permissions:
+      - state.test.result.read
+      - state.draft.write
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: test_run_id
+        in: path
+        required: true
+        description: Opaque test run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tests.yaml#/CreateTestStateAdjustmentDraftRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/StateAdjustmentDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-105-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/artifacts/{artifact_id}/workspace-items:
+  post:
+    summary: Create a Workspace item from an Artifact
+    description: Create a Workspace item from an Artifact. See API-106 in the API registry for product context.
+    operationId: createWorkspaceItemFromArtifact
+    tags:
+      - StateTests
+    x-api-id: API-106
+    x-interaction-ids:
+      - INT-129
+    x-permissions:
+      - artifact.read
+      - workspace.write
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: test-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: artifact_id
+        in: path
+        required: true
+        description: Opaque artifact id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tests.yaml#/CreateWorkspaceItemFromArtifactRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tests.yaml#/WorkspaceItemResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-097-128/api-106-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity

@@ -1,0 +1,4 @@
+{
+  "summary": "Stream task run events",
+  "value": "id: run_event_050\nevent: stage_started\ndata: {\"run_id\":\"trun_board_brief_01\",\"sequence\":3}\n\n"
+}

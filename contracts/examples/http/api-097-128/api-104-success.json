@@ -1,0 +1,16 @@
+{
+  "summary": "Get an Artifact preview",
+  "value": {
+    "data": {
+      "artifact_id": "art_example_103",
+      "preview_status": "ready",
+      "preview_type": "document",
+      "preview_url": "https://preview.example.invalid/artifacts/art_example_103",
+      "open_url": "https://open.example.invalid/artifacts/art_example_103",
+      "expires_at": "2026-07-15T11:21:32Z"
+    },
+    "meta": {
+      "request_id": "req_task7_104"
+    }
+  }
+}

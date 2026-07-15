@@ -1,0 +1,15 @@
+{
+  "summary": "Analyze a State draft intent",
+  "value": {
+    "data": {
+      "operation_type": "generation_job",
+      "operation_id": "op_intent_061",
+      "status": "queued",
+      "status_url": "/api/v1/operations/op_intent_061",
+      "events_url": "/api/v1/operations/op_intent_061/events"
+    },
+    "meta": {
+      "request_id": "req_task5_61"
+    }
+  }
+}

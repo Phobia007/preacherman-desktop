@@ -1,0 +1,12 @@
+{
+  "error": {
+    "code": "RESOURCE_NOT_FOUND",
+    "message": "This item is no longer available.",
+    "field_errors": [],
+    "retryable": false,
+    "details": null
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

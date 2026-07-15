@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "PREVIEW_UNAVAILABLE",
+    "message": "A preview is not available for this file.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "artifact_id": "art_example_001"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

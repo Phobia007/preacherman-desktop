@@ -1,0 +1,35 @@
+{
+  "summary": "Save a Skill import job for later",
+  "value": {
+    "data": {
+      "import_job_id": "import_skill_080",
+      "target_type": "skill_draft",
+      "target_skill_draft_id": null,
+      "source_type": "repository",
+      "repository_url": "https://code.example.invalid/example/research-scout",
+      "branch": "main",
+      "source_id": null,
+      "status": "saved_for_later",
+      "checks": [
+        {
+          "check_id": "icheck_schema",
+          "check_type": "schema",
+          "result": "pass",
+          "title": "Schema and structure",
+          "summary": "The imported Skill structure is valid.",
+          "evidence": {
+            "files_checked": 4
+          },
+          "suggested_fix": null
+        }
+      ],
+      "detected_capabilities": [],
+      "readiness_score": 86,
+      "error_code": null,
+      "created_at": "2026-07-15T09:00:00Z"
+    },
+    "meta": {
+      "request_id": "req_task6_83"
+    }
+  }
+}

@@ -1,0 +1,1059 @@
+/task-drafts/{task_draft_id}:
+  get:
+    summary: Get a task draft
+    description: Get a task draft. See API-039 in the API registry for product context.
+    operationId: getTaskDraft
+    tags:
+      - Tasks
+    x-api-id: API-039
+    x-interaction-ids:
+      - INT-040
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_draft_id
+        in: path
+        required: true
+        description: Opaque task draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/TaskDraftDetailResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-039-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+  patch:
+    summary: Update a task draft
+    description: Update a task draft. See API-040 in the API registry for product context.
+    operationId: updateTaskDraft
+    tags:
+      - Tasks
+    x-api-id: API-040
+    x-interaction-ids:
+      - INT-041
+      - INT-049
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_draft_id
+        in: path
+        required: true
+        description: Opaque task draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IfMatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/UpdateTaskDraftRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/TaskDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-040-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/task-templates:
+  get:
+    summary: List task templates
+    description: List task templates. See API-041 in the API registry for product context.
+    operationId: listTaskTemplates
+    tags:
+      - Tasks
+    x-api-id: API-041
+    x-interaction-ids:
+      - INT-042
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/TaskTemplateListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-041-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/task-drafts/{task_draft_id}/apply-template:
+  post:
+    summary: Apply a template to a task draft
+    description: Apply a template to a task draft. See API-042 in the API registry for product context.
+    operationId: applyTaskTemplate
+    tags:
+      - Tasks
+    x-api-id: API-042
+    x-interaction-ids:
+      - INT-042
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_draft_id
+        in: path
+        required: true
+        description: Opaque task draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+      - $ref: ../components/parameters.yaml#/IfMatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/ApplyTaskTemplateRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/TaskDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-042-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/task-drafts/{task_draft_id}/sources:
+  post:
+    summary: Add a source to a task draft
+    description: Add a source to a task draft. See API-043 in the API registry for product context.
+    operationId: addTaskDraftSource
+    tags:
+      - Tasks
+    x-api-id: API-043
+    x-interaction-ids:
+      - INT-043
+      - INT-044
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+      - SOURCE_PARSE_FAILED
+      - SOURCE_UNSAFE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_draft_id
+        in: path
+        required: true
+        description: Opaque task draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/AddTaskDraftSourceRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/SourceAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-043-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/task-drafts/{task_draft_id}/sources/{source_id}:
+  delete:
+    summary: Remove a source from a task draft
+    description: Remove a source from a task draft. See API-044 in the API registry for product context.
+    operationId: removeTaskDraftSource
+    tags:
+      - Tasks
+    x-api-id: API-044
+    x-interaction-ids:
+      - INT-045
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+      - IDEMPOTENCY_CONFLICT
+      - SOURCE_PARSE_FAILED
+      - SOURCE_UNSAFE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_draft_id
+        in: path
+        required: true
+        description: Opaque task draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: source_id
+        in: path
+        required: true
+        description: Opaque source id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+      - $ref: ../components/parameters.yaml#/IfMatch
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/RevisionResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-044-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/task-drafts/{task_draft_id}/context-tags:
+  post:
+    summary: Add a context tag to a task draft
+    description: Add a context tag to a task draft. See API-045 in the API registry for product context.
+    operationId: addTaskContextTag
+    tags:
+      - Tasks
+    x-api-id: API-045
+    x-interaction-ids:
+      - INT-046
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_draft_id
+        in: path
+        required: true
+        description: Opaque task draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+      - $ref: ../components/parameters.yaml#/IfMatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/AddTaskContextTagRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/ContextTagResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-045-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/task-drafts/{task_draft_id}/context-tags/{context_tag_id}:
+  delete:
+    summary: Remove a context tag from a task draft
+    description: Remove a context tag from a task draft. See API-046 in the API registry for product context.
+    operationId: removeTaskContextTag
+    tags:
+      - Tasks
+    x-api-id: API-046
+    x-interaction-ids:
+      - INT-047
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_draft_id
+        in: path
+        required: true
+        description: Opaque task draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - name: context_tag_id
+        in: path
+        required: true
+        description: Opaque context tag id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+      - $ref: ../components/parameters.yaml#/IfMatch
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/RevisionResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-046-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/task-drafts/{task_draft_id}/actions:
+  post:
+    summary: Run a task draft quick action
+    description: Run a task draft quick action. See API-047 in the API registry for product context.
+    operationId: createTaskDraftAction
+    tags:
+      - Tasks
+    x-api-id: API-047
+    x-interaction-ids:
+      - INT-048
+    x-permissions:
+      - task_draft.owner
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_draft_id
+        in: path
+        required: true
+        description: Opaque task draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/TaskDraftActionRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/common.yaml#/OperationAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-047-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/task-runs:
+  post:
+    summary: Create a task run
+    description: Create a task run. See API-048 in the API registry for product context.
+    operationId: createTaskRun
+    tags:
+      - Tasks
+    x-api-id: API-048
+    x-interaction-ids:
+      - INT-050
+    x-permissions:
+      - task.run.create
+      - state.use
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/CreateTaskRunRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/CreateTaskRunAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-048-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/task-runs/{task_run_id}:
+  get:
+    summary: Get a task run
+    description: Get a task run. See API-049 in the API registry for product context.
+    operationId: getTaskRun
+    tags:
+      - Tasks
+    x-api-id: API-049
+    x-interaction-ids:
+      - INT-007
+      - INT-051
+    x-permissions:
+      - task.run.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_run_id
+        in: path
+        required: true
+        description: Opaque task run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/TaskRunResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-049-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/task-runs/{task_run_id}/events:
+  get:
+    summary: Stream task run events
+    description: Stream task run events. See API-050 in the API registry for product context.
+    operationId: streamTaskRunEvents
+    tags:
+      - Tasks
+    x-api-id: API-050
+    x-interaction-ids:
+      - INT-051
+    x-permissions:
+      - task.run.read
+    x-execution-mode: sse
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - EVENT_CURSOR_EXPIRED
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_run_id
+        in: path
+        required: true
+        description: Opaque task run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/AfterSequence
+      - $ref: ../components/parameters.yaml#/LastEventId
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          text/event-stream:
+            schema:
+              type: string
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-050-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/EventCursorExpired
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/task-runs/{task_run_id}/retry:
+  post:
+    summary: Retry a task run as a new run
+    description: Retry a task run as a new run. See API-051 in the API registry for product context.
+    operationId: retryTaskRun
+    tags:
+      - Tasks
+    x-api-id: API-051
+    x-interaction-ids:
+      - INT-052
+    x-permissions:
+      - task.run.retry
+      - state.use
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_run_id
+        in: path
+        required: true
+        description: Opaque task run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/RetryTaskRunRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/RetryTaskRunAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-051-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/task-runs/{task_run_id}/result:
+  get:
+    summary: Get a task run result
+    description: Get a task run result. See API-052 in the API registry for product context.
+    operationId: getTaskRunResult
+    tags:
+      - Tasks
+    x-api-id: API-052
+    x-interaction-ids:
+      - INT-053
+    x-permissions:
+      - task.run.result.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_run_id
+        in: path
+        required: true
+        description: Opaque task run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/TaskRunResultResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-052-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/task-runs/{task_run_id}/refine-draft:
+  post:
+    summary: Create a refined task draft
+    description: Create a refined task draft. See API-053 in the API registry for product context.
+    operationId: createRefinedTaskDraft
+    tags:
+      - Tasks
+    x-api-id: API-053
+    x-interaction-ids:
+      - INT-054
+    x-permissions:
+      - task.run.result.read
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_run_id
+        in: path
+        required: true
+        description: Opaque task run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/RefineTaskDraftRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/TaskDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-053-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/task-runs/{task_run_id}/state-adjustment-draft:
+  post:
+    summary: Create a State adjustment draft from a task result
+    description: Create a State adjustment draft from a task result. See API-054 in the API registry for product context.
+    operationId: createTaskStateAdjustmentDraft
+    tags:
+      - Tasks
+    x-api-id: API-054
+    x-interaction-ids:
+      - INT-055
+    x-permissions:
+      - task.run.result.read
+      - state.draft.write
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: task_run_id
+        in: path
+        required: true
+        description: Opaque task run id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/tasks.yaml#/CreateStateAdjustmentDraftRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-054-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/artifacts/{artifact_id}/download-url:
+  get:
+    summary: Create a short-lived artifact download URL
+    description: Create a short-lived artifact download URL. See API-055 in the API registry for product context.
+    operationId: createArtifactDownloadUrl
+    tags:
+      - Tasks
+    x-api-id: API-055
+    x-interaction-ids:
+      - INT-056
+    x-permissions:
+      - artifact.download
+      - task.run.result.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions:
+      - artifact.downloaded
+    x-event-schema: null
+    x-owner: task-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - DOWNLOAD_URL_EXPIRED
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: artifact_id
+        in: path
+        required: true
+        description: Opaque artifact id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/tasks.yaml#/ArtifactDownloadResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-055-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "410":
+        $ref: ../components/responses.yaml#/DownloadUrlExpired

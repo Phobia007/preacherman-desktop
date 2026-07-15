@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "EXPORT_FAILED",
+    "message": "We could not create this export.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "failed_stage": "render"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

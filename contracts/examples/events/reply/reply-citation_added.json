@@ -1,0 +1,24 @@
+{
+  "event_id": "evt_reply_citation_added_01",
+  "stream_id": "conversation:conversation_01",
+  "sequence": 1,
+  "event_type": "reply.citation_added",
+  "schema_version": 1,
+  "resource_type": "conversation",
+  "resource_id": "conversation_01",
+  "operation_id": "response_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "response",
+  "progress": null,
+  "payload": {
+    "assistant_message_id": "message_assistant_01",
+    "citation": {
+      "source_id": "source_01",
+      "title": "Q2 Field Notes",
+      "url": "/api/v1/sources/source_01"
+    }
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

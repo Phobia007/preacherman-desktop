@@ -1,0 +1,16 @@
+{
+  "summary": "Sanitized success example for API-011",
+  "value": {
+    "data": {
+      "live": true,
+      "connection_state": "connected",
+      "autosaved_at": "2026-07-14T10:21:32Z",
+      "resource_type": "state_draft",
+      "resource_id": "sd_example_001",
+      "revision": 12
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

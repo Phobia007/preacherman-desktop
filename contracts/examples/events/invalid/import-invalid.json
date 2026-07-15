@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_import_source_read_01",
+  "stream_id": "import_job:import_job_01",
+  "sequence": 1,
+  "event_type": "import.source_read",
+  "schema_version": 1,
+  "resource_type": "import_job",
+  "resource_id": "import_job_01",
+  "operation_id": "import_job_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "reading",
+  "progress": 0.14,
+  "payload": {
+    "file_count": 12,
+    "branch": "main"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

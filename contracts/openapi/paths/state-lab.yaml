@@ -1,0 +1,863 @@
+/state-lab:
+  get:
+    summary: Get the State Lab workspace
+    description: Get the State Lab workspace. See API-056 in the API registry for product context.
+    operationId: getStateLab
+    tags:
+      - StateLab
+    x-api-id: API-056
+    x-interaction-ids:
+      - INT-064
+    x-permissions:
+      - authenticated_user
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateLabResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-056-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/state-templates:
+  get:
+    summary: List State templates
+    description: List State templates. See API-057 in the API registry for product context.
+    operationId: listStateTemplates
+    tags:
+      - StateLab
+    x-api-id: API-057
+    x-interaction-ids:
+      - INT-064
+      - INT-066
+    x-permissions:
+      - authenticated_user
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/Cursor
+      - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateTemplateListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-057-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/state-drafts:
+  post:
+    summary: Create a State draft
+    description: Create a State draft. See API-058 in the API registry for product context.
+    operationId: createStateDraft
+    tags:
+      - StateLab
+    x-api-id: API-058
+    x-interaction-ids:
+      - INT-066
+      - INT-067
+    x-permissions:
+      - state.draft.create
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/CreateStateDraftRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-058-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/state-drafts/{state_draft_id}:
+  get:
+    summary: Get a State draft
+    description: Get a State draft. See API-059 in the API registry for product context.
+    operationId: getStateDraft
+    tags:
+      - StateLab
+    x-api-id: API-059
+    x-interaction-ids:
+      - INT-057
+      - INT-065
+    x-permissions:
+      - state.draft.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-059-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+  patch:
+    summary: Update a State draft
+    description: Update a State draft. See API-060 in the API registry for product context.
+    operationId: updateStateDraft
+    tags:
+      - StateLab
+    x-api-id: API-060
+    x-interaction-ids:
+      - INT-070
+      - INT-073
+    x-permissions:
+      - state.draft.write
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IfMatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/UpdateStateDraftRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-060-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/state-drafts/{state_draft_id}/analyze-intent:
+  post:
+    summary: Analyze a State draft intent
+    description: Analyze a State draft intent. See API-061 in the API registry for product context.
+    operationId: analyzeStateIntent
+    tags:
+      - StateLab
+    x-api-id: API-061
+    x-interaction-ids:
+      - INT-068
+    x-permissions:
+      - state.draft.write
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/AnalyzeStateIntentRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/common.yaml#/OperationAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-061-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/state-drafts/{state_draft_id}/recommendations:
+  get:
+    summary: Get State draft recommendations
+    description: Get State draft recommendations. See API-062 in the API registry for product context.
+    operationId: getStateRecommendations
+    tags:
+      - StateLab
+    x-api-id: API-062
+    x-interaction-ids:
+      - INT-057
+      - INT-068
+    x-permissions:
+      - state.draft.write
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateRecommendationListResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-062-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+/state-drafts/{state_draft_id}/skill-compatibility:
+  post:
+    summary: Check Skill compatibility with a State draft
+    description: Check Skill compatibility with a State draft. See API-063 in the API registry for product context.
+    operationId: checkStateSkillCompatibility
+    tags:
+      - StateLab
+    x-api-id: API-063
+    x-interaction-ids:
+      - INT-058
+    x-permissions:
+      - state.skill_mount.manage
+      - skill.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/CheckSkillCompatibilityRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/SkillCompatibilityResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-063-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/state-drafts/{state_draft_id}/skill-mounts:
+  post:
+    summary: Mount a Skill version on a State draft
+    description: Mount a Skill version on a State draft. See API-064 in the API registry for product context.
+    operationId: createStateSkillMount
+    tags:
+      - StateLab
+    x-api-id: API-064
+    x-interaction-ids:
+      - INT-069
+    x-permissions:
+      - state.skill_mount.manage
+      - skill.read
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+      - $ref: ../components/parameters.yaml#/IfMatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/CreateStateSkillMountRequest
+    responses:
+      "201":
+        description: The resource was created.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateSkillMountResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-064-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/state-drafts/{state_draft_id}/skill-mounts/order:
+  put:
+    summary: Reorder State draft Skill mounts
+    description: Reorder State draft Skill mounts. See API-065 in the API registry for product context.
+    operationId: reorderStateSkillMounts
+    tags:
+      - StateLab
+    x-api-id: API-065
+    x-interaction-ids:
+      - INT-070
+    x-permissions:
+      - state.skill_mount.manage
+      - skill.read
+    x-execution-mode: sync
+    x-idempotency: none
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+    x-priority: P1
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IfMatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/ReorderStateSkillMountsRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateSkillMountOrderResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-065-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+/state-drafts/{state_draft_id}/imports:
+  post:
+    summary: Import configuration into a State draft
+    description: Import configuration into a State draft. See API-066 in the API registry for product context.
+    operationId: createStateDraftImport
+    tags:
+      - StateLab
+    x-api-id: API-066
+    x-interaction-ids:
+      - INT-071
+    x-permissions:
+      - state.skill_mount.manage
+      - skill.read
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/CreateStateDraftImportRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateDraftImportAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-066-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/state-drafts/{state_draft_id}/save-and-retest:
+  post:
+    summary: Save a State draft and create a TestRun atomically
+    description: Save a State draft and create a TestRun atomically. See API-067 in the API registry for product context.
+    operationId: saveStateDraftAndRetest
+    tags:
+      - StateLab
+    x-api-id: API-067
+    x-interaction-ids:
+      - INT-061
+    x-permissions:
+      - state.draft.write
+      - state.test.run
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - REVISION_CONFLICT
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+      - $ref: ../components/parameters.yaml#/IfMatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/SaveAndRetestRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/SaveAndRetestAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-067-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "412":
+        $ref: ../components/responses.yaml#/PreconditionFailed
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/state-drafts/{state_draft_id}/lab-tests:
+  post:
+    summary: Create a State Lab test
+    description: Create a State Lab test. See API-068 in the API registry for product context.
+    operationId: createStateLabTest
+    tags:
+      - StateLab
+    x-api-id: API-068
+    x-interaction-ids:
+      - INT-072
+    x-permissions:
+      - state.test.run
+    x-execution-mode: async
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: events/event.schema.json
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+      - INSUFFICIENT_QUOTA
+      - DEPENDENCY_UNAVAILABLE
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/CreateStateLabTestRequest
+    responses:
+      "202":
+        description: The asynchronous operation was accepted.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+          Location:
+            $ref: ../components/headers.yaml#/Location
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateLabTestAcceptedResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-068-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity
+      "429":
+        $ref: ../components/responses.yaml#/TooManyRequests
+      "503":
+        $ref: ../components/responses.yaml#/ServiceUnavailable
+/state-drafts/{state_draft_id}/save-unpublished:
+  post:
+    summary: Save a private unpublished State draft
+    description: Save a private unpublished State draft. See API-069 in the API registry for product context.
+    operationId: saveStateDraftUnpublished
+    tags:
+      - StateLab
+    x-api-id: API-069
+    x-interaction-ids:
+      - INT-073
+    x-permissions:
+      - state.draft.write
+    x-execution-mode: sync
+    x-idempotency: required
+    x-audit-actions: []
+    x-event-schema: null
+    x-owner: state-lab-service
+    x-error-codes:
+      - AUTH_SESSION_EXPIRED
+      - RESOURCE_FORBIDDEN
+      - RESOURCE_NOT_FOUND
+      - VALIDATION_FAILED
+      - IDEMPOTENCY_CONFLICT
+    x-priority: P0
+    x-source-document: 06-api-requirements.md
+    parameters:
+      - $ref: ../components/parameters.yaml#/XRequestId
+      - name: state_draft_id
+        in: path
+        required: true
+        description: Opaque state draft id.
+        schema:
+          $ref: ../components/common.yaml#/Id
+      - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/states.yaml#/SaveStateDraftUnpublishedRequest
+    responses:
+      "200":
+        description: The request succeeded.
+        headers:
+          X-Request-ID:
+            $ref: ../components/headers.yaml#/XRequestId
+        content:
+          application/json:
+            schema:
+              $ref: ../components/states.yaml#/StateDraftResponse
+            examples:
+              success:
+                $ref: ../../examples/http/api-039-069/api-069-success.json
+      "401":
+        $ref: ../components/responses.yaml#/Unauthorized
+      "403":
+        $ref: ../components/responses.yaml#/Forbidden
+      "404":
+        $ref: ../components/responses.yaml#/NotFound
+      "409":
+        $ref: ../components/responses.yaml#/Conflict
+      "422":
+        $ref: ../components/responses.yaml#/UnprocessableEntity

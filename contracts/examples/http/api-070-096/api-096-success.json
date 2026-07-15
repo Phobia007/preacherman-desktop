@@ -1,0 +1,22 @@
+{
+  "summary": "Mount a Skill version to a State draft",
+  "value": {
+    "data": {
+      "mount": {
+        "state_skill_mount_id": "mount_research_scout_plus",
+        "state_draft_id": "std_strategy_adjustment",
+        "skill_version_id": "skv_research_scout_v13",
+        "position": 1,
+        "configuration": {
+          "source_policy": "verified_only"
+        },
+        "is_enabled": true,
+        "mounted_at": "2026-07-15T09:00:00Z"
+      },
+      "state_draft_revision": 14
+    },
+    "meta": {
+      "request_id": "req_task6_96"
+    }
+  }
+}

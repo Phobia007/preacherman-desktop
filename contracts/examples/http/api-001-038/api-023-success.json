@@ -1,0 +1,41 @@
+{
+  "summary": "Sanitized success example for API-023",
+  "value": {
+    "data": {
+      "state_id": "st_example_001",
+      "versions": [
+        {
+          "state_version_id": "sv_example_001",
+          "state_id": "st_example_001",
+          "version": "v1.8",
+          "name": "Strategy Operator",
+          "publish_status": "published",
+          "capabilities": [
+            "research",
+            "planning"
+          ]
+        }
+      ],
+      "branches": [
+        {
+          "state_draft_id": "sd_example_001",
+          "state_id": "st_example_001",
+          "name": "Strategy Operator draft",
+          "status": "editing",
+          "revision": 12
+        }
+      ],
+      "latest_events": [
+        {
+          "ledger_event_id": "led_example_001",
+          "event_type": "version_created",
+          "summary": "Version v1.8 created.",
+          "created_at": "2026-07-14T10:21:32Z"
+        }
+      ]
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

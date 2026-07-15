@@ -1,0 +1,25 @@
+{
+  "summary": "Create a State match",
+  "value": {
+    "data": {
+      "state_match": {
+        "state_match_id": "sma_example_108",
+        "need": "Prepare a board brief and recommend next steps.",
+        "intent": "strategy",
+        "status": "queued",
+        "candidates": [],
+        "created_at": "2026-07-15T10:21:32Z"
+      },
+      "operation": {
+        "operation_type": "generation_job",
+        "operation_id": "op_state_match_108",
+        "status": "queued",
+        "status_url": "/api/v1/operations/op_state_match_108",
+        "events_url": "/api/v1/operations/op_state_match_108/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task7_108"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "summary": "Sanitized success example for API-030",
+  "value": {
+    "data": {
+      "operation_type": "response_run",
+      "operation_id": "rr_example_002",
+      "status": "queued",
+      "status_url": "/api/v1/operations/rr_example_002",
+      "events_url": "/api/v1/operations/rr_example_002/events"
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_test_takeaway_created_01",
+  "stream_id": "test_run:test_run_01",
+  "sequence": 1,
+  "event_type": "test.takeaway_created",
+  "schema_version": 1,
+  "resource_type": "test_run",
+  "resource_id": "test_run_01",
+  "operation_id": "test_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "running",
+  "domain_status": "running",
+  "stage": "synthesize",
+  "progress": 0.68,
+  "payload": {
+    "takeaway_id": "takeaway_01",
+    "title": "Market demand is strong"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

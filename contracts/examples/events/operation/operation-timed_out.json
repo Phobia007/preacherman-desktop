@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_operation_timed_out_01",
+  "stream_id": "task_run:task_run_01",
+  "sequence": 1,
+  "event_type": "operation.timed_out",
+  "schema_version": 1,
+  "resource_type": "task_run",
+  "resource_id": "task_run_01",
+  "operation_id": "task_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "timed_out",
+  "domain_status": "running",
+  "stage": "research",
+  "progress": 0.7,
+  "payload": {
+    "timeout_seconds": 900,
+    "retryable": true
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

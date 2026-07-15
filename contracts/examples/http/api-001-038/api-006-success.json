@@ -1,0 +1,20 @@
+{
+  "summary": "Sanitized success example for API-006",
+  "value": {
+    "data": {
+      "user_id": "usr_example_001",
+      "display_name": "Example User",
+      "avatar_asset_id": null,
+      "role_label": "Founder",
+      "locale": "zh-CN",
+      "timezone": "Asia/Shanghai",
+      "preferences": {
+        "theme": "system"
+      },
+      "revision": 13
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

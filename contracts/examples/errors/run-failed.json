@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "RUN_FAILED",
+    "message": "The run stopped before it finished.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "failed_stage": "research"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

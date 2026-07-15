@@ -1,0 +1,12 @@
+{
+  "error": {
+    "code": "RESOURCE_FORBIDDEN",
+    "message": "You do not have access to this.",
+    "field_errors": [],
+    "retryable": false,
+    "details": null
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

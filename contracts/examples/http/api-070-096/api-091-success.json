@@ -1,0 +1,19 @@
+{
+  "summary": "List eligible destination State drafts",
+  "value": {
+    "data": [
+      {
+        "state_draft_id": "std_strategy_adjustment",
+        "state_id": "state_strategy_operator",
+        "name": "Strategy Operator",
+        "status": "editing",
+        "revision": 12
+      }
+    ],
+    "meta": {
+      "request_id": "req_task6_91",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

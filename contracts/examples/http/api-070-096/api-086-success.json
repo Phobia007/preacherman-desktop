@@ -1,0 +1,33 @@
+{
+  "summary": "Get a Skill validation run",
+  "value": {
+    "data": {
+      "validation_run_id": "vr_research_scout_01",
+      "skill_draft_id": "skd_research_scout_plus",
+      "draft_revision": 8,
+      "test_set_ids": [
+        "tset_market_analysis"
+      ],
+      "mode": "full",
+      "status": "completed",
+      "tests_count": 50,
+      "pass_count": 48,
+      "review_count": 2,
+      "fail_count": 0,
+      "metrics": {
+        "accuracy": 91,
+        "completeness": 89,
+        "clarity": 94
+      },
+      "review_item_ids": [
+        "review_citation_quality",
+        "review_risk_cases"
+      ],
+      "started_at": "2026-07-15T09:00:00Z",
+      "completed_at": "2026-07-15T09:05:00Z"
+    },
+    "meta": {
+      "request_id": "req_task6_86"
+    }
+  }
+}

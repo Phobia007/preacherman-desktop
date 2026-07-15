@@ -1,0 +1,22 @@
+{
+  "summary": "Activate an installed State",
+  "value": {
+    "data": {
+      "installation": {
+        "installation_id": "ins_example_112",
+        "state_id": "sta_strategy_operator",
+        "state_version_id": "stv_strategy_121",
+        "status": "active",
+        "is_current": true,
+        "installed_at": "2026-07-15T10:21:32Z",
+        "activated_at": "2026-07-15T11:21:32Z",
+        "deactivated_at": null,
+        "revision": 2
+      },
+      "previous_current_installation_id": "ins_previous_001"
+    },
+    "meta": {
+      "request_id": "req_task7_113"
+    }
+  }
+}

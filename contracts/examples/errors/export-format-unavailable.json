@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "EXPORT_FORMAT_UNAVAILABLE",
+    "message": "That format is no longer available.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "requested_format": "docx"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

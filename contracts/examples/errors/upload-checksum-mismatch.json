@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "UPLOAD_CHECKSUM_MISMATCH",
+    "message": "The uploaded file could not be verified.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "checksum_algorithm": "sha256"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

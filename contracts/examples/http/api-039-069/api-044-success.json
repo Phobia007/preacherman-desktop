@@ -1,0 +1,11 @@
+{
+  "summary": "Remove a source from a task draft",
+  "value": {
+    "data": {
+      "revision": 9
+    },
+    "meta": {
+      "request_id": "req_task5_44"
+    }
+  }
+}

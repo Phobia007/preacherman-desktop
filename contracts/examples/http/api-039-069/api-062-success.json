@@ -1,0 +1,19 @@
+{
+  "summary": "Get State draft recommendations",
+  "value": {
+    "data": [
+      {
+        "recommendation_id": "rec_pricing_skill",
+        "type": "skill",
+        "title": "Add Pricing Strategist",
+        "detail": "Adds pricing depth for the latest task.",
+        "confidence": 0.91,
+        "skill_version_id": "skv_pricing_v10",
+        "status": "suggested"
+      }
+    ],
+    "meta": {
+      "request_id": "req_task5_62"
+    }
+  }
+}

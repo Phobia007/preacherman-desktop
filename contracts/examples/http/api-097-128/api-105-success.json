@@ -1,0 +1,40 @@
+{
+  "summary": "Create a State adjustment draft from a test result",
+  "value": {
+    "data": {
+      "state_draft": {
+        "state_draft_id": "std_adjustment_105",
+        "state_id": "sta_example_001",
+        "base_version_id": "stv_example_018",
+        "name": "Strategy Operator adjustment",
+        "goal": "Improve pricing depth while preserving the current strategy workflow.",
+        "capabilities": [
+          "research",
+          "synthesis"
+        ],
+        "behavior": {
+          "evidence_first": true
+        },
+        "skill_mounts": [],
+        "status": "editing",
+        "last_test_run_id": "ter_example_100",
+        "revision": 1,
+        "autosaved_at": "2026-07-15T10:21:32Z"
+      },
+      "recommendations": [
+        {
+          "recommendation_id": "rec_example_105",
+          "type": "skill",
+          "title": "Add Pricing Strategist",
+          "detail": "Adds pricing analysis depth to future tasks.",
+          "confidence": 0.91,
+          "skill_version_id": "skv_pricing_001",
+          "status": "suggested"
+        }
+      ]
+    },
+    "meta": {
+      "request_id": "req_task7_105"
+    }
+  }
+}

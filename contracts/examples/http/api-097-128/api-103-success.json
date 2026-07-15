@@ -1,0 +1,60 @@
+{
+  "summary": "Get a State test result",
+  "value": {
+    "data": {
+      "test_result": {
+        "test_result_id": "trs_example_103",
+        "test_run_id": "ter_example_100",
+        "overall_score": 96,
+        "accuracy": 96,
+        "usefulness": 94,
+        "clarity": 95,
+        "risk_level": "low",
+        "outcome": "pass",
+        "key_takeaways": [
+          {
+            "title": "Market demand",
+            "detail": "Enterprise demand remained strong."
+          }
+        ],
+        "improvement_items": [
+          {
+            "code": "PRICING_DEPTH",
+            "title": "Add pricing depth",
+            "detail": "Include a dedicated pricing strategy section.",
+            "severity": "suggestion"
+          }
+        ],
+        "artifact_ids": [
+          "art_example_103"
+        ],
+        "duration_ms": 324000,
+        "created_at": "2026-07-15T10:21:32Z"
+      },
+      "artifacts": [
+        {
+          "artifact_id": "art_example_103",
+          "owner_type": "test_run",
+          "owner_id": "ter_example_100",
+          "artifact_type": "document",
+          "title": "Board Brief",
+          "filename": "board-brief.docx",
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "size_bytes": 18432,
+          "scan_status": "clean",
+          "preview_status": "ready",
+          "preview_artifact_id": null,
+          "retention_class": "temporary",
+          "metadata": {
+            "pages": 1
+          },
+          "created_at": "2026-07-15T10:21:32Z",
+          "expires_at": "2026-07-15T11:21:32Z"
+        }
+      ]
+    },
+    "meta": {
+      "request_id": "req_task7_103"
+    }
+  }
+}

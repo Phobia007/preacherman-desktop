@@ -1,0 +1,33 @@
+{
+  "summary": "Create a refined task draft",
+  "value": {
+    "data": {
+      "task_draft_id": "td_board_brief_refined",
+      "state_id": "state_strategy_operator",
+      "conversation_id": null,
+      "goal": "Prepare a board brief for Q2 performance and Q3 outlook.",
+      "description": "Synthesize the supplied sources into an executive-ready brief.",
+      "source_ids": [
+        "source_q2_notes"
+      ],
+      "context_tags": [
+        {
+          "context_tag_id": "ctag_strategy",
+          "owner_type": "task_draft",
+          "owner_id": "td_board_brief",
+          "label": "Strategy",
+          "value": "product_strategy"
+        }
+      ],
+      "template_id": null,
+      "status": "editing",
+      "revision": 0,
+      "autosaved_at": "2026-07-15T08:00:00Z",
+      "created_at": "2026-07-15T08:00:00Z",
+      "updated_at": "2026-07-15T08:00:00Z"
+    },
+    "meta": {
+      "request_id": "req_task5_53"
+    }
+  }
+}

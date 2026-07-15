@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "REVISION_CONFLICT",
+    "message": "This draft changed in another session.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "current_revision": 12
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

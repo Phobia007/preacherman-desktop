@@ -1,0 +1,21 @@
+{
+  "event_id": "evt_export_file_ready_01",
+  "stream_id": "export_job:export_job_01",
+  "sequence": 1,
+  "event_type": "export.file_ready",
+  "schema_version": 1,
+  "resource_type": "export_job",
+  "resource_id": "export_job_01",
+  "operation_id": "export_job_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "succeeded",
+  "domain_status": "completed",
+  "stage": "completed",
+  "progress": 1,
+  "payload": {
+    "download_url": "/api/v1/artifacts/artifact_export_01/download",
+    "expires_at": "2026-07-15T11:21:32Z",
+    "checksum": "sha256:example"
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

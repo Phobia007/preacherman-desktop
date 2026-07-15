@@ -1,0 +1,19 @@
+{
+  "summary": "Install a State without activating it",
+  "value": {
+    "data": {
+      "installation_id": "ins_example_112",
+      "state_id": "sta_strategy_operator",
+      "state_version_id": "stv_strategy_121",
+      "status": "installed_inactive",
+      "is_current": false,
+      "installed_at": "2026-07-15T10:21:32Z",
+      "activated_at": null,
+      "deactivated_at": null,
+      "revision": 1
+    },
+    "meta": {
+      "request_id": "req_task7_112"
+    }
+  }
+}

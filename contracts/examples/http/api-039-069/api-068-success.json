@@ -1,0 +1,19 @@
+{
+  "summary": "Create a State Lab test",
+  "value": {
+    "data": {
+      "test_run_id": "testrun_strategy_03",
+      "test_run_status": "queued",
+      "operation": {
+        "operation_type": "test_run",
+        "operation_id": "testrun_strategy_03",
+        "status": "queued",
+        "status_url": "/api/v1/test-runs/testrun_strategy_03",
+        "events_url": "/api/v1/test-runs/testrun_strategy_03/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task5_68"
+    }
+  }
+}

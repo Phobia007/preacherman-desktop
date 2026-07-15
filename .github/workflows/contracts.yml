@@ -1,0 +1,63 @@
+name: Contracts
+
+on:
+  pull_request:
+    paths:
+      - "contracts/**"
+      - "packages/preacherman-surface-skin/**"
+      - ".github/workflows/contracts.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "contracts/**"
+      - "packages/preacherman-surface-skin/**"
+      - ".github/workflows/contracts.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: npm
+          cache-dependency-path: contracts/package-lock.json
+      - run: npm ci
+      - run: npm run contracts:check
+      - run: npm run generate:typescript
+      - run: npm run generated:typecheck
+      - run: npm run contracts:provider
+      - name: Generated files are current
+        run: git diff --exit-code -- events examples/events generated/typescript dist/openapi.bundle.yaml
+      - name: Compare OpenAPI with pull request base
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git show "origin/${BASE_REF}:contracts/dist/openapi.bundle.yaml" > /tmp/openapi.baseline.yaml
+          BASELINE_OPENAPI=/tmp/openapi.baseline.yaml npm run contracts:compatibility
+
+  surface-skin:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/preacherman-surface-skin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: npm
+          cache-dependency-path: packages/preacherman-surface-skin/package-lock.json
+      - run: npm ci
+      - run: npm run check

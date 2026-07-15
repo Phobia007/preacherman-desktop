@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Too many requests. Try again shortly.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "retry_after_seconds": 30
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

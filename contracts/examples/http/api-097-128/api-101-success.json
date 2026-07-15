@@ -1,0 +1,33 @@
+{
+  "summary": "Get a State test run",
+  "value": {
+    "data": {
+      "test_run_id": "ter_example_100",
+      "test_draft_id": "tdr_example_097",
+      "previous_test_run_id": null,
+      "state_id": "sta_example_001",
+      "state_version_id": "stv_example_018",
+      "state_draft_id": null,
+      "input_snapshot": {
+        "task": "Prepare a board brief for Q2 performance and Q3 outlook.",
+        "source_ids": [],
+        "mode": "quick",
+        "settings": {
+          "include_trace": true
+        },
+        "test_draft_revision": 1
+      },
+      "mode": "quick",
+      "status": "running",
+      "current_stage": "research",
+      "progress": 0.48,
+      "result_id": null,
+      "error_code": null,
+      "started_at": "2026-07-15T10:21:32Z",
+      "completed_at": null
+    },
+    "meta": {
+      "request_id": "req_task7_101"
+    }
+  }
+}

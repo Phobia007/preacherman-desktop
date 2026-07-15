@@ -1,0 +1,959 @@
+StateMarketCard:
+  type: object
+  additionalProperties: false
+  required:
+    - state_id
+    - state_version_id
+    - name
+    - description
+    - category
+    - version
+    - builder_name
+    - verified
+    - install_count
+    - tags
+  properties:
+    state_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 2000
+    category:
+      type: string
+      maxLength: 120
+    version:
+      type: string
+      maxLength: 32
+    builder_name:
+      type: string
+      maxLength: 160
+    verified:
+      type: boolean
+    install_count:
+      type: integer
+      minimum: 0
+    tags:
+      type: array
+      maxItems: 30
+      items:
+        type: string
+        maxLength: 80
+StateMatchReason:
+  type: object
+  additionalProperties: false
+  required: [capability, score, explanation]
+  properties:
+    capability:
+      type: string
+      maxLength: 120
+    score:
+      type: number
+      minimum: 0
+      maximum: 100
+    explanation:
+      type: string
+      maxLength: 1000
+StateMatchCandidate:
+  type: object
+  additionalProperties: false
+  required: [state, fit_score, reasons]
+  properties:
+    state:
+      $ref: '#/StateMarketCard'
+    fit_score:
+      type: number
+      minimum: 0
+      maximum: 100
+    reasons:
+      type: array
+      maxItems: 30
+      items:
+        $ref: '#/StateMatchReason'
+StateMatch:
+  type: object
+  additionalProperties: false
+  required: [state_match_id, need, intent, status, candidates, created_at]
+  properties:
+    state_match_id:
+      $ref: ./common.yaml#/Id
+    need:
+      type: string
+      minLength: 1
+      maxLength: 4000
+    intent:
+      type: [string, 'null']
+      maxLength: 120
+    status:
+      type: string
+      enum: [queued, running, completed, failed]
+    candidates:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/StateMatchCandidate'
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+StateProof:
+  type: object
+  additionalProperties: false
+  required: [state_version_id, verified, run_count, metrics, provenance, updated_at]
+  properties:
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    verified:
+      type: boolean
+    run_count:
+      type: integer
+      minimum: 0
+    metrics:
+      type: object
+      additionalProperties:
+        type: number
+    provenance:
+      type: object
+      additionalProperties: true
+    updated_at:
+      $ref: ./common.yaml#/Timestamp
+SandboxSession:
+  type: object
+  additionalProperties: false
+  required:
+    - sandbox_session_id
+    - state_version_id
+    - status
+    - expires_at
+    - test_run_ids
+    - is_persistent
+    - created_at
+  properties:
+    sandbox_session_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    status:
+      type: string
+      enum: [preparing, active, expired, closed]
+    expires_at:
+      $ref: ./common.yaml#/Timestamp
+    test_run_ids:
+      type: array
+      maxItems: 100
+      items:
+        $ref: ./common.yaml#/Id
+    is_persistent:
+      type: boolean
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+StateInstallation:
+  type: object
+  additionalProperties: false
+  description: Installation and activation are separate lifecycle transitions.
+  required:
+    - installation_id
+    - state_id
+    - state_version_id
+    - status
+    - is_current
+    - installed_at
+    - activated_at
+    - deactivated_at
+    - revision
+  properties:
+    installation_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    status:
+      type: string
+      enum: [installed_inactive, active, disabled, uninstalled]
+    is_current:
+      type: boolean
+    installed_at:
+      $ref: ./common.yaml#/Timestamp
+    activated_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    deactivated_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+    revision:
+      $ref: ./common.yaml#/Revision
+StateVersionSkillMount:
+  type: object
+  additionalProperties: false
+  required:
+    - state_skill_mount_id
+    - state_version_id
+    - skill_version_id
+    - position
+    - configuration
+    - is_enabled
+    - mounted_at
+  properties:
+    state_skill_mount_id:
+      $ref: ./common.yaml#/Id
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    skill_version_id:
+      $ref: ./common.yaml#/Id
+    position:
+      type: integer
+      minimum: 0
+    configuration:
+      type: object
+      additionalProperties: true
+    is_enabled:
+      type: boolean
+    mounted_at:
+      $ref: ./common.yaml#/Timestamp
+StateVersionQuality:
+  type: object
+  additionalProperties: false
+  required: [overall_score, outcome, metrics]
+  properties:
+    overall_score:
+      type: number
+      minimum: 0
+      maximum: 100
+    outcome:
+      type: string
+      enum: [pass, review, fail]
+    metrics:
+      type: object
+      additionalProperties:
+        type: number
+StateVersion:
+  type: object
+  additionalProperties: false
+  description: Immutable State version. Restoring creates a new version instead of overwriting history.
+  required:
+    - state_version_id
+    - state_id
+    - version
+    - based_on_version_id
+    - source_draft_id
+    - name
+    - goal
+    - capabilities
+    - skill_mounts
+    - learnings
+    - quality
+    - status
+    - created_at
+    - published_at
+  properties:
+    state_version_id:
+      allOf:
+        - $ref: ./common.yaml#/Id
+      readOnly: true
+    state_id:
+      allOf:
+        - $ref: ./common.yaml#/Id
+      readOnly: true
+    version:
+      type: string
+      maxLength: 32
+      readOnly: true
+    based_on_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+      readOnly: true
+    source_draft_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+      readOnly: true
+    name:
+      type: string
+      maxLength: 160
+      readOnly: true
+    goal:
+      type: string
+      maxLength: 10000
+      readOnly: true
+    capabilities:
+      type: array
+      maxItems: 100
+      items:
+        type: string
+        maxLength: 120
+      readOnly: true
+    skill_mounts:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/StateVersionSkillMount'
+      readOnly: true
+    learnings:
+      type: array
+      maxItems: 1000
+      items:
+        type: object
+        additionalProperties: true
+      readOnly: true
+    quality:
+      allOf:
+        - $ref: '#/StateVersionQuality'
+      readOnly: true
+    status:
+      type: string
+      enum: [private, published, deprecated]
+      readOnly: true
+    created_at:
+      allOf:
+        - $ref: ./common.yaml#/Timestamp
+      readOnly: true
+    published_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+      readOnly: true
+LedgerEvent:
+  type: object
+  additionalProperties: false
+  required:
+    - ledger_event_id
+    - state_id
+    - event_type
+    - source_version_id
+    - target_version_id
+    - branch_id
+    - source_task_run_id
+    - summary
+    - created_at
+  properties:
+    ledger_event_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    event_type:
+      type: string
+      enum: [version_created, published, branched, restored, activated]
+    source_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    target_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    branch_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    source_task_run_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    summary:
+      type: string
+      maxLength: 500
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+StateBranch:
+  type: object
+  additionalProperties: false
+  required: [branch_id, state_id, source_version_id, name, state_draft_id, created_at]
+  properties:
+    branch_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    source_version_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    state_draft_id:
+      $ref: ./common.yaml#/Id
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+StateLedgerSummary:
+  type: object
+  additionalProperties: false
+  required: [version_count, branch_count, current_state_version_id, last_updated_at]
+  properties:
+    version_count:
+      type: integer
+      minimum: 0
+    branch_count:
+      type: integer
+      minimum: 0
+    current_state_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    last_updated_at:
+      $ref: ./common.yaml#/Timestamp
+StateVersionDiff:
+  type: object
+  additionalProperties: false
+  required: [left_state_version_id, right_state_version_id, changes]
+  properties:
+    left_state_version_id:
+      $ref: ./common.yaml#/Id
+    right_state_version_id:
+      $ref: ./common.yaml#/Id
+    changes:
+      type: array
+      maxItems: 1000
+      items:
+        type: object
+        additionalProperties: false
+        required: [section, change_type, summary]
+        properties:
+          section:
+            type: string
+            maxLength: 160
+          change_type:
+            type: string
+            enum: [added, removed, changed]
+          summary:
+            type: string
+            maxLength: 1000
+UploadSession:
+  type: object
+  additionalProperties: false
+  description: Upload transport and scan status. Private object-storage keys are never exposed.
+  required:
+    - upload_id
+    - purpose
+    - owner_type
+    - owner_id
+    - original_filename
+    - declared_mime_type
+    - detected_mime_type
+    - declared_size_bytes
+    - verified_size_bytes
+    - checksum_sha256
+    - status
+    - multipart
+    - expires_at
+    - created_at
+    - completed_at
+  properties:
+    upload_id:
+      $ref: ./common.yaml#/Id
+    purpose:
+      type: string
+      enum: [avatar, task_source, test_source, skill_source, skill_import, audio]
+    owner_type:
+      type: [string, 'null']
+      maxLength: 80
+    owner_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    original_filename:
+      type: string
+      minLength: 1
+      maxLength: 255
+    declared_mime_type:
+      type: string
+      maxLength: 255
+    detected_mime_type:
+      type: [string, 'null']
+      maxLength: 255
+    declared_size_bytes:
+      type: integer
+      minimum: 1
+    verified_size_bytes:
+      type: [integer, 'null']
+      minimum: 0
+    checksum_sha256:
+      type: [string, 'null']
+      minLength: 64
+      maxLength: 64
+    status:
+      type: string
+      enum: [created, uploading, uploaded, verifying, scanning, accepted, rejected, expired, aborted]
+    multipart:
+      type: boolean
+    expires_at:
+      $ref: ./common.yaml#/Timestamp
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+    completed_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+RuntimeEvent:
+  type: object
+  additionalProperties: false
+  required: [runtime_event_id, resource_type, resource_id, sequence, event_type, payload, occurred_at]
+  properties:
+    runtime_event_id:
+      $ref: ./common.yaml#/Id
+    resource_type:
+      type: string
+      maxLength: 80
+    resource_id:
+      $ref: ./common.yaml#/Id
+    sequence:
+      type: integer
+      minimum: 0
+    event_type:
+      type: string
+      enum: [live_status, connection_status, autosave_status, health_changed, usage_changed, api_changed, log]
+    payload:
+      type: object
+      additionalProperties: true
+    occurred_at:
+      $ref: ./common.yaml#/Timestamp
+CreateStateMatchRequest:
+  type: object
+  additionalProperties: false
+  required: [need]
+  properties:
+    need:
+      type: string
+      minLength: 1
+      maxLength: 4000
+    intent:
+      type: string
+      maxLength: 120
+    constraints:
+      type: object
+      additionalProperties: true
+CreateSandboxSessionRequest:
+  type: object
+  additionalProperties: false
+  required: [state_version_id]
+  properties:
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    task_snapshot:
+      type: object
+      additionalProperties: true
+    limits:
+      type: object
+      additionalProperties: true
+CreateStateInstallationRequest:
+  type: object
+  additionalProperties: false
+  required: [state_version_id, accepted_license_version]
+  properties:
+    state_version_id:
+      $ref: ./common.yaml#/Id
+    accepted_license_version:
+      type: string
+      minLength: 1
+      maxLength: 64
+ActivateStateInstallationRequest:
+  type: object
+  additionalProperties: false
+  required:
+    - installation_revision
+    - expected_current_installation_id
+    - expected_current_installation_revision
+  properties:
+    installation_revision:
+      $ref: ./common.yaml#/Revision
+    expected_current_installation_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    expected_current_installation_revision:
+      oneOf:
+        - $ref: ./common.yaml#/Revision
+        - type: 'null'
+DeactivateStateInstallationRequest:
+  type: object
+  additionalProperties: false
+  required: [installation_revision, reason]
+  properties:
+    installation_revision:
+      $ref: ./common.yaml#/Revision
+    reason:
+      type: string
+      maxLength: 500
+CreateStateBranchRequest:
+  type: object
+  additionalProperties: false
+  required: [source_state_version_id, branch_name]
+  properties:
+    source_state_version_id:
+      $ref: ./common.yaml#/Id
+    branch_name:
+      type: string
+      minLength: 1
+      maxLength: 160
+RestoreStateVersionRequest:
+  type: object
+  additionalProperties: false
+  required: [source_state_version_id, expected_current_state_version_id, confirmation_token]
+  properties:
+    source_state_version_id:
+      $ref: ./common.yaml#/Id
+    expected_current_state_version_id:
+      $ref: ./common.yaml#/Id
+    confirmation_token:
+      type: string
+      minLength: 16
+      maxLength: 256
+CreateUploadSessionRequest:
+  type: object
+  additionalProperties: false
+  required: [purpose, original_filename, declared_mime_type, declared_size_bytes]
+  properties:
+    purpose:
+      type: string
+      enum: [avatar, task_source, test_source, skill_source, skill_import, audio]
+    owner_type:
+      type: string
+      maxLength: 80
+    owner_id:
+      $ref: ./common.yaml#/Id
+    original_filename:
+      type: string
+      minLength: 1
+      maxLength: 255
+    declared_mime_type:
+      type: string
+      maxLength: 255
+    declared_size_bytes:
+      type: integer
+      minimum: 1
+    checksum_sha256:
+      type: string
+      minLength: 64
+      maxLength: 64
+CompleteUploadSessionRequest:
+  type: object
+  additionalProperties: false
+  required: [checksum_sha256]
+  properties:
+    checksum_sha256:
+      type: string
+      minLength: 64
+      maxLength: 64
+    parts:
+      type: array
+      maxItems: 10000
+      items:
+        type: object
+        additionalProperties: false
+        required: [part_number, etag]
+        properties:
+          part_number:
+            type: integer
+            minimum: 1
+          etag:
+            type: string
+            maxLength: 255
+RetrySourceParseRequest:
+  type: object
+  additionalProperties: false
+  properties:
+    parser_options:
+      type: object
+      additionalProperties: true
+StateMarketResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [featured, states, categories, installations]
+      properties:
+        featured:
+          type: array
+          items:
+            $ref: '#/StateMarketCard'
+        states:
+          type: array
+          items:
+            $ref: '#/StateMarketCard'
+        categories:
+          type: array
+          items:
+            type: string
+            maxLength: 120
+        installations:
+          type: array
+          items:
+            $ref: '#/StateInstallation'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+StateMatchAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [state_match, operation]
+      properties:
+        state_match:
+          $ref: '#/StateMatch'
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateMarketSummaryResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [state, fit_score, match_reasons, proof_summary]
+      properties:
+        state:
+          $ref: '#/StateMarketCard'
+        fit_score:
+          type: [number, 'null']
+          minimum: 0
+          maximum: 100
+        match_reasons:
+          type: array
+          items:
+            $ref: '#/StateMatchReason'
+        proof_summary:
+          $ref: '#/StateProof'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateProofResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/StateProof'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SandboxSessionAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [sandbox_session, operation]
+      properties:
+        sandbox_session:
+          $ref: '#/SandboxSession'
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateInstallationResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/StateInstallation'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+ActivatedStateInstallationResponse:
+  type: object
+  additionalProperties: false
+  description: Activating this installation replaces the user's only Current State atomically.
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [installation, previous_current_installation_id]
+      properties:
+        installation:
+          $ref: '#/StateInstallation'
+        previous_current_installation_id:
+          oneOf:
+            - $ref: ./common.yaml#/Id
+            - type: 'null'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateLedgerResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [summary, versions, branches, events]
+      properties:
+        summary:
+          $ref: '#/StateLedgerSummary'
+        versions:
+          type: array
+          items:
+            $ref: '#/StateVersion'
+        branches:
+          type: array
+          items:
+            $ref: '#/StateBranch'
+        events:
+          type: array
+          items:
+            $ref: '#/LedgerEvent'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+StateVersionResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/StateVersion'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateVersionDiffAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [left_state_version_id, right_state_version_id, operation]
+      properties:
+        left_state_version_id:
+          $ref: ./common.yaml#/Id
+        right_state_version_id:
+          $ref: ./common.yaml#/Id
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateBranchResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [branch, state_draft, ledger_event]
+      properties:
+        branch:
+          $ref: '#/StateBranch'
+        state_draft:
+          $ref: ./states.yaml#/StateDraft
+        ledger_event:
+          $ref: '#/LedgerEvent'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+RestoredStateDraftResponse:
+  type: object
+  additionalProperties: false
+  description: A restore creates a new editable StateDraft and leaves the Current State unchanged.
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required:
+        - source_state_version_id
+        - current_state_version_id
+        - state_draft
+        - ledger_event
+      properties:
+        source_state_version_id:
+          $ref: ./common.yaml#/Id
+        current_state_version_id:
+          $ref: ./common.yaml#/Id
+        state_draft:
+          $ref: ./states.yaml#/StateDraft
+        ledger_event:
+          $ref: '#/LedgerEvent'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+LedgerEventListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/LedgerEvent'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+CreateUploadSessionResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [upload_session, upload_url, upload_headers]
+      properties:
+        upload_session:
+          $ref: '#/UploadSession'
+        upload_url:
+          type: string
+          format: uri
+          maxLength: 2048
+          description: Short-lived upload destination. Never persist it in logs or analytics.
+        upload_headers:
+          type: object
+          additionalProperties:
+            type: string
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+CompleteUploadSessionAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [upload_session, source, operation]
+      properties:
+        upload_session:
+          $ref: '#/UploadSession'
+        source:
+          oneOf:
+            - $ref: ./tasks.yaml#/Source
+            - type: 'null'
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SourceResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: ./tasks.yaml#/Source
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SourceParseAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [source, operation]
+      properties:
+        source:
+          $ref: ./tasks.yaml#/Source
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta

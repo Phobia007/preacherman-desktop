@@ -1,0 +1,42 @@
+{
+  "summary": "Create a State test run",
+  "value": {
+    "data": {
+      "test_run": {
+        "test_run_id": "ter_example_100",
+        "test_draft_id": "tdr_example_097",
+        "previous_test_run_id": null,
+        "state_id": "sta_example_001",
+        "state_version_id": "stv_example_018",
+        "state_draft_id": null,
+        "input_snapshot": {
+          "task": "Prepare a board brief for Q2 performance and Q3 outlook.",
+          "source_ids": [],
+          "mode": "quick",
+          "settings": {
+            "include_trace": true
+          },
+          "test_draft_revision": 1
+        },
+        "mode": "quick",
+        "status": "queued",
+        "current_stage": null,
+        "progress": 0,
+        "result_id": null,
+        "error_code": null,
+        "started_at": null,
+        "completed_at": null
+      },
+      "operation": {
+        "operation_type": "test_run",
+        "operation_id": "ter_example_100",
+        "status": "queued",
+        "status_url": "/api/v1/operations/ter_example_100",
+        "events_url": "/api/v1/operations/ter_example_100/events"
+      }
+    },
+    "meta": {
+      "request_id": "req_task7_100"
+    }
+  }
+}

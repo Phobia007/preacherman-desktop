@@ -1,0 +1,24 @@
+{
+  "event_id": "evt_reply_completed_01",
+  "stream_id": "conversation:conversation_01",
+  "sequence": 1,
+  "event_type": "reply.completed",
+  "schema_version": 1,
+  "resource_type": "conversation",
+  "resource_id": "conversation_01",
+  "operation_id": "response_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "succeeded",
+  "domain_status": "running",
+  "stage": "completed",
+  "progress": 1,
+  "payload": {
+    "assistant_message_id": "message_assistant_01",
+    "finish_reason": "stop",
+    "usage_summary": {
+      "input_tokens": 812,
+      "output_tokens": 286
+    }
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

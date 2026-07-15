@@ -1,0 +1,25 @@
+{
+  "event_id": "evt_operation_failed_01",
+  "stream_id": "task_run:task_run_01",
+  "sequence": 1,
+  "event_type": "operation.failed",
+  "schema_version": 1,
+  "resource_type": "task_run",
+  "resource_id": "task_run_01",
+  "operation_id": "task_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "failed",
+  "domain_status": "running",
+  "stage": "validate",
+  "progress": 0.72,
+  "payload": {
+    "error": {
+      "code": "RUN_FAILED",
+      "message": "The operation could not be completed.",
+      "retryable": true,
+      "failed_stage": "validate",
+      "details": {}
+    }
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

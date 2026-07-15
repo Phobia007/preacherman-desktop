@@ -1,0 +1,19 @@
+{
+  "summary": "Sanitized success example for API-025",
+  "value": {
+    "data": {
+      "conversation_id": "con_example_001",
+      "state_id": "st_example_001",
+      "state_version_id": "sv_example_001",
+      "title": "Example planning session",
+      "status": "active",
+      "message_count": 2,
+      "last_message_at": "2026-07-14T10:21:32Z",
+      "created_at": "2026-07-14T10:21:32Z",
+      "updated_at": "2026-07-14T10:21:32Z"
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

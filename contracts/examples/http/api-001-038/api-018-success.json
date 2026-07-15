@@ -1,0 +1,41 @@
+{
+  "summary": "Sanitized success example for API-018",
+  "value": {
+    "data": {
+      "state": {
+        "state_id": "st_example_001",
+        "name": "Strategy Operator",
+        "description": "Turns ambiguity into executable strategy.",
+        "lifecycle_status": "published",
+        "current_version_id": "sv_example_001"
+      },
+      "version": {
+        "state_version_id": "sv_example_001",
+        "state_id": "st_example_001",
+        "version": "v1.8",
+        "name": "Strategy Operator",
+        "publish_status": "published",
+        "capabilities": [
+          "research",
+          "planning"
+        ]
+      },
+      "capabilities": [
+        "planning",
+        "research"
+      ],
+      "permissions": [
+        "read",
+        "execute"
+      ],
+      "validation_summary": {
+        "score": 96,
+        "status": "verified"
+      },
+      "match_reason": "High alignment with planning and research needs."
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

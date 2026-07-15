@@ -1,0 +1,4 @@
+{
+  "summary": "Stream State test run events",
+  "value": "id: 4\nevent: test.stage.started\ndata: {\"test_run_id\":\"ter_example_100\",\"sequence\":4,\"stage\":\"research\"}\n\n"
+}

@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "ALREADY_INSTALLED",
+    "message": "This State is already installed.",
+    "field_errors": [],
+    "retryable": false,
+    "details": {
+      "installation_id": "inst_example_001"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

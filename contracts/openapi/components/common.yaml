@@ -1,0 +1,158 @@
+Id:
+  type: string
+  minLength: 3
+  maxLength: 128
+  pattern: ^[A-Za-z][A-Za-z0-9_-]+$
+Timestamp:
+  type: string
+  format: date-time
+Revision:
+  type: integer
+  minimum: 0
+RequestMeta:
+  type: object
+  additionalProperties: false
+  required: [request_id]
+  properties:
+    request_id:
+      type: string
+      minLength: 8
+      maxLength: 128
+      pattern: ^req_[A-Za-z0-9_-]+$
+      examples: [req_example_001]
+ListMeta:
+  type: object
+  additionalProperties: false
+  required: [request_id, next_cursor, has_more]
+  properties:
+    request_id:
+      type: string
+      minLength: 8
+      maxLength: 128
+      pattern: ^req_[A-Za-z0-9_-]+$
+    next_cursor:
+      type: [string, 'null']
+      minLength: 1
+      maxLength: 512
+    has_more:
+      type: boolean
+    sort:
+      type: string
+      minLength: 1
+      maxLength: 64
+    order:
+      type: string
+      enum: [asc, desc]
+FieldError:
+  type: object
+  additionalProperties: false
+  required: [field, code, message]
+  properties:
+    field:
+      type: string
+      minLength: 1
+      maxLength: 160
+    code:
+      type: string
+      pattern: ^[A-Z][A-Z0-9_]+$
+    message:
+      type: string
+      minLength: 1
+      maxLength: 500
+ErrorResponse:
+  type: object
+  additionalProperties: false
+  required: [error, meta]
+  properties:
+    error:
+      type: object
+      additionalProperties: false
+      required: [code, message, field_errors, retryable, details]
+      properties:
+        code:
+          type: string
+          enum:
+            - AUTH_INVALID_CREDENTIALS
+            - AUTH_SESSION_EXPIRED
+            - RESOURCE_FORBIDDEN
+            - RESOURCE_NOT_FOUND
+            - REVISION_CONFLICT
+            - IDEMPOTENCY_CONFLICT
+            - VALIDATION_FAILED
+            - INSUFFICIENT_QUOTA
+            - SOURCE_PARSE_FAILED
+            - SOURCE_UNSAFE
+            - UPLOAD_TOO_LARGE
+            - UPLOAD_UNSUPPORTED_TYPE
+            - UPLOAD_EXPIRED
+            - UPLOAD_INCOMPLETE
+            - UPLOAD_CHECKSUM_MISMATCH
+            - MALWARE_DETECTED
+            - URL_FETCH_BLOCKED
+            - PREVIEW_UNAVAILABLE
+            - DOWNLOAD_URL_EXPIRED
+            - SHARE_LINK_EXPIRED
+            - SHARE_LINK_REVOKED
+            - RUN_FAILED
+            - RUN_NOT_RETRYABLE
+            - VERSION_CONFLICT
+            - ALREADY_INSTALLED
+            - STATE_NOT_ACTIVATABLE
+            - EXPORT_FORMAT_UNAVAILABLE
+            - EXPORT_FAILED
+            - RATE_LIMITED
+            - EVENT_CURSOR_EXPIRED
+            - DEPENDENCY_UNAVAILABLE
+        message:
+          type: string
+          minLength: 1
+          maxLength: 500
+        field_errors:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/FieldError'
+        retryable:
+          type: boolean
+        details:
+          type: [object, 'null']
+          additionalProperties: true
+    meta:
+      $ref: '#/RequestMeta'
+OperationAccepted:
+  type: object
+  additionalProperties: false
+  required: [operation_type, operation_id, status, status_url, events_url]
+  properties:
+    operation_type:
+      type: string
+      enum:
+        - task_run
+        - test_run
+        - validation_run
+        - import_job
+        - export_job
+        - response_run
+        - generation_job
+    operation_id:
+      type: string
+      minLength: 3
+      maxLength: 128
+    status:
+      type: string
+      enum: [queued, preparing, running]
+    status_url:
+      type: string
+      pattern: ^/api/v1/
+    events_url:
+      type: string
+      pattern: ^/api/v1/
+OperationAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/OperationAccepted'
+    meta:
+      $ref: '#/RequestMeta'

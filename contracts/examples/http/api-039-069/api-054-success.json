@@ -1,0 +1,41 @@
+{
+  "summary": "Create a State adjustment draft from a task result",
+  "value": {
+    "data": {
+      "state_draft_id": "std_strategy_adjustment",
+      "state_id": "state_strategy_operator",
+      "base_version_id": "stv_strategy_v18",
+      "name": "Strategy Operator",
+      "goal": "Turn ambiguous goals into executable strategy.",
+      "capabilities": [
+        "research",
+        "planning",
+        "prioritization"
+      ],
+      "behavior": {
+        "output_style": "structured",
+        "reasoning": "evidence_first"
+      },
+      "skill_mounts": [
+        {
+          "state_skill_mount_id": "mount_research_scout",
+          "state_draft_id": "std_strategy_adjustment",
+          "skill_version_id": "skv_research_scout_v13",
+          "position": 0,
+          "configuration": {
+            "source_policy": "verified_only"
+          },
+          "is_enabled": true,
+          "mounted_at": "2026-07-15T08:00:00Z"
+        }
+      ],
+      "status": "editing",
+      "last_test_run_id": null,
+      "revision": 12,
+      "autosaved_at": "2026-07-15T08:00:00Z"
+    },
+    "meta": {
+      "request_id": "req_task5_54"
+    }
+  }
+}

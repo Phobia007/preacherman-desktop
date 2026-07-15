@@ -1,0 +1,27 @@
+{
+  "event_id": "evt_reply_failed_01",
+  "stream_id": "conversation:conversation_01",
+  "sequence": 1,
+  "event_type": "reply.failed",
+  "schema_version": 1,
+  "resource_type": "conversation",
+  "resource_id": "conversation_01",
+  "operation_id": "response_run_01",
+  "correlation_id": "correlation_01",
+  "operation_status": "failed",
+  "domain_status": "running",
+  "stage": "response",
+  "progress": null,
+  "payload": {
+    "assistant_message_id": "message_assistant_01",
+    "error": {
+      "code": "RUN_FAILED",
+      "message": "The response could not be completed.",
+      "retryable": true,
+      "failed_stage": "validate",
+      "details": {}
+    },
+    "retryable": true
+  },
+  "occurred_at": "2026-07-15T10:21:32Z"
+}

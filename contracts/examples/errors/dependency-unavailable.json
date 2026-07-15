@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "DEPENDENCY_UNAVAILABLE",
+    "message": "A required service is temporarily unavailable.",
+    "field_errors": [],
+    "retryable": true,
+    "details": {
+      "dependency_category": "model_provider"
+    }
+  },
+  "meta": {
+    "request_id": "req_example_001"
+  }
+}

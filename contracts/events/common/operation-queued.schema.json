@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/events/common/operation-queued.schema.json",
+  "title": "operation.queued",
+  "allOf": [
+    {
+      "$ref": "https://schemas.preacherman.ai/events/event-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "operation.queued"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "resource_type": {
+          "enum": [
+            "task_run",
+            "test_run",
+            "validation_run",
+            "import_job",
+            "export_job",
+            "response_run",
+            "generation_job"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "queue_position": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "estimated_start_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "event_type",
+        "schema_version",
+        "resource_type",
+        "payload"
+      ]
+    }
+  ]
+}

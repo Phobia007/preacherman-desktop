@@ -1,0 +1,22 @@
+{
+  "summary": "List task templates",
+  "value": {
+    "data": [
+      {
+        "task_template_id": "ttpl_board_brief",
+        "name": "Board Brief",
+        "description": "One-page board update.",
+        "goal_template": "Prepare a board brief for the selected period.",
+        "context_tags": [
+          "strategy",
+          "board"
+        ]
+      }
+    ],
+    "meta": {
+      "request_id": "req_task5_41",
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

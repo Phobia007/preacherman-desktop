@@ -1,0 +1,57 @@
+{
+  "summary": "Get a task draft",
+  "value": {
+    "data": {
+      "task_draft": {
+        "task_draft_id": "td_board_brief",
+        "state_id": "state_strategy_operator",
+        "conversation_id": "conv_board_brief",
+        "goal": "Prepare a board brief for Q2 performance and Q3 outlook.",
+        "description": "Synthesize the supplied sources into an executive-ready brief.",
+        "source_ids": [
+          "source_q2_notes"
+        ],
+        "context_tags": [
+          {
+            "context_tag_id": "ctag_strategy",
+            "owner_type": "task_draft",
+            "owner_id": "td_board_brief",
+            "label": "Strategy",
+            "value": "product_strategy"
+          }
+        ],
+        "template_id": null,
+        "status": "editing",
+        "revision": 8,
+        "autosaved_at": "2026-07-15T08:00:00Z",
+        "created_at": "2026-07-15T08:00:00Z",
+        "updated_at": "2026-07-15T08:00:00Z"
+      },
+      "sources": [
+        {
+          "source_id": "source_q2_notes",
+          "owner_type": "task_draft",
+          "owner_id": "td_board_brief",
+          "upload_id": "upload_q2_notes",
+          "source_type": "file",
+          "title": "Q2 field notes",
+          "original_filename": "q2-field-notes.md",
+          "uri": null,
+          "mime_type": "text/markdown",
+          "size_bytes": 4096,
+          "scan_status": "clean",
+          "processing_status": "ready",
+          "parse_status": "ready",
+          "parse_error_code": null,
+          "metadata": {
+            "word_count": 812
+          },
+          "created_at": "2026-07-15T08:00:00Z"
+        }
+      ]
+    },
+    "meta": {
+      "request_id": "req_task5_39"
+    }
+  }
+}

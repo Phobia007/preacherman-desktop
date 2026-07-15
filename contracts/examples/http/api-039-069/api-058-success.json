@@ -1,0 +1,29 @@
+{
+  "summary": "Create a State draft",
+  "value": {
+    "data": {
+      "state_draft_id": "std_strategy_new",
+      "state_id": "state_strategy_operator",
+      "base_version_id": null,
+      "name": "Strategy Operator",
+      "goal": "Turn ambiguous goals into executable strategy.",
+      "capabilities": [
+        "research",
+        "planning",
+        "prioritization"
+      ],
+      "behavior": {
+        "output_style": "structured",
+        "reasoning": "evidence_first"
+      },
+      "skill_mounts": [],
+      "status": "editing",
+      "last_test_run_id": null,
+      "revision": 0,
+      "autosaved_at": "2026-07-15T08:00:00Z"
+    },
+    "meta": {
+      "request_id": "req_task5_58"
+    }
+  }
+}

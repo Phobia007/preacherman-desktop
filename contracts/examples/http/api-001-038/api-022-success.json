@@ -1,0 +1,36 @@
+{
+  "summary": "Sanitized success example for API-022",
+  "value": {
+    "data": {
+      "state_id": "st_example_001",
+      "testable_versions": [
+        {
+          "state_version_id": "sv_example_001",
+          "state_id": "st_example_001",
+          "version": "v1.8",
+          "name": "Strategy Operator",
+          "publish_status": "published",
+          "capabilities": [
+            "research",
+            "planning"
+          ]
+        }
+      ],
+      "recent_tests": [
+        {
+          "test_run_id": "testrun_example_001",
+          "status": "succeeded",
+          "progress": 1,
+          "overall_score": 96,
+          "created_at": "2026-07-14T10:21:32Z"
+        }
+      ],
+      "default_settings": {
+        "mode": "quick"
+      }
+    },
+    "meta": {
+      "request_id": "req_example_001"
+    }
+  }
+}

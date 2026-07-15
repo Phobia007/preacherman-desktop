@@ -1,0 +1,547 @@
+StateSkillMount:
+  type: object
+  additionalProperties: false
+  required:
+    - state_skill_mount_id
+    - state_draft_id
+    - skill_version_id
+    - position
+    - configuration
+    - is_enabled
+    - mounted_at
+  properties:
+    state_skill_mount_id:
+      $ref: ./common.yaml#/Id
+    state_draft_id:
+      $ref: ./common.yaml#/Id
+    skill_version_id:
+      $ref: ./common.yaml#/Id
+    position:
+      type: integer
+      minimum: 0
+    configuration:
+      type: object
+      additionalProperties: true
+    is_enabled:
+      type: boolean
+    mounted_at:
+      $ref: ./common.yaml#/Timestamp
+StateSkillMountWrite:
+  type: object
+  additionalProperties: false
+  description: Client-managed State Skill mount fields. Server IDs and timestamps are excluded.
+  required: [skill_version_id, position, configuration, is_enabled]
+  properties:
+    skill_version_id:
+      $ref: ./common.yaml#/Id
+    position:
+      type: integer
+      minimum: 0
+    configuration:
+      type: object
+      additionalProperties: true
+    is_enabled:
+      type: boolean
+StateDraft:
+  type: object
+  additionalProperties: false
+  required:
+    - state_draft_id
+    - state_id
+    - name
+    - goal
+    - capabilities
+    - behavior
+    - skill_mounts
+    - status
+    - revision
+    - autosaved_at
+  properties:
+    state_draft_id:
+      $ref: ./common.yaml#/Id
+    state_id:
+      $ref: ./common.yaml#/Id
+    base_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    goal:
+      type: string
+      minLength: 1
+      maxLength: 10000
+    capabilities:
+      type: array
+      maxItems: 100
+      items:
+        type: string
+        maxLength: 120
+    behavior:
+      type: object
+      additionalProperties: true
+    skill_mounts:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/StateSkillMount'
+    status:
+      type: string
+      enum: [editing, testing, validated, discarded]
+    last_test_run_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    revision:
+      $ref: ./common.yaml#/Revision
+    autosaved_at:
+      oneOf:
+        - $ref: ./common.yaml#/Timestamp
+        - type: 'null'
+StateTemplate:
+  type: object
+  additionalProperties: false
+  required: [state_template_id, name, description, goal_template, capabilities]
+  properties:
+    state_template_id:
+      $ref: ./common.yaml#/Id
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    description:
+      type: string
+      maxLength: 2000
+    goal_template:
+      type: string
+      maxLength: 10000
+    capabilities:
+      type: array
+      maxItems: 100
+      items:
+        type: string
+        maxLength: 120
+StateRecommendation:
+  type: object
+  additionalProperties: false
+  required: [recommendation_id, type, title, detail, confidence, status]
+  properties:
+    recommendation_id:
+      $ref: ./common.yaml#/Id
+    type:
+      type: string
+      enum: [skill, capability, behavior, guardrail]
+    title:
+      type: string
+      maxLength: 240
+    detail:
+      type: string
+      maxLength: 2000
+    confidence:
+      type: number
+      minimum: 0
+      maximum: 1
+    skill_version_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    status:
+      type: string
+      enum: [suggested, accepted, dismissed]
+ImportJob:
+  type: object
+  additionalProperties: false
+  required:
+    - import_job_id
+    - target_type
+    - source_type
+    - status
+    - checks
+    - readiness_score
+    - created_at
+  properties:
+    import_job_id:
+      $ref: ./common.yaml#/Id
+    target_type:
+      type: string
+      enum: [state_draft]
+    source_type:
+      type: string
+      enum: [repository, file]
+    repository_url:
+      type: [string, 'null']
+      format: uri
+      maxLength: 2048
+    branch:
+      type: [string, 'null']
+      maxLength: 255
+    source_id:
+      oneOf:
+        - $ref: ./common.yaml#/Id
+        - type: 'null'
+    status:
+      type: string
+      enum: [queued, reading, checking, ready, failed]
+    checks:
+      type: array
+      maxItems: 100
+      items:
+        type: object
+        additionalProperties: true
+    readiness_score:
+      type: [number, 'null']
+      minimum: 0
+      maximum: 100
+    error_code:
+      type: [string, 'null']
+      maxLength: 80
+    created_at:
+      $ref: ./common.yaml#/Timestamp
+CreateStateDraftRequest:
+  type: object
+  additionalProperties: false
+  required: [name, goal, creation_mode]
+  properties:
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    goal:
+      type: string
+      minLength: 1
+      maxLength: 10000
+    creation_mode:
+      type: string
+      enum: [blank, template, duplicate]
+    state_template_id:
+      $ref: ./common.yaml#/Id
+    base_state_version_id:
+      $ref: ./common.yaml#/Id
+UpdateStateDraftRequest:
+  type: object
+  additionalProperties: false
+  minProperties: 1
+  properties:
+    name:
+      type: string
+      minLength: 1
+      maxLength: 160
+    goal:
+      type: string
+      minLength: 1
+      maxLength: 10000
+    capabilities:
+      type: array
+      maxItems: 100
+      items:
+        type: string
+        maxLength: 120
+    behavior:
+      type: object
+      additionalProperties: true
+AnalyzeStateIntentRequest:
+  type: object
+  additionalProperties: false
+  required: [intent, draft_revision]
+  properties:
+    intent:
+      type: string
+      minLength: 1
+      maxLength: 10000
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+CheckSkillCompatibilityRequest:
+  type: object
+  additionalProperties: false
+  required: [skill_version_id]
+  properties:
+    skill_version_id:
+      $ref: ./common.yaml#/Id
+CreateStateSkillMountRequest:
+  type: object
+  additionalProperties: false
+  required: [skill_version_id, position, configuration, draft_revision]
+  properties:
+    skill_version_id:
+      $ref: ./common.yaml#/Id
+    position:
+      type: integer
+      minimum: 0
+    configuration:
+      type: object
+      additionalProperties: true
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+ReorderStateSkillMountsRequest:
+  type: object
+  additionalProperties: false
+  required: [mount_ids, draft_revision]
+  properties:
+    mount_ids:
+      type: array
+      minItems: 1
+      maxItems: 100
+      uniqueItems: true
+      items:
+        $ref: ./common.yaml#/Id
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+CreateStateDraftImportRequest:
+  type: object
+  additionalProperties: false
+  required: [source_type, draft_revision]
+  properties:
+    source_type:
+      type: string
+      enum: [repository, file]
+    repository_url:
+      type: string
+      format: uri
+      maxLength: 2048
+    branch:
+      type: string
+      maxLength: 255
+    source_id:
+      $ref: ./common.yaml#/Id
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+SaveAndRetestRequest:
+  type: object
+  additionalProperties: false
+  required: [draft_revision, changes, test_input]
+  properties:
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    changes:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          maxLength: 160
+        goal:
+          type: string
+          maxLength: 10000
+        behavior:
+          type: object
+          additionalProperties: true
+        skill_mounts:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/StateSkillMountWrite'
+    test_input:
+      type: object
+      additionalProperties: false
+      required: [source_task_run_id, mode]
+      properties:
+        source_task_run_id:
+          $ref: ./common.yaml#/Id
+        mode:
+          type: string
+          enum: [quick, deep, stress]
+CreateStateLabTestRequest:
+  type: object
+  additionalProperties: false
+  required: [draft_revision, task, source_ids, mode, settings]
+  properties:
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    task:
+      type: string
+      minLength: 1
+      maxLength: 10000
+    source_ids:
+      type: array
+      maxItems: 100
+      items:
+        $ref: ./common.yaml#/Id
+    mode:
+      type: string
+      enum: [quick, deep, stress]
+    settings:
+      type: object
+      additionalProperties: true
+SaveStateDraftUnpublishedRequest:
+  type: object
+  additionalProperties: false
+  required: [draft_revision]
+  properties:
+    draft_revision:
+      $ref: ./common.yaml#/Revision
+    note:
+      type: [string, 'null']
+      maxLength: 1000
+StateDraftResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      $ref: '#/StateDraft'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateLabResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [drafts, templates, recent_test_runs]
+      properties:
+        drafts:
+          type: array
+          items:
+            $ref: '#/StateDraft'
+        templates:
+          type: array
+          items:
+            $ref: '#/StateTemplate'
+        recent_test_runs:
+          type: array
+          items:
+            $ref: ./content.yaml#/TestRunSummary
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateTemplateListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/StateTemplate'
+    meta:
+      $ref: ./common.yaml#/ListMeta
+StateRecommendationListResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/StateRecommendation'
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SkillCompatibilityResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [skill_version_id, compatibility_status, reasons]
+      properties:
+        skill_version_id:
+          $ref: ./common.yaml#/Id
+        compatibility_status:
+          type: string
+          enum: [compatible, review_required, incompatible]
+        reasons:
+          type: array
+          maxItems: 100
+          items:
+            type: string
+            maxLength: 500
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateSkillMountResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [mount, draft_revision]
+      properties:
+        mount:
+          $ref: '#/StateSkillMount'
+        draft_revision:
+          $ref: ./common.yaml#/Revision
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateSkillMountOrderResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [mount_ids, draft_revision]
+      properties:
+        mount_ids:
+          type: array
+          items:
+            $ref: ./common.yaml#/Id
+        draft_revision:
+          $ref: ./common.yaml#/Revision
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateDraftImportAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [import_job, operation]
+      properties:
+        import_job:
+          $ref: '#/ImportJob'
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+SaveAndRetestAcceptedResponse:
+  type: object
+  additionalProperties: false
+  description: Saves the draft and creates a TestRun atomically. It never publishes or activates a State.
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [state_draft_id, draft_revision, test_run_id, test_run_status, operation]
+      properties:
+        state_draft_id:
+          $ref: ./common.yaml#/Id
+        draft_revision:
+          $ref: ./common.yaml#/Revision
+        test_run_id:
+          $ref: ./common.yaml#/Id
+        test_run_status:
+          type: string
+          enum: [queued]
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
+StateLabTestAcceptedResponse:
+  type: object
+  additionalProperties: false
+  required: [data, meta]
+  properties:
+    data:
+      type: object
+      additionalProperties: false
+      required: [test_run_id, test_run_status, operation]
+      properties:
+        test_run_id:
+          $ref: ./common.yaml#/Id
+        test_run_status:
+          type: string
+          enum: [queued]
+        operation:
+          $ref: ./common.yaml#/OperationAccepted
+    meta:
+      $ref: ./common.yaml#/RequestMeta
