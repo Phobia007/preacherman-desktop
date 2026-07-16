@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="State Focus / target icon" clip-path="url(#clip0_0_86)">
+<path id="Vector" d="M9 15C12.3137 15 15 12.3137 15 9C15 5.68629 12.3137 3 9 3C5.68629 3 3 5.68629 3 9C3 12.3137 5.68629 15 9 15Z" stroke="var(--stroke-0, #111111)" stroke-width="1.275"/>
+<path id="Vector_2" d="M9 11.25C10.2426 11.25 11.25 10.2426 11.25 9C11.25 7.75736 10.2426 6.75 9 6.75C7.75736 6.75 6.75 7.75736 6.75 9C6.75 10.2426 7.75736 11.25 9 11.25Z" fill="var(--fill-0, #111111)"/>
+<path id="Vector_3" d="M9 1.5V4.5M9 13.5V16.5M1.5 9H4.5M13.5 9H16.5" stroke="var(--stroke-0, #111111)" stroke-width="1.125" stroke-linecap="round"/>
+</g>
+<defs>
+<clipPath id="clip0_0_86">
+<rect width="18" height="18" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,296 @@
+{
+  "fileKey": "USA27mjAybt1oSFyhwwDaz",
+  "frames": [
+    {
+      "pageId": "287:636",
+      "nodeId": "287:637",
+      "name": "home点击status",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "pageId": "287:713",
+      "nodeId": "287:714",
+      "name": "home点击current state",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "pageId": "219:2",
+      "nodeId": "219:3",
+      "name": "home点击current state详情",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "pageId": "281:373",
+      "nodeId": "281:374",
+      "name": "home点击人模对话",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "pageId": "7:102",
+      "nodeId": "32:2",
+      "name": "home对话",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "pageId": "100:166",
+      "nodeId": "412:728",
+      "name": "home对话hover",
+      "width": 1440,
+      "height": 900
+    }
+  ],
+  "sharedShellAssets": "../281-538",
+  "localizedAt": "2026-07-16",
+  "assets": [
+    {
+      "localPath": "219-3--state-focus-active-dot.svg",
+      "bytes": 271,
+      "sha256": "0ada810151354a2df7ba08fc327058b2386fd4a167380345931c5823be4ba9d3"
+    },
+    {
+      "localPath": "219-3--state-focus-clock-footer.svg",
+      "bytes": 609,
+      "sha256": "cc73f6a110060ed88bb98305a013fb972035e95ca73da22b2e0e71285526b6e9"
+    },
+    {
+      "localPath": "219-3--state-focus-edit-icon.svg",
+      "bytes": 543,
+      "sha256": "42cfbec47e86f420d01d4f41d8ad3021c72fdf742bf6de7d48905b05c3706153"
+    },
+    {
+      "localPath": "219-3--state-focus-external-icon.svg",
+      "bytes": 807,
+      "sha256": "cf69bf7874b76307e7149c9fe0d8847630467267c1337e833edfbdef86546e56"
+    },
+    {
+      "localPath": "219-3--state-focus-flow-chat-icon.svg",
+      "bytes": 628,
+      "sha256": "3a02d701d18efa9e22ea7f81104c69338266e7cc2553e6609905e1d7aebd015e"
+    },
+    {
+      "localPath": "219-3--state-focus-flow-info-circle.svg",
+      "bytes": 279,
+      "sha256": "112848bd72b9975da1f5f8b36ff5a9a7551e4a427948b502980bc87d4fb781a5"
+    },
+    {
+      "localPath": "219-3--state-focus-flow-node-exploring.svg",
+      "bytes": 312,
+      "sha256": "4119c46aa4c8e193123e7d897d571d9bd94e904f1ea0fe8f0850ab93f639de6c"
+    },
+    {
+      "localPath": "219-3--state-focus-flow-node-inner-current-focus.svg",
+      "bytes": 284,
+      "sha256": "b19a62ee5f452fc75ab68ae8c9a857c23aa6e5499a576978c1523182d38479e5"
+    },
+    {
+      "localPath": "219-3--state-focus-flow-node-outer-current-focus.svg",
+      "bytes": 295,
+      "sha256": "500792fcf4e5b9f1592c2fcd5bc5fe6b5f1dc838bb140e0ade4f5da3b44987e2"
+    },
+    {
+      "localPath": "219-3--state-focus-flow-node-session-start.svg",
+      "bytes": 280,
+      "sha256": "bd05285243f6aa7152ceb9b47244a24ea7b31c47cffedc51b6743fb69d51a8c4"
+    },
+    {
+      "localPath": "219-3--state-focus-halo-circle-strategic-planning.svg",
+      "bytes": 1130,
+      "sha256": "38572c919d26ffa9600b3049c6fef4f62b44af4a1ed36b8617cdcb92c7266244"
+    },
+    {
+      "localPath": "219-3--state-focus-halo-icon-decision-velocity.svg",
+      "bytes": 416,
+      "sha256": "77d4dc7cadd62cb5d88300a9f51995a8c93c071d92c4af2ad1228e27ca27a9b5"
+    },
+    {
+      "localPath": "219-3--state-focus-halo-icon-stakeholder-alignment.svg",
+      "bytes": 1089,
+      "sha256": "32c743bd8fd5a5b0266c94f92d502abe80261279fc406b3532f929dc34a7d7b0"
+    },
+    {
+      "localPath": "219-3--state-focus-halo-icon-strategic-planning.svg",
+      "bytes": 912,
+      "sha256": "a5a51eac0c19e75a75910d44ada84f5f4ec37b9549a546b2ca081521a4b24b5b"
+    },
+    {
+      "localPath": "219-3--state-focus-halo-icon-systems-design.svg",
+      "bytes": 1308,
+      "sha256": "26cb79ec11a449c381f823d8e1f2acc6655a182fcb40828059e545c675e42a47"
+    },
+    {
+      "localPath": "219-3--state-focus-integrity-shield.svg",
+      "bytes": 589,
+      "sha256": "7a631ca2103f011144e967ec0618f39c54a0f173427a4656f16eadb8b7ea103e"
+    },
+    {
+      "localPath": "219-3--state-focus-ledger-footer.svg",
+      "bytes": 483,
+      "sha256": "ef22f21c7f4b044e95f384d50496ed674063112e308d34ab3ab8032017c6490a"
+    },
+    {
+      "localPath": "219-3--state-focus-mounted-skill-bullet0.svg",
+      "bytes": 285,
+      "sha256": "b29937050c9d6207c7024a01e367a802626f23345bfd300ce61414b4eb8669df"
+    },
+    {
+      "localPath": "219-3--state-focus-orbit-lower-counter.svg",
+      "bytes": 644,
+      "sha256": "a1531764093a984ee572f828538c1543d9a623953e5fdcde600fe4654dbcb1ca"
+    },
+    {
+      "localPath": "219-3--state-focus-orbit-wide-upper.svg",
+      "bytes": 640,
+      "sha256": "05201aee04820d022061f0f77e951290915f5088fb256b8029844f52b2f329b5"
+    },
+    {
+      "localPath": "219-3--state-focus-profile-arrow.svg",
+      "bytes": 374,
+      "sha256": "c6935fb5df7efe326292e1a8e1e613ded766c1ab5cabe2bc758cad42157207ca"
+    },
+    {
+      "localPath": "219-3--state-focus-profile-section-icon.svg",
+      "bytes": 626,
+      "sha256": "b1482a07f5666e77aa1302b4ee689feb801ca025d64e9067ab7881bb17dec7dd"
+    },
+    {
+      "localPath": "219-3--state-focus-profile-section-icon1.svg",
+      "bytes": 729,
+      "sha256": "e12e20536fc72e166a1f1eeb94623fc973a63eb2e6be0fd3f8544343831b616c"
+    },
+    {
+      "localPath": "219-3--state-focus-profile-section-icon2.svg",
+      "bytes": 631,
+      "sha256": "b50d3b65ce86c3194159f0088622a0d5451dfa5727ddcec08d32d83f5ee57c8c"
+    },
+    {
+      "localPath": "219-3--state-focus-profile-section-icon3.svg",
+      "bytes": 564,
+      "sha256": "2a421052120db911dddeb42c62d31cfa4ff96f107a9febb766c0665ddb87f041"
+    },
+    {
+      "localPath": "219-3--state-focus-target-icon.svg",
+      "bytes": 885,
+      "sha256": "bb5b237d542216d680c0d70cdb8225599eb7ae8005e2202d26e7c474c1332321"
+    },
+    {
+      "localPath": "219-3--state-focus-translucent-state-vessel.png",
+      "bytes": 264278,
+      "sha256": "b697b1a79f106b0bcb1aa9fd4aeac92cfd35dccd70660bb873374372eafbe060"
+    },
+    {
+      "localPath": "281-374--annotation-hand-cursor-click-to-chat.svg",
+      "bytes": 1462,
+      "sha256": "f923a665bc31d941975e9c80d45933759c2661d9b907b9ad7a1ba89ac1b8f06e"
+    },
+    {
+      "localPath": "281-374--state-vessel-orbit-line-slow-rotation.svg",
+      "bytes": 870,
+      "sha256": "08a24a15eab9f78c910ae5bf94d5d7b63e8488810a35fe3e12d1acb89a3da1de"
+    },
+    {
+      "localPath": "281-374--state-vessel-secondary-orbit-line.svg",
+      "bytes": 850,
+      "sha256": "1d1a97816932554e6a1ef9340d720f1eadb92ff590f71987b2b67301d9b83b60"
+    },
+    {
+      "localPath": "281-374--state-vessel-skill-halo-code-copilot.svg",
+      "bytes": 1251,
+      "sha256": "3ed85c3fac04f62912a2e958dff5957a129a09569c0525c8d52ea6493c75d38e"
+    },
+    {
+      "localPath": "281-374--state-vessel-skill-halo-memory-core.svg",
+      "bytes": 1264,
+      "sha256": "146fab74e47faed4314679e8dff4e36a97f161cec77176a0b747986b2cbf1607"
+    },
+    {
+      "localPath": "281-374--state-vessel-translucent-human-figure.png",
+      "bytes": 264715,
+      "sha256": "54e522fca5fb150776a8806b3c9d700c2b4fb6fff12348749ea3cf7a74193485"
+    },
+    {
+      "localPath": "287-637--state-vessel-skill-halo-code-copilot.svg",
+      "bytes": 1251,
+      "sha256": "000e8fccb173f03e2e557072c588790e7b17b4bac4ea388be18fa8935a17a7b4"
+    },
+    {
+      "localPath": "287-637--state-vessel-skill-halo-memory-core.svg",
+      "bytes": 1264,
+      "sha256": "135471605804e850ed2a215f748d6e3bf1b4c0ac8a6a3df5c9d7554daddefed7"
+    },
+    {
+      "localPath": "287-637--state-vessel-skill-halo-research-scout.svg",
+      "bytes": 1253,
+      "sha256": "aee4d59da981a2b6e89dc1284db78116f489d5e50300d9ba7f9152ca5e2426c8"
+    },
+    {
+      "localPath": "287-714--state-vessel-skill-halo-code-copilot.svg",
+      "bytes": 1246,
+      "sha256": "667b880ca6d7f3035afdbf4b8420c4296e0b8400bbc67ec7ef04b45f19f7d01f"
+    },
+    {
+      "localPath": "287-714--state-vessel-skill-halo-memory-core.svg",
+      "bytes": 1264,
+      "sha256": "731067d4fb00b62177fbbf289026be424ea3f954f2f3a50d42d2cb7997d8a08b"
+    },
+    {
+      "localPath": "32-2--conversation-trace-clock-icon.svg",
+      "bytes": 802,
+      "sha256": "8c2906f916b816a1de5f49c82217f01d32bdb1a34b08717ae10b92e13be8e786"
+    },
+    {
+      "localPath": "32-2--session-flow-info-circle.svg",
+      "bytes": 297,
+      "sha256": "c3121f242760ba0b01118162b0ff7b8a2de5eb3f20a6aa1a5d2d22d3c89c0913"
+    },
+    {
+      "localPath": "32-2--session-flow-node-exploring.svg",
+      "bytes": 368,
+      "sha256": "37a794f32a6957f0cfa70f669f5df60361c99703d2c0347c832eb265d4472755"
+    },
+    {
+      "localPath": "32-2--session-flow-node-session-start.svg",
+      "bytes": 312,
+      "sha256": "53f9934fdaf89dc3b9152fa3005a8a9ae9112b6e72c1715c2aae31e449991723"
+    },
+    {
+      "localPath": "32-2--state-vessel-orbit-line-slow-rotation.svg",
+      "bytes": 640,
+      "sha256": "a64eeaca0be1bdbfbaced9812ce863cae8056d5de1ac054bc96f7f552fd3ec82"
+    },
+    {
+      "localPath": "32-2--state-vessel-secondary-orbit-line.svg",
+      "bytes": 825,
+      "sha256": "f3727f239d667a1db62a3280a8f55f16a2b00afccb406982be159dbac79d4f6b"
+    },
+    {
+      "localPath": "32-2--state-vessel-skill-halo-code-copilot.svg",
+      "bytes": 1126,
+      "sha256": "c07793eb431348c23fa35c80f56302000fd406ee745841d7e24ff13c57173933"
+    },
+    {
+      "localPath": "32-2--state-vessel-skill-halo-memory-core.svg",
+      "bytes": 1125,
+      "sha256": "fdc35bfb420451382c30865c4ce3777658d9e655171ff5a8633ce8e8e743aa8e"
+    },
+    {
+      "localPath": "32-2--state-vessel-translucent-human-figure.png",
+      "bytes": 269544,
+      "sha256": "796ebba6a20610cb6fac7f90e9623da8df4fbb99152b1138b3d5b0fa1e8e69d8"
+    },
+    {
+      "localPath": "412-728--state-vessel-skill-halo-memory-core.svg",
+      "bytes": 1125,
+      "sha256": "403013d8d805bcf2f01a462a67ced0ade3c41773ca95daf452a02cf7843dd2b6"
+    },
+    {
+      "localPath": "412-728--state-vessel-translucent-human-figure.png",
+      "bytes": 269004,
+      "sha256": "bfabf93866a482e244c3b0f27907e998e93092b45d93457247472472a0101657"
+    }
+  ]
+}

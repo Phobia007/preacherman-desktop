@@ -6,6 +6,7 @@ import type {
   SurfaceHostBridge,
 } from "@preacherman/surface-skin";
 import type { DemoActionLog } from "./actionLog";
+import { acceptedScreenId, openDemoScreen } from "./demo/screenRoute";
 
 const windowCommands = new Set([
   "demo.window.close",
@@ -46,6 +47,12 @@ export function createDemoHostBridge(actionLog: DemoActionLog): SurfaceHostBridg
       let result: SurfaceCommandResult;
       if (windowCommands.has(command.type)) {
         result = isTauri() ? await executeNativeWindowAction(command) : browserWindowResult(command);
+      } else if (command.type === "demo.screen.open" && typeof command.payload?.screenId === "string") {
+        openDemoScreen(command.payload.screenId);
+        result = { ok: true, data: { screenId: command.payload.screenId, recordedLocally: true } };
+      } else if (command.type === "demo.navigation.select" && command.payload?.surfaceType === "home") {
+        openDemoScreen(acceptedScreenId);
+        result = { ok: true, data: { screenId: acceptedScreenId, recordedLocally: true } };
       } else {
         result = { ok: true, data: { recordedLocally: true } };
       }

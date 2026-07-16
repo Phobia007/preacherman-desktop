@@ -3,6 +3,7 @@ import "./styles/index.css";
 export { createSurfaceSkinAdapter } from "./adapter/createSurfaceSkinAdapter";
 export { SurfaceFallback } from "./renderers/SurfaceFallback";
 export { SurfaceRenderer } from "./renderers/SurfaceRenderer";
+export { HomeFlowSurface } from "./surfaces/home/HomeFlowSurface";
 export { WorkspaceConversationSurface } from "./surfaces/workspace/WorkspaceConversationSurface";
 export { bridgeSurfaceTokens, defaultSurfaceSkinTokens, surfaceTokenStyle } from "./tokens/bridge";
 export type {

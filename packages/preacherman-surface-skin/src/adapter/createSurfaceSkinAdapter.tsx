@@ -10,6 +10,7 @@ import type {
 import { bridgeSurfaceTokens, surfaceTokenStyle } from "../tokens/bridge";
 import { SurfaceFallback } from "../renderers/SurfaceFallback";
 import { SurfaceRenderer } from "../renderers/SurfaceRenderer";
+import { HomeFlowSurface } from "../surfaces/home/HomeFlowSurface";
 import { WorkspaceConversationSurface } from "../surfaces/workspace/WorkspaceConversationSurface";
 
 const supportedSurfaceTypes = new Set<SurfaceType>([
@@ -24,6 +25,7 @@ const supportedSurfaceTypes = new Set<SurfaceType>([
 ]);
 
 const builtInRenderers: Partial<Record<SurfaceType, ComponentType<SurfaceViewProps>>> = {
+  home: HomeFlowSurface,
   workspace: WorkspaceConversationSurface,
 };
 

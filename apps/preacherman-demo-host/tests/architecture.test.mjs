@@ -80,14 +80,53 @@ test("demo host has no backend or network client", async () => {
   }
 });
 
-test("host supplies one explicit workspace manifest and no extra routes", async () => {
+test("host keeps the accepted workspace manifest and adds only the demo screen index route", async () => {
   const appPath = join(sourceRoot, "App.tsx");
+  const routePath = join(sourceRoot, "demo", "screenRoute.ts");
   assert.equal(await exists(appPath), true, "App must exist");
+  assert.equal(await exists(routePath), true, "screen route helper must exist");
   const source = await readFile(appPath, "utf8");
+  const routeSource = await readFile(routePath, "utf8");
   assert.match(source, /surfaceType:\s*["']workspace["']/);
   assert.match(source, /schemaVersion:\s*1/);
   assert.match(source, /surfaceId:\s*["']figma-281-538["']/);
   assert.doesNotMatch(source, /react-router|createBrowserRouter|(?:page|frame|route)[-_ ]?(?:53|55)\b/i);
+  assert.match(routeSource, /__screens/);
+});
+
+test("Figma Screen Registry reconciles all 53 current Figma pages with explicit status", async () => {
+  const registryPath = join(sourceRoot, "demo", "figmaScreenRegistry.ts");
+  assert.equal(await exists(registryPath), true, "Figma Screen Registry must exist");
+  const source = await readFile(registryPath, "utf8");
+  const pageIds = [...source.matchAll(/pageId:\s*["']([^"']+)["']/g)].map((match) => match[1]);
+  const screenIds = [...source.matchAll(/screenId:\s*["']([^"']+)["']/g)].map((match) => match[1]);
+  const implemented = [...source.matchAll(/implementationStatus:\s*["']implemented["']/g)];
+  const pending = [...source.matchAll(/implementationStatus:\s*["']pending["']/g)];
+
+  assert.equal(pageIds.length, 53);
+  assert.equal(new Set(pageIds).size, 53, "page IDs must be unique");
+  assert.equal(screenIds.length, 53);
+  assert.equal(new Set(screenIds).size, 53, "screen IDs must be unique");
+  assert.equal(implemented.length, 7, "accepted frame plus first six-frame batch");
+  assert.equal(pending.length, 46, "all non-implemented pages stay explicitly pending");
+  assert.match(source, /pdfReconciliation\s*=\s*["']PDF 55页待补充核对["']/);
+});
+
+test("Demo Screen Index lists every registry entry and links only implemented screens", async () => {
+  const indexPath = join(sourceRoot, "demo", "ScreenIndex.tsx");
+  const routePath = join(sourceRoot, "demo", "screenRoute.ts");
+  assert.equal(await exists(indexPath), true, "Demo Screen Index must exist");
+  assert.equal(await exists(routePath), true, "screen route helper must exist");
+  const indexSource = await readFile(indexPath, "utf8");
+  const routeSource = await readFile(routePath, "utf8");
+  assert.match(indexSource, /figmaScreenRegistry\.map/);
+  assert.match(indexSource, /implementationStatus\s*===\s*["']implemented["']/);
+  assert.match(indexSource, /disabled/);
+  assert.match(indexSource, /Implemented/);
+  assert.match(indexSource, /Pending/);
+  assert.match(routeSource, /\/__screens/);
+  assert.match(routeSource, /history\.pushState/);
+  assert.doesNotMatch(indexSource + routeSource, /react-router|createBrowserRouter/);
 });
 
 test("Tauri window configuration matches the 1440 by 900 borderless baseline", async () => {

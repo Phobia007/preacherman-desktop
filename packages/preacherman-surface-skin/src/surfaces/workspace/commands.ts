@@ -15,6 +15,13 @@ export function navigationCommand(surfaceType: string): SurfaceCommand {
   };
 }
 
+export function screenCommand(screenId: string): SurfaceCommand {
+  return {
+    type: "demo.screen.open",
+    payload: { screenId },
+  };
+}
+
 export const notificationCommand: SurfaceCommand = {
   type: "demo.notifications.open",
 };

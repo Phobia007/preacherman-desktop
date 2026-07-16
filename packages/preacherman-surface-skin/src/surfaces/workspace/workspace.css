@@ -67,6 +67,7 @@
   font-weight: 400;
   line-height: 20px;
   letter-spacing: 0;
+  cursor: pointer;
 }
 
 .pm-workspace__live-status img {
@@ -226,6 +227,34 @@
   width: 72px;
   height: 72px;
   max-width: none;
+}
+
+.pm-workspace__state-chat-target {
+  position: absolute;
+  top: 145px;
+  left: 542px;
+  z-index: 4;
+  width: 296px;
+  height: 618px;
+  border-radius: 48%;
+  background: transparent;
+}
+
+.pm-workspace__state-chat-hint {
+  position: absolute;
+  top: 314px;
+  left: 836px;
+  z-index: 6;
+  box-sizing: border-box;
+  width: 196px;
+  height: 36px;
+  padding: 8px 16px;
+  border: 1px solid rgb(189 178 163 / 38%);
+  border-radius: 18px;
+  background: rgb(255 254 251 / 78%);
+  font-size: 15px;
+  line-height: 18px;
+  white-space: nowrap;
 }
 
 .pm-workspace__bottom-navigation {
