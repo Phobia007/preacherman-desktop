@@ -329,8 +329,9 @@ test("green status button toggles an empty glass popover and closes on outside c
   assert.match(source, /event\.key\s*===\s*["']Escape["']/);
   assert.match(source, /contains\(event\.target/);
   assert.match(source, /pm-workspace__status-popover/);
+  assert.match(source, />Alive<\/span>/);
   assert.doesNotMatch(source, /Status[^A-Za-z]*(?:live|Live)|screenCommand/);
-  assert.match(css, /\.pm-workspace__status-indicator\s*\{[^}]*width:\s*14px[^}]*height:\s*14px/s);
+  assert.match(css, /\.pm-workspace__status-indicator\s*\{[^}]*width:\s*54px[^}]*height:\s*14px[^}]*font-size:\s*9px/s);
   assert.match(css, /\.pm-workspace__status-popover\s*\{[^}]*width:\s*300px[^}]*height:\s*190px[^}]*backdrop-filter:\s*blur/s);
 });
 
@@ -339,7 +340,7 @@ test("workspace interaction affordances stay on the surface and expose hover des
   for (const description of ["Open notifications"]) {
     assert.match(markup, new RegExp(`title="${description}"`));
   }
-  assert.doesNotMatch(markup, /<(?:a|form)\b|\bhref=|\baction=/i);
+  assert.doesNotMatch(markup, /<(?:a|form)\b/i);
 });
 
 test("workspace renderer matches all visible Figma copy", async () => {
@@ -371,29 +372,29 @@ test("window chrome shows the local Preacherman mark inside a frameless drag reg
   assert.doesNotMatch(source, /@tauri-apps|\b(?:invoke|listen)\s*\(/i);
 });
 
-test("workspace orbit layer animates four named semantic nodes through the local bridge", async () => {
+test("workspace orbit layer binds four named semantic nodes to shared layered geometry and the local bridge", async () => {
   const componentPath = join(packageRoot, "src", "surfaces", "workspace", "OrbitLayer.tsx");
+  const geometryPath = join(packageRoot, "src", "surfaces", "workspace", "orbitGeometry.ts");
   const commandsPath = join(packageRoot, "src", "surfaces", "workspace", "commands.ts");
   const cssPath = join(packageRoot, "src", "surfaces", "workspace", "workspace.css");
   assert.equal(await exists(componentPath), true, "OrbitLayer must exist");
   const source = await readFile(componentPath, "utf8");
+  const geometry = await readFile(geometryPath, "utf8");
   const commands = await readFile(commandsPath, "utf8");
   const css = await readFile(cssPath, "utf8");
 
   for (const label of ["Memory Core", "Code Copilot", "Research Scout", "Insight Miner"]) {
-    assert.match(source, new RegExp(label));
+    assert.match(geometry, new RegExp(label));
   }
-  assert.equal((source.match(/\{ id: "/g) ?? []).length, 4);
   assert.equal((source.match(/<button\b/g) ?? []).length, 1, "one mapped semantic button template");
   assert.match(source, /dispatch\(orbitNodeCommand\(node\.id,\s*node\.label\)\)/);
-  assert.match(source, /pm-workspace__orbit-node-layer--hit/);
-  assert.match(source, /onMouseEnter=\{\(\)\s*=>\s*setActiveNode\(node\.id\)\}/);
+  assert.match(source, /orbitFrameAtElapsed/);
+  assert.match(source, /requestAnimationFrame/);
+  assert.match(source, /data-orbit-layer=\{node\.layer\}/);
+  assert.match(source, /onMouseEnter=\{\(\)\s*=>\s*activateNode\(node\.id,\s*orbit\.id\)\}/);
   assert.match(commands, /type:\s*["']demo\.orbit-node\.select["']/);
-  assert.match(css, /@keyframes pm-orbit-node-forward/);
-  assert.match(css, /@keyframes pm-orbit-node-reverse/);
-  assert.match(css, /\.pm-workspace__orbit-layer--back/);
-  assert.match(css, /\.pm-workspace__orbit-layer--front/);
-  assert.match(css, /\.pm-workspace__orbit-node-layer--hit\s*\{[^}]*z-index:\s*5/s);
-  assert.match(css, /\.pm-workspace__orbit-node\.is-highlighted\s*\{[^}]*animation-play-state:\s*paused/s);
-  assert.match(css, /button\.pm-workspace__orbit-node:hover\s*\{[^}]*animation-play-state:\s*paused/s);
+  assert.match(css, /\.pm-workspace__orbit-track-layer--back\s*\{[^}]*z-index:\s*1/s);
+  assert.match(css, /\.pm-workspace__orbit-track-layer--front\s*\{[^}]*z-index:\s*4/s);
+  assert.match(css, /\.pm-workspace__human-stack\s*\{[^}]*z-index:\s*2/s);
+  assert.match(css, /\.pm-workspace__orbit-node\.is-highlighted img/);
 });

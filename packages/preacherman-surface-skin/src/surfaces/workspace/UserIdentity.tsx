@@ -17,7 +17,6 @@ export function UserIdentity({ dispatch }: UserIdentityProps) {
       >
         <img alt="" aria-hidden="true" src={bellAsset} />
       </button>
-      <span className="pm-workspace__account-divider" aria-hidden="true" />
       <button
         aria-label="Open user menu"
         className="pm-workspace__identity"

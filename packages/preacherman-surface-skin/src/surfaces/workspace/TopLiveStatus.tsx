@@ -38,7 +38,7 @@ export function TopLiveStatus() {
         onClick={() => setIsOpen((open) => !open)}
         type="button"
       >
-        <span aria-hidden="true" className="pm-workspace__status-indicator" />
+        <span aria-hidden="true" className="pm-workspace__status-indicator">Alive</span>
       </button>
       {isOpen ? (
         <div
