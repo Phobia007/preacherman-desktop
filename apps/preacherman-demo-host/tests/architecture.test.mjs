@@ -106,6 +106,7 @@ test("host keeps the accepted workspace manifest and adds only the demo screen i
   assert.match(source, /surfaceType:\s*["']workspace["']/);
   assert.match(source, /schemaVersion:\s*1/);
   assert.match(source, /surfaceId:\s*["']figma-281-538["']/);
+  assert.match(source, /identity:\s*\{[\s\S]*identityNumber:\s*["']01["'][\s\S]*\}/);
   assert.doesNotMatch(source, /react-router|createBrowserRouter|(?:page|frame|route)[-_ ]?(?:53|55)\b/i);
   assert.match(routeSource, /__screens/);
 });
@@ -196,7 +197,27 @@ test("Tauri capability grants only the required core window actions", async () =
 });
 
 test("Tauri Windows resources use a valid localized icon", async () => {
+  const configPath = join(tauriRoot, "tauri.conf.json");
+  const sourcePath = join(tauriRoot, "icons", "app-icon.png");
   const iconPath = join(tauriRoot, "icons", "icon.ico");
+  const config = JSON.parse(await readFile(configPath, "utf8"));
+
+  assert.equal(await exists(sourcePath), true, "1024px localized master icon must exist");
+  const sourceBytes = await readFile(sourcePath);
+  assert.equal(sourceBytes.toString("ascii", 1, 4), "PNG");
+  assert.equal(sourceBytes.readUInt32BE(16), 1024, "master icon width");
+  assert.equal(sourceBytes.readUInt32BE(20), 1024, "master icon height");
+
+  for (const file of ["32x32.png", "128x128.png", "128x128@2x.png", "icon.ico"]) {
+    assert.equal(await exists(join(tauriRoot, "icons", file)), true, `${file} must exist`);
+  }
+  assert.deepEqual(config.bundle.icon, [
+    "icons/32x32.png",
+    "icons/128x128.png",
+    "icons/128x128@2x.png",
+    "icons/icon.icns",
+    "icons/icon.ico"
+  ]);
   assert.equal(await exists(iconPath), true, "Windows icon must exist");
   const bytes = await readFile(iconPath);
   assert.equal(bytes.readUInt16LE(0), 0, "ICO reserved header");

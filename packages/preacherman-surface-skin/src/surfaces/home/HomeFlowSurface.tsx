@@ -20,7 +20,7 @@ const frameBySurfaceId: Readonly<Record<string, string>> = {
   "figma-412-728": "412:728",
 };
 
-export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewProps) {
+export function HomeFlowSurface({ dispatch, manifest, projection, tokenStyle }: SurfaceViewProps) {
   const surfaceId = manifest.surfaceId ?? "figma-287-637";
   const [hoverHint, setHoverHint] = useState(false);
   const forceHint = surfaceId === "figma-281-374";
@@ -38,7 +38,7 @@ export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewP
     >
       <WindowChrome />
       <TopLiveStatus />
-      <UserIdentity dispatch={dispatch} />
+      <UserIdentity dispatch={dispatch} projection={projection} />
 
       <div className="pm-home-flow__scene">
         {showCurrentState ? (

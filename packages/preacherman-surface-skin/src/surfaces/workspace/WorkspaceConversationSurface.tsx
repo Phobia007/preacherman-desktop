@@ -8,7 +8,7 @@ import { WindowChrome } from "./WindowChrome";
 import { screenCommand } from "./commands";
 import "./workspace.css";
 
-export function WorkspaceConversationSurface({ dispatch, manifest, tokenStyle }: SurfaceViewProps) {
+export function WorkspaceConversationSurface({ dispatch, manifest, projection, tokenStyle }: SurfaceViewProps) {
   const [showChatHint, setShowChatHint] = useState(false);
 
   return (
@@ -21,7 +21,7 @@ export function WorkspaceConversationSurface({ dispatch, manifest, tokenStyle }:
     >
       <WindowChrome />
       <TopLiveStatus />
-      <UserIdentity dispatch={dispatch} />
+      <UserIdentity dispatch={dispatch} projection={projection} />
       <StateVessel dispatch={dispatch} />
       <button
         aria-label="Talk to this State"

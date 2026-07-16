@@ -75,6 +75,7 @@ test("workspace corner controls and Alive trigger use the requested fixed positi
   const css = await readFile(join(packageRoot, "src", "surfaces", "workspace", "workspace.css"), "utf8");
   const identityRule = css.match(/\.pm-workspace__identity\s*\{[^}]*\}/s)?.[0] ?? "";
   const bellRule = css.match(/\.pm-workspace__bell\s*\{[^}]*\}/s)?.[0] ?? "";
+  const statusShellRule = css.match(/\.pm-workspace__status-shell\s*\{[^}]*\}/s)?.[0] ?? "";
   const statusRule = css.match(/\.pm-workspace__status-indicator\s*\{[^}]*\}/s)?.[0] ?? "";
 
   assert.doesNotMatch(userSource, /account-divider/);
@@ -85,9 +86,25 @@ test("workspace corner controls and Alive trigger use the requested fixed positi
   assert.match(bellRule, /bottom:\s*32px/);
   assert.doesNotMatch(bellRule, /\btop:/);
   assert.match(statusSource, />Alive<\/span>/);
-  assert.match(statusRule, /width:\s*54px/);
-  assert.match(statusRule, /height:\s*14px/);
-  assert.match(statusRule, /font-size:\s*9px/);
+  assert.match(statusShellRule, /top:\s*30px/);
+  assert.match(statusRule, /width:\s*80px/);
+  assert.match(statusRule, /height:\s*26px/);
+  assert.match(statusRule, /font-size:\s*10px/);
+  assert.match(statusRule, /background:\s*rgb\(170 220 180 \/ 48%\)/);
+  assert.match(statusRule, /backdrop-filter:\s*blur\(18px\) saturate\(140%\)/);
+  assert.match(statusRule, /animation:\s*pm-alive-breathe 4\.6s ease-in-out infinite/);
+  assert.match(css, /@keyframes pm-alive-breathe/);
+});
+
+test("UserIdentity renders the projected identity number without hard-coding demo data", async () => {
+  const source = await readFile(join(packageRoot, "src", "surfaces", "workspace", "UserIdentity.tsx"), "utf8");
+
+  assert.match(source, /Pick<SurfaceViewProps,\s*"dispatch"\s*\|\s*"projection">/);
+  assert.match(source, /projection\.data\?\.identity/);
+  assert.match(source, /identityNumber\s*\?\s*\(/);
+  assert.match(source, /className="pm-workspace__identity-number"/);
+  assert.match(source, /#\{identityNumber\}/);
+  assert.doesNotMatch(source, /#01/);
 });
 
 test("workspace orbit renderer consumes one geometry frame and keeps bridge buttons semantic", async () => {

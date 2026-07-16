@@ -27,6 +27,11 @@ const manifest: SurfaceManifest = {
 
 const projection: SurfaceProjection = {
   status: "ready",
+  data: {
+    identity: {
+      identityNumber: "01",
+    },
+  },
 };
 
 const actionLog = createDemoActionLog();

@@ -49,43 +49,50 @@
 
 .pm-workspace__status-shell {
   position: absolute;
-  top: 18px;
+  top: 30px;
   left: 50%;
   z-index: 8;
-  width: 58px;
-  height: 22px;
+  width: 80px;
+  height: 26px;
   transform: translateX(-50%);
 }
 
 .pm-workspace__status-trigger {
   display: grid;
-  width: 58px;
-  height: 22px;
+  width: 80px;
+  height: 26px;
   place-items: center;
-  border-radius: 7px;
+  border-radius: 10px;
 }
 
 .pm-workspace__status-indicator {
   display: grid;
-  width: 54px;
-  height: 14px;
+  box-sizing: border-box;
+  width: 80px;
+  height: 26px;
   place-items: center;
-  border: 1px solid rgb(46 126 75 / 20%);
-  border-radius: 4px;
-  background: #65ae7c;
-  box-shadow: 0 2px 8px -5px rgb(35 105 59 / 55%);
-  color: rgb(255 255 255 / 92%);
-  font-size: 9px;
+  border: 1px solid rgb(255 255 255 / 64%);
+  border-radius: 9px;
+  background: rgb(170 220 180 / 48%);
+  box-shadow:
+    0 8px 22px -14px rgb(55 130 76 / 46%),
+    inset 0 1px 0 rgb(255 255 255 / 68%);
+  color: rgb(42 86 53 / 92%);
+  font-family: Inter, sans-serif;
+  font-size: 10px;
   font-weight: 500;
-  line-height: 14px;
+  line-height: 24px;
   text-align: center;
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  animation: pm-alive-breathe 4.6s ease-in-out infinite;
   transition: filter 160ms ease, transform 160ms ease;
 }
 
 .pm-workspace__status-trigger:hover .pm-workspace__status-indicator,
 .pm-workspace__status-trigger:focus-visible .pm-workspace__status-indicator {
-  filter: brightness(1.045);
-  transform: scale(1.035);
+  filter: brightness(1.025) saturate(1.04);
+  transform: scale(1.008);
 }
 
 .pm-workspace__status-popover {
@@ -167,6 +174,13 @@
   font-weight: 700;
   line-height: 16px;
   white-space: nowrap;
+}
+
+.pm-workspace__identity-number {
+  margin-left: 4px;
+  color: #77736d;
+  font-size: 10px;
+  font-weight: 500;
 }
 
 .pm-workspace__role {
@@ -454,6 +468,21 @@ button.pm-workspace__orbit-node:focus-visible img {
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
+@keyframes pm-alive-breathe {
+  0%, 100% {
+    opacity: 0.96;
+    box-shadow:
+      0 7px 20px -15px rgb(55 130 76 / 38%),
+      inset 0 1px 0 rgb(255 255 255 / 62%);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 9px 24px -14px rgb(55 130 76 / 50%),
+      inset 0 1px 0 rgb(255 255 255 / 76%);
+  }
+}
+
 @keyframes pm-human-breathe {
   0%, 100% { transform: translateY(-2px) rotate(-0.2deg); }
   50% { transform: translateY(4px) rotate(0.15deg); }
@@ -465,6 +494,7 @@ button.pm-workspace__orbit-node:focus-visible img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .pm-workspace__status-indicator,
   .pm-workspace__human-stack,
   .pm-workspace__navigation-dot {
     animation-play-state: paused;

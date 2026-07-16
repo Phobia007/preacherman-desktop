@@ -331,7 +331,7 @@ test("green status button toggles an empty glass popover and closes on outside c
   assert.match(source, /pm-workspace__status-popover/);
   assert.match(source, />Alive<\/span>/);
   assert.doesNotMatch(source, /Status[^A-Za-z]*(?:live|Live)|screenCommand/);
-  assert.match(css, /\.pm-workspace__status-indicator\s*\{[^}]*width:\s*54px[^}]*height:\s*14px[^}]*font-size:\s*9px/s);
+  assert.match(css, /\.pm-workspace__status-indicator\s*\{[^}]*width:\s*80px[^}]*height:\s*26px[^}]*font-size:\s*10px/s);
   assert.match(css, /\.pm-workspace__status-popover\s*\{[^}]*width:\s*300px[^}]*height:\s*190px[^}]*backdrop-filter:\s*blur/s);
 });
 
