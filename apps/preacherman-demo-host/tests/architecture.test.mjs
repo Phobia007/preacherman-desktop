@@ -38,6 +38,14 @@ test("demo host is an independent package with a public Surface Skin dependency"
   assert.match(manifest.scripts?.tauri ?? "", /^tauri$/);
 });
 
+test("browser shell serves a local favicon without external asset requests", async () => {
+  const html = await readFile(join(hostRoot, "index.html"), "utf8");
+  const faviconPath = join(hostRoot, "public", "favicon.ico");
+  assert.match(html, /<link[^>]+rel=["']icon["'][^>]+href=["']\/favicon\.ico["']/);
+  assert.equal(await exists(faviconPath), true, "local browser favicon must exist");
+  assert.doesNotMatch(html, /https?:\/\//i);
+});
+
 test("host imports Surface Skin only through its public package entry", async () => {
   assert.equal(await exists(sourceRoot), true, "host source directory must exist");
   const imports = [];
@@ -49,6 +57,14 @@ test("host imports Surface Skin only through its public package entry", async ()
   for (const match of imports) {
     assert.equal(match[1], "@preacherman/surface-skin");
   }
+});
+
+test("host build deduplicates React across the linked Surface Skin package", async () => {
+  const configPath = join(hostRoot, "vite.config.ts");
+  assert.equal(await exists(configPath), true, "host Vite config must exist");
+  const source = await readFile(configPath, "utf8");
+  const compactSource = source.replace(/\s/g, "");
+  assert.match(compactSource, /dedupe:\["react","react-dom"\]/);
 });
 
 test("DemoHostBridge records browser window actions without reporting fake success", async () => {
@@ -129,19 +145,41 @@ test("Demo Screen Index lists every registry entry and links only implemented sc
   assert.doesNotMatch(indexSource + routeSource, /react-router|createBrowserRouter/);
 });
 
-test("Tauri window configuration matches the 1440 by 900 borderless baseline", async () => {
+test("startup intro hands off from the localized logo to the main surface once", async () => {
+  const appPath = join(sourceRoot, "App.tsx");
+  const introPath = join(sourceRoot, "introSequence.ts");
+  const logoPath = join(sourceRoot, "assets", "preacherman-mark.png");
+  const stylesPath = join(sourceRoot, "styles.css");
+  const app = await readFile(appPath, "utf8");
+  const intro = await readFile(introPath, "utf8");
+  const styles = await readFile(stylesPath, "utf8");
+
+  assert.equal(await exists(logoPath), true, "startup logo must be localized in Demo Host assets");
+  assert.match(app, /claimStartupIntro\(\)/);
+  assert.match(app, /setTimeout\([\s\S]*STARTUP_INTRO_TOTAL_MS/);
+  assert.match(app, /showStartupIntro\s*\?\s*<StartupIntro\s*\/>/);
+  assert.match(intro, /whiteHoldMs:\s*1000/);
+  assert.match(intro, /logoFadeInMs:\s*600/);
+  assert.match(intro, /logoVisibleMs:\s*3000/);
+  assert.match(intro, /logoFadeOutMs:\s*600/);
+  assert.match(intro, /mainFadeInMs:\s*700/);
+  assert.match(styles, /\.demo-startup__logo\s*\{[^}]*width:\s*600px[^}]*height:\s*600px/s);
+  assert.doesNotMatch(app + intro + styles, /https?:\/\/|codex\/attachments|AppData\/Local\/Temp/i);
+});
+
+test("Tauri window configuration matches the 1800 by 1000 borderless baseline", async () => {
   const configPath = join(tauriRoot, "tauri.conf.json");
   assert.equal(await exists(configPath), true, "tauri.conf.json must exist");
   const config = JSON.parse(await readFile(configPath, "utf8"));
   assert.equal(config.productName, "Preacherman Desktop Demo");
   assert.equal(config.identifier, "ai.preacherman.demo");
   const window = config.app.windows[0];
-  assert.equal(window.width, 1440);
-  assert.equal(window.height, 900);
+  assert.equal(window.width, 1800);
+  assert.equal(window.height, 1000);
   assert.equal(window.decorations, false);
   assert.equal(window.center, true);
   assert.equal(window.resizable, true);
-  assert.equal(window.backgroundColor, "#F7F5F1");
+  assert.equal(window.backgroundColor, "#FFFFFF");
 });
 
 test("Tauri capability grants only the required core window actions", async () => {

@@ -2,6 +2,14 @@
   background: #f7f5f1;
 }
 
+.pm-home-flow__scene {
+  position: absolute;
+  top: 0;
+  left: 180px;
+  width: 1440px;
+  height: 1000px;
+}
+
 .pm-home-flow__current-state {
   position: absolute;
   top: 23px;

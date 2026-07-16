@@ -15,6 +15,8 @@ import {
   readDemoScreenRoute,
 } from "./demo/screenRoute";
 import { createDemoHostBridge } from "./demoHostBridge";
+import { StartupIntro } from "./StartupIntro";
+import { claimStartupIntro, STARTUP_INTRO_TOTAL_MS } from "./introSequence";
 
 const manifest: SurfaceManifest = {
   surfaceType: "workspace",
@@ -38,6 +40,19 @@ function currentRoute() {
 
 export function App() {
   const [route, setRoute] = useState(currentRoute);
+  const [showStartupIntro, setShowStartupIntro] = useState(() => claimStartupIntro());
+  const [animateMainEntrance] = useState(showStartupIntro);
+
+  useEffect(() => {
+    if (!showStartupIntro) {
+      return undefined;
+    }
+    const timeoutId = window.setTimeout(
+      () => setShowStartupIntro(false),
+      STARTUP_INTRO_TOTAL_MS,
+    );
+    return () => window.clearTimeout(timeoutId);
+  }, [showStartupIntro]);
 
   useEffect(() => {
     const refreshRoute = () => setRoute(currentRoute());
@@ -65,15 +80,22 @@ export function App() {
       : figmaScreenRegistry[0];
   }, [route]);
 
-  if (route.kind === "index") {
-    return <ScreenIndex onOpenScreen={openDemoScreen} />;
-  }
+  const entranceClassName = animateMainEntrance ? " demo-host--entering" : "";
+  const mainContent = route.kind === "index"
+    ? (
+        <div className={`demo-host${entranceClassName}`}>
+          <ScreenIndex onOpenScreen={openDemoScreen} />
+        </div>
+      )
+    : (() => {
+        const selectedManifest = screen?.manifest ?? manifest;
+        const ScreenSurface = adapter.resolve(selectedManifest).component;
+        return (
+          <main className={`demo-host${entranceClassName}`}>
+            <ScreenSurface manifest={selectedManifest} projection={projection} />
+          </main>
+        );
+      })();
 
-  const selectedManifest = screen?.manifest ?? manifest;
-  const ScreenSurface = adapter.resolve(selectedManifest).component;
-  return (
-    <main className="demo-host">
-      <ScreenSurface manifest={selectedManifest} projection={projection} />
-    </main>
-  );
+  return showStartupIntro ? <StartupIntro /> : mainContent;
 }

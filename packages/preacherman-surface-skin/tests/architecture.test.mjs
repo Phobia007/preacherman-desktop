@@ -176,10 +176,8 @@ test("Home batch reuses shared shell components and exposes the designed interac
 test("Home product flow binds Figma states to their literal interaction triggers", async () => {
   const home = await readFile(join(packageRoot, "src", "surfaces", "home", "HomeFlowSurface.tsx"), "utf8");
   const conversation = await readFile(join(packageRoot, "src", "surfaces", "home", "ConversationScene.tsx"), "utf8");
-  const status = await readFile(join(packageRoot, "src", "surfaces", "workspace", "TopLiveStatus.tsx"), "utf8");
   const workspace = await readFile(join(packageRoot, "src", "surfaces", "workspace", "WorkspaceConversationSurface.tsx"), "utf8");
 
-  assert.match(status, /screenCommand\("figma-287-637"\)/, "Status click opens State Trace");
   assert.match(home, /current-state[\s\S]*screenCommand\("figma-219-3"\)/, "Current State click opens its detail");
   assert.match(home, /chat-target[\s\S]*screenCommand\("figma-32-2"\)/, "State figure click opens chat");
   assert.match(workspace, /state-chat-target[\s\S]*screenCommand\("figma-32-2"\)/, "accepted Home figure opens chat");
@@ -282,14 +280,63 @@ test("workspace renderer exposes exactly seven semantic navigation buttons", asy
   }
 });
 
+test("all implemented surfaces share one floating bottom navigation panel", async () => {
+  const workspace = await workspaceMarkup();
+  const home = await surfaceMarkup("home", "figma-287-637");
+
+  for (const markup of [workspace, home.markup]) {
+    assert.equal((markup.match(/pm-workspace__bottom-navigation-zone/g) ?? []).length, 1);
+    assert.equal((markup.match(/<nav\b[^>]*pm-workspace__bottom-navigation/g) ?? []).length, 1);
+    assert.equal((markup.match(/<button\b[^>]*data-navigation-item=/g) ?? []).length, 7);
+  }
+});
+
+test("bottom navigation is an 820px floating panel revealed by the bottom zone", async () => {
+  const componentPath = join(packageRoot, "src", "surfaces", "workspace", "BottomNavigation.tsx");
+  const cssPath = join(packageRoot, "src", "surfaces", "workspace", "workspace.css");
+  const source = await readFile(componentPath, "utf8");
+  const css = await readFile(cssPath, "utf8");
+  const zone = css.match(/\.pm-workspace__bottom-navigation-zone\s*\{[^}]*\}/s)?.[0] ?? "";
+  const panel = css.match(/\.pm-workspace__bottom-navigation\s*\{[^}]*\}/s)?.[0] ?? "";
+
+  assert.match(zone, /bottom:\s*0/);
+  assert.match(zone, /height:\s*92px/);
+  assert.match(panel, /width:\s*820px/);
+  assert.match(panel, /bottom:\s*16px/);
+  assert.match(panel, /border-radius:\s*14px/);
+  assert.match(panel, /box-shadow:/);
+  assert.match(panel, /opacity:\s*0/);
+  assert.match(panel, /visibility:\s*hidden/);
+  assert.match(panel, /pointer-events:\s*none/);
+  assert.match(source, /NAVIGATION_HIDE_DELAY_MS\s*=\s*360/);
+  assert.match(source, /setTimeout\([\s\S]*NAVIGATION_HIDE_DELAY_MS/);
+  assert.match(source, /onMouseEnter=\{showNavigation\}/);
+  assert.match(source, /onMouseLeave=\{scheduleNavigationHide\}/);
+  assert.equal((source.match(/<span className="pm-workspace__navigation-dot"/g) ?? []).length, 3);
+  assert.match(css, /@keyframes pm-navigation-dot-breathe/);
+  assert.match(css, /animation-delay:\s*-0\.36s/);
+  assert.match(css, /\.pm-workspace__bottom-navigation-zone\.is-visible[^{]*\.pm-workspace__bottom-navigation/);
+});
+
+test("green status button toggles an empty glass popover and closes on outside click or Escape", async () => {
+  const componentPath = join(packageRoot, "src", "surfaces", "workspace", "TopLiveStatus.tsx");
+  const cssPath = join(packageRoot, "src", "surfaces", "workspace", "workspace.css");
+  const source = await readFile(componentPath, "utf8");
+  const css = await readFile(cssPath, "utf8");
+
+  assert.match(source, /aria-expanded=\{isOpen\}/);
+  assert.match(source, /setIsOpen\(\(open\)\s*=>\s*!open\)/);
+  assert.match(source, /event\.key\s*===\s*["']Escape["']/);
+  assert.match(source, /contains\(event\.target/);
+  assert.match(source, /pm-workspace__status-popover/);
+  assert.doesNotMatch(source, /Status[^A-Za-z]*(?:live|Live)|screenCommand/);
+  assert.match(css, /\.pm-workspace__status-indicator\s*\{[^}]*width:\s*14px[^}]*height:\s*14px/s);
+  assert.match(css, /\.pm-workspace__status-popover\s*\{[^}]*width:\s*300px[^}]*height:\s*190px[^}]*backdrop-filter:\s*blur/s);
+});
+
 test("workspace interaction affordances stay on the surface and expose hover descriptions", async () => {
   const markup = await workspaceMarkup();
-  for (const description of [
-    "Close window",
-    "Minimize window",
-    "Maximize or restore window",
-    "Open notifications",
-  ]) {
+  for (const description of ["Open notifications"]) {
     assert.match(markup, new RegExp(`title="${description}"`));
   }
   assert.doesNotMatch(markup, /<(?:a|form)\b|\bhref=|\baction=/i);
@@ -297,9 +344,10 @@ test("workspace interaction affordances stay on the surface and expose hover des
 
 test("workspace renderer matches all visible Figma copy", async () => {
   const markup = await workspaceMarkup();
-  for (const text of ["Status：live", "PM", "Preacherman", "Founder"]) {
+  for (const text of ["PM", "Preacherman", "Founder"]) {
     assert.match(markup, new RegExp(text));
   }
+  assert.doesNotMatch(markup, /Status[^<]*(?:live|Live)/);
 });
 
 test("workspace button reset does not override exact navigation typography", async () => {
@@ -311,19 +359,41 @@ test("workspace button reset does not override exact navigation typography", asy
   assert.match(css, /\.pm-workspace__nav-item--home\s*\{[^}]*font-weight:\s*600/s);
 });
 
-test("window chrome routes all window actions through the injected dispatch bridge", async () => {
+test("window chrome shows the local Preacherman mark inside a frameless drag region", async () => {
   const componentPath = join(packageRoot, "src", "surfaces", "workspace", "WindowChrome.tsx");
+  const logoPath = join(packageRoot, "src", "assets", "brand", "preacherman-mark.png");
   assert.equal(await exists(componentPath), true, "WindowChrome must exist");
   const source = await readFile(componentPath, "utf8");
-  assert.match(source, /dispatch\(windowCommand\("close"\)\)/);
-  assert.match(source, /dispatch\(windowCommand\("minimize"\)\)/);
-  assert.match(source, /dispatch\(windowCommand\("toggle-maximize"\)\)/);
+  assert.equal(await exists(logoPath), true, "top-left logo must be a local Surface Skin asset");
+  assert.match(source, /data-tauri-drag-region/);
+  assert.match(source, /preacherman-mark\.png/);
+  assert.doesNotMatch(source, /window-(?:close|minimize|maximize)\.svg|windowCommand/);
   assert.doesNotMatch(source, /@tauri-apps|\b(?:invoke|listen)\s*\(/i);
 });
 
-test("workspace orbit layer remains static", async () => {
+test("workspace orbit layer animates four named semantic nodes through the local bridge", async () => {
   const componentPath = join(packageRoot, "src", "surfaces", "workspace", "OrbitLayer.tsx");
+  const commandsPath = join(packageRoot, "src", "surfaces", "workspace", "commands.ts");
+  const cssPath = join(packageRoot, "src", "surfaces", "workspace", "workspace.css");
   assert.equal(await exists(componentPath), true, "OrbitLayer must exist");
   const source = await readFile(componentPath, "utf8");
-  assert.doesNotMatch(source, /animation|requestAnimationFrame|setInterval/i);
+  const commands = await readFile(commandsPath, "utf8");
+  const css = await readFile(cssPath, "utf8");
+
+  for (const label of ["Memory Core", "Code Copilot", "Research Scout", "Insight Miner"]) {
+    assert.match(source, new RegExp(label));
+  }
+  assert.equal((source.match(/\{ id: "/g) ?? []).length, 4);
+  assert.equal((source.match(/<button\b/g) ?? []).length, 1, "one mapped semantic button template");
+  assert.match(source, /dispatch\(orbitNodeCommand\(node\.id,\s*node\.label\)\)/);
+  assert.match(source, /pm-workspace__orbit-node-layer--hit/);
+  assert.match(source, /onMouseEnter=\{\(\)\s*=>\s*setActiveNode\(node\.id\)\}/);
+  assert.match(commands, /type:\s*["']demo\.orbit-node\.select["']/);
+  assert.match(css, /@keyframes pm-orbit-node-forward/);
+  assert.match(css, /@keyframes pm-orbit-node-reverse/);
+  assert.match(css, /\.pm-workspace__orbit-layer--back/);
+  assert.match(css, /\.pm-workspace__orbit-layer--front/);
+  assert.match(css, /\.pm-workspace__orbit-node-layer--hit\s*\{[^}]*z-index:\s*5/s);
+  assert.match(css, /\.pm-workspace__orbit-node\.is-highlighted\s*\{[^}]*animation-play-state:\s*paused/s);
+  assert.match(css, /button\.pm-workspace__orbit-node:hover\s*\{[^}]*animation-play-state:\s*paused/s);
 });

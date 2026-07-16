@@ -36,11 +36,12 @@ export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewP
       data-surface-type={manifest.surfaceType}
       style={tokenStyle}
     >
-      <WindowChrome dispatch={dispatch} />
-      <TopLiveStatus dispatch={dispatch} />
+      <WindowChrome />
+      <TopLiveStatus />
       <UserIdentity dispatch={dispatch} />
 
-      {showCurrentState ? (
+      <div className="pm-home-flow__scene">
+        {showCurrentState ? (
         <button
           className="pm-home-flow__current-state"
           onClick={() => void dispatch(screenCommand("figma-219-3"))}
@@ -48,9 +49,9 @@ export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewP
         >
           current state: v 1.0.0
         </button>
-      ) : null}
+        ) : null}
 
-      {surfaceId === "figma-287-637" ? (
+        {surfaceId === "figma-287-637" ? (
         <>
           <HomeVessel />
           <section className="pm-home-flow__trace" aria-label="State trace">
@@ -64,9 +65,9 @@ export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewP
             </ul>
           </section>
         </>
-      ) : null}
+        ) : null}
 
-      {surfaceId === "figma-287-714" || forceHint ? (
+        {surfaceId === "figma-287-714" || forceHint ? (
         <>
           <HomeVessel />
           {surfaceId === "figma-287-714" ? <img alt="Click Current State" className="pm-home-flow__current-cursor" src={handCursor} /> : null}
@@ -87,10 +88,11 @@ export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewP
             </div>
           ) : null}
         </>
-      ) : null}
+        ) : null}
 
-      {isStateDetail ? <StateFocusDetail dispatch={dispatch} /> : null}
-      {isConversation ? <ConversationScene dispatch={dispatch} replyVisible={surfaceId === "figma-412-728"} /> : null}
+        {isStateDetail ? <StateFocusDetail dispatch={dispatch} /> : null}
+        {isConversation ? <ConversationScene dispatch={dispatch} replyVisible={surfaceId === "figma-412-728"} /> : null}
+      </div>
 
       <BottomNavigation dispatch={dispatch} />
     </section>

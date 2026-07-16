@@ -13,12 +13,12 @@
       {
         "label": "main",
         "title": "Preacherman Desktop Demo",
-        "width": 1440,
-        "height": 900,
+        "width": 1800,
+        "height": 1000,
         "center": true,
         "resizable": true,
         "decorations": false,
-        "backgroundColor": "#F7F5F1"
+        "backgroundColor": "#FFFFFF"
       }
     ],
     "security": {

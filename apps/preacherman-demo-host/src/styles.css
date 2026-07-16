@@ -1,11 +1,26 @@
+:root {
+  --demo-app-width: 1800px;
+  --demo-app-height: 1000px;
+  --demo-main-fade-in: 700ms;
+}
+
 html,
 body,
 #root,
 .demo-host {
-  width: 1440px;
-  height: 900px;
+  width: var(--demo-app-width);
+  height: var(--demo-app-height);
   margin: 0;
   overflow: hidden;
+}
+
+html,
+body,
+#root {
+  background: #ffffff;
+}
+
+.demo-host {
   background: #f7f5f1;
 }
 
@@ -14,10 +29,59 @@ body {
   text-rendering: geometricPrecision;
 }
 
+.demo-host--entering {
+  animation: demo-main-enter var(--demo-main-fade-in) ease-out both;
+}
+
+.demo-startup {
+  display: grid;
+  width: var(--demo-app-width);
+  height: var(--demo-app-height);
+  margin: 0;
+  overflow: hidden;
+  place-items: center;
+  background: #ffffff;
+}
+
+.demo-startup__logo {
+  display: grid;
+  width: 600px;
+  height: 600px;
+  opacity: 0;
+  place-items: center;
+  animation:
+    demo-logo-in var(--demo-intro-logo-in) ease-out var(--demo-intro-white-hold) forwards,
+    demo-logo-out var(--demo-intro-logo-out) ease-in
+      calc(var(--demo-intro-white-hold) + var(--demo-intro-logo-in) + var(--demo-intro-logo-visible))
+      forwards;
+}
+
+.demo-startup__logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes demo-logo-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes demo-logo-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes demo-main-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .screen-index {
   box-sizing: border-box;
-  width: 1440px;
-  height: 900px;
+  width: var(--demo-app-width);
+  height: var(--demo-app-height);
   overflow: auto;
   padding: 42px 52px 64px;
   color: #161514;

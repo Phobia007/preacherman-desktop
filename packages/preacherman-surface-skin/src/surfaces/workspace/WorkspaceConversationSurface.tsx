@@ -19,10 +19,10 @@ export function WorkspaceConversationSurface({ dispatch, manifest, tokenStyle }:
       data-surface-type={manifest.surfaceType}
       style={tokenStyle}
     >
-      <WindowChrome dispatch={dispatch} />
-      <TopLiveStatus dispatch={dispatch} />
+      <WindowChrome />
+      <TopLiveStatus />
       <UserIdentity dispatch={dispatch} />
-      <StateVessel />
+      <StateVessel dispatch={dispatch} />
       <button
         aria-label="Talk to this State"
         className="pm-workspace__state-chat-target"

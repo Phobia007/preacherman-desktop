@@ -1,16 +1,14 @@
 import humanAsset from "../../assets/figma/281-538/human.png";
+import type { SurfaceViewProps } from "../../adapter/types";
 import { OrbitLayer } from "./OrbitLayer";
-import { SkillHalo } from "./SkillHalo";
 
-export function StateVessel() {
+type StateVesselProps = Pick<SurfaceViewProps, "dispatch">;
+
+export function StateVessel({ dispatch }: StateVesselProps) {
   return (
-    <div className="pm-workspace__state-vessel" aria-hidden="true">
-      <OrbitLayer />
-      <img alt="" className="pm-workspace__human" src={humanAsset} />
-      <SkillHalo kind="memory" left={398} top={387} />
-      <SkillHalo kind="skill" left={545} top={563} />
-      <SkillHalo kind="skill" left={812} top={284} />
-      <SkillHalo kind="skill" left={826} top={487} />
+    <div className="pm-workspace__state-vessel">
+      <OrbitLayer dispatch={dispatch} />
+      <img alt="" aria-hidden="true" className="pm-workspace__human" src={humanAsset} />
     </div>
   );
 }
