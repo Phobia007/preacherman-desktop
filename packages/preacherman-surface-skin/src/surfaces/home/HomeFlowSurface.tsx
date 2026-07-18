@@ -16,7 +16,12 @@ const frameBySurfaceId: Readonly<Record<string, string>> = {
   "figma-412-728": "412:728",
 };
 
-export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewProps) {
+export function HomeFlowSurface({
+  avatarSlot,
+  dispatch,
+  manifest,
+  tokenStyle,
+}: SurfaceViewProps) {
   const surfaceId = manifest.surfaceId ?? "figma-287-637";
   const [hoverHint, setHoverHint] = useState(false);
   const forceHint = surfaceId === "figma-281-374";
@@ -45,7 +50,7 @@ export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewP
 
         {surfaceId === "figma-287-637" ? (
         <>
-          <HomeVessel />
+          <HomeVessel avatarSlot={avatarSlot} />
           <section className="pm-home-flow__trace" aria-label="State trace">
             <h2>STATE TRACE</h2>
             <ul>
@@ -61,7 +66,7 @@ export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewP
 
         {surfaceId === "figma-287-714" || forceHint ? (
         <>
-          <HomeVessel />
+          <HomeVessel avatarSlot={avatarSlot} />
           {surfaceId === "figma-287-714" ? <img alt="Click Current State" className="pm-home-flow__current-cursor" src={handCursor} /> : null}
           <button
             aria-label="Talk to this State"
@@ -83,7 +88,13 @@ export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewP
         ) : null}
 
         {isStateDetail ? <StateFocusDetail dispatch={dispatch} /> : null}
-        {isConversation ? <ConversationScene dispatch={dispatch} replyVisible={surfaceId === "figma-412-728"} /> : null}
+        {isConversation ? (
+          <ConversationScene
+            avatarSlot={avatarSlot}
+            dispatch={dispatch}
+            replyVisible={surfaceId === "figma-412-728"}
+          />
+        ) : null}
       </div>
 
     </section>

@@ -1,8 +1,10 @@
 node_modules/
 packages/preacherman-surface-skin/dist/
+packages/preacherman-avatar-renderer/dist/
 apps/*/dist/
 apps/*/node_modules/
 apps/*/src-tauri/target/
+apps/preacherman-demo-host/public/local-avatar/
 *.log
 .DS_Store
 Thumbs.db

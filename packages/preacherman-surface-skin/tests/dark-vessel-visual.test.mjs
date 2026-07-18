@@ -32,7 +32,7 @@ test("workspace removes the human click target and its page transition", async (
   const workspace = await readFile(join(workspaceRoot, "WorkspaceConversationSurface.tsx"), "utf8");
   const css = await readFile(join(workspaceRoot, "workspace.css"), "utf8");
 
-  assert.doesNotMatch(workspace, /useState|screenCommand|state-chat-target|state-chat-hint|figma-32-2/);
+  assert.doesNotMatch(workspace, /screenCommand|state-chat-target|state-chat-hint|figma-32-2/);
   assert.doesNotMatch(css, /pm-workspace__state-chat-target|pm-workspace__state-chat-hint/);
 });
 

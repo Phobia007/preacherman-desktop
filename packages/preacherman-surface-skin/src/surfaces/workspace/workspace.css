@@ -30,6 +30,29 @@
   outline-offset: 2px;
 }
 
+.pm-workspace__avatar-stage {
+  position: absolute;
+  top: 110px;
+  left: 590px;
+  z-index: 2;
+  width: 620px;
+  height: 780px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--pm-skin-duration-normal, 240ms) ease-out;
+}
+
+.pm-workspace__avatar-stage[data-avatar-state="ready"] {
+  opacity: 1;
+}
+
+.pm-workspace__avatar-viewport {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .pm-workspace__window-chrome {
   position: absolute;
   inset: 0 0 auto;

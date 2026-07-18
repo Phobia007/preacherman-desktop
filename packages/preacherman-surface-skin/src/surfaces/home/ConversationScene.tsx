@@ -5,13 +5,17 @@ import { screenCommand } from "../workspace/commands";
 import { HomeVessel } from "./HomeVessel";
 import { SessionFlow } from "./SessionFlow";
 
-type ConversationSceneProps = Pick<SurfaceViewProps, "dispatch"> & {
+type ConversationSceneProps = Pick<SurfaceViewProps, "avatarSlot" | "dispatch"> & {
   readonly replyVisible: boolean;
 };
 
 const designedPrompt = "What are 3 high-leverage product opportunities in the AI workspace right now?";
 
-export function ConversationScene({ dispatch, replyVisible }: ConversationSceneProps) {
+export function ConversationScene({
+  avatarSlot,
+  dispatch,
+  replyVisible,
+}: ConversationSceneProps) {
   const [prompt, setPrompt] = useState("");
 
   function sendPrompt() {
@@ -34,7 +38,7 @@ export function ConversationScene({ dispatch, replyVisible }: ConversationSceneP
 
   return (
     <div className={`pm-conversation ${replyVisible ? "pm-conversation--reply" : ""}`}>
-      <HomeVessel layout={replyVisible ? "reply" : "chat"} />
+      <HomeVessel avatarSlot={avatarSlot} layout={replyVisible ? "reply" : "chat"} />
 
       {replyVisible ? (
         <div className="pm-conversation__transcript" aria-live="polite">

@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   resolve: {
-    dedupe: ["react", "react-dom"],
+    dedupe: ["react", "react-dom", "three", "@react-three/fiber"],
   },
   build: {
     chunkSizeWarningLimit: 600,

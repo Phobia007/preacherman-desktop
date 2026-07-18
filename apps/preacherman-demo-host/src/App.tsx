@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { AppShell } from "./app-shell/AppShell";
+import { DemoAvatarSlot } from "./avatar/DemoAvatarSlot";
 import { figmaScreenRegistry, findFigmaScreen } from "./demo/figmaScreenRegistry";
 import { ScreenIndex } from "./demo/ScreenIndex";
 import {
@@ -47,6 +48,7 @@ const projection: SurfaceProjection = {
 
 const actionLog = createDemoActionLog();
 const adapter = createSurfaceSkinAdapter({
+  avatarSlot: DemoAvatarSlot,
   host: createDemoHostBridge(actionLog),
 });
 const startupIntroEnabled = claimStartupIntro();

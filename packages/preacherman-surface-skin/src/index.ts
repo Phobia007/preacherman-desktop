@@ -9,6 +9,8 @@ export { WorkspaceConversationSurface } from "./surfaces/workspace/WorkspaceConv
 export { navigationCommand, windowCommand } from "./surfaces/workspace/commands";
 export { bridgeSurfaceTokens, defaultSurfaceSkinTokens, surfaceTokenStyle } from "./tokens/bridge";
 export type {
+  AvatarSlot,
+  AvatarSlotProps,
   CreateSurfaceSkinAdapterOptions,
   HostSurfaceTokens,
   SurfaceAction,

@@ -64,7 +64,9 @@ test("host build deduplicates React across the linked Surface Skin package", asy
   assert.equal(await exists(configPath), true, "host Vite config must exist");
   const source = await readFile(configPath, "utf8");
   const compactSource = source.replace(/\s/g, "");
-  assert.match(compactSource, /dedupe:\["react","react-dom"\]/);
+  const dedupeEntries = compactSource.match(/dedupe:\[([^\]]+)\]/)?.[1] ?? "";
+  assert.match(dedupeEntries, /"react"/);
+  assert.match(dedupeEntries, /"react-dom"/);
 });
 
 test("DemoHostBridge records browser window actions without reporting fake success", async () => {

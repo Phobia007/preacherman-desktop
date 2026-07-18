@@ -61,6 +61,14 @@ export interface SurfaceHostBridge {
   subscribe?(subscription: SurfaceSubscription): () => void;
 }
 
+export interface AvatarSlotProps {
+  readonly className?: string;
+  readonly onReady?: () => void;
+  readonly onError?: (error: unknown) => void;
+}
+
+export type AvatarSlot = ComponentType<AvatarSlotProps>;
+
 export interface HostSurfaceTokens {
   readonly color?: Partial<SurfaceSkinTokens["color"]>;
   readonly typography?: Partial<SurfaceSkinTokens["typography"]>;
@@ -97,6 +105,7 @@ export interface SurfaceViewProps {
   readonly tokens: SurfaceSkinTokens;
   readonly tokenStyle: CSSProperties;
   readonly dispatch: SurfaceHostBridge["execute"];
+  readonly avatarSlot?: AvatarSlot;
 }
 
 export interface SurfaceRendererProps {
@@ -119,6 +128,7 @@ export interface SurfaceSkinAdapter {
 
 export interface CreateSurfaceSkinAdapterOptions {
   readonly host: SurfaceHostBridge;
+  readonly avatarSlot?: AvatarSlot;
   readonly tokens?: HostSurfaceTokens;
   readonly renderers?: Partial<Record<SurfaceType, ComponentType<SurfaceViewProps>>>;
   readonly supportedSchemaVersions?: ReadonlyArray<number>;

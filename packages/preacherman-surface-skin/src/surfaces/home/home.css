@@ -32,10 +32,46 @@
 
 .pm-home-vessel__orbit,
 .pm-home-vessel__human,
+.pm-home-vessel__avatar,
 .pm-home-vessel__halo {
   position: absolute;
   display: block;
   max-width: none;
+}
+
+.pm-home-vessel__orbit--rear {
+  z-index: 1;
+}
+
+.pm-home-vessel__human,
+.pm-home-vessel__avatar {
+  z-index: 2;
+}
+
+.pm-home-vessel__orbit--front {
+  z-index: 3;
+}
+
+.pm-home-vessel__halo {
+  z-index: 4;
+}
+
+.pm-home-vessel__human {
+  transition: opacity var(--pm-skin-duration-normal) ease-out;
+}
+
+.pm-home-vessel__avatar {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--pm-skin-duration-normal) ease-out;
+}
+
+.pm-home-vessel[data-avatar-state="ready"] .pm-home-vessel__human {
+  opacity: 0;
+}
+
+.pm-home-vessel[data-avatar-state="ready"] .pm-home-vessel__avatar {
+  opacity: 1;
 }
 
 .pm-home-vessel--home .pm-home-vessel__orbit--slow {
@@ -62,6 +98,13 @@
   opacity: 0.42;
 }
 
+.pm-home-vessel--home .pm-home-vessel__avatar {
+  top: 148px;
+  left: 569px;
+  width: 285px;
+  height: 610px;
+}
+
 .pm-home-vessel--home .pm-home-vessel__halo {
   width: 72px;
   height: 72px;
@@ -73,7 +116,8 @@
   left: 429px;
 }
 
-.pm-home-flow[data-figma-frame="287:637"] .pm-home-vessel__human {
+.pm-home-flow[data-figma-frame="287:637"] .pm-home-vessel__human,
+.pm-home-flow[data-figma-frame="287:637"] .pm-home-vessel__avatar {
   top: 162px;
   left: 568px;
 }
@@ -184,12 +228,26 @@
   opacity: 0.42;
 }
 
+.pm-home-vessel--chat .pm-home-vessel__avatar {
+  top: 53px;
+  left: 273px;
+  width: 308px;
+  height: 648px;
+}
+
 .pm-home-vessel--reply .pm-home-vessel__human {
   top: 63px;
   left: 264px;
   width: 297px;
   height: 677px;
   opacity: 0.42;
+}
+
+.pm-home-vessel--reply .pm-home-vessel__avatar {
+  top: 63px;
+  left: 264px;
+  width: 297px;
+  height: 677px;
 }
 
 .pm-home-vessel--chat .pm-home-vessel__halo,

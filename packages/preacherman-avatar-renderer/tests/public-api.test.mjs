@@ -1,0 +1,68 @@
+import assert from "node:assert/strict";
+import { readFile, readdir } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import test from "node:test";
+
+const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+async function sourceFiles(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const nested = await Promise.all(entries.map(async (entry) => {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) return sourceFiles(path);
+    return /\.(?:ts|tsx|css)$/.test(entry.name) ? [path] : [];
+  }));
+  return nested.flat();
+}
+
+test("package declares the React 18 compatible renderer boundary as peer dependencies", async () => {
+  const manifest = JSON.parse(await readFile(join(packageRoot, "package.json"), "utf8"));
+
+  assert.equal(manifest.name, "@preacherman/avatar-renderer");
+  assert.deepEqual(manifest.peerDependencies, {
+    "@react-three/drei": "9.115.0",
+    "@react-three/fiber": "8.18.0",
+    react: "18.3.1",
+    "react-dom": "18.3.1",
+    three: "0.185.1",
+  });
+  assert.equal(manifest.dependencies, undefined);
+  assert.equal(manifest.overrides?.["stats-gl"], "2.2.7");
+});
+
+test("built package exposes the required public API", async () => {
+  const entry = await import(pathToFileURL(join(packageRoot, "dist", "index.js")));
+
+  for (const name of [
+    "AvatarViewport",
+    "AvatarError",
+    "normalizeAvatarError",
+    "disposeAvatarSceneResources",
+  ]) {
+    assert.equal(typeof entry[name], "function", `${name} must be a runtime export`);
+  }
+});
+
+test("renderer source is independent from Tauri, Surface Skin, Demo Host, backend, and network clients", async () => {
+  const files = await sourceFiles(join(packageRoot, "src"));
+  const source = (await Promise.all(files.map((path) => readFile(path, "utf8")))).join("\n");
+
+  assert.doesNotMatch(source, /@tauri-apps|preacherman-surface-skin|demo-host|backend-handoff/i);
+  assert.doesNotMatch(source, /\b(?:fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(/);
+});
+
+test("static viewport uses a transparent pointer-inert demand Canvas with capped DPR and no controls", async () => {
+  const viewport = await readFile(join(packageRoot, "src", "AvatarViewport.tsx"), "utf8");
+  const scene = await readFile(join(packageRoot, "src", "AvatarScene.tsx"), "utf8");
+  const combined = `${viewport}\n${scene}`;
+
+  assert.match(combined, /frameloop=["']demand["']/);
+  assert.match(combined, /alpha:\s*true/);
+  assert.match(combined, /dpr=\{dpr\}/);
+  assert.match(combined, /Math\.min\(.*2\)/s);
+  assert.match(combined, /pointerEvents:\s*["']none["']/);
+  assert.doesNotMatch(combined, /OrbitControls|MapControls|TrackballControls|CameraControls/);
+  assert.doesNotMatch(combined, /forceContextLoss|SkeletonHelper|gridHelper|autoRotate/i);
+  assert.match(scene, /new AvatarError\(\s*["']CONTEXT_LOST["']/);
+});

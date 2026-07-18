@@ -42,6 +42,7 @@ function bindRenderer(
   const tokenStyle = surfaceTokenStyle(tokens);
   const BoundRenderer = ({ manifest, projection }: SurfaceRendererProps) => (
     <View
+      avatarSlot={options.avatarSlot}
       dispatch={options.host.execute.bind(options.host)}
       manifest={manifest}
       projection={projection}
