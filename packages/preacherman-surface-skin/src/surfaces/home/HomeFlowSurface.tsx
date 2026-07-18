@@ -1,11 +1,7 @@
 import { useState } from "react";
 import type { SurfaceViewProps } from "../../adapter/types";
 import handCursor from "../../assets/figma/home-batch-1/281-374--annotation-hand-cursor-click-to-chat.svg";
-import { BottomNavigation } from "../workspace/BottomNavigation";
 import { screenCommand } from "../workspace/commands";
-import { TopLiveStatus } from "../workspace/TopLiveStatus";
-import { UserIdentity } from "../workspace/UserIdentity";
-import { WindowChrome } from "../workspace/WindowChrome";
 import { ConversationScene } from "./ConversationScene";
 import { HomeVessel } from "./HomeVessel";
 import { StateFocusDetail } from "./StateFocusDetail";
@@ -20,7 +16,7 @@ const frameBySurfaceId: Readonly<Record<string, string>> = {
   "figma-412-728": "412:728",
 };
 
-export function HomeFlowSurface({ dispatch, manifest, projection, tokenStyle }: SurfaceViewProps) {
+export function HomeFlowSurface({ dispatch, manifest, tokenStyle }: SurfaceViewProps) {
   const surfaceId = manifest.surfaceId ?? "figma-287-637";
   const [hoverHint, setHoverHint] = useState(false);
   const forceHint = surfaceId === "figma-281-374";
@@ -36,10 +32,6 @@ export function HomeFlowSurface({ dispatch, manifest, projection, tokenStyle }: 
       data-surface-type={manifest.surfaceType}
       style={tokenStyle}
     >
-      <WindowChrome />
-      <TopLiveStatus />
-      <UserIdentity dispatch={dispatch} projection={projection} />
-
       <div className="pm-home-flow__scene">
         {showCurrentState ? (
         <button
@@ -94,7 +86,6 @@ export function HomeFlowSurface({ dispatch, manifest, projection, tokenStyle }: 
         {isConversation ? <ConversationScene dispatch={dispatch} replyVisible={surfaceId === "figma-412-728"} /> : null}
       </div>
 
-      <BottomNavigation dispatch={dispatch} />
     </section>
   );
 }

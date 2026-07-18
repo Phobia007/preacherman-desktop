@@ -15,13 +15,6 @@ export function navigationCommand(surfaceType: string): SurfaceCommand {
   };
 }
 
-export function orbitNodeCommand(nodeId: string, label: string): SurfaceCommand {
-  return {
-    type: "demo.orbit-node.select",
-    payload: { nodeId, label },
-  };
-}
-
 export function screenCommand(screenId: string): SurfaceCommand {
   return {
     type: "demo.screen.open",

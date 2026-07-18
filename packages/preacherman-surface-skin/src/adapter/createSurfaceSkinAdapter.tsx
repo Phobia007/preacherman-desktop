@@ -21,6 +21,7 @@ const supportedSurfaceTypes = new Set<SurfaceType>([
   "market",
   "ledger",
   "monitor",
+  "settings",
   "skill",
 ]);
 

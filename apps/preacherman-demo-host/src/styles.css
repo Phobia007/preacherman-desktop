@@ -7,7 +7,8 @@
 html,
 body,
 #root,
-.demo-host {
+.demo-host,
+.demo-app-shell {
   width: var(--demo-app-width);
   height: var(--demo-app-height);
   margin: 0;
@@ -20,8 +21,274 @@ body,
   background: #ffffff;
 }
 
+html[data-appearance="dark"],
+html[data-appearance="dark"] body,
+html[data-appearance="dark"] #root {
+  background: #111111;
+}
+
 .demo-host {
   background: #f7f5f1;
+}
+
+.demo-app-shell {
+  position: relative;
+  background: #f7f5f1;
+  color: #111111;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.demo-app-shell[data-appearance="dark"] {
+  color: #f5f3ef;
+  background: #161615;
+}
+
+.demo-app-shell__chrome {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 20;
+  height: 68px;
+  pointer-events: none;
+}
+
+.demo-app-shell__drag-region {
+  position: absolute;
+  top: 0;
+  height: 68px;
+  pointer-events: auto;
+}
+
+.demo-app-shell__drag-region--left {
+  left: 64px;
+  width: calc(50% - 124px);
+}
+
+.demo-app-shell__drag-region--right {
+  right: 132px;
+  width: calc(50% - 192px);
+}
+
+.demo-app-shell__brand-mark {
+  position: absolute;
+  top: 17px;
+  left: 24px;
+  display: block;
+  width: 36px;
+  height: 32px;
+  object-fit: contain;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.demo-app-shell[data-appearance="dark"] .demo-window-controls__button img {
+  filter: invert(1);
+}
+
+.demo-window-controls {
+  position: absolute;
+  top: 14px;
+  right: 24px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.demo-window-controls__button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  color: rgb(47 45 42 / 72%);
+  background: transparent;
+  cursor: pointer;
+  transition: color 140ms ease, background-color 140ms ease, opacity 140ms ease;
+}
+
+.demo-window-controls__button:hover,
+.demo-window-controls__button:focus-visible {
+  color: rgb(25 24 22 / 92%);
+  background: rgb(31 29 26 / 6%);
+}
+
+.demo-window-controls__button:focus-visible {
+  outline: 1px solid rgb(38 36 33 / 38%);
+  outline-offset: 1px;
+}
+
+.demo-window-controls__button img {
+  display: block;
+  width: 15px;
+  height: 15px;
+  opacity: 0.68;
+  transition: opacity 140ms ease;
+}
+
+.demo-window-controls__button:hover img,
+.demo-window-controls__button:focus-visible img {
+  opacity: 0.94;
+}
+
+.demo-app-shell__screen-content,
+.demo-app-shell__screen-page {
+  position: absolute;
+  inset: 0;
+  width: var(--demo-app-width);
+  height: var(--demo-app-height);
+}
+
+.demo-app-shell__screen-content {
+  z-index: 1;
+}
+
+.demo-settings {
+  display: grid;
+  place-items: center;
+  color: inherit;
+  background: transparent;
+}
+
+.demo-settings__controls {
+  display: grid;
+  width: 244px;
+  gap: 14px;
+}
+
+.demo-settings__button {
+  display: flex;
+  box-sizing: border-box;
+  width: 244px;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 20px;
+  border: 1px solid rgb(255 255 255 / 66%);
+  border-radius: 14px;
+  color: #272522;
+  background: rgb(255 255 255 / 58%);
+  box-shadow:
+    0 16px 34px -24px rgb(42 37 31 / 34%),
+    inset 0 1px 0 rgb(255 255 255 / 78%);
+  font: 500 13px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+  backdrop-filter: blur(18px) saturate(135%);
+  transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.demo-settings__button strong {
+  font: inherit;
+  font-weight: 650;
+}
+
+.demo-settings__button:hover,
+.demo-settings__button:focus-visible {
+  background: rgb(255 255 255 / 78%);
+  box-shadow:
+    0 18px 38px -24px rgb(42 37 31 / 42%),
+    inset 0 1px 0 rgb(255 255 255 / 88%);
+  transform: translateY(-1px);
+}
+
+.demo-settings__button:focus-visible {
+  outline: 1px solid rgb(35 33 30 / 44%);
+  outline-offset: 2px;
+}
+
+.demo-app-shell[data-appearance="dark"] .demo-settings__button {
+  border-color: rgb(255 255 255 / 16%);
+  color: #f6f3ed;
+  background: rgb(255 255 255 / 8%);
+  box-shadow:
+    0 18px 38px -24px rgb(0 0 0 / 68%),
+    inset 0 1px 0 rgb(255 255 255 / 14%);
+}
+
+.demo-app-shell[data-appearance="dark"] .demo-settings__button:hover,
+.demo-app-shell[data-appearance="dark"] .demo-settings__button:focus-visible {
+  background: rgb(255 255 255 / 13%);
+}
+
+.demo-window-resize-handles {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.demo-window-resize-handle {
+  position: absolute;
+  pointer-events: auto;
+}
+
+.demo-window-resize-handle--north,
+.demo-window-resize-handle--south {
+  right: 12px;
+  left: 12px;
+  height: 6px;
+  cursor: ns-resize;
+}
+
+.demo-window-resize-handle--north { top: 0; }
+.demo-window-resize-handle--south { bottom: 0; }
+
+.demo-window-resize-handle--east,
+.demo-window-resize-handle--west {
+  top: 12px;
+  bottom: 12px;
+  width: 6px;
+  cursor: ew-resize;
+}
+
+.demo-window-resize-handle--east { right: 0; }
+.demo-window-resize-handle--west { left: 0; }
+
+.demo-window-resize-handle--north-east,
+.demo-window-resize-handle--north-west,
+.demo-window-resize-handle--south-east,
+.demo-window-resize-handle--south-west {
+  width: 12px;
+  height: 12px;
+}
+
+.demo-window-resize-handle--north-east { top: 0; right: 0; cursor: nesw-resize; }
+.demo-window-resize-handle--north-west { top: 0; left: 0; cursor: nwse-resize; }
+.demo-window-resize-handle--south-east { right: 0; bottom: 0; cursor: nwse-resize; }
+.demo-window-resize-handle--south-west { bottom: 0; left: 0; cursor: nesw-resize; }
+
+.demo-app-shell[data-appearance="dark"] .demo-host,
+.demo-app-shell[data-appearance="dark"] .demo-host--empty,
+.demo-app-shell[data-appearance="dark"] .pm-workspace,
+.demo-app-shell[data-appearance="dark"] .pm-home-flow {
+  color: #f5f3ef;
+  background: #161615;
+}
+
+.demo-app-shell[data-appearance="dark"] .pm-home-flow__trace,
+.demo-app-shell[data-appearance="dark"] .pm-conversation__panel,
+.demo-app-shell[data-appearance="dark"] .pm-home-flow__chat-hint span {
+  border-color: rgb(255 255 255 / 12%);
+  color: #f5f3ef;
+  background: rgb(255 255 255 / 8%);
+}
+
+.demo-app-shell[data-appearance="dark"] .pm-workspace__bottom-navigation {
+  border-color: rgb(255 255 255 / 14%);
+  color: #f4f1eb;
+  background: rgb(30 30 29 / 82%);
+  box-shadow: 0 18px 40px -24px rgb(0 0 0 / 90%);
+}
+
+.demo-app-shell[data-appearance="dark"] .pm-workspace__nav-indicator-line {
+  background: #f4f1eb;
+}
+
+.demo-app-shell__screen-page {
+  animation: demo-screen-enter 220ms ease-out both;
 }
 
 body {
@@ -33,49 +300,14 @@ body {
   animation: demo-main-enter var(--demo-main-fade-in) ease-out both;
 }
 
-.demo-startup {
-  display: grid;
-  width: var(--demo-app-width);
-  height: var(--demo-app-height);
-  margin: 0;
-  overflow: hidden;
-  place-items: center;
-  background: #ffffff;
-}
-
-.demo-startup__logo {
-  display: grid;
-  width: 600px;
-  height: 600px;
-  opacity: 0;
-  place-items: center;
-  animation:
-    demo-logo-in var(--demo-intro-logo-in) ease-out var(--demo-intro-white-hold) forwards,
-    demo-logo-out var(--demo-intro-logo-out) ease-in
-      calc(var(--demo-intro-white-hold) + var(--demo-intro-logo-in) + var(--demo-intro-logo-visible))
-      forwards;
-}
-
-.demo-startup__logo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-@keyframes demo-logo-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes demo-logo-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
 @keyframes demo-main-enter {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes demo-screen-enter {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .screen-index {

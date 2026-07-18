@@ -1,0 +1,57 @@
+.demo-intro-splash {
+  display: grid;
+  width: var(--demo-app-width);
+  height: var(--demo-app-height);
+  margin: 0;
+  overflow: hidden;
+  place-items: center;
+  background: #ffffff;
+  transition: background-color 180ms ease;
+}
+
+.demo-intro-splash[data-appearance="dark"] {
+  background: #111111;
+}
+
+.demo-intro-splash__logo {
+  display: grid;
+  width: 600px;
+  height: 600px;
+  place-items: center;
+}
+
+.demo-intro-splash__logo.is-fading {
+  animation: demo-intro-logo-out 600ms ease-in forwards;
+}
+
+.demo-animated-logo {
+  display: grid;
+  width: var(--demo-animated-logo-size);
+  height: var(--demo-animated-logo-size);
+  place-items: center;
+}
+
+.demo-animated-logo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.demo-animated-logo [data-wordmark] {
+  opacity: 0;
+  transform: translateY(7px);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes demo-intro-logo-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-intro-splash__logo.is-fading {
+    animation-timing-function: linear;
+  }
+}

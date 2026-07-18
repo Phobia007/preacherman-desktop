@@ -3,9 +3,10 @@ import {
   type SurfaceManifest,
   type SurfaceProjection,
 } from "@preacherman/surface-skin";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
+import { AppShell } from "./app-shell/AppShell";
 import { figmaScreenRegistry, findFigmaScreen } from "./demo/figmaScreenRegistry";
 import { ScreenIndex } from "./demo/ScreenIndex";
 import {
@@ -13,10 +14,20 @@ import {
   openDemoScreen,
   openDemoScreenIndex,
   readDemoScreenRoute,
+  type LocalSurfaceType,
 } from "./demo/screenRoute";
 import { createDemoHostBridge } from "./demoHostBridge";
-import { StartupIntro } from "./StartupIntro";
-import { claimStartupIntro, STARTUP_INTRO_TOTAL_MS } from "./introSequence";
+import { IntroSplash } from "./intro/IntroSplash";
+import { claimStartupIntro } from "./introSequence";
+import {
+  applyPreferences,
+  readPreferences,
+  savePreferences,
+  uiCopy,
+  type Appearance,
+  type Locale,
+} from "./preferences";
+import { SettingsScreen } from "./settings/SettingsScreen";
 
 const manifest: SurfaceManifest = {
   surfaceType: "workspace",
@@ -38,6 +49,7 @@ const actionLog = createDemoActionLog();
 const adapter = createSurfaceSkinAdapter({
   host: createDemoHostBridge(actionLog),
 });
+const startupIntroEnabled = claimStartupIntro();
 
 function currentRoute() {
   return readDemoScreenRoute();
@@ -45,19 +57,15 @@ function currentRoute() {
 
 export function App() {
   const [route, setRoute] = useState(currentRoute);
-  const [showStartupIntro, setShowStartupIntro] = useState(() => claimStartupIntro());
+  const [preferences, setPreferences] = useState(readPreferences);
+  const [showStartupIntro, setShowStartupIntro] = useState(startupIntroEnabled);
   const [animateMainEntrance] = useState(showStartupIntro);
+  const handleIntroComplete = useCallback(() => setShowStartupIntro(false), []);
 
   useEffect(() => {
-    if (!showStartupIntro) {
-      return undefined;
-    }
-    const timeoutId = window.setTimeout(
-      () => setShowStartupIntro(false),
-      STARTUP_INTRO_TOTAL_MS,
-    );
-    return () => window.clearTimeout(timeoutId);
-  }, [showStartupIntro]);
+    applyPreferences(preferences);
+    savePreferences(preferences);
+  }, [preferences]);
 
   useEffect(() => {
     const refreshRoute = () => setRoute(currentRoute());
@@ -85,22 +93,76 @@ export function App() {
       : figmaScreenRegistry[0];
   }, [route]);
 
-  const entranceClassName = animateMainEntrance ? " demo-host--entering" : "";
+  const activeSurfaceType = route.kind === "surface" && route.surfaceType
+    ? route.surfaceType
+    : "home";
+  const contentKey = route.kind === "index"
+    ? "screen-index"
+    : route.kind === "surface"
+      ? `surface-${activeSurfaceType}`
+      : `screen-${route.screenId ?? acceptedScreenId}`;
   const mainContent = route.kind === "index"
     ? (
-        <div className={`demo-host${entranceClassName}`}>
+        <div className="demo-host">
           <ScreenIndex onOpenScreen={openDemoScreen} />
         </div>
       )
+    : route.kind === "surface"
+      ? activeSurfaceType === "home"
+        ? (() => {
+            const ScreenSurface = adapter.resolve(manifest).component;
+            return (
+              <main className="demo-host">
+                <ScreenSurface manifest={manifest} projection={projection} />
+              </main>
+            );
+          })()
+        : activeSurfaceType === "settings"
+          ? (
+              <SettingsScreen
+                appearance={preferences.appearance}
+                locale={preferences.locale}
+                onAppearanceChange={(appearance: Appearance) => {
+                  setPreferences((current) => ({ ...current, appearance }));
+                }}
+                onLocaleChange={(locale: Locale) => {
+                  setPreferences((current) => ({ ...current, locale }));
+                }}
+              />
+            )
+          : (
+            <main
+              aria-label={`${uiCopy[preferences.locale].emptySurfaceLabels[activeSurfaceType]} screen`}
+              className="demo-host demo-host--empty"
+            />
+          )
     : (() => {
         const selectedManifest = screen?.manifest ?? manifest;
         const ScreenSurface = adapter.resolve(selectedManifest).component;
         return (
-          <main className={`demo-host${entranceClassName}`}>
+          <main className="demo-host">
             <ScreenSurface manifest={selectedManifest} projection={projection} />
           </main>
         );
       })();
 
-  return showStartupIntro ? <StartupIntro /> : mainContent;
+  return showStartupIntro ? (
+    <IntroSplash
+      appearance={preferences.appearance}
+      locale={preferences.locale}
+      onComplete={handleIntroComplete}
+    />
+  ) : (
+    <AppShell
+      activeSurfaceType={activeSurfaceType}
+      appearance={preferences.appearance}
+      dispatch={adapter.dispatch}
+      entering={animateMainEntrance}
+      locale={preferences.locale}
+    >
+      <div className="demo-app-shell__screen-page" key={contentKey}>
+        {mainContent}
+      </div>
+    </AppShell>
+  );
 }

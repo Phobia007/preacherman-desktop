@@ -69,20 +69,26 @@ test("host build deduplicates React across the linked Surface Skin package", asy
 
 test("DemoHostBridge records browser window actions without reporting fake success", async () => {
   const bridgePath = join(sourceRoot, "demoHostBridge.ts");
+  const clientPath = join(sourceRoot, "tauriClient.ts");
   assert.equal(await exists(bridgePath), true, "DemoHostBridge must exist");
-  const source = await readFile(bridgePath, "utf8");
-  assert.match(source, /errorCode:\s*["']TAURI_UNAVAILABLE["']/);
-  assert.match(source, /ok:\s*false/);
-  assert.match(source, /actionLog\.record/);
-  assert.match(source, /getCurrentWindow\(\)\.(?:close|minimize|toggleMaximize)\(\)/);
+  assert.equal(await exists(clientPath), true, "Tauri client boundary must exist");
+  const bridgeSource = await readFile(bridgePath, "utf8");
+  const clientSource = await readFile(clientPath, "utf8");
+  assert.match(clientSource, /errorCode:\s*["']TAURI_UNAVAILABLE["']/);
+  assert.match(clientSource, /ok:\s*false/);
+  assert.match(bridgeSource, /actionLog\.record/);
+  assert.match(clientSource, /const window = getCurrentWindow\(\)/);
+  assert.match(clientSource, /window\.close\(\)/);
+  assert.match(clientSource, /window\.minimize\(\)/);
+  assert.match(clientSource, /window\.toggleMaximize\(\)/);
 });
 
-test("Tauri APIs are confined to DemoHostBridge", async () => {
+test("Tauri APIs are confined to the Tauri client boundary", async () => {
   assert.equal(await exists(sourceRoot), true, "host source directory must exist");
   for (const file of await sourceFiles(sourceRoot)) {
     const source = await readFile(file, "utf8");
     if (source.includes("@tauri-apps")) {
-      assert.equal(file, join(sourceRoot, "demoHostBridge.ts"));
+      assert.equal(file, join(sourceRoot, "tauriClient.ts"));
     }
   }
 });
@@ -92,7 +98,7 @@ test("demo host has no backend or network client", async () => {
   for (const file of await sourceFiles(sourceRoot)) {
     const source = await readFile(file, "utf8");
     assert.doesNotMatch(source, /\b(?:fetch|axios|EventSource|WebSocket)\b/i, file);
-    assert.doesNotMatch(source, /tauriClient|database|sqlite|upload|credential/i, file);
+    assert.doesNotMatch(source, /database|sqlite|upload|credential/i, file);
   }
 });
 
@@ -109,6 +115,7 @@ test("host keeps the accepted workspace manifest and adds only the demo screen i
   assert.match(source, /identity:\s*\{[\s\S]*identityNumber:\s*["']01["'][\s\S]*\}/);
   assert.doesNotMatch(source, /react-router|createBrowserRouter|(?:page|frame|route)[-_ ]?(?:53|55)\b/i);
   assert.match(routeSource, /__screens/);
+  assert.match(routeSource, /__surfaces/);
 });
 
 test("Figma Screen Registry reconciles all 53 current Figma pages with explicit status", async () => {
@@ -146,26 +153,39 @@ test("Demo Screen Index lists every registry entry and links only implemented sc
   assert.doesNotMatch(indexSource + routeSource, /react-router|createBrowserRouter/);
 });
 
-test("startup intro hands off from the localized logo to the main surface once", async () => {
+test("startup intro hands off from the animated logo to the main surface once", async () => {
   const appPath = join(sourceRoot, "App.tsx");
   const introPath = join(sourceRoot, "introSequence.ts");
   const logoPath = join(sourceRoot, "assets", "preacherman-mark.png");
   const stylesPath = join(sourceRoot, "styles.css");
+  const splashPath = join(sourceRoot, "intro", "IntroSplash.tsx");
+  const animatedLogoPath = join(sourceRoot, "intro", "AnimatedPreachermanLogo.tsx");
+  const animatedLogoStylesPath = join(sourceRoot, "intro", "animated-preacherman-logo.css");
   const app = await readFile(appPath, "utf8");
   const intro = await readFile(introPath, "utf8");
   const styles = await readFile(stylesPath, "utf8");
+  const splash = await readFile(splashPath, "utf8");
+  const animatedLogo = await readFile(animatedLogoPath, "utf8");
+  const animatedLogoStyles = await readFile(animatedLogoStylesPath, "utf8");
 
-  assert.equal(await exists(logoPath), true, "startup logo must be localized in Demo Host assets");
+  assert.equal(await exists(logoPath), true, "the shared localized brand asset must remain available");
   assert.match(app, /claimStartupIntro\(\)/);
-  assert.match(app, /setTimeout\([\s\S]*STARTUP_INTRO_TOTAL_MS/);
-  assert.match(app, /showStartupIntro\s*\?\s*<StartupIntro\s*\/>/);
-  assert.match(intro, /whiteHoldMs:\s*1000/);
-  assert.match(intro, /logoFadeInMs:\s*600/);
-  assert.match(intro, /logoVisibleMs:\s*3000/);
+  assert.match(app, /<IntroSplash[\s\S]*onComplete=\{handleIntroComplete\}/);
+  assert.match(intro, /whiteHoldMs:\s*800/);
+  assert.match(intro, /logoDrawMs:\s*LOGO_ANIMATION_TOTAL_MS/);
+  assert.match(intro, /logoVisibleMs:\s*1000/);
   assert.match(intro, /logoFadeOutMs:\s*600/);
   assert.match(intro, /mainFadeInMs:\s*700/);
-  assert.match(styles, /\.demo-startup__logo\s*\{[^}]*width:\s*600px[^}]*height:\s*600px/s);
-  assert.doesNotMatch(app + intro + styles, /https?:\/\/|codex\/attachments|AppData\/Local\/Temp/i);
+  assert.match(splash, /size=\{600\}/);
+  assert.match(splash, /appearance\s*===\s*["']dark["']\s*\?\s*["']#f7f5f1["']\s*:\s*["']#111111["']/);
+  assert.match(splash, /ink=\{introInk\}/);
+  assert.match(animatedLogoStyles, /\.demo-intro-splash__logo\s*\{[^}]*width:\s*600px[^}]*height:\s*600px/s);
+  assert.match(animatedLogoStyles, /width:\s*var\(--demo-animated-logo-size\)/);
+  assert.doesNotMatch(animatedLogo, /preacherman-mark\.png/);
+  assert.doesNotMatch(
+    app + intro + styles + splash + animatedLogo + animatedLogoStyles,
+    /https?:\/\/|codex\/attachments|AppData\/Local\/Temp/i,
+  );
 });
 
 test("Tauri window configuration matches the 1800 by 1000 borderless baseline", async () => {
@@ -192,7 +212,9 @@ test("Tauri capability grants only the required core window actions", async () =
     "core:window:default",
     "core:window:allow-close",
     "core:window:allow-minimize",
-    "core:window:allow-toggle-maximize"
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-start-dragging",
+    "core:window:allow-start-resize-dragging"
   ]);
 });
 

@@ -8,6 +8,7 @@ export type SurfaceType =
   | "market"
   | "ledger"
   | "monitor"
+  | "settings"
   | "skill";
 
 export interface SurfaceManifest {
