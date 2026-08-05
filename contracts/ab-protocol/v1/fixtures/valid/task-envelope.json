@@ -1,0 +1,49 @@
+{
+  "protocol_version": 1,
+  "task_id": "task:contract-demo-001",
+  "conversation_id": "conversation:local-demo-001",
+  "idempotency_key": "idem:contract-demo-001",
+  "created_at": "2026-08-02T09:00:00.000Z",
+  "created_by": {
+    "role": "front_agent",
+    "actor_id": "agent:a-default"
+  },
+  "raw_user_input": {
+    "text": "帮我先整理合同草稿，发出去之前必须让我确认。",
+    "language": "zh-CN",
+    "transcript_confidence": 0.98
+  },
+  "objective": "根据当前对话资料生成一份合同草稿，并在任何外发动作前请求用户批准。",
+  "success_criteria": [
+    "生成可供用户审阅的合同草稿",
+    "未获得批准前不执行外部发送"
+  ],
+  "constraints": [
+    {
+      "kind": "must",
+      "statement": "外发前必须获得用户批准",
+      "source_quote": "发出去之前必须让我确认"
+    }
+  ],
+  "allowed_actions": [
+    "document.create_draft",
+    "communication.send"
+  ],
+  "approval_policy": {
+    "mode": "risk_based",
+    "required_for": [
+      "external_communication"
+    ]
+  },
+  "context_refs": [
+    {
+      "kind": "conversation",
+      "id": "conversation:local-demo-001"
+    }
+  ],
+  "prsp_contract_ref": {
+    "kind": "prsp_contract",
+    "id": "prsp:state-v1",
+    "revision": "abi-1"
+  }
+}

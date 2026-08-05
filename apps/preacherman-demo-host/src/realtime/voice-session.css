@@ -1,0 +1,187 @@
+.preacherman-live {
+  position: absolute;
+  right: 72px;
+  bottom: 112px;
+  z-index: 8;
+  display: grid;
+  width: 288px;
+  justify-items: end;
+  gap: 12px;
+  color: var(--demo-theme-text);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.preacherman-live__status,
+.preacherman-live__task {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--demo-theme-border);
+  color: var(--demo-theme-text);
+  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 84%, transparent);
+  box-shadow: var(--demo-theme-activate-shadow);
+  backdrop-filter: blur(22px) saturate(145%);
+}
+
+.preacherman-live__status {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  border-radius: 999px;
+}
+
+.preacherman-live__status span,
+.preacherman-live__eyebrow {
+  color: var(--demo-theme-muted);
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.preacherman-live__status strong {
+  max-width: 200px;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preacherman-live[data-state="error"] .preacherman-live__status strong,
+.preacherman-live__task[data-status="failed"] strong {
+  color: var(--demo-theme-error);
+}
+
+.preacherman-live__task {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.preacherman-live__task strong {
+  font: 600 12px/1.25 Inter, sans-serif;
+}
+
+.preacherman-live__task p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--demo-theme-muted);
+  font-size: 10px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.preacherman-live__cancel {
+  width: max-content;
+  padding: 5px 0;
+  border: 0;
+  color: var(--demo-theme-muted);
+  background: transparent;
+  font: 600 9px/1 Inter, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.preacherman-live__cancel:hover,
+.preacherman-live__cancel:focus-visible {
+  color: var(--demo-theme-error);
+}
+
+.preacherman-live__cancel:focus-visible {
+  outline: 1px solid var(--demo-theme-focus);
+  outline-offset: 3px;
+}
+
+.preacherman-live__button {
+  display: inline-flex;
+  box-sizing: border-box;
+  min-width: 156px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  padding: 0 20px;
+  border: 1px solid var(--demo-theme-activate-rest-border);
+  border-radius: 999px;
+  color: var(--demo-theme-activate-rest-text);
+  background: var(--demo-theme-activate-rest-bg);
+  box-shadow: var(--demo-theme-activate-shadow);
+  backdrop-filter: blur(22px) saturate(160%);
+  font: 600 10px/1 Inter, sans-serif;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.preacherman-live__button:hover:not(:disabled) {
+  box-shadow: var(--demo-theme-activate-hover-shadow);
+  transform: translateY(-2px);
+}
+
+.preacherman-live__button:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+}
+
+.preacherman-live__button:focus-visible {
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: 3px;
+}
+
+.preacherman-live__button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.preacherman-live__button[aria-pressed="true"] {
+  color: var(--demo-theme-activate-fill-text);
+  background: var(--demo-theme-activate-fill);
+}
+
+.preacherman-live__signal {
+  display: flex;
+  height: 14px;
+  align-items: center;
+  gap: 2px;
+}
+
+.preacherman-live__signal i {
+  display: block;
+  width: 1px;
+  height: 5px;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.preacherman-live__signal i:nth-child(2) {
+  height: 11px;
+}
+
+.preacherman-live[data-state="listening"] .preacherman-live__signal i,
+.preacherman-live[data-state="speaking"] .preacherman-live__signal i {
+  animation: preacherman-live-signal 720ms ease-in-out infinite alternate;
+}
+
+.preacherman-live[data-state="listening"] .preacherman-live__signal i:nth-child(2),
+.preacherman-live[data-state="speaking"] .preacherman-live__signal i:nth-child(2) {
+  animation-delay: -360ms;
+}
+
+@keyframes preacherman-live-signal {
+  from { transform: scaleY(0.55); }
+  to { transform: scaleY(1.45); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preacherman-live__button,
+  .preacherman-live__signal i {
+    animation: none;
+    transition: none;
+  }
+}

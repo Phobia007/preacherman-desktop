@@ -1,0 +1,30 @@
+{
+  "protocol_version": 1,
+  "adapter_id": "adapter:example-executor",
+  "adapter_version": "1.0.0",
+  "role": "executor_agent",
+  "provider": "example-provider",
+  "api_family": "responses",
+  "supported_protocol_versions": [
+    1
+  ],
+  "input_modalities": [
+    "text"
+  ],
+  "output_modalities": [
+    "text"
+  ],
+  "features": {
+    "async_execution": true,
+    "cancellation": true,
+    "human_approval": true,
+    "resume": true,
+    "steering": true,
+    "streaming": true,
+    "tool_calling": true
+  },
+  "supported_actions": [
+    "document.create_draft",
+    "communication.send"
+  ]
+}

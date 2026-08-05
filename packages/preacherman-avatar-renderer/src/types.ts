@@ -1,3 +1,5 @@
+import type { AvatarActionDescriptor } from "./avatar/types/avatarAnimation";
+
 export type AvatarLoadState =
   | "loading"
   | "ready"
@@ -5,6 +7,7 @@ export type AvatarLoadState =
   | "context-lost";
 
 export type AvatarQuality = "low" | "balanced" | "high";
+export type AvatarPose = "rest" | "standby";
 
 export type AvatarErrorCode =
   | "WEBGL_UNAVAILABLE"
@@ -26,12 +29,21 @@ export interface AvatarReadyDetail extends AvatarPerformanceSnapshot {
 export interface AvatarViewportProps {
   readonly assetBaseUrl: string;
   readonly className?: string;
+  readonly debug?: boolean;
   readonly onReady?: (detail: AvatarReadyDetail) => void;
   readonly onError?: (error: AvatarError) => void;
   readonly onContextLost?: (error: AvatarError) => void;
   readonly onPerformance?: (snapshot: AvatarPerformanceSnapshot) => void;
   readonly quality?: AvatarQuality;
   readonly reducedMotion?: boolean;
+}
+
+export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
+  readonly actionId?: string;
+  readonly actionRequestKey?: number;
+  readonly onActionsReady?: (actions: readonly AvatarActionDescriptor[]) => void;
+  readonly pose?: AvatarPose;
+  readonly resetKey?: number;
 }
 
 export class AvatarError extends Error {

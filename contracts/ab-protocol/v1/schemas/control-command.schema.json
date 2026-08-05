@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/ab/v1/control-command.schema.json",
+  "title": "A/B Control Command",
+  "$defs": {
+    "base": {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "command_id",
+        "task_id",
+        "idempotency_key",
+        "type",
+        "issued_at",
+        "issued_by",
+        "payload"
+      ],
+      "properties": {
+        "protocol_version": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/protocol_version"
+        },
+        "command_id": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+        },
+        "task_id": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+        },
+        "idempotency_key": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+        },
+        "type": {
+          "enum": [
+            "approve",
+            "cancel",
+            "pause",
+            "provide_input",
+            "reject",
+            "resume",
+            "steer"
+          ]
+        },
+        "issued_at": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/timestamp"
+        },
+        "issued_by": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/actor_ref"
+        },
+        "payload": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "cancel",
+                "pause",
+                "resume"
+              ]
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "steer"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "instructions"
+              ],
+              "properties": {
+                "instructions": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "approve",
+                "reject"
+              ]
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "approval_id"
+              ],
+              "properties": {
+                "approval_id": {
+                  "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "provide_input"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "request_id",
+                "value"
+              ],
+              "properties": {
+                "request_id": {
+                  "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+                },
+                "value": true
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

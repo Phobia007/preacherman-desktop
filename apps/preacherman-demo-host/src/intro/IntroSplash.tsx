@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { STARTUP_INTRO_TIMING } from "../introSequence";
+import {
+  STARTUP_INTRO_FAILSAFE_MS,
+  STARTUP_INTRO_TIMING,
+} from "../introSequence";
 import { uiCopy, type Appearance, type Locale } from "../preferences";
 import { AnimatedPreachermanLogo } from "./AnimatedPreachermanLogo";
 import "./animated-preacherman-logo.css";
@@ -22,8 +25,15 @@ export function IntroSplash({ appearance, locale, onComplete }: IntroSplashProps
       () => setShowLogo(true),
       STARTUP_INTRO_TIMING.whiteHoldMs,
     );
-    return () => window.clearTimeout(whiteHoldTimer);
-  }, []);
+    const failsafeTimer = window.setTimeout(
+      onComplete,
+      STARTUP_INTRO_FAILSAFE_MS,
+    );
+    return () => {
+      window.clearTimeout(whiteHoldTimer);
+      window.clearTimeout(failsafeTimer);
+    };
+  }, [onComplete]);
 
   useEffect(() => () => {
     if (holdTimerRef.current !== undefined) {

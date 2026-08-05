@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/ab/v1/task-result.schema.json",
+  "title": "A/B Task Result",
+  "type": "object",
+  "required": [
+    "protocol_version",
+    "result_id",
+    "task_id",
+    "status",
+    "summary",
+    "facts",
+    "artifacts",
+    "side_effects",
+    "unresolved_items",
+    "completed_at"
+  ],
+  "properties": {
+    "protocol_version": {
+      "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/protocol_version"
+    },
+    "result_id": {
+      "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+    },
+    "task_id": {
+      "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+    },
+    "status": {
+      "enum": [
+        "succeeded",
+        "partially_succeeded",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "facts": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "required": [
+          "statement",
+          "source_refs"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "source_refs": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/logical_ref"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "required": [
+          "artifact_ref",
+          "name",
+          "media_type"
+        ],
+        "properties": {
+          "artifact_ref": {
+            "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/logical_ref"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "media_type": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9!#$&^_.+-]+/[A-Za-z0-9!#$&^_.+-]+$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "side_effects": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "required": [
+          "action",
+          "status"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9._-]{1,127}$"
+          },
+          "status": {
+            "enum": [
+              "attempted",
+              "succeeded",
+              "failed",
+              "reverted"
+            ]
+          },
+          "target_ref": {
+            "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/logical_ref"
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "unresolved_items": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "completed_at": {
+      "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/timestamp"
+    }
+  },
+  "additionalProperties": false
+}

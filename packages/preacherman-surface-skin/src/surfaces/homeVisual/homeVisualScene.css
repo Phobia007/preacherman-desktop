@@ -1,0 +1,158 @@
+.home-visual-scene {
+  --scene-bg: #090c11;
+  --scene-bg-secondary: #0d141c;
+  --scene-center-light: 35 60 80;
+  --scene-code: 151 174 190;
+  --scene-code-accent: 196 216 228;
+  --scene-code-glow: 206 229 239;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse 48% 76% at 50% 44%,
+      rgb(var(--scene-center-light) / 38%) 0%,
+      rgb(21 40 55 / 24%) 34%,
+      rgb(12 21 29 / 11%) 61%,
+      transparent 82%
+    ),
+    linear-gradient(
+      180deg,
+      #080b10 0%,
+      var(--scene-bg-secondary) 45%,
+      var(--scene-bg) 100%
+    );
+  container-type: size;
+  pointer-events: none;
+  user-select: none;
+}
+
+.home-visual-scene[data-home-visual-theme="light"] {
+  --scene-bg: #f7f5f1;
+  --scene-bg-secondary: #f1eee9;
+  --scene-center-light: 255 255 255;
+  background:
+    radial-gradient(
+      ellipse 48% 76% at 50% 44%,
+      rgb(var(--scene-center-light) / 72%) 0%,
+      rgb(245 242 237 / 42%) 40%,
+      transparent 82%
+    ),
+    linear-gradient(
+      180deg,
+      #fbfaf7 0%,
+      var(--scene-bg-secondary) 48%,
+      var(--scene-bg) 100%
+    );
+}
+
+.home-visual-scene__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 38%,
+      rgb(3 5 8 / 20%) 68%,
+      rgb(3 5 8 / 52%) 100%
+    );
+}
+
+[data-home-visual-theme="light"] .home-visual-scene__vignette {
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 42%,
+      rgb(126 117 107 / 5%) 72%,
+      rgb(103 94 84 / 13%) 100%
+    );
+}
+
+.binary-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  overflow: hidden;
+  mask-image:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(0 0 0 / 5%) 4%,
+      rgb(0 0 0 / 15%) 10%,
+      rgb(0 0 0 / 32%) 18%,
+      rgb(0 0 0 / 55%) 28%,
+      rgb(0 0 0 / 78%) 38%,
+      #000000 48%,
+      #000000 52%,
+      rgb(0 0 0 / 78%) 62%,
+      rgb(0 0 0 / 55%) 72%,
+      rgb(0 0 0 / 32%) 82%,
+      rgb(0 0 0 / 15%) 90%,
+      rgb(0 0 0 / 5%) 96%,
+      transparent 100%
+    );
+  -webkit-mask-image:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(0 0 0 / 5%) 4%,
+      rgb(0 0 0 / 15%) 10%,
+      rgb(0 0 0 / 32%) 18%,
+      rgb(0 0 0 / 55%) 28%,
+      rgb(0 0 0 / 78%) 38%,
+      #000000 48%,
+      #000000 52%,
+      rgb(0 0 0 / 78%) 62%,
+      rgb(0 0 0 / 55%) 72%,
+      rgb(0 0 0 / 32%) 82%,
+      rgb(0 0 0 / 15%) 90%,
+      rgb(0 0 0 / 5%) 96%,
+      transparent 100%
+    );
+}
+
+.binary-rain__canvas {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  display: block;
+  animation: binary-rain-drift 42s linear infinite;
+  contain: strict;
+  will-change: transform;
+}
+
+.binary-rain__canvas--edge {
+  z-index: 1;
+  opacity: 0.44;
+  filter: blur(7px);
+  animation-duration: 64s;
+}
+
+.binary-rain__canvas--glow {
+  z-index: 2;
+  opacity: 0.32;
+  filter: blur(4px);
+}
+
+.binary-rain__canvas--sharp {
+  z-index: 3;
+  opacity: 1;
+}
+
+@keyframes binary-rain-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .binary-rain__canvas {
+    animation-play-state: paused;
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "protocol_version": 1,
+  "result_id": "result:contract-demo-001",
+  "task_id": "task:contract-demo-001",
+  "status": "succeeded",
+  "summary": "合同草稿已经生成，用户批准后的发送动作已完成。",
+  "facts": [
+    {
+      "statement": "The contract draft was created before the external action.",
+      "source_refs": [
+        {
+          "kind": "artifact",
+          "id": "artifact:contract-draft-001"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact_ref": {
+        "kind": "artifact",
+        "id": "artifact:contract-draft-001"
+      },
+      "name": "contract-draft.md",
+      "media_type": "text/markdown"
+    }
+  ],
+  "side_effects": [
+    {
+      "action": "communication.send",
+      "status": "succeeded",
+      "target_ref": {
+        "kind": "external_resource",
+        "id": "recipient:external-001"
+      },
+      "summary": "Approved contract was sent"
+    }
+  ],
+  "unresolved_items": [],
+  "completed_at": "2026-08-02T09:01:02.000Z"
+}

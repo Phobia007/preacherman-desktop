@@ -1,12 +1,15 @@
 export type Appearance = "light" | "dark";
 export type Locale = "en" | "zh-CN";
+export type ModelId = "cortana";
 
 export interface DemoPreferences {
+  readonly activeModelId: ModelId | null;
   readonly appearance: Appearance;
   readonly locale: Locale;
 }
 
 export const DEFAULT_PREFERENCES: DemoPreferences = {
+  activeModelId: null,
   appearance: "light",
   locale: "en",
 };
@@ -76,6 +79,10 @@ function isLocale(value: unknown): value is Locale {
   return value === "en" || value === "zh-CN";
 }
 
+function isModelId(value: unknown): value is ModelId {
+  return value === "cortana";
+}
+
 export function readPreferences(): DemoPreferences {
   if (typeof window === "undefined") {
     return DEFAULT_PREFERENCES;
@@ -85,6 +92,9 @@ export function readPreferences(): DemoPreferences {
       | Partial<DemoPreferences>
       | null;
     return {
+      activeModelId: isModelId(stored?.activeModelId)
+        ? stored.activeModelId
+        : DEFAULT_PREFERENCES.activeModelId,
       appearance: isAppearance(stored?.appearance)
         ? stored.appearance
         : DEFAULT_PREFERENCES.appearance,

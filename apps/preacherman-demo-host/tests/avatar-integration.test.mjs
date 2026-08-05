@@ -45,7 +45,7 @@ test("Demo avatar slot uses BASE_URL local assets and records renderer diagnosti
   );
 
   assert.match(assets, /import\.meta\.env\.BASE_URL/);
-  assert.match(assets, /local-avatar\//);
+  assert.match(assets, /assets\/avatars\/cortana\//);
   assert.doesNotMatch(`${assets}\n${slot}`, /E:\\\\|E:\//);
   assert.match(slot, /AvatarViewport/);
   assert.match(slot, /__PREACHERMAN_AVATAR_DIAGNOSTICS__/);
@@ -62,7 +62,7 @@ test("Demo Host injects AvatarSlot at adapter creation rather than into manifest
   assert.doesNotMatch(app, /projection:\s*\{[\s\S]*avatar/i);
 });
 
-test("Tauri production CSP and devCsp are non-null, local-only, and keep filesystem permissions absent", async () => {
+test("Tauri CSP permits only the local voice service and OpenAI Realtime network boundary", async () => {
   const config = JSON.parse(
     await readFile(join(packageRoot, "src-tauri", "tauri.conf.json"), "utf8"),
   );
@@ -79,16 +79,28 @@ test("Tauri production CSP and devCsp are non-null, local-only, and keep filesys
   assert.notEqual(csp.trim(), "");
   assert.notEqual(devCsp.trim(), "");
   assert.match(csp, /connect-src[^;]*ipc:/);
+  assert.match(csp, /connect-src[^;]*blob:/);
   assert.match(csp, /img-src[^;]*data:[^;]*blob:/);
+  assert.match(csp, /script-src[^;]*'wasm-unsafe-eval'/);
   assert.match(csp, /font-src[^;]*data:/);
-  assert.doesNotMatch(csp.replaceAll("http://ipc.localhost", ""), /https?:\/\//);
+  assert.match(csp, /http:\/\/127\.0\.0\.1:8787/);
+  assert.match(csp, /https:\/\/api\.openai\.com/);
+  assert.doesNotMatch(
+    csp
+      .replaceAll("http://ipc.localhost", "")
+      .replaceAll("http://127.0.0.1:8787", "")
+      .replaceAll("https://api.openai.com", ""),
+    /https?:\/\//,
+  );
   assert.match(devCsp, /http:\/\/127\.0\.0\.1:1420/);
   assert.match(devCsp, /ws:\/\/127\.0\.0\.1:1420/);
   assert.doesNotMatch(
     devCsp
       .replaceAll("http://ipc.localhost", "")
       .replaceAll("http://127.0.0.1:1420", "")
-      .replaceAll("ws://127.0.0.1:1420", ""),
+      .replaceAll("ws://127.0.0.1:1420", "")
+      .replaceAll("http://127.0.0.1:8787", "")
+      .replaceAll("https://api.openai.com", ""),
     /https?:\/\//,
   );
   assert.equal(

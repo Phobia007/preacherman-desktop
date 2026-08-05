@@ -62,6 +62,7 @@ test("window controls use the supplied local 80 by 80 SVG paths and bridge comma
   for (const [file, path] of expected) {
     const source = await readFile(join(assetRoot, file), "utf8");
     assert.match(source, /viewBox="0 0 80 80"/);
+    assert.match(source, /stroke-width="4"/);
     assert.match(source, new RegExp(path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
     assert.match(controls, new RegExp(file.replace(".", "\\.")));
   }
@@ -114,18 +115,18 @@ test("all seven stable navigation keys have local routes without adding a router
   assert.doesNotMatch(app + route, /react-router|createBrowserRouter/);
 });
 
-test("Home and the five empty destinations share one light background while Settings keeps controls", async () => {
+test("Home and the five empty destinations share the semantic theme canvas while Settings keeps controls", async () => {
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
   const hostRule = styles.match(/\.demo-host\s*\{[^}]*\}/s)?.[0] ?? "";
   const emptyRule = styles.match(/(?:^|\n)\.demo-host--empty\s*\{[^}]*\}/s)?.[0] ?? "";
-  const darkHostRule = styles.match(/\.demo-app-shell\[data-appearance="dark"\][\s\S]*?\.demo-host--empty,[\s\S]*?\{[^}]*background:\s*#161615[^}]*\}/)?.[0] ?? "";
+  const darkHostRule = styles.match(/\.demo-app-shell\[data-appearance="dark"\][\s\S]*?\.demo-host--empty,[\s\S]*?\{[^}]*background:\s*var\(--demo-theme-canvas\)[^}]*\}/)?.[0] ?? "";
 
   assert.match(app, /activeSurfaceType\s*===\s*["']home["']/);
   assert.match(app, /activeSurfaceType\s*===\s*["']settings["']/);
   assert.match(app, /<SettingsScreen\b/);
   assert.match(app, /demo-host--empty/);
-  assert.match(hostRule, /background:\s*#f7f5f1/);
+  assert.match(hostRule, /background:\s*var\(--demo-theme-canvas,\s*#f7f5f1\)/);
   assert.equal(emptyRule, "");
   assert.match(darkHostRule, /\.demo-host--empty/);
   assert.doesNotMatch(app, /workspace:\s*\{\s*surfaceType:\s*["']workspace["']/);

@@ -8,7 +8,8 @@
   },
   "scripts": {
     "contracts:bundle": "redocly bundle core@v1 --config redocly.yaml --output dist/openapi.bundle.yaml",
-    "contracts:check": "npm run contracts:lint && npm run contracts:bundle && npm run contracts:registry && npm run contracts:http-examples && npm run contracts:event-check && npm run generate:typescript && npm run generated:typecheck && npm run contracts:provider && npm run contracts:compatibility && npm run contracts:secrets && node --test tests/*.test.mjs",
+    "contracts:check": "npm run contracts:lint && npm run contracts:bundle && npm run contracts:registry && npm run contracts:http-examples && npm run contracts:event-check && npm run contracts:ab && npm run generate:typescript && npm run generated:typecheck && npm run contracts:provider && npm run contracts:compatibility && npm run contracts:secrets && node --test tests/*.test.mjs",
+    "contracts:ab": "node scripts/validate-ab-protocol.mjs",
     "contracts:event-check": "npm run generate:events && node scripts/check-event-coverage.mjs && npm run contracts:event-examples",
     "contracts:event-examples": "node scripts/validate-event-fixtures.mjs",
     "contracts:compatibility": "node scripts/check-breaking-changes.mjs",
@@ -17,6 +18,7 @@
     "contracts:registry": "node scripts/check-api-coverage.mjs --registry-only && node scripts/check-error-coverage.mjs --registry-only && node scripts/check-event-coverage.mjs --registry-only",
     "contracts:provider": "node scripts/validate-provider-fixtures.mjs examples/provider/samples",
     "contracts:secrets": "node scripts/scan-contract-secrets.mjs",
+    "generate:ab-manifest": "node scripts/generate-ab-protocol-manifest.mjs --write",
     "generate:events": "node scripts/generate-event-contracts.mjs",
     "generate:typescript": "node scripts/generate-typescript.mjs",
     "generated:typecheck": "tsc --project generated/typescript/tsconfig.json",

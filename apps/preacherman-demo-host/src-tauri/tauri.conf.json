@@ -22,8 +22,8 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self' customprotocol: asset:; connect-src 'self' ipc: http://ipc.localhost; font-src 'self' data:; img-src 'self' data: blob:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'; script-src 'self'",
-      "devCsp": "default-src 'self' http://127.0.0.1:1420; connect-src 'self' ipc: http://ipc.localhost http://127.0.0.1:1420 ws://127.0.0.1:1420; font-src 'self' data:; img-src 'self' data: blob: http://127.0.0.1:1420; media-src 'self' blob: http://127.0.0.1:1420; style-src 'self' 'unsafe-inline' http://127.0.0.1:1420; script-src 'self' http://127.0.0.1:1420"
+      "csp": "default-src 'self' customprotocol: asset:; connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:8787 https://api.openai.com; font-src 'self' data:; img-src 'self' data: blob:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'",
+      "devCsp": "default-src 'self' http://127.0.0.1:1420; connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:1420 ws://127.0.0.1:1420 http://127.0.0.1:8787 https://api.openai.com; font-src 'self' data:; img-src 'self' data: blob: http://127.0.0.1:1420; media-src 'self' blob: http://127.0.0.1:1420; style-src 'self' 'unsafe-inline' http://127.0.0.1:1420; script-src 'self' 'wasm-unsafe-eval' http://127.0.0.1:1420"
     }
   },
   "bundle": {

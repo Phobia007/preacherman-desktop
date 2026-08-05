@@ -80,6 +80,7 @@ export function DemoAvatarSlot({
     <AvatarViewport
       assetBaseUrl={localAvatarAssetBaseUrl()}
       className={className}
+      debug={import.meta.env.DEV}
       onContextLost={handleContextLost}
       onError={handleError}
       onPerformance={recordPerformance}

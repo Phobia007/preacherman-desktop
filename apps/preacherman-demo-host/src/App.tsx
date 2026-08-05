@@ -6,6 +6,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
+import { ABTaskConsole } from "./ab/ABTaskConsole";
 import { AppShell } from "./app-shell/AppShell";
 import { DemoAvatarSlot } from "./avatar/DemoAvatarSlot";
 import { figmaScreenRegistry, findFigmaScreen } from "./demo/figmaScreenRegistry";
@@ -18,6 +19,8 @@ import {
   type LocalSurfaceType,
 } from "./demo/screenRoute";
 import { createDemoHostBridge } from "./demoHostBridge";
+import { CortanaGallery } from "./gallery/CortanaGallery";
+import { CortanaModelStage } from "./gallery/CortanaModelStage";
 import { IntroSplash } from "./intro/IntroSplash";
 import { claimStartupIntro } from "./introSequence";
 import {
@@ -28,6 +31,7 @@ import {
   type Appearance,
   type Locale,
 } from "./preferences";
+import { VoiceSessionControl } from "./realtime/VoiceSessionControl";
 import { SettingsScreen } from "./settings/SettingsScreen";
 
 const manifest: SurfaceManifest = {
@@ -103,6 +107,23 @@ export function App() {
     : route.kind === "surface"
       ? `surface-${activeSurfaceType}`
       : `screen-${route.screenId ?? acceptedScreenId}`;
+  const HomeSurface = adapter.resolve(manifest).component;
+  const isCortanaActive = preferences.activeModelId === "cortana";
+  const homeContent = (
+    <main
+      className="demo-host demo-host--home"
+      data-model-active={isCortanaActive}
+    >
+      {isCortanaActive ? (
+        <>
+          <HomeSurface manifest={manifest} projection={projection} />
+          <CortanaModelStage ariaLabel="Activated Cortana model" />
+          <VoiceSessionControl locale={preferences.locale} />
+        </>
+      ) : null}
+      <ABTaskConsole locale={preferences.locale} />
+    </main>
+  );
   const mainContent = route.kind === "index"
     ? (
         <div className="demo-host">
@@ -111,14 +132,7 @@ export function App() {
       )
     : route.kind === "surface"
       ? activeSurfaceType === "home"
-        ? (() => {
-            const ScreenSurface = adapter.resolve(manifest).component;
-            return (
-              <main className="demo-host">
-                <ScreenSurface manifest={manifest} projection={projection} />
-              </main>
-            );
-          })()
+        ? homeContent
         : activeSurfaceType === "settings"
           ? (
               <SettingsScreen
@@ -132,6 +146,15 @@ export function App() {
                 }}
               />
             )
+          : activeSurfaceType === "market"
+            ? (
+                <CortanaGallery
+                  activeModelId={preferences.activeModelId}
+                  onActiveModelChange={(activeModelId) => {
+                    setPreferences((current) => ({ ...current, activeModelId }));
+                  }}
+                />
+              )
           : (
             <main
               aria-label={`${uiCopy[preferences.locale].emptySurfaceLabels[activeSurfaceType]} screen`}
@@ -140,6 +163,9 @@ export function App() {
           )
     : (() => {
         const selectedManifest = screen?.manifest ?? manifest;
+        if (selectedManifest.surfaceId === manifest.surfaceId) {
+          return homeContent;
+        }
         const ScreenSurface = adapter.resolve(selectedManifest).component;
         return (
           <main className="demo-host">

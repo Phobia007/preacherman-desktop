@@ -1,0 +1,15 @@
+{
+  "protocol_version": 1,
+  "result_id": "result:invalid-001",
+  "task_id": "task:invalid-001",
+  "status": "succeeded",
+  "summary": "Provider response leaked into the core contract",
+  "facts": [],
+  "artifacts": [],
+  "side_effects": [],
+  "unresolved_items": [],
+  "completed_at": "2026-08-02T09:00:00.000Z",
+  "provider_response": {
+    "request_id": "request:provider-001"
+  }
+}

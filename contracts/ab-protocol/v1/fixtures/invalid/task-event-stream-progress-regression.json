@@ -1,0 +1,86 @@
+[
+  {
+    "protocol_version": 1,
+    "event_id": "event:invalid-001",
+    "task_id": "task:invalid-001",
+    "sequence": 1,
+    "type": "accepted",
+    "occurred_at": "2026-08-02T09:00:01.000Z",
+    "emitted_by": {
+      "role": "orchestrator",
+      "actor_id": "orchestrator:local-demo"
+    },
+    "payload": {
+      "message": "Task accepted"
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:invalid-002",
+    "task_id": "task:invalid-001",
+    "sequence": 2,
+    "type": "started",
+    "occurred_at": "2026-08-02T09:00:02.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "message": "Task started"
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:invalid-003",
+    "task_id": "task:invalid-001",
+    "sequence": 3,
+    "type": "progress",
+    "occurred_at": "2026-08-02T09:00:03.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "message": "First update",
+      "progress": 0.75
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:invalid-004",
+    "task_id": "task:invalid-001",
+    "sequence": 4,
+    "type": "progress",
+    "occurred_at": "2026-08-02T09:00:04.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "message": "Regressed update",
+      "progress": 0.5
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:invalid-005",
+    "task_id": "task:invalid-001",
+    "sequence": 5,
+    "type": "failed",
+    "occurred_at": "2026-08-02T09:00:05.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "error": {
+        "protocol_version": 1,
+        "task_id": "task:invalid-001",
+        "code": "AB_EXECUTION_FAILED",
+        "category": "execution",
+        "message": "Execution stopped",
+        "retryable": false
+      }
+    }
+  }
+]

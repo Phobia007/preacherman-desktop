@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/ab/v1/task-event.schema.json",
+  "title": "A/B Task Event",
+  "$defs": {
+    "base": {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "event_id",
+        "task_id",
+        "sequence",
+        "type",
+        "occurred_at",
+        "emitted_by",
+        "payload"
+      ],
+      "properties": {
+        "protocol_version": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/protocol_version"
+        },
+        "event_id": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+        },
+        "task_id": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "type": {
+          "enum": [
+            "accepted",
+            "approval_required",
+            "cancelled",
+            "completed",
+            "failed",
+            "needs_input",
+            "paused",
+            "progress",
+            "resumed",
+            "started"
+          ]
+        },
+        "occurred_at": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/timestamp"
+        },
+        "emitted_by": {
+          "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/actor_ref"
+        },
+        "payload": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "accepted",
+                "started"
+              ]
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "progress"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "message",
+                "progress"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "progress": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "needs_input"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "request_id",
+                "question"
+              ],
+              "properties": {
+                "request_id": {
+                  "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+                },
+                "question": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "approval_required"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "approval_id",
+                "action",
+                "summary",
+                "risk_level"
+              ],
+              "properties": {
+                "approval_id": {
+                  "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+                },
+                "action": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9._-]{1,127}$"
+                },
+                "summary": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "risk_level": {
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "paused"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "reason"
+              ],
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "resumed"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "completed"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "result_id",
+                "summary"
+              ],
+              "properties": {
+                "result_id": {
+                  "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+                },
+                "summary": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "failed"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "error"
+              ],
+              "properties": {
+                "error": {
+                  "$ref": "https://schemas.preacherman.ai/ab/v1/coordination-error.schema.json"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "cancelled"
+            },
+            "payload": {
+              "type": "object",
+              "required": [
+                "reason"
+              ],
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

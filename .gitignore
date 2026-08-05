@@ -5,6 +5,10 @@ apps/*/dist/
 apps/*/node_modules/
 apps/*/src-tauri/target/
 apps/preacherman-demo-host/public/local-avatar/
+.playwright-cli/
+.runtime-tmp/
+output/
+apps/*/output/
 *.log
 .DS_Store
 Thumbs.db

@@ -1,0 +1,15 @@
+{
+  "protocol_version": 1,
+  "command_id": "command:invalid-001",
+  "task_id": "task:invalid-001",
+  "idempotency_key": "idem:invalid-001",
+  "type": "approve",
+  "issued_at": "2026-08-02T09:00:00.000Z",
+  "issued_by": {
+    "role": "front_agent",
+    "actor_id": "agent:a-default"
+  },
+  "payload": {
+    "reason": "Missing approval identifier"
+  }
+}

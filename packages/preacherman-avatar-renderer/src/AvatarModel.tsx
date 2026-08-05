@@ -1,7 +1,8 @@
-import { addAfterEffect, useThree } from "@react-three/fiber";
-import { useGLTF, useTexture } from "@react-three/drei";
-import { useEffect, useMemo, useRef } from "react";
+import { addAfterEffect, useFrame, useThree } from "@react-three/fiber";
+import { useTexture } from "@react-three/drei";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Group,
   LinearFilter,
   LinearMipmapLinearFilter,
   Material,
@@ -14,14 +15,28 @@ import {
   Texture,
   Vector2,
 } from "three";
+import { ThreeAvatarAnimationAdapter } from "./avatar/adapters/ThreeAvatarAnimationAdapter";
+import { CortanaAnimationController } from "./avatar/controllers/CortanaAnimationController";
+import {
+  CORTANA_AVATAR_ID,
+  CORTANA_DEFAULT_ACTION_ID,
+  CORTANA_RIG_ID,
+  cortanaAnimationManifest,
+  cortanaMotionStateMap,
+} from "./avatar/manifests/cortanaAnimationManifest";
+import type {
+  AvatarActionDescriptor,
+  AvatarAnimationDebugSnapshot,
+  AvatarAnimationError,
+} from "./avatar/types/avatarAnimation";
 import {
   createHologramMaterial,
   updateHologramResolution,
 } from "./hologramMaterial";
-import { disposeAvatarSceneResources } from "./resourceLifecycle";
 import type { AvatarPerformanceSnapshot } from "./types";
+import type { AvatarPose } from "./types";
 
-const MODEL_FILE = "cortana-runtime-v0.glb";
+const MODEL_FILE = "cortana-runtime.glb";
 const SHADER_FILES = [
   "storm_cortana_scanlines_diff.png",
   "storm_cortana_default_eye_iris_normal.png",
@@ -33,6 +48,11 @@ const SHADER_FILES = [
 
 interface AvatarAssetUrls {
   readonly model: string;
+  readonly motionLibrary: {
+    readonly manifestUrl: string;
+    readonly indexUrl: string;
+    readonly packsBaseUrl: string;
+  };
   readonly textures: readonly [
     scanline: string,
     irisNormal: string,
@@ -44,8 +64,16 @@ interface AvatarAssetUrls {
 }
 
 interface AvatarModelProps {
+  readonly actionId?: string;
+  readonly actionRequestKey?: number;
   readonly assetBaseUrl: string;
+  readonly onActionsReady?: (actions: readonly AvatarActionDescriptor[]) => void;
+  readonly onAnimationDebug?: (
+    snapshot: AvatarAnimationDebugSnapshot,
+  ) => void;
+  readonly onAnimationError: (error: AvatarAnimationError) => void;
   readonly onFirstFrame: (snapshot: AvatarPerformanceSnapshot) => void;
+  readonly pose?: AvatarPose;
 }
 
 interface MaterialBindings {
@@ -64,6 +92,11 @@ export function createAvatarAssetUrls(assetBaseUrl: string): AvatarAssetUrls {
     `${base}shader/${file}`;
   return {
     model: `${base}${MODEL_FILE}`,
+    motionLibrary: {
+      manifestUrl: `${base}motion-library/motions.json`,
+      indexUrl: `${base}motion-library/index.json`,
+      packsBaseUrl: `${base}motion-library/packs/`,
+    },
     textures: [
       shaderUrl(SHADER_FILES[0]),
       shaderUrl(SHADER_FILES[1]),
@@ -113,11 +146,15 @@ function buildMaterialBindings(
 }
 
 export function AvatarModel({
+  actionId,
+  actionRequestKey,
   assetBaseUrl,
+  onActionsReady,
+  onAnimationDebug,
+  onAnimationError,
   onFirstFrame,
 }: AvatarModelProps) {
   const urls = useMemo(() => createAvatarAssetUrls(assetBaseUrl), [assetBaseUrl]);
-  const gltf = useGLTF(urls.model);
   const [
     scanlineMap,
     irisNormalMap,
@@ -126,9 +163,28 @@ export function AvatarModel({
     hairControlMap,
     eyeControlMap,
   ] = useTexture([...urls.textures]);
+  const adapter = useMemo(
+    () => new ThreeAvatarAnimationAdapter({
+      avatarId: CORTANA_AVATAR_ID,
+      rigId: CORTANA_RIG_ID,
+      modelUrl: urls.model,
+      actions: cortanaAnimationManifest,
+      defaultActionId: CORTANA_DEFAULT_ACTION_ID,
+      stateMap: cortanaMotionStateMap,
+      motionLibrary: urls.motionLibrary,
+      onError: onAnimationError,
+    }),
+    [onAnimationError, urls.model],
+  );
+  const controller = useMemo(
+    () => new CortanaAnimationController(adapter),
+    [adapter],
+  );
+  const [root, setRoot] = useState<Group | null>(null);
   const { gl, invalidate, size } = useThree();
   const drawingBufferSize = useRef(new Vector2());
   const reported = useRef(false);
+  const disposeTimer = useRef<ReturnType<typeof setTimeout>>();
   const controlMaps = useMemo<Readonly<Record<string, Texture>>>(
     () => ({
       rt_body: bodyControlMap,
@@ -140,9 +196,43 @@ export function AvatarModel({
     [bodyControlMap, eyeControlMap, faceControlMap, hairControlMap],
   );
   const bindings = useMemo(
-    () => buildMaterialBindings(gltf.scene, scanlineMap, irisNormalMap, controlMaps),
-    [controlMaps, gltf.scene, irisNormalMap, scanlineMap],
+    () => root
+      ? buildMaterialBindings(root, scanlineMap, irisNormalMap, controlMaps)
+      : null,
+    [controlMaps, irisNormalMap, root, scanlineMap],
   );
+
+  useEffect(() => {
+    let active = true;
+    const unsubscribe = onAnimationDebug
+      ? adapter.subscribeDebug(onAnimationDebug)
+      : undefined;
+    void controller.load()
+      .then(async () => {
+        if (!active) return;
+        await controller.setState("idle");
+        if (!active) return;
+        setRoot(adapter.getRoot());
+        onActionsReady?.(controller.listActions());
+        invalidate();
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+      unsubscribe?.();
+    };
+  }, [adapter, controller, invalidate, onActionsReady, onAnimationDebug]);
+
+  useEffect(() => {
+    if (!root || !actionId) return;
+    void controller.play(actionId, { restart: true })
+      .then(() => invalidate())
+      .catch(() => undefined);
+  }, [actionId, actionRequestKey, controller, invalidate, root]);
+
+  useFrame((_, deltaSeconds) => {
+    adapter.update(deltaSeconds);
+  });
 
   useEffect(() => {
     scanlineMap.wrapS = RepeatWrapping;
@@ -160,27 +250,59 @@ export function AvatarModel({
     irisNormalMap.magFilter = LinearFilter;
     irisNormalMap.needsUpdate = true;
 
-    for (const controlMap of new Set(Object.values(controlMaps))) {
+    bodyControlMap.wrapS = RepeatWrapping;
+    bodyControlMap.wrapT = RepeatWrapping;
+    bodyControlMap.colorSpace = SRGBColorSpace;
+    bodyControlMap.flipY = false;
+    bodyControlMap.minFilter = LinearMipmapLinearFilter;
+    bodyControlMap.magFilter = LinearFilter;
+    bodyControlMap.anisotropy = gl.capabilities.getMaxAnisotropy();
+    bodyControlMap.needsUpdate = true;
+
+    faceControlMap.wrapS = RepeatWrapping;
+    faceControlMap.wrapT = RepeatWrapping;
+    faceControlMap.colorSpace = SRGBColorSpace;
+    faceControlMap.flipY = false;
+    faceControlMap.minFilter = LinearMipmapLinearFilter;
+    faceControlMap.magFilter = LinearFilter;
+    faceControlMap.anisotropy = gl.capabilities.getMaxAnisotropy();
+    faceControlMap.needsUpdate = true;
+
+    for (const controlMap of new Set([
+      hairControlMap,
+      eyeControlMap,
+    ])) {
       controlMap.wrapS = RepeatWrapping;
       controlMap.wrapT = RepeatWrapping;
-      controlMap.colorSpace = SRGBColorSpace;
+      controlMap.colorSpace = NoColorSpace;
       controlMap.flipY = false;
       controlMap.minFilter = LinearMipmapLinearFilter;
       controlMap.magFilter = LinearFilter;
       controlMap.anisotropy = gl.capabilities.getMaxAnisotropy();
       controlMap.needsUpdate = true;
     }
-  }, [controlMaps, gl, irisNormalMap, scanlineMap]);
+  }, [
+    bodyControlMap,
+    eyeControlMap,
+    faceControlMap,
+    gl,
+    hairControlMap,
+    irisNormalMap,
+    scanlineMap,
+  ]);
 
   useEffect(() => {
+    if (!bindings) return;
     for (const [mesh, material] of bindings.holograms) mesh.material = material;
     invalidate();
     return () => {
       for (const [mesh, material] of bindings.originals) mesh.material = material;
+      for (const material of bindings.clonedMaterials) material.dispose();
     };
   }, [bindings, invalidate]);
 
   useEffect(() => {
+    if (!bindings) return;
     gl.getDrawingBufferSize(drawingBufferSize.current);
     for (const material of bindings.clonedMaterials) {
       updateHologramResolution(
@@ -190,9 +312,10 @@ export function AvatarModel({
       );
     }
     invalidate();
-  }, [bindings.clonedMaterials, gl, invalidate, size.height, size.width]);
+  }, [bindings, gl, invalidate, size.height, size.width]);
 
   useEffect(() => {
+    if (!root) return;
     const removeAfterEffect = addAfterEffect(() => {
       if (reported.current) return;
       reported.current = true;
@@ -205,32 +328,37 @@ export function AvatarModel({
     });
     invalidate();
     return removeAfterEffect;
-  }, [gl, invalidate, onFirstFrame]);
+  }, [gl, invalidate, onFirstFrame, root]);
 
   useEffect(
     () => () => {
-      for (const [mesh, material] of bindings.originals) mesh.material = material;
-      disposeAvatarSceneResources(gltf.scene, {
-        materials: bindings.clonedMaterials,
-        textures: [
-          scanlineMap,
-          irisNormalMap,
-          ...new Set(Object.values(controlMaps)),
-        ],
-      });
+      scanlineMap.dispose();
+      irisNormalMap.dispose();
+      for (const controlMap of new Set(Object.values(controlMaps))) {
+        controlMap.dispose();
+      }
       for (const url of urls.textures) useTexture.clear(url);
-      useGLTF.clear(urls.model);
     },
     [
-      bindings,
       controlMaps,
-      gltf.scene,
       irisNormalMap,
       scanlineMap,
-      urls.model,
       urls.textures,
     ],
   );
 
-  return <primitive object={gltf.scene} dispose={null} />;
+  useEffect(() => {
+    if (disposeTimer.current !== undefined) {
+      clearTimeout(disposeTimer.current);
+      disposeTimer.current = undefined;
+    }
+    return () => {
+      // React StrictMode immediately replays effects in development. Deferring
+      // disposal lets that replay keep the in-flight GLB load, while a genuine
+      // unmount still releases the controller on the next task.
+      disposeTimer.current = setTimeout(() => controller.dispose(), 0);
+    };
+  }, [controller]);
+
+  return root ? <primitive object={root} dispose={null} /> : null;
 }

@@ -1,0 +1,95 @@
+{
+  "contract_id": "preacherman.ab-coordination.v1",
+  "abi_version": 1,
+  "status": "draft",
+  "schema_draft": "2020-12",
+  "schemas": [
+    {
+      "path": "schemas/capability-manifest.schema.json",
+      "sha256": "45bcde21cbd83cd82ad70f67fa8f5ee025310e9055f5e6580b3267055582d360"
+    },
+    {
+      "path": "schemas/common.schema.json",
+      "sha256": "70dbc218373a8ef9d9df0f95d29f6ddb250a7e456dfa309062c2c8501705af01"
+    },
+    {
+      "path": "schemas/control-command.schema.json",
+      "sha256": "e546e9232747208ddcb502b38fba141303e9f0dc54a78ce072be8a881972ea48"
+    },
+    {
+      "path": "schemas/coordination-error.schema.json",
+      "sha256": "de10d4d1147923a383da571edb43539a7136cbe87df7905113b1b509a603be62"
+    },
+    {
+      "path": "schemas/task-envelope.schema.json",
+      "sha256": "a714ec5ecdd4c621611aad134fa8fa254995c71bba73d15a62dcaabf211708ab"
+    },
+    {
+      "path": "schemas/task-event.schema.json",
+      "sha256": "0f1b6658cdea4fed5fee629a37ba9fe102be6f0dfe755df7a17547f5cf1cc34d"
+    },
+    {
+      "path": "schemas/task-result.schema.json",
+      "sha256": "ef56a32512f50e3eaccacfb78a69db6c6a5ff32bd915c7dfa8e3d2e80b993a70"
+    }
+  ],
+  "fixtures": {
+    "valid": [
+      {
+        "path": "fixtures/valid/capability-manifest.json",
+        "sha256": "88e6ce7ceeb6f13da261751e3575203374710c4ffab62ecbdeea4ca1d841d95d"
+      },
+      {
+        "path": "fixtures/valid/control-command.json",
+        "sha256": "725ed3cf1cc3c4170dd530099f87c91262c2dc1ed704e14fa576eadc2aae7c18"
+      },
+      {
+        "path": "fixtures/valid/coordination-error.json",
+        "sha256": "2352c43d16973376558aaa2cc4a346803db2a77acd05bc61edbc04a57d500fc7"
+      },
+      {
+        "path": "fixtures/valid/task-envelope.json",
+        "sha256": "2cedd8a025f97723bb50956d00d403fde45db63035758dca1aef51416cf93387"
+      },
+      {
+        "path": "fixtures/valid/task-event-stream.json",
+        "sha256": "5345602418fbcc3d3e127df32397b7be1fc789ae9909d30c5aadc4649f89995c"
+      },
+      {
+        "path": "fixtures/valid/task-result.json",
+        "sha256": "6d76b743277cd330fb682585ef9c47d006ac86001bc277ede480ade3e53195f7"
+      }
+    ],
+    "invalid": [
+      {
+        "path": "fixtures/invalid/capability-manifest-unknown-feature.json",
+        "sha256": "7348b633ae9cea178afcfd17ea3c1635a6cfb09b2384fc04a3a48762636f5d95"
+      },
+      {
+        "path": "fixtures/invalid/control-command-missing-approval-id.json",
+        "sha256": "c0c749b2950b496bc5ac89e4bbcce7cff46b96906a385d0bda13ccc0fa8333d7"
+      },
+      {
+        "path": "fixtures/invalid/coordination-error-unknown-code.json",
+        "sha256": "91da5311408b2bf9c3bccf2e493c53469b141123796a79c210a531e194b127e7"
+      },
+      {
+        "path": "fixtures/invalid/task-envelope-provider-payload.json",
+        "sha256": "1b0c9ad310718d68bd26230fc9dfbc19ab6bae70491d6657870ef10248e020f0"
+      },
+      {
+        "path": "fixtures/invalid/task-event-stream-progress-regression.json",
+        "sha256": "f81fc3f6a2cb82f2fd5f09c098d1da292a508d8ac79c7dddce010d1dc58d6d21"
+      },
+      {
+        "path": "fixtures/invalid/task-result-provider-response.json",
+        "sha256": "0ce3ac70733a97d6f93b02b44740283404db4efb64200bf0c00a5f498c38537f"
+      }
+    ]
+  },
+  "boundaries": {
+    "executable_authorization": false,
+    "provider_payloads": false,
+    "runtime_execution": false
+  }
+}

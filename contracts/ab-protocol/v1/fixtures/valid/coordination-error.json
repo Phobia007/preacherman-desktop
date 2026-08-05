@@ -1,0 +1,9 @@
+{
+  "protocol_version": 1,
+  "task_id": "task:contract-demo-001",
+  "code": "AB_DEPENDENCY_UNAVAILABLE",
+  "category": "dependency",
+  "message": "The selected action dependency is temporarily unavailable.",
+  "retryable": true,
+  "retry_after_ms": 5000
+}

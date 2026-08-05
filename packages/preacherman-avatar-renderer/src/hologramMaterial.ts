@@ -15,6 +15,12 @@ type RampStop = readonly [
   blue: number,
 ];
 
+export const HOLOGRAM_REFERENCE_GRADE = {
+  contrastExponent: 1,
+  outputGain: 1,
+  saturation: 1,
+} as const;
+
 export interface HologramProfile {
   readonly sourceMaterial: string;
   readonly family: MaterialFamily;
@@ -26,7 +32,7 @@ export interface HologramProfile {
   readonly controlGreenTint: readonly [number, number, number];
   readonly usesControlMap: boolean;
   readonly controlSemanticStatus: "unresolved";
-  readonly controlChannels: readonly ("green" | "alpha")[];
+  readonly controlChannels: readonly ("red" | "green" | "blue" | "alpha")[];
   readonly surfaceMode: "blended" | "dithered";
   readonly backfaceCulling: boolean;
   readonly lightingFloor: number;
@@ -72,14 +78,6 @@ const PROFILES: Record<string, HologramProfile> = {
     ...BODY_PROFILE,
     sourceMaterial: "cortana_face",
     family: "face",
-    scanlineScale: 250,
-    controlGreenTint: [0.10653924196958542, 0.17199672758579254, 0.3185468018054962],
-    lightingFloor: 0.22,
-    lightingExponent: 0.68,
-    scanlineFloor: 0.5,
-    outputGain: 1.18,
-    neckBlendStart: 1.46,
-    neckBlendEnd: 1.54,
   },
   rt_hair: {
     sourceMaterial: "cortana_hair",
@@ -119,10 +117,10 @@ const PROFILES: Record<string, HologramProfile> = {
     controlGreenTint: [0.16826944053173065, 0.47353148460388184, 1],
     usesControlMap: true,
     controlSemanticStatus: "unresolved",
-    controlChannels: ["green"],
+    controlChannels: ["red", "blue"],
     surfaceMode: "blended",
-    backfaceCulling: false,
-    lightingFloor: 0,
+    backfaceCulling: true,
+    lightingFloor: 0.16,
     lightingExponent: 1,
     scanlineFloor: 1,
     outputGain: 1,
@@ -196,9 +194,13 @@ export function createHologramMaterial(
   material.alphaToCoverage = isDitheredSurface;
   material.alphaTest = isDitheredSurface ? 0.05 : 0;
   material.transparent = !isDitheredSurface;
-  material.depthWrite = true;
+  // Alpha-blended eyelashes sit immediately in front of the eyeballs. Letting
+  // them write depth (or drawing their back faces) makes overlapping lash
+  // cards occlude one another as the head turns, which shows up as black,
+  // string-like rings around the eyes.
+  material.depthWrite = profile.family !== "eyelashes";
   material.side = profile.backfaceCulling ? FrontSide : DoubleSide;
-  material.toneMapped = false;
+  material.toneMapped = true;
   const sourceCorneaNormalMap = source.name === "rt_eyes" ? source.normalMap : null;
   const resolvedIrisNormalConnected = source.name === "rt_eyes" && irisNormalMap !== undefined;
   if (resolvedIrisNormalConnected) material.normalMap = irisNormalMap;
@@ -217,7 +219,7 @@ export function createHologramMaterial(
     resolvedIrisNormalConnected,
   };
   material.customProgramCacheKey = () =>
-    `preacherman-source-node-chain-v3:${source.name}`;
+    `preacherman-source-node-chain-v21:${source.name}`;
   material.onBeforeCompile = (shader, renderer) => {
     shader.uniforms.uHoloScanlineMap = { value: scanlineMap };
     shader.uniforms.uHoloScanlineScale = { value: profile.scanlineScale };
@@ -227,6 +229,7 @@ export function createHologramMaterial(
       value: renderer.getDrawingBufferSize(new Vector2()),
     };
     shader.uniforms.uHoloFamily = { value: familyCode(profile.family) };
+    shader.uniforms.uHoloIsFace = { value: source.name === "rt_face" ? 1 : 0 };
     shader.uniforms.uHoloDiffuseGamma = { value: profile.diffuseGamma };
     shader.uniforms.uHoloLightingFloor = { value: profile.lightingFloor };
     shader.uniforms.uHoloLightingExponent = { value: profile.lightingExponent };
@@ -247,6 +250,15 @@ export function createHologramMaterial(
       value: sourceCorneaNormalMap ?? scanlineMap,
     };
     shader.uniforms.uHoloCorneaEnabled = { value: sourceCorneaNormalMap ? 1 : 0 };
+    shader.uniforms.uHoloReferenceContrastExponent = {
+      value: HOLOGRAM_REFERENCE_GRADE.contrastExponent,
+    };
+    shader.uniforms.uHoloReferenceOutputGain = {
+      value: HOLOGRAM_REFERENCE_GRADE.outputGain,
+    };
+    shader.uniforms.uHoloReferenceSaturation = {
+      value: HOLOGRAM_REFERENCE_GRADE.saturation,
+    };
     material.userData.hologramShader = shader;
     shader.vertexShader = `
 varying float vHoloModelY;
@@ -262,6 +274,7 @@ uniform float uHoloScanlineBrightness;
 uniform float uHoloScanlineContrast;
 uniform vec2 uHoloResolution;
 uniform int uHoloFamily;
+uniform float uHoloIsFace;
 uniform float uHoloDiffuseGamma;
 uniform float uHoloLightingFloor;
 uniform float uHoloLightingExponent;
@@ -278,6 +291,9 @@ uniform sampler2D uHoloControlMap;
 uniform float uHoloControlEnabled;
 uniform sampler2D uHoloCorneaNormalMap;
 uniform float uHoloCorneaEnabled;
+uniform float uHoloReferenceContrastExponent;
+uniform float uHoloReferenceOutputGain;
+uniform float uHoloReferenceSaturation;
 varying float vHoloModelY;
 
 float holoLuma(vec3 value) {
@@ -333,61 +349,50 @@ if (uHoloScanlineScale > 0.5) {
 
 vec3 holoColor;
 float holoOpacity;
-if (uHoloFamily == 0) {
+if (uHoloFamily == 0 || uHoloFamily == 1) {
   vec3 composite = holoBase + vec3(holoControl.a * uHoloControlAlphaAdd);
   vec3 ramped = composite * holoLightRamp;
   holoColor = mix(ramped, ramped * uHoloControlGreenTint, clamp(holoControl.g, 0.0, 1.0));
   float sourceTransparency = clamp((holoControl.g - holoLight) * holoLight * holoLight, 0.0, 1.0);
-  float sourceEnergy = mix(0.34, 1.0, clamp(sourceTransparency * 7.0, 0.0, 1.0));
-  holoColor *= sourceEnergy * mix(uHoloScanlineFloor, 1.0, holoScan) * uHoloOutputGain;
-  holoOpacity = 1.0;
-} else if (uHoloFamily == 1) {
-  vec3 composite = holoBase + vec3(holoControl.a * uHoloControlAlphaAdd);
-  vec3 ramped = composite * holoLightRamp;
-  vec3 faceColor = mix(ramped, ramped * uHoloControlGreenTint, clamp(holoControl.g, 0.0, 1.0));
-  float faceEnergy = mix(0.42, 1.0, holoProfileLight);
-  faceColor *= faceEnergy * mix(uHoloScanlineFloor, 1.0, holoScan) * uHoloOutputGain;
-  vec3 neckBodyLightRamp = holoRamp(holoLight);
-  vec3 neckBodyRamped = composite * neckBodyLightRamp;
-  vec3 neckBodyColor = mix(
-    neckBodyRamped,
-    neckBodyRamped * uHoloControlGreenTint,
-    clamp(holoControl.g, 0.0, 1.0)
-  );
-  float neckBodyTransparency = clamp(
-    (holoControl.g - holoLight) * holoLight * holoLight,
+  holoOpacity = clamp(
+    (1.0 - sourceTransparency) * (1.0 - holoScan),
     0.0,
     1.0
   );
-  float neckBodyEnergy = mix(
-    0.34,
-    1.0,
-    clamp(neckBodyTransparency * 7.0, 0.0, 1.0)
-  );
-  neckBodyColor *= neckBodyEnergy * mix(0.38, 1.0, holoScan) * 1.35;
-  float neckFaceBlend = smoothstep(uHoloNeckBlendStart, uHoloNeckBlendEnd, vHoloModelY);
-  holoColor = mix(neckBodyColor, faceColor, neckFaceBlend);
+  holoColor *= holoOpacity;
+  if (uHoloIsFace > 0.5) {
+    holoColor *= 1.55;
+  }
   holoOpacity = 1.0;
 } else if (uHoloFamily == 2) {
   holoColor = holoBase * holoLightRamp * mix(uHoloScanlineFloor, 1.0, holoScan);
   holoColor += uHoloControlGreenTint * diffuseColor.a * 0.005;
   holoOpacity = diffuseColor.a;
 } else if (uHoloFamily == 3) {
-  float controlGreen = clamp(holoControl.g, 0.0, 1.0);
-  float irisMask = smoothstep(0.015, 0.16, holoLuma(holoBase));
-  vec3 eyeBase = holoBase * (1.0 - controlGreen) * holoLightRamp;
-  vec3 eyeEmissionSeed = holoBase * controlGreen;
-  vec3 eyeEmission = mix(eyeEmissionSeed, eyeEmissionSeed * uHoloControlGreenTint, 0.75) * 0.5;
-  vec3 eyeOuterEmission = (1.0 - controlGreen) * uHoloControlGreenTint * 0.05;
+  float controlRed = clamp(holoControl.r, 0.0, 1.0);
+  float irisDisk = smoothstep(0.08, 0.82, clamp(holoControl.b, 0.0, 1.0));
+  float irisFibers = smoothstep(0.035, 0.68, controlRed);
+  float pupilDepth = irisDisk
+    * (1.0 - smoothstep(0.018, 0.11, controlRed));
+  vec3 eyeBase = holoBase * holoLightRamp * 0.42;
+  vec3 irisColor = mix(
+    vec3(0.002, 0.012, 0.05),
+    vec3(0.025, 0.22, 0.82),
+    irisFibers
+  );
+  vec3 eyeEmission = irisColor * mix(0.28, 0.92, irisFibers);
+  vec3 eyeOuterEmission = (1.0 - irisDisk) * uHoloControlGreenTint * 0.025;
   float cornea = 0.0;
   #ifdef USE_MAP
   if (uHoloCorneaEnabled > 0.5) {
     vec3 corneaNormal = texture2D(uHoloCorneaNormalMap, vMapUv).xyz * 2.0 - 1.0;
     float corneaShape = clamp(corneaNormal.z * 0.5 + 0.5, 0.0, 1.0);
-    cornea = pow(corneaShape, 18.0) * 0.025 * irisMask;
+    cornea = pow(corneaShape, 18.0) * 0.018 * irisDisk;
   }
   #endif
-  holoColor = eyeBase + eyeEmission + eyeOuterEmission + vec3(cornea);
+  holoColor = mix(eyeBase + eyeOuterEmission, eyeEmission, irisDisk);
+  holoColor += vec3(cornea);
+  holoColor *= 1.0 - pupilDepth * 0.985;
   holoOpacity = 1.0;
 } else {
   vec3 composite = holoBase + vec3(holoControl.a * uHoloControlAlphaAdd);
@@ -397,6 +402,16 @@ if (uHoloFamily == 0) {
 }
 
 holoColor *= 1.189207115;
+holoColor = uHoloReferenceOutputGain * pow(
+  max(holoColor, vec3(0.0)),
+  vec3(uHoloReferenceContrastExponent)
+);
+float holoReferenceLuma = holoLuma(holoColor);
+holoColor = mix(
+  vec3(holoReferenceLuma),
+  holoColor,
+  uHoloReferenceSaturation
+);
 gl_FragColor = vec4(max(holoColor, vec3(0.0)), clamp(holoOpacity, 0.0, 1.0));
 `,
     );

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/ab/v1/coordination-error.schema.json",
+  "title": "A/B Coordination Error",
+  "type": "object",
+  "required": [
+    "protocol_version",
+    "code",
+    "category",
+    "message",
+    "retryable"
+  ],
+  "properties": {
+    "protocol_version": {
+      "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/protocol_version"
+    },
+    "task_id": {
+      "$ref": "https://schemas.preacherman.ai/ab/v1/common.schema.json#/$defs/identifier"
+    },
+    "code": {
+      "enum": [
+        "AB_ACTION_NOT_ALLOWED",
+        "AB_APPROVAL_REQUIRED",
+        "AB_CAPABILITY_UNAVAILABLE",
+        "AB_CONTROL_UNSUPPORTED",
+        "AB_DEPENDENCY_UNAVAILABLE",
+        "AB_EVENT_SEQUENCE_CONFLICT",
+        "AB_EXECUTION_FAILED",
+        "AB_PROTOCOL_INVALID_MESSAGE",
+        "AB_PROVIDER_AUTH_FAILED",
+        "AB_PROVIDER_RATE_LIMITED",
+        "AB_TASK_NOT_FOUND",
+        "AB_TASK_STATE_CONFLICT"
+      ]
+    },
+    "category": {
+      "enum": [
+        "authorization",
+        "capability",
+        "dependency",
+        "execution",
+        "protocol",
+        "rate_limit",
+        "state"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "retry_after_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 86400000
+    }
+  },
+  "additionalProperties": false
+}

@@ -52,12 +52,22 @@ test("renderer source is independent from Tauri, Surface Skin, Demo Host, backen
   assert.doesNotMatch(source, /\b(?:fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(/);
 });
 
-test("static viewport uses a transparent pointer-inert demand Canvas with capped DPR and no controls", async () => {
+test("static viewport uses one animated transparent Canvas with capped DPR and no controls", async () => {
   const viewport = await readFile(join(packageRoot, "src", "AvatarViewport.tsx"), "utf8");
   const scene = await readFile(join(packageRoot, "src", "AvatarScene.tsx"), "utf8");
-  const combined = `${viewport}\n${scene}`;
+  const adapter = await readFile(
+    join(
+      packageRoot,
+      "src",
+      "avatar",
+      "adapters",
+      "ThreeAvatarAnimationAdapter.ts",
+    ),
+    "utf8",
+  );
+  const combined = `${viewport}\n${scene}\n${adapter}`;
 
-  assert.match(combined, /frameloop=["']demand["']/);
+  assert.match(viewport, /frameloop=["']always["']/);
   assert.match(combined, /alpha:\s*true/);
   assert.match(combined, /dpr=\{dpr\}/);
   assert.match(combined, /Math\.min\(.*2\)/s);
@@ -65,4 +75,6 @@ test("static viewport uses a transparent pointer-inert demand Canvas with capped
   assert.doesNotMatch(combined, /OrbitControls|MapControls|TrackballControls|CameraControls/);
   assert.doesNotMatch(combined, /forceContextLoss|SkeletonHelper|gridHelper|autoRotate/i);
   assert.match(scene, /new AvatarError\(\s*["']CONTEXT_LOST["']/);
+  assert.match(adapter, /new AnimationMixer\(/);
+  assert.doesNotMatch(adapter, /requestAnimationFrame|cancelAnimationFrame/);
 });

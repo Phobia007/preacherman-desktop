@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.preacherman.ai/ab/v1/common.schema.json",
+  "title": "A/B Protocol Common Definitions",
+  "$defs": {
+    "protocol_version": {
+      "const": 1
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actor_ref": {
+      "type": "object",
+      "required": [
+        "actor_id",
+        "role"
+      ],
+      "properties": {
+        "actor_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "role": {
+          "enum": [
+            "user",
+            "front_agent",
+            "orchestrator",
+            "executor_agent",
+            "policy"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "logical_ref": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "artifact",
+            "conversation",
+            "external_resource",
+            "prsp_contract",
+            "skill",
+            "source",
+            "state"
+          ]
+        },
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

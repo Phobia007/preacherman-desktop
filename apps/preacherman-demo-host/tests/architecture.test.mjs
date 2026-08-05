@@ -95,12 +95,14 @@ test("Tauri APIs are confined to the Tauri client boundary", async () => {
   }
 });
 
-test("demo host has no backend or network client", async () => {
+test("network access is confined to the Realtime client and never contains credentials", async () => {
   assert.equal(await exists(sourceRoot), true, "host source directory must exist");
   for (const file of await sourceFiles(sourceRoot)) {
     const source = await readFile(file, "utf8");
-    assert.doesNotMatch(source, /\b(?:fetch|axios|EventSource|WebSocket)\b/i, file);
-    assert.doesNotMatch(source, /database|sqlite|upload|credential/i, file);
+    if (/\b(?:fetch|axios|EventSource|WebSocket)\b/i.test(source)) {
+      assert.equal(file, join(sourceRoot, "realtime", "RealtimeVoiceClient.ts"));
+    }
+    assert.doesNotMatch(source, /OPENAI_API_KEY|CODEX_API_KEY/, file);
   }
 });
 

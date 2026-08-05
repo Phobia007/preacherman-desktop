@@ -1,0 +1,16 @@
+{
+  "protocol_version": 1,
+  "command_id": "command:approve-send-001",
+  "task_id": "task:contract-demo-001",
+  "idempotency_key": "idem:approve-send-001",
+  "type": "approve",
+  "issued_at": "2026-08-02T09:00:59.000Z",
+  "issued_by": {
+    "role": "front_agent",
+    "actor_id": "agent:a-default"
+  },
+  "payload": {
+    "approval_id": "approval:send-001",
+    "reason": "User explicitly approved the action"
+  }
+}

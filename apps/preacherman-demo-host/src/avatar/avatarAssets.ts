@@ -4,5 +4,5 @@ function withTrailingSlash(value: string): string {
 export function localAvatarAssetBaseUrl(
   baseUrl = import.meta.env.BASE_URL,
 ): string {
-  return `${withTrailingSlash(baseUrl)}local-avatar/`;
+  return `${withTrailingSlash(baseUrl)}assets/avatars/cortana/`;
 }

@@ -4,16 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 1420 --strictPort",
+    "dev": "node scripts/dev.mjs",
+    "dev:ui": "vite --host 127.0.0.1 --port 1420 --strictPort",
+    "dev:service": "node --env-file-if-exists=.env.local server/index.mjs",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test --test-isolation=none tests/*.test.mjs",
     "check": "npm run typecheck && npm run build && npm test",
     "sync:avatar": "node scripts/sync-local-avatar.mjs",
+    "sync:motions": "node scripts/sync-cortana-motion-library.mjs",
     "tauri": "tauri",
     "tauri:dev": "tauri dev"
   },
   "dependencies": {
+    "@openai/codex-sdk": "^0.146.0",
     "@preacherman/avatar-renderer": "file:../../packages/preacherman-avatar-renderer",
     "@preacherman/surface-skin": "file:../../packages/preacherman-surface-skin",
     "@react-three/drei": "9.115.0",

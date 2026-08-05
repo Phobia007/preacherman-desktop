@@ -14,6 +14,8 @@ export const STARTUP_INTRO_TOTAL_MS =
   + STARTUP_INTRO_TIMING.logoVisibleMs
   + STARTUP_INTRO_TIMING.logoFadeOutMs;
 
+export const STARTUP_INTRO_FAILSAFE_MS = STARTUP_INTRO_TOTAL_MS + 1000;
+
 let startupIntroClaimed = false;
 
 export function claimStartupIntro(): boolean {

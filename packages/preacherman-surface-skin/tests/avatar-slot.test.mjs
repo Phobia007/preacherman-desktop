@@ -108,7 +108,7 @@ test("AvatarSlot remains runtime adapter configuration rather than serialized co
   assert.match(options, /avatarSlot\?:\s*AvatarSlot/);
 });
 
-test("current empty Workspace mounts the injected AvatarSlot only in its centered viewport", async () => {
+test("current Workspace replaces its injected AvatarSlot with the isolated Home visual", async () => {
   function TestAvatarSlot(props) {
     return createElement("div", {
       className: props.className,
@@ -119,8 +119,12 @@ test("current empty Workspace mounts the injected AvatarSlot only in its centere
   const withAvatar = await renderWorkspace(TestAvatarSlot);
   const withoutAvatar = await renderWorkspace(undefined);
 
-  assert.match(withAvatar, /pm-workspace__avatar-stage/);
-  assert.match(withAvatar, /data-test-avatar-slot/);
-  assert.doesNotMatch(withoutAvatar, /pm-workspace__avatar-stage/);
+  for (const markup of [withAvatar, withoutAvatar]) {
+    assert.match(markup, /home-visual-scene/);
+    assert.equal((markup.match(/binary-rain__canvas/g) ?? []).length, 6);
+    assert.doesNotMatch(markup, /home-(?:figure|orb|orbits)/);
+    assert.doesNotMatch(markup, /pm-workspace__avatar-stage/);
+    assert.doesNotMatch(markup, /data-test-avatar-slot/);
+  }
   assert.doesNotMatch(withoutAvatar, /data-test-avatar-slot/);
 });

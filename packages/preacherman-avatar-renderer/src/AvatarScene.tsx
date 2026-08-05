@@ -2,9 +2,18 @@ import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
 import { AvatarError, type AvatarPerformanceSnapshot } from "./types";
 import { AvatarModel } from "./AvatarModel";
+import { HologramLights } from "./HologramLights";
+import type {
+  AvatarAnimationDebugSnapshot,
+  AvatarAnimationError,
+} from "./avatar/types/avatarAnimation";
 
 interface AvatarSceneProps {
   readonly assetBaseUrl: string;
+  readonly onAnimationDebug?: (
+    snapshot: AvatarAnimationDebugSnapshot,
+  ) => void;
+  readonly onAnimationError: (error: AvatarAnimationError) => void;
   readonly onContextLost: (error: AvatarError) => void;
   readonly onFirstFrame: (snapshot: AvatarPerformanceSnapshot) => void;
 }
@@ -51,17 +60,20 @@ function ContextLossListener({
 
 export function AvatarScene({
   assetBaseUrl,
+  onAnimationDebug,
+  onAnimationError,
   onContextLost,
   onFirstFrame,
 }: AvatarSceneProps) {
   return (
     <>
-      <ambientLight intensity={0} />
-      <directionalLight name="Key" position={[-4, 0.55, 1.2]} intensity={3.2} />
-      <directionalLight name="Fill" position={[3, 0.5, 2.5]} intensity={0.02} />
-      <directionalLight name="Rim" position={[1, 2, -4]} intensity={0.03} />
-      <directionalLight name="Under" position={[0, -3, 0]} intensity={0.05} />
-      <AvatarModel assetBaseUrl={assetBaseUrl} onFirstFrame={onFirstFrame} />
+      <HologramLights />
+      <AvatarModel
+        assetBaseUrl={assetBaseUrl}
+        onAnimationDebug={onAnimationDebug}
+        onAnimationError={onAnimationError}
+        onFirstFrame={onFirstFrame}
+      />
       <FixedCamera />
       <ContextLossListener onContextLost={onContextLost} />
     </>

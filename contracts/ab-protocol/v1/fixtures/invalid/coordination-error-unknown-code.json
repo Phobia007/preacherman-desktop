@@ -1,0 +1,8 @@
+{
+  "protocol_version": 1,
+  "task_id": "task:invalid-001",
+  "code": "PROVIDER_MADE_THIS_UP",
+  "category": "execution",
+  "message": "Unstable provider-specific error code",
+  "retryable": false
+}

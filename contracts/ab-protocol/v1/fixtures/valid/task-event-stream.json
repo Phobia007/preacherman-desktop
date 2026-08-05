@@ -1,0 +1,113 @@
+[
+  {
+    "protocol_version": 1,
+    "event_id": "event:contract-demo-001",
+    "task_id": "task:contract-demo-001",
+    "sequence": 1,
+    "type": "accepted",
+    "occurred_at": "2026-08-02T09:00:01.000Z",
+    "emitted_by": {
+      "role": "orchestrator",
+      "actor_id": "orchestrator:local-demo"
+    },
+    "payload": {
+      "message": "Task accepted"
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:contract-demo-002",
+    "task_id": "task:contract-demo-001",
+    "sequence": 2,
+    "type": "started",
+    "occurred_at": "2026-08-02T09:00:02.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "message": "Drafting contract"
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:contract-demo-003",
+    "task_id": "task:contract-demo-001",
+    "sequence": 3,
+    "type": "progress",
+    "occurred_at": "2026-08-02T09:00:03.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "message": "Contract draft created",
+      "progress": 0.5
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:contract-demo-004",
+    "task_id": "task:contract-demo-001",
+    "sequence": 4,
+    "type": "approval_required",
+    "occurred_at": "2026-08-02T09:00:04.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "approval_id": "approval:send-001",
+      "action": "communication.send",
+      "summary": "Send the approved contract to the external recipient",
+      "risk_level": "medium"
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:contract-demo-005",
+    "task_id": "task:contract-demo-001",
+    "sequence": 5,
+    "type": "resumed",
+    "occurred_at": "2026-08-02T09:01:00.000Z",
+    "emitted_by": {
+      "role": "orchestrator",
+      "actor_id": "orchestrator:local-demo"
+    },
+    "payload": {
+      "reason": "User approval received"
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:contract-demo-006",
+    "task_id": "task:contract-demo-001",
+    "sequence": 6,
+    "type": "progress",
+    "occurred_at": "2026-08-02T09:01:01.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "message": "Approved action completed",
+      "progress": 1
+    }
+  },
+  {
+    "protocol_version": 1,
+    "event_id": "event:contract-demo-007",
+    "task_id": "task:contract-demo-001",
+    "sequence": 7,
+    "type": "completed",
+    "occurred_at": "2026-08-02T09:01:02.000Z",
+    "emitted_by": {
+      "role": "executor_agent",
+      "actor_id": "agent:b-default"
+    },
+    "payload": {
+      "result_id": "result:contract-demo-001",
+      "summary": "Contract draft created and approved action completed"
+    }
+  }
+]

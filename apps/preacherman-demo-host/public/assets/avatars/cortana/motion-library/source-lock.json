@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "library": "Cortana Motion Library",
+  "motion_count": 412,
+  "pack_count": 9,
+  "source_master": {
+    "path": "model/Cortana_Master.blend",
+    "size_bytes": 403241135,
+    "sha256": "1a679c3fbef199c6adf2493e8ce329043052084b2c20ddcfbfa4e07ad2b259e3"
+  },
+  "files": [
+    {
+      "role": "motion_manifest",
+      "path": "motions.json",
+      "sha256": "69637f5b06f3825203fc21516a727d03d0897eef406d22721cc8f33cbd6c2ce8",
+      "size_bytes": 322348
+    },
+    {
+      "role": "pack_index",
+      "path": "index.json",
+      "sha256": "c3804de92ff061fd97dc89505350889b78ed337e2618d2610f115b218faf2925",
+      "size_bytes": 21474
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "core",
+      "path": "packs/core.glb",
+      "sha256": "50d54e2dec62018019916fc8ed1a6102e12afc639ea89e14e16147d35fafab19",
+      "size_bytes": 10583072
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "rokoko_legacy_01",
+      "path": "packs/rokoko_legacy_01.glb",
+      "sha256": "9931a789792a4132a15589581f44abcc51ef870ab1ffc94119dc1afe6ddda6bb",
+      "size_bytes": 45540616
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "rokoko_legacy_02",
+      "path": "packs/rokoko_legacy_02.glb",
+      "sha256": "0a67336222289ec92bbe2f4806beab668c4cffa8a1ed3ac64c37690f78ae96ff",
+      "size_bytes": 46712940
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "rokoko_legacy_03",
+      "path": "packs/rokoko_legacy_03.glb",
+      "sha256": "6affc2eb1a3c334a48469f37ad63e144a736ddf018aee1ef5bef601543b5c5de",
+      "size_bytes": 50646464
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "rokoko_legacy_04",
+      "path": "packs/rokoko_legacy_04.glb",
+      "sha256": "2bafa12e674caea6826636f792f9552c87826ed74686d778f19ce61db552f80e",
+      "size_bytes": 49180364
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "rokoko_legacy_05",
+      "path": "packs/rokoko_legacy_05.glb",
+      "sha256": "c4800f9732632d86232bc76c1c7e5c0f56e87960b4150bd4c8377939a468a305",
+      "size_bytes": 13298836
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "rokoko_modern_01",
+      "path": "packs/rokoko_modern_01.glb",
+      "sha256": "f238777660a2ddb7d881e9fbb0c33f8f66dd65e02be722cecf083875286b9b8d",
+      "size_bytes": 65261456
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "rokoko_modern_02",
+      "path": "packs/rokoko_modern_02.glb",
+      "sha256": "c0ff4604eccb5980afb0e896a55e3b4decf547e797635bfff3a0cc4263209d50",
+      "size_bytes": 66666776
+    },
+    {
+      "role": "animation_pack",
+      "pack_id": "rokoko_modern_03",
+      "path": "packs/rokoko_modern_03.glb",
+      "sha256": "71adb1baeaabdd9df0d441a04da330486fed6aeb9e5bef27f491f5eb2d3e99e3",
+      "size_bytes": 21343024
+    }
+  ]
+}

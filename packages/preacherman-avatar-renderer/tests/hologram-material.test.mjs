@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import test from "node:test";
@@ -12,9 +13,15 @@ import {
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 test("ported hologram profiles retain Viewer V0 material identities and numeric constants", async () => {
-  const { hologramProfileFor } = await import(
+  const { HOLOGRAM_REFERENCE_GRADE, hologramProfileFor } = await import(
     pathToFileURL(join(packageRoot, "dist", "index.js"))
   );
+
+  assert.deepEqual(HOLOGRAM_REFERENCE_GRADE, {
+    contrastExponent: 1,
+    outputGain: 1,
+    saturation: 1,
+  });
 
   assert.deepEqual(
     {
@@ -48,12 +55,24 @@ test("ported hologram profiles retain Viewer V0 material identities and numeric 
       ],
     },
   );
-  assert.equal(hologramProfileFor("rt_face").neckBlendStart, 1.46);
-  assert.equal(hologramProfileFor("rt_face").neckBlendEnd, 1.54);
+  const bodyProfile = hologramProfileFor("rt_body");
+  const faceProfile = hologramProfileFor("rt_face");
+  assert.deepEqual(
+    {
+      ...faceProfile,
+      sourceMaterial: bodyProfile.sourceMaterial,
+      family: bodyProfile.family,
+    },
+    bodyProfile,
+  );
   assert.equal(hologramProfileFor("rt_hair").surfaceMode, "dithered");
+  assert.deepEqual(
+    hologramProfileFor("rt_eyes").controlChannels,
+    ["red", "blue"],
+  );
 });
 test("hologram material clones the source and preserves Viewer V0 surface modes", async () => {
-  const { createHologramMaterial } = await import(
+  const { createHologramMaterial, hologramProfileFor } = await import(
     pathToFileURL(join(packageRoot, "dist", "index.js"))
   );
   const sourceBody = new MeshStandardMaterial({ name: "rt_body", roughness: 0.42 });
@@ -70,15 +89,216 @@ test("hologram material clones the source and preserves Viewer V0 surface modes"
     undefined,
     new Texture(),
   );
+  const eyes = createHologramMaterial(
+    new MeshStandardMaterial({ name: "rt_eyes" }),
+    new Texture(),
+    new Texture(),
+    new Texture(),
+  );
+  const eyelashes = createHologramMaterial(
+    new MeshStandardMaterial({ name: "rt_eyelashes" }),
+    new Texture(),
+    undefined,
+    new Texture(),
+  );
 
   assert.notEqual(body, sourceBody);
   assert.equal(sourceBody.roughness, 0.42);
   assert.equal(body.transparent, true);
   assert.equal(body.depthWrite, true);
-  assert.equal(body.toneMapped, false);
+  assert.equal(body.toneMapped, true);
   assert.equal(hair.alphaToCoverage, true);
   assert.equal(hair.alphaTest, 0.05);
   assert.equal(hair.transparent, false);
   assert.equal(hair.side, DoubleSide);
   assert.equal(face.side, FrontSide);
+  assert.equal(eyes.side, FrontSide);
+  assert.equal(eyelashes.side, FrontSide);
+  assert.equal(eyelashes.depthWrite, false);
+  assert.equal(eyes.depthWrite, true);
+  assert.deepEqual(face.color.toArray(), [1, 1, 1]);
+  assert.equal(hair.toneMapped, true);
+  assert.equal(face.toneMapped, true);
+  assert.equal(hologramProfileFor("rt_eyes").lightingFloor, 0.16);
+});
+
+test("interactive lighting reproduces the four source Blender area lights at runtime scale", async () => {
+  const { HOLOGRAM_LIGHTS } = await import(
+    pathToFileURL(join(packageRoot, "dist", "index.js"))
+  );
+
+  assert.deepEqual(HOLOGRAM_LIGHTS, {
+    ambient: 0,
+    areaRight: {
+      position: [-0.606, 1.385, 0.523],
+      target: [0.119, 1.397, -0.166],
+      intensity: 9.2,
+      width: 0.375,
+      height: 0.375,
+    },
+    areaBackLeft: {
+      position: [0.332, 1.461, -0.419],
+      target: [-0.488, 1.443, 0.153],
+      intensity: 4.92,
+      width: 0.385,
+      height: 0.385,
+    },
+    areaFront: {
+      position: [-0.072, 1.388, 0.651],
+      target: [-0.061, 1.414, -0.349],
+      intensity: 2.98,
+      width: 0.385,
+      height: 0.385,
+    },
+    areaUnder: {
+      position: [0.008, -0.18, -0.023],
+      target: [0.008, 0.82, -0.005],
+      intensity: 0.84,
+      width: 2.931,
+      height: 2.931,
+    },
+  });
+});
+
+test("source light reconstruction uses oriented rectangular area lights", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "HologramLights.tsx"),
+    "utf8",
+  );
+
+  assert.match(source, /RectAreaLightUniformsLib\.init\(\)/);
+  assert.match(source, /<rectAreaLight/);
+  assert.match(source, /light\.current\?\.lookAt\(/);
+  assert.doesNotMatch(source, /<pointLight|<directionalLight/);
+});
+
+test("both avatar canvases apply the source Standard-view renderer configuration", async () => {
+  const [lights, staticViewport, interactiveViewport] = await Promise.all([
+    readFile(join(packageRoot, "src", "HologramLights.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "AvatarViewport.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "InteractiveAvatarViewport.tsx"), "utf8"),
+  ]);
+
+  assert.match(lights, /renderer\.toneMapping = NoToneMapping/);
+  assert.match(lights, /renderer\.toneMappingExposure = HOLOGRAM_TONE_MAPPING_EXPOSURE/);
+  assert.match(staticViewport, /configureHologramRenderer\(gl\)/);
+  assert.match(interactiveViewport, /configureHologramRenderer\(gl\)/);
+});
+
+test("body and face control textures follow their source sRGB properties", async () => {
+  const model = await readFile(
+    join(packageRoot, "src", "AvatarModel.tsx"),
+    "utf8",
+  );
+
+  assert.match(
+    model,
+    /bodyControlMap\.colorSpace = SRGBColorSpace/,
+  );
+  assert.match(
+    model,
+    /faceControlMap\.colorSpace = SRGBColorSpace/,
+  );
+  assert.match(
+    model,
+    /hairControlMap,[\s\S]*?eyeControlMap,[\s\S]*?controlMap\.colorSpace = NoColorSpace/,
+  );
+});
+
+test("eye shader reads the authored iris and pupil channels", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "hologramMaterial.ts"),
+    "utf8",
+  );
+
+  assert.match(source, /float irisDisk = smoothstep\([\s\S]*?holoControl\.b/);
+  assert.match(source, /float pupilDepth = irisDisk[\s\S]*?controlRed/);
+  assert.match(source, /mix\(eyeBase \+ eyeOuterEmission, eyeEmission, irisDisk\)/);
+});
+
+test("body shader preserves the source diffuse and control-map material chain", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "hologramMaterial.ts"),
+    "utf8",
+  );
+
+  assert.match(
+    source,
+    /vec3 composite = holoBase \+ vec3\(holoControl\.a \* uHoloControlAlphaAdd\)/,
+  );
+  assert.match(
+    source,
+    /mix\(ramped, ramped \* uHoloControlGreenTint, clamp\(holoControl\.g/,
+  );
+  assert.match(
+    source,
+    /\(1\.0 - sourceTransparency\) \* \(1\.0 - holoScan\)/,
+  );
+  assert.match(source, /holoColor \*= holoOpacity;/);
+  assert.match(source, /holoOpacity = 1\.0;/);
+  assert.doesNotMatch(source, /bodyZone|bodyVerticalEnergy|sourceEnergy/);
+});
+
+test("face uses the body color pipeline with skin-energy gain and no global tint", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "hologramMaterial.ts"),
+    "utf8",
+  );
+
+  assert.match(source, /if \(uHoloFamily == 0 \|\| uHoloFamily == 1\)/);
+  assert.match(source, /uHoloIsFace = \{ value: source\.name === "rt_face" \? 1 : 0 \}/);
+  assert.match(source, /if \(uHoloIsFace > 0\.5\) \{\s*holoColor \*= 1\.55/);
+  assert.doesNotMatch(
+    source,
+    /profile\.family === "face"[\s\S]*?material\.color\.setRGB/,
+  );
+  assert.doesNotMatch(source, /FACE_RAMP|faceEnergy|neckBodyColor|faceBodyTint/);
+});
+
+test("interactive lighting stays in world space while only the avatar rotates", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "InteractiveAvatarScene.tsx"),
+    "utf8",
+  );
+  const controlsStart = source.indexOf("<PresentationControls");
+  const controlsEnd = source.indexOf("</PresentationControls>", controlsStart);
+  const controlledContent = source.slice(controlsStart, controlsEnd);
+
+  assert.ok(source.indexOf("<HologramLights />") < controlsStart);
+  assert.doesNotMatch(controlledContent, /HologramLights/);
+  assert.match(controlledContent, /<AvatarModel\b/);
+});
+
+test("interactive viewport keeps the model at a fixed size while drag rotation remains enabled", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "InteractiveAvatarScene.tsx"),
+    "utf8",
+  );
+
+  assert.match(source, /camera\.position\.set\(0, 0\.86, 3\.35\)/);
+  assert.match(source, /<OrbitControls[\s\S]*?enableZoom=\{false\}/);
+  assert.match(source, /<PresentationControls[\s\S]*?\bglobal\b/);
+});
+
+test("runtime animation replaces component-local standby bone posing", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "AvatarModel.tsx"),
+    "utf8",
+  );
+
+  assert.match(source, /new CortanaAnimationController\(adapter\)/);
+  assert.match(source, /controller\.setState\("idle"\)/);
+  assert.match(source, /useFrame\(\(_, deltaSeconds\) => \{[\s\S]*adapter\.update\(deltaSeconds\)/);
+  assert.doesNotMatch(source, /aimBoneAt|pose\.bones|new Vector3/);
+});
+
+test("runtime animation disposal survives the StrictMode effect replay", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "AvatarModel.tsx"),
+    "utf8",
+  );
+
+  assert.match(source, /disposeTimer = useRef/);
+  assert.match(source, /clearTimeout\(disposeTimer\.current\)/);
+  assert.match(source, /setTimeout\(\(\) => controller\.dispose\(\), 0\)/);
 });

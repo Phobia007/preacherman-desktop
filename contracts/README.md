@@ -24,6 +24,7 @@ npm run contracts:bundle
 npm run contracts:registry
 npm run contracts:http-examples
 npm run contracts:event-check
+npm run contracts:ab
 npm run contracts:provider
 npm run contracts:compatibility
 npm run contracts:secrets
@@ -73,6 +74,18 @@ npm run contracts:event-check
 The gate verifies the common envelope, every event variant, all valid fixtures,
 one rejected fixture per family, progress bounds, event type coverage, and the
 single-terminal-event stream rule.
+
+## A/B Coordination Protocol
+
+`ab-protocol/v1` is the provider-neutral contract between the conversational A
+agent, the deterministic orchestrator, and the execution B agent. It references
+PRSP for persona, skill, mode, and provider requirements without embedding PRSP
+or provider SDK payloads. Validate its closed schemas, state-machine semantics,
+positive and negative fixtures, and manifest hashes with:
+
+```bash
+npm run contracts:ab
+```
 
 ## Local Mocking
 

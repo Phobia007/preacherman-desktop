@@ -109,12 +109,15 @@ test("intro splash owns the 5.6 second handoff without persistent storage", asyn
   assert.match(intro, /logoVisibleMs:\s*1000/);
   assert.match(intro, /logoFadeOutMs:\s*600/);
   assert.match(intro, /mainFadeInMs:\s*700/);
+  assert.match(intro, /STARTUP_INTRO_FAILSAFE_MS\s*=\s*STARTUP_INTRO_TOTAL_MS\s*\+\s*1000/);
   assert.match(intro, /claimStartupIntro/);
   assert.doesNotMatch(intro + app + splash, /localStorage|sessionStorage/);
   assert.doesNotMatch(main, /StrictMode/);
   assert.match(splash, /STARTUP_INTRO_TIMING\.whiteHoldMs/);
   assert.match(splash, /STARTUP_INTRO_TIMING\.logoVisibleMs/);
   assert.match(splash, /STARTUP_INTRO_TIMING\.logoFadeOutMs/);
+  assert.match(splash, /window\.setTimeout\(\s*onComplete,\s*STARTUP_INTRO_FAILSAFE_MS/);
+  assert.match(splash, /window\.clearTimeout\(failsafeTimer\)/);
   assert.match(app, /<IntroSplash[\s\S]*onComplete=\{handleIntroComplete\}/);
   assert.doesNotMatch(app, /STARTUP_INTRO_TOTAL_MS|setTimeout\([\s\S]*setShowStartupIntro/);
 });

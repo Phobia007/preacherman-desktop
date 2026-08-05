@@ -7,7 +7,13 @@ import {
   useState,
 } from "react";
 import { AvatarErrorBoundary } from "./AvatarErrorBoundary";
+import { AvatarAnimationDebugPanel } from "./AvatarAnimationDebugPanel";
 import { AvatarScene } from "./AvatarScene";
+import { configureHologramRenderer } from "./HologramLights";
+import type {
+  AvatarAnimationDebugSnapshot,
+  AvatarAnimationError,
+} from "./avatar/types/avatarAnimation";
 import {
   AvatarError,
   normalizeAvatarError,
@@ -26,6 +32,7 @@ function supportsWebGL(): boolean {
 export function AvatarViewport({
   assetBaseUrl,
   className,
+  debug = false,
   onReady,
   onError,
   onContextLost,
@@ -34,6 +41,8 @@ export function AvatarViewport({
   reducedMotion = false,
 }: AvatarViewportProps) {
   const [loadState, setLoadState] = useState<AvatarLoadState>("loading");
+  const [animationDebug, setAnimationDebug] =
+    useState<AvatarAnimationDebugSnapshot | null>(null);
   const dpr = useMemo<[number, number]>(() => {
     const deviceDpr = typeof window === "undefined" ? 1 : window.devicePixelRatio;
     const cap = quality === "low" ? 1 : quality === "balanced" ? 1.5 : 2;
@@ -51,6 +60,12 @@ export function AvatarViewport({
     onContextLost?.(contextError);
     onError?.(contextError);
   }, [onContextLost, onError]);
+
+  const reportAnimationError = useCallback((error: AvatarAnimationError) => {
+    reportError(
+      new AvatarError("ASSET_LOAD_FAILED", error.message, error),
+    );
+  }, [reportError]);
 
   const reportFirstFrame = useCallback((snapshot: AvatarPerformanceSnapshot) => {
     setLoadState("ready");
@@ -77,7 +92,7 @@ export function AvatarViewport({
         <Canvas
           camera={{ fov: 30, near: 0.01, far: 100, position: [0, 0.85, 3.4] }}
           dpr={dpr}
-          frameloop="demand"
+          frameloop="always"
           gl={{
             alpha: true,
             antialias: true,
@@ -85,6 +100,7 @@ export function AvatarViewport({
           }}
           onCreated={({ gl }) => {
             gl.info.autoReset = true;
+            configureHologramRenderer(gl);
             gl.setClearColor(0x000000, 0);
           }}
           shadows={false}
@@ -92,12 +108,17 @@ export function AvatarViewport({
           <Suspense fallback={null}>
             <AvatarScene
               assetBaseUrl={assetBaseUrl}
+              onAnimationDebug={debug ? setAnimationDebug : undefined}
+              onAnimationError={reportAnimationError}
               onContextLost={reportContextLost}
               onFirstFrame={reportFirstFrame}
             />
           </Suspense>
         </Canvas>
       </AvatarErrorBoundary>
+      {debug ? (
+        <AvatarAnimationDebugPanel snapshot={animationDebug} />
+      ) : null}
     </div>
   );
 }
