@@ -9,7 +9,9 @@ export interface DemoPreferences {
 }
 
 export const DEFAULT_PREFERENCES: DemoPreferences = {
-  activeModelId: null,
+  // A fresh installation starts with the companion present. A stored `null`
+  // remains meaningful: it represents an explicit user deactivation.
+  activeModelId: "cortana",
   appearance: "light",
   locale: "en",
 };

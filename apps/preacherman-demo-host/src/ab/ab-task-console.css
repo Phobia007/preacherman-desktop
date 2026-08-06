@@ -37,13 +37,23 @@
 }
 
 .ab-task-console__eyebrow,
-.ab-task-console__approval > span,
-.ab-task-console__result > span {
+.ab-task-console__approval > span {
   color: var(--demo-theme-muted);
   font-size: 9px;
   font-weight: 650;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.ab-task-console__diagnostic {
+  color: var(--demo-theme-muted);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.ab-task-console__diagnostic[data-source="fallback"] {
+  color: var(--demo-theme-error);
 }
 
 .ab-task-console h2 {

@@ -95,12 +95,17 @@ test("Tauri APIs are confined to the Tauri client boundary", async () => {
   }
 });
 
-test("network access is confined to the Realtime client and never contains credentials", async () => {
+test("network access stays on approved local Agent and voice boundaries and never contains credentials", async () => {
   assert.equal(await exists(sourceRoot), true, "host source directory must exist");
   for (const file of await sourceFiles(sourceRoot)) {
     const source = await readFile(file, "utf8");
     if (/\b(?:fetch|axios|EventSource|WebSocket)\b/i.test(source)) {
-      assert.equal(file, join(sourceRoot, "realtime", "RealtimeVoiceClient.ts"));
+      assert.ok([
+        join(sourceRoot, "ab", "ABTaskConsole.tsx"),
+        join(sourceRoot, "conversationLedger.ts"),
+        join(sourceRoot, "settings", "SettingsScreen.tsx"),
+        join(sourceRoot, "realtime", "VoiceSessionControl.tsx"),
+      ].includes(file), file);
     }
     assert.doesNotMatch(source, /OPENAI_API_KEY|CODEX_API_KEY/, file);
   }
@@ -207,7 +212,7 @@ test("Tauri window configuration matches the 1800 by 1000 borderless baseline", 
   assert.equal(window.backgroundColor, "#FFFFFF");
 });
 
-test("Tauri capability grants only the required core window actions", async () => {
+test("Tauri capability grants window actions and the packaged Windows service sidecar", async () => {
   const capabilityPath = join(tauriRoot, "capabilities", "main.json");
   assert.equal(await exists(capabilityPath), true, "main capability must exist");
   const capability = JSON.parse(await readFile(capabilityPath, "utf8"));
@@ -218,7 +223,8 @@ test("Tauri capability grants only the required core window actions", async () =
     "core:window:allow-minimize",
     "core:window:allow-toggle-maximize",
     "core:window:allow-start-dragging",
-    "core:window:allow-start-resize-dragging"
+    "core:window:allow-start-resize-dragging",
+    "shell:allow-spawn"
   ]);
 });
 
@@ -251,10 +257,11 @@ test("Tauri Windows resources use a valid localized icon", async () => {
   assert.equal(bytes.readUInt16LE(4) > 0, true, "ICO must contain an image");
 });
 
-test("Rust host remains a minimal Tauri shell without backend commands", async () => {
+test("Rust host remains a minimal Tauri shell with no application commands", async () => {
   const rustPath = join(tauriRoot, "src", "main.rs");
   assert.equal(await exists(rustPath), true, "Rust main must exist");
   const source = await readFile(rustPath, "utf8");
   assert.match(source, /tauri::Builder::default\(\)/);
-  assert.doesNotMatch(source, /#\[tauri::command\]|invoke_handler|plugin\(/);
+  assert.doesNotMatch(source, /#\[tauri::command\]|invoke_handler/);
+  assert.match(source, /sidecar\("preacherman-service"\)/);
 });

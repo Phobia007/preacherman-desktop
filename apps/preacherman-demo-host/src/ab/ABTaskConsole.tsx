@@ -1,181 +1,205 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { Locale } from "../preferences";
-import { ABOrchestrator } from "./ABOrchestrator";
-import { MockActionAdapter, MockExecutorAgentAdapter, MockFrontAgentAdapter } from "./MockAdapters";
-import type { ABTaskSnapshot } from "./contracts";
+import { localServiceUrl } from "../serviceConfig";
+import { beginNewConversation, saveConversation, type LedgerMessage } from "../conversationLedger";
 import "./ab-task-console.css";
 
-const initialSnapshot: ABTaskSnapshot = {
-  state: "idle",
-  task: null,
-  events: [],
-  result: null,
-  conversational_result: "",
-  pending_approval: null,
-  last_command: null,
-  error: null,
-};
+interface TaskProposal {
+  readonly proposalId: string;
+  readonly executor: string;
+  readonly inputs: readonly string[];
+  readonly outputs: readonly string[];
+  objective: string;
+}
+
+interface TaskRun {
+  readonly runId: string;
+  readonly objective: string;
+  readonly status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
+  readonly events: readonly { readonly stage: string; readonly message: string }[];
+  readonly artifact: { readonly name: string; readonly path: string } | null;
+  readonly error: string | null;
+}
+
+interface Message extends LedgerMessage {}
+
+interface TurnDiagnostics {
+  readonly source: "deepseek" | "deepseek-unstructured" | "fallback";
+  readonly model: string | null;
+  readonly reason: string | null;
+}
 
 const copy = {
   en: {
-    eyebrow: "AB Protocol · Mock",
-    title: "Agent coordination",
-    description: "Test the contract, approval, and result path without a model API.",
-    placeholder: "Describe a task for A Agent to hand to B Agent…",
-    start: "Run mock task",
-    cancel: "Cancel",
-    approve: "Approve",
-    reject: "Reject",
-    approval: "Approval required",
-    result: "A Agent response",
-    noExternal: "Mock only · no external action",
-    states: {
-      idle: "Ready",
-      accepted: "Accepted",
-      running: "B Agent running",
-      waiting_for_approval: "Waiting for approval",
-      completed: "Completed",
-      failed: "Failed",
-      cancelled: "Cancelled",
-    },
+    eyebrow: "Preacherman · Agent coordination",
+    title: "Talk to your companion",
+    placeholder: "Ask a question or describe a PitchKit you want to create…",
+    send: "Send",
+    confirm: "Confirm and run",
+    running: "Your PitchKit is being prepared",
+    artifact: "Artifact ready",
+    cancel: "Cancel task",
+    retry: "Retry",
+    newConversation: "New conversation",
+    deepseekReply: "DeepSeek reply",
+    deepseekPlainReply: "DeepSeek reply (plain text)",
+    fallbackReply: "Local fallback — DeepSeek did not return a usable reply",
+    taskStarted: "I’m preparing your PitchKit now. You can keep talking to me while it runs—tell me what you want to emphasize, simplify, or add.",
   },
   "zh-CN": {
-    eyebrow: "AB 协议 · 模拟",
-    title: "Agent 协作验证",
-    description: "无需模型 API，先验证合同、审批与结果回传链路。",
-    placeholder: "输入一个任务，让 A Agent 整理后交给 B Agent…",
-    start: "运行模拟任务",
-    cancel: "取消",
-    approve: "批准",
-    reject: "拒绝",
-    approval: "需要你的批准",
-    result: "A Agent 回复",
-    noExternal: "仅模拟 · 不产生外部操作",
-    states: {
-      idle: "就绪",
-      accepted: "已接收",
-      running: "B Agent 执行中",
-      waiting_for_approval: "等待批准",
-      completed: "已完成",
-      failed: "失败",
-      cancelled: "已取消",
-    },
+    eyebrow: "Preacherman · Agent 协作",
+    title: "和你的数字伙伴对话",
+    placeholder: "说说你的想法，或描述要生成的 PitchKit…",
+    send: "发送",
+    confirm: "确认并执行",
+    running: "正在生成 PitchKit",
+    artifact: "产物已完成",
+    cancel: "取消任务",
+    retry: "重试",
+    newConversation: "新对话",
+    deepseekReply: "DeepSeek 已回复",
+    deepseekPlainReply: "DeepSeek 已回复（非结构化）",
+    fallbackReply: "本地兜底回复：DeepSeek 未返回可用结果",
+    taskStarted: "好的，我正在生成 PitchKit。执行期间你仍然可以继续告诉我：想重点强调什么、删减什么，或补充哪些信息。",
   },
 } as const;
 
-function latestProgress(snapshot: ABTaskSnapshot): number {
-  for (let index = snapshot.events.length - 1; index >= 0; index -= 1) {
-    const event = snapshot.events[index];
-    if (event.type === "progress" && typeof event.payload.progress === "number") {
-      return event.payload.progress;
-    }
-  }
-  return snapshot.state === "completed" ? 1 : 0;
+function completionSummary(locale: Locale, objective: string): string {
+  const conciseObjective = objective.trim().slice(0, 72) || (locale === "zh-CN" ? "你的目标" : "your objective");
+  return locale === "zh-CN"
+    ? `PitchKit 已完成。我已经围绕“${conciseObjective}”整理出一份 10 页路演框架，包含受众、价值主张、演示大纲和下一步建议。你可以查看产物，或继续让我帮你优化其中一页。`
+    : `Your PitchKit is ready. I created a 10-slide framework for “${conciseObjective}” with audience, value proposition, presentation outline, and next steps. You can review it or ask me to refine any slide.`;
 }
 
-function latestMessage(snapshot: ABTaskSnapshot): string {
-  for (let index = snapshot.events.length - 1; index >= 0; index -= 1) {
-    const message = snapshot.events[index].payload.message;
-    if (typeof message === "string") return message;
-  }
-  return "";
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(localServiceUrl(path), {
+    headers: { "Content-Type": "application/json" },
+    ...init,
+  });
+  const payload = await response.json() as T & { error?: string };
+  if (!response.ok) throw new Error(payload.error || "The local service is unavailable.");
+  return payload;
 }
 
 export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
   const labels = copy[locale];
-  const orchestrator = useMemo(() => new ABOrchestrator({
-    frontAgent: new MockFrontAgentAdapter(),
-    executorAgent: new MockExecutorAgentAdapter(new MockActionAdapter()),
-    locale,
-  }), [locale]);
-  const [snapshot, setSnapshot] = useState(initialSnapshot);
+  const sessionKey = useMemo(() => `preacherman.conversation.${locale}`, [locale]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    try { return JSON.parse(localStorage.getItem(sessionKey) || "[]") as Message[]; } catch { return []; }
+  });
   const [input, setInput] = useState("");
+  const [proposal, setProposal] = useState<TaskProposal | null>(null);
+  const [run, setRun] = useState<TaskRun | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [diagnostics, setDiagnostics] = useState<TurnDiagnostics | null>(null);
+  const [busy, setBusy] = useState(false);
+  const announcedRunIds = useRef(new Set<string>());
 
-  useEffect(() => orchestrator.subscribe(setSnapshot), [orchestrator]);
+  useEffect(() => {
+    if (messages.length) localStorage.setItem(sessionKey, JSON.stringify(messages.slice(-10)));
+    else localStorage.removeItem(sessionKey);
+    saveConversation(locale, messages);
+  }, [locale, messages, sessionKey]);
+  useEffect(() => {
+    if (!run || !["queued", "running"].includes(run.status)) return undefined;
+    const timer = window.setInterval(() => {
+      void request<{ run: TaskRun }>(`/api/agent/runs/${run.runId}`).then(({ run: next }) => setRun(next)).catch((reason: Error) => setError(reason.message));
+    }, 700);
+    return () => window.clearInterval(timer);
+  }, [run]);
+  useEffect(() => {
+    if (!run || run.status !== "succeeded" || announcedRunIds.current.has(run.runId)) return;
+    announcedRunIds.current.add(run.runId);
+    const summary = completionSummary(locale, run.objective);
+    setMessages((current) => [...current, { role: "assistant", text: summary }]);
+    window.dispatchEvent(new CustomEvent("preacherman:speak", { detail: summary.slice(0, 160) }));
+  }, [locale, run]);
 
-  const active = ["accepted", "running", "waiting_for_approval"].includes(snapshot.state);
-  const progress = latestProgress(snapshot);
-  const message = latestMessage(snapshot);
+  const sendText = useCallback(async (candidate: string) => {
+    const text = candidate.trim();
+    if (!text || busy) return;
+    setBusy(true); setError(null); setInput("");
+    setMessages((current) => [...current, { role: "user", text }]);
+    try {
+      const response = await request<{ displayText: string; proposal: TaskProposal | null; diagnostics: TurnDiagnostics }>("/api/agent/turn", {
+        method: "POST", body: JSON.stringify({ input: text, locale, history: [...messages, { role: "user", text }].slice(-10) }),
+      });
+      setMessages((current) => [...current, { role: "assistant", text: response.displayText }]);
+      setDiagnostics(response.diagnostics);
+      window.dispatchEvent(new CustomEvent("preacherman:speak", { detail: response.displayText.slice(0, 160) }));
+      setProposal(response.proposal);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Unable to reach the companion service.");
+    } finally { setBusy(false); }
+  }, [busy, locale, messages]);
+
+  useEffect(() => {
+    const handleVoiceTranscript = (event: Event) => {
+      const transcript = (event as CustomEvent<string>).detail;
+      void sendText(transcript);
+    };
+    window.addEventListener("preacherman:voice-transcript", handleVoiceTranscript);
+    return () => window.removeEventListener("preacherman:voice-transcript", handleVoiceTranscript);
+  }, [sendText]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    if (!input.trim() || active) return;
-    orchestrator.submit(input);
+    void sendText(input);
   };
 
+  const confirm = async () => {
+    if (!proposal || busy) return;
+    setBusy(true); setError(null);
+    try {
+      const response = await request<{ run: TaskRun }>(`/api/agent/proposals/${proposal.proposalId}/confirm`, {
+        method: "POST", body: JSON.stringify({ objective: proposal.objective }),
+      });
+      setRun(response.run); setProposal(null);
+      setMessages((current) => [...current, { role: "assistant", text: labels.taskStarted }]);
+      window.dispatchEvent(new CustomEvent("preacherman:speak", { detail: labels.taskStarted.slice(0, 160) }));
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Unable to start the task.");
+    } finally { setBusy(false); }
+  };
+
+  const controlRun = async (action: "cancel" | "retry") => {
+    if (!run || busy) return;
+    setBusy(true); setError(null);
+    try {
+      const response = await request<{ run: TaskRun }>(`/api/agent/runs/${run.runId}/${action}`, { method: "POST", body: "{}" });
+      setRun(response.run);
+    } catch (reason) { setError(reason instanceof Error ? reason.message : "Unable to update task."); }
+    finally { setBusy(false); }
+  };
+
+  const startNewConversation = () => {
+    beginNewConversation();
+    localStorage.removeItem(sessionKey);
+    announcedRunIds.current.clear();
+    setMessages([]);
+    setInput("");
+    setProposal(null);
+    setRun(null);
+    setError(null);
+    setDiagnostics(null);
+  };
+
+  const hasActiveTask = run ? ["queued", "running"].includes(run.status) : false;
+
   return (
-    <section className="ab-task-console" data-state={snapshot.state}>
-      <header className="ab-task-console__header">
-        <div>
-          <span className="ab-task-console__eyebrow">{labels.eyebrow}</span>
-          <h2>{labels.title}</h2>
-        </div>
-        <span className="ab-task-console__state">{labels.states[snapshot.state]}</span>
-      </header>
-
-      <p className="ab-task-console__description">{labels.description}</p>
-
+    <section className="ab-task-console" data-state={run?.status || "idle"}>
+      <header className="ab-task-console__header"><div><span className="ab-task-console__eyebrow">{labels.eyebrow}</span><h2>{labels.title}</h2></div><button aria-label={labels.newConversation} className="ab-task-console__button ab-task-console__button--quiet" disabled={busy || hasActiveTask} onClick={startNewConversation} type="button">{labels.newConversation}</button></header>
+      <div aria-live="polite" className="ab-task-console__result">
+        {messages.slice(-4).map((message, index) => <p key={`${message.role}-${index}`}><strong>{message.role === "user" ? (locale === "zh-CN" ? "你" : "You") : "Preacherman"}</strong> {message.text}</p>)}
+        {error ? <p data-error="true">{error}</p> : null}
+        {diagnostics ? <span className="ab-task-console__diagnostic" data-source={diagnostics.source}>{diagnostics.source === "deepseek" ? labels.deepseekReply : diagnostics.source === "deepseek-unstructured" ? labels.deepseekPlainReply : labels.fallbackReply}{diagnostics.model ? ` · ${diagnostics.model}` : null}</span> : null}
+      </div>
       <form className="ab-task-console__form" onSubmit={submit}>
-        <textarea
-          aria-label={labels.placeholder}
-          disabled={active}
-          onChange={(event) => setInput(event.target.value)}
-          placeholder={labels.placeholder}
-          rows={3}
-          value={input}
-        />
-        <div className="ab-task-console__actions">
-          <span>{labels.noExternal}</span>
-          {active ? (
-            <button className="ab-task-console__button ab-task-console__button--quiet" onClick={() => orchestrator.cancel()} type="button">
-              {labels.cancel}
-            </button>
-          ) : (
-            <button className="ab-task-console__button ab-task-console__button--primary" disabled={!input.trim()} type="submit">
-              {labels.start}
-            </button>
-          )}
-        </div>
+        <textarea aria-label={labels.placeholder} disabled={busy} onChange={(event) => setInput(event.target.value)} placeholder={labels.placeholder} rows={3} value={input} />
+        <div className="ab-task-console__actions"><button className="ab-task-console__button ab-task-console__button--primary" disabled={!input.trim() || busy} type="submit">{labels.send}</button></div>
       </form>
-
-      {snapshot.state !== "idle" ? (
-        <div aria-live="polite" className="ab-task-console__activity">
-          <div className="ab-task-console__progress" aria-label={`${Math.round(progress * 100)}%`}>
-            <i style={{ width: `${progress * 100}%` }} />
-          </div>
-          <div className="ab-task-console__handoff" aria-label="A to B coordination path">
-            <span data-active={snapshot.events.some((event) => event.type === "accepted")}>A</span>
-            <i />
-            <span data-active={snapshot.events.some((event) => event.emitted_by.role === "orchestrator")}>O</span>
-            <i />
-            <span data-active={snapshot.events.some((event) => event.emitted_by.role === "executor_agent")}>B</span>
-          </div>
-          {message ? <p>{message}</p> : null}
-        </div>
-      ) : null}
-
-      {snapshot.pending_approval ? (
-        <section className="ab-task-console__approval">
-          <span>{labels.approval}</span>
-          <strong>{snapshot.pending_approval.action}</strong>
-          <p>{snapshot.pending_approval.summary}</p>
-          <div>
-            <button className="ab-task-console__button ab-task-console__button--primary" onClick={() => orchestrator.approve()} type="button">
-              {labels.approve}
-            </button>
-            <button className="ab-task-console__button ab-task-console__button--quiet" onClick={() => orchestrator.reject()} type="button">
-              {labels.reject}
-            </button>
-          </div>
-        </section>
-      ) : null}
-
-      {(snapshot.conversational_result || snapshot.error) ? (
-        <section className="ab-task-console__result" data-error={Boolean(snapshot.error)}>
-          <span>{labels.result}</span>
-          <p>{snapshot.error || snapshot.conversational_result}</p>
-        </section>
-      ) : null}
+      {proposal ? <section className="ab-task-console__approval"><span>{proposal.executor}</span><textarea aria-label="PitchKit objective" onChange={(event) => setProposal({ ...proposal, objective: event.target.value })} value={proposal.objective} /><p>{proposal.inputs.join(" · ")} → {proposal.outputs.join(" · ")}</p><button className="ab-task-console__button ab-task-console__button--primary" disabled={busy || !proposal.objective.trim()} onClick={() => void confirm()} type="button">{labels.confirm}</button></section> : null}
+      {run ? <section className="ab-task-console__activity"><strong>{run.status === "succeeded" ? labels.artifact : labels.running}</strong><p>{run.events.at(-1)?.message || "Queued"}</p>{run.artifact ? <p><code>{run.artifact.path}</code></p> : null}{run.error ? <p data-error="true">{run.error}</p> : null}{["queued", "running"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" disabled={busy} onClick={() => void controlRun("cancel")} type="button">{labels.cancel}</button> : null}{["failed", "cancelled"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" disabled={busy} onClick={() => void controlRun("retry")} type="button">{labels.retry}</button> : null}</section> : null}
     </section>
   );
 }

@@ -49,6 +49,41 @@
   white-space: nowrap;
 }
 
+.preacherman-live__mode {
+  display: inline-flex;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 82%, transparent);
+  box-shadow: var(--demo-theme-activate-shadow);
+  backdrop-filter: blur(18px) saturate(145%);
+}
+
+.preacherman-live__mode button {
+  min-width: 76px;
+  padding: 8px 12px;
+  border: 0;
+  color: var(--demo-theme-muted);
+  background: transparent;
+  font: 650 9px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.preacherman-live__mode button[aria-pressed="true"] {
+  color: var(--demo-theme-activate-fill-text);
+  background: var(--demo-theme-activate-fill);
+}
+
+.preacherman-live__mode button:disabled { cursor: default; opacity: 0.7; }
+
+.preacherman-live__mode button:focus-visible {
+  position: relative;
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: -2px;
+}
+
 .preacherman-live[data-state="error"] .preacherman-live__status strong,
 .preacherman-live__task[data-status="failed"] strong {
   color: var(--demo-theme-error);
@@ -117,6 +152,8 @@
   letter-spacing: 0.11em;
   text-transform: uppercase;
   cursor: pointer;
+  touch-action: none;
+  user-select: none;
   transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 

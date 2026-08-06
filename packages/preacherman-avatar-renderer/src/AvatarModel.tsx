@@ -74,6 +74,7 @@ interface AvatarModelProps {
   readonly onAnimationError: (error: AvatarAnimationError) => void;
   readonly onFirstFrame: (snapshot: AvatarPerformanceSnapshot) => void;
   readonly pose?: AvatarPose;
+  readonly jawOpen?: number;
 }
 
 interface MaterialBindings {
@@ -153,6 +154,7 @@ export function AvatarModel({
   onAnimationDebug,
   onAnimationError,
   onFirstFrame,
+  jawOpen = 0,
 }: AvatarModelProps) {
   const urls = useMemo(() => createAvatarAssetUrls(assetBaseUrl), [assetBaseUrl]);
   const [
@@ -232,6 +234,9 @@ export function AvatarModel({
 
   useFrame((_, deltaSeconds) => {
     adapter.update(deltaSeconds);
+    if (!root || jawOpen <= 0) return;
+    const jaw = root.getObjectByName("b_jaw");
+    if (jaw) jaw.rotation.x += Math.min(1, jawOpen) * 0.22;
   });
 
   useEffect(() => {

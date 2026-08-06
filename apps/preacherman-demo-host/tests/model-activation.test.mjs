@@ -21,7 +21,7 @@ test("Gallery activation persists the selected model and Home reuses the same st
   );
 
   assert.match(preferences, /activeModelId:\s*ModelId \| null/);
-  assert.match(preferences, /activeModelId:\s*null/);
+  assert.match(preferences, /activeModelId:\s*"cortana"/);
   assert.match(preferences, /value === "cortana"/);
   assert.match(app, /const isCortanaActive = preferences\.activeModelId === "cortana"/);
   assert.match(app, /data-model-active=\{isCortanaActive\}/);

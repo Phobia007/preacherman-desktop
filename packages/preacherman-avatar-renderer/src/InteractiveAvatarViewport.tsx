@@ -38,6 +38,7 @@ export function InteractiveAvatarViewport({
   pose = "standby",
   quality = "balanced",
   resetKey = 0,
+  jawOpen = 0,
 }: InteractiveAvatarViewportProps) {
   const [loadState, setLoadState] = useState<AvatarLoadState>("loading");
   const [animationDebug, setAnimationDebug] =
@@ -116,6 +117,7 @@ export function InteractiveAvatarViewport({
               onFirstFrame={reportFirstFrame}
               pose={pose}
               resetKey={resetKey}
+              jawOpen={jawOpen}
             />
           </Suspense>
         </Canvas>
