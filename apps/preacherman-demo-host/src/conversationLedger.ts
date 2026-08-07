@@ -3,6 +3,14 @@ import { localServiceUrl } from "./serviceConfig";
 
 export interface LedgerMessage { readonly role: "user" | "assistant"; readonly text: string; }
 export interface ConversationLedgerEntry { readonly id: string; readonly locale: Locale; readonly updatedAt: string; readonly messages: readonly LedgerMessage[]; }
+export interface TaskLedgerEntry {
+  readonly taskId: string;
+  readonly objective: string;
+  readonly status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
+  readonly updatedAt: string;
+  readonly events: readonly { readonly stage: string; readonly message: string }[];
+  readonly artifact: { readonly name: string; readonly path: string } | null;
+}
 
 const LEDGER_KEY = "preacherman.conversation-ledger.v1";
 const CURRENT_ID_KEY = "preacherman.current-conversation-id";
@@ -50,5 +58,16 @@ export async function loadRecentConversations(): Promise<readonly ConversationLe
     return Array.isArray(payload.entries) ? payload.entries : readEntries();
   } catch {
     return readEntries();
+  }
+}
+
+export async function loadRecentTasks(): Promise<readonly TaskLedgerEntry[]> {
+  try {
+    const response = await fetch(localServiceUrl("/api/tasks?limit=10"));
+    if (!response.ok) return [];
+    const payload = await response.json() as { tasks?: TaskLedgerEntry[] };
+    return Array.isArray(payload.tasks) ? payload.tasks : [];
+  } catch {
+    return [];
   }
 }

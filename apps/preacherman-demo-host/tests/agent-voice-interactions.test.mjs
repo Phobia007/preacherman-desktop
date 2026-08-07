@@ -48,6 +48,23 @@ test("the companion sends conversation history and exposes its reply source", as
   assert.match(source, /fallbackReply/);
 });
 
+test("the demo exposes one guided AIRI path from proposal to Ledger artifact", async () => {
+  const [consoleSource, ledger, ledgerBoundary, app] = await Promise.all([
+    readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "conversation", "ConversationLedgerScreen.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "conversationLedger.ts"), "utf8"),
+    readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
+  ]);
+  assert.match(consoleSource, /tryDemo/);
+  assert.match(consoleSource, /demoPrompt/);
+  assert.match(consoleSource, /preacherman\.ledger-view/);
+  assert.match(consoleSource, /openLocalSurface\("ledger"\)/);
+  assert.match(ledgerBoundary, /\/api\/tasks\?limit=10/);
+  assert.match(ledger, /task\.artifact\?\.path/);
+  assert.match(app, /featureId === "companion\.chat"/);
+  assert.match(app, /openLocalSurface\("workspace"\)/);
+});
+
 test("voice input exposes persisted push-to-talk and hands-free VAD modes", async () => {
   const source = await readFile(join(packageRoot, "src", "realtime", "VoiceSessionControl.tsx"), "utf8");
   assert.match(source, /VOICE_MODE_STORAGE_KEY/);

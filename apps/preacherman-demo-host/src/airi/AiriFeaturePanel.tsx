@@ -26,9 +26,9 @@ export function AiriFeaturePanel({
   readonly surface: DemoSurfaceType;
 }) {
   const placement = featurePlacementForSurface(surface);
-  const [selectedId, setSelectedId] = useState(placement.features[0]?.id ?? "");
+  const [selectedId, setSelectedId] = useState("");
   const [activationState, setActivationState] = useState<"idle" | "focused" | "unavailable">("idle");
-  const selected = placement.features.find((candidate) => candidate.id === selectedId) ?? placement.features[0];
+  const selected = placement.features.find((candidate) => candidate.id === selectedId);
   const chinese = locale === "zh-CN";
 
   return (

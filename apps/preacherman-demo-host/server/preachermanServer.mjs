@@ -61,6 +61,7 @@ export function createPreachermanServer(options = {}) {
   ]);
   const proposals = new Map();
   let savedProviderConfig = null;
+  let conversationSaveQueue = Promise.resolve();
 
   function taskStoreFile() {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "task-store.v1.json");
@@ -93,13 +94,17 @@ export function createPreachermanServer(options = {}) {
       .slice(-20)
       .map((message) => ({ role: message.role, text: message.text.slice(0, 4_000) })) : [];
     const next = { id, locale, updatedAt: new Date().toISOString(), messages };
-    const entries = (await readConversationLedger()).filter((item) => item?.id !== id);
-    const target = conversationLedgerFile();
-    await mkdir(dirname(target), { recursive: true });
-    const temporary = `${target}.tmp`;
-    await writeFile(temporary, JSON.stringify([next, ...entries].slice(0, 10)), { mode: 0o600 });
-    await rename(temporary, target);
-    await chmod(target, 0o600);
+    const write = conversationSaveQueue.then(async () => {
+      const entries = (await readConversationLedger()).filter((item) => item?.id !== id);
+      const target = conversationLedgerFile();
+      await mkdir(dirname(target), { recursive: true });
+      const temporary = `${target}.${process.pid}.${randomUUID()}.tmp`;
+      await writeFile(temporary, JSON.stringify([next, ...entries].slice(0, 10)), { mode: 0o600 });
+      await rename(temporary, target);
+      if (process.platform !== "win32") await chmod(target, 0o600);
+    });
+    conversationSaveQueue = write.catch(() => undefined);
+    await write;
     return next;
   }
 
@@ -132,10 +137,10 @@ export function createPreachermanServer(options = {}) {
     };
     const target = providerConfigFile();
     await mkdir(dirname(target), { recursive: true });
-    const temporary = `${target}.tmp`;
+    const temporary = `${target}.${process.pid}.${randomUUID()}.tmp`;
     await writeFile(temporary, JSON.stringify(savedProviderConfig), { mode: 0o600 });
     await rename(temporary, target);
-    await chmod(target, 0o600);
+    if (process.platform !== "win32") await chmod(target, 0o600);
     return savedProviderConfig;
   }
 
@@ -452,6 +457,12 @@ export function createPreachermanServer(options = {}) {
         if (typeof body.objective === "string" && body.objective.trim()) proposal.objective = body.objective.trim();
         const run = await startPitchRun(proposal);
         json(response, 202, { run }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/tasks") {
+        const requestedLimit = Number.parseInt(url.searchParams.get("limit") || "10", 10);
+        const limit = Number.isFinite(requestedLimit) ? requestedLimit : 10;
+        json(response, 200, { tasks: await taskStore.list(limit) }, origin);
         return;
       }
       const taskMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)$/);

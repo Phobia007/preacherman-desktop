@@ -28,7 +28,7 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
   {
     surface: "home",
     features: [
-      feature("companion.chat", "Companion chat", "伙伴对话", "ready"),
+      feature("companion.chat", "Companion chat", "伙伴对话", "live"),
       feature("voice.quick-input", "Voice input", "语音输入", "live"),
       feature("presentation.stop", "Stop speech", "停止播报", "live"),
       feature("avatar.status", "Avatar state", "角色状态", "live"),
@@ -78,8 +78,8 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
     features: [
       feature("conversation.history", "Conversations", "对话记录", "live"),
       feature("memory.recall", "Memory", "长期记忆", "ready"),
-      feature("task.events", "Task events", "任务事件", "ready"),
-      feature("task.artifacts", "Artifacts", "任务产物", "ready"),
+      feature("task.events", "Task events", "任务事件", "live"),
+      feature("task.artifacts", "Artifacts", "任务产物", "live"),
     ],
   },
   {

@@ -95,6 +95,11 @@ test("TaskRun persists, restarts stale revisions, and remains readable through t
   assert.deepEqual(completed.events.map((event) => event.sequence), completed.events.map((_, index) => index + 1));
   assert.ok(completed.events.some((event) => event.type === "revision_restarted"));
   assert.match(await readFile(completed.artifact.path, "utf8"), /privacy-first local-storage/);
+  const recent = await request(baseUrl, "/api/tasks?limit=1");
+  assert.equal(recent.response.status, 200);
+  assert.equal(recent.body.tasks.length, 1);
+  assert.equal(recent.body.tasks[0].taskId, run.taskId);
+  assert.equal(recent.body.tasks[0].artifact.name, "pitch-kit.md");
 
   const storeFile = join(dataDir, "task-store.v1.json");
   const persisted = JSON.parse(await readFile(storeFile, "utf8"));

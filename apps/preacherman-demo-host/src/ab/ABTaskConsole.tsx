@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 import type { Locale } from "../preferences";
 import { localServiceUrl } from "../serviceConfig";
 import { beginNewConversation, saveConversation, type LedgerMessage } from "../conversationLedger";
+import { openLocalSurface } from "../demo/screenRoute";
 import { useLiveCoordinator } from "../live/LiveCoordinatorContext";
 import "./ab-task-console.css";
 
@@ -42,6 +43,9 @@ const copy = {
     stopTask: "Stop task",
     retry: "Retry",
     newConversation: "New conversation",
+    tryDemo: "Try AIRI demo",
+    demoPrompt: "Create a concise demo pitch for Preacherman that shows the AI companion, controlled task execution, voice presentation, and reviewable artifacts.",
+    viewLedger: "View in Ledger",
     deepseekReply: "DeepSeek reply",
     deepseekPlainReply: "DeepSeek reply (plain text)",
     fallbackReply: "Local fallback — DeepSeek did not return a usable reply",
@@ -58,6 +62,9 @@ const copy = {
     stopTask: "停止任务",
     retry: "重试",
     newConversation: "新对话",
+    tryDemo: "体验 AIRI 全流程",
+    demoPrompt: "为 Preacherman 生成一份简洁的演示路演方案，重点展示 AI 伙伴、受控任务执行、语音播报和可审阅产物。",
+    viewLedger: "前往 Ledger 查看",
     deepseekReply: "DeepSeek 已回复",
     deepseekPlainReply: "DeepSeek 已回复（非结构化）",
     fallbackReply: "本地兜底回复：DeepSeek 未返回可用结果",
@@ -194,7 +201,7 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
   const hasActiveTask = run ? ["queued", "running"].includes(run.status) : false;
 
   return (
-    <section className="ab-task-console" data-state={run?.status || "idle"}>
+    <section className="ab-task-console" data-airi-control="companion.chat" data-state={run?.status || "idle"} tabIndex={-1}>
       <header className="ab-task-console__header"><div><span className="ab-task-console__eyebrow">{labels.eyebrow}</span><h2>{labels.title}</h2></div><button aria-label={labels.newConversation} className="ab-task-console__button ab-task-console__button--quiet" disabled={busy || hasActiveTask} onClick={startNewConversation} type="button">{labels.newConversation}</button></header>
       <div aria-live="polite" className="ab-task-console__result">
         {messages.slice(-4).map((message, index) => <p key={`${message.role}-${index}`}><strong>{message.role === "user" ? (locale === "zh-CN" ? "你" : "You") : "Preacherman"}</strong> {message.text}</p>)}
@@ -203,10 +210,10 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
       </div>
       <form className="ab-task-console__form" onSubmit={submit}>
         <textarea aria-label={labels.placeholder} data-airi-control="task.create" disabled={busy} onChange={(event) => setInput(event.target.value)} placeholder={labels.placeholder} rows={3} value={input} />
-        <div className="ab-task-console__actions"><button className="ab-task-console__button ab-task-console__button--primary" disabled={!input.trim() || busy} type="submit">{labels.send}</button></div>
+        <div className="ab-task-console__actions"><button className="ab-task-console__button ab-task-console__button--quiet" disabled={busy || hasActiveTask} onClick={() => void sendText(labels.demoPrompt)} type="button">{labels.tryDemo}</button><button className="ab-task-console__button ab-task-console__button--primary" disabled={!input.trim() || busy} type="submit">{labels.send}</button></div>
       </form>
       {proposal ? <section className="ab-task-console__approval"><span>{proposal.executor}</span><textarea aria-label="PitchKit objective" onChange={(event) => setProposal({ ...proposal, objective: event.target.value })} value={proposal.objective} /><p>{proposal.inputs.join(" · ")} → {proposal.outputs.join(" · ")}</p><button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.confirm" disabled={busy || !proposal.objective.trim()} onClick={() => void confirm()} type="button">{labels.confirm}</button></section> : null}
-      {run ? <section className="ab-task-console__activity"><strong>{run.status === "succeeded" ? labels.artifact : labels.running}</strong><p>{run.events.at(-1)?.message || "Queued"}</p>{run.artifact ? <p><code>{run.artifact.path}</code></p> : null}{run.error ? <p data-error="true">{run.error}</p> : null}{["queued", "running"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" data-airi-control="task.cancel" disabled={busy} onClick={() => void coordinator.cancelTask(run.runId)} type="button">{labels.stopTask}</button> : null}{["failed", "cancelled"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.retry" disabled={busy} onClick={() => void controlRun(run.runId, "retry")} type="button">{labels.retry}</button> : null}</section> : null}
+      {run ? <section className="ab-task-console__activity"><strong>{run.status === "succeeded" ? labels.artifact : labels.running}</strong><ol className="ab-task-console__timeline">{run.events.slice(-4).map((event, index) => <li key={`${event.stage}-${index}`}><span>{event.stage}</span><p>{event.message}</p></li>)}</ol>{run.artifact ? <p><code>{run.artifact.path}</code></p> : null}{run.error ? <p data-error="true">{run.error}</p> : null}{["queued", "running"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" data-airi-control="task.cancel" disabled={busy} onClick={() => void coordinator.cancelTask(run.runId)} type="button">{labels.stopTask}</button> : null}{["failed", "cancelled"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.retry" disabled={busy} onClick={() => void controlRun(run.runId, "retry")} type="button">{labels.retry}</button> : null}{run.status === "succeeded" ? <button className="ab-task-console__button ab-task-console__button--primary" onClick={() => { sessionStorage.setItem("preacherman.ledger-view", "artifacts"); openLocalSurface("ledger"); }} type="button">{labels.viewLedger}</button> : null}</section> : null}
     </section>
   );
 }

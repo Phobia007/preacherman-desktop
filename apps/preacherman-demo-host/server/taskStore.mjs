@@ -82,6 +82,14 @@ export function createTaskStore({ file, now = () => new Date().toISOString() }) 
       return task ? clone(task) : null;
     },
 
+    async list(limit = 10) {
+      await mutationQueue;
+      const current = await load();
+      return clone([...current.tasks]
+        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+        .slice(0, Math.max(1, Math.min(50, limit))));
+    },
+
     async update(taskId, update) {
       return mutate((current) => {
         const task = current.tasks.find((candidate) => candidate.taskId === taskId);

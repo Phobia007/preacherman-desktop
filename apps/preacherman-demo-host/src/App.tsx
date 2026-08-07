@@ -17,6 +17,7 @@ import {
   acceptedScreenId,
   openDemoScreen,
   openDemoScreenIndex,
+  openLocalSurface,
   readDemoScreenRoute,
   type LocalSurfaceType,
 } from "./demo/screenRoute";
@@ -72,18 +73,27 @@ export function App() {
   const [animateMainEntrance] = useState(showStartupIntro);
   const handleIntroComplete = useCallback(() => setShowStartupIntro(false), []);
   const handleAiriFeatureActivate = useCallback((featureId: string): boolean => {
-    const target = Array.from(document.querySelectorAll<HTMLElement>("[data-airi-control]"))
-      .find((candidate) => candidate.dataset.airiControl?.split(" ").includes(featureId));
-    if (!target || (target instanceof HTMLButtonElement && target.disabled)) return false;
+    const focusControl = (controlId: string): boolean => {
+      const target = Array.from(document.querySelectorAll<HTMLElement>("[data-airi-control]"))
+        .find((candidate) => candidate.dataset.airiControl?.split(" ").includes(controlId));
+      if (!target || (target instanceof HTMLButtonElement && target.disabled)) return false;
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+      target.dataset.airiHighlight = "true";
+      window.setTimeout(() => delete target.dataset.airiHighlight, 900);
+      if (["presentation.stop", "task.cancel", "conversation.history", "task.events", "task.artifacts"].includes(controlId) && target instanceof HTMLButtonElement) {
+        target.click();
+      }
+      return true;
+    };
 
-    target.focus({ preventScroll: true });
-    target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-    target.dataset.airiHighlight = "true";
-    window.setTimeout(() => delete target.dataset.airiHighlight, 900);
-    if (["presentation.stop", "task.cancel"].includes(featureId) && target instanceof HTMLButtonElement) {
-      target.click();
+    if (focusControl(featureId)) return true;
+    if (featureId === "companion.chat") {
+      openLocalSurface("workspace");
+      window.setTimeout(() => focusControl("companion.chat"), 0);
+      return true;
     }
-    return true;
+    return false;
   }, []);
 
   useEffect(() => {

@@ -54,8 +54,14 @@ test("local service persists private provider settings and completes the guarded
     body: JSON.stringify({ locale: "zh-CN", messages: [{ role: "user", text: "不要保存我的音频" }, { role: "assistant", text: "只保存文字记录" }] }),
   });
   assert.equal(conversation.response.status, 200);
+  const concurrentSaves = await Promise.all(["test-2", "test-3"].map((id) => request(baseUrl, `/api/conversations/conversation%3A${id}`, {
+    method: "PUT",
+    body: JSON.stringify({ locale: "en", messages: [{ role: "user", text: `Concurrent ${id}` }] }),
+  })));
+  assert.deepEqual(concurrentSaves.map(({ response }) => response.status), [200, 200]);
   const recent = await request(baseUrl, "/api/conversations/recent");
-  assert.equal(recent.body.entries[0].messages[1].text, "只保存文字记录");
+  const savedConversation = recent.body.entries.find((entry) => entry.id === "conversation:test-1");
+  assert.equal(savedConversation.messages[1].text, "只保存文字记录");
   if (process.platform !== "win32") assert.equal((await stat(join(dataDir, "conversation-ledger.json"))).mode & 0o777, 0o600);
 
   const turn = await request(baseUrl, "/api/agent/turn", {

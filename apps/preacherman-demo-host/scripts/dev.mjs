@@ -2,11 +2,15 @@ import { spawn } from "node:child_process";
 import { resolve } from "node:path";
 
 const packageRoot = resolve(import.meta.dirname, "..");
+const serviceEnv = {
+  ...process.env,
+  PREACHERMAN_DATA_DIR: process.env.PREACHERMAN_DATA_DIR || resolve(packageRoot, "..", "..", ".runtime-tmp", "preacherman-data"),
+};
 const children = [
   spawn(
     process.execPath,
     ["--env-file-if-exists=.env.local", "server/index.mjs"],
-    { cwd: packageRoot, stdio: "inherit" },
+    { cwd: packageRoot, env: serviceEnv, stdio: "inherit" },
   ),
   spawn(
     process.execPath,

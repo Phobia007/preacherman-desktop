@@ -184,6 +184,32 @@
   border-top: 1px solid var(--demo-theme-border);
 }
 
+.ab-task-console__timeline {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-task-console__timeline li {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.ab-task-console__timeline span {
+  overflow: hidden;
+  color: var(--demo-theme-loading);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .ab-task-console__progress {
   height: 2px;
   overflow: hidden;
