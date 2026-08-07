@@ -20,6 +20,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "check": "npm run typecheck && npm run build && npm test",
+    "prepare": "npm run build",
     "test": "node --test --test-isolation=none tests/*.test.mjs",
     "typecheck": "tsc --noEmit"
   },

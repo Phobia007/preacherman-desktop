@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@preacherman/avatar-renderer": "file:../../packages/preacherman-avatar-renderer",
+    "@preacherman/presentation-runtime": "file:../../packages/preacherman-presentation-runtime",
     "@preacherman/surface-skin": "file:../../packages/preacherman-surface-skin",
     "@react-three/drei": "9.115.0",
     "@react-three/fiber": "8.18.0",

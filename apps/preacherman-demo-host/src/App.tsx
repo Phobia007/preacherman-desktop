@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { ABTaskConsole } from "./ab/ABTaskConsole";
+import { featuresForSurface } from "./airi/featurePlacement";
 import { AppShell } from "./app-shell/AppShell";
 import { DemoAvatarSlot } from "./avatar/DemoAvatarSlot";
 import { figmaScreenRegistry, findFigmaScreen } from "./demo/figmaScreenRegistry";
@@ -123,7 +124,28 @@ export function App() {
           <VoiceSessionControl locale={preferences.locale} />
         </>
       ) : null}
+    </main>
+  );
+  const workspaceContent = (
+    <main
+      className="demo-host demo-host--workspace"
+      data-airi-features={featuresForSurface("workspace").join(" ")}
+    >
+      {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
       <ABTaskConsole locale={preferences.locale} />
+    </main>
+  );
+  const labContent = (
+    <main
+      className="demo-host demo-host--lab"
+      data-airi-features={featuresForSurface("lab").join(" ")}
+    >
+      <div className="demo-airi-lab__intro">
+        <span>AIRI PRESENTATION RUNTIME</span>
+        <h1>{preferences.locale === "zh-CN" ? "语音与角色实验室" : "Voice and avatar lab"}</h1>
+        <p>{preferences.locale === "zh-CN" ? "在这里验证麦克风、语音合成、中断和角色状态。" : "Validate microphone, speech synthesis, interruption, and avatar state here."}</p>
+      </div>
+      {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
     </main>
   );
   const mainContent = route.kind === "index"
@@ -135,6 +157,10 @@ export function App() {
     : route.kind === "surface"
       ? activeSurfaceType === "home"
         ? homeContent
+        : activeSurfaceType === "workspace"
+          ? workspaceContent
+          : activeSurfaceType === "lab"
+            ? labContent
         : activeSurfaceType === "settings"
           ? (
               <SettingsScreen

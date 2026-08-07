@@ -170,8 +170,14 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
   }, [busy]);
 
   useEffect(() => coordinator.connectTaskCancellationAdapter({
-    cancelTask: (taskRunId) => controlRun(taskRunId, "cancel"),
-  }), [controlRun, coordinator]);
+    cancelTask: async (taskRunId) => {
+      const response = await request<{ task: TaskRun }>(`/api/tasks/${taskRunId}/commands`, {
+        method: "POST",
+        body: JSON.stringify({ type: "cancel" }),
+      });
+      setRun(response.task);
+    },
+  }), [coordinator]);
 
   const startNewConversation = () => {
     beginNewConversation();

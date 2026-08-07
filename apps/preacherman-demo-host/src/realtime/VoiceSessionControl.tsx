@@ -97,6 +97,8 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   useEffect(() => () => { cleanup(); socket.current?.close(); }, []);
 
   useEffect(() => {
+    let resolveActivePlayback: (() => void) | null = null;
+    let removeAbortListener: (() => void) | null = null;
     const clearPlayback = () => {
       if (playbackCompletionTimer.current) window.clearTimeout(playbackCompletionTimer.current);
       if (ttsFallbackTimer.current) window.clearTimeout(ttsFallbackTimer.current);
@@ -119,16 +121,26 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
     };
     const finishPlayback = () => {
+      removeAbortListener?.();
+      removeAbortListener = null;
       clearPlayback();
       window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "idle" }));
       coordinator.reportSpeechLifecycle("idle");
+      const resolve = resolveActivePlayback;
+      resolveActivePlayback = null;
+      resolve?.();
     };
     const stopSpeech = (_reason: "user_action" | "new_request") => {
       coordinator.reportSpeechLifecycle("stopping");
       finishPlayback();
     };
-    const play = ({ text, locale: speechLocale }: SpeechRequest) => {
-      if (!text) return;
+    const play = ({ text, locale: speechLocale }: SpeechRequest, signal: AbortSignal) => new Promise<void>((resolve) => {
+      if (!text) { resolve(); return; }
+      resolveActivePlayback = resolve;
+      const handleAbort = () => stopSpeech("new_request");
+      signal.addEventListener("abort", handleAbort, { once: true });
+      removeAbortListener = () => signal.removeEventListener("abort", handleAbort);
+      if (signal.aborted) { handleAbort(); return; }
       clearPlayback();
       coordinator.reportSpeechLifecycle("starting");
       window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "speaking" }));
@@ -193,7 +205,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       ws.onerror = () => {
         if (!receivedAudio) fallback();
       };
-    };
+    });
     const disconnect = coordinator.connectPresentationAdapter({ speak: play, stopSpeech });
     return () => {
       disconnect();

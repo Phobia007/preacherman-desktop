@@ -1,3 +1,4 @@
+import { createPresentationRuntime } from "@preacherman/presentation-runtime";
 import type { Locale } from "../preferences";
 
 export type SpeechLifecycle = "idle" | "starting" | "playing" | "stopping";
@@ -12,7 +13,7 @@ export interface SpeechRequest {
 }
 
 export interface PresentationAdapter {
-  speak(request: SpeechRequest): void;
+  speak(request: SpeechRequest, signal: AbortSignal): Promise<void>;
   stopSpeech(reason: "user_action" | "new_request"): void;
 }
 
@@ -30,6 +31,20 @@ export class LiveCoordinator {
   private readonly speechListeners = new Set<SpeechListener>();
   private speechLifecycle: SpeechLifecycle = "idle";
   private interactionEpoch = 0;
+  private readonly presentationRuntime = createPresentationRuntime<SpeechRequest>({
+    synthesize: async (segment) => ({
+      generationId: segment.generationId,
+      audioStreamId: segment.audioStreamId,
+      interactionEpoch: segment.interactionEpoch,
+      ...(segment.taskId ? { taskId: segment.taskId } : {}),
+      text: segment.text,
+      locale: segment.locale === "zh-CN" ? "zh-CN" : "en",
+    }),
+    play: async (item, signal) => {
+      const adapter = this.presentationAdapter;
+      if (adapter) await adapter.speak(item.audio, signal);
+    },
+  });
 
   connectPresentationAdapter(adapter: PresentationAdapter): () => void {
     this.presentationAdapter = adapter;
@@ -49,19 +64,22 @@ export class LiveCoordinator {
     const content = text.trim();
     if (!content || !this.presentationAdapter) return false;
     const generationId = `generation_${crypto.randomUUID()}`;
-    this.presentationAdapter.speak({
+    const audioStreamId = `audio_${crypto.randomUUID()}`;
+    const interactionEpoch = ++this.interactionEpoch;
+    const generation = this.presentationRuntime.openGeneration({
       generationId,
-      audioStreamId: `audio_${crypto.randomUUID()}`,
-      interactionEpoch: ++this.interactionEpoch,
+      audioStreamId,
+      interactionEpoch,
       taskId,
-      text: content,
-      locale,
     });
+    generation.enqueue({ segmentId: generationId, text: content, locale });
+    void generation.complete();
     return true;
   }
 
   stopSpeech(): boolean {
     if (!this.presentationAdapter || this.speechLifecycle === "idle") return false;
+    this.presentationRuntime.interruptPresentation("user_action");
     this.presentationAdapter.stopSpeech("user_action");
     return true;
   }

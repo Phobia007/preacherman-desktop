@@ -1,17 +1,21 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { build } from "esbuild";
 import test from "node:test";
-import ts from "typescript";
 
 const packageRoot = join(import.meta.dirname, "..");
 
 async function loadCoordinator() {
-  const source = await readFile(join(packageRoot, "src", "live", "LiveCoordinator.ts"), "utf8");
-  const output = ts.transpileModule(source, {
-    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
-  }).outputText;
-  return import(`data:text/javascript;base64,${Buffer.from(output).toString("base64")}`);
+  const result = await build({
+    bundle: true,
+    entryPoints: [join(packageRoot, "src", "live", "LiveCoordinator.ts")],
+    format: "esm",
+    platform: "node",
+    target: "node22",
+    write: false,
+  });
+  return import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`);
 }
 
 test("Agent A announces task start and summarizes a completed B artifact", async () => {
@@ -91,7 +95,7 @@ test("stopping presentation never cancels a TaskRun", async () => {
   const coordinator = new LiveCoordinator();
   const calls = [];
   coordinator.connectPresentationAdapter({
-    speak: (request) => calls.push(["speak", request]),
+    speak: async (request) => { calls.push(["speak", request]); },
     stopSpeech: (reason) => calls.push(["stop-speech", reason]),
   });
   coordinator.connectTaskCancellationAdapter({
@@ -99,6 +103,7 @@ test("stopping presentation never cancels a TaskRun", async () => {
   });
 
   assert.equal(coordinator.requestSpeech("Demo reply", "en", "task:1"), true);
+  await new Promise((resolve) => setImmediate(resolve));
   coordinator.reportSpeechLifecycle("playing");
   assert.equal(coordinator.stopSpeech(), true);
   assert.deepEqual(calls.map(([scope]) => scope), ["speak", "stop-speech"]);
@@ -108,4 +113,13 @@ test("stopping presentation never cancels a TaskRun", async () => {
   assert.equal(calls[0][1].taskId, "task:1");
   assert.match(calls[0][1].generationId, /^generation_/);
   assert.match(calls[0][1].audioStreamId, /^audio_/);
+});
+
+test("the coordinator routes speech through the AIRI-derived Presentation Runtime", async () => {
+  const source = await readFile(join(packageRoot, "src", "live", "LiveCoordinator.ts"), "utf8");
+  const consoleSource = await readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8");
+  assert.match(source, /createPresentationRuntime/);
+  assert.match(source, /openGeneration/);
+  assert.match(source, /interruptPresentation/);
+  assert.match(consoleSource, /\/api\/tasks\/\$\{taskRunId\}\/commands/);
 });
