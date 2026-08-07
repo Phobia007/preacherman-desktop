@@ -45,7 +45,7 @@ html[data-appearance="dark"] #root {
 .demo-airi-lab__intro {
   position: absolute;
   top: 132px;
-  left: 96px;
+  left: 448px;
   width: min(520px, 46vw);
   color: var(--demo-theme-text);
 }

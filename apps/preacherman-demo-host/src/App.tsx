@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { ABTaskConsole } from "./ab/ABTaskConsole";
+import { AiriFeaturePanel } from "./airi/AiriFeaturePanel";
 import { featuresForSurface } from "./airi/featurePlacement";
 import { AppShell } from "./app-shell/AppShell";
 import { DemoAvatarSlot } from "./avatar/DemoAvatarSlot";
@@ -112,6 +113,11 @@ export function App() {
       : `screen-${route.screenId ?? acceptedScreenId}`;
   const HomeSurface = adapter.resolve(manifest).component;
   const isCortanaActive = preferences.activeModelId === "cortana";
+  const airiPanelSurface: LocalSurfaceType | null = route.kind === "surface"
+    ? activeSurfaceType
+    : route.kind === "screen" && (screen?.manifest?.surfaceId ?? manifest.surfaceId) === manifest.surfaceId
+      ? "home"
+      : null;
   const homeContent = (
     <main
       className="demo-host demo-host--home"
@@ -220,6 +226,9 @@ export function App() {
     >
       <div className="demo-app-shell__screen-page" key={contentKey}>
         {mainContent}
+        {airiPanelSurface ? (
+          <AiriFeaturePanel locale={preferences.locale} surface={airiPanelSurface} />
+        ) : null}
       </div>
     </AppShell>
   );
