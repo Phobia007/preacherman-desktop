@@ -2,7 +2,7 @@ import {
   InteractiveAvatarViewport,
   type AvatarActionDescriptor,
 } from "@preacherman/avatar-renderer";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { localAvatarAssetBaseUrl } from "../avatar/avatarAssets";
 
 interface CortanaModelStageProps {
@@ -15,6 +15,7 @@ export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
   const [selectedActionId, setSelectedActionId] = useState("");
   const [playingActionId, setPlayingActionId] = useState<string>();
   const [actionRequestKey, setActionRequestKey] = useState(0);
+  const [jawOpen, setJawOpen] = useState(0);
   const motionActions = useMemo(
     () => actions
       .filter((action) => Boolean(action.packUrl))
@@ -39,6 +40,32 @@ export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
     setActionRequestKey((current) => current + 1);
   };
 
+  useEffect(() => {
+    const applyPerformanceState = (event: Event) => {
+      const state = (event as CustomEvent<string>).detail;
+      const preferred = state === "speaking"
+        ? ["conversation_loop", "chatting"]
+        : state === "listening"
+          ? ["listening", "looking_around", "conversation_loop"]
+          : ["conversation_loop"];
+      const action = preferred
+        .map((id) => actions.find((candidate) => candidate.id === id))
+        .find(Boolean)
+        ?? actions.find((candidate) => candidate.packUrl);
+      if (!action) return;
+      setPlayingActionId(action.id);
+      setActionRequestKey((current) => current + 1);
+    };
+    window.addEventListener("preacherman:avatar-state", applyPerformanceState);
+    return () => window.removeEventListener("preacherman:avatar-state", applyPerformanceState);
+  }, [actions]);
+
+  useEffect(() => {
+    const applyJawOpen = (event: Event) => setJawOpen((event as CustomEvent<number>).detail || 0);
+    window.addEventListener("preacherman:avatar-jaw", applyJawOpen);
+    return () => window.removeEventListener("preacherman:avatar-jaw", applyJawOpen);
+  }, []);
+
   return (
     <section aria-label={ariaLabel} className="cortana-model-stage">
       <InteractiveAvatarViewport
@@ -51,6 +78,7 @@ export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
         onReady={handleReady}
         pose="standby"
         quality="high"
+        jawOpen={jawOpen}
       />
       {loadState === "loading" ? (
         <div aria-label="Loading Cortana" className="cortana-model-stage__loading" role="status">

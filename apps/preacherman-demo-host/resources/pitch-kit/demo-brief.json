@@ -1,0 +1,8 @@
+{
+  "product": { "name": "Preacherman", "stage": "desktop demo" },
+  "audience": "需要快速把复杂构想讲清楚的产品、设计与创始团队",
+  "problem": "团队常在内容、结构和现场表达之间反复切换，难以快速形成可演示的完整叙事。",
+  "valueProposition": "Preacherman 以持续在场的数字伙伴连接对话、受控任务执行和可审阅产物。",
+  "slides": ["开场与机会", "目标用户", "核心问题", "产品体验", "Agent 协作", "语音与数字人", "工作流", "差异化", "路线图", "行动请求"],
+  "assumptions": ["演示面向中文为主的使用者", "首版只生成 Markdown PitchKit", "外部发布始终需要单独批准"]
+}

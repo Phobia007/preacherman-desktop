@@ -44,6 +44,8 @@ export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   readonly onActionsReady?: (actions: readonly AvatarActionDescriptor[]) => void;
   readonly pose?: AvatarPose;
   readonly resetKey?: number;
+  /** Procedural mouth opening driven by actual output audio (0 through 1). */
+  readonly jawOpen?: number;
 }
 
 export class AvatarError extends Error {

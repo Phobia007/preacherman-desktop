@@ -24,6 +24,7 @@ interface InteractiveAvatarSceneProps {
   readonly onFirstFrame: (snapshot: AvatarPerformanceSnapshot) => void;
   readonly pose: AvatarPose;
   readonly resetKey: number;
+  readonly jawOpen: number;
 }
 
 function CameraRig({
@@ -89,6 +90,7 @@ export function InteractiveAvatarScene({
   onFirstFrame,
   pose,
   resetKey,
+  jawOpen,
 }: InteractiveAvatarSceneProps) {
   return (
     <>
@@ -110,6 +112,7 @@ export function InteractiveAvatarScene({
           onAnimationError={onAnimationError}
           onFirstFrame={onFirstFrame}
           pose={pose}
+          jawOpen={jawOpen}
         />
       </PresentationControls>
       <CameraRig resetKey={resetKey} />

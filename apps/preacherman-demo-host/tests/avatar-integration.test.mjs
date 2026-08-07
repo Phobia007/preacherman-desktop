@@ -62,7 +62,7 @@ test("Demo Host injects AvatarSlot at adapter creation rather than into manifest
   assert.doesNotMatch(app, /projection:\s*\{[\s\S]*avatar/i);
 });
 
-test("Tauri CSP permits only the local voice service and OpenAI Realtime network boundary", async () => {
+test("Tauri CSP permits only the local Agent and voice service boundary", async () => {
   const config = JSON.parse(
     await readFile(join(packageRoot, "src-tauri", "tauri.conf.json"), "utf8"),
   );
@@ -83,13 +83,13 @@ test("Tauri CSP permits only the local voice service and OpenAI Realtime network
   assert.match(csp, /img-src[^;]*data:[^;]*blob:/);
   assert.match(csp, /script-src[^;]*'wasm-unsafe-eval'/);
   assert.match(csp, /font-src[^;]*data:/);
-  assert.match(csp, /http:\/\/127\.0\.0\.1:8787/);
-  assert.match(csp, /https:\/\/api\.openai\.com/);
+  assert.match(csp, /http:\/\/127\.0\.0\.1:\*/);
+  assert.match(csp, /ws:\/\/127\.0\.0\.1:\*/);
   assert.doesNotMatch(
     csp
       .replaceAll("http://ipc.localhost", "")
-      .replaceAll("http://127.0.0.1:8787", "")
-      .replaceAll("https://api.openai.com", ""),
+      .replaceAll("http://127.0.0.1:*", "")
+      .replaceAll("ws://127.0.0.1:*", ""),
     /https?:\/\//,
   );
   assert.match(devCsp, /http:\/\/127\.0\.0\.1:1420/);
@@ -99,8 +99,8 @@ test("Tauri CSP permits only the local voice service and OpenAI Realtime network
       .replaceAll("http://ipc.localhost", "")
       .replaceAll("http://127.0.0.1:1420", "")
       .replaceAll("ws://127.0.0.1:1420", "")
-      .replaceAll("http://127.0.0.1:8787", "")
-      .replaceAll("https://api.openai.com", ""),
+      .replaceAll("http://127.0.0.1:*", "")
+      .replaceAll("ws://127.0.0.1:*", ""),
     /https?:\/\//,
   );
   assert.equal(

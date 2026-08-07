@@ -7,10 +7,9 @@
 html,
 body,
 #root,
-.demo-host,
-.demo-app-shell {
-  width: var(--demo-app-width);
-  height: var(--demo-app-height);
+.demo-app-viewport {
+  width: 100%;
+  height: 100%;
   margin: 0;
   overflow: hidden;
 }
@@ -61,9 +60,25 @@ html[data-appearance="dark"] #root {
   --demo-theme-activate-hover-shadow: 0 20px 44px -22px rgb(15 18 20 / 48%), inset 0 1px 0 rgb(255 255 255 / 96%);
   --demo-theme-activate-flash: rgb(17 17 17 / 55%);
   position: relative;
+  width: var(--demo-app-width);
+  height: var(--demo-app-height);
   background: var(--demo-theme-canvas);
   color: var(--demo-theme-text);
   transition: color 180ms ease, background-color 180ms ease;
+}
+
+.demo-app-viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--demo-theme-canvas, #f7f5f1);
+}
+
+.demo-app-viewport > .demo-app-shell {
+  flex: 0 0 auto;
+  transform: scale(var(--demo-app-scale, 1));
+  transform-origin: center;
 }
 
 .demo-app-shell[data-appearance="dark"] {
@@ -205,7 +220,7 @@ html[data-appearance="dark"] #root {
 
 .demo-settings__controls {
   display: grid;
-  width: 244px;
+  width: 420px;
   gap: 14px;
 }
 
@@ -230,6 +245,109 @@ html[data-appearance="dark"] #root {
   backdrop-filter: blur(18px) saturate(135%);
   transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
+
+.demo-settings__service {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 16px;
+  color: var(--demo-theme-text);
+  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 84%, transparent);
+  box-shadow: var(--demo-theme-activate-shadow);
+}
+
+.demo-settings__service header {
+  display: grid;
+  gap: 5px;
+}
+
+.demo-settings__service header span {
+  font: 650 13px/1.2 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.demo-settings__service header small,
+.demo-settings__message,
+.demo-settings__results {
+  margin: 0;
+  color: var(--demo-theme-muted);
+  font: 500 11px/1.45 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.demo-settings__service label {
+  display: grid;
+  gap: 5px;
+  color: var(--demo-theme-muted);
+  font: 600 10px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.demo-settings__service input,
+.demo-settings__service select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--demo-theme-border-strong);
+  border-radius: 8px;
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface);
+  font: 500 12px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  padding: 0 10px;
+}
+
+.demo-settings__service input:focus-visible,
+.demo-settings__service select:focus-visible {
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: 1px;
+}
+
+.demo-settings__button--test {
+  width: 100%;
+  min-height: 38px;
+  color: var(--demo-theme-activate-fill-text);
+  background: var(--demo-theme-activate-fill);
+}
+
+.demo-settings__results {
+  display: grid;
+  gap: 5px;
+}
+
+.demo-settings__results div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.demo-settings__results dt { color: var(--demo-theme-text); }
+.demo-settings__results dd { margin: 0; }
+.demo-settings__results dd[data-ok="true"] { color: var(--demo-theme-loading); }
+.demo-settings__results dd[data-ok="false"] { color: var(--demo-theme-error); }
+
+.demo-ledger {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 16px;
+  color: var(--demo-theme-text);
+}
+
+.demo-ledger > header,
+.demo-ledger > ol,
+.demo-ledger > p {
+  box-sizing: border-box;
+  width: min(720px, calc(100% - 160px));
+  margin: 0;
+}
+
+.demo-ledger > header { display: grid; gap: 6px; }
+.demo-ledger > header span { font: 650 18px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; }
+.demo-ledger > header small,
+.demo-ledger > p { color: var(--demo-theme-muted); font: 500 12px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+.demo-ledger > ol { display: grid; gap: 8px; padding: 0; list-style: none; }
+.demo-ledger li { display: grid; gap: 5px; padding: 13px 15px; border: 1px solid var(--demo-theme-border); border-radius: 12px; background: var(--demo-theme-surface); }
+.demo-ledger time { color: var(--demo-theme-muted); font: 500 10px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+.demo-ledger li p { margin: 0; font: 500 13px/1.35 Inter, ui-sans-serif, system-ui, sans-serif; }
 
 .demo-settings__button strong {
   font: inherit;

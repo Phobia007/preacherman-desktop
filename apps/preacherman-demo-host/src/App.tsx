@@ -33,6 +33,7 @@ import {
 } from "./preferences";
 import { VoiceSessionControl } from "./realtime/VoiceSessionControl";
 import { SettingsScreen } from "./settings/SettingsScreen";
+import { ConversationLedgerScreen } from "./conversation/ConversationLedgerScreen";
 
 const manifest: SurfaceManifest = {
   surfaceType: "workspace",
@@ -153,8 +154,10 @@ export function App() {
                   onActiveModelChange={(activeModelId) => {
                     setPreferences((current) => ({ ...current, activeModelId }));
                   }}
-                />
-              )
+              />
+            )
+          : activeSurfaceType === "ledger"
+            ? <ConversationLedgerScreen locale={preferences.locale} />
           : (
             <main
               aria-label={`${uiCopy[preferences.locale].emptySurfaceLabels[activeSurfaceType]} screen`}
