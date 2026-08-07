@@ -9,6 +9,7 @@ apps/preacherman-demo-host/public/local-avatar/
 .runtime-tmp/
 output/
 apps/*/output/
+/.codex-worktrees/
 *.log
 .DS_Store
 Thumbs.db
