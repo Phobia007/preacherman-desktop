@@ -12,6 +12,7 @@ import {
   validatePitchKit,
   writePitchKit,
 } from "./agentRuntime.mjs";
+import { appendTaskEvent, createTaskStore } from "./taskStore.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -59,8 +60,13 @@ export function createPreachermanServer(options = {}) {
     "tauri://localhost",
   ]);
   const proposals = new Map();
-  const pitchRuns = new Map();
   let savedProviderConfig = null;
+
+  function taskStoreFile() {
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "task-store.v1.json");
+  }
+
+  const taskStore = createTaskStore({ file: taskStoreFile() });
 
   function providerConfigFile() {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "provider-settings.json");
@@ -237,46 +243,111 @@ export function createPreachermanServer(options = {}) {
     }
   }
 
-  async function startPitchRun(proposal) {
-    const run = {
-      runId: `run_${randomUUID()}`,
-      proposalId: proposal.proposalId,
-      objective: proposal.objective,
-      status: "queued",
-      events: [],
-      artifact: null,
-      error: null,
-    };
-    pitchRuns.set(run.runId, run);
-    const event = (stage, message) => run.events.push({ stage, message, at: new Date().toISOString() });
-    void (async () => {
-      try {
-        run.status = "running";
-        event("reading", "Reading the fixed PitchKit brief");
-        const brief = await readPitchBrief();
-        if (run.status === "cancelled") return;
-        event("generating", "Generating a constrained PitchKit");
-        let markdown = await generatePitchKit({ env: await runtimeEnv(), objective: run.objective, brief, fetchImpl });
-        if (run.status === "cancelled") return;
-        event("validating", "Validating required sections");
+  async function executePitchTask(taskId) {
+    try {
+      await taskStore.update(taskId, (task) => {
+        if (task.status !== "queued") return;
+        task.status = "running";
+        appendTaskEvent(task, { type: "started", stage: "reading", message: "Reading the fixed PitchKit brief" });
+      });
+      const brief = await readPitchBrief();
+
+      while (true) {
+        const execution = await taskStore.update(taskId, (task) => {
+          if (task.status !== "running") return;
+          appendTaskEvent(task, { type: "progress", stage: "generating", message: "Generating a constrained PitchKit" });
+        });
+        if (!execution || execution.status !== "running") return;
+
+        const executionRevision = execution.revision;
+        let markdown;
+        try {
+          markdown = await generatePitchKit({ env: await runtimeEnv(), objective: execution.objective, brief, fetchImpl });
+        } catch (error) {
+          const latest = await taskStore.get(taskId);
+          if (latest?.status === "running" && latest.revision !== executionRevision) continue;
+          throw error;
+        }
+
+        let latest = await taskStore.get(taskId);
+        if (!latest || latest.status !== "running") return;
+        if (latest.revision !== executionRevision) {
+          await taskStore.update(taskId, (task) => {
+            if (task.status === "running") appendTaskEvent(task, { type: "revision_restarted", stage: "generating", message: "Restarting generation with the latest direction" });
+          });
+          continue;
+        }
+
+        await taskStore.update(taskId, (task) => {
+          if (task.status === "running" && task.revision === executionRevision) {
+            appendTaskEvent(task, { type: "progress", stage: "validating", message: "Validating required sections" });
+          }
+        });
         try {
           validatePitchKit(markdown);
         } catch {
-          event("generating", "Repairing the required PitchKit format");
-          markdown = repairPitchKit(run.objective, brief);
+          await taskStore.update(taskId, (task) => {
+            if (task.status === "running" && task.revision === executionRevision) {
+              appendTaskEvent(task, { type: "progress", stage: "generating", message: "Repairing the required PitchKit format" });
+            }
+          });
+          markdown = repairPitchKit(execution.objective, brief);
           validatePitchKit(markdown);
         }
-        event("writing", "Writing the PitchKit artifact");
-        const artifactPath = await writePitchKit({ env, runId: run.runId, markdown });
-        run.artifact = { name: "pitch-kit.md", path: artifactPath, mediaType: "text/markdown" };
-        run.status = "succeeded";
-        event("terminal", "PitchKit completed");
-      } catch (error) {
-        run.status = "failed";
-        run.error = error instanceof Error ? error.message : String(error);
-        event("terminal", run.error);
+
+        latest = await taskStore.get(taskId);
+        if (!latest || latest.status !== "running") return;
+        if (latest.revision !== executionRevision) continue;
+        await taskStore.update(taskId, (task) => {
+          if (task.status === "running" && task.revision === executionRevision) {
+            appendTaskEvent(task, { type: "progress", stage: "writing", message: "Writing the PitchKit artifact" });
+          }
+        });
+        const artifactPath = await writePitchKit({ env, runId: taskId, markdown });
+
+        latest = await taskStore.get(taskId);
+        if (!latest || latest.status !== "running") return;
+        if (latest.revision !== executionRevision) continue;
+        const completion = await taskStore.update(taskId, (task) => {
+          if (task.status !== "running" || task.revision !== executionRevision) return;
+          task.artifact = { name: "pitch-kit.md", path: artifactPath, mediaType: "text/markdown" };
+          task.status = "succeeded";
+          appendTaskEvent(task, { type: "completed", stage: "terminal", message: "PitchKit completed" });
+        });
+        if (completion?.status === "running" && completion.revision !== executionRevision) continue;
+        return;
       }
-    })();
+    } catch (error) {
+      await taskStore.update(taskId, (task) => {
+        if (task.status === "cancelled") return;
+        task.status = "failed";
+        task.retryable = true;
+        task.error = error instanceof Error ? error.message : String(error);
+        appendTaskEvent(task, { type: "failed", stage: "terminal", message: task.error });
+      });
+    }
+  }
+
+  async function startPitchRun(proposal) {
+    const taskId = `run_${randomUUID()}`;
+    const createdAt = new Date().toISOString();
+    const run = {
+      taskId,
+      runId: taskId,
+      proposalId: proposal.proposalId,
+      objective: proposal.objective,
+      executor: "pitchkit",
+      revision: 1,
+      status: "queued",
+      retryable: false,
+      events: [{ sequence: 1, revision: 1, type: "accepted", stage: "queued", message: "PitchKit queued", at: createdAt }],
+      artifact: null,
+      error: null,
+      createdAt,
+      updatedAt: createdAt,
+    };
+    await taskStore.create(run);
+    void executePitchTask(taskId);
     return run;
   }
 
@@ -383,9 +454,69 @@ export function createPreachermanServer(options = {}) {
         json(response, 202, { run }, origin);
         return;
       }
+      const taskMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)$/);
+      if (request.method === "GET" && taskMatch) {
+        const task = await taskStore.get(decodeURIComponent(taskMatch[1]));
+        if (!task) {
+          json(response, 404, { error: "Task run not found." }, origin);
+          return;
+        }
+        json(response, 200, { task }, origin);
+        return;
+      }
+      const taskCommandMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)\/commands$/);
+      if (request.method === "POST" && taskCommandMatch) {
+        const taskId = decodeURIComponent(taskCommandMatch[1]);
+        const existing = await taskStore.get(taskId);
+        if (!existing) {
+          json(response, 404, { error: "Task run not found." }, origin);
+          return;
+        }
+        const body = await readJson(request);
+        const type = body.type;
+        if (type === "cancel") {
+          const task = await taskStore.update(taskId, (current) => {
+            if (!["queued", "running"].includes(current.status)) return;
+            current.status = "cancelled";
+            appendTaskEvent(current, { type: "cancelled", stage: "terminal", message: "PitchKit cancelled" });
+          });
+          json(response, 200, { task, command: { type: "cancel", accepted: task.status === "cancelled" } }, origin);
+          return;
+        }
+        if (type === "steer") {
+          const objective = typeof body.objective === "string" ? body.objective.trim() : "";
+          const instruction = typeof body.instruction === "string" ? body.instruction.trim() : "";
+          if (!objective && !instruction) {
+            json(response, 400, { error: "steer requires objective or instruction." }, origin);
+            return;
+          }
+          if (!["queued", "running"].includes(existing.status)) {
+            json(response, 409, { error: "Only an active task can be steered.", task: existing }, origin);
+            return;
+          }
+          const task = await taskStore.update(taskId, (current) => {
+            if (!["queued", "running"].includes(current.status)) return;
+            current.revision += 1;
+            current.objective = objective || `${current.objective}\n\nAdditional direction: ${instruction}`;
+            appendTaskEvent(current, {
+              type: "steered",
+              stage: "steering",
+              message: instruction || "Task objective updated",
+            });
+          });
+          if (task.revision === existing.revision) {
+            json(response, 409, { error: "Task finished before steering was applied.", task }, origin);
+            return;
+          }
+          json(response, 202, { task, command: { type: "steer", accepted: true, revision: task.revision } }, origin);
+          return;
+        }
+        json(response, 400, { error: "command type must be cancel or steer." }, origin);
+        return;
+      }
       const runMatch = url.pathname.match(/^\/api\/agent\/runs\/([^/]+)$/);
       if (request.method === "GET" && runMatch) {
-        const run = pitchRuns.get(decodeURIComponent(runMatch[1]));
+        const run = await taskStore.get(decodeURIComponent(runMatch[1]));
         if (!run) {
           json(response, 404, { error: "Task run not found." }, origin);
           return;
@@ -395,17 +526,18 @@ export function createPreachermanServer(options = {}) {
       }
       const runActionMatch = url.pathname.match(/^\/api\/agent\/runs\/([^/]+)\/(cancel|retry)$/);
       if (request.method === "POST" && runActionMatch) {
-        const run = pitchRuns.get(decodeURIComponent(runActionMatch[1]));
+        const run = await taskStore.get(decodeURIComponent(runActionMatch[1]));
         if (!run) {
           json(response, 404, { error: "Task run not found." }, origin);
           return;
         }
         if (runActionMatch[2] === "cancel") {
-          if (["queued", "running"].includes(run.status)) {
-            run.status = "cancelled";
-            run.events.push({ stage: "terminal", message: "PitchKit cancelled", at: new Date().toISOString() });
-          }
-          json(response, 200, { run }, origin);
+          const cancelled = await taskStore.update(run.taskId, (task) => {
+            if (!["queued", "running"].includes(task.status)) return;
+            task.status = "cancelled";
+            appendTaskEvent(task, { type: "cancelled", stage: "terminal", message: "PitchKit cancelled" });
+          });
+          json(response, 200, { run: cancelled }, origin);
           return;
         }
         const retry = await startPitchRun({ proposalId: run.proposalId, objective: run.objective });

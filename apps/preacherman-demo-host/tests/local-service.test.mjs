@@ -47,7 +47,7 @@ test("local service persists private provider settings and completes the guarded
   assert.equal(saved.response.status, 200);
   assert.deepEqual(saved.body, { deepseekConfigured: true, dashscopeWorkspaceConfigured: true, asrConfigured: false, ttsConfigured: false });
   assert.equal(JSON.stringify(saved.body).includes("private-deepseek-key"), false);
-  assert.equal((await stat(join(dataDir, "provider-settings.json"))).mode & 0o777, 0o600);
+  if (process.platform !== "win32") assert.equal((await stat(join(dataDir, "provider-settings.json"))).mode & 0o777, 0o600);
 
   const conversation = await request(baseUrl, "/api/conversations/conversation%3Atest-1", {
     method: "PUT",
@@ -56,7 +56,7 @@ test("local service persists private provider settings and completes the guarded
   assert.equal(conversation.response.status, 200);
   const recent = await request(baseUrl, "/api/conversations/recent");
   assert.equal(recent.body.entries[0].messages[1].text, "只保存文字记录");
-  assert.equal((await stat(join(dataDir, "conversation-ledger.json"))).mode & 0o777, 0o600);
+  if (process.platform !== "win32") assert.equal((await stat(join(dataDir, "conversation-ledger.json"))).mode & 0o777, 0o600);
 
   const turn = await request(baseUrl, "/api/agent/turn", {
     method: "POST",
