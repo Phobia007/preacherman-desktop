@@ -35,6 +35,7 @@ function CortanaCard({ onOpen }: { readonly onOpen: () => void }) {
     <button
       aria-label="Open Cortana model"
       className="cortana-card"
+      data-airi-control="avatar.select"
       onClick={onOpen}
       type="button"
     >

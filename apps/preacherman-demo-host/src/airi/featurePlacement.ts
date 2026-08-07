@@ -59,7 +59,7 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
     features: [
       feature("avatar.select", "Character model", "角色模型", "live"),
       feature("voice.select", "Voice pack", "声音包", "ready"),
-      feature("motion.select", "Motion set", "动作集", "live"),
+      feature("motion.select", "Motion set", "动作集", "ready"),
       feature("persona.select", "Persona", "人格设定", "ready"),
     ],
   },

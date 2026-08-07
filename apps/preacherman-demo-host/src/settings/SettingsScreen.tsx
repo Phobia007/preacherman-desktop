@@ -75,9 +75,9 @@ export function SettingsScreen({ appearance, locale, onAppearanceChange, onLocal
 
   return <main aria-label={isChinese ? "设置" : "Settings"} className="demo-host demo-settings">
     <div className="demo-settings__controls">
-      <button aria-pressed={appearance === "dark"} className="demo-settings__button" onClick={() => onAppearanceChange(appearance === "light" ? "dark" : "light")} type="button"><span>{isChinese ? "外观" : "Appearance"}</span><span aria-hidden="true">·</span><strong>{appearanceValue}</strong></button>
-      <button aria-pressed={locale === "zh-CN"} className="demo-settings__button" onClick={() => onLocaleChange(locale === "en" ? "zh-CN" : "en")} type="button"><span>{isChinese ? "语言" : "Language"}</span><span aria-hidden="true">·</span><strong>{languageValue}</strong></button>
-      <section className="demo-settings__service">
+      <button aria-pressed={appearance === "dark"} className="demo-settings__button" data-airi-control="appearance.select" onClick={() => onAppearanceChange(appearance === "light" ? "dark" : "light")} type="button"><span>{isChinese ? "外观" : "Appearance"}</span><span aria-hidden="true">·</span><strong>{appearanceValue}</strong></button>
+      <button aria-pressed={locale === "zh-CN"} className="demo-settings__button" data-airi-control="locale.select" onClick={() => onLocaleChange(locale === "en" ? "zh-CN" : "en")} type="button"><span>{isChinese ? "语言" : "Language"}</span><span aria-hidden="true">·</span><strong>{languageValue}</strong></button>
+      <section className="demo-settings__service" data-airi-control="provider.credentials voice.providers" tabIndex={-1}>
         <header><span>{isChinese ? "AI 与语音服务" : "AI & Voice services"}</span><small>{isChinese ? "Key 仅保存在本机服务端，不会回显。" : "Keys stay in the local service and are never shown again."}</small></header>
         <label>{isChinese ? "本地服务端口" : "Local service port"}<input inputMode="numeric" max="65535" min="1024" onChange={(event) => setPort(event.target.valueAsNumber || 0)} type="number" value={port} /></label>
         <label>DeepSeek API Key <input autoComplete="off" onChange={(event) => setDeepseekKey(event.target.value)} placeholder={status?.deepseekConfigured ? (isChinese ? "已配置；留空可保留当前 Key" : "Configured; leave blank to keep it") : "sk-…"} type="password" value={deepseekKey} /></label>

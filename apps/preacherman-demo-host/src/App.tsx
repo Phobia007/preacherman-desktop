@@ -71,6 +71,20 @@ export function App() {
   const [showStartupIntro, setShowStartupIntro] = useState(startupIntroEnabled);
   const [animateMainEntrance] = useState(showStartupIntro);
   const handleIntroComplete = useCallback(() => setShowStartupIntro(false), []);
+  const handleAiriFeatureActivate = useCallback((featureId: string): boolean => {
+    const target = Array.from(document.querySelectorAll<HTMLElement>("[data-airi-control]"))
+      .find((candidate) => candidate.dataset.airiControl?.split(" ").includes(featureId));
+    if (!target || (target instanceof HTMLButtonElement && target.disabled)) return false;
+
+    target.focus({ preventScroll: true });
+    target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    target.dataset.airiHighlight = "true";
+    window.setTimeout(() => delete target.dataset.airiHighlight, 900);
+    if (["presentation.stop", "task.cancel"].includes(featureId) && target instanceof HTMLButtonElement) {
+      target.click();
+    }
+    return true;
+  }, []);
 
   useEffect(() => {
     applyPreferences(preferences);
@@ -227,7 +241,11 @@ export function App() {
       <div className="demo-app-shell__screen-page" key={contentKey}>
         {mainContent}
         {airiPanelSurface ? (
-          <AiriFeaturePanel locale={preferences.locale} surface={airiPanelSurface} />
+          <AiriFeaturePanel
+            locale={preferences.locale}
+            onActivate={handleAiriFeatureActivate}
+            surface={airiPanelSurface}
+          />
         ) : null}
       </div>
     </AppShell>

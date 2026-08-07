@@ -67,7 +67,7 @@ export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
   }, []);
 
   return (
-    <section aria-label={ariaLabel} className="cortana-model-stage">
+    <section aria-label={ariaLabel} className="cortana-model-stage" data-airi-control="avatar.status" tabIndex={-1}>
       <InteractiveAvatarViewport
         actionId={playingActionId}
         actionRequestKey={actionRequestKey}
@@ -95,6 +95,7 @@ export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
         <strong>{motionActions.length || "—"} actions</strong>
         <select
           aria-label="Select Cortana motion"
+          data-airi-control="motion.select"
           disabled={motionActions.length === 0}
           onChange={(event) => setSelectedActionId(event.target.value)}
           value={selectedActionId}

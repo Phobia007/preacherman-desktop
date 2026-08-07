@@ -25,8 +25,8 @@ test("AIRI controls have one explicit Preacherman surface placement", async () =
   assert.match(registry, /status: AiriFeatureStatus/);
   assert.match(app, /activeSurfaceType === "workspace"[\s\S]*workspaceContent/);
   assert.match(app, /activeSurfaceType === "lab"[\s\S]*labContent/);
-  assert.match(app, /<AiriFeaturePanel locale=\{preferences\.locale\} surface=\{airiPanelSurface\}/);
-  assert.match(panel, /onClick=\{\(\) => setSelectedId\(candidate\.id\)\}/);
+  assert.match(app, /<AiriFeaturePanel[\s\S]*onActivate=\{handleAiriFeatureActivate\}[\s\S]*surface=\{airiPanelSurface\}/);
+  assert.match(panel, /onActivate\(candidate\.id\)/);
   assert.match(panel, /Connected in this demo/);
   assert.match(panel, /UI ready · runtime connection follows/);
   assert.match(panelStyles, /var\(--demo-theme-text\)/);
@@ -38,4 +38,28 @@ test("AIRI controls have one explicit Preacherman surface placement", async () =
   assert.match(styles, /\.demo-settings[\s\S]*?width: 100%;[\s\S]*?height: 100%;/);
   assert.match(styles, /\.demo-ledger[\s\S]*?width: 100%;[\s\S]*?height: 100%;/);
   assert.doesNotMatch(styles.match(/\.demo-airi-lab__intro[\s\S]*?\.demo-app-shell/)?.[0] ?? "", /#[0-9a-f]{3,8}\b/i);
+});
+
+test("live AIRI buttons focus the matching existing control", async () => {
+  const [app, voice, task, gallery, model, settings, ledger] = await Promise.all([
+    readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "realtime", "VoiceSessionControl.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "gallery", "CortanaGallery.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "gallery", "CortanaModelStage.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "settings", "SettingsScreen.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "conversation", "ConversationLedgerScreen.tsx"), "utf8"),
+  ]);
+
+  assert.match(app, /querySelectorAll<HTMLElement>\("\[data-airi-control\]"\)/);
+  assert.match(app, /target\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(voice, /data-airi-control="voice\.quick-input voice\.asr"/);
+  assert.match(voice, /data-airi-control="presentation\.stop"/);
+  assert.match(task, /data-airi-control="task\.create"/);
+  assert.match(task, /data-airi-control="task\.confirm"/);
+  assert.match(gallery, /data-airi-control="avatar\.select"/);
+  assert.match(model, /data-airi-control="avatar\.status"/);
+  assert.match(settings, /data-airi-control="appearance\.select"/);
+  assert.match(settings, /data-airi-control="provider\.credentials voice\.providers"/);
+  assert.match(ledger, /data-airi-control="conversation\.history"/);
 });

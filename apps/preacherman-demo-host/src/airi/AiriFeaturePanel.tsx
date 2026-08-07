@@ -18,13 +18,16 @@ const surfaceTitles: Record<DemoSurfaceType, { readonly en: string; readonly "zh
 
 export function AiriFeaturePanel({
   locale,
+  onActivate,
   surface,
 }: {
   readonly locale: Locale;
+  readonly onActivate: (featureId: string) => boolean;
   readonly surface: DemoSurfaceType;
 }) {
   const placement = featurePlacementForSurface(surface);
   const [selectedId, setSelectedId] = useState(placement.features[0]?.id ?? "");
+  const [activationState, setActivationState] = useState<"idle" | "focused" | "unavailable">("idle");
   const selected = placement.features.find((candidate) => candidate.id === selectedId) ?? placement.features[0];
   const chinese = locale === "zh-CN";
 
@@ -46,7 +49,12 @@ export function AiriFeaturePanel({
             className="demo-airi-panel__feature"
             data-status={candidate.status}
             key={candidate.id}
-            onClick={() => setSelectedId(candidate.id)}
+            onClick={() => {
+              setSelectedId(candidate.id);
+              setActivationState(candidate.status === "live"
+                ? (onActivate(candidate.id) ? "focused" : "unavailable")
+                : "idle");
+            }}
             type="button"
           >
             <span aria-hidden="true" className="demo-airi-panel__status" />
@@ -59,7 +67,11 @@ export function AiriFeaturePanel({
           <strong>{selected.label[locale]}</strong>
           <span data-status={selected.status}>
             {selected.status === "live"
-              ? (chinese ? "已接入当前 Demo" : "Connected in this demo")
+              ? activationState === "focused"
+                ? (chinese ? "已定位到对应控件" : "Control focused")
+                : activationState === "unavailable"
+                  ? (chinese ? "已接入 · 当前状态下暂不可用" : "Connected · unavailable in the current state")
+                  : (chinese ? "已接入当前 Demo" : "Connected in this demo")
               : (chinese ? "界面已就绪 · 等待运行时接线" : "UI ready · runtime connection follows")}
           </span>
         </footer>
