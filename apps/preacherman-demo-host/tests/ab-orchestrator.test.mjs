@@ -191,7 +191,7 @@ test("AB console uses the existing semantic theme and is mounted beside voice", 
   assert.match(app, /<VoiceSessionControl locale=\{preferences\.locale\} \/>[\s\S]*<ABTaskConsole locale=\{preferences\.locale\} \/>/);
   assert.match(component, /\/api\/agent\/turn/);
   assert.match(component, /\/api\/agent\/proposals\//);
-  assert.match(component, /preacherman:voice-transcript/);
+  assert.match(component, /coordinator\.onFinalTranscript/);
   for (const token of ["text", "muted", "border", "border-strong", "focus", "loading", "error", "activate-fill"]) {
     assert.match(styles, new RegExp(`var\\(--demo-theme-${token}`));
   }

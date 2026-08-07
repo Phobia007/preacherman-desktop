@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 import type { Locale } from "../preferences";
 import { localServiceUrl } from "../serviceConfig";
 import { beginNewConversation, saveConversation, type LedgerMessage } from "../conversationLedger";
+import { useLiveCoordinator } from "../live/LiveCoordinatorContext";
 import "./ab-task-console.css";
 
 interface TaskProposal {
@@ -38,7 +39,7 @@ const copy = {
     confirm: "Confirm and run",
     running: "Your PitchKit is being prepared",
     artifact: "Artifact ready",
-    cancel: "Cancel task",
+    stopTask: "Stop task",
     retry: "Retry",
     newConversation: "New conversation",
     deepseekReply: "DeepSeek reply",
@@ -54,7 +55,7 @@ const copy = {
     confirm: "确认并执行",
     running: "正在生成 PitchKit",
     artifact: "产物已完成",
-    cancel: "取消任务",
+    stopTask: "停止任务",
     retry: "重试",
     newConversation: "新对话",
     deepseekReply: "DeepSeek 已回复",
@@ -83,6 +84,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
   const labels = copy[locale];
+  const coordinator = useLiveCoordinator();
   const sessionKey = useMemo(() => `preacherman.conversation.${locale}`, [locale]);
   const [messages, setMessages] = useState<Message[]>(() => {
     try { return JSON.parse(localStorage.getItem(sessionKey) || "[]") as Message[]; } catch { return []; }
@@ -112,8 +114,8 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
     announcedRunIds.current.add(run.runId);
     const summary = completionSummary(locale, run.objective);
     setMessages((current) => [...current, { role: "assistant", text: summary }]);
-    window.dispatchEvent(new CustomEvent("preacherman:speak", { detail: summary.slice(0, 160) }));
-  }, [locale, run]);
+    coordinator.requestSpeech(summary.slice(0, 160), locale, run.runId);
+  }, [coordinator, locale, run]);
 
   const sendText = useCallback(async (candidate: string) => {
     const text = candidate.trim();
@@ -126,21 +128,16 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
       });
       setMessages((current) => [...current, { role: "assistant", text: response.displayText }]);
       setDiagnostics(response.diagnostics);
-      window.dispatchEvent(new CustomEvent("preacherman:speak", { detail: response.displayText.slice(0, 160) }));
+      coordinator.requestSpeech(response.displayText.slice(0, 160), locale);
       setProposal(response.proposal);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Unable to reach the companion service.");
     } finally { setBusy(false); }
-  }, [busy, locale, messages]);
+  }, [busy, coordinator, locale, messages]);
 
   useEffect(() => {
-    const handleVoiceTranscript = (event: Event) => {
-      const transcript = (event as CustomEvent<string>).detail;
-      void sendText(transcript);
-    };
-    window.addEventListener("preacherman:voice-transcript", handleVoiceTranscript);
-    return () => window.removeEventListener("preacherman:voice-transcript", handleVoiceTranscript);
-  }, [sendText]);
+    return coordinator.onFinalTranscript((transcript) => void sendText(transcript));
+  }, [coordinator, sendText]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -156,21 +153,25 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
       });
       setRun(response.run); setProposal(null);
       setMessages((current) => [...current, { role: "assistant", text: labels.taskStarted }]);
-      window.dispatchEvent(new CustomEvent("preacherman:speak", { detail: labels.taskStarted.slice(0, 160) }));
+      coordinator.requestSpeech(labels.taskStarted.slice(0, 160), locale, response.run.runId);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Unable to start the task.");
     } finally { setBusy(false); }
   };
 
-  const controlRun = async (action: "cancel" | "retry") => {
-    if (!run || busy) return;
+  const controlRun = useCallback(async (taskRunId: string, action: "cancel" | "retry") => {
+    if (busy) return;
     setBusy(true); setError(null);
     try {
-      const response = await request<{ run: TaskRun }>(`/api/agent/runs/${run.runId}/${action}`, { method: "POST", body: "{}" });
+      const response = await request<{ run: TaskRun }>(`/api/agent/runs/${taskRunId}/${action}`, { method: "POST", body: "{}" });
       setRun(response.run);
     } catch (reason) { setError(reason instanceof Error ? reason.message : "Unable to update task."); }
     finally { setBusy(false); }
-  };
+  }, [busy]);
+
+  useEffect(() => coordinator.connectTaskCancellationAdapter({
+    cancelTask: (taskRunId) => controlRun(taskRunId, "cancel"),
+  }), [controlRun, coordinator]);
 
   const startNewConversation = () => {
     beginNewConversation();
@@ -199,7 +200,7 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
         <div className="ab-task-console__actions"><button className="ab-task-console__button ab-task-console__button--primary" disabled={!input.trim() || busy} type="submit">{labels.send}</button></div>
       </form>
       {proposal ? <section className="ab-task-console__approval"><span>{proposal.executor}</span><textarea aria-label="PitchKit objective" onChange={(event) => setProposal({ ...proposal, objective: event.target.value })} value={proposal.objective} /><p>{proposal.inputs.join(" · ")} → {proposal.outputs.join(" · ")}</p><button className="ab-task-console__button ab-task-console__button--primary" disabled={busy || !proposal.objective.trim()} onClick={() => void confirm()} type="button">{labels.confirm}</button></section> : null}
-      {run ? <section className="ab-task-console__activity"><strong>{run.status === "succeeded" ? labels.artifact : labels.running}</strong><p>{run.events.at(-1)?.message || "Queued"}</p>{run.artifact ? <p><code>{run.artifact.path}</code></p> : null}{run.error ? <p data-error="true">{run.error}</p> : null}{["queued", "running"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" disabled={busy} onClick={() => void controlRun("cancel")} type="button">{labels.cancel}</button> : null}{["failed", "cancelled"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" disabled={busy} onClick={() => void controlRun("retry")} type="button">{labels.retry}</button> : null}</section> : null}
+      {run ? <section className="ab-task-console__activity"><strong>{run.status === "succeeded" ? labels.artifact : labels.running}</strong><p>{run.events.at(-1)?.message || "Queued"}</p>{run.artifact ? <p><code>{run.artifact.path}</code></p> : null}{run.error ? <p data-error="true">{run.error}</p> : null}{["queued", "running"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" disabled={busy} onClick={() => void coordinator.cancelTask(run.runId)} type="button">{labels.stopTask}</button> : null}{["failed", "cancelled"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" disabled={busy} onClick={() => void controlRun(run.runId, "retry")} type="button">{labels.retry}</button> : null}</section> : null}
     </section>
   );
 }

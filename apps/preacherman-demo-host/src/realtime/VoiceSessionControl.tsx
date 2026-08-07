@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import type { SpeechRequest } from "../live/LiveCoordinator";
+import { useLiveCoordinator } from "../live/LiveCoordinatorContext";
 import type { Locale } from "../preferences";
 import { localServiceWebSocketUrl } from "../serviceConfig";
 import "./voice-session.css";
@@ -43,12 +45,14 @@ function isMeaningfulTranscript(value: string): boolean {
 
 function copy(locale: Locale) {
   return locale === "zh-CN"
-    ? { idle: "按住说话", listening: "松开后发送", finalizing: "正在确认语音", pushToTalk: "按住", handsFree: "自由说话", handsFreeStart: "开始聆听", handsFreeStop: "结束聆听" }
-    : { idle: "Hold to talk", listening: "Release to send", finalizing: "Finalizing speech", pushToTalk: "Hold", handsFree: "Hands-free", handsFreeStart: "Start listening", handsFreeStop: "Stop listening" };
+    ? { idle: "按住说话", listening: "松开后发送", finalizing: "正在确认语音", pushToTalk: "按住", handsFree: "自由说话", handsFreeStart: "开始聆听", handsFreeStop: "结束聆听", stopSpeaking: "停止说话" }
+    : { idle: "Hold to talk", listening: "Release to send", finalizing: "Finalizing speech", pushToTalk: "Hold", handsFree: "Hands-free", handsFreeStart: "Start listening", handsFreeStop: "Stop listening", stopSpeaking: "Stop speaking" };
 }
 
 export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
+  const coordinator = useLiveCoordinator();
   const [state, setState] = useState<VoiceState>("idle");
+  const [speechLifecycle, setSpeechLifecycle] = useState(coordinator.getSpeechLifecycle());
   const [captureMode, setCaptureMode] = useState<CaptureMode>(() => localStorage.getItem(VOICE_MODE_STORAGE_KEY) === "handsFree" ? "handsFree" : "pushToTalk");
   const [transcript, setTranscript] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -62,6 +66,9 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   const playbackContext = useRef<AudioContext | null>(null);
   const playbackCursor = useRef(0);
   const activeTts = useRef<WebSocket | null>(null);
+  const activePlaybackSources = useRef(new Set<AudioBufferSourceNode>());
+  const playbackCompletionTimer = useRef<number | null>(null);
+  const ttsFallbackTimer = useRef<number | null>(null);
   const captureModeRef = useRef<CaptureMode>(captureMode);
   const handsFreeActive = useRef(false);
   const awaitingAssistantReply = useRef(false);
@@ -78,6 +85,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   useEffect(() => { stateRef.current = state; }, [state]);
   useEffect(() => { transcriptRef.current = transcript; }, [transcript]);
   useEffect(() => { captureModeRef.current = captureMode; localStorage.setItem(VOICE_MODE_STORAGE_KEY, captureMode); }, [captureMode]);
+  useEffect(() => coordinator.onSpeechLifecycle(setSpeechLifecycle), [coordinator]);
 
   const cleanup = () => {
     if (timer.current) window.clearTimeout(timer.current);
@@ -89,10 +97,40 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   useEffect(() => () => { cleanup(); socket.current?.close(); }, []);
 
   useEffect(() => {
-    const play = (event: Event) => {
-      const text = (event as CustomEvent<string>).detail?.trim();
+    const clearPlayback = () => {
+      if (playbackCompletionTimer.current) window.clearTimeout(playbackCompletionTimer.current);
+      if (ttsFallbackTimer.current) window.clearTimeout(ttsFallbackTimer.current);
+      playbackCompletionTimer.current = null;
+      ttsFallbackTimer.current = null;
+      const ws = activeTts.current;
+      activeTts.current = null;
+      if (ws) {
+        ws.onopen = null;
+        ws.onmessage = null;
+        ws.onerror = null;
+        ws.close();
+      }
+      speechSynthesis.cancel();
+      for (const source of activePlaybackSources.current) {
+        try { source.stop(); } catch { /* source already ended */ }
+      }
+      activePlaybackSources.current.clear();
+      playbackCursor.current = 0;
+      window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
+    };
+    const finishPlayback = () => {
+      clearPlayback();
+      window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "idle" }));
+      coordinator.reportSpeechLifecycle("idle");
+    };
+    const stopSpeech = (_reason: "user_action" | "new_request") => {
+      coordinator.reportSpeechLifecycle("stopping");
+      finishPlayback();
+    };
+    const play = ({ text, locale: speechLocale }: SpeechRequest) => {
       if (!text) return;
-      activeTts.current?.close();
+      clearPlayback();
+      coordinator.reportSpeechLifecycle("starting");
       window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "speaking" }));
       const ws = new WebSocket(localServiceWebSocketUrl("/api/voice/tts"));
       activeTts.current = ws;
@@ -101,17 +139,21 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       const fallback = () => {
         if (usedFallback) return;
         usedFallback = true;
+        activeTts.current = null;
+        ws.onopen = null;
+        ws.onmessage = null;
+        ws.onerror = null;
         ws.close();
         speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.onend = () => window.dispatchEvent(new CustomEvent("preacherman:tts-finished"));
-        utterance.onerror = () => window.dispatchEvent(new CustomEvent("preacherman:tts-finished"));
+        utterance.onstart = () => coordinator.reportSpeechLifecycle("playing");
+        utterance.onend = finishPlayback;
+        utterance.onerror = finishPlayback;
         speechSynthesis.speak(utterance);
-        window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "idle" }));
       };
-      const firstAudioTimeout = window.setTimeout(fallback, 600);
+      ttsFallbackTimer.current = window.setTimeout(fallback, 600);
       ws.onopen = () => {
-        ws.send(JSON.stringify({ event_id: eventId(), type: "session.update", session: { voice: "Serena", response_format: "pcm", sample_rate: 24000, mode: "server_commit", language_type: locale === "zh-CN" ? "Chinese" : "English" } }));
+        ws.send(JSON.stringify({ event_id: eventId(), type: "session.update", session: { voice: "Serena", response_format: "pcm", sample_rate: 24000, mode: "server_commit", language_type: speechLocale === "zh-CN" ? "Chinese" : "English" } }));
       };
       ws.onmessage = async (message) => {
         if (typeof message.data !== "string") return;
@@ -124,7 +166,9 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         }
         if (payload.type === "response.audio.delta" && payload.delta) {
           receivedAudio = true;
-          window.clearTimeout(firstAudioTimeout);
+          if (ttsFallbackTimer.current) window.clearTimeout(ttsFallbackTimer.current);
+          ttsFallbackTimer.current = null;
+          coordinator.reportSpeechLifecycle("playing");
           const audio = playbackContext.current || new AudioContext({ sampleRate: 24000 });
           playbackContext.current = audio;
           const pcm = fromBase64(payload.delta);
@@ -133,15 +177,15 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
           const channel = buffer.getChannelData(0);
           for (let index = 0; index < pcm.length; index += 1) channel[index] = pcm[index] / 0x8000;
           const source = audio.createBufferSource(); source.buffer = buffer; source.connect(audio.destination);
+          activePlaybackSources.current.add(source);
+          source.onended = () => activePlaybackSources.current.delete(source);
           const startAt = Math.max(audio.currentTime + 0.08, playbackCursor.current);
           source.start(startAt); playbackCursor.current = startAt + buffer.duration;
         }
         if (payload.type === "response.audio.done" || payload.type === "response.done") {
-          window.clearTimeout(firstAudioTimeout);
-          window.setTimeout(() => {
-            window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "idle" }));
-            window.dispatchEvent(new CustomEvent("preacherman:tts-finished"));
-          }, Math.max(0, (playbackCursor.current - (playbackContext.current?.currentTime || 0)) * 1000));
+          if (ttsFallbackTimer.current) window.clearTimeout(ttsFallbackTimer.current);
+          ttsFallbackTimer.current = null;
+          playbackCompletionTimer.current = window.setTimeout(finishPlayback, Math.max(0, (playbackCursor.current - (playbackContext.current?.currentTime || 0)) * 1000));
           window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
         }
         if (payload.type === "error") fallback();
@@ -150,9 +194,13 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         if (!receivedAudio) fallback();
       };
     };
-    window.addEventListener("preacherman:speak", play);
-    return () => window.removeEventListener("preacherman:speak", play);
-  }, [locale]);
+    const disconnect = coordinator.connectPresentationAdapter({ speak: play, stopSpeech });
+    return () => {
+      disconnect();
+      clearPlayback();
+      coordinator.reportSpeechLifecycle("idle");
+    };
+  }, [coordinator]);
 
   const finish = (stopHandsFree = false) => {
     if (stateRef.current !== "listening") return;
@@ -167,8 +215,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   const start = async () => {
     if (!["idle", "error"].includes(stateRef.current)) return;
     try {
-      activeTts.current?.close();
-      speechSynthesis.cancel();
+      coordinator.stopSpeech();
       setErrorMessage("");
       window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "listening" }));
       setTranscript("");
@@ -209,7 +256,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
             setTranscript("");
             return;
           }
-          window.dispatchEvent(new CustomEvent("preacherman:voice-transcript", { detail: finalText }));
+          coordinator.deliverFinalTranscript(finalText);
           if (captureModeRef.current === "handsFree" && handsFreeActive.current) {
             awaitingAssistantReply.current = true;
             expectedSocketClose.current = true;
@@ -253,20 +300,18 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     }
   };
 
-  useEffect(() => {
-    const resumeHandsFree = () => {
+  useEffect(() => coordinator.onSpeechLifecycle((lifecycle) => {
+    if (lifecycle === "idle") {
       if (!handsFreeActive.current || !awaitingAssistantReply.current || captureModeRef.current !== "handsFree") return;
       awaitingAssistantReply.current = false;
       stateRef.current = "idle";
       setState("idle");
       window.setTimeout(() => { if (handsFreeActive.current) void start(); }, 180);
-    };
-    window.addEventListener("preacherman:tts-finished", resumeHandsFree);
-    return () => window.removeEventListener("preacherman:tts-finished", resumeHandsFree);
-  });
+    }
+  }));
 
   return (
-    <section className="preacherman-live" data-state={state}>
+    <section className="preacherman-live" data-speech-state={speechLifecycle} data-state={speechLifecycle === "playing" ? "speaking" : state}>
       <div className="preacherman-live__status" role="status">
         <span>{locale === "zh-CN" ? "语音输入" : "Voice input"}</span>
         <strong>{state === "error" ? errorMessage : transcript || labels[state]}</strong>
@@ -275,20 +320,23 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         <button aria-pressed={captureMode === "pushToTalk"} disabled={state === "listening" || state === "finalizing"} onClick={() => { handsFreeActive.current = false; setCaptureMode("pushToTalk"); }} type="button">{labels.pushToTalk}</button>
         <button aria-pressed={captureMode === "handsFree"} disabled={state === "listening" || state === "finalizing"} onClick={() => setCaptureMode("handsFree")} type="button">{labels.handsFree}</button>
       </div>
-      <button
-        aria-pressed={state === "listening"}
-        className="preacherman-live__button"
-        disabled={state === "finalizing"}
-        onClick={captureMode === "handsFree" ? () => { if (state === "listening") finish(true); else { handsFreeActive.current = true; void start(); } } : undefined}
-        onPointerCancel={captureMode === "pushToTalk" ? () => finish() : undefined}
-        onPointerDown={captureMode === "pushToTalk" ? (event) => { event.currentTarget.setPointerCapture(event.pointerId); void start(); } : undefined}
-        onPointerLeave={captureMode === "pushToTalk" ? () => finish() : undefined}
-        onPointerUp={captureMode === "pushToTalk" ? () => finish() : undefined}
-        type="button"
-      >
-        <span aria-hidden="true" className="preacherman-live__signal"><i /><i /><i /></span>
-        <span>{state === "error" ? (locale === "zh-CN" ? "点按重试" : "Tap to retry") : captureMode === "handsFree" ? (state === "listening" ? labels.handsFreeStop : labels.handsFreeStart) : labels[state]}</span>
-      </button>
+      <div className="preacherman-live__controls">
+        <button
+          aria-pressed={state === "listening"}
+          className="preacherman-live__button"
+          disabled={state === "finalizing"}
+          onClick={captureMode === "handsFree" ? () => { if (state === "listening") finish(true); else { handsFreeActive.current = true; void start(); } } : undefined}
+          onPointerCancel={captureMode === "pushToTalk" ? () => finish() : undefined}
+          onPointerDown={captureMode === "pushToTalk" ? (event) => { event.currentTarget.setPointerCapture(event.pointerId); void start(); } : undefined}
+          onPointerLeave={captureMode === "pushToTalk" ? () => finish() : undefined}
+          onPointerUp={captureMode === "pushToTalk" ? () => finish() : undefined}
+          type="button"
+        >
+          <span aria-hidden="true" className="preacherman-live__signal"><i /><i /><i /></span>
+          <span>{state === "error" ? (locale === "zh-CN" ? "点按重试" : "Tap to retry") : captureMode === "handsFree" ? (state === "listening" ? labels.handsFreeStop : labels.handsFreeStart) : labels[state]}</span>
+        </button>
+        <button className="preacherman-live__cancel" disabled={speechLifecycle === "idle"} onClick={() => coordinator.stopSpeech()} type="button">{labels.stopSpeaking}</button>
+      </div>
     </section>
   );
 }

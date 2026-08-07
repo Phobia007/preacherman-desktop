@@ -23,6 +23,7 @@ import { CortanaGallery } from "./gallery/CortanaGallery";
 import { CortanaModelStage } from "./gallery/CortanaModelStage";
 import { IntroSplash } from "./intro/IntroSplash";
 import { claimStartupIntro } from "./introSequence";
+import { LiveCoordinatorProvider } from "./live/LiveCoordinatorContext";
 import {
   applyPreferences,
   readPreferences,
@@ -177,7 +178,7 @@ export function App() {
         );
       })();
 
-  return showStartupIntro ? (
+  const app = showStartupIntro ? (
     <IntroSplash
       appearance={preferences.appearance}
       locale={preferences.locale}
@@ -196,4 +197,6 @@ export function App() {
       </div>
     </AppShell>
   );
+
+  return <LiveCoordinatorProvider>{app}</LiveCoordinatorProvider>;
 }

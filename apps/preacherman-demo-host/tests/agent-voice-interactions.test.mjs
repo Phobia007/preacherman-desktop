@@ -2,15 +2,24 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import test from "node:test";
+import ts from "typescript";
 
 const packageRoot = join(import.meta.dirname, "..");
+
+async function loadCoordinator() {
+  const source = await readFile(join(packageRoot, "src", "live", "LiveCoordinator.ts"), "utf8");
+  const output = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+  }).outputText;
+  return import(`data:text/javascript;base64,${Buffer.from(output).toString("base64")}`);
+}
 
 test("Agent A announces task start and summarizes a completed B artifact", async () => {
   const source = await readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8");
   assert.match(source, /taskStarted/);
   assert.match(source, /completionSummary/);
   assert.match(source, /run\.status !== "succeeded"/);
-  assert.match(source, /preacherman:speak/);
+  assert.match(source, /coordinator\.requestSpeech/);
   assert.doesNotMatch(source, /run\?\.status === "running"\) return/);
 });
 
@@ -45,8 +54,58 @@ test("voice input exposes persisted push-to-talk and hands-free VAD modes", asyn
   assert.match(source, /silence_duration_ms: 900/);
   assert.match(source, /isMeaningfulTranscript/);
   assert.match(source, /handsFreeActive/);
-  assert.match(source, /preacherman:tts-finished/);
+  assert.match(source, /coordinator\.onSpeechLifecycle/);
   assert.match(source, /awaitingAssistantReply/);
   assert.match(source, /onPointerDown=/);
   assert.match(source, /onClick=\{captureMode === "handsFree"/);
+});
+
+test("the Live Coordinator keeps speech, transcript, and task cancellation in separate scopes", async () => {
+  const [coordinator, context, voice, consoleSource, app] = await Promise.all([
+    readFile(join(packageRoot, "src", "live", "LiveCoordinator.ts"), "utf8"),
+    readFile(join(packageRoot, "src", "live", "LiveCoordinatorContext.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "realtime", "VoiceSessionControl.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
+  ]);
+
+  assert.match(coordinator, /connectPresentationAdapter/);
+  assert.match(coordinator, /stopSpeech\(\)/);
+  assert.match(coordinator, /deliverFinalTranscript/);
+  assert.match(coordinator, /connectTaskCancellationAdapter/);
+  assert.match(coordinator, /cancelTask\(taskRunId/);
+  assert.match(coordinator, /generationId/);
+  assert.match(coordinator, /audioStreamId/);
+  assert.match(coordinator, /interactionEpoch/);
+  assert.match(context, /LiveCoordinatorProvider/);
+  assert.match(app, /<LiveCoordinatorProvider>/);
+
+  assert.match(voice, /labels\.stopSpeaking/);
+  assert.match(consoleSource, /labels\.stopTask/);
+  assert.doesNotMatch(voice, /preacherman:(?:speak|voice-transcript|tts-finished)/);
+  assert.doesNotMatch(consoleSource, /preacherman:(?:speak|voice-transcript|tts-finished)/);
+});
+
+test("stopping presentation never cancels a TaskRun", async () => {
+  const { LiveCoordinator } = await loadCoordinator();
+  const coordinator = new LiveCoordinator();
+  const calls = [];
+  coordinator.connectPresentationAdapter({
+    speak: (request) => calls.push(["speak", request]),
+    stopSpeech: (reason) => calls.push(["stop-speech", reason]),
+  });
+  coordinator.connectTaskCancellationAdapter({
+    cancelTask: async (taskRunId) => { calls.push(["cancel-task", taskRunId]); },
+  });
+
+  assert.equal(coordinator.requestSpeech("Demo reply", "en", "task:1"), true);
+  coordinator.reportSpeechLifecycle("playing");
+  assert.equal(coordinator.stopSpeech(), true);
+  assert.deepEqual(calls.map(([scope]) => scope), ["speak", "stop-speech"]);
+
+  assert.equal(await coordinator.cancelTask("task:1"), true);
+  assert.deepEqual(calls.map(([scope]) => scope), ["speak", "stop-speech", "cancel-task"]);
+  assert.equal(calls[0][1].taskId, "task:1");
+  assert.match(calls[0][1].generationId, /^generation_/);
+  assert.match(calls[0][1].audioStreamId, /^audio_/);
 });

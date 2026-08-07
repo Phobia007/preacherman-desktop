@@ -123,8 +123,21 @@
   cursor: pointer;
 }
 
-.preacherman-live__cancel:hover,
-.preacherman-live__cancel:focus-visible {
+.preacherman-live__controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.preacherman-live__cancel:disabled {
+  color: var(--demo-theme-muted);
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.preacherman-live__cancel:hover:not(:disabled),
+.preacherman-live__cancel:focus-visible:not(:disabled) {
   color: var(--demo-theme-error);
 }
 

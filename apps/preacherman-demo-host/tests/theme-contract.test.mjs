@@ -150,3 +150,18 @@ test("Gallery and model detail chrome inherit the active appearance without reco
     /\.preacherman-avatar-debug\s*\{[\s\S]*var\(--demo-theme-border-strong\)[\s\S]*var\(--demo-theme-text\)[\s\S]*var\(--demo-theme-surface-elevated\)/,
   );
 });
+
+test("live speech and task controls inherit semantic colors in light and dark appearances", async () => {
+  const [styles, voiceStyles, taskStyles] = await Promise.all([
+    readFile(join(hostRoot, "src", "styles.css"), "utf8"),
+    readFile(join(hostRoot, "src", "realtime", "voice-session.css"), "utf8"),
+    readFile(join(hostRoot, "src", "ab", "ab-task-console.css"), "utf8"),
+  ]);
+
+  assert.match(styles, /\.demo-app-shell\s*\{[\s\S]*--demo-theme-focus:[\s\S]*--demo-theme-error:/);
+  assert.match(styles, /\.demo-app-shell\[data-appearance="dark"\]\s*\{[\s\S]*--demo-theme-focus:[\s\S]*--demo-theme-error:/);
+  assert.match(voiceStyles, /\.preacherman-live__cancel:disabled\s*\{[\s\S]*var\(--demo-theme-muted\)/);
+  assert.match(voiceStyles, /\.preacherman-live__cancel:focus-visible[^\{]*\{[\s\S]*var\(--demo-theme-focus\)/);
+  assert.match(taskStyles, /\.ab-task-console__button:focus-visible\s*\{[\s\S]*var\(--demo-theme-focus\)/);
+  assert.match(taskStyles, /\.ab-task-console__button--quiet\s*\{[\s\S]*var\(--demo-theme-activate-rest-text\)[\s\S]*var\(--demo-theme-activate-rest-bg\)/);
+});
