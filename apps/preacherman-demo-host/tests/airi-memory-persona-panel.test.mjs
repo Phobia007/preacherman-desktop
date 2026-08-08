@@ -30,6 +30,7 @@ async function loadPanel(t) {
 const persona = { id: "persona-airi", name: "Airi", description: "Local guide", selected: true };
 const memory = {
   id: "memory-1",
+  owner: "preacherman-runtime",
   personaId: persona.id,
   namespace: "work",
   text: "Ship the demo",
@@ -45,22 +46,25 @@ const memory = {
   },
 };
 
-test("request helpers call the three real Memory/Persona service routes", async (t) => {
-  const { loadAiriPersonas, recallAiriMemories, rememberAiriMemory } = await loadPanel(t);
+test("request helpers call the four real Memory/Persona service routes", async (t) => {
+  const { loadAiriPersonas, recallAiriMemories, rememberAiriMemory, selectAiriPersona } = await loadPanel(t);
   const calls = [];
   const request = async (path, init) => {
     calls.push([path, init]);
     if (path === "/api/personas") return { personas: [persona], selected: persona };
+    if (path.endsWith("/select")) return { selected: persona };
     if (path === "/api/memory/remember") return { memory };
     return { memories: [memory] };
   };
 
   assert.equal((await loadAiriPersonas(request)).selected.id, persona.id);
+  assert.equal((await selectAiriPersona(request, persona.id)).id, persona.id);
   assert.equal((await rememberAiriMemory(request, { personaId: persona.id, namespace: "work", text: "Ship the demo" })).id, memory.id);
   assert.equal((await recallAiriMemories(request, { personaId: persona.id, namespace: "work", query: "demo", limit: 20 }))[0].id, memory.id);
 
   assert.deepEqual(calls.map(([path]) => path), [
     "/api/personas",
+    `/api/personas/${persona.id}/select`,
     "/api/memory/remember",
     "/api/memory/recall",
   ]);
@@ -69,13 +73,15 @@ test("request helpers call the three real Memory/Persona service routes", async 
     assert.equal(init.method, "POST");
     assert.equal(init.headers["content-type"], "application/json");
   }
-  assert.deepEqual(JSON.parse(calls[1][1].body), { personaId: persona.id, namespace: "work", text: "Ship the demo" });
-  assert.deepEqual(JSON.parse(calls[2][1].body), { personaId: persona.id, namespace: "work", query: "demo", limit: 20 });
+  assert.deepEqual(JSON.parse(calls[1][1].body), {});
+  assert.deepEqual(JSON.parse(calls[2][1].body), { personaId: persona.id, namespace: "work", text: "Ship the demo" });
+  assert.deepEqual(JSON.parse(calls[3][1].body), { personaId: persona.id, namespace: "work", query: "demo", limit: 20 });
 });
 
 test("malformed service results never become apparent success", async (t) => {
-  const { loadAiriPersonas, recallAiriMemories, rememberAiriMemory } = await loadPanel(t);
+  const { loadAiriPersonas, recallAiriMemories, rememberAiriMemory, selectAiriPersona } = await loadPanel(t);
   await assert.rejects(loadAiriPersonas(async () => ({ selected: null })), /persona list/i);
+  await assert.rejects(selectAiriPersona(async () => ({ selected: null }), persona.id), /invalid response/i);
   await assert.rejects(rememberAiriMemory(async () => ({ memory: { id: "incomplete" } }), {
     personaId: persona.id, namespace: "work", text: "demo",
   }), /memory time metadata|invalid memory/i);
@@ -97,8 +103,10 @@ test("panel markup is bilingual, accessible, and does not collect restricted fie
   assert.match(english, /for="airi-memory-content"/);
   assert.match(english, /for="airi-memory-query"/);
   assert.match(english, /role="note"/);
-  assert.match(english, /service does not expose a selection endpoint/);
-  assert.match(chinese, /不会模拟切换成功/);
+  const source = await readFile(componentPath, "utf8");
+  assert.match(source, /\/api\/personas\/\$\{encodeURIComponent\(personaId\)\}\/select/);
+  assert.match(source, /aria-pressed=\{selected\}/);
+  assert.ok(source.indexOf("await selectAiriPersona") < source.indexOf("setSelectedPersona(selected)"));
   assert.doesNotMatch(english, /type="password"/);
   assert.doesNotMatch(english, /type="file"/);
   assert.doesNotMatch(english, /<audio/i);

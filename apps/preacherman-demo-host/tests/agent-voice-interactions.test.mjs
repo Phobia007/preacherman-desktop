@@ -1,26 +1,30 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { build } from "esbuild";
+import { pathToFileURL } from "node:url";
 import test from "node:test";
+import ts from "typescript";
 
 const packageRoot = join(import.meta.dirname, "..");
 
-async function loadCoordinator() {
-  const result = await build({
-    bundle: true,
-    entryPoints: [join(packageRoot, "src", "live", "LiveCoordinator.ts")],
-    format: "esm",
-    platform: "node",
-    target: "node22",
-    write: false,
-  });
-  return import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`);
+async function loadCoordinator(t) {
+  const source = await readFile(join(packageRoot, "src", "live", "LiveCoordinator.ts"), "utf8");
+  const output = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+  }).outputText;
+  const temporaryDirectory = await mkdtemp(join(packageRoot, ".tmp-live-coordinator-"));
+  const modulePath = join(temporaryDirectory, "LiveCoordinator.mjs");
+  await writeFile(modulePath, output, "utf8");
+  t.after(() => rm(temporaryDirectory, { recursive: true, force: true }));
+  return import(`${pathToFileURL(modulePath).href}?${Date.now()}`);
 }
 
 test("Agent A announces task start and summarizes a completed B artifact", async () => {
   const source = await readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8");
   assert.match(source, /taskStarted/);
+  assert.match(source, /pluginTaskStarted/);
+  assert.match(source, /proposal\.kind === "plugin-tool"/);
+  assert.match(source, /runCompletionSummary/);
   assert.match(source, /completionSummary/);
   assert.match(source, /run\.status !== "succeeded"/);
   assert.match(source, /coordinator\.requestSpeech/);
@@ -107,8 +111,8 @@ test("the Live Coordinator keeps speech, transcript, and task cancellation in se
   assert.doesNotMatch(consoleSource, /preacherman:(?:speak|voice-transcript|tts-finished)/);
 });
 
-test("stopping presentation never cancels a TaskRun", async () => {
-  const { LiveCoordinator } = await loadCoordinator();
+test("stopping presentation never cancels a TaskRun", async (t) => {
+  const { LiveCoordinator } = await loadCoordinator(t);
   const coordinator = new LiveCoordinator();
   const calls = [];
   coordinator.connectPresentationAdapter({

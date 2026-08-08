@@ -9,6 +9,7 @@ import { createDemoActionLog } from "./actionLog";
 import { ABTaskConsole } from "./ab/ABTaskConsole";
 import { AiriFeaturePanel } from "./airi/AiriFeaturePanel";
 import { AiriEcosystemDiagnostics } from "./airi/AiriEcosystemDiagnostics";
+import { AiriComputerVisionPanel } from "./airi/AiriComputerVisionPanel";
 import { AiriGameletPanel } from "./airi/AiriGameletPanel";
 import { AiriWidgetGallery } from "./airi/AiriWidgetGallery";
 import { airiServiceRequest } from "./airi/capabilityClient";
@@ -157,6 +158,7 @@ export function App() {
           <HomeSurface manifest={manifest} projection={projection} />
           <CortanaModelStage ariaLabel="Activated Cortana model" />
           <VoiceSessionControl locale={preferences.locale} />
+          <ABTaskConsole locale={preferences.locale} />
         </>
       ) : null}
     </main>
@@ -167,9 +169,10 @@ export function App() {
       data-airi-features={featuresForSurface("workspace").join(" ")}
     >
       {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
-      <div className="demo-airi-work-runtime" data-airi-control="plugin.widgets plugin.gamelets game.tic-tac-toe">
+      <div className="demo-airi-work-runtime" data-airi-control="plugin.widgets plugin.gamelets game.tic-tac-toe computer-use.session vision.screen vision.camera">
         <AiriWidgetGallery locale={preferences.locale} serviceRequest={airiServiceRequest} />
         <AiriGameletPanel locale={preferences.locale} serviceRequest={airiServiceRequest} />
+        <AiriComputerVisionPanel locale={preferences.locale} serviceRequest={airiServiceRequest} />
       </div>
       <ABTaskConsole locale={preferences.locale} />
     </main>
@@ -184,7 +187,10 @@ export function App() {
         <h1>{preferences.locale === "zh-CN" ? "语音与角色实验室" : "Voice and avatar lab"}</h1>
         <p>{preferences.locale === "zh-CN" ? "在这里验证麦克风、语音合成、中断和角色状态。" : "Validate microphone, speech synthesis, interruption, and avatar state here."}</p>
       </div>
-      {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
+      {isCortanaActive ? <>
+        <CortanaModelStage ariaLabel="Cortana voice and avatar lab model" />
+        <VoiceSessionControl locale={preferences.locale} />
+      </> : null}
     </main>
   );
   const testContent = (

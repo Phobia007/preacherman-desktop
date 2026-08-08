@@ -34,6 +34,16 @@ html[data-appearance="dark"] #root {
   position: relative;
 }
 
+.demo-host--home > .ab-task-console {
+  top: auto;
+  right: auto;
+  bottom: 106px;
+  left: 72px;
+  width: 420px;
+  max-height: 400px;
+  overflow: auto;
+}
+
 .demo-host--workspace,
 .demo-host--lab,
 .demo-host--test {
@@ -49,6 +59,10 @@ html[data-appearance="dark"] #root {
   left: 448px;
   width: min(520px, 46vw);
   color: var(--demo-theme-text);
+}
+
+.demo-host--lab .cortana-model-stage {
+  inset: 190px 300px 130px 920px;
 }
 
 .demo-airi-test__intro {
@@ -596,6 +610,22 @@ html[data-appearance="dark"] #root {
 
 .demo-settings__plugin-message[data-error="true"] {
   color: var(--demo-theme-error);
+}
+
+.demo-settings__plugin-approval {
+  margin: 0;
+  padding: 8px 9px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 8px;
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-surface);
+  font: 500 10px/1.45 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.demo-settings__plugin-approval[data-required="true"] {
+  border-color: color-mix(in srgb, var(--demo-theme-loading) 48%, var(--demo-theme-border));
+  color: var(--demo-theme-text);
+  background: color-mix(in srgb, var(--demo-theme-loading) 8%, var(--demo-theme-surface));
 }
 
 .demo-settings__button--test {

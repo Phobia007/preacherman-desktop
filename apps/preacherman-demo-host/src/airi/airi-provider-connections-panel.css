@@ -193,6 +193,46 @@
   min-width: 0;
 }
 
+.demo-airi-provider-connections__capability li > .demo-airi-provider-connections__provider-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.demo-airi-provider-connections button.demo-airi-provider-connections__test-button,
+.demo-airi-provider-connections button.demo-airi-provider-connections__connection-action-button {
+  min-height: 28px;
+  padding: 5px 8px;
+  border-color: var(--demo-theme-border-strong);
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-control-hover-bg);
+  box-shadow: none;
+  font-size: 9px;
+}
+
+.demo-airi-provider-connections button.demo-airi-provider-connections__test-button:hover:not(:disabled),
+.demo-airi-provider-connections button.demo-airi-provider-connections__connection-action-button:hover:not(:disabled) {
+  background: var(--demo-theme-surface-elevated);
+  box-shadow: none;
+}
+
+.demo-airi-provider-connections button.demo-airi-provider-connections__test-button:disabled,
+.demo-airi-provider-connections button.demo-airi-provider-connections__connection-action-button:disabled {
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-surface);
+  cursor: not-allowed;
+}
+
+.demo-airi-provider-connections__test-result[data-state="testing"],
+.demo-airi-provider-connections__test-result[data-state="succeeded"] {
+  color: var(--demo-theme-loading);
+}
+
+.demo-airi-provider-connections__test-result[data-state="failed"] {
+  color: var(--demo-theme-error);
+}
+
 .demo-airi-provider-connections__capability strong,
 .demo-airi-provider-connections__connection-grid strong {
   overflow: hidden;
@@ -210,6 +250,25 @@
   color: var(--demo-theme-muted);
   font-size: 9px;
   line-height: 1.45;
+}
+
+.demo-airi-provider-connections__connection-actions {
+  display: flex;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.demo-airi-provider-connections__connection-actions button {
+  flex: 1 1 0;
+}
+
+.demo-airi-provider-connections__connection-action-result[data-state="running"],
+.demo-airi-provider-connections__connection-action-result[data-state="succeeded"] {
+  color: var(--demo-theme-loading);
+}
+
+.demo-airi-provider-connections__connection-action-result[data-state="failed"] {
+  color: var(--demo-theme-error);
 }
 
 .demo-airi-provider-connections__status {

@@ -8,7 +8,7 @@ const hostRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = join(hostRoot, "src");
 const workspaceRoot = join(hostRoot, "..", "..");
 
-test("Gallery activation persists the selected model and Home reuses the same stage", async () => {
+test("Gallery activation persists the selected model and Home plus Lab reuse the same stage", async () => {
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const preferences = await readFile(join(sourceRoot, "preferences.ts"), "utf8");
   const gallery = await readFile(
@@ -34,7 +34,7 @@ test("Gallery activation persists the selected model and Home reuses the same st
   assert.match(gallery, /activeModelId === activeItem\.id \? null : activeItem\.id/);
   assert.match(gallery, /onActiveModelChange:\s*\(modelId: ModelId \| null\) => void/);
   const stageUsages = (`${app}\n${gallery}`).match(/<CortanaModelStage\b/g) ?? [];
-  assert.equal(stageUsages.length, 2);
+  assert.equal(stageUsages.length, 3);
   assert.match(stage, /pose="standby"/);
   assert.match(stage, /quality="high"/);
 });

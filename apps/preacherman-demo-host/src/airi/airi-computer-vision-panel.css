@@ -1,0 +1,250 @@
+.demo-airi-computer-vision {
+  display: grid;
+  gap: 20px;
+  width: min(100%, 1040px);
+  padding: 24px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 20px;
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface-elevated);
+  box-shadow: var(--demo-theme-activate-shadow);
+}
+
+.demo-airi-computer-vision__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.demo-airi-computer-vision h2,
+.demo-airi-computer-vision h3,
+.demo-airi-computer-vision p,
+.demo-airi-computer-vision dl,
+.demo-airi-computer-vision dd {
+  margin: 0;
+}
+
+.demo-airi-computer-vision__eyebrow {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--demo-theme-loading);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.demo-airi-computer-vision h2 {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.demo-airi-computer-vision__header p {
+  max-width: 680px;
+  margin-top: 8px;
+  color: var(--demo-theme-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.demo-airi-computer-vision button {
+  min-height: 40px;
+  padding: 9px 15px;
+  border: 1px solid var(--demo-theme-activate-rest-border);
+  border-radius: 10px;
+  color: var(--demo-theme-activate-fill-text);
+  background: var(--demo-theme-activate-fill);
+  box-shadow: var(--demo-theme-activate-shadow);
+  cursor: pointer;
+  font: 650 12px/1.2 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.demo-airi-computer-vision button:hover:not(:disabled) {
+  box-shadow: var(--demo-theme-activate-hover-shadow);
+}
+
+.demo-airi-computer-vision button:focus-visible {
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: 3px;
+}
+
+.demo-airi-computer-vision button:disabled {
+  border-color: var(--demo-theme-border-strong);
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-surface);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.demo-airi-computer-vision__notice,
+.demo-airi-computer-vision__error {
+  padding: 14px 16px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 12px;
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-surface);
+  font-size: 12px;
+}
+
+.demo-airi-computer-vision__error {
+  border-color: color-mix(in srgb, var(--demo-theme-error) 58%, transparent);
+  color: var(--demo-theme-error);
+}
+
+.demo-airi-computer-vision__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.demo-airi-computer-vision__card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 14px;
+  background: var(--demo-theme-surface);
+}
+
+.demo-airi-computer-vision__card[data-phase="error"] {
+  border-color: color-mix(in srgb, var(--demo-theme-error) 54%, transparent);
+}
+
+.demo-airi-computer-vision__card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.demo-airi-computer-vision__card-heading > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.demo-airi-computer-vision__card h3 {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demo-airi-computer-vision code {
+  color: var(--demo-theme-muted);
+  font: 500 9px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.demo-airi-computer-vision__card > p,
+.demo-airi-computer-vision dd {
+  overflow-wrap: anywhere;
+  color: var(--demo-theme-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.demo-airi-computer-vision__phase {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  color: var(--demo-theme-muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.demo-airi-computer-vision__phase > span {
+  width: 7px;
+  height: 7px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.demo-airi-computer-vision__phase[data-phase="ready"] {
+  color: var(--demo-theme-loading);
+}
+
+.demo-airi-computer-vision__phase[data-phase="ready"] > span {
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--demo-theme-loading) 14%, transparent);
+}
+
+.demo-airi-computer-vision__phase[data-phase="error"] {
+  color: var(--demo-theme-error);
+}
+
+.demo-airi-computer-vision__phase[data-phase="testing"],
+.demo-airi-computer-vision__phase[data-phase="running"] {
+  color: var(--demo-theme-control);
+}
+
+.demo-airi-computer-vision dl {
+  display: grid;
+  gap: 7px;
+  padding: 10px 0;
+  border-block: 1px solid var(--demo-theme-border);
+}
+
+.demo-airi-computer-vision dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.demo-airi-computer-vision dt {
+  color: var(--demo-theme-text);
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.demo-airi-computer-vision__card-error {
+  color: var(--demo-theme-error) !important;
+}
+
+.demo-airi-computer-vision__external {
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--demo-theme-muted) !important;
+  background: var(--demo-theme-control-hover-bg);
+}
+
+.demo-airi-computer-vision__card > button {
+  width: 100%;
+  margin-top: auto;
+}
+
+@media (max-width: 920px) {
+  .demo-airi-computer-vision__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 580px) {
+  .demo-airi-computer-vision {
+    padding: 18px;
+  }
+
+  .demo-airi-computer-vision__header {
+    display: grid;
+  }
+
+  .demo-airi-computer-vision__header > button,
+  .demo-airi-computer-vision__grid {
+    width: 100%;
+  }
+
+  .demo-airi-computer-vision__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-airi-computer-vision *,
+  .demo-airi-computer-vision *::before,
+  .demo-airi-computer-vision *::after {
+    scroll-behavior: auto;
+  }
+}

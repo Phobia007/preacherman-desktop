@@ -63,10 +63,14 @@ test("Settings exposes the AIRI plugin lifecycle and tool console in both themes
 
   assert.match(settings, /<PluginSettings\b/);
   assert.match(plugins, /\/api\/plugins\/tools\/call/);
+  assert.match(plugins, /approved: true/);
+  assert.match(plugins, /Approve & execute once/);
+  assert.match(plugins, /plugin\.permissions/);
   assert.match(plugins, /data-airi-control="plugin\.manager agent\.plugin-tools runtime\.plugin-inspector plugin\.hot-reload"/);
   assert.match(runtime, /manifest\.plugin\.airi\.moeru\.ai/);
   assert.match(runtime, /"loading", "loaded", "authenticating", "authenticated", "announced"/);
   assert.match(styles, /\.demo-settings__plugin-list/);
+  assert.match(styles, /\.demo-settings__plugin-approval/);
   assert.match(styles, /var\(--demo-theme-border\)/);
   assert.match(styles, /var\(--demo-theme-focus\)/);
 });

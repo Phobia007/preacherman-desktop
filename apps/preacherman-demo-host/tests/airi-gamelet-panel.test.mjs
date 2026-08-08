@@ -23,8 +23,13 @@ async function loadPanelModule() {
   return import(`data:text/javascript;base64,${Buffer.from(javascript.text).toString("base64")}`);
 }
 
-test("Gamelet request helpers use the real catalog, session, and action endpoints", async () => {
-  const { loadAiriGamelets, createAiriGameletSession, sendAiriGameletAction } = await loadPanelModule();
+test("Gamelet request helpers use the real catalog, session, action, and stop endpoints", async () => {
+  const {
+    loadAiriGamelets,
+    createAiriGameletSession,
+    sendAiriGameletAction,
+    stopAiriGameletSession,
+  } = await loadPanelModule();
   const calls = [];
   const active = {
     session: {
@@ -41,10 +46,12 @@ test("Gamelet request helpers use the real catalog, session, and action endpoint
       state: { board: ["X", "X", "X", "O", "O", null, null, null, null], currentPlayer: null, moves: 5, outcome: "won", winner: "X" },
     },
   };
+  const stopped = { session: { ...active.session, status: "stopped" } };
   const serviceRequest = async (path, init) => {
     calls.push({ path, init });
     if (path === "/api/gamelets") return { gamelets: [{ id: "tic-tac-toe", title: "Tic-tac-toe", description: "Offline", version: "1.0.0" }] };
     if (path === "/api/gamelets/sessions") return active;
+    if (path.endsWith("/stop")) return stopped;
     return completed;
   };
 
@@ -53,12 +60,15 @@ test("Gamelet request helpers use the real catalog, session, and action endpoint
   const finalSession = await sendAiriGameletAction(serviceRequest, "game-1", 2);
   assert.equal(finalSession.status, "completed");
   assert.equal(finalSession.state.winner, "X", "winner must come from the service response");
+  assert.equal((await stopAiriGameletSession(serviceRequest, "game-1")).status, "stopped");
   assert.deepEqual(calls.map(({ path }) => path), [
     "/api/gamelets",
     "/api/gamelets/sessions",
     "/api/gamelets/sessions/game-1/actions",
+    "/api/gamelets/sessions/game-1/stop",
   ]);
   assert.deepEqual(JSON.parse(calls[2].init.body), { action: { type: "place", cell: 2 } });
+  assert.deepEqual(JSON.parse(calls[3].init.body), { reason: "user-requested" });
 });
 
 test("panel provides bilingual server-authoritative status, keyboard buttons, and errors", async () => {
@@ -74,6 +84,10 @@ test("panel provides bilingual server-authoritative status, keyboard buttons, an
   assert.match(panel, /aria-label=\{mark \? text\.markedCell/);
   assert.match(panel, /<button[\s\S]*onClick=\{\(\) => void place\(cell\)\}/);
   assert.match(panel, /cells\.current\[firstOpenCell\]\?\.focus/);
+  assert.match(panel, /stopAiriGameletSession[\s\S]*\/api\/gamelets\/sessions\/\$\{encodeURIComponent\(sessionId\)\}\/stop/);
+  assert.match(panel, /Pause and resume are not available yet\./);
+  assert.match(panel, /暂停和继续功能尚未提供。/);
+  assert.match(panel, /session\?\.status === "active"[\s\S]*onClick=\{\(\) => void stop\(\)\}/);
 });
 
 test("Gamelet panel consumes semantic tokens supplied by both appearance modes", async () => {

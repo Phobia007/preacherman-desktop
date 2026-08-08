@@ -41,8 +41,11 @@ const copy = {
     ready: "Ready for a new game",
     start: "Start game",
     restart: "Play again",
+    stop: "Stop game",
     starting: "Starting…",
     moving: "Sending move…",
+    stopping: "Stopping…",
+    pauseUnavailable: "Pause and resume are not available yet.",
     turn: (player: string) => `${player}'s turn`,
     won: (player: string) => `${player} wins`,
     draw: "Draw game",
@@ -61,8 +64,11 @@ const copy = {
     ready: "可以开始新棋局",
     start: "开始游戏",
     restart: "再来一局",
+    stop: "停止棋局",
     starting: "正在开始…",
     moving: "正在提交落子…",
+    stopping: "正在停止…",
+    pauseUnavailable: "暂停和继续功能尚未提供。",
     turn: (player: string) => `轮到 ${player} 落子`,
     won: (player: string) => `${player} 获胜`,
     draw: "本局平局",
@@ -134,6 +140,16 @@ export async function sendAiriGameletAction(
   ));
 }
 
+export async function stopAiriGameletSession(
+  serviceRequest: AiriGameletServiceRequest,
+  sessionId: string,
+) {
+  return parseSession(await serviceRequest<unknown>(
+    `/api/gamelets/sessions/${encodeURIComponent(sessionId)}/stop`,
+    { method: "POST", body: JSON.stringify({ reason: "user-requested" }) },
+  ));
+}
+
 function statusText(session: AiriGameletSession | null, locale: Locale) {
   const text = copy[locale];
   if (!session) return text.ready;
@@ -149,7 +165,7 @@ export function AiriGameletPanel({ locale, serviceRequest }: AiriGameletPanelPro
   const text = copy[locale];
   const [catalogState, setCatalogState] = useState<"loading" | "ready" | "unavailable">("loading");
   const [session, setSession] = useState<AiriGameletSession | null>(null);
-  const [pending, setPending] = useState<"start" | "move" | null>(null);
+  const [pending, setPending] = useState<"start" | "move" | "stop" | null>(null);
   const [error, setError] = useState("");
   const cells = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -198,6 +214,19 @@ export function AiriGameletPanel({ locale, serviceRequest }: AiriGameletPanelPro
     }
   };
 
+  const stop = async () => {
+    if (!session || session.status !== "active" || pending) return;
+    setPending("stop");
+    setError("");
+    try {
+      setSession(await stopAiriGameletSession(serviceRequest, session.id));
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setPending(null);
+    }
+  };
+
   const status = catalogState === "loading"
     ? text.loading
     : catalogState === "unavailable"
@@ -206,7 +235,9 @@ export function AiriGameletPanel({ locale, serviceRequest }: AiriGameletPanelPro
         ? text.starting
         : pending === "move"
           ? text.moving
-          : statusText(session, locale);
+          : pending === "stop"
+            ? text.stopping
+            : statusText(session, locale);
 
   return <section className="demo-airi-gamelet" data-airi-control="plugin.gamelets" aria-labelledby="airi-gamelet-title">
     <header className="demo-airi-gamelet__header">
@@ -215,14 +246,24 @@ export function AiriGameletPanel({ locale, serviceRequest }: AiriGameletPanelPro
         <h2 id="airi-gamelet-title">{text.title}</h2>
         <p>{text.description}</p>
       </div>
-      <button
-        className="demo-airi-gamelet__start"
-        disabled={catalogState !== "ready" || pending !== null}
-        onClick={() => void start()}
-        type="button"
-      >
-        {pending === "start" ? text.starting : session ? text.restart : text.start}
-      </button>
+      <div className="demo-airi-gamelet__actions">
+        {session?.status === "active" ? <button
+          className="demo-airi-gamelet__stop"
+          disabled={pending !== null}
+          onClick={() => void stop()}
+          type="button"
+        >
+          {pending === "stop" ? text.stopping : text.stop}
+        </button> : <button
+          className="demo-airi-gamelet__start"
+          disabled={catalogState !== "ready" || pending !== null}
+          onClick={() => void start()}
+          type="button"
+        >
+          {pending === "start" ? text.starting : session ? text.restart : text.start}
+        </button>}
+        <small>{text.pauseUnavailable}</small>
+      </div>
     </header>
 
     <div className="demo-airi-gamelet__status" data-status={error ? "error" : session?.status ?? catalogState} aria-live="polite" aria-busy={pending !== null}>

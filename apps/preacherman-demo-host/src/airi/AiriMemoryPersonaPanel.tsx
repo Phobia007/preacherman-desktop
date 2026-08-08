@@ -13,6 +13,7 @@ export interface AiriPersonaSummary {
 
 export interface AiriMemoryResult {
   readonly id: string;
+  readonly owner: string;
   readonly personaId: string;
   readonly namespace: string;
   readonly text: string;
@@ -47,7 +48,8 @@ const copy = {
     noPersona: "No persona is selected",
     personaList: "Available personas",
     selected: "Selected",
-    switchingUnavailable: "Persona switching is unavailable because the local service does not expose a selection endpoint.",
+    selectPersona: "Select",
+    selectingPersona: "Selecting…",
     namespace: "Namespace",
     namespaceHint: "Memories are isolated by persona and namespace.",
     memory: "Memory content",
@@ -78,7 +80,8 @@ const copy = {
     noPersona: "尚未选择人格",
     personaList: "可用人格",
     selected: "已选择",
-    switchingUnavailable: "本地服务尚未提供人格切换接口，因此此处仅展示当前选择，不会模拟切换成功。",
+    selectPersona: "选择",
+    selectingPersona: "选择中…",
     namespace: "命名空间",
     namespaceHint: "记忆按人格和命名空间严格隔离。",
     memory: "记忆内容",
@@ -117,7 +120,7 @@ function requirePersona(value: unknown): AiriPersonaSummary {
 function requireMemory(value: unknown): AiriMemoryResult {
   const memory = requireObject(value, "Memory service");
   const temporal = requireObject(memory.temporal, "Memory time metadata");
-  if (typeof memory.id !== "string" || typeof memory.text !== "string" || typeof memory.namespace !== "string"
+  if (typeof memory.id !== "string" || typeof memory.owner !== "string" || typeof memory.text !== "string" || typeof memory.namespace !== "string"
     || typeof temporal.recordedAt !== "string" || typeof temporal.occurredAt !== "string") {
     throw new Error("Memory service returned an invalid memory.");
   }
@@ -143,6 +146,18 @@ export async function rememberAiriMemory(
     body: JSON.stringify(input),
   }), "Memory service");
   return requireMemory(response.memory);
+}
+
+export async function selectAiriPersona(
+  serviceRequest: AiriMemoryPersonaServiceRequest,
+  personaId: string,
+): Promise<AiriPersonaSummary> {
+  const response = requireObject(await serviceRequest<unknown>(`/api/personas/${encodeURIComponent(personaId)}/select`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: "{}",
+  }), "Persona selection service");
+  return requirePersona(response.selected);
 }
 
 export async function recallAiriMemories(
@@ -177,7 +192,7 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
   const [query, setQuery] = useState("");
   const [memories, setMemories] = useState<readonly AiriMemoryResult[]>([]);
   const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState<"remember" | "recall" | null>(null);
+  const [busy, setBusy] = useState<"select" | "remember" | "recall" | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -196,6 +211,23 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
     });
     return () => { active = false; };
   }, [serviceRequest]);
+
+  const selectPersona = async (personaId: string) => {
+    if (busy || personaId === selectedPersona?.id) return;
+    setBusy("select");
+    setError("");
+    setMessage("");
+    try {
+      const selected = await selectAiriPersona(serviceRequest, personaId);
+      setSelectedPersona(selected);
+      setPersonas((current) => current.map((persona) => ({ ...persona, selected: persona.id === selected.id })));
+      setMemories([]);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setBusy(null);
+    }
+  };
 
   const remember = async (event: FormEvent) => {
     event.preventDefault();
@@ -255,11 +287,14 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
     </header>
 
     <div className="demo-airi-memory__persona-list" aria-label={text.personaList}>
-      {personas.map((persona) => <span key={persona.id} data-selected={persona.id === selectedPersona?.id}>
-        {persona.name}{persona.id === selectedPersona?.id ? <small>{text.selected}</small> : null}
-      </span>)}
+      {personas.map((persona) => {
+        const selected = persona.id === selectedPersona?.id;
+        return <button aria-pressed={selected} disabled={loading || busy !== null || selected} key={persona.id} onClick={() => void selectPersona(persona.id)} type="button">
+          <span>{persona.name}</span>
+          <small>{selected ? text.selected : busy === "select" ? text.selectingPersona : text.selectPersona}</small>
+        </button>;
+      })}
     </div>
-    <p className="demo-airi-memory__unavailable" role="note">{text.switchingUnavailable}</p>
 
     <label className="demo-airi-memory__namespace" htmlFor="airi-memory-namespace">
       <span>{text.namespace}</span>

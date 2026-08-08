@@ -11,6 +11,7 @@ interface PluginSession {
   readonly updatedAt: string;
   readonly toolCount: number;
   readonly capabilities: readonly string[];
+  readonly permissions?: readonly string[];
   readonly sourceDirectory?: string;
   readonly kits?: readonly string[];
   readonly bindings?: readonly string[];
@@ -25,6 +26,7 @@ interface PluginSession {
 interface PluginTool {
   readonly name: string;
   readonly description: string;
+  readonly requiresApproval: boolean;
 }
 
 interface PluginSettingsProps {
@@ -44,6 +46,7 @@ export function PluginSettings({ locale, serviceRequest }: PluginSettingsProps) 
   const [messageIsError, setMessageIsError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const selectedToolDetails = tools.find((tool) => tool.name === selectedTool);
 
   const load = async (showLoading = false) => {
     if (showLoading) setLoading(true);
@@ -155,7 +158,7 @@ export function PluginSettings({ locale, serviceRequest }: PluginSettingsProps) 
       if (!args || typeof args !== "object" || Array.isArray(args)) throw new Error(chinese ? "工具参数必须是 JSON 对象。" : "Tool arguments must be a JSON object.");
       const response = await serviceRequest<{ readonly result: unknown }>("/api/plugins/tools/call", {
         method: "POST",
-        body: JSON.stringify({ name: selectedTool, arguments: args }),
+        body: JSON.stringify({ name: selectedTool, arguments: args, approved: true }),
       });
       setResultText(JSON.stringify(response.result, null, 2));
       setMessage(chinese ? "插件工具已执行。" : "Plugin tool executed.");
@@ -186,6 +189,7 @@ export function PluginSettings({ locale, serviceRequest }: PluginSettingsProps) 
         <small>{plugin.manifest.kind} · {plugin.toolCount} {chinese ? "个工具" : "tools"} · {plugin.enabled ? (chinese ? "已启用" : "enabled") : (chinese ? "已停用" : "disabled")}</small>
         {plugin.sourceDirectory ? <code className="demo-settings__plugin-source" title={plugin.sourceDirectory}>{plugin.sourceDirectory}</code> : <small>{chinese ? "内置插件" : "Built-in plugin"}</small>}
         <div className="demo-settings__plugin-contracts">
+          <div><span>{chinese ? "权限 Permissions" : "Permissions"}</span><p>{plugin.permissions?.length ? plugin.permissions.join(" · ") : (chinese ? "无宿主权限" : "No host permissions")}</p></div>
           <div><span>{chinese ? "能力包 Kits" : "Kits"}</span><p>{plugin.kits?.length ? plugin.kits.join(" · ") : (chinese ? "未声明" : "None declared")}</p></div>
           <div><span>{chinese ? "绑定 Bindings" : "Bindings"}</span><p>{plugin.bindings?.length ? plugin.bindings.join(" · ") : (chinese ? "未声明" : "None declared")}</p></div>
         </div>
@@ -197,9 +201,14 @@ export function PluginSettings({ locale, serviceRequest }: PluginSettingsProps) 
         {plugin.sourceDirectory ? <button className="demo-settings__service-button demo-settings__plugin-uninstall" disabled={busy} onClick={() => void uninstallPlugin(plugin)} type="button">{chinese ? "卸载外部插件" : "Uninstall external plugin"}</button> : null}
       </article>)}
     </div>
-    <label>{chinese ? "插件工具" : "Plugin tool"}<select disabled={busy || tools.length === 0} onChange={(event) => setSelectedTool(event.target.value)} value={selectedTool}><option value="">{chinese ? "选择工具" : "Select a tool"}</option>{tools.map((tool) => <option key={tool.name} value={tool.name}>{tool.name}</option>)}</select></label>
+    <label>{chinese ? "插件工具" : "Plugin tool"}<select disabled={busy || tools.length === 0} onChange={(event) => setSelectedTool(event.target.value)} value={selectedTool}><option value="">{chinese ? "选择工具" : "Select a tool"}</option>{tools.map((tool) => <option key={tool.name} value={tool.name}>{tool.name}{tool.requiresApproval ? (chinese ? " · 需批准" : " · approval required") : ""}</option>)}</select></label>
+    {selectedToolDetails ? <p className="demo-settings__plugin-approval" data-required={selectedToolDetails.requiresApproval} role="note">
+      {selectedToolDetails.requiresApproval
+        ? (chinese ? "此工具需要审批。点击下方按钮表示仅批准本次执行，后续调用仍需重新批准。" : "This tool requires approval. Clicking below approves this invocation only; future calls require approval again.")
+        : (chinese ? "此内置工具无需额外审批。" : "This built-in tool does not require additional approval.")}
+    </p> : null}
     <label>{chinese ? "JSON 参数" : "JSON arguments"}<textarea className="demo-settings__mcp-arguments" disabled={busy || tools.length === 0} onChange={(event) => setArgumentsText(event.target.value)} spellCheck={false} value={argumentsText} /></label>
-    <button className="demo-settings__service-button demo-settings__service-button--primary" disabled={busy || !selectedTool} onClick={() => void executeTool()} type="button">{chinese ? "执行插件工具" : "Execute plugin tool"}</button>
+    <button className="demo-settings__service-button demo-settings__service-button--primary" disabled={busy || !selectedTool} onClick={() => void executeTool()} type="button">{selectedToolDetails?.requiresApproval ? (chinese ? "批准并执行一次" : "Approve & execute once") : (chinese ? "执行插件工具" : "Execute plugin tool")}</button>
     {message ? <p className="demo-settings__message demo-settings__plugin-message" data-error={messageIsError} role={messageIsError ? "alert" : "status"}>{message}</p> : null}
     {resultText ? <pre className="demo-settings__mcp-result">{resultText}</pre> : null}
   </section>;

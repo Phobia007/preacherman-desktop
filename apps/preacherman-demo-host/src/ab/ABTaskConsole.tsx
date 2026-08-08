@@ -8,6 +8,7 @@ import "./ab-task-console.css";
 
 interface TaskProposal {
   readonly proposalId: string;
+  readonly kind?: "plugin-tool";
   readonly executor: string;
   readonly inputs: readonly string[];
   readonly outputs: readonly string[];
@@ -54,6 +55,7 @@ const copy = {
     deepseekPlainReply: "DeepSeek reply (plain text)",
     fallbackReply: "Local fallback — DeepSeek did not return a usable reply",
     taskStarted: "I’m preparing your PitchKit now. You can keep talking to me while it runs—tell me what you want to emphasize, simplify, or add.",
+    pluginTaskStarted: "The approved AIRI plugin tool is running. Its structured result will be written to Ledger.",
   },
   "zh-CN": {
     eyebrow: "Preacherman · Agent 协作",
@@ -73,6 +75,7 @@ const copy = {
     deepseekPlainReply: "DeepSeek 已回复（非结构化）",
     fallbackReply: "本地兜底回复：DeepSeek 未返回可用结果",
     taskStarted: "好的，我正在生成 PitchKit。执行期间你仍然可以继续告诉我：想重点强调什么、删减什么，或补充哪些信息。",
+    pluginTaskStarted: "已批准的 AIRI 插件工具正在执行，结构化结果会写入 Ledger。",
   },
 } as const;
 
@@ -81,6 +84,15 @@ function completionSummary(locale: Locale, objective: string): string {
   return locale === "zh-CN"
     ? `PitchKit 已完成。我已经围绕“${conciseObjective}”整理出一份 10 页路演框架，包含受众、价值主张、演示大纲和下一步建议。你可以查看产物，或继续让我帮你优化其中一页。`
     : `Your PitchKit is ready. I created a 10-slide framework for “${conciseObjective}” with audience, value proposition, presentation outline, and next steps. You can review it or ask me to refine any slide.`;
+}
+
+function runCompletionSummary(locale: Locale, run: TaskRun): string {
+  if (run.toolCall && run.artifact?.name !== "pitch-kit.md") {
+    return locale === "zh-CN"
+      ? `插件工具 ${run.toolCall.name} 已执行完成，结构化结果已写入 ${run.artifact?.name ?? "Ledger 产物"}。`
+      : `Plugin tool ${run.toolCall.name} completed. Its structured result is available in ${run.artifact?.name ?? "the Ledger artifact"}.`;
+  }
+  return completionSummary(locale, run.objective);
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -123,7 +135,7 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
   useEffect(() => {
     if (!run || run.status !== "succeeded" || announcedRunIds.current.has(run.runId)) return;
     announcedRunIds.current.add(run.runId);
-    const summary = completionSummary(locale, run.objective);
+    const summary = runCompletionSummary(locale, run);
     setMessages((current) => [...current, { role: "assistant", text: summary }]);
     coordinator.requestSpeech(summary.slice(0, 160), locale, run.runId);
   }, [coordinator, locale, run]);
@@ -163,8 +175,9 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
         method: "POST", body: JSON.stringify({ objective: proposal.objective }),
       });
       setRun(response.run); setProposal(null);
-      setMessages((current) => [...current, { role: "assistant", text: labels.taskStarted }]);
-      coordinator.requestSpeech(labels.taskStarted.slice(0, 160), locale, response.run.runId);
+      const startedMessage = proposal.kind === "plugin-tool" ? labels.pluginTaskStarted : labels.taskStarted;
+      setMessages((current) => [...current, { role: "assistant", text: startedMessage }]);
+      coordinator.requestSpeech(startedMessage.slice(0, 160), locale, response.run.runId);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Unable to start the task.");
     } finally { setBusy(false); }
@@ -216,7 +229,7 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
         <textarea aria-label={labels.placeholder} data-airi-control="task.create" disabled={busy} onChange={(event) => setInput(event.target.value)} placeholder={labels.placeholder} rows={3} value={input} />
         <div className="ab-task-console__actions"><button className="ab-task-console__button ab-task-console__button--quiet" disabled={busy || hasActiveTask} onClick={() => void sendText(labels.demoPrompt)} type="button">{labels.tryDemo}</button><button className="ab-task-console__button ab-task-console__button--primary" disabled={!input.trim() || busy} type="submit">{labels.send}</button></div>
       </form>
-      {proposal ? <section className="ab-task-console__approval"><span>{proposal.executor}</span><textarea aria-label="PitchKit objective" onChange={(event) => setProposal({ ...proposal, objective: event.target.value })} value={proposal.objective} /><p>{proposal.inputs.join(" · ")} → {proposal.outputs.join(" · ")}</p><button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.confirm" disabled={busy || !proposal.objective.trim()} onClick={() => void confirm()} type="button">{labels.confirm}</button></section> : null}
+      {proposal ? <section className="ab-task-console__approval"><span>{proposal.executor}</span><textarea aria-label={locale === "zh-CN" ? "任务目标" : "Task objective"} onChange={(event) => setProposal({ ...proposal, objective: event.target.value })} value={proposal.objective} /><p>{proposal.inputs.join(" · ")} → {proposal.outputs.join(" · ")}</p><button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.confirm" disabled={busy || !proposal.objective.trim()} onClick={() => void confirm()} type="button">{labels.confirm}</button></section> : null}
       {run ? <section className="ab-task-console__activity"><strong>{run.status === "succeeded" ? labels.artifact : labels.running}</strong><ol className="ab-task-console__timeline">{run.events.slice(-4).map((event, index) => <li key={`${event.stage}-${index}`}><span>{event.stage}</span><p>{event.message}</p></li>)}</ol>{run.toolCall ? <p><span>{locale === "zh-CN" ? "已调用工具" : "Tool called"}</span> <code>{run.toolCall.name}</code></p> : null}{run.artifact ? <p><code>{run.artifact.path}</code></p> : null}{run.error ? <p data-error="true">{run.error}</p> : null}{["queued", "running"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" data-airi-control="task.cancel" disabled={busy} onClick={() => void coordinator.cancelTask(run.runId)} type="button">{labels.stopTask}</button> : null}{["failed", "cancelled"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.retry" disabled={busy} onClick={() => void controlRun(run.runId, "retry")} type="button">{labels.retry}</button> : null}{run.status === "succeeded" ? <button className="ab-task-console__button ab-task-console__button--primary" onClick={() => { sessionStorage.setItem("preacherman.ledger-view", "artifacts"); openLocalSurface("ledger"); }} type="button">{labels.viewLedger}</button> : null}</section> : null}
     </section>
   );

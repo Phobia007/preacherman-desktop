@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { SpeechRequest } from "../live/LiveCoordinator";
-import { useLiveCoordinator } from "../live/LiveCoordinatorContext";
+import { useAvatarInteractionController, useLiveCoordinator, type AvatarInteractionState } from "../live/LiveCoordinatorContext";
 import type { Locale } from "../preferences";
 import { localServiceWebSocketUrl } from "../serviceConfig";
 import "./voice-session.css";
@@ -51,6 +51,7 @@ function copy(locale: Locale) {
 
 export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   const coordinator = useLiveCoordinator();
+  const avatarInteraction = useAvatarInteractionController();
   const [state, setState] = useState<VoiceState>("idle");
   const [speechLifecycle, setSpeechLifecycle] = useState(coordinator.getSpeechLifecycle());
   const [captureMode, setCaptureMode] = useState<CaptureMode>(() => localStorage.getItem(VOICE_MODE_STORAGE_KEY) === "handsFree" ? "handsFree" : "pushToTalk");
@@ -69,17 +70,39 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   const activePlaybackSources = useRef(new Set<AudioBufferSourceNode>());
   const playbackCompletionTimer = useRef<number | null>(null);
   const ttsFallbackTimer = useRef<number | null>(null);
+  const thinkingFallbackTimer = useRef<number | null>(null);
   const captureModeRef = useRef<CaptureMode>(captureMode);
   const handsFreeActive = useRef(false);
   const awaitingAssistantReply = useRef(false);
   const expectedSocketClose = useRef(false);
   const labels = copy(locale);
 
+  const setAvatarState = (next: AvatarInteractionState) => {
+    avatarInteraction.setState(next);
+    window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: next }));
+  };
+
+  const clearThinkingFallback = () => {
+    if (thinkingFallbackTimer.current) window.clearTimeout(thinkingFallbackTimer.current);
+    thinkingFallbackTimer.current = null;
+  };
+
+  const beginThinking = () => {
+    clearThinkingFallback();
+    setAvatarState("thinking");
+    thinkingFallbackTimer.current = window.setTimeout(() => {
+      if (avatarInteraction.getState() === "thinking") setAvatarState("idle");
+      awaitingAssistantReply.current = false;
+      thinkingFallbackTimer.current = null;
+    }, 20_000);
+  };
+
   const setVoiceError = (message: string) => {
     setErrorMessage(message);
     stateRef.current = "error";
     setState("error");
-    window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "idle" }));
+    clearThinkingFallback();
+    setAvatarState("idle");
   };
 
   useEffect(() => { stateRef.current = state; }, [state]);
@@ -94,7 +117,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     void context.current?.close(); context.current = null;
     stream.current?.getTracks().forEach((track) => track.stop()); stream.current = null;
   };
-  useEffect(() => () => { cleanup(); socket.current?.close(); }, []);
+  useEffect(() => () => { cleanup(); clearThinkingFallback(); avatarInteraction.setState("idle"); socket.current?.close(); }, [avatarInteraction]);
 
   useEffect(() => {
     let resolveActivePlayback: (() => void) | null = null;
@@ -124,7 +147,8 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       removeAbortListener?.();
       removeAbortListener = null;
       clearPlayback();
-      window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "idle" }));
+      clearThinkingFallback();
+      setAvatarState("idle");
       coordinator.reportSpeechLifecycle("idle");
       const resolve = resolveActivePlayback;
       resolveActivePlayback = null;
@@ -136,6 +160,8 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     };
     const play = ({ text, locale: speechLocale }: SpeechRequest, signal: AbortSignal) => new Promise<void>((resolve) => {
       if (!text) { resolve(); return; }
+      awaitingAssistantReply.current = false;
+      clearThinkingFallback();
       resolveActivePlayback = resolve;
       const handleAbort = () => stopSpeech("new_request");
       signal.addEventListener("abort", handleAbort, { once: true });
@@ -143,7 +169,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       if (signal.aborted) { handleAbort(); return; }
       clearPlayback();
       coordinator.reportSpeechLifecycle("starting");
-      window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "speaking" }));
+      setAvatarState("speaking");
       const ws = new WebSocket(localServiceWebSocketUrl("/api/voice/tts"));
       activeTts.current = ws;
       let receivedAudio = false;
@@ -212,7 +238,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       clearPlayback();
       coordinator.reportSpeechLifecycle("idle");
     };
-  }, [coordinator]);
+  }, [avatarInteraction, coordinator]);
 
   const finish = (stopHandsFree = false) => {
     if (stateRef.current !== "listening") return;
@@ -229,7 +255,8 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     try {
       coordinator.stopSpeech();
       setErrorMessage("");
-      window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "listening" }));
+      clearThinkingFallback();
+      setAvatarState("listening");
       setTranscript("");
       const mic = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, sampleRate: 16000 } });
       stream.current = mic;
@@ -268,9 +295,10 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
             setTranscript("");
             return;
           }
+          awaitingAssistantReply.current = true;
+          beginThinking();
           coordinator.deliverFinalTranscript(finalText);
           if (captureModeRef.current === "handsFree" && handsFreeActive.current) {
-            awaitingAssistantReply.current = true;
             expectedSocketClose.current = true;
             stateRef.current = "finalizing";
             setState("finalizing");
@@ -284,7 +312,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         if (payload.type === "session.finished") {
           stateRef.current = "idle";
           setState("idle");
-          window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: "idle" }));
+          if (!awaitingAssistantReply.current) setAvatarState("idle");
           cleanup();
           ws.close();
         }

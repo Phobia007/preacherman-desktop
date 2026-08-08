@@ -41,7 +41,43 @@ test("panel groups the complete commercial catalog with bilingual and accessible
   assert.match(component, /role="alert"/);
   assert.match(component, /aria-busy=\{loading\}/);
   assert.match(component, /disabled=\{loading\}/);
-  assert.doesNotMatch(component, /method:\s*"(?:POST|PUT|DELETE)"/);
+  assert.doesNotMatch(component, /method:\s*"(?:PUT|DELETE)"/);
+});
+
+test("ready provider tests require explicit server confirmation and stay disabled otherwise", async () => {
+  const [component, styles] = await Promise.all([readFile(componentFile, "utf8"), readFile(stylesFile, "utf8")]);
+  assert.match(component, /`\/api\/providers\/\$\{encodeURIComponent\(provider\.id\)\}\/test`/);
+  assert.match(component, /method: "POST", body: JSON\.stringify\(\{ capability \}\)/);
+  assert.match(component, /response\.result\?\.state !== "ready" \|\| response\.result\.ok !== true/);
+  assert.match(component, /disabled=\{state !== "ready" \|\| testStatus\?\.phase === "testing"\}/);
+  assert.match(component, /role=\{testStatus\.phase === "failed" \? "alert" : "status"\}/);
+  assert.match(component, /Provider test passed/);
+  assert.match(component, /服务商测试通过/);
+  assert.match(styles, /__test-button/);
+  assert.match(styles, /__test-result\[data-state="succeeded"\]/);
+  assert.match(styles, /__test-result\[data-state="failed"\]/);
+});
+
+test("connection actions follow live status and accept only confirmed response states", async () => {
+  const [component, styles] = await Promise.all([readFile(componentFile, "utf8"), readFile(stylesFile, "utf8")]);
+  assert.match(component, /action === "disconnect"\) return status === "connected"/);
+  assert.match(component, /return status === "disconnected"/);
+  assert.match(component, /`\/api\/connections\/\$\{encodeURIComponent\(connection\.id\)\}\/\$\{action\}`/);
+  assert.match(component, /method: "POST", body: JSON\.stringify\(\{\}\)/);
+  assert.match(component, /const expectedStatus = action === "connect" \? "connected" : "disconnected"/);
+  assert.match(component, /updated\.status !== expectedStatus/);
+  assert.match(component, /connections: current\.connections\.map/);
+  assert.match(component, /\{ operation: action, phase: "running", message: runningMessage \}/);
+  assert.match(component, /aria-busy=\{busy && actionStatus\?\.operation === "test"\}/);
+  assert.match(component, /aria-busy=\{busy && actionStatus\?\.operation === "connect"\}/);
+  assert.match(component, /connection\?\.status === "connected" \? <button/);
+  assert.match(component, /disabled=\{!canRunConnectionAction\(connection\?\.status, "test"\) \|\| busy\}/);
+  assert.match(component, /disabled=\{!canRunConnectionAction\(connection\?\.status, "connect"\) \|\| busy\}/);
+  assert.match(component, /请先在设置中补齐必需配置/);
+  assert.match(component, /Register the external runtime adapter/);
+  assert.match(component, /role=\{actionStatus\.phase === "failed" \? "alert" : "status"\}/);
+  assert.match(styles, /__connection-action-button/);
+  assert.match(styles, /__connection-action-result\[data-state="failed"\]/);
 });
 
 test("standalone panel styles use the shared light and dark theme contract", async () => {
