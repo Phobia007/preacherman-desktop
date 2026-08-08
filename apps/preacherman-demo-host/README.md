@@ -2,6 +2,8 @@
 
 Preacherman Demo Host 是一个本地优先的桌面数字伙伴原型，包含响应式 Web UI、Cortana 3D Avatar、DeepSeek 对话与 PitchKit 任务、阿里云百炼实时语音以及 Tauri Windows 打包能力。
 
+AIRI 兼容层的运行入口、能力矩阵、插件开发契约、完整演示脚本、外部依赖和交付检查见 [AIRI × Preacherman ecosystem demo](./AIRI-ECOSYSTEM-DEMO.md)。
+
 ## 当前能力
 
 - 自动激活并显示 3D Avatar，支持浅色、深色和不同窗口尺寸。
@@ -9,6 +11,8 @@ Preacherman Demo Host 是一个本地优先的桌面数字伙伴原型，包含�
 - 使用阿里云百炼 Qwen ASR/TTS 进行语音识别和流式语音合成。
 - 支持按住说话和自由对话两种输入模式。
 - 支持 PitchKit 提案确认、执行、取消、重试和本地产物写入。
+- 支持 AIRI 兼容插件、Kits/Bindings、MCP、Widget、Gamelet、Provider、Memory、外部连接、Computer/Vision 和可观测性面板。
+- 插件工具可由 Agent 提案并在用户批准后执行，结构化结果会进入 TaskRun、产物和 Ledger。
 - Key 只保存在本机服务端，不通过浏览器接口回显。
 - 保存最近文本会话，不保存音频或 Provider Key。
 - 可构建包含本地服务 sidecar 的 Windows NSIS 安装程序。
@@ -187,12 +191,16 @@ src-tauri/target/release/bundle/nsis/
 
 ## 当前限制
 
-- Agent A/B 尚未完全接入仓库中的正式 A/B v1 协议。
 - PitchKit 执行器目前仍依赖固定 Demo Brief。
 - 任务完成总结仍有固定模板成分。
 - TTS 在 600ms 内没有收到首段音频时会回退浏览器本地语音，网络较慢时可能过早降级。
+- Discord、Telegram、YouTube、Minecraft 和 Factorio 已有独立协议适配器与 fixture，但本地 Demo 默认没有注册生产 transport；缺少 transport 时会显示 `external-runtime-required`。
+- 桌面截图、摄像头和外部 Vision 需要对应 Adapter；没有 Adapter 时不会伪装为可用。
+- 外部插件是受信任的本地 Node.js 代码，不在沙箱中运行。安装前必须审阅来源，危险工具每次调用都需要批准。
+- 默认仅允许从私有数据目录的 `plugins` 文件夹安装；额外可信根目录必须通过 `PREACHERMAN_PLUGIN_ROOTS` 显式配置，规范路径检查会拒绝目录穿越以及符号链接或 junction 越界。
+- 带参数的插件工具不会把完整参数持久化到 TaskRun；失败后需从 Work 或 Plugin Manager 重新提交原参数，避免 Ledger 保存敏感输入。
 - Node 本地服务没有热重载。
-- Windows 安装包配置已完成，但尚未在当前 Mac 上实际构建和安装验证。
+- Windows sidecar 已在隔离目录完成构建和健康检查；完整 NSIS 安装程序仍未代码签名，公开分发前还需要签名和安装机回归。
 
 ## 常见问题
 
