@@ -44,6 +44,36 @@ test("kit registry registers, discovers, and unregisters an actual custom capabi
   assert.throws(() => kits.get("custom-data"), { code: "KIT_NOT_FOUND", statusCode: 404 });
 });
 
+test("plugin-owned kits distinguish providers from consumers and enforce owner cleanup", () => {
+  const kits = createKitRegistry();
+  kits.register({
+    name: "host-events",
+    version: "1.0.0",
+    description: "Host event stream.",
+    capabilities: ["read"],
+  }, { providerId: "preacherman-host" });
+  kits.provide("calendar-plugin", {
+    name: "calendar-data",
+    version: "1.2.0",
+    description: "Calendar data owned by the external plugin.",
+    capabilities: ["list", "create"],
+  });
+  kits.attachConsumer("calendar-plugin", "host-events", "^1.0.0");
+  kits.attachConsumer("Calendar_Plugin", "host-events", "^1.0.0");
+
+  assert.deepEqual(kits.providedBy("calendar-plugin").map((kit) => kit.name), ["calendar-data"]);
+  assert.deepEqual(kits.usedBy("calendar-plugin").map((kit) => kit.name), ["host-events"]);
+  assert.deepEqual(kits.usedBy("Calendar_Plugin").map((kit) => kit.name), ["host-events"]);
+  assert.throws(
+    () => kits.unprovide("other-plugin", "calendar-data"),
+    { code: "KIT_OWNER_MISMATCH", statusCode: 403 },
+  );
+
+  assert.equal(kits.removePlugin("calendar-plugin"), 2);
+  assert.throws(() => kits.get("calendar-data"), { code: "KIT_NOT_FOUND", statusCode: 404 });
+  assert.deepEqual(kits.usedBy("calendar-plugin"), []);
+});
+
 test("semantic compatibility rejects incompatible consumers and bindings", () => {
   assert.equal(isVersionCompatible("1.4.2", "^1.2.0"), true);
   assert.equal(isVersionCompatible("2.0.0", "^1.2.0"), false);
@@ -103,6 +133,10 @@ test("binding registry uniquely maps kit operations to real async handlers", asy
   assert.throws(
     () => runtime.bindings.bind({ pluginId: "other-adapter", kit: "task", operation: "create", handler() {} }),
     { code: "BINDING_ALREADY_REGISTERED", statusCode: 409 },
+  );
+  assert.throws(
+    () => runtime.bindings.unbind("task", "create", "other-adapter"),
+    { code: "BINDING_OWNER_MISMATCH", statusCode: 403 },
   );
   await assert.rejects(
     runtime.bindings.invokeTrusted("preacherman-runtime", "task", "list", {}),

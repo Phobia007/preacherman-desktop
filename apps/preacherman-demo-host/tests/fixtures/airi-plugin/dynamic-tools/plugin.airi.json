@@ -1,0 +1,19 @@
+{
+  "apiVersion": "v1",
+  "kind": "manifest.plugin.airi.moeru.ai",
+  "name": "dynamic-tools",
+  "permissions": ["workspace:write"],
+  "tools": [
+    {
+      "name": "dynamic_echo",
+      "requiresApproval": false
+    },
+    {
+      "name": "tool_control",
+      "requiresApproval": false
+    }
+  ],
+  "entrypoints": {
+    "node": "index.mjs"
+  }
+}

@@ -127,8 +127,10 @@ function normalizeAdapter(adapter, id) {
   if (typeof adapter.create !== "function" || typeof adapter.send !== "function") {
     throw gameletError("INVALID_GAMELET_INPUT", `Gamelet ${id} adapter requires create() and send().`);
   }
-  if (adapter.stop !== undefined && typeof adapter.stop !== "function") {
-    throw gameletError("INVALID_GAMELET_INPUT", `Gamelet ${id} adapter stop must be a function.`);
+  for (const hook of ["pause", "resume", "stop", "destroy"]) {
+    if (adapter[hook] !== undefined && typeof adapter[hook] !== "function") {
+      throw gameletError("INVALID_GAMELET_INPUT", `Gamelet ${id} adapter ${hook} must be a function.`);
+    }
   }
   return adapter;
 }
@@ -357,7 +359,7 @@ export function createAiriGameletRuntime({
   async function createSession({ pluginId, gameletId, input = {} }) {
     requireName(pluginId, "Plugin id");
     const registration = requireRegistration(gameletId);
-    if ([...sessions.values()].filter((session) => session.status === "active").length >= maxSessions) {
+    if ([...sessions.values()].filter((session) => session.status === "active" || session.status === "paused").length >= maxSessions) {
       throw gameletError("GAMELET_SESSION_LIMIT", `Gamelet session limit reached (${maxSessions}).`, 429);
     }
     const id = String(createId());
@@ -387,10 +389,15 @@ export function createAiriGameletRuntime({
     };
     appendHistory(session, null, result.state, createdAt);
     appendEvent(session, { type: "session.created" }, createdAt);
+    appendEvent(session, { type: "session.started" }, createdAt);
     for (const event of result.events) appendEvent(session, event, createdAt);
     if (result.status === "completed") appendEvent(session, { type: "session.completed" }, createdAt);
     sessions.set(id, session);
     return publicSession(session);
+  }
+
+  async function startSession(options) {
+    return createSession(options);
   }
 
   async function sendAction({ pluginId, sessionId, action }) {
@@ -442,6 +449,42 @@ export function createAiriGameletRuntime({
       .sort((left, right) => left.createdAt.localeCompare(right.createdAt));
   }
 
+  async function pauseSession({ pluginId, sessionId }) {
+    const session = requireOwnedSession(sessionId, pluginId);
+    if (session.status !== "active") {
+      throw gameletError("GAMELET_SESSION_NOT_ACTIVE", `Gamelet session ${sessionId} is ${session.status}.`, 409);
+    }
+    const registration = requireRegistration(session.gameletId);
+    if (registration.adapter.pause) {
+      await callAdapter(registration.adapter.pause({
+        state: clone(session.state, "Gamelet state"), sessionId, pluginId,
+      }), `Gamelet ${session.gameletId} pause`);
+    }
+    const updatedAt = now();
+    session.status = "paused";
+    session.updatedAt = updatedAt;
+    appendEvent(session, { type: "session.paused" }, updatedAt);
+    return publicSession(session);
+  }
+
+  async function resumeSession({ pluginId, sessionId }) {
+    const session = requireOwnedSession(sessionId, pluginId);
+    if (session.status !== "paused") {
+      throw gameletError("GAMELET_SESSION_NOT_PAUSED", `Gamelet session ${sessionId} is ${session.status}.`, 409);
+    }
+    const registration = requireRegistration(session.gameletId);
+    if (registration.adapter.resume) {
+      await callAdapter(registration.adapter.resume({
+        state: clone(session.state, "Gamelet state"), sessionId, pluginId,
+      }), `Gamelet ${session.gameletId} resume`);
+    }
+    const updatedAt = now();
+    session.status = "active";
+    session.updatedAt = updatedAt;
+    appendEvent(session, { type: "session.resumed" }, updatedAt);
+    return publicSession(session);
+  }
+
   async function stopSession({ pluginId, sessionId, reason = "requested" }) {
     const session = requireOwnedSession(sessionId, pluginId);
     if (session.status === "stopped") return publicSession(session);
@@ -461,16 +504,57 @@ export function createAiriGameletRuntime({
     return publicSession(session);
   }
 
+  async function destroySession({ pluginId, sessionId, reason = "requested" }) {
+    const session = requireOwnedSession(sessionId, pluginId);
+    if (typeof reason !== "string" || !reason.trim() || Buffer.byteLength(reason, "utf8") > 512) {
+      throw gameletError("INVALID_GAMELET_INPUT", "Gamelet destroy reason must be a non-empty string of at most 512 bytes.");
+    }
+    const registration = registrations.get(session.gameletId);
+    if (registration?.adapter.stop && session.status !== "stopped") {
+      await callAdapter(registration.adapter.stop({
+        state: clone(session.state, "Gamelet state"), sessionId, pluginId, reason,
+      }), `Gamelet ${session.gameletId} stop before destroy`);
+    }
+    if (registration?.adapter.destroy) {
+      await callAdapter(registration.adapter.destroy({
+        state: clone(session.state, "Gamelet state"), sessionId, pluginId, reason,
+      }), `Gamelet ${session.gameletId} destroy`);
+    }
+    const updatedAt = now();
+    session.status = "destroyed";
+    session.updatedAt = updatedAt;
+    appendEvent(session, { type: "session.destroyed", reason }, updatedAt);
+    const destroyed = publicSession(session);
+    sessions.delete(sessionId);
+    return destroyed;
+  }
+
   async function cleanupSessions(targets, reason) {
     await Promise.allSettled(targets.map(async (session) => {
       const registration = registrations.get(session.gameletId);
       if (registration?.adapter.stop && session.status !== "stopped") {
-        await callAdapter(registration.adapter.stop({
-          state: clone(session.state, "Gamelet state"),
-          sessionId: session.id,
-          pluginId: session.ownerPluginId,
-          reason,
-        }), `Gamelet ${session.gameletId} cleanup`);
+        try {
+          await callAdapter(registration.adapter.stop({
+            state: clone(session.state, "Gamelet state"),
+            sessionId: session.id,
+            pluginId: session.ownerPluginId,
+            reason,
+          }), `Gamelet ${session.gameletId} cleanup`);
+        } catch {
+          // Destruction remains best-effort even when stopping a plugin resource fails.
+        }
+      }
+      if (registration?.adapter.destroy) {
+        try {
+          await callAdapter(registration.adapter.destroy({
+            state: clone(session.state, "Gamelet state"),
+            sessionId: session.id,
+            pluginId: session.ownerPluginId,
+            reason,
+          }), `Gamelet ${session.gameletId} destroy cleanup`);
+        } catch {
+          // Plugin removal cannot retain an unreachable session after hook failure.
+        }
       }
     }));
     for (const session of targets) sessions.delete(session.id);
@@ -513,5 +597,20 @@ export function createAiriGameletRuntime({
 
   if (includeBuiltin) register(BUILTIN_TIC_TAC_TOE_GAMELET);
 
-  return { close, createSession, discover, getSession, listSessions, register, removePlugin, sendAction, stopSession, unregister };
+  return {
+    close,
+    createSession,
+    destroySession,
+    discover,
+    getSession,
+    listSessions,
+    pauseSession,
+    register,
+    removePlugin,
+    resumeSession,
+    sendAction,
+    startSession,
+    stopSession,
+    unregister,
+  };
 }

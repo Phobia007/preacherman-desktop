@@ -119,6 +119,26 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapabi
     return state;
   }
 
+  function persistEvent(event) {
+    const write = mutationQueue.then(async () => {
+      const current = await load();
+      current.events = [event, ...current.events].slice(0, 200);
+      await writePrivateJson(file, current);
+      return structuredClone(event);
+    });
+    mutationQueue = write.then(() => undefined, () => undefined);
+    return write;
+  }
+
+  function safeRecordedExecution(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+    const execution = {};
+    for (const key of ["status", "summary", "taskId", "toolName", "artifactPath", "errorCode"]) {
+      if (typeof value[key] === "string") execution[key] = value[key].slice(0, key === "summary" ? 500 : 240);
+    }
+    return Object.keys(execution).length > 0 ? execution : undefined;
+  }
+
   async function invoke(capabilityId, context = {}) {
     if (!/^[a-z0-9][a-z0-9.-]{1,100}$/.test(capabilityId)) throw new Error("Invalid AIRI capability id.");
     const config = await getRuntimeEnv();
@@ -148,14 +168,26 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapabi
       ...(execution ? { execution } : {}),
       at: now(),
     };
-    const write = mutationQueue.then(async () => {
-      const current = await load();
-      current.events = [event, ...current.events].slice(0, 200);
-      await writePrivateJson(file, current);
-      return structuredClone(event);
+    return persistEvent(event);
+  }
+
+  async function record(capabilityId, context = {}) {
+    if (!/^[a-z0-9][a-z0-9.-]{1,100}$/.test(capabilityId)) throw new Error("Invalid AIRI capability id.");
+    const config = await getRuntimeEnv();
+    const backend = await resolveBackend(capabilityId, config, context);
+    const execution = safeRecordedExecution(context.execution);
+    return persistEvent({
+      eventId: `airi_${randomUUID()}`,
+      capabilityId,
+      family: familyOf(capabilityId),
+      surface: typeof context.surface === "string" ? context.surface.slice(0, 30) : "unknown",
+      state: backend.state,
+      adapter: backend.adapter,
+      requirements: backend.requirements,
+      message: execution?.summary || localizedMessage(context.locale, backend.state, backend.adapter),
+      ...(execution ? { execution } : {}),
+      at: now(),
     });
-    mutationQueue = write.then(() => undefined, () => undefined);
-    return write;
   }
 
   async function list(limit = 50) {
@@ -186,5 +218,5 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapabi
     }));
   }
 
-  return { invoke, list, status };
+  return { invoke, list, record, status };
 }

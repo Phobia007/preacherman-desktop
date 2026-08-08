@@ -8,7 +8,22 @@ export const MEMORY_PERSONA_LIMITS = Object.freeze({
   maxTotalMemories: 1_000,
   maxMemoryBytes: 8 * 1024,
   maxStoreBytes: 2 * 1024 * 1024,
+  maxAuditEvents: 500,
 });
+
+export const MEMORY_BOUNDARIES = Object.freeze(["persona", "session", "long-term"]);
+export const MEMORY_PLUGIN_SCOPES = Object.freeze([
+  "persona:read",
+  "persona:write",
+  "persona:select",
+  "persona:delete",
+  "memory:read",
+  "memory:write",
+  "memory:delete",
+  "memory:audit:read",
+  "conversations:recent:read",
+  "conversations:recent:content:read",
+]);
 
 const PERSONA_NAME_BYTES = 120;
 const PERSONA_DESCRIPTION_BYTES = 2 * 1024;
@@ -16,6 +31,7 @@ const PERSONA_INSTRUCTIONS_BYTES = 8 * 1024;
 const NAMESPACE_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
 const OWNER_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/;
 const DEFAULT_OWNER = "preacherman-runtime";
+const BOUNDARY_SET = new Set(MEMORY_BOUNDARIES);
 const SENSITIVE_FIELD_PATTERN = /^(?:api[-_]?key|access[-_]?key|secret(?:[-_]?key)?|token|authorization|password|cookie|audio(?:data|bytes|buffer)?|voice(?:data|bytes|buffer)?|private[-_]?key|encryption[-_]?key|keys?)$/i;
 
 function runtimeError(code, message, statusCode = 400, cause) {
@@ -93,6 +109,17 @@ function normalizeNamespace(value = "general") {
   return value;
 }
 
+function normalizeBoundary(value = "persona", sessionId) {
+  if (!BOUNDARY_SET.has(value)) {
+    throw runtimeError("INVALID_MEMORY_INPUT", `Memory boundary must be one of: ${MEMORY_BOUNDARIES.join(", ")}.`);
+  }
+  if (value === "session") return { boundary: value, sessionId: normalizeId(sessionId, "Session id") };
+  if (sessionId !== undefined && sessionId !== null && sessionId !== "") {
+    throw runtimeError("INVALID_MEMORY_INPUT", "sessionId is only valid for the session memory boundary.");
+  }
+  return { boundary: value, sessionId: null };
+}
+
 function normalizeIso(value, label) {
   if (value === undefined || value === null || value === "") return null;
   if (typeof value !== "string") throw runtimeError("INVALID_MEMORY_INPUT", `${label} must be an ISO date-time string.`);
@@ -138,7 +165,7 @@ async function writePrivateJson(target, value, maximumBytes) {
 }
 
 function validateLoadedState(value) {
-  if (!value || ![1, 2].includes(value.version) || !Array.isArray(value.personas) || !Array.isArray(value.memories)) {
+  if (!value || ![1, 2, 3].includes(value.version) || !Array.isArray(value.personas) || !Array.isArray(value.memories)) {
     throw runtimeError("MEMORY_STORE_INVALID", "Memory/Persona store has an unsupported or invalid format.", 500);
   }
   if (value.selectedPersonaId !== null && typeof value.selectedPersonaId !== "string") {
@@ -147,15 +174,44 @@ function validateLoadedState(value) {
   if (value.selectedPersonaId && !value.personas.some((persona) => persona.id === value.selectedPersonaId)) {
     throw runtimeError("MEMORY_STORE_INVALID", "Selected persona does not exist in the Memory/Persona store.", 500);
   }
-  let migrated = value.version === 1;
+  let migrated = value.version !== 3 || !Array.isArray(value.audit);
   const memories = value.memories.map((memory) => {
-    if (memory && typeof memory.owner === "string" && OWNER_PATTERN.test(memory.owner)) return memory;
-    migrated = true;
-    return { ...memory, owner: DEFAULT_OWNER };
+    if (!memory || typeof memory !== "object") {
+      throw runtimeError("MEMORY_STORE_INVALID", "Memory/Persona store contains an invalid memory.", 500);
+    }
+    const validOwner = typeof memory.owner === "string" && OWNER_PATTERN.test(memory.owner);
+    if (value.version >= 2 && !validOwner) {
+      throw runtimeError("MEMORY_STORE_INVALID", "Memory/Persona store contains an invalid memory owner.", 500);
+    }
+    if (value.version === 3 && (!BOUNDARY_SET.has(memory.boundary)
+      || (memory.boundary === "session" && typeof memory.sessionId !== "string")
+      || memory.sensitivity !== "private")) {
+      throw runtimeError("MEMORY_STORE_INVALID", "Memory/Persona store contains an invalid memory boundary.", 500);
+    }
+    const owner = validOwner ? memory.owner : DEFAULT_OWNER;
+    const boundary = BOUNDARY_SET.has(memory.boundary) ? memory.boundary : "persona";
+    const sessionId = boundary === "session" ? memory.sessionId : null;
+    const sensitivity = "private";
+    if (owner !== memory?.owner || boundary !== memory?.boundary || sessionId !== memory?.sessionId || sensitivity !== memory?.sensitivity) migrated = true;
+    return { ...memory, owner, boundary, sessionId, sensitivity };
   });
   return {
-    state: { ...value, version: 2, memories },
+    state: { ...value, version: 3, memories, audit: Array.isArray(value.audit) ? value.audit : [] },
     migrated,
+  };
+}
+
+function conversationPreview(entry, includeContent) {
+  const messages = Array.isArray(entry?.messages) ? entry.messages : [];
+  const lastMessage = [...messages].reverse().find((message) => typeof message?.text === "string" || typeof message?.content === "string");
+  const lastText = typeof lastMessage?.text === "string" ? lastMessage.text : lastMessage?.content;
+  const preview = includeContent && lastText ? redactSecrets(lastText.slice(0, 280)).value : undefined;
+  return {
+    id: typeof entry?.id === "string" ? entry.id : "unknown",
+    locale: entry?.locale === "zh-CN" ? "zh-CN" : "en",
+    updatedAt: typeof entry?.updatedAt === "string" ? entry.updatedAt : null,
+    messageCount: messages.length,
+    ...(preview ? { preview } : {}),
   };
 }
 
@@ -172,11 +228,22 @@ export function createAiriMemoryPersonaRuntime({
   limits: limitOverrides = {},
   defaultTimezone = "UTC",
   principal = DEFAULT_OWNER,
+  scopes,
+  recentConversationReader,
+  onAuditEvent = () => undefined,
 } = {}) {
   if (typeof file !== "string" || !file) throw new TypeError("Memory/Persona runtime requires a persistence file.");
   if (typeof principal !== "string" || !OWNER_PATTERN.test(principal)) {
     throw new TypeError("Memory/Persona principal must be a valid owner identifier.");
   }
+  if (scopes !== undefined && (!Array.isArray(scopes) || scopes.some((scope) => !MEMORY_PLUGIN_SCOPES.includes(scope)))) {
+    throw new TypeError("Memory/Persona scopes contain an unsupported plugin scope.");
+  }
+  if (recentConversationReader !== undefined && typeof recentConversationReader !== "function") {
+    throw new TypeError("recentConversationReader must be a function.");
+  }
+  if (typeof onAuditEvent !== "function") throw new TypeError("onAuditEvent must be a function.");
+  const grantedScopes = new Set(scopes ?? (principal === DEFAULT_OWNER ? ["*"] : []));
   const limits = Object.freeze({ ...MEMORY_PERSONA_LIMITS, ...limitOverrides });
   for (const [name, value] of Object.entries(limits)) {
     if (!Number.isInteger(value) || value < 1) throw new TypeError(`Memory/Persona limit ${name} must be a positive integer.`);
@@ -212,7 +279,7 @@ export function createAiriMemoryPersonaRuntime({
           if (loaded.migrated) await writePrivateJson(file, state, limits.maxStoreBytes);
         } catch (error) {
           if (error?.code !== "ENOENT") throw error;
-          state = { version: 2, selectedPersonaId: null, personas: [], memories: [], updatedAt: now() };
+          state = { version: 3, selectedPersonaId: null, personas: [], memories: [], audit: [], updatedAt: now() };
           await writePrivateJson(file, state, limits.maxStoreBytes);
         }
         transition("ready");
@@ -236,15 +303,62 @@ export function createAiriMemoryPersonaRuntime({
     return persona;
   }
 
-  function mutate(operation) {
+  function requireScope(scope) {
+    if (grantedScopes.has("*") || grantedScopes.has(scope)) return;
+    throw runtimeError("MEMORY_SCOPE_DENIED", `Principal ${principal} requires scope ${scope}.`, 403);
+  }
+
+  function appendAudit(current, context, outcome, output, error) {
+    if (!context) return null;
+    const event = {
+      id: randomUUID(),
+      sequence: (current.audit.at(-1)?.sequence ?? 0) + 1,
+      principal,
+      operation: context.operation,
+      outcome,
+      requiredScope: context.requiredScope,
+      boundary: context.boundary ?? null,
+      personaId: context.personaId ?? null,
+      namespace: context.namespace ?? null,
+      sessionId: context.sessionId ?? null,
+      resultCount: outcome === "succeeded" ? (Array.isArray(output) ? output.length : output == null ? 0 : 1) : 0,
+      errorCode: error?.code ?? null,
+      at: now(),
+    };
+    current.audit.push(event);
+    current.audit = current.audit.slice(-limits.maxAuditEvents);
+    return event;
+  }
+
+  function notifyAudit(event) {
+    if (!event) return;
+    try { onAuditEvent(structuredClone(event)); } catch { /* Observers cannot change operation results. */ }
+  }
+
+  function mutate(operation, auditContext) {
     const result = mutationQueue.then(async () => {
       await initialize();
       const draft = structuredClone(state);
-      const output = operation(draft);
-      draft.updatedAt = now();
-      await writePrivateJson(file, draft, limits.maxStoreBytes);
-      state = draft;
-      return structuredClone(output);
+      try {
+        const output = await operation(draft);
+        const auditEvent = appendAudit(draft, auditContext, "succeeded", output);
+        draft.updatedAt = now();
+        await writePrivateJson(file, draft, limits.maxStoreBytes);
+        state = draft;
+        notifyAudit(auditEvent);
+        return structuredClone(output);
+      } catch (error) {
+        if (auditContext) {
+          const auditDraft = structuredClone(state);
+          const outcome = error?.code === "MEMORY_SCOPE_DENIED" ? "denied" : "failed";
+          const auditEvent = appendAudit(auditDraft, auditContext, outcome, null, error);
+          auditDraft.updatedAt = now();
+          await writePrivateJson(file, auditDraft, limits.maxStoreBytes);
+          state = auditDraft;
+          notifyAudit(auditEvent);
+        }
+        throw error;
+      }
     });
     mutationQueue = result.then(() => undefined, () => undefined);
     return result;
@@ -263,6 +377,7 @@ export function createAiriMemoryPersonaRuntime({
     const description = normalizeText(value.description, "Persona description", PERSONA_DESCRIPTION_BYTES);
     const instructions = normalizeText(value.instructions, "Persona instructions", PERSONA_INSTRUCTIONS_BYTES);
     return mutate((current) => {
+      requireScope("persona:write");
       if (current.personas.length >= limits.maxPersonas) {
         throw runtimeError("PERSONA_LIMIT_REACHED", `Persona limit of ${limits.maxPersonas} reached.`, 409);
       }
@@ -283,20 +398,25 @@ export function createAiriMemoryPersonaRuntime({
   }
 
   async function listPersonas() {
-    return read((current) => current.personas
-      .map((persona) => ({ ...persona, selected: persona.id === current.selectedPersonaId }))
-      .sort((left, right) => left.createdAt.localeCompare(right.createdAt)));
+    return read((current) => {
+      requireScope("persona:read");
+      return current.personas
+        .map((persona) => ({ ...persona, selected: persona.id === current.selectedPersonaId }))
+        .sort((left, right) => left.createdAt.localeCompare(right.createdAt));
+    });
   }
 
   async function getSelectedPersona() {
-    return read((current) => current.selectedPersonaId
-      ? { ...findPersona(current, current.selectedPersonaId), selected: true }
-      : null);
+    return read((current) => {
+      requireScope("persona:read");
+      return current.selectedPersonaId ? { ...findPersona(current, current.selectedPersonaId), selected: true } : null;
+    });
   }
 
   async function selectPersona(personaId) {
     const id = normalizeId(personaId, "Persona id");
     return mutate((current) => {
+      requireScope("persona:select");
       const persona = findPersona(current, id);
       current.selectedPersonaId = id;
       return { ...persona, selected: true };
@@ -313,6 +433,7 @@ export function createAiriMemoryPersonaRuntime({
     if (Object.hasOwn(value, "description")) normalized.description = normalizeText(value.description, "Persona description", PERSONA_DESCRIPTION_BYTES);
     if (Object.hasOwn(value, "instructions")) normalized.instructions = normalizeText(value.instructions, "Persona instructions", PERSONA_INSTRUCTIONS_BYTES);
     return mutate((current) => {
+      requireScope("persona:write");
       const persona = findPersona(current, id);
       for (const [key, result] of Object.entries(normalized)) {
         persona[key] = result.value;
@@ -326,6 +447,7 @@ export function createAiriMemoryPersonaRuntime({
   async function deletePersona(personaId) {
     const id = normalizeId(personaId, "Persona id");
     return mutate((current) => {
+      requireScope("persona:delete");
       const index = current.personas.findIndex((persona) => persona.id === id);
       if (index < 0) throw runtimeError("PERSONA_NOT_FOUND", `Unknown persona: ${id}`, 404);
       current.personas.splice(index, 1);
@@ -338,20 +460,23 @@ export function createAiriMemoryPersonaRuntime({
 
   async function remember(input) {
     const value = requirePlainObject(input, "Memory input");
-    rejectUnknownFields(value, new Set(["personaId", "namespace", "text", "tags", "occurredAt", "expiresAt", "timezone"]), "Memory input");
+    rejectUnknownFields(value, new Set(["personaId", "namespace", "boundary", "sessionId", "text", "tags", "occurredAt", "expiresAt", "timezone"]), "Memory input");
     const namespace = normalizeNamespace(value.namespace);
+    const memoryBoundary = normalizeBoundary(value.boundary, value.sessionId);
     const text = normalizeText(value.text, "Memory text", limits.maxMemoryBytes, { required: true });
     const tags = normalizeTags(value.tags);
     const occurredAt = normalizeIso(value.occurredAt, "occurredAt");
     const expiresAt = normalizeIso(value.expiresAt, "expiresAt");
     const timezone = normalizeTimezone(value.timezone ?? defaultTimezone);
     return mutate((current) => {
+      requireScope("memory:write");
       const persona = findPersona(current, value.personaId);
       if (current.memories.length >= limits.maxTotalMemories) {
         throw runtimeError("MEMORY_LIMIT_REACHED", `Total memory limit of ${limits.maxTotalMemories} reached.`, 409);
       }
       const scopeCount = current.memories.filter((memory) => memory.owner === principal
-        && memory.personaId === persona.id && memory.namespace === namespace).length;
+        && memory.personaId === persona.id && memory.namespace === namespace
+        && memory.boundary === memoryBoundary.boundary && memory.sessionId === memoryBoundary.sessionId).length;
       if (scopeCount >= limits.maxMemoriesPerNamespace) {
         throw runtimeError("MEMORY_LIMIT_REACHED", `Memory limit of ${limits.maxMemoriesPerNamespace} reached for namespace ${namespace}.`, 409);
       }
@@ -361,6 +486,9 @@ export function createAiriMemoryPersonaRuntime({
         owner: principal,
         personaId: persona.id,
         namespace,
+        boundary: memoryBoundary.boundary,
+        sessionId: memoryBoundary.sessionId,
+        sensitivity: "private",
         text: text.value,
         tags,
         redacted: text.redacted,
@@ -368,13 +496,17 @@ export function createAiriMemoryPersonaRuntime({
       };
       current.memories.push(memory);
       return publicMemory(memory, new Date(recordedAt));
+    }, {
+      operation: "memory.remember", requiredScope: "memory:write", personaId: value.personaId,
+      namespace, ...memoryBoundary,
     });
   }
 
   async function recall(input) {
     const value = requirePlainObject(input, "Recall input");
-    rejectUnknownFields(value, new Set(["personaId", "namespace", "query", "limit", "includeExpired"]), "Recall input");
+    rejectUnknownFields(value, new Set(["personaId", "namespace", "boundary", "sessionId", "query", "limit", "includeExpired"]), "Recall input");
     const namespace = normalizeNamespace(value.namespace);
+    const memoryBoundary = normalizeBoundary(value.boundary, value.sessionId);
     if (value.query !== undefined && typeof value.query !== "string") throw runtimeError("INVALID_MEMORY_INPUT", "Recall query must be a string.");
     const query = value.query?.trim().toLocaleLowerCase() ?? "";
     const limit = value.limit ?? 20;
@@ -382,35 +514,75 @@ export function createAiriMemoryPersonaRuntime({
     if (value.includeExpired !== undefined && typeof value.includeExpired !== "boolean") {
       throw runtimeError("INVALID_MEMORY_INPUT", "includeExpired must be a boolean.");
     }
-    return read((current) => {
+    return mutate((current) => {
+      requireScope("memory:read");
       const persona = findPersona(current, value.personaId);
       const currentTime = new Date(now());
       return current.memories
         .filter((memory) => memory.owner === principal
-          && memory.personaId === persona.id && memory.namespace === namespace)
+          && memory.personaId === persona.id && memory.namespace === namespace
+          && memory.boundary === memoryBoundary.boundary && memory.sessionId === memoryBoundary.sessionId)
         .map((memory) => publicMemory(memory, currentTime))
         .filter((memory) => value.includeExpired || !memory.temporal.isExpired)
         .filter((memory) => !query || memory.text.toLocaleLowerCase().includes(query)
           || memory.tags.some((tag) => tag.toLocaleLowerCase().includes(query)))
         .sort((left, right) => right.temporal.occurredAt.localeCompare(left.temporal.occurredAt))
         .slice(0, limit);
+    }, {
+      operation: "memory.recall", requiredScope: "memory:read", personaId: value.personaId,
+      namespace, ...memoryBoundary,
     });
   }
 
   async function deleteMemory(input) {
     const value = requirePlainObject(input, "Delete memory input");
-    rejectUnknownFields(value, new Set(["personaId", "namespace", "memoryId"]), "Delete memory input");
+    rejectUnknownFields(value, new Set(["personaId", "namespace", "boundary", "sessionId", "memoryId"]), "Delete memory input");
     const personaId = normalizeId(value.personaId, "Persona id");
     const memoryId = normalizeId(value.memoryId, "Memory id");
     const namespace = normalizeNamespace(value.namespace);
+    const memoryBoundary = normalizeBoundary(value.boundary, value.sessionId);
     return mutate((current) => {
+      requireScope("memory:delete");
       findPersona(current, personaId);
       const index = current.memories.findIndex((memory) => memory.id === memoryId
-        && memory.owner === principal && memory.personaId === personaId && memory.namespace === namespace);
+        && memory.owner === principal && memory.personaId === personaId && memory.namespace === namespace
+        && memory.boundary === memoryBoundary.boundary && memory.sessionId === memoryBoundary.sessionId);
       if (index < 0) throw runtimeError("MEMORY_NOT_FOUND", "Memory does not exist in the requested persona and namespace.", 404);
       current.memories.splice(index, 1);
-      return { id: memoryId, personaId, namespace, deleted: true };
+      return { id: memoryId, personaId, namespace, ...memoryBoundary, deleted: true };
+    }, {
+      operation: "memory.delete", requiredScope: "memory:delete", personaId, namespace, ...memoryBoundary,
     });
+  }
+
+  async function readRecentConversations(input = {}) {
+    const value = requirePlainObject(input, "Recent conversation input");
+    rejectUnknownFields(value, new Set(["limit"]), "Recent conversation input");
+    const limit = value.limit ?? 10;
+    if (!Number.isInteger(limit) || limit < 1 || limit > 20) {
+      throw runtimeError("INVALID_MEMORY_INPUT", "Recent conversation limit must be between 1 and 20.");
+    }
+    return mutate(async () => {
+      requireScope("conversations:recent:read");
+      if (!recentConversationReader) {
+        throw runtimeError("CONVERSATION_READER_UNAVAILABLE", "Recent conversation reader is not connected.", 501);
+      }
+      const entries = await recentConversationReader({ limit, principal });
+      if (!Array.isArray(entries)) throw runtimeError("CONVERSATION_READER_INVALID", "Recent conversation reader returned an invalid result.", 502);
+      const includeContent = grantedScopes.has("*") || grantedScopes.has("conversations:recent:content:read");
+      return entries.slice(0, limit).map((entry) => conversationPreview(entry, includeContent));
+    }, { operation: "conversations.recent.read", requiredScope: "conversations:recent:read" });
+  }
+
+  async function listAuditEvents(input = {}) {
+    const value = requirePlainObject(input, "Audit input");
+    rejectUnknownFields(value, new Set(["limit"]), "Audit input");
+    const limit = value.limit ?? 50;
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw runtimeError("INVALID_MEMORY_INPUT", "Audit limit must be between 1 and 100.");
+    return mutate((current) => {
+      requireScope("memory:audit:read");
+      return [...current.audit].reverse().slice(0, limit);
+    }, { operation: "memory.audit.read", requiredScope: "memory:audit:read" });
   }
 
   async function close() {
@@ -426,10 +598,18 @@ export function createAiriMemoryPersonaRuntime({
     createPersona,
     deleteMemory,
     deletePersona,
+    getAccessPolicy: () => ({
+      principal,
+      scopes: grantedScopes.has("*") ? ["*"] : [...grantedScopes].sort(),
+      boundaries: [...MEMORY_BOUNDARIES],
+      sensitiveData: "private-by-default",
+    }),
     getLifecycle: () => structuredClone(lifecycle),
     getSelectedPersona,
     initialize,
+    listAuditEvents,
     listPersonas,
+    readRecentConversations,
     recall,
     remember,
     selectPersona,

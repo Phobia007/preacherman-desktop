@@ -1,0 +1,10 @@
+{
+  "apiVersion": "v1",
+  "kind": "manifest.plugin.airi.moeru.ai",
+  "name": "binding-owner-violation",
+  "permissions": [],
+  "tools": [],
+  "entrypoints": {
+    "node": "index.mjs"
+  }
+}

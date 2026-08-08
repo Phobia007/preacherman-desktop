@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 import {
   BUILTIN_TIC_TAC_TOE_GAMELET,
   createAiriGameletRuntime,
 } from "../server/airiGameletRuntime.mjs";
+import { createTaskStore } from "../server/taskStore.mjs";
 
 function fixture(options = {}) {
   let id = 0;
@@ -103,7 +107,7 @@ test("adapter timeouts do not commit late state and active session limit is expl
   });
   assert.equal(stopped.status, "stopped");
   assert.deepEqual(stopped.events.at(-1), {
-    sequence: 2,
+    sequence: 3,
     at: "2026-08-08T00:00:01.000Z",
     type: "session.stopped",
     reason: "user-requested",
@@ -114,6 +118,7 @@ test("adapter timeouts do not commit late state and active session limit is expl
 
 test("removePlugin cleans provider and consumer sessions while ownership protects registration", async () => {
   const stopped = [];
+  const destroyed = [];
   const runtime = fixture({ includeBuiltin: false });
   runtime.register({
     pluginId: "game-provider",
@@ -128,6 +133,7 @@ test("removePlugin cleans provider and consumer sessions while ownership protect
       create: () => ({ state: { value: 0 } }),
       send: ({ state }) => ({ state: { value: state.value + 1 } }),
       stop: ({ sessionId, reason }) => { stopped.push({ sessionId, reason }); },
+      destroy: ({ sessionId, reason }) => { destroyed.push({ sessionId, reason }); },
     },
   });
   const providerSession = await runtime.createSession({ pluginId: "game-provider", gameletId: "counter-game" });
@@ -143,6 +149,8 @@ test("removePlugin cleans provider and consumer sessions while ownership protect
   assert.equal(runtime.listSessions({ pluginId: "consumer-plugin" }).length, 0);
   assert.deepEqual(stopped.map(({ sessionId }) => sessionId).sort(), [consumerSession.id, providerSession.id].sort());
   assert.equal(stopped.every(({ reason }) => reason === "plugin-removed"), true);
+  assert.deepEqual(destroyed.map(({ sessionId }) => sessionId).sort(), [consumerSession.id, providerSession.id].sort());
+  assert.equal(destroyed.every(({ reason }) => reason === "plugin-removed"), true);
 });
 
 test("adapter output must remain JSON-safe and within byte, depth, node, and event limits", async () => {
@@ -211,6 +219,81 @@ test("session histories and event logs retain the newest bounded entries with mo
   assert.equal(session.state.value, 5);
   assert.deepEqual(session.history.map(({ sequence }) => sequence), [3, 4, 5]);
   assert.equal(session.events.length, 4);
-  assert.deepEqual(session.events.map(({ sequence }) => sequence), [9, 10, 11, 12]);
+  assert.deepEqual(session.events.map(({ sequence }) => sequence), [10, 11, 12, 13]);
   assert.deepEqual(session.events.map(({ type }) => type), ["action.accepted", "counter.incremented", "action.accepted", "counter.incremented"]);
+});
+
+test("start, pause, resume, stop, and destroy form a real isolated session lifecycle", async () => {
+  const hooks = [];
+  const runtime = fixture({ includeBuiltin: false });
+  runtime.register({
+    pluginId: "lifecycle-provider",
+    definition: {
+      id: "lifecycle-game",
+      version: "1.0.0",
+      title: "Lifecycle game",
+      description: "Lifecycle contract test adapter.",
+      actions: [{ type: "advance" }],
+    },
+    adapter: {
+      create: () => { hooks.push("create"); return { state: { turns: 0 } }; },
+      send: ({ state }) => ({ state: { turns: state.turns + 1 } }),
+      pause: () => { hooks.push("pause"); },
+      resume: () => { hooks.push("resume"); },
+      stop: () => { hooks.push("stop"); },
+      destroy: () => { hooks.push("destroy"); },
+    },
+  });
+
+  let session = await runtime.startSession({ pluginId: "lifecycle-player", gameletId: "lifecycle-game" });
+  assert.equal(session.status, "active");
+  assert.deepEqual(session.events.slice(0, 2).map(({ type }) => type), ["session.created", "session.started"]);
+  session = await runtime.pauseSession({ pluginId: "lifecycle-player", sessionId: session.id });
+  assert.equal(session.status, "paused");
+  await assert.rejects(
+    runtime.sendAction({ pluginId: "lifecycle-player", sessionId: session.id, action: { type: "advance" } }),
+    { code: "GAMELET_SESSION_NOT_ACTIVE", statusCode: 409 },
+  );
+  session = await runtime.resumeSession({ pluginId: "lifecycle-player", sessionId: session.id });
+  assert.equal(session.status, "active");
+  session = await runtime.sendAction({
+    pluginId: "lifecycle-player", sessionId: session.id, action: { type: "advance" },
+  });
+  assert.equal(session.state.turns, 1);
+  session = await runtime.stopSession({ pluginId: "lifecycle-player", sessionId: session.id, reason: "test-complete" });
+  assert.equal(session.status, "stopped");
+  const destroyed = await runtime.destroySession({
+    pluginId: "lifecycle-player", sessionId: session.id, reason: "release-resources",
+  });
+  assert.equal(destroyed.status, "destroyed");
+  assert.equal(destroyed.events.at(-1).type, "session.destroyed");
+  assert.throws(
+    () => runtime.getSession({ pluginId: "lifecycle-player", sessionId: session.id }),
+    { code: "GAMELET_SESSION_NOT_FOUND", statusCode: 404 },
+  );
+  assert.deepEqual(hooks, ["create", "pause", "resume", "stop", "destroy"]);
+});
+
+test("Gamelet lifecycle never creates or mutates a TaskRun", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "preacherman-gamelet-isolation-"));
+  t.after(async () => { await rm(directory, { recursive: true, force: true }); });
+  const taskStore = createTaskStore({ file: join(directory, "tasks.json") });
+  const task = {
+    taskId: "existing-task",
+    status: "succeeded",
+    updatedAt: "2026-08-08T00:00:00.000Z",
+    events: [{ sequence: 1, type: "completed" }],
+  };
+  await taskStore.create(task);
+  const before = await taskStore.list(10);
+
+  const runtime = fixture();
+  const started = await runtime.startSession({ pluginId: "isolated-player", gameletId: "tic-tac-toe" });
+  const paused = await runtime.pauseSession({ pluginId: "isolated-player", sessionId: started.id });
+  await runtime.resumeSession({ pluginId: "isolated-player", sessionId: paused.id });
+  await runtime.stopSession({ pluginId: "isolated-player", sessionId: paused.id });
+  await runtime.destroySession({ pluginId: "isolated-player", sessionId: paused.id });
+
+  assert.deepEqual(await taskStore.list(10), before);
+  assert.equal((await taskStore.list(10)).length, 1);
 });

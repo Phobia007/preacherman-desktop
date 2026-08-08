@@ -3,10 +3,11 @@ import { chmod, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 export const AIRI_WIDGET_KIND = "widget.airi.moeru.ai";
+export const AIRI_WIDGET_PLACEMENTS = Object.freeze(["home", "work", "lab", "gallery", "ledger", "settings"]);
 
 const ID_PATTERN = /^[a-z][a-z0-9-]{0,63}$/;
 const VERSION_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
-const PLACEMENTS = new Set(["home", "work", "ledger", "lab", "gallery"]);
+const PLACEMENTS = new Set(AIRI_WIDGET_PLACEMENTS);
 const TONES = new Set(["primary", "muted", "accent", "success", "warning", "error"]);
 const TEXT_VARIANTS = new Set(["heading", "body", "caption"]);
 const ORIENTATIONS = new Set(["vertical", "horizontal"]);
@@ -58,7 +59,7 @@ function normalizeManifest(value) {
   const manifest = requirePlainObject(value, "Widget manifest");
   requireExactKeys(
     manifest,
-    new Set(["apiVersion", "kind", "id", "version", "title", "description", "placement"]),
+    new Set(["apiVersion", "kind", "id", "version", "title", "description", "placement", "permissions"]),
     new Set(["apiVersion", "kind", "id", "version", "title", "placement"]),
     "Widget manifest",
     "INVALID_WIDGET_MANIFEST",
@@ -80,6 +81,7 @@ function normalizeManifest(value) {
     }
     description = manifest.description;
   }
+  const permissions = normalizePermissions(manifest.permissions);
   return {
     apiVersion: "v1",
     kind: AIRI_WIDGET_KIND,
@@ -88,7 +90,22 @@ function normalizeManifest(value) {
     title,
     ...(description === undefined ? {} : { description }),
     placement: manifest.placement,
+    permissions,
   };
+}
+
+function normalizePermissions(value = []) {
+  if (!Array.isArray(value) || value.length > 20) {
+    throw widgetError("INVALID_WIDGET_MANIFEST", "Widget permissions must be an array with at most 20 entries.");
+  }
+  return [...new Set(value.map((permission) => requireString(permission, "Widget permission", 80, { pattern: /^[a-z][a-z0-9:.-]{0,79}$/ })))].sort();
+}
+
+function requirePlacement(value, label = "Widget placement") {
+  if (!PLACEMENTS.has(value)) {
+    throw widgetError("INVALID_WIDGET_MANIFEST", `${label} must be one of: ${AIRI_WIDGET_PLACEMENTS.join(", ")}.`);
+  }
+  return value;
 }
 
 function validateJsonValue(value, label, depth = 0) {
@@ -207,6 +224,23 @@ function publicWidget(record) {
   return structuredClone(record);
 }
 
+function widgetPhase(record) {
+  if (record.error) return "error";
+  if (!record.enabled) return "disabled";
+  if (record.permissions.missing.length > 0) return "permission-required";
+  return "ready";
+}
+
+function permissionState(requested, granted) {
+  const grantedSet = new Set(granted);
+  const accepted = requested.filter((permission) => grantedSet.has(permission));
+  return {
+    requested,
+    granted: accepted,
+    missing: requested.filter((permission) => !grantedSet.has(permission)),
+  };
+}
+
 export function createAiriWidgetRuntime({
   file,
   now = () => new Date().toISOString(),
@@ -215,11 +249,13 @@ export function createAiriWidgetRuntime({
   maxWidgetsPerPlugin = 50,
   maxDepth = 8,
   maxNodes = 200,
+  assignPlacement = ({ requestedPlacement }) => requestedPlacement,
 } = {}) {
   if (typeof file !== "string" || !file) throw new TypeError("Widget runtime requires a persistence file.");
   for (const [label, value] of Object.entries({ maxWidgetBytes, maxWidgets, maxWidgetsPerPlugin, maxDepth, maxNodes })) {
     if (!Number.isInteger(value) || value < 1) throw new TypeError(`${label} must be a positive integer.`);
   }
+  if (typeof assignPlacement !== "function") throw new TypeError("assignPlacement must be a function.");
   let state;
   let mutationQueue = Promise.resolve();
 
@@ -233,6 +269,24 @@ export function createAiriWidgetRuntime({
     return normalized;
   }
 
+  function normalizeLoadedRecord(record) {
+    normalizePluginId(record?.pluginId);
+    const definition = normalizeDefinition({ manifest: record?.manifest, schema: record?.schema });
+    if (record?.id !== definition.manifest.id || !Number.isInteger(record?.revision) || record.revision < 1) {
+      throw new Error("record identity or revision is invalid");
+    }
+    const placement = requirePlacement(record.placement ?? definition.manifest.placement, "Host widget placement");
+    const enabled = record.enabled !== false;
+    const granted = normalizePermissions(record.permissions?.granted ?? []);
+    const permissions = permissionState(definition.manifest.permissions, granted);
+    const error = record.error === null || record.error === undefined
+      ? null
+      : requireString(record.error, "Widget error", 1_000);
+    const normalized = { ...record, ...definition, placement, enabled, permissions, error };
+    normalized.phase = widgetPhase(normalized);
+    return normalized;
+  }
+
   async function load() {
     if (state) return state;
     try {
@@ -241,13 +295,7 @@ export function createAiriWidgetRuntime({
         throw widgetError("WIDGET_STATE_INVALID", "Widget persistence file has an unsupported shape.", 500);
       }
       try {
-        for (const record of parsed.widgets) {
-          normalizePluginId(record?.pluginId);
-          const definition = normalizeDefinition({ manifest: record?.manifest, schema: record?.schema });
-          if (record?.id !== definition.manifest.id || !Number.isInteger(record?.revision) || record.revision < 1) {
-            throw new Error("record identity or revision is invalid");
-          }
-        }
+        parsed.widgets = parsed.widgets.map(normalizeLoadedRecord);
       } catch (cause) {
         throw widgetError("WIDGET_STATE_INVALID", "Widget persistence file contains an invalid record.", 500, cause);
       }
@@ -288,6 +336,11 @@ export function createAiriWidgetRuntime({
   async function register({ pluginId, manifest, schema }) {
     pluginId = normalizePluginId(pluginId);
     const definition = normalizeDefinition({ manifest, schema });
+    const placement = requirePlacement(assignPlacement({
+      pluginId,
+      requestedPlacement: definition.manifest.placement,
+      manifest: structuredClone(definition.manifest),
+    }), "Host widget placement");
     return mutate((current) => {
       if (current.widgets.length >= maxWidgets) throw widgetError("WIDGET_LIMIT_EXCEEDED", "Widget registry is full.", 409);
       if (current.widgets.filter((widget) => widget.pluginId === pluginId).length >= maxWidgetsPerPlugin) {
@@ -297,16 +350,23 @@ export function createAiriWidgetRuntime({
         throw widgetError("WIDGET_ALREADY_REGISTERED", `AIRI widget is already registered: ${definition.manifest.id}`, 409);
       }
       const timestamp = now();
+      const permissions = permissionState(definition.manifest.permissions, []);
       const record = {
         id: definition.manifest.id,
         pluginId,
         ...definition,
-        phase: "ready",
+        placement,
+        enabled: true,
+        permissions,
+        error: null,
+        phase: "loading",
         revision: 1,
         createdAt: timestamp,
         updatedAt: timestamp,
-        lifecycle: [{ phase: "registered", at: timestamp }, { phase: "ready", at: timestamp }],
+        lifecycle: [{ phase: "registered", at: timestamp }, { phase: "loading", at: timestamp }],
       };
+      record.phase = widgetPhase(record);
+      record.lifecycle.push({ phase: record.phase, at: timestamp });
       current.widgets.push(record);
       return record;
     });
@@ -336,10 +396,59 @@ export function createAiriWidgetRuntime({
       const timestamp = now();
       record.manifest = next.manifest;
       record.schema = next.schema;
+      record.permissions = permissionState(next.manifest.permissions, record.permissions.granted);
       record.revision += 1;
       record.updatedAt = timestamp;
-      record.phase = "ready";
-      record.lifecycle.push({ phase: "updated", at: timestamp }, { phase: "ready", at: timestamp });
+      record.phase = widgetPhase(record);
+      record.lifecycle.push({ phase: "updated", at: timestamp }, { phase: record.phase, at: timestamp });
+      return record;
+    });
+  }
+
+  async function configureHost({ id, placement, enabled, grantedPermissions }) {
+    requireString(id, "Widget id", 64, { pattern: ID_PATTERN });
+    if (placement !== undefined) requirePlacement(placement, "Host widget placement");
+    if (enabled !== undefined && typeof enabled !== "boolean") throw widgetError("INVALID_WIDGET_INPUT", "Widget enabled must be a boolean.");
+    return mutate((current) => {
+      const record = current.widgets.find((candidate) => candidate.id === id);
+      if (!record) throw widgetError("WIDGET_NOT_FOUND", `Unknown AIRI widget: ${id}`, 404);
+      if (placement !== undefined) record.placement = placement;
+      if (enabled !== undefined) record.enabled = enabled;
+      if (grantedPermissions !== undefined) {
+        record.permissions = permissionState(record.manifest.permissions, normalizePermissions(grantedPermissions));
+      }
+      const timestamp = now();
+      record.phase = widgetPhase(record);
+      record.revision += 1;
+      record.updatedAt = timestamp;
+      record.lifecycle.push({ phase: "host-configured", at: timestamp }, { phase: record.phase, at: timestamp });
+      return record;
+    });
+  }
+
+  async function reportError({ pluginId, id, error }) {
+    const message = requireString(error, "Widget error", 1_000);
+    return mutate((current) => {
+      const record = ownedRecord(current, pluginId, id);
+      const timestamp = now();
+      record.error = message;
+      record.phase = "error";
+      record.revision += 1;
+      record.updatedAt = timestamp;
+      record.lifecycle.push({ phase: "error", at: timestamp, error: message });
+      return record;
+    });
+  }
+
+  async function clearError({ pluginId, id }) {
+    return mutate((current) => {
+      const record = ownedRecord(current, pluginId, id);
+      const timestamp = now();
+      record.error = null;
+      record.phase = widgetPhase(record);
+      record.revision += 1;
+      record.updatedAt = timestamp;
+      record.lifecycle.push({ phase: record.phase, at: timestamp });
       return record;
     });
   }
@@ -362,5 +471,5 @@ export function createAiriWidgetRuntime({
     });
   }
 
-  return { get, list, register, remove, removePlugin, update };
+  return { clearError, configureHost, get, list, register, remove, removePlugin, reportError, update };
 }

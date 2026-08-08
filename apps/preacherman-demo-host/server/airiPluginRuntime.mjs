@@ -9,9 +9,10 @@ const MANIFEST_KIND = "manifest.plugin.airi.moeru.ai";
 const PLUGIN_ABI = "preacherman.plugin.v1";
 const MAX_MANIFEST_BYTES = 128 * 1024;
 const MAX_ENTRY_BYTES = 2 * 1024 * 1024;
+const MAX_PLUGIN_TOOLS = 64;
 const PLUGIN_NAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/;
 const TOOL_NAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$/;
-const PERMISSION_PATTERN = /^[a-z][a-z0-9.-]*(?::[a-z][a-z0-9.-]*)?$/;
+const PERMISSION_PATTERN = /^[a-z][a-z0-9.-]*(?::[a-z][a-z0-9.-]*)*$/;
 const SUPPORTED_SCHEMA_TYPES = new Set(["array", "boolean", "integer", "number", "object", "string"]);
 const READY_LIFECYCLE = [
   "loading", "loaded", "authenticating", "authenticated", "announced",
@@ -28,6 +29,13 @@ function approvalError(message) {
   const error = new Error(message);
   error.statusCode = 403;
   error.code = "PLUGIN_APPROVAL_REQUIRED";
+  return error;
+}
+
+function ownershipError(message) {
+  const error = new Error(message);
+  error.statusCode = 403;
+  error.code = "PLUGIN_RESOURCE_OWNER_MISMATCH";
   return error;
 }
 
@@ -53,8 +61,14 @@ async function writePrivateJson(target, value) {
 }
 
 function isInside(root, target) {
-  const result = relative(root, target);
+  const comparableRoot = process.platform === "win32" ? root.toLowerCase() : root;
+  const comparableTarget = process.platform === "win32" ? target.toLowerCase() : target;
+  const result = relative(comparableRoot, comparableTarget);
   return result === "" || (!result.startsWith("..") && !isAbsolute(result));
+}
+
+function pathKey(path) {
+  return process.platform === "win32" ? path.toLowerCase() : path;
 }
 
 async function readLimitedFile(path, maximum, label) {
@@ -90,7 +104,7 @@ function parseManifest(text) {
   }
   if (new Set(permissions).size !== permissions.length) throw userError("AIRI plugin permissions must not contain duplicates.");
   const tools = manifest.tools ?? [];
-  if (!Array.isArray(tools) || tools.length > 64) throw userError("AIRI plugin manifest tools must be an array of at most 64 entries.");
+  if (!Array.isArray(tools) || tools.length > MAX_PLUGIN_TOOLS) throw userError(`AIRI plugin manifest tools must be an array of at most ${MAX_PLUGIN_TOOLS} entries.`);
   const toolNames = new Set();
   for (const tool of tools) {
     if (!tool || typeof tool !== "object" || Array.isArray(tool) || typeof tool.name !== "string" || !TOOL_NAME_PATTERN.test(tool.name)) {
@@ -112,19 +126,23 @@ function parseManifest(text) {
   };
 }
 
-async function inspectSource(sourceDirectory) {
+async function inspectSource(sourceDirectory, trustedRoots = null) {
   if (typeof sourceDirectory !== "string" || sourceDirectory.length === 0 || sourceDirectory.length > 2_000) {
     throw userError("A trusted plugin source directory is required.");
   }
   const root = await realpath(resolve(sourceDirectory));
   if (!(await stat(root)).isDirectory()) throw userError("AIRI plugin source must be a directory.");
+  const trustedRoot = trustedRoots === null ? null : trustedRoots.find((candidate) => isInside(candidate, root));
+  if (trustedRoots !== null && !trustedRoot) {
+    throw userError("AIRI plugin source is outside the configured trusted roots.");
+  }
   const manifestPath = await realpath(join(root, "plugin.airi.json"));
   if (!isInside(root, manifestPath)) throw userError("plugin.airi.json escapes the plugin directory.");
   const { manifest, entrypoint } = parseManifest(await readLimitedFile(manifestPath, MAX_MANIFEST_BYTES, "plugin.airi.json"));
   const entryPath = await realpath(resolve(root, entrypoint));
   if (!isInside(root, entryPath)) throw userError("AIRI plugin entrypoint escapes the plugin directory.");
   await readLimitedFile(entryPath, MAX_ENTRY_BYTES, "AIRI plugin entrypoint");
-  return { root, manifest, entryPath };
+  return { root, manifest, entryPath, trustedRoot };
 }
 
 function validateSchema(schema, label, depth = 0, ancestors = new Set()) {
@@ -196,7 +214,7 @@ function validateTool(pluginId, value, requiresApproval = true) {
   if (typeof value.name !== "string" || !TOOL_NAME_PATTERN.test(value.name)) throw userError(`Plugin ${pluginId} returned an invalid tool name.`);
   if (typeof value.execute !== "function") throw userError(`Plugin ${pluginId} tool ${value.name} requires execute().`);
   if (value.description !== undefined && typeof value.description !== "string") throw userError(`Plugin ${pluginId} tool ${value.name} has an invalid description.`);
-  const inputSchema = value.inputSchema ?? { type: "object", properties: {}, additionalProperties: false };
+  const inputSchema = structuredClone(value.inputSchema ?? { type: "object", properties: {}, additionalProperties: false });
   validateSchema(inputSchema, `Plugin ${pluginId} tool ${value.name} inputSchema`);
   return {
     pluginId,
@@ -207,6 +225,73 @@ function validateTool(pluginId, value, requiresApproval = true) {
     requiresApproval,
     execute: value.execute,
   };
+}
+
+function publicTool(tool) {
+  const { execute: _execute, ...metadata } = tool;
+  return structuredClone(metadata);
+}
+
+function createPluginToolRegistry({ pluginId, declarations, permissions }) {
+  const approvalByTool = new Map(declarations.map((tool) => [tool.name, tool.requiresApproval]));
+  const permissionApprovalRequired = permissionsRequireApproval(permissions);
+  const registrations = new Map();
+  let active = true;
+
+  function assertActive() {
+    if (!active) throw userError(`Plugin ${pluginId} tool registry is no longer active.`);
+  }
+
+  function register(definition) {
+    assertActive();
+    if (definition && typeof definition === "object"
+      && (Object.hasOwn(definition, "pluginId") || Object.hasOwn(definition, "ownerPluginId"))) {
+      throw ownershipError(`Plugin ${pluginId} tool definitions cannot override their host-captured owner.`);
+    }
+    const declared = definition && typeof definition === "object" ? approvalByTool.get(definition.name) : undefined;
+    if (registrations.has(definition.name)) throw userError(`Plugin ${pluginId} tool is already registered: ${definition.name}`);
+    if (registrations.size >= MAX_PLUGIN_TOOLS) throw userError(`Plugin ${pluginId} cannot register more than ${MAX_PLUGIN_TOOLS} tools.`);
+    const tool = validateTool(pluginId, definition, permissionApprovalRequired || (declared ?? true));
+    registrations.set(tool.toolName, tool);
+    return publicTool(tool);
+  }
+
+  function unregister(name) {
+    assertActive();
+    if (typeof name !== "string" || !TOOL_NAME_PATTERN.test(name)) throw userError(`Plugin ${pluginId} supplied an invalid tool name.`);
+    const tool = registrations.get(name);
+    if (!tool) throw userError(`Plugin ${pluginId} does not own a registered tool named ${name}.`);
+    registrations.delete(name);
+    return publicTool(tool);
+  }
+
+  function list() {
+    assertActive();
+    return [...registrations.values()].map(publicTool).sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  function deactivate() {
+    active = false;
+    registrations.clear();
+  }
+
+  return {
+    facade: Object.freeze({ list, register, unregister }),
+    deactivate,
+    getByQualifiedName(name) {
+      if (!active || typeof name !== "string" || !name.startsWith(`${pluginId}::`)) return undefined;
+      return registrations.get(name.slice(pluginId.length + 2));
+    },
+    listInternal() {
+      return active ? [...registrations.values()] : [];
+    },
+    register,
+    unregister,
+  };
+}
+
+function permissionsRequireApproval(permissions) {
+  return permissions.some((permission) => !permission.endsWith(":read"));
 }
 
 function normalizeToolResult(result) {
@@ -228,13 +313,44 @@ export function createAiriPluginRuntime({
   file,
   taskStore,
   hostBridge = Object.freeze({}),
+  createPluginBridge,
   kits,
   bindings,
+  widgets,
+  releasePluginResources,
+  trustedRoots,
   timeoutMs = 10_000,
   now = () => new Date().toISOString(),
 }) {
   if (!Number.isInteger(timeoutMs) || timeoutMs < 10 || timeoutMs > 120_000) {
     throw new TypeError("Plugin timeout must be an integer between 10 and 120000 milliseconds.");
+  }
+  if (createPluginBridge !== undefined && typeof createPluginBridge !== "function") {
+    throw new TypeError("createPluginBridge must be a function.");
+  }
+  if (releasePluginResources !== undefined && typeof releasePluginResources !== "function") {
+    throw new TypeError("releasePluginResources must be a function.");
+  }
+  if (trustedRoots !== undefined && (!Array.isArray(trustedRoots)
+    || trustedRoots.some((root) => typeof root !== "string" || root.length === 0 || root.length > 2_000))) {
+    throw new TypeError("trustedRoots must be an array of non-empty directory paths.");
+  }
+  const configuredTrustedRoots = trustedRoots === undefined ? null : [...trustedRoots];
+  let canonicalTrustedRootsPromise;
+
+  function getTrustedRoots() {
+    if (configuredTrustedRoots === null) return Promise.resolve(null);
+    canonicalTrustedRootsPromise ??= Promise.all(configuredTrustedRoots.map(async (configuredRoot) => {
+      let root;
+      try {
+        root = await realpath(resolve(configuredRoot));
+      } catch {
+        throw userError(`Trusted plugin root cannot be resolved: ${configuredRoot}`);
+      }
+      if (!(await stat(root)).isDirectory()) throw userError(`Trusted plugin root must be a directory: ${configuredRoot}`);
+      return root;
+    })).then((roots) => [...new Map(roots.map((root) => [pathKey(root), root])).values()]);
+    return canonicalTrustedRootsPromise;
   }
   const builtinManifest = {
     apiVersion: "v1",
@@ -308,12 +424,17 @@ export function createAiriPluginRuntime({
           };
         },
       }] : [],
+      widgetCount: 0,
       dispose: null,
     };
   }
 
+  function toolsForSession(session) {
+    return session?.toolRegistry ? session.toolRegistry.listInternal() : session?.tools ?? [];
+  }
+
   async function activateExternal(source, previousRevision = 0) {
-    const inspected = await inspectSource(source.directory);
+    const inspected = await inspectSource(source.directory, await getTrustedRoots());
     if (inspected.manifest.name !== source.id) throw userError(`Plugin source identity changed from ${source.id} to ${inspected.manifest.name}.`);
     const moduleUrl = pathToFileURL(inspected.entryPath);
     moduleUrl.searchParams.set("preachermanReload", randomUUID());
@@ -322,13 +443,24 @@ export function createAiriPluginRuntime({
     if (!plugin || plugin.abi !== PLUGIN_ABI || typeof plugin.activate !== "function") {
       throw userError(`Plugin ${source.id} uses an unsupported ABI; expected ${PLUGIN_ABI}.`);
     }
+    const resourceState = { active: true };
+    const assertResourceActive = () => {
+      if (!resourceState.active) throw userError(`Plugin ${source.id} host context is no longer active.`);
+    };
+    const toolRegistry = createPluginToolRegistry({
+      pluginId: source.id,
+      declarations: inspected.manifest.tools,
+      permissions: inspected.manifest.permissions,
+    });
     const kitFacade = kits ? Object.freeze({
       discover({ capability } = {}) {
+        assertResourceActive();
         return kits.discover({ capability }).map(({ name, version, description, capabilities, phase }) => ({
           name, version, description, capabilities, phase,
         }));
       },
       require(name, versionRange = "*") {
+        assertResourceActive();
         const kit = kits.attachConsumer(source.id, name, versionRange);
         return {
           name: kit.name,
@@ -338,9 +470,77 @@ export function createAiriPluginRuntime({
           phase: kit.phase,
         };
       },
+      provide(definition) {
+        assertResourceActive();
+        if (typeof kits.provide !== "function") throw userError("The host Kit Registry does not support external providers.");
+        const kit = kits.provide(source.id, definition);
+        return {
+          name: kit.name,
+          version: kit.version,
+          description: kit.description,
+          capabilities: kit.capabilities,
+          phase: kit.phase,
+        };
+      },
+      register(definition) {
+        assertResourceActive();
+        if (typeof kits.provide !== "function") throw userError("The host Kit Registry does not support external providers.");
+        const kit = kits.provide(source.id, definition);
+        return {
+          name: kit.name,
+          version: kit.version,
+          description: kit.description,
+          capabilities: kit.capabilities,
+          phase: kit.phase,
+        };
+      },
+      unregister(name) {
+        assertResourceActive();
+        if (typeof kits.unprovide !== "function") throw userError("The host Kit Registry does not support external providers.");
+        const kit = kits.unprovide(source.id, name);
+        bindings?.removeKit?.(name);
+        return {
+          name: kit.name,
+          version: kit.version,
+          description: kit.description,
+          capabilities: kit.capabilities,
+          phase: kit.phase,
+        };
+      },
     }) : null;
+    const bindPluginBinding = ({ kit, operation, versionRange = "*", handler }) => {
+      assertResourceActive();
+      if (typeof bindings?.bind !== "function") throw userError("The host Binding Registry does not support plugin providers.");
+      const owned = typeof kits?.ownedBy === "function"
+        && kits.ownedBy(source.id).some((record) => record.name === kit);
+      if (!owned) throw ownershipError(`Plugin ${source.id} can only bind operations for a Kit it provides: ${String(kit)}`);
+      if (typeof handler !== "function") throw userError(`Plugin ${source.id} binding ${String(kit)}.${String(operation)} requires a handler.`);
+      return bindings.bind({
+        pluginId: source.id,
+        kit,
+        operation,
+        versionRange,
+        async handler(input, context) {
+          assertResourceActive();
+          if (context?.providerPluginId !== source.id) {
+            throw ownershipError(`Plugin ${source.id} does not own binding ${String(kit)}.${String(operation)}.`);
+          }
+          const result = await withTimeout(
+            Promise.resolve().then(() => handler(structuredClone(input), Object.freeze({ ...context }))),
+            timeoutMs,
+            `Plugin ${source.id} binding ${String(kit)}.${String(operation)}`,
+          );
+          return structuredClone(result);
+        },
+      });
+    };
     const bindingFacade = bindings ? Object.freeze({
+      bind: bindPluginBinding,
       async invoke({ kit, operation, versionRange = "*", input }) {
+        assertResourceActive();
+        if (typeof bindings.invokeAs === "function") {
+          return bindings.invokeAs(source.id, kit, operation, input, { versionRange });
+        }
         return bindings.invoke({
           kit,
           operation,
@@ -349,43 +549,117 @@ export function createAiriPluginRuntime({
           context: { callerPluginId: source.id },
         });
       },
+      list() {
+        assertResourceActive();
+        return bindings.list({ pluginId: source.id });
+      },
+      register: bindPluginBinding,
+      unbind({ kit, operation }) {
+        assertResourceActive();
+        return bindings.unbind(kit, operation, source.id);
+      },
     }) : null;
-    const activated = await withTimeout(plugin.activate(Object.freeze({
-      abi: PLUGIN_ABI,
-      pluginId: source.id,
-      hostBridge,
-      permissions: Object.freeze([...inspected.manifest.permissions]),
-      kits: kitFacade,
-      bindings: bindingFacade,
-      now,
-    })), timeoutMs, `Plugin ${source.id} activation`);
-    if (!activated || typeof activated !== "object" || Array.isArray(activated)) throw userError(`Plugin ${source.id} activate() must return an object.`);
-    if (activated.dispose !== undefined && typeof activated.dispose !== "function") throw userError(`Plugin ${source.id} returned an invalid dispose hook.`);
-    const approvalByTool = new Map(inspected.manifest.tools.map((tool) => [tool.name, tool.requiresApproval]));
-    const tools = Array.isArray(activated.tools)
-      ? activated.tools.map((tool) => validateTool(source.id, tool, approvalByTool.get(tool?.name) ?? true))
-      : [];
-    return {
-      id: source.id,
-      manifest: inspected.manifest,
-      version: typeof plugin.version === "string" ? plugin.version : "0.0.0",
-      source: inspected.root,
-      phase: "ready",
-      lifecycle: READY_LIFECYCLE,
-      revision: previousRevision + 1,
-      updatedAt: now(),
-      error: null,
-      tools,
-      dispose: activated.dispose ?? null,
-    };
+    const toolFacade = toolRegistry.facade;
+    let activated;
+    try {
+      const pluginBridge = createPluginBridge
+        ? await withTimeout(createPluginBridge({
+          pluginId: source.id,
+          permissions: Object.freeze([...inspected.manifest.permissions]),
+          hostBridge,
+        }), timeoutMs, `Plugin ${source.id} host bridge`)
+        : hostBridge;
+      activated = await withTimeout(plugin.activate(Object.freeze({
+        abi: PLUGIN_ABI,
+        pluginId: source.id,
+        hostBridge: Object.freeze(pluginBridge ?? {}),
+        permissions: Object.freeze([...inspected.manifest.permissions]),
+        kits: kitFacade,
+        bindings: bindingFacade,
+        tools: toolFacade,
+        now,
+      })), timeoutMs, `Plugin ${source.id} activation`);
+      if (!activated || typeof activated !== "object" || Array.isArray(activated)) throw userError(`Plugin ${source.id} activate() must return an object.`);
+      if (activated.dispose !== undefined && typeof activated.dispose !== "function") throw userError(`Plugin ${source.id} returned an invalid dispose hook.`);
+      if (activated.widgets !== undefined && (!Array.isArray(activated.widgets) || activated.widgets.length > 32)) {
+        throw userError(`Plugin ${source.id} widgets must be an array of at most 32 definitions.`);
+      }
+      if (activated.tools !== undefined && (!Array.isArray(activated.tools) || activated.tools.length > MAX_PLUGIN_TOOLS)) {
+        throw userError(`Plugin ${source.id} tools must be an array of at most ${MAX_PLUGIN_TOOLS} definitions.`);
+      }
+      for (const tool of activated.tools ?? []) toolRegistry.register(tool);
+      const widgetDefinitions = activated.widgets ?? [];
+      if (widgets) {
+        await widgets.removePlugin?.(source.id);
+        try {
+          for (const definition of widgetDefinitions) await widgets.register({ pluginId: source.id, ...definition });
+        } catch (error) {
+          await Promise.resolve(widgets.removePlugin?.(source.id)).catch(() => undefined);
+          throw error;
+        }
+      } else if (widgetDefinitions.length > 0) {
+        throw userError(`Plugin ${source.id} declared widgets but the Widget Kit is unavailable.`);
+      }
+      return {
+        id: source.id,
+        manifest: inspected.manifest,
+        version: typeof plugin.version === "string" ? plugin.version : "0.0.0",
+        source: inspected.root,
+        trustedRoot: inspected.trustedRoot,
+        phase: "ready",
+        lifecycle: READY_LIFECYCLE,
+        revision: previousRevision + 1,
+        updatedAt: now(),
+        error: null,
+        toolRegistry,
+        resourceState,
+        widgetCount: widgetDefinitions.length,
+        dispose: activated.dispose ?? null,
+      };
+    } catch (error) {
+      try {
+        if (typeof activated?.dispose === "function") {
+          await withTimeout(activated.dispose(), timeoutMs, `Plugin ${source.id} failed activation disposal`);
+        }
+      } catch {
+        // Preserve the activation error; host-owned resources are still removed below.
+      } finally {
+        resourceState.active = false;
+        toolRegistry.deactivate();
+      }
+      throw error;
+    }
+  }
+
+  async function cleanupPluginResources(pluginId) {
+    if (!pluginId) return;
+    const ownedKits = typeof kits?.ownedBy === "function" ? kits.ownedBy(pluginId).map((kit) => kit.name) : [];
+    bindings?.removePlugin?.(pluginId);
+    for (const kit of ownedKits) bindings?.removeKit?.(kit);
+    kits?.removePlugin?.(pluginId);
+    await widgets?.removePlugin?.(pluginId);
+    await releasePluginResources?.(pluginId);
+  }
+
+  async function activateExternalSafely(source, previousRevision = 0) {
+    try {
+      return await activateExternal(source, previousRevision);
+    } catch (error) {
+      await Promise.resolve(cleanupPluginResources(source.id)).catch(() => undefined);
+      throw error;
+    }
   }
 
   async function disposeSession(session) {
-    if (typeof session?.dispose === "function") {
-      await withTimeout(session.dispose(), timeoutMs, `Plugin ${session.id} disposal`);
+    try {
+      if (typeof session?.dispose === "function") {
+        await withTimeout(session.dispose(), timeoutMs, `Plugin ${session.id} disposal`);
+      }
+    } finally {
+      if (session?.resourceState) session.resourceState.active = false;
+      session?.toolRegistry?.deactivate();
+      await cleanupPluginResources(session?.id);
     }
-    kits?.removePlugin?.(session?.id);
-    bindings?.removePlugin?.(session?.id);
   }
 
   function failedSession(source, error, previousRevision = 0) {
@@ -400,6 +674,9 @@ export function createAiriPluginRuntime({
       updatedAt: now(),
       error: error instanceof Error ? error.message : String(error),
       tools: [],
+      toolRegistry: null,
+      resourceState: null,
+      widgetCount: 0,
       dispose: null,
     };
   }
@@ -419,7 +696,7 @@ export function createAiriPluginRuntime({
         continue;
       }
       try {
-        sessions.set(source.id, await activateExternal(source));
+        sessions.set(source.id, await activateExternalSafely(source));
       } catch (error) {
         sessions.set(source.id, failedSession(source, error));
       }
@@ -428,12 +705,16 @@ export function createAiriPluginRuntime({
   }
 
   function snapshot(session) {
-    const associatedKits = typeof kits?.discover === "function"
-      ? kits.discover({ pluginId: session.id }).map((kit) => kit.name)
+    const usedKits = typeof kits?.usedBy === "function"
+      ? kits.usedBy(session.id).map((kit) => kit.name)
+      : typeof kits?.discover === "function" ? kits.discover({ pluginId: session.id }).map((kit) => kit.name) : [];
+    const providedKits = typeof kits?.providedBy === "function"
+      ? kits.providedBy(session.id).map((kit) => kit.name)
       : [];
+    const associatedKits = [...new Set([...usedKits, ...providedKits])].sort((left, right) => left.localeCompare(right));
     const associatedBindings = typeof bindings?.list === "function"
-      ? bindings.list()
-        .filter((binding) => associatedKits.includes(binding.kit))
+      ? bindings.list({ pluginId: session.id })
+        .filter((binding) => binding.pluginId === session.id)
         .map((binding) => `${binding.kit}.${binding.operation}`)
       : [];
     return {
@@ -441,6 +722,11 @@ export function createAiriPluginRuntime({
       manifest: structuredClone(session.manifest),
       version: session.version,
       ...(session.source === "builtin" ? {} : { sourceDirectory: session.source }),
+      trust: session.source === "builtin"
+        ? { mode: "builtin" }
+        : configuredTrustedRoots === null
+          ? { mode: "explicit-directory" }
+          : { mode: "root-allowlist", ...(session.trustedRoot ? { root: session.trustedRoot } : {}) },
       phase: session.phase,
       lifecycle: [...session.lifecycle],
       revision: session.revision,
@@ -450,8 +736,11 @@ export function createAiriPluginRuntime({
       capabilities: ["tools", ...(session.id === BUILTIN_PLUGIN_ID ? ["tasks:read"] : [])],
       permissions: [...(session.manifest.permissions ?? [])],
       kits: associatedKits,
+      usedKits,
+      providedKits,
       bindings: associatedBindings,
-      toolCount: session.phase === "ready" ? session.tools.length : 0,
+      toolCount: session.phase === "ready" ? toolsForSession(session).length : 0,
+      widgetCount: session.phase === "ready" ? session.widgetCount ?? 0 : 0,
     };
   }
 
@@ -472,11 +761,11 @@ export function createAiriPluginRuntime({
 
   async function install(sourceDirectory) {
     return mutate(async () => {
-      const inspected = await inspectSource(sourceDirectory);
+      const inspected = await inspectSource(sourceDirectory, await getTrustedRoots());
       const id = inspected.manifest.name;
       if (id === BUILTIN_PLUGIN_ID || state.sources.some((source) => source.id === id)) throw userError(`AIRI plugin is already installed: ${id}`);
       const source = { id, directory: inspected.root, enabled: true };
-      const session = await activateExternal(source);
+      const session = await activateExternalSafely(source);
       state.sources.push(source);
       try {
         await persistState();
@@ -505,7 +794,7 @@ export function createAiriPluginRuntime({
       const previous = sessions.get(id);
       if (source.enabled === enabled) return snapshot(previous);
       if (enabled) {
-        const next = await activateExternal(source, previous.revision);
+        const next = await activateExternalSafely(source, previous.revision);
         source.enabled = true;
         try {
           await persistState();
@@ -527,6 +816,8 @@ export function createAiriPluginRuntime({
           updatedAt: now(),
           error: null,
           tools: [],
+          toolRegistry: null,
+          resourceState: null,
           dispose: null,
         });
       }
@@ -545,7 +836,7 @@ export function createAiriPluginRuntime({
         if (!source.enabled) return snapshot(previous);
         await disposeSession(previous);
         try {
-          sessions.set(id, await activateExternal(source, previous.revision));
+          sessions.set(id, await activateExternalSafely(source, previous.revision));
         } catch (error) {
           sessions.set(id, failedSession(source, error, previous.revision));
           throw error;
@@ -579,8 +870,36 @@ export function createAiriPluginRuntime({
     await mutationQueue;
     return [...sessions.values()]
       .filter((session) => session.phase === "ready")
-      .flatMap((session) => session.tools.map(({ execute: _execute, ...tool }) => structuredClone(tool)))
+      .flatMap((session) => toolsForSession(session).map(publicTool))
       .sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  async function listToolsForPlugin(pluginId) {
+    await initialize();
+    await mutationQueue;
+    const session = sessions.get(pluginId);
+    if (!session || session.phase !== "ready" || !session.toolRegistry) return [];
+    return session.toolRegistry.listInternal().map(publicTool).sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  async function registerTool(pluginId, definition) {
+    await initialize();
+    await mutationQueue;
+    const session = sessions.get(pluginId);
+    if (!session || session.phase !== "ready" || !session.toolRegistry) {
+      throw ownershipError(`Plugin ${String(pluginId)} does not own an active dynamic tool registry.`);
+    }
+    return session.toolRegistry.register(definition);
+  }
+
+  async function unregisterTool(pluginId, name) {
+    await initialize();
+    await mutationQueue;
+    const session = sessions.get(pluginId);
+    if (!session || session.phase !== "ready" || !session.toolRegistry) {
+      throw ownershipError(`Plugin ${String(pluginId)} does not own an active dynamic tool registry.`);
+    }
+    return session.toolRegistry.unregister(name);
   }
 
   async function callTool(name, args = {}, approvalContext = {}) {
@@ -590,7 +909,9 @@ export function createAiriPluginRuntime({
     await initialize();
     await mutationQueue;
     for (const session of sessions.values()) {
-      const tool = session.phase === "ready" ? session.tools.find((item) => item.name === name) : undefined;
+      const tool = session.phase === "ready"
+        ? session.toolRegistry?.getByQualifiedName(name) ?? session.tools?.find((item) => item.name === name)
+        : undefined;
       if (tool) {
         validateSchemaValue(args, tool.inputSchema);
         if (tool.requiresApproval && approvalContext.approved !== true) {
@@ -641,5 +962,19 @@ export function createAiriPluginRuntime({
     initialized = false;
   }
 
-  return { callTool, close, executeCapability, initialize, install, listPlugins, listTools, reload, setEnabled, uninstall };
+  return {
+    callTool,
+    close,
+    executeCapability,
+    initialize,
+    install,
+    listPlugins,
+    listTools,
+    listToolsForPlugin,
+    registerTool,
+    reload,
+    setEnabled,
+    uninstall,
+    unregisterTool,
+  };
 }

@@ -1,4 +1,8 @@
 const KIT_PHASES = new Set(["registered", "ready", "stopped", "error"]);
+const MAX_KITS_PER_PROVIDER = 32;
+const MAX_KIT_CAPABILITIES = 64;
+const MAX_KIT_DESCRIPTION_LENGTH = 1_024;
+const PLUGIN_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/;
 
 export const CORE_KIT_DEFINITIONS = Object.freeze([
   {
@@ -31,6 +35,13 @@ function runtimeError(code, message, statusCode = 400, cause) {
 function requireName(value, label) {
   if (typeof value !== "string" || !/^[a-z][a-z0-9-]{0,63}$/.test(value)) {
     throw runtimeError("INVALID_KIT_INPUT", `${label} must use lowercase letters, numbers, and hyphens.`);
+  }
+  return value;
+}
+
+function requirePluginId(value, label = "Plugin id") {
+  if (typeof value !== "string" || !PLUGIN_ID_PATTERN.test(value)) {
+    throw runtimeError("INVALID_KIT_INPUT", `${label} is invalid.`);
   }
   return value;
 }
@@ -77,8 +88,14 @@ function normalizeDefinition(definition) {
   if (typeof definition.description !== "string" || !definition.description.trim()) {
     throw runtimeError("INVALID_KIT_INPUT", `Kit ${name} requires a description.`);
   }
+  if (definition.description.trim().length > MAX_KIT_DESCRIPTION_LENGTH) {
+    throw runtimeError("INVALID_KIT_INPUT", `Kit ${name} description is too long.`);
+  }
   if (!Array.isArray(definition.capabilities) || definition.capabilities.length === 0) {
     throw runtimeError("INVALID_KIT_INPUT", `Kit ${name} requires at least one capability.`);
+  }
+  if (definition.capabilities.length > MAX_KIT_CAPABILITIES) {
+    throw runtimeError("INVALID_KIT_INPUT", `Kit ${name} declares too many capabilities.`);
   }
   const capabilities = [...new Set(definition.capabilities.map((capability) => requireName(capability, "Kit capability")))];
   return { name, version: definition.version, description: definition.description.trim(), capabilities };
@@ -112,6 +129,7 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
       definition: normalized,
       phase,
       lifecycle: [{ phase: "registered", at: timestamp }, ...(phase === "registered" ? [] : [{ phase, at: timestamp }])],
+      ownerProviderId: providerId ?? null,
       providers: new Map(),
       consumers: new Map(),
     };
@@ -128,6 +146,24 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
       phase: "stopped",
       lifecycle: [...record.lifecycle, { phase: "stopped", at: now() }],
     });
+  }
+
+  function provide(providerId, definition, options = {}) {
+    requirePluginId(providerId);
+    const ownedKitCount = [...records.values()].filter((record) => record.ownerProviderId === providerId).length;
+    if (ownedKitCount >= MAX_KITS_PER_PROVIDER) {
+      throw runtimeError("KIT_PROVIDER_LIMIT", `Plugin ${providerId} cannot provide more than ${MAX_KITS_PER_PROVIDER} AIRI kits.`, 409);
+    }
+    return register(definition, { ...options, providerId });
+  }
+
+  function unprovide(providerId, name) {
+    requirePluginId(providerId);
+    const record = getRecord(name);
+    if (record.ownerProviderId !== providerId) {
+      throw runtimeError("KIT_OWNER_MISMATCH", `Plugin ${providerId} does not own AIRI kit ${name}.`, 403);
+    }
+    return unregister(name);
   }
 
   function setPhase(name, phase) {
@@ -153,7 +189,7 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
   }
 
   function attachProvider(pluginId, name, version) {
-    requireName(pluginId, "Plugin id");
+    requirePluginId(pluginId);
     const record = getRecord(name);
     if (version !== record.definition.version) {
       throw runtimeError("KIT_VERSION_INCOMPATIBLE", `Provider ${pluginId} offers ${name}@${version}; host requires ${record.definition.version}.`, 409);
@@ -164,7 +200,7 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
   }
 
   function attachConsumer(pluginId, name, versionRange = "*") {
-    requireName(pluginId, "Plugin id");
+    requirePluginId(pluginId);
     const record = getRecord(name);
     assertCompatible(name, versionRange);
     record.consumers.set(pluginId, { pluginId, versionRange, attachedAt: now() });
@@ -172,7 +208,7 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
   }
 
   function assertConsumer(pluginId, name, versionRange = "*") {
-    requireName(pluginId, "Plugin id");
+    requirePluginId(pluginId);
     const record = getRecord(name);
     const consumer = record.consumers.get(pluginId);
     if (!consumer) {
@@ -197,9 +233,38 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
       .sort((left, right) => left.name.localeCompare(right.name));
   }
 
+  function providedBy(pluginId) {
+    requirePluginId(pluginId);
+    return [...records.values()]
+      .filter((record) => record.providers.has(pluginId))
+      .map(publicKit)
+      .sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  function ownedBy(pluginId) {
+    requirePluginId(pluginId);
+    return [...records.values()]
+      .filter((record) => record.ownerProviderId === pluginId)
+      .map(publicKit)
+      .sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  function usedBy(pluginId) {
+    requirePluginId(pluginId);
+    return [...records.values()]
+      .filter((record) => record.consumers.has(pluginId))
+      .map(publicKit)
+      .sort((left, right) => left.name.localeCompare(right.name));
+  }
+
   function removePlugin(pluginId) {
     let removed = 0;
-    for (const record of records.values()) {
+    for (const [name, record] of records) {
+      if (record.ownerProviderId === pluginId) {
+        records.delete(name);
+        removed += 1;
+        continue;
+      }
       removed += Number(record.providers.delete(pluginId));
       removed += Number(record.consumers.delete(pluginId));
     }
@@ -208,7 +273,23 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
 
   for (const definition of definitions) register(definition, { providerId: "preacherman-host" });
 
-  return { assertCompatible, assertConsumer, attachConsumer, attachProvider, discover, get: (name) => publicKit(getRecord(name)), register, removePlugin, setPhase, unregister };
+  return {
+    assertCompatible,
+    assertConsumer,
+    attachConsumer,
+    attachProvider,
+    discover,
+    get: (name) => publicKit(getRecord(name)),
+    ownedBy,
+    provide,
+    providedBy,
+    register,
+    removePlugin,
+    setPhase,
+    unprovide,
+    unregister,
+    usedBy,
+  };
 }
 
 export function createBindingRegistry({ kits }) {
@@ -217,7 +298,7 @@ export function createBindingRegistry({ kits }) {
   const keyFor = (kit, operation) => `${kit}::${operation}`;
 
   function bind({ pluginId, kit, operation, versionRange = "*", handler }) {
-    requireName(pluginId, "Plugin id");
+    requirePluginId(pluginId);
     requireName(operation, "Binding operation");
     const kitRecord = kits.assertCompatible(kit, versionRange);
     if (!kitRecord.capabilities.includes(operation)) {
@@ -261,7 +342,7 @@ export function createBindingRegistry({ kits }) {
       throw runtimeError(
         "BINDING_EXECUTION_FAILED",
         `AIRI binding failed: ${key}: ${cause instanceof Error ? cause.message : String(cause)}`,
-        500,
+        Number.isInteger(cause?.statusCode) ? cause.statusCode : 500,
         cause,
       );
     }
@@ -276,7 +357,7 @@ export function createBindingRegistry({ kits }) {
   }
 
   async function invokeAs(callerPluginId, kit, operation, input, context = {}) {
-    requireName(callerPluginId, "Caller plugin id");
+    requirePluginId(callerPluginId, "Caller plugin id");
     const { handlerContext, versionRange } = splitInvocationContext(context);
     kits.assertConsumer(callerPluginId, kit, versionRange);
     return executeBinding({
@@ -291,7 +372,7 @@ export function createBindingRegistry({ kits }) {
   }
 
   async function invokeTrusted(callerPluginId, kit, operation, input, context = {}) {
-    requireName(callerPluginId, "Trusted caller id");
+    requirePluginId(callerPluginId, "Trusted caller id");
     const { handlerContext, versionRange } = splitInvocationContext(context);
     return executeBinding({
       callerPluginId,
@@ -335,7 +416,18 @@ export function createBindingRegistry({ kits }) {
     return removed;
   }
 
-  return { bind, invoke, invokeAs, invokeTrusted, list, removePlugin, unbind };
+  function removeKit(kit) {
+    let removed = 0;
+    for (const [key, binding] of bindings) {
+      if (binding.kit === kit) {
+        bindings.delete(key);
+        removed += 1;
+      }
+    }
+    return removed;
+  }
+
+  return { bind, invoke, invokeAs, invokeTrusted, list, removeKit, removePlugin, unbind };
 }
 
 export function createAiriKitsRuntime({ definitions = CORE_KIT_DEFINITIONS, now } = {}) {
@@ -345,7 +437,10 @@ export function createAiriKitsRuntime({ definitions = CORE_KIT_DEFINITIONS, now 
     bindings,
     kits,
     removePlugin(pluginId) {
-      return { bindings: bindings.removePlugin(pluginId), associations: kits.removePlugin(pluginId) };
+      const ownedKits = kits.ownedBy(pluginId).map((kit) => kit.name);
+      const removedBindings = bindings.removePlugin(pluginId)
+        + ownedKits.reduce((count, kit) => count + bindings.removeKit(kit), 0);
+      return { bindings: removedBindings, associations: kits.removePlugin(pluginId) };
     },
   };
 }

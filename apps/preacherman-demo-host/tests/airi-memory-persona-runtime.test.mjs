@@ -154,7 +154,12 @@ test("owner principal isolates remember, recall, and delete without accepting an
   );
   await host.close();
 
-  const plugin = createAiriMemoryPersonaRuntime({ file, principal: "external-plugin", now: tickingClock() });
+  const plugin = createAiriMemoryPersonaRuntime({
+    file,
+    principal: "external-plugin",
+    scopes: ["memory:read", "memory:write", "memory:delete"],
+    now: tickingClock(),
+  });
   assert.deepEqual(await plugin.recall({ personaId: persona.id, namespace: "work" }), []);
   const pluginMemory = await plugin.remember({ personaId: persona.id, namespace: "work", text: "Plugin-only memory" });
   await assert.rejects(
@@ -183,9 +188,123 @@ test("version 1 memories migrate to the default host owner", async () => withSto
   assert.equal((await host.recall({ personaId: persona.id, namespace: "legacy" }))[0].id, memory.id);
   await host.close();
   const migratedState = JSON.parse(await readFile(file, "utf8"));
-  assert.equal(migratedState.version, 2);
+  assert.equal(migratedState.version, 3);
   assert.equal(migratedState.memories[0].owner, "preacherman-runtime");
 
-  const other = createAiriMemoryPersonaRuntime({ file, principal: "other-owner" });
+  const other = createAiriMemoryPersonaRuntime({ file, principal: "other-owner", scopes: ["memory:read"] });
   assert.deepEqual(await other.recall({ personaId: persona.id, namespace: "legacy" }), []);
+}));
+
+test("persona, session, and long-term boundaries cannot recall or delete across scopes", async () => withStore(async (file) => {
+  const runtime = createAiriMemoryPersonaRuntime({ file, now: tickingClock() });
+  const persona = await runtime.createPersona({ name: "Boundary persona" });
+  const personaMemory = await runtime.remember({ personaId: persona.id, namespace: "context", text: "Persona fact" });
+  const longTerm = await runtime.remember({ personaId: persona.id, namespace: "context", boundary: "long-term", text: "Long-term fact" });
+  const sessionOne = await runtime.remember({ personaId: persona.id, namespace: "context", boundary: "session", sessionId: "session-one", text: "First session" });
+  const sessionTwo = await runtime.remember({ personaId: persona.id, namespace: "context", boundary: "session", sessionId: "session-two", text: "Second session" });
+
+  assert.deepEqual((await runtime.recall({ personaId: persona.id, namespace: "context" })).map(({ id }) => id), [personaMemory.id]);
+  assert.deepEqual((await runtime.recall({ personaId: persona.id, namespace: "context", boundary: "long-term" })).map(({ id }) => id), [longTerm.id]);
+  assert.deepEqual((await runtime.recall({ personaId: persona.id, namespace: "context", boundary: "session", sessionId: "session-one" })).map(({ id }) => id), [sessionOne.id]);
+  assert.equal(sessionTwo.sensitivity, "private");
+  await assert.rejects(
+    runtime.deleteMemory({ personaId: persona.id, namespace: "context", boundary: "session", sessionId: "session-two", memoryId: sessionOne.id }),
+    { code: "MEMORY_NOT_FOUND", statusCode: 404 },
+  );
+  await assert.rejects(
+    runtime.recall({ personaId: persona.id, namespace: "context", boundary: "session" }),
+    /Session id is required/,
+  );
+}));
+
+test("plugin scopes default to denied and memory audit events omit text and query content", async () => withStore(async (file) => {
+  const host = createAiriMemoryPersonaRuntime({ file, now: tickingClock() });
+  const persona = await host.createPersona({ name: "Audited persona" });
+  await host.close();
+
+  const observed = [];
+  const deniedPlugin = createAiriMemoryPersonaRuntime({
+    file,
+    principal: "untrusted-plugin",
+    onAuditEvent: (event) => observed.push(event),
+  });
+  await assert.rejects(deniedPlugin.listPersonas(), { code: "MEMORY_SCOPE_DENIED", statusCode: 403 });
+  await assert.rejects(
+    deniedPlugin.recall({ personaId: persona.id, namespace: "private", query: "token=should-never-be-logged" }),
+    { code: "MEMORY_SCOPE_DENIED", statusCode: 403 },
+  );
+  assert.equal(observed[0].outcome, "denied");
+  assert.equal(observed[0].requiredScope, "memory:read");
+  assert.equal(JSON.stringify(observed).includes("should-never-be-logged"), false);
+  await deniedPlugin.close();
+
+  const auditHost = createAiriMemoryPersonaRuntime({ file });
+  const events = await auditHost.listAuditEvents({ limit: 20 });
+  const denied = events.find((event) => event.principal === "untrusted-plugin");
+  assert.equal(denied.operation, "memory.recall");
+  assert.equal(denied.outcome, "denied");
+  assert.equal(JSON.stringify(denied).includes("query"), false);
+}));
+
+test("recent conversation access is limited, scoped, redacted, and observable", async () => withStore(async (file) => {
+  const conversations = [{
+    id: "conversation-1",
+    locale: "en",
+    updatedAt: "2026-08-08T12:00:00.000Z",
+    messages: [
+      { role: "user", text: "Earlier message" },
+      { role: "assistant", text: "Use token=supersecretvalue123 for the demo" },
+    ],
+  }];
+  const denied = createAiriMemoryPersonaRuntime({ file, principal: "no-conversation-scope" });
+  await assert.rejects(denied.readRecentConversations({ limit: 1 }), { code: "MEMORY_SCOPE_DENIED", statusCode: 403 });
+  await denied.close();
+
+  const metadataOnly = createAiriMemoryPersonaRuntime({
+    file,
+    principal: "metadata-plugin",
+    scopes: ["conversations:recent:read"],
+    recentConversationReader: async () => conversations,
+  });
+  const [metadata] = await metadataOnly.readRecentConversations({ limit: 1 });
+  assert.deepEqual(metadata, {
+    id: "conversation-1", locale: "en", updatedAt: "2026-08-08T12:00:00.000Z", messageCount: 2,
+  });
+  await metadataOnly.close();
+
+  const contentReader = createAiriMemoryPersonaRuntime({
+    file,
+    principal: "content-plugin",
+    scopes: ["conversations:recent:read", "conversations:recent:content:read"],
+    recentConversationReader: async ({ limit, principal }) => {
+      assert.equal(limit, 1);
+      assert.equal(principal, "content-plugin");
+      return conversations;
+    },
+  });
+  const [entry] = await contentReader.readRecentConversations({ limit: 1 });
+  assert.equal(entry.preview.includes("supersecretvalue123"), false);
+  assert.match(entry.preview, /\[REDACTED\]/);
+}));
+
+test("version 2 owner data migrates into the persona boundary without losing access", async () => withStore(async (file) => {
+  const initial = createAiriMemoryPersonaRuntime({ file, now: tickingClock() });
+  const persona = await initial.createPersona({ name: "Version two persona" });
+  const memory = await initial.remember({ personaId: persona.id, namespace: "legacy-v2", text: "Version two memory" });
+  await initial.close();
+  const versionTwo = JSON.parse(await readFile(file, "utf8"));
+  versionTwo.version = 2;
+  delete versionTwo.audit;
+  delete versionTwo.memories[0].boundary;
+  delete versionTwo.memories[0].sessionId;
+  delete versionTwo.memories[0].sensitivity;
+  await writeFile(file, JSON.stringify(versionTwo), "utf8");
+
+  const migrated = createAiriMemoryPersonaRuntime({ file });
+  const [restored] = await migrated.recall({ personaId: persona.id, namespace: "legacy-v2" });
+  assert.equal(restored.id, memory.id);
+  assert.equal(restored.boundary, "persona");
+  assert.equal(restored.sensitivity, "private");
+  await migrated.close();
+  assert.equal(JSON.parse(await readFile(file, "utf8")).version, 3);
 }));

@@ -1,9 +1,34 @@
 import assert from "node:assert/strict";
+import { mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 import {
   AIRI_CONNECTION_CATALOG,
   createAiriConnectionRuntime,
+  createDiscordConnectionAdapter,
+  createFactorioConnectionAdapter,
+  createMinecraftConnectionAdapter,
+  createTelegramConnectionAdapter,
+  createYouTubeConnectionAdapter,
 } from "../server/airiConnectionRuntime.mjs";
+import { createDiscordProtocolFixture } from "./fixtures/airi-connections/discord-protocol.mjs";
+import { createTelegramProtocolFixture } from "./fixtures/airi-connections/telegram-protocol.mjs";
+import { createYouTubeProtocolFixture } from "./fixtures/airi-connections/youtube-protocol.mjs";
+import { createMinecraftRconProtocolFixture } from "./fixtures/airi-connections/minecraft-rcon-protocol.mjs";
+import { createFactorioRconProtocolFixture } from "./fixtures/airi-connections/factorio-rcon-protocol.mjs";
+
+async function exerciseProtocolAdapter({ service, configuration, secret, adapter, events, operations }) {
+  const runtime = createAiriConnectionRuntime();
+  runtime.configure(service, configuration);
+  runtime.registerAdapter({ pluginId: `${service}-fixture`, service, adapter });
+  assert.equal((await runtime.test(service)).status, "disconnected");
+  assert.equal((await runtime.connect(service)).status, "connected");
+  assert.equal((await runtime.disconnect(service)).status, "disconnected");
+  assert.deepEqual(events.map(({ operation }) => operation), operations);
+  assert.equal(JSON.stringify(runtime.get(service)).includes(secret), false);
+  assert.equal(JSON.stringify(runtime.history({ service })).includes(secret), false);
+}
 
 test("connection catalog declares the five demo ecosystems without configured credentials", () => {
   const runtime = createAiriConnectionRuntime({ now: () => "2026-08-08T00:00:00.000Z" });
@@ -13,6 +38,134 @@ test("connection catalog declares the five demo ecosystems without configured cr
   assert.equal(runtime.list().every((connection) => connection.status === "configuration-required"), true);
   assert.equal(runtime.list().every((connection) => connection.adapter === null), true);
   assert.equal(runtime.status("discord").status, "configuration-required");
+});
+
+test("configuration survives a real runtime restart in an atomic private file", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "airi-connection-runtime-"));
+  const file = join(directory, "connections.json");
+  t.after(() => rm(directory, { recursive: true, force: true }));
+
+  const first = createAiriConnectionRuntime({ file });
+  assert.throws(() => first.get("youtube"), {
+    code: "CONNECTION_RUNTIME_NOT_INITIALIZED",
+    statusCode: 409,
+  });
+  await first.initialize();
+  first.configure("youtube", { videoId: "live-video-1", accessToken: "persisted-youtube-secret" });
+  first.configure("minecraft", {
+    host: "127.0.0.1",
+    port: 25575,
+    password: "persisted-rcon-secret",
+  });
+  await first.close();
+
+  assert.deepEqual(await readdir(directory), ["connections.json"]);
+  if (process.platform !== "win32") assert.equal((await stat(file)).mode & 0o777, 0o600);
+
+  const second = createAiriConnectionRuntime({ file });
+  await second.initialize();
+  assert.deepEqual(second.get("youtube").configuration, {
+    values: { videoId: "live-video-1" },
+    secrets: { accessToken: true },
+  });
+  assert.deepEqual(second.get("minecraft").configuration, {
+    values: { host: "127.0.0.1", port: 25575 },
+    secrets: { password: true },
+  });
+  const publicState = JSON.stringify({ list: second.list(), history: second.history() });
+  assert.equal(publicState.includes("persisted-youtube-secret"), false);
+  assert.equal(publicState.includes("persisted-rcon-secret"), false);
+
+  let adapterSecret;
+  second.registerAdapter({
+    pluginId: "youtube-plugin",
+    service: "youtube",
+    adapter: {
+      async test({ configuration }) {
+        adapterSecret = configuration.accessToken;
+        return { ok: true };
+      },
+      async connect() { return { connected: true }; },
+      async disconnect() { return { disconnected: true }; },
+    },
+  });
+  await second.test("youtube");
+  assert.equal(adapterSecret, "persisted-youtube-secret");
+  await second.close();
+
+  const stored = await readFile(file, "utf8");
+  assert.equal(stored.includes("persisted-youtube-secret"), true);
+  assert.deepEqual(await readdir(directory), ["connections.json"]);
+});
+
+test("Discord adapter verifies Bot identity and owns a Gateway session", async () => {
+  const events = [];
+  await exerciseProtocolAdapter({
+    service: "discord",
+    configuration: { botToken: "discord-secret" },
+    secret: "discord-secret",
+    adapter: createDiscordConnectionAdapter(createDiscordProtocolFixture(events)),
+    events,
+    operations: ["getCurrentUser", "openGateway", "closeGateway"],
+  });
+  assert.equal(events[0].authorization, "Bot discord-secret");
+  assert.equal(events[2].sessionId, "discord-gateway-1");
+});
+
+test("Telegram adapter verifies getMe and controls the Updates session", async () => {
+  const events = [];
+  await exerciseProtocolAdapter({
+    service: "telegram",
+    configuration: { botToken: "telegram-secret" },
+    secret: "telegram-secret",
+    adapter: createTelegramConnectionAdapter(createTelegramProtocolFixture(events)),
+    events,
+    operations: ["getMe", "startUpdates", "stopUpdates"],
+  });
+  assert.equal(events[0].botToken, "telegram-secret");
+  assert.equal(events[2].sessionId, "telegram-updates-1");
+});
+
+test("YouTube adapter resolves a liveChatId before polling live chat", async () => {
+  const events = [];
+  await exerciseProtocolAdapter({
+    service: "youtube",
+    configuration: { videoId: "video-1", accessToken: "youtube-secret" },
+    secret: "youtube-secret",
+    adapter: createYouTubeConnectionAdapter(createYouTubeProtocolFixture(events)),
+    events,
+    operations: ["resolveLiveChat", "resolveLiveChat", "startPolling", "stopPolling"],
+  });
+  assert.equal(events[0].videoId, "video-1");
+  assert.equal(events[2].liveChatId, "youtube-live-chat-1");
+});
+
+test("Minecraft adapter probes and opens the Minecraft RCON protocol", async () => {
+  const events = [];
+  await exerciseProtocolAdapter({
+    service: "minecraft",
+    configuration: { host: "127.0.0.1", port: 25575, password: "minecraft-secret" },
+    secret: "minecraft-secret",
+    adapter: createMinecraftConnectionAdapter(createMinecraftRconProtocolFixture(events)),
+    events,
+    operations: ["probe", "open", "close"],
+  });
+  assert.equal(events[0].command, "list");
+  assert.equal(events[1].port, 25575);
+});
+
+test("Factorio adapter probes and opens the Factorio RCON protocol", async () => {
+  const events = [];
+  await exerciseProtocolAdapter({
+    service: "factorio",
+    configuration: { host: "127.0.0.1", port: 27015, password: "factorio-secret" },
+    secret: "factorio-secret",
+    adapter: createFactorioConnectionAdapter(createFactorioRconProtocolFixture(events)),
+    events,
+    operations: ["probe", "open", "close"],
+  });
+  assert.equal(events[0].command, "/players online");
+  assert.equal(events[1].port, 27015);
 });
 
 test("configuration stays secret-safe and fake adapter operations are actually invoked", async () => {

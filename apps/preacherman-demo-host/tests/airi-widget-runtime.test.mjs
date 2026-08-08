@@ -3,7 +3,7 @@ import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { AIRI_WIDGET_KIND, createAiriWidgetRuntime } from "../server/airiWidgetRuntime.mjs";
+import { AIRI_WIDGET_KIND, AIRI_WIDGET_PLACEMENTS, createAiriWidgetRuntime } from "../server/airiWidgetRuntime.mjs";
 
 function definition(id, overrides = {}) {
   return {
@@ -43,7 +43,7 @@ test("registers, lists, gets, updates, removes, and persists declarative widgets
 
   assert.equal(registered.phase, "ready");
   assert.equal(registered.revision, 1);
-  assert.deepEqual(registered.lifecycle.map(({ phase }) => phase), ["registered", "ready"]);
+  assert.deepEqual(registered.lifecycle.map(({ phase }) => phase), ["registered", "loading", "ready"]);
   assert.deepEqual((await runtime.list({ pluginId: "demo-plugin" })).map(({ id }) => id), ["task-card"]);
   assert.equal((await runtime.get({ pluginId: "demo-plugin", id: "task-card" })).schema.children[1].value, 3);
 
@@ -54,7 +54,7 @@ test("registers, lists, gets, updates, removes, and persists declarative widgets
   const updated = await runtime.update({ pluginId: "demo-plugin", id: "task-card", ...updatedDefinition });
   assert.equal(updated.revision, 2);
   assert.equal(updated.manifest.title, "Updated tasks");
-  assert.deepEqual(updated.lifecycle.map(({ phase }) => phase), ["registered", "ready", "updated", "ready"]);
+  assert.deepEqual(updated.lifecycle.map(({ phase }) => phase), ["registered", "loading", "ready", "updated", "ready"]);
 
   const restarted = createAiriWidgetRuntime({ file });
   assert.equal((await restarted.get({ pluginId: "demo-plugin", id: "task-card" })).schema.text, "4 active tasks");
@@ -63,6 +63,44 @@ test("registers, lists, gets, updates, removes, and persists declarative widgets
   const removed = await restarted.remove({ pluginId: "demo-plugin", id: "task-card" });
   assert.equal(removed.phase, "removed");
   assert.deepEqual(await restarted.list(), []);
+});
+
+test("host assigns all placements and controls permission, disabled, and error states", async () => {
+  const { file } = await fixture();
+  const assignments = [];
+  const runtime = createAiriWidgetRuntime({
+    file,
+    assignPlacement({ pluginId, requestedPlacement }) {
+      assignments.push({ pluginId, requestedPlacement });
+      return "settings";
+    },
+  });
+  const registered = await runtime.register({
+    pluginId: "secure-plugin",
+    ...definition("secure-card", { manifest: { placement: "home", permissions: ["ledger:read", "tasks:read"] } }),
+  });
+
+  assert.deepEqual(AIRI_WIDGET_PLACEMENTS, ["home", "work", "lab", "gallery", "ledger", "settings"]);
+  assert.deepEqual(assignments, [{ pluginId: "secure-plugin", requestedPlacement: "home" }]);
+  assert.equal(registered.manifest.placement, "home");
+  assert.equal(registered.placement, "settings");
+  assert.equal(registered.phase, "permission-required");
+  assert.deepEqual(registered.permissions.missing, ["ledger:read", "tasks:read"]);
+
+  const ready = await runtime.configureHost({ id: "secure-card", grantedPermissions: ["tasks:read", "ledger:read", "unused:permission"] });
+  assert.equal(ready.phase, "ready");
+  assert.deepEqual(ready.permissions.granted, ["ledger:read", "tasks:read"]);
+  assert.equal((await runtime.configureHost({ id: "secure-card", enabled: false })).phase, "disabled");
+  assert.equal((await runtime.configureHost({ id: "secure-card", enabled: true, placement: "lab" })).phase, "ready");
+  assert.equal((await runtime.reportError({ pluginId: "secure-plugin", id: "secure-card", error: "Adapter unavailable" })).phase, "error");
+  const recovered = await runtime.clearError({ pluginId: "secure-plugin", id: "secure-card" });
+  assert.equal(recovered.phase, "ready");
+  assert.equal(recovered.placement, "lab");
+  assert.equal((await createAiriWidgetRuntime({ file }).get({ pluginId: "secure-plugin", id: "secure-card" })).phase, "ready");
+  await assert.rejects(runtime.configureHost({ id: "secure-card", placement: "global" }), {
+    code: "INVALID_WIDGET_MANIFEST",
+    statusCode: 400,
+  });
 });
 
 test("enforces ownership isolation while allowing host-wide listing", async () => {

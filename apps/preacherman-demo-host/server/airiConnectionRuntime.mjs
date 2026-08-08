@@ -1,3 +1,7 @@
+import { randomUUID } from "node:crypto";
+import { chmod, mkdir, open, readFile, rename, rm } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
+
 const CONNECTION_STATES = new Set([
   "configuration-required",
   "external-runtime-required",
@@ -151,12 +155,124 @@ function validateAdapter(adapter) {
   return adapter;
 }
 
+function requireProtocol(protocol, operations, name) {
+  if (!protocol || typeof protocol !== "object" || Array.isArray(protocol)) {
+    throw connectionError("INVALID_CONNECTION_ADAPTER", `${name} protocol must be an object.`);
+  }
+  for (const operation of operations) {
+    if (typeof protocol[operation] !== "function") {
+      throw connectionError("INVALID_CONNECTION_ADAPTER", `${name} protocol requires ${operation}().`);
+    }
+  }
+  return protocol;
+}
+
+export function createDiscordConnectionAdapter(protocol) {
+  requireProtocol(protocol, ["getCurrentUser", "openGateway", "closeGateway"], "Discord");
+  return {
+    async test({ configuration, signal }) {
+      const user = await protocol.getCurrentUser({ authorization: `Bot ${configuration.botToken}`, signal });
+      return { ok: typeof user?.id === "string" && Boolean(user.id) };
+    },
+    async connect({ configuration, signal }) {
+      const opened = await protocol.openGateway({ token: configuration.botToken, signal });
+      return { connected: opened?.ready === true, session: opened?.session };
+    },
+    async disconnect({ session, signal }) {
+      const result = await protocol.closeGateway({ session, signal });
+      return { disconnected: result?.closed === true };
+    },
+  };
+}
+
+export function createTelegramConnectionAdapter(protocol) {
+  requireProtocol(protocol, ["getMe", "startUpdates", "stopUpdates"], "Telegram");
+  return {
+    async test({ configuration, signal }) {
+      const result = await protocol.getMe({ botToken: configuration.botToken, signal });
+      return { ok: result?.ok === true && Number.isInteger(result?.result?.id) };
+    },
+    async connect({ configuration, signal }) {
+      const result = await protocol.startUpdates({ botToken: configuration.botToken, signal });
+      return { connected: result?.running === true, session: result?.session };
+    },
+    async disconnect({ session, signal }) {
+      const result = await protocol.stopUpdates({ session, signal });
+      return { disconnected: result?.stopped === true };
+    },
+  };
+}
+
+export function createYouTubeConnectionAdapter(protocol) {
+  requireProtocol(protocol, ["resolveLiveChat", "startPolling", "stopPolling"], "YouTube");
+  const resolve = ({ configuration, signal }) => protocol.resolveLiveChat({
+    videoId: configuration.videoId,
+    accessToken: configuration.accessToken,
+    signal,
+  });
+  return {
+    async test(context) {
+      const result = await resolve(context);
+      return { ok: typeof result?.liveChatId === "string" && Boolean(result.liveChatId) };
+    },
+    async connect(context) {
+      const resolved = await resolve(context);
+      if (typeof resolved?.liveChatId !== "string" || !resolved.liveChatId) return { connected: false };
+      const result = await protocol.startPolling({
+        liveChatId: resolved.liveChatId,
+        accessToken: context.configuration.accessToken,
+        signal: context.signal,
+      });
+      return { connected: result?.running === true, session: result?.session };
+    },
+    async disconnect({ session, signal }) {
+      const result = await protocol.stopPolling({ session, signal });
+      return { disconnected: result?.stopped === true };
+    },
+  };
+}
+
+function createRconConnectionAdapter(protocol, service, testCommand) {
+  requireProtocol(protocol, ["probe", "open", "close"], `${service} RCON`);
+  const endpoint = (configuration) => ({
+    host: configuration.host,
+    port: configuration.port,
+    password: configuration.password,
+  });
+  return {
+    async test({ configuration, signal }) {
+      const result = await protocol.probe({ ...endpoint(configuration), command: testCommand, signal });
+      return { ok: result?.ok === true };
+    },
+    async connect({ configuration, signal }) {
+      const result = await protocol.open({ ...endpoint(configuration), signal });
+      return { connected: result?.connected === true, session: result?.session };
+    },
+    async disconnect({ session, signal }) {
+      const result = await protocol.close({ session, signal });
+      return { disconnected: result?.closed === true };
+    },
+  };
+}
+
+export function createMinecraftConnectionAdapter(protocol) {
+  return createRconConnectionAdapter(protocol, "Minecraft", "list");
+}
+
+export function createFactorioConnectionAdapter(protocol) {
+  return createRconConnectionAdapter(protocol, "Factorio", "/players online");
+}
+
 export function createAiriConnectionRuntime({
   catalog = AIRI_CONNECTION_CATALOG,
+  file,
   timeoutMs = 10_000,
   historyLimit = 200,
   now = () => new Date().toISOString(),
 } = {}) {
+  if (file !== undefined && (typeof file !== "string" || !file.trim())) {
+    throw new TypeError("Connection persistence file must be a non-empty string.");
+  }
   if (!Number.isInteger(timeoutMs) || timeoutMs < 10 || timeoutMs > 120_000) {
     throw new TypeError("Connection timeout must be an integer between 10 and 120000 milliseconds.");
   }
@@ -166,8 +282,11 @@ export function createAiriConnectionRuntime({
 
   const records = new Map();
   const events = [];
+  const persistenceFile = file ? resolve(file) : null;
   let eventSequence = 0;
   let closed = false;
+  let initialized = !persistenceFile;
+  let persistencePending = Promise.resolve();
 
   for (const definition of catalog) {
     const entry = cloneCatalogEntry(definition);
@@ -189,6 +308,16 @@ export function createAiriConnectionRuntime({
 
   function requireOpen() {
     if (closed) throw connectionError("CONNECTION_RUNTIME_CLOSED", "AIRI connection runtime is closed.", 409);
+  }
+
+  function requireInitialized() {
+    if (!initialized) {
+      throw connectionError(
+        "CONNECTION_RUNTIME_NOT_INITIALIZED",
+        "Initialize the persistent AIRI connection runtime before using it.",
+        409,
+      );
+    }
   }
 
   function getRecord(id) {
@@ -216,6 +345,91 @@ export function createAiriConnectionRuntime({
     record.status = status;
     record.updatedAt = now();
     addEvent(record, type, status, details);
+  }
+
+  function persistenceSnapshot() {
+    return {
+      version: 1,
+      connections: Object.fromEntries(
+        [...records].map(([id, record]) => [id, structuredClone(record.configuration)]),
+      ),
+    };
+  }
+
+  async function writePersistence(snapshot) {
+    await mkdir(dirname(persistenceFile), { recursive: true });
+    const temporaryFile = `${persistenceFile}.${process.pid}.${randomUUID()}.tmp`;
+    let handle;
+    try {
+      handle = await open(temporaryFile, "wx", 0o600);
+      await handle.writeFile(`${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
+      await handle.sync();
+      await handle.close();
+      handle = undefined;
+      await rename(temporaryFile, persistenceFile);
+      await chmod(persistenceFile, 0o600);
+    } finally {
+      await handle?.close().catch(() => undefined);
+      await rm(temporaryFile, { force: true }).catch(() => undefined);
+    }
+  }
+
+  function persistConfiguration() {
+    if (!persistenceFile) return;
+    const snapshot = persistenceSnapshot();
+    persistencePending = persistencePending.then(
+      () => writePersistence(snapshot),
+      () => writePersistence(snapshot),
+    );
+  }
+
+  async function initialize() {
+    requireOpen();
+    if (initialized) return list();
+    let persisted;
+    try {
+      persisted = JSON.parse(await readFile(persistenceFile, "utf8"));
+    } catch (error) {
+      if (error?.code === "ENOENT") {
+        initialized = true;
+        return list();
+      }
+      throw connectionError(
+        "CONNECTION_PERSISTENCE_INVALID",
+        "The AIRI connection persistence file could not be read.",
+        500,
+      );
+    }
+    if (
+      !persisted
+      || persisted.version !== 1
+      || !persisted.connections
+      || typeof persisted.connections !== "object"
+      || Array.isArray(persisted.connections)
+    ) {
+      throw connectionError(
+        "CONNECTION_PERSISTENCE_INVALID",
+        "The AIRI connection persistence file has an unsupported format.",
+        500,
+      );
+    }
+    for (const [id, configuration] of Object.entries(persisted.connections)) {
+      const record = records.get(id);
+      if (!record) continue;
+      try {
+        record.configuration = validateConfiguration(record.catalog, configuration, {});
+      } catch {
+        throw connectionError(
+          "CONNECTION_PERSISTENCE_INVALID",
+          `The stored ${id} connection configuration is invalid.`,
+          500,
+        );
+      }
+      record.status = prerequisiteState(record);
+      record.updatedAt = now();
+    }
+    initialized = true;
+    return list();
   }
 
   function queue(record, operation) {
@@ -271,19 +485,23 @@ export function createAiriConnectionRuntime({
   }
 
   function catalogSnapshot() {
+    requireInitialized();
     return [...records.values()].map((record) => cloneCatalogEntry(record.catalog));
   }
 
   function list() {
+    requireInitialized();
     return [...records.values()].map(publicSnapshot);
   }
 
   function get(id) {
+    requireInitialized();
     return publicSnapshot(getRecord(id));
   }
 
   function configure(id, configuration) {
     requireOpen();
+    requireInitialized();
     const record = getRecord(id);
     if (record.connected || ["connecting", "disconnecting"].includes(record.status)) {
       throw connectionError("CONNECTION_ACTIVE", `Disconnect ${record.catalog.name} before changing its configuration.`, 409);
@@ -292,11 +510,13 @@ export function createAiriConnectionRuntime({
     record.lastError = null;
     const status = prerequisiteState(record);
     setStatus(record, status, "configured");
+    persistConfiguration();
     return publicSnapshot(record);
   }
 
   function registerAdapter({ pluginId, service, adapter }) {
     requireOpen();
+    requireInitialized();
     requireIdentifier(pluginId, "Plugin id");
     const record = getRecord(service);
     if (record.registration) {
@@ -310,6 +530,7 @@ export function createAiriConnectionRuntime({
 
   async function testConnection(id) {
     requireOpen();
+    requireInitialized();
     const record = getRecord(id);
     return queue(record, async () => {
       const prerequisite = prerequisiteState(record);
@@ -335,6 +556,7 @@ export function createAiriConnectionRuntime({
 
   async function connect(id) {
     requireOpen();
+    requireInitialized();
     const record = getRecord(id);
     return queue(record, async () => {
       if (record.connected) return publicSnapshot(record);
@@ -360,6 +582,7 @@ export function createAiriConnectionRuntime({
   }
 
   async function disconnect(id) {
+    requireInitialized();
     const record = getRecord(id);
     return queue(record, async () => {
       if (!record.connected) {
@@ -413,6 +636,7 @@ export function createAiriConnectionRuntime({
 
   async function unregisterAdapter(service, pluginId) {
     requireOpen();
+    requireInitialized();
     const record = getRecord(service);
     if (!record.registration) return publicSnapshot(record);
     if (pluginId && record.registration.pluginId !== pluginId) {
@@ -423,6 +647,7 @@ export function createAiriConnectionRuntime({
   }
 
   function history({ service, limit = historyLimit } = {}) {
+    requireInitialized();
     if (!Number.isInteger(limit) || limit < 1) throw connectionError("INVALID_CONNECTION_INPUT", "History limit must be a positive integer.");
     if (service) getRecord(service);
     return structuredClone(events.filter((event) => !service || event.connectionId === service).slice(-limit));
@@ -430,6 +655,7 @@ export function createAiriConnectionRuntime({
 
   async function removePlugin(pluginId) {
     requireOpen();
+    requireInitialized();
     requireIdentifier(pluginId, "Plugin id");
     const owned = [...records.values()].filter((record) => record.registration?.pluginId === pluginId);
     let disconnected = 0;
@@ -445,6 +671,7 @@ export function createAiriConnectionRuntime({
   async function close() {
     if (closed) return;
     for (const record of records.values()) await disposeRegistration(record);
+    await persistencePending;
     closed = true;
   }
 
@@ -456,6 +683,7 @@ export function createAiriConnectionRuntime({
     disconnect,
     get,
     history,
+    initialize,
     list,
     registerAdapter,
     removePlugin,

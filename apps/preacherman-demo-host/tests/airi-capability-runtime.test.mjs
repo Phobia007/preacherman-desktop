@@ -56,3 +56,25 @@ test("blocked execution cannot be recorded as backend success", async (t) => {
   assert.equal(event.message, "Desktop adapter required.");
   assert.deepEqual((await runtime.list()).map((entry) => entry.eventId), [event.eventId]);
 });
+
+test("host operations can record a safe event without executing the capability twice", async (t) => {
+  let executions = 0;
+  const runtime = await runtimeFor(t, {
+    executeCapability: async () => { executions += 1; },
+  });
+  const event = await runtime.record("agent.plugin-tools", {
+    surface: "work",
+    execution: {
+      status: "succeeded",
+      summary: "Plugin tool completed.",
+      taskId: "task-1",
+      toolName: "example::summarize",
+      artifactPath: "summary.json",
+      secret: "must-not-be-recorded",
+    },
+  });
+  assert.equal(executions, 0);
+  assert.equal(event.execution.taskId, "task-1");
+  assert.equal(event.execution.secret, undefined);
+  assert.deepEqual((await runtime.list()).map((entry) => entry.eventId), [event.eventId]);
+});

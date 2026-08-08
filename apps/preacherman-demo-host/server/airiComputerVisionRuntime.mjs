@@ -1,3 +1,7 @@
+import { randomUUID } from "node:crypto";
+import { readFile, realpath, stat } from "node:fs/promises";
+import { extname, isAbsolute, relative, resolve } from "node:path";
+
 const IMAGE_MIME_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 const PLUGIN_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/;
 
@@ -132,29 +136,75 @@ function normalizeCursorInput(input) {
   return result;
 }
 
-function normalizeVisionInput(input, maxImageBytes) {
+function isInside(root, target) {
+  const result = relative(root, target);
+  return result === "" || (!result.startsWith("..") && !isAbsolute(result));
+}
+
+async function readScopedLocalImage(localPath, localImageRoots, maxImageBytes) {
+  if (typeof localPath !== "string" || localPath.length === 0 || localPath.length > 4_096) {
+    throw runtimeError("INVALID_COMPUTER_VISION_INPUT", "Local image path is invalid.");
+  }
+  if (localImageRoots.length === 0) {
+    throw runtimeError("LOCAL_IMAGE_SCOPE_REQUIRED", "No trusted local image directory is configured.", 403);
+  }
+  let target;
+  try {
+    target = await realpath(resolve(localPath));
+  } catch {
+    throw runtimeError("LOCAL_IMAGE_NOT_FOUND", "The selected local image is unavailable.", 404);
+  }
+  const trustedRoots = await Promise.all(localImageRoots.map(async (root) => {
+    try { return await realpath(root); } catch { return null; }
+  }));
+  if (!trustedRoots.some((root) => root && isInside(root, target))) {
+    throw runtimeError("LOCAL_IMAGE_OUT_OF_SCOPE", "The selected image is outside the trusted local scope.", 403);
+  }
+  const details = await stat(target);
+  if (!details.isFile()) throw runtimeError("LOCAL_IMAGE_NOT_FOUND", "The selected local image is not a file.", 404);
+  if (details.size > maxImageBytes) {
+    throw runtimeError("COMPUTER_VISION_INPUT_TOO_LARGE", `Local image exceeds the ${maxImageBytes}-byte limit.`, 413);
+  }
+  const mimeType = ({ ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp" })[extname(target).toLowerCase()];
+  if (!mimeType) throw runtimeError("INVALID_COMPUTER_VISION_INPUT", "Local image must be PNG, JPEG, or WebP.");
+  return { mimeType, data: (await readFile(target)).toString("base64") };
+}
+
+async function normalizeVisionInput(input, maxImageBytes, localImageRoots) {
   const value = expectObject(input, "Vision analysis input");
   assertKeys(value, ["image", "prompt"], "Vision analysis input");
   const image = expectObject(value.image, "Vision image");
-  assertKeys(image, ["mimeType", "data"], "Vision image");
-  if (!IMAGE_MIME_TYPES.has(image.mimeType)) {
-    throw runtimeError("INVALID_COMPUTER_VISION_INPUT", "Vision image MIME type must be image/png, image/jpeg, or image/webp.");
+  assertKeys(image, ["mimeType", "data", "source", "localPath"], "Vision image");
+  let normalizedImage;
+  if (image.localPath !== undefined) {
+    if (image.mimeType !== undefined || image.data !== undefined || image.source !== undefined) {
+      throw runtimeError("INVALID_COMPUTER_VISION_INPUT", "Local image input cannot include inline image fields.");
+    }
+    normalizedImage = await readScopedLocalImage(image.localPath, localImageRoots, maxImageBytes);
+  } else {
+    if (!IMAGE_MIME_TYPES.has(image.mimeType)) {
+      throw runtimeError("INVALID_COMPUTER_VISION_INPUT", "Vision image MIME type must be image/png, image/jpeg, or image/webp.");
+    }
+    if (image.source !== undefined && image.source !== "inline" && image.source !== "screenshot") {
+      throw runtimeError("INVALID_COMPUTER_VISION_INPUT", "Vision image source must be inline or screenshot.");
+    }
+    decodedBase64Size(image.data, maxImageBytes, "Vision image");
+    normalizedImage = { mimeType: image.mimeType, data: image.data, ...(image.source ? { source: image.source } : {}) };
   }
-  decodedBase64Size(image.data, maxImageBytes, "Vision image");
-  const result = { image: { mimeType: image.mimeType, data: image.data } };
+  const result = { image: normalizedImage };
   const prompt = optionalString(value.prompt, "Vision prompt", 4_000);
   if (prompt !== undefined) result.prompt = prompt;
   return result;
 }
 
-function normalizeInput(capability, input, { maxImageBytes, maxInputBytes }) {
+async function normalizeInput(capability, input, { maxImageBytes, maxInputBytes, localImageRoots }) {
   if (jsonSize(input, "Computer/Vision input") > maxInputBytes) {
     throw runtimeError("COMPUTER_VISION_INPUT_TOO_LARGE", `Computer/Vision input exceeds the ${maxInputBytes}-byte limit.`, 413);
   }
   if (capability === "screenshot") return normalizeCaptureInput(input, false);
   if (capability === "camera-window") return normalizeCaptureInput(input, true);
   if (capability === "cursor-monitor") return normalizeCursorInput(input);
-  return normalizeVisionInput(input, maxImageBytes);
+  return normalizeVisionInput(input, maxImageBytes, localImageRoots);
 }
 
 function normalizeImageResult(value, maxImageBytes) {
@@ -241,11 +291,141 @@ function validateAdapter(adapter) {
   return adapter;
 }
 
+function normalizeComputerTarget(value) {
+  const target = expectObject(value, "Computer Use target");
+  assertKeys(target, ["kind", "id"], "Computer Use target");
+  if (!['desktop', 'window', 'web'].includes(target.kind)) {
+    throw runtimeError("INVALID_COMPUTER_USE_TARGET", "Computer Use target kind must be desktop, window, or web.");
+  }
+  const id = requiredString(target.id, "Computer Use target id", 1_000);
+  if (target.kind === "web") {
+    let url;
+    try { url = new URL(id); } catch { throw runtimeError("INVALID_COMPUTER_USE_TARGET", "Web targets require an absolute HTTP(S) origin."); }
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      throw runtimeError("INVALID_COMPUTER_USE_TARGET", "Web targets require an HTTP(S) origin.");
+    }
+    if (url.username || url.password) throw runtimeError("INVALID_COMPUTER_USE_TARGET", "Web targets cannot contain credentials.");
+    url.hash = "";
+    return { kind: "web", id: url.href };
+  }
+  return { kind: target.kind, id };
+}
+
+function targetKey(target) {
+  return `${target.kind}:${target.id}`;
+}
+
+function normalizeComputerAction(value) {
+  const action = expectObject(value, "Computer Use action");
+  if (action.type === "click") {
+    assertKeys(action, ["type", "selector", "x", "y"], "Click action");
+    const selector = optionalString(action.selector, "Click selector", 512);
+    const hasCoordinates = Number.isFinite(action.x) && Number.isFinite(action.y);
+    if (!selector && !hasCoordinates) throw runtimeError("INVALID_COMPUTER_USE_ACTION", "Click requires a selector or coordinates.");
+    if (hasCoordinates && (Math.abs(action.x) > 1_000_000 || Math.abs(action.y) > 1_000_000)) {
+      throw runtimeError("INVALID_COMPUTER_USE_ACTION", "Click coordinates are outside the supported range.");
+    }
+    return { type: "click", ...(selector ? { selector } : {}), ...(hasCoordinates ? { x: action.x, y: action.y } : {}) };
+  }
+  if (action.type === "type") {
+    assertKeys(action, ["type", "selector", "text"], "Type action");
+    return {
+      type: "type",
+      selector: requiredString(action.selector, "Type selector", 512),
+      text: requiredString(action.text, "Type text", 10_000),
+    };
+  }
+  if (action.type === "key") {
+    assertKeys(action, ["type", "key"], "Key action");
+    const key = requiredString(action.key, "Key", 32);
+    if (!["Enter", "Escape", "Tab", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(key)) {
+      throw runtimeError("INVALID_COMPUTER_USE_ACTION", "Key action is not allowed.");
+    }
+    return { type: "key", key };
+  }
+  if (action.type === "scroll") {
+    assertKeys(action, ["type", "deltaX", "deltaY"], "Scroll action");
+    if (!Number.isFinite(action.deltaX) || !Number.isFinite(action.deltaY)
+      || Math.abs(action.deltaX) > 100_000 || Math.abs(action.deltaY) > 100_000) {
+      throw runtimeError("INVALID_COMPUTER_USE_ACTION", "Scroll delta is outside the supported range.");
+    }
+    return { type: "scroll", deltaX: action.deltaX, deltaY: action.deltaY };
+  }
+  throw runtimeError("INVALID_COMPUTER_USE_ACTION", "Computer Use action type is not allowed.");
+}
+
+function summarizeAction(action) {
+  if (action.type === "type") return { type: "type", selector: action.selector, textLength: action.text.length };
+  return structuredClone(action);
+}
+
+function normalizeObservationResult(value, maxImageBytes) {
+  const result = expectObject(value, "Computer observation result");
+  assertKeys(result, ["summary", "image"], "Computer observation result");
+  const normalized = { summary: requiredString(result.summary, "Observation summary", 10_000) };
+  if (result.image !== undefined) {
+    normalized.image = normalizeImageResult({ image: result.image }, maxImageBytes).image;
+  }
+  return normalized;
+}
+
+function normalizeDomResult(value) {
+  const result = expectObject(value, "DOM inspection result");
+  assertKeys(result, ["url", "title", "nodes", "truncated"], "DOM inspection result");
+  if (!Array.isArray(result.nodes) || result.nodes.length > 2_000 || typeof result.truncated !== "boolean") {
+    throw runtimeError("INVALID_ADAPTER_RESULT", "DOM inspection result is invalid.", 502);
+  }
+  return {
+    ...(result.url === undefined ? {} : { url: requiredString(result.url, "DOM URL", 2_000) }),
+    ...(result.title === undefined ? {} : { title: requiredString(result.title, "DOM title", 1_000) }),
+    nodes: result.nodes.map((item) => {
+      const node = expectObject(item, "DOM node");
+      assertKeys(node, ["tag", "role", "name", "text", "selector"], "DOM node");
+      return {
+        tag: requiredString(node.tag, "DOM tag", 64),
+        ...(node.role === undefined ? {} : { role: requiredString(node.role, "DOM role", 128) }),
+        ...(node.name === undefined ? {} : { name: requiredString(node.name, "DOM name", 512) }),
+        ...(node.text === undefined ? {} : { text: requiredString(node.text, "DOM text", 2_000) }),
+        ...(node.selector === undefined ? {} : { selector: requiredString(node.selector, "DOM selector", 512) }),
+      };
+    }),
+    truncated: result.truncated,
+  };
+}
+
+function normalizeActionResult(value) {
+  const result = expectObject(value, "Computer action result");
+  assertKeys(result, ["performed", "summary"], "Computer action result");
+  if (result.performed !== true) throw runtimeError("INVALID_ADAPTER_RESULT", "Computer adapter did not confirm the action.", 502);
+  requiredString(result.summary, "Computer action summary", 2_000);
+  return { performed: true };
+}
+
+function validateComputerUseAdapter(adapter) {
+  if (!adapter || typeof adapter !== "object" || Array.isArray(adapter)) {
+    throw runtimeError("INVALID_COMPUTER_USE_ADAPTER", "Computer Use adapter must be an object.");
+  }
+  for (const operation of ["test", "observe", "inspectDom", "perform"]) {
+    if (typeof adapter[operation] !== "function") {
+      throw runtimeError("INVALID_COMPUTER_USE_ADAPTER", `Computer Use adapter requires ${operation}().`);
+    }
+  }
+  if (adapter.dispose !== undefined && typeof adapter.dispose !== "function") {
+    throw runtimeError("INVALID_COMPUTER_USE_ADAPTER", "Computer Use adapter dispose must be a function.");
+  }
+  return adapter;
+}
+
 export function createAiriComputerVisionRuntime({
   timeoutMs = 10_000,
   maxImageBytes = 8 * 1024 * 1024,
   maxInputBytes = 12 * 1024 * 1024,
   maxResultBytes = 12 * 1024 * 1024,
+  localImageRoots = [],
+  approvalVerifier,
+  approvalTtlMs = 60_000,
+  operationLogLimit = 500,
+  clock = () => Date.now(),
   now = () => new Date().toISOString(),
 } = {}) {
   if (!Number.isInteger(timeoutMs) || timeoutMs < 10 || timeoutMs > 120_000) {
@@ -255,7 +435,19 @@ export function createAiriComputerVisionRuntime({
     if (!Number.isInteger(value) || value < 1) throw new TypeError(`${name} must be a positive integer.`);
   }
 
-  const limits = { maxImageBytes, maxInputBytes, maxResultBytes };
+  if (!Array.isArray(localImageRoots) || localImageRoots.some((root) => typeof root !== "string" || root.length === 0)) {
+    throw new TypeError("localImageRoots must be an array of trusted directory paths.");
+  }
+  if (approvalVerifier !== undefined && typeof approvalVerifier !== "function") {
+    throw new TypeError("approvalVerifier must be a function.");
+  }
+  if (!Number.isInteger(approvalTtlMs) || approvalTtlMs < 1_000 || approvalTtlMs > 300_000) {
+    throw new TypeError("approvalTtlMs must be an integer between 1000 and 300000 milliseconds.");
+  }
+  if (!Number.isInteger(operationLogLimit) || operationLogLimit < 1 || operationLogLimit > 10_000) {
+    throw new TypeError("operationLogLimit must be an integer between 1 and 10000.");
+  }
+  const limits = { maxImageBytes, maxInputBytes, maxResultBytes, localImageRoots: localImageRoots.map((root) => resolve(root)) };
   const records = new Map(AIRI_COMPUTER_VISION_CATALOG.map((capability) => [capability.id, {
     capability: structuredClone(capability),
     registration: null,
@@ -266,6 +458,13 @@ export function createAiriComputerVisionRuntime({
     updatedAt: now(),
     pending: Promise.resolve(),
   }]));
+  const approvals = new Map();
+  const operationLog = [];
+  let computerRegistration = null;
+  let computerPhase = "external-runtime-required";
+  let computerLastTest = null;
+  let computerLastError = null;
+  let computerPending = Promise.resolve();
   let closed = false;
 
   function requireOpen() {
@@ -317,6 +516,328 @@ export function createAiriComputerVisionRuntime({
     } finally {
       clearTimeout(timer);
     }
+  }
+
+  function queueComputer(operation) {
+    const result = computerPending.then(operation, operation);
+    computerPending = result.then(() => undefined, () => undefined);
+    return result;
+  }
+
+  function addOperation({ type, callerPluginId = "preacherman-host", target, status: operationStatus, durationMs = 0, error }) {
+    const entry = {
+      id: randomUUID(),
+      type,
+      callerPluginId,
+      ...(target ? { target: structuredClone(target) } : {}),
+      status: operationStatus,
+      durationMs,
+      at: now(),
+      ...(error ? { error: structuredClone(error) } : {}),
+    };
+    operationLog.push(entry);
+    if (operationLog.length > operationLogLimit) operationLog.splice(0, operationLog.length - operationLogLimit);
+    return entry;
+  }
+
+  function safeComputerError(operation, error) {
+    const timeout = error?.code === "COMPUTER_VISION_TIMEOUT";
+    const invalidResult = error?.code === "INVALID_ADAPTER_RESULT";
+    return {
+      code: timeout ? "COMPUTER_USE_TIMEOUT" : invalidResult ? "INVALID_ADAPTER_RESULT" : "COMPUTER_USE_ADAPTER_FAILED",
+      message: timeout
+        ? `Computer Use ${operation} timed out.`
+        : invalidResult ? "Computer Use adapter returned an invalid result." : `Computer Use adapter ${operation} failed.`,
+      statusCode: timeout ? 504 : 502,
+      at: now(),
+    };
+  }
+
+  function requireCaller(pluginId) {
+    if (typeof pluginId !== "string" || !PLUGIN_ID_PATTERN.test(pluginId)) {
+      throw runtimeError("INVALID_COMPUTER_USE_CALLER", "Computer Use caller plugin id is invalid.");
+    }
+    return pluginId;
+  }
+
+  function scopedTarget(value) {
+    const target = normalizeComputerTarget(value);
+    if (!computerRegistration?.targetKeys.has(targetKey(target))) {
+      throw runtimeError("COMPUTER_USE_TARGET_OUT_OF_SCOPE", "Computer Use target is outside the registered adapter scope.", 403);
+    }
+    return target;
+  }
+
+  function computerUseStatus() {
+    expireApprovals();
+    return structuredClone({
+      phase: computerPhase,
+      adapter: computerRegistration ? { pluginId: computerRegistration.pluginId } : null,
+      targets: computerRegistration ? computerRegistration.targets : [],
+      lastTest: computerLastTest,
+      lastError: computerLastError,
+      pendingApprovals: [...approvals.values()].filter((approval) => approval.status === "pending").length,
+    });
+  }
+
+  function registerComputerUseAdapter({ pluginId, targets, adapter }) {
+    requireOpen();
+    requireCaller(pluginId);
+    if (computerRegistration) throw runtimeError("COMPUTER_USE_ADAPTER_EXISTS", "Computer Use already has an adapter.", 409);
+    if (!Array.isArray(targets) || targets.length === 0 || targets.length > 64) {
+      throw runtimeError("INVALID_COMPUTER_USE_TARGET", "Computer Use adapter requires between 1 and 64 targets.");
+    }
+    const normalizedTargets = targets.map(normalizeComputerTarget);
+    const keys = new Set(normalizedTargets.map(targetKey));
+    if (keys.size !== normalizedTargets.length) throw runtimeError("INVALID_COMPUTER_USE_TARGET", "Computer Use targets must be unique.");
+    computerRegistration = {
+      pluginId,
+      targets: normalizedTargets,
+      targetKeys: keys,
+      adapter: validateComputerUseAdapter(adapter),
+    };
+    computerPhase = "ready";
+    computerLastError = null;
+    return computerUseStatus();
+  }
+
+  async function testComputerUse() {
+    requireOpen();
+    return queueComputer(async () => {
+      if (!computerRegistration) return { status: "external-runtime-required", capability: "computer-use" };
+      computerPhase = "testing";
+      try {
+        const result = await withTimeout(
+          (signal) => computerRegistration.adapter.test({ capability: "computer-use", signal }),
+          "Computer Use test",
+        );
+        if (!result || result.ok !== true) throw runtimeError("COMPUTER_USE_TEST_REJECTED", "Adapter did not confirm readiness.", 502);
+        computerLastTest = { ok: true, at: now() };
+        computerLastError = null;
+        computerPhase = "ready";
+        return { status: "succeeded", capability: "computer-use", checkedAt: computerLastTest.at };
+      } catch (error) {
+        computerLastTest = { ok: false, at: now() };
+        computerLastError = safeComputerError("test", error);
+        computerPhase = "error";
+        return { status: "failed", capability: "computer-use", error: computerLastError };
+      }
+    });
+  }
+
+  async function runComputerRead(type, request) {
+    requireOpen();
+    const callerPluginId = requireCaller(request?.callerPluginId);
+    if (!computerRegistration) return { status: "external-runtime-required", operation: type, result: null };
+    const target = scopedTarget(request?.target);
+    const selector = type === "inspect-dom" ? optionalString(request?.selector, "DOM selector", 512) : undefined;
+    const maxDepth = type === "inspect-dom" ? optionalInteger(request?.maxDepth, "DOM maxDepth", 1, 20) : undefined;
+    return queueComputer(async () => {
+      const startedAt = clock();
+      computerPhase = "running";
+      try {
+        const rawResult = await withTimeout(
+          (signal) => type === "observe"
+            ? computerRegistration.adapter.observe({ callerPluginId, target, signal })
+            : computerRegistration.adapter.inspectDom({ callerPluginId, target, selector, maxDepth, signal }),
+          `Computer Use ${type}`,
+        );
+        const result = type === "observe"
+          ? normalizeObservationResult(rawResult, maxImageBytes)
+          : normalizeDomResult(rawResult);
+        computerLastError = null;
+        computerPhase = "ready";
+        addOperation({ type, callerPluginId, target, status: "succeeded", durationMs: Math.max(0, clock() - startedAt) });
+        return { status: "succeeded", operation: type, result };
+      } catch (error) {
+        computerLastError = safeComputerError(type, error);
+        computerPhase = "error";
+        addOperation({ type, callerPluginId, target, status: "failed", durationMs: Math.max(0, clock() - startedAt), error: computerLastError });
+        return { status: "failed", operation: type, result: null, error: computerLastError };
+      }
+    });
+  }
+
+  function observe(request) {
+    return runComputerRead("observe", request);
+  }
+
+  function inspectDom(request) {
+    return runComputerRead("inspect-dom", request);
+  }
+
+  function publicApproval(approval) {
+    return structuredClone({
+      id: approval.id,
+      status: approval.status,
+      callerPluginId: approval.callerPluginId,
+      target: approval.target,
+      action: approval.actionSummary,
+      createdAt: approval.createdAt,
+      expiresAt: approval.expiresAt,
+      ...(approval.completedAt ? { completedAt: approval.completedAt } : {}),
+      ...(approval.result ? { result: approval.result } : {}),
+      ...(approval.error ? { error: approval.error } : {}),
+    });
+  }
+
+  function expireApprovals() {
+    for (const approval of approvals.values()) {
+      if (approval.status === "pending" && clock() > approval.expiresAtMs) {
+        approval.status = "expired";
+        approval.completedAt = now();
+        addOperation({ type: "action-expired", callerPluginId: approval.callerPluginId, target: approval.target, status: "expired" });
+      }
+    }
+  }
+
+  function requestAction(request) {
+    requireOpen();
+    const callerPluginId = requireCaller(request?.callerPluginId);
+    if (!computerRegistration) return { status: "external-runtime-required", approval: null };
+    const target = scopedTarget(request?.target);
+    const action = normalizeComputerAction(request?.action);
+    const createdAtMs = clock();
+    const approval = {
+      id: randomUUID(),
+      status: "pending",
+      callerPluginId,
+      target,
+      action,
+      actionSummary: summarizeAction(action),
+      createdAt: now(),
+      createdAtMs,
+      expiresAt: new Date(createdAtMs + approvalTtlMs).toISOString(),
+      expiresAtMs: createdAtMs + approvalTtlMs,
+    };
+    approvals.set(approval.id, approval);
+    addOperation({ type: "action-requested", callerPluginId, target, status: "pending" });
+    return { status: "approval-required", approval: publicApproval(approval) };
+  }
+
+  function listApprovals({ status: approvalStatus } = {}) {
+    expireApprovals();
+    return [...approvals.values()]
+      .filter((approval) => !approvalStatus || approval.status === approvalStatus)
+      .map(publicApproval);
+  }
+
+  async function approveAction({ approvalId, decision, evidence }) {
+    requireOpen();
+    expireApprovals();
+    const approval = approvals.get(approvalId);
+    if (!approval) throw runtimeError("COMPUTER_USE_APPROVAL_NOT_FOUND", "Computer Use approval was not found.", 404);
+    if (approval.status !== "pending") throw runtimeError("COMPUTER_USE_APPROVAL_CONSUMED", "Computer Use approval is no longer pending.", 409);
+    if (decision !== "approve" && decision !== "deny") throw runtimeError("INVALID_COMPUTER_USE_APPROVAL", "Approval decision must be approve or deny.");
+    if (!approvalVerifier) throw runtimeError("COMPUTER_USE_APPROVAL_AUTHORITY_REQUIRED", "Host approval authority is not configured.", 503);
+    let verified;
+    try {
+      verified = await withTimeout(
+        (signal) => approvalVerifier({
+          approvalId,
+          decision,
+          evidence,
+          request: publicApproval(approval),
+          signal,
+        }),
+        "Computer Use approval verification",
+      );
+    } catch (error) {
+      if (error?.code === "COMPUTER_VISION_TIMEOUT") {
+        throw runtimeError("COMPUTER_USE_APPROVAL_TIMEOUT", "Host approval verification timed out.", 504);
+      }
+      throw runtimeError("COMPUTER_USE_APPROVAL_REJECTED", "Host approval evidence was rejected.", 403);
+    }
+    if (verified !== true) throw runtimeError("COMPUTER_USE_APPROVAL_REJECTED", "Host approval evidence was rejected.", 403);
+    expireApprovals();
+    if (approval.status !== "pending") throw runtimeError("COMPUTER_USE_APPROVAL_CONSUMED", "Computer Use approval is no longer pending.", 409);
+    if (decision === "deny") {
+      approval.status = "denied";
+      approval.completedAt = now();
+      addOperation({ type: "action-denied", callerPluginId: approval.callerPluginId, target: approval.target, status: "denied" });
+      return { status: "denied", approval: publicApproval(approval) };
+    }
+    approval.status = "executing";
+    return queueComputer(async () => {
+      const startedAt = clock();
+      computerPhase = "running";
+      try {
+        if (!computerRegistration?.targetKeys.has(targetKey(approval.target))) {
+          throw runtimeError("COMPUTER_USE_TARGET_OUT_OF_SCOPE", "Approved target is no longer registered.", 403);
+        }
+        const rawResult = await withTimeout(
+          (signal) => computerRegistration.adapter.perform({
+            callerPluginId: approval.callerPluginId,
+            target: approval.target,
+            action: structuredClone(approval.action),
+            approvalId: approval.id,
+            signal,
+          }),
+          "Computer Use approved action",
+        );
+        approval.result = normalizeActionResult(rawResult);
+        approval.status = "succeeded";
+        approval.completedAt = now();
+        computerLastError = null;
+        computerPhase = "ready";
+        addOperation({ type: `action-${approval.action.type}`, callerPluginId: approval.callerPluginId, target: approval.target, status: "succeeded", durationMs: Math.max(0, clock() - startedAt) });
+        return { status: "succeeded", approval: publicApproval(approval) };
+      } catch (error) {
+        approval.error = safeComputerError("action", error);
+        approval.status = "failed";
+        approval.completedAt = now();
+        computerLastError = approval.error;
+        computerPhase = "error";
+        addOperation({ type: `action-${approval.action.type}`, callerPluginId: approval.callerPluginId, target: approval.target, status: "failed", durationMs: Math.max(0, clock() - startedAt), error: approval.error });
+        return { status: "failed", approval: publicApproval(approval) };
+      }
+    });
+  }
+
+  function logs({ limit = 50, callerPluginId } = {}) {
+    if (!Number.isInteger(limit) || limit < 1 || limit > operationLogLimit) {
+      throw runtimeError("INVALID_COMPUTER_USE_LOG_QUERY", `Operation log limit must be between 1 and ${operationLogLimit}.`);
+    }
+    return structuredClone(operationLog
+      .filter((entry) => !callerPluginId || entry.callerPluginId === callerPluginId)
+      .slice(-limit));
+  }
+
+  async function disposeComputerRegistration() {
+    await computerPending;
+    const registration = computerRegistration;
+    if (!registration) return false;
+    if (typeof registration.adapter.dispose === "function") {
+      try {
+        await withTimeout(
+          (signal) => registration.adapter.dispose({ capability: "computer-use", signal }),
+          "Computer Use adapter disposal",
+        );
+      } catch {
+        // Removal stays bounded even when an external runtime ignores cancellation.
+      }
+    }
+    computerRegistration = null;
+    computerPhase = "external-runtime-required";
+    computerLastError = null;
+    for (const approval of approvals.values()) {
+      if (approval.status === "pending") {
+        approval.status = "cancelled";
+        approval.completedAt = now();
+      }
+    }
+    return true;
+  }
+
+  async function unregisterComputerUseAdapter(pluginId) {
+    requireOpen();
+    requireCaller(pluginId);
+    if (!computerRegistration) return computerUseStatus();
+    if (computerRegistration.pluginId !== pluginId) {
+      throw runtimeError("COMPUTER_USE_ADAPTER_OWNER_MISMATCH", `${pluginId} does not own the Computer Use adapter.`, 403);
+    }
+    await disposeComputerRegistration();
+    return computerUseStatus();
   }
 
   function safeFailure(record, operation, error) {
@@ -385,7 +906,7 @@ export function createAiriComputerVisionRuntime({
   async function invoke(capability, input = {}) {
     requireOpen();
     const record = getRecord(capability);
-    const normalizedInput = normalizeInput(capability, input, limits);
+    const normalizedInput = await normalizeInput(capability, input, limits);
     return queue(record, async () => {
       if (!record.registration) return { status: "external-runtime-required", capability, result: null };
       setPhase(record, "running");
@@ -447,14 +968,48 @@ export function createAiriComputerVisionRuntime({
     }
     const owned = [...records.values()].filter((record) => record.registration?.pluginId === pluginId);
     for (const record of owned) await disposeRegistration(record);
-    return { adapters: owned.length };
+    const computerUseAdapters = computerRegistration?.pluginId === pluginId && await disposeComputerRegistration() ? 1 : 0;
+    let removedApprovals = 0;
+    for (const approval of approvals.values()) {
+      if (approval.callerPluginId === pluginId && approval.status === "pending") {
+        approval.status = "cancelled";
+        approval.completedAt = now();
+        removedApprovals += 1;
+      }
+    }
+    return {
+      adapters: owned.length,
+      ...(computerUseAdapters ? { computerUseAdapters } : {}),
+      ...(removedApprovals ? { approvals: removedApprovals } : {}),
+    };
   }
 
   async function close() {
     if (closed) return;
     for (const record of records.values()) await disposeRegistration(record);
+    await disposeComputerRegistration();
     closed = true;
   }
 
-  return { catalog, close, invoke, list, registerAdapter, removePlugin, status, test: testAdapter, unregisterAdapter };
+  return {
+    approveAction,
+    catalog,
+    close,
+    computerUseStatus,
+    inspectDom,
+    invoke,
+    list,
+    listApprovals,
+    logs,
+    observe,
+    registerAdapter,
+    registerComputerUseAdapter,
+    removePlugin,
+    requestAction,
+    status,
+    test: testAdapter,
+    testComputerUse,
+    unregisterAdapter,
+    unregisterComputerUseAdapter,
+  };
 }
