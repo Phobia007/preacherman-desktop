@@ -66,6 +66,9 @@ test("Settings exposes the AIRI plugin lifecycle and tool console in both themes
   assert.match(plugins, /approved: true/);
   assert.match(plugins, /Approve & execute once/);
   assert.match(plugins, /plugin\.permissions/);
+  assert.match(plugins, /plugin\.usedKits/);
+  assert.match(plugins, /plugin\.providedKits/);
+  assert.match(plugins, /Owned Bindings/);
   assert.match(plugins, /data-airi-control="plugin\.manager agent\.plugin-tools runtime\.plugin-inspector plugin\.hot-reload"/);
   assert.match(runtime, /manifest\.plugin\.airi\.moeru\.ai/);
   assert.match(runtime, /"loading", "loaded", "authenticating", "authenticated", "announced"/);

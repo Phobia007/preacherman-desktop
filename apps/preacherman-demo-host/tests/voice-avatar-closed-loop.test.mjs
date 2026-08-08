@@ -82,4 +82,8 @@ test("voice and model components share explicit four-state avatar control withou
   assert.match(model, /data-avatar-state=\{interactionState\}/);
   assert.match(voice, /coordinator\.stopSpeech\(\)/);
   assert.doesNotMatch(voice, /cancelTask/);
+  assert.match(voice, /coordinator\.onConversationEpoch/);
+  assert.match(voice, /activeAsrEpoch/);
+  assert.match(voice, /activeSpeechEpoch/);
+  assert.match(voice, /coordinator\.deliverFinalTranscript\(finalText, conversationEpoch\)/);
 });

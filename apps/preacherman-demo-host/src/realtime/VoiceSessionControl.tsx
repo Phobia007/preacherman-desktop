@@ -71,6 +71,8 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   const playbackCompletionTimer = useRef<number | null>(null);
   const ttsFallbackTimer = useRef<number | null>(null);
   const thinkingFallbackTimer = useRef<number | null>(null);
+  const activeSpeechEpoch = useRef<number | null>(null);
+  const activeAsrEpoch = useRef<number | null>(null);
   const captureModeRef = useRef<CaptureMode>(captureMode);
   const handsFreeActive = useRef(false);
   const awaitingAssistantReply = useRef(false);
@@ -99,6 +101,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
 
   const setVoiceError = (message: string) => {
     setErrorMessage(message);
+    activeAsrEpoch.current = null;
     stateRef.current = "error";
     setState("error");
     clearThinkingFallback();
@@ -118,6 +121,22 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     stream.current?.getTracks().forEach((track) => track.stop()); stream.current = null;
   };
   useEffect(() => () => { cleanup(); clearThinkingFallback(); avatarInteraction.setState("idle"); socket.current?.close(); }, [avatarInteraction]);
+  useEffect(() => coordinator.onConversationEpoch(() => {
+    expectedSocketClose.current = true;
+    handsFreeActive.current = false;
+    awaitingAssistantReply.current = false;
+    activeAsrEpoch.current = null;
+    socket.current?.close();
+    socket.current = null;
+    cleanup();
+    clearThinkingFallback();
+    transcriptRef.current = "";
+    setTranscript("");
+    setErrorMessage("");
+    stateRef.current = "idle";
+    setState("idle");
+    setAvatarState("idle");
+  }), [coordinator]);
 
   useEffect(() => {
     let resolveActivePlayback: (() => void) | null = null;
@@ -143,10 +162,12 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       playbackCursor.current = 0;
       window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
     };
-    const finishPlayback = () => {
+    const finishPlayback = (expectedEpoch = activeSpeechEpoch.current) => {
+      if (expectedEpoch !== activeSpeechEpoch.current) return;
       removeAbortListener?.();
       removeAbortListener = null;
       clearPlayback();
+      activeSpeechEpoch.current = null;
       clearThinkingFallback();
       setAvatarState("idle");
       coordinator.reportSpeechLifecycle("idle");
@@ -158,8 +179,9 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       coordinator.reportSpeechLifecycle("stopping");
       finishPlayback();
     };
-    const play = ({ text, locale: speechLocale }: SpeechRequest, signal: AbortSignal) => new Promise<void>((resolve) => {
+    const play = ({ text, locale: speechLocale, interactionEpoch }: SpeechRequest, signal: AbortSignal) => new Promise<void>((resolve) => {
       if (!text) { resolve(); return; }
+      activeSpeechEpoch.current = interactionEpoch;
       awaitingAssistantReply.current = false;
       clearThinkingFallback();
       resolveActivePlayback = resolve;
@@ -175,6 +197,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       let receivedAudio = false;
       let usedFallback = false;
       const fallback = () => {
+        if (activeSpeechEpoch.current !== interactionEpoch) return;
         if (usedFallback) return;
         usedFallback = true;
         activeTts.current = null;
@@ -184,17 +207,21 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         ws.close();
         speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.onstart = () => coordinator.reportSpeechLifecycle("playing");
-        utterance.onend = finishPlayback;
-        utterance.onerror = finishPlayback;
+        utterance.onstart = () => {
+          if (activeSpeechEpoch.current === interactionEpoch) coordinator.reportSpeechLifecycle("playing");
+        };
+        utterance.onend = () => finishPlayback(interactionEpoch);
+        utterance.onerror = () => finishPlayback(interactionEpoch);
         speechSynthesis.speak(utterance);
       };
       ttsFallbackTimer.current = window.setTimeout(fallback, 600);
       ws.onopen = () => {
+        if (activeSpeechEpoch.current !== interactionEpoch) return;
         ws.send(JSON.stringify({ event_id: eventId(), type: "session.update", session: { voice: "Serena", response_format: "pcm", sample_rate: 24000, mode: "server_commit", language_type: speechLocale === "zh-CN" ? "Chinese" : "English" } }));
       };
       ws.onmessage = async (message) => {
         if (typeof message.data !== "string") return;
+        if (activeSpeechEpoch.current !== interactionEpoch) return;
         const payload = JSON.parse(message.data) as { type?: string; delta?: string; error?: { message?: string }; message?: string };
         if (payload.type === "session.updated") {
           ws.send(JSON.stringify({ event_id: eventId(), type: "input_text_buffer.append", text }));
@@ -223,12 +250,13 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         if (payload.type === "response.audio.done" || payload.type === "response.done") {
           if (ttsFallbackTimer.current) window.clearTimeout(ttsFallbackTimer.current);
           ttsFallbackTimer.current = null;
-          playbackCompletionTimer.current = window.setTimeout(finishPlayback, Math.max(0, (playbackCursor.current - (playbackContext.current?.currentTime || 0)) * 1000));
+          playbackCompletionTimer.current = window.setTimeout(() => finishPlayback(interactionEpoch), Math.max(0, (playbackCursor.current - (playbackContext.current?.currentTime || 0)) * 1000));
           window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
         }
         if (payload.type === "error") fallback();
       };
       ws.onerror = () => {
+        if (activeSpeechEpoch.current !== interactionEpoch) return;
         if (!receivedAudio) fallback();
       };
     });
@@ -252,6 +280,8 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
 
   const start = async () => {
     if (!["idle", "error"].includes(stateRef.current)) return;
+    const conversationEpoch = coordinator.getConversationEpoch();
+    activeAsrEpoch.current = conversationEpoch;
     try {
       coordinator.stopSpeech();
       setErrorMessage("");
@@ -259,6 +289,10 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       setAvatarState("listening");
       setTranscript("");
       const mic = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, sampleRate: 16000 } });
+      if (!coordinator.isConversationEpochCurrent(conversationEpoch) || activeAsrEpoch.current !== conversationEpoch) {
+        mic.getTracks().forEach((track) => track.stop());
+        return;
+      }
       stream.current = mic;
       const ws = new WebSocket(localServiceWebSocketUrl("/api/voice/asr"));
       expectedSocketClose.current = false;
@@ -280,6 +314,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       };
       ws.onmessage = (event) => {
         if (typeof event.data !== "string") return;
+        if (!coordinator.isConversationEpochCurrent(conversationEpoch) || activeAsrEpoch.current !== conversationEpoch) return;
         const payload = JSON.parse(event.data) as { type?: string; delta?: string; transcript?: string; text?: string; message?: string; error?: { message?: string } };
         if (payload.type === "preacherman.voice.error" || payload.type === "error") {
           setVoiceError(payload.error?.message || payload.message || (locale === "zh-CN" ? "语音服务拒绝了连接。" : "The voice service rejected the connection."));
@@ -295,9 +330,10 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
             setTranscript("");
             return;
           }
+          if (!coordinator.deliverFinalTranscript(finalText, conversationEpoch)) return;
           awaitingAssistantReply.current = true;
           beginThinking();
-          coordinator.deliverFinalTranscript(finalText);
+          activeAsrEpoch.current = null;
           if (captureModeRef.current === "handsFree" && handsFreeActive.current) {
             expectedSocketClose.current = true;
             stateRef.current = "finalizing";
@@ -317,8 +353,12 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
           ws.close();
         }
       };
-      ws.onerror = () => { setVoiceError(locale === "zh-CN" ? "无法连接语音服务。请检查本地服务和设置。" : "Cannot connect to the voice service. Check the local service and Settings."); cleanup(); };
+      ws.onerror = () => {
+        if (!coordinator.isConversationEpochCurrent(conversationEpoch) || activeAsrEpoch.current !== conversationEpoch) return;
+        setVoiceError(locale === "zh-CN" ? "无法连接语音服务。请检查本地服务和设置。" : "Cannot connect to the voice service. Check the local service and Settings."); cleanup();
+      };
       ws.onclose = () => {
+        if (!coordinator.isConversationEpochCurrent(conversationEpoch) || activeAsrEpoch.current !== conversationEpoch) return;
         if (expectedSocketClose.current) return;
         if (["listening", "finalizing"].includes(stateRef.current)) {
           setVoiceError(locale === "zh-CN" ? "语音连接意外关闭。请重试。" : "The voice connection closed unexpectedly. Please try again.");
@@ -326,12 +366,17 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         }
       };
       ws.onopen = async () => {
+        if (!coordinator.isConversationEpochCurrent(conversationEpoch) || activeAsrEpoch.current !== conversationEpoch) {
+          ws.close();
+          return;
+        }
         const turnDetection = captureMode === "handsFree"
           ? { type: "server_vad", threshold: 0.2, silence_duration_ms: 900 }
           : null;
         ws.send(JSON.stringify({ event_id: eventId(), type: "session.update", session: { modalities: ["text"], input_audio_format: "pcm", sample_rate: 16000, input_audio_transcription: { language: locale === "zh-CN" ? "zh" : "en" }, turn_detection: turnDetection } }));
       };
     } catch (error) {
+      if (!coordinator.isConversationEpochCurrent(conversationEpoch) || activeAsrEpoch.current !== conversationEpoch) return;
       const denied = error instanceof DOMException && error.name === "NotAllowedError";
       setVoiceError(denied
         ? (locale === "zh-CN" ? "请在浏览器地址栏允许麦克风权限后重试。" : "Allow microphone access in the browser, then try again.")

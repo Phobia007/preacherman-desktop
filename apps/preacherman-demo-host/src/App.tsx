@@ -10,7 +10,9 @@ import { ABTaskConsole } from "./ab/ABTaskConsole";
 import { AiriFeaturePanel } from "./airi/AiriFeaturePanel";
 import { AiriEcosystemDiagnostics } from "./airi/AiriEcosystemDiagnostics";
 import { AiriComputerVisionPanel } from "./airi/AiriComputerVisionPanel";
+import { AiriDomObservationBridge } from "./airi/AiriDomObservationBridge";
 import { AiriGameletPanel } from "./airi/AiriGameletPanel";
+import { AiriObservabilityPanel } from "./airi/AiriObservabilityPanel";
 import { AiriWidgetGallery } from "./airi/AiriWidgetGallery";
 import { airiServiceRequest } from "./airi/capabilityClient";
 import { featuresForSurface, findAiriFeature } from "./airi/featurePlacement";
@@ -161,6 +163,7 @@ export function App() {
           <ABTaskConsole locale={preferences.locale} />
         </>
       ) : null}
+      <AiriWidgetGallery placement="home" locale={preferences.locale} serviceRequest={airiServiceRequest} />
     </main>
   );
   const workspaceContent = (
@@ -170,7 +173,7 @@ export function App() {
     >
       {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
       <div className="demo-airi-work-runtime" data-airi-control="plugin.widgets plugin.gamelets game.tic-tac-toe computer-use.session vision.screen vision.camera">
-        <AiriWidgetGallery locale={preferences.locale} serviceRequest={airiServiceRequest} />
+        <AiriWidgetGallery placement="work" locale={preferences.locale} serviceRequest={airiServiceRequest} />
         <AiriGameletPanel locale={preferences.locale} serviceRequest={airiServiceRequest} />
         <AiriComputerVisionPanel locale={preferences.locale} serviceRequest={airiServiceRequest} />
       </div>
@@ -191,6 +194,7 @@ export function App() {
         <CortanaModelStage ariaLabel="Cortana voice and avatar lab model" />
         <VoiceSessionControl locale={preferences.locale} />
       </> : null}
+      <AiriWidgetGallery placement="lab" locale={preferences.locale} serviceRequest={airiServiceRequest} />
     </main>
   );
   const testContent = (
@@ -206,6 +210,7 @@ export function App() {
           : "Inspect microphone, model, tool, plugin, and runtime entries. Solid entries are connected; outlined entries require their service."}</p>
       </div>
       <AiriEcosystemDiagnostics locale={preferences.locale} serviceRequest={airiServiceRequest} />
+      <AiriObservabilityPanel locale={preferences.locale} serviceRequest={airiServiceRequest} />
     </main>
   );
   const mainContent = route.kind === "index"
@@ -223,6 +228,7 @@ export function App() {
             ? labContent
         : activeSurfaceType === "settings"
           ? (
+            <>
               <SettingsScreen
                 appearance={preferences.appearance}
                 locale={preferences.locale}
@@ -233,18 +239,24 @@ export function App() {
                   setPreferences((current) => ({ ...current, locale }));
                 }}
               />
+              <AiriWidgetGallery placement="settings" locale={preferences.locale} serviceRequest={airiServiceRequest} />
+            </>
             )
           : activeSurfaceType === "market"
             ? (
+              <>
                 <CortanaGallery
                   activeModelId={preferences.activeModelId}
                   onActiveModelChange={(activeModelId) => {
                     setPreferences((current) => ({ ...current, activeModelId }));
                   }}
-              />
+                />
+                <AiriWidgetGallery placement="gallery" locale={preferences.locale} serviceRequest={airiServiceRequest} />
+                <AiriGameletPanel locale={preferences.locale} serviceRequest={airiServiceRequest} />
+              </>
             )
           : activeSurfaceType === "ledger"
-            ? <ConversationLedgerScreen locale={preferences.locale} serviceRequest={airiServiceRequest} />
+            ? <><ConversationLedgerScreen locale={preferences.locale} serviceRequest={airiServiceRequest} /><AiriWidgetGallery placement="ledger" locale={preferences.locale} serviceRequest={airiServiceRequest} /></>
           : activeSurfaceType === "test"
             ? testContent
           : (
@@ -280,6 +292,7 @@ export function App() {
       entering={animateMainEntrance}
       locale={preferences.locale}
     >
+      <AiriDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={airiServiceRequest} />
       <div className="demo-app-shell__screen-page" key={contentKey}>
         {mainContent}
         {airiPanelSurface ? (

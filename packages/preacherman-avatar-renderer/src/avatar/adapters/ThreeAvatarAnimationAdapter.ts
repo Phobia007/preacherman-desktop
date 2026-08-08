@@ -586,6 +586,10 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
   };
 
   private fail(error: AvatarAnimationError): AvatarAnimationError {
+    // A route change can dispose the model while an async GLB request is still
+    // completing. That cancellation is an expected lifecycle outcome, not a
+    // product error that should pollute the browser console.
+    if (this.disposed && error.code === "NOT_LOADED") return error;
     this.mixerState = "error";
     this.options.onError?.(error);
     console.error("[preacherman.avatar-animation]", {

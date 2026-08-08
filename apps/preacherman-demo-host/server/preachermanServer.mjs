@@ -1,8 +1,9 @@
 import { randomUUID } from "node:crypto";
+import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
 import { mkdir, readFile, rename, writeFile, chmod } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { delimiter, dirname, join } from "node:path";
 import { WebSocket, WebSocketServer } from "ws";
 import {
   createPitchProposal,
@@ -20,10 +21,13 @@ import { createAiriPluginRuntime } from "./airiPluginRuntime.mjs";
 import { createAiriPluginTaskBinding } from "./airiPluginTaskBinding.mjs";
 import { createAiriWidgetRuntime, AIRI_WIDGET_KIND } from "./airiWidgetRuntime.mjs";
 import { createAiriGameletRuntime } from "./airiGameletRuntime.mjs";
-import { createAiriProviderRuntime } from "./airiProviderRuntime.mjs";
-import { createAiriMemoryPersonaRuntime } from "./airiMemoryPersonaRuntime.mjs";
+import { createAiriProviderRuntime, createDashScopeStreamingAdapter } from "./airiProviderRuntime.mjs";
+import { createAiriMemoryPersonaRuntime, MEMORY_PLUGIN_SCOPES } from "./airiMemoryPersonaRuntime.mjs";
+import { createAiriObservabilityRuntime } from "./airiObservabilityRuntime.mjs";
 import { createAiriConnectionRuntime } from "./airiConnectionRuntime.mjs";
 import { createAiriComputerVisionRuntime } from "./airiComputerVisionRuntime.mjs";
+import { createAiriDomObservationRuntime } from "./airiDomObservationRuntime.mjs";
+import { createAiriEcosystemBindingFacade } from "./airiEcosystemBindingFacade.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -63,6 +67,16 @@ function readJson(request) {
 export function createPreachermanServer(options = {}) {
   const env = options.env ?? process.env;
   const fetchImpl = options.fetchImpl ?? fetch;
+  const dataDirectory = env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo");
+  const pluginDirectory = join(dataDirectory, "plugins");
+  const developmentPluginFixtures = join(process.cwd(), "tests", "fixtures", "airi-plugin");
+  const trustedPluginRoots = [
+    pluginDirectory,
+    ...(typeof env.PREACHERMAN_PLUGIN_ROOTS === "string"
+      ? env.PREACHERMAN_PLUGIN_ROOTS.split(delimiter).map((root) => root.trim()).filter(Boolean)
+      : []),
+    ...(existsSync(developmentPluginFixtures) ? [developmentPluginFixtures] : []),
+  ];
   const allowedOrigins = new Set([
     "http://127.0.0.1:1420",
     "http://localhost:1420",
@@ -160,13 +174,52 @@ export function createPreachermanServer(options = {}) {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-memory-persona.v1.json");
   }
 
+  function observabilityFile() {
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-observability.v1.json");
+  }
+
+  let airiWidgetRuntime;
+  const pluginMemoryRuntimes = new Map();
+
+  function memoryRuntimeForPlugin(pluginId, permissions) {
+    let runtime = pluginMemoryRuntimes.get(pluginId);
+    if (runtime) return runtime;
+    const scopes = permissions.filter((permission) => MEMORY_PLUGIN_SCOPES.includes(permission));
+    runtime = createAiriMemoryPersonaRuntime({
+      file: join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-plugin-memory", `${pluginId}.v1.json`),
+      principal: pluginId,
+      scopes,
+      recentConversationReader: async ({ limit }) => (await readConversationLedger()).slice(0, limit),
+      onAuditEvent(event) {
+        void airiObservabilityRuntime.recordTrace({
+          caller: pluginId,
+          target: event.operation,
+          durationMs: 0,
+          status: event.outcome === "succeeded" ? "succeeded" : "failed",
+          input: { scope: event.requiredScope, boundary: event.boundary },
+          result: { resultCount: event.resultCount },
+          error: event.errorCode,
+        }).catch(() => undefined);
+      },
+    });
+    pluginMemoryRuntimes.set(pluginId, runtime);
+    return runtime;
+  }
+
   let airiPluginRuntime;
+  let ecosystemFacade;
   airiPluginRuntime = createAiriPluginRuntime({
     file: pluginStateFile(),
     taskStore,
     hostBridge: Object.freeze({ abi: "preacherman.host.v1", service: "preacherman-demo-host" }),
     kits: airiKitsRuntime.kits,
     bindings: airiKitsRuntime.bindings,
+    trustedRoots: trustedPluginRoots,
+    releasePluginResources: (pluginId) => ecosystemFacade?.removePlugin(pluginId),
+    createPluginBridge({ pluginId, permissions, hostBridge }) {
+      memoryRuntimeForPlugin(pluginId, permissions);
+      return hostBridge;
+    },
   });
   airiKitsRuntime.bindings.bind({
     pluginId: "preacherman-host",
@@ -175,6 +228,24 @@ export function createPreachermanServer(options = {}) {
     versionRange: "^1.0.0",
     async handler() {
       return { tools: await airiPluginRuntime.listTools() };
+    },
+  });
+  airiKitsRuntime.bindings.bind({
+    pluginId: "preacherman-host",
+    kit: "tools",
+    operation: "register",
+    versionRange: "^1.0.0",
+    async handler(input, bindingContext) {
+      return airiPluginRuntime.registerTool(bindingContext.callerPluginId, input?.tool);
+    },
+  });
+  airiKitsRuntime.bindings.bind({
+    pluginId: "preacherman-host",
+    kit: "tools",
+    operation: "unregister",
+    versionRange: "^1.0.0",
+    async handler(input, bindingContext) {
+      return airiPluginRuntime.unregisterTool(bindingContext.callerPluginId, input?.name);
     },
   });
   airiKitsRuntime.bindings.bind({
@@ -211,10 +282,18 @@ export function createPreachermanServer(options = {}) {
       toolName,
     });
     const taskId = created.task.taskId;
+    await taskStore.update(taskId, (task) => {
+      task.providerPluginId = providerPluginId;
+      task.toolCall.qualifiedName = name;
+    });
     let terminal = false;
     try {
       await invokeBinding("ledger", "append", { taskId, value: 0.35, stage: "tool-call", message: `Calling ${name}.` });
-      const result = await airiPluginRuntime.callTool(name, args, { approved, callerPluginId: callerId });
+      const result = await airiObservabilityRuntime.trace({
+        caller: callerId,
+        target: name,
+        input: { argumentKeys: Object.keys(args).sort(), approved },
+      }, () => airiPluginRuntime.callTool(name, args, { approved, callerPluginId: callerId }));
       if (result.isError) {
         await airiPluginTaskBinding.execute("fail", {
           taskId,
@@ -236,6 +315,16 @@ export function createPreachermanServer(options = {}) {
         },
       });
       terminal = true;
+      await airiCapabilityRuntime.record("agent.plugin-tools", {
+        surface: "work",
+        execution: {
+          status: "succeeded",
+          summary: `Plugin tool ${name} completed and wrote a Ledger artifact.`,
+          taskId,
+          toolName: name,
+          artifactPath: completed.task?.artifact?.path || completed.ledger?.artifact?.path || `${toolName}-result.json`,
+        },
+      }).catch(() => undefined);
       return { ...result, task: completed.task, ledger: completed.ledger };
     } catch (error) {
       if (!terminal) {
@@ -244,6 +333,16 @@ export function createPreachermanServer(options = {}) {
           error: error instanceof Error ? error.message : String(error),
         }, { pluginId: callerId }).catch(() => undefined);
       }
+      await airiCapabilityRuntime.record("agent.plugin-tools", {
+        surface: "work",
+        execution: {
+          status: "failed",
+          summary: `Plugin tool ${name} failed.`,
+          taskId,
+          toolName: name,
+          errorCode: typeof error?.code === "string" ? error.code : "PLUGIN_TOOL_FAILED",
+        },
+      }).catch(() => undefined);
       throw error;
     }
   }
@@ -311,15 +410,66 @@ export function createPreachermanServer(options = {}) {
     };
   }
 
-  const airiWidgetRuntime = createAiriWidgetRuntime({ file: widgetStateFile() });
+  airiWidgetRuntime = createAiriWidgetRuntime({ file: widgetStateFile() });
+  const airiObservabilityRuntime = createAiriObservabilityRuntime({ file: observabilityFile() });
   const airiGameletRuntime = createAiriGameletRuntime();
   const airiProviderRuntime = createAiriProviderRuntime({ getConfig: runtimeEnv, fetchImpl });
-  const airiMemoryPersonaRuntime = createAiriMemoryPersonaRuntime({ file: memoryPersonaFile() });
-  const airiConnectionRuntime = createAiriConnectionRuntime();
-  const airiComputerVisionRuntime = createAiriComputerVisionRuntime();
+  airiProviderRuntime.registerAdapter({
+    pluginId: "preacherman-dashscope-stream",
+    providerId: "dashscope",
+    ...createDashScopeStreamingAdapter({
+      asr: createDashscopeVoiceProtocol("asr"),
+      tts: createDashscopeVoiceProtocol("tts"),
+    }),
+  });
+  const airiMemoryPersonaRuntime = createAiriMemoryPersonaRuntime({
+    file: memoryPersonaFile(),
+    recentConversationReader: async ({ limit }) => (await readConversationLedger()).slice(0, limit),
+  });
+  const airiConnectionRuntime = createAiriConnectionRuntime({ file: join(dataDirectory, "connection-settings.json") });
+  const computerUseApprovalAuthority = Object.freeze({ authority: "preacherman-local-host" });
+  const localImageRoots = [
+    join(dataDirectory, "vision-inputs"),
+    ...(typeof env.PREACHERMAN_VISION_IMAGE_ROOTS === "string"
+      ? env.PREACHERMAN_VISION_IMAGE_ROOTS.split(delimiter).filter(Boolean)
+      : []),
+  ];
+  const airiComputerVisionRuntime = createAiriComputerVisionRuntime({
+    localImageRoots,
+    approvalVerifier: ({ evidence }) => evidence === computerUseApprovalAuthority,
+  });
+  const airiDomObservationRuntime = createAiriDomObservationRuntime();
+  ecosystemFacade = createAiriEcosystemBindingFacade({
+    kits: airiKitsRuntime.kits,
+    bindings: airiKitsRuntime.bindings,
+    widgetRuntime: airiWidgetRuntime,
+    gameletRuntime: airiGameletRuntime,
+    providerRuntime: airiProviderRuntime,
+    connectionRuntime: airiConnectionRuntime,
+    computerVisionRuntime: airiComputerVisionRuntime,
+    getMemoryRuntime(pluginId) {
+      const runtime = pluginMemoryRuntimes.get(pluginId);
+      if (runtime) return runtime;
+      const error = new Error("Plugin memory runtime unavailable.");
+      error.code = "MEMORY_RUNTIME_UNAVAILABLE";
+      error.statusCode = 503;
+      throw error;
+    },
+    async releaseMemoryRuntime(pluginId) {
+      const runtime = pluginMemoryRuntimes.get(pluginId);
+      await runtime?.close();
+      pluginMemoryRuntimes.delete(pluginId);
+    },
+  });
 
   async function initializeEcosystemRuntimes() {
-    await airiMemoryPersonaRuntime.initialize();
+    await Promise.all([
+      airiMemoryPersonaRuntime.initialize(),
+      airiObservabilityRuntime.initialize(),
+      airiConnectionRuntime.initialize(),
+    ]);
+    await mkdir(pluginDirectory, { recursive: true });
+    await mkdir(localImageRoots[0], { recursive: true });
     if ((await airiMemoryPersonaRuntime.listPersonas()).length === 0) {
       await airiMemoryPersonaRuntime.createPersona({
         name: "Preacherman",
@@ -344,7 +494,7 @@ export function createPreachermanServer(options = {}) {
           gap: 8,
           children: [
             { type: "text", text: "AIRI runtimes are registered", variant: "heading", tone: "primary" },
-            { type: "metric", label: "Core kits", value: 3, tone: "success" },
+            { type: "metric", label: "Registered Kits", value: 9, tone: "success" },
             { type: "button", label: "Open ledger", action: { type: "emit", event: "open-ledger" } },
           ],
         },
@@ -525,6 +675,58 @@ export function createPreachermanServer(options = {}) {
     });
   }
 
+  function createDashscopeVoiceProtocol(kind) {
+    const urlFor = ({ workspaceId }) => kind === "asr"
+      ? dashscopeAsrUrl({ DASHSCOPE_WORKSPACE_ID: workspaceId })
+      : dashscopeTtsUrl();
+    return {
+      test: ({ apiKey, workspaceId }) => testDashscopeConnection(urlFor({ workspaceId }), apiKey),
+      open: ({ apiKey, workspaceId, signal, emit }) => new Promise((resolveOpen, rejectOpen) => {
+        const socket = new WebSocket(urlFor({ workspaceId }), {
+          headers: { Authorization: `Bearer ${apiKey}`, "OpenAI-Beta": "realtime=v1" },
+        });
+        let opened = false;
+        const abort = () => {
+          if (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING) socket.close();
+        };
+        signal.addEventListener("abort", abort, { once: true });
+        socket.once("open", () => {
+          opened = true;
+          resolveOpen({ session: { socket, abort }, metadata: { transport: "websocket", kind } });
+        });
+        socket.on("message", (data, isBinary) => emit({
+          type: "message",
+          data: isBinary ? Buffer.from(data).toString("base64") : data.toString("utf8"),
+          isBinary,
+        }));
+        socket.on("close", (code, reason) => emit({ type: "close", code, reason: reason.toString("utf8") }));
+        socket.on("unexpected-response", (_request, response) => {
+          if (!opened) rejectOpen(new Error(`DashScope returned HTTP ${response.statusCode || 401}.`));
+        });
+        socket.on("error", () => {
+          if (!opened) rejectOpen(new Error("DashScope connection failed."));
+          else emit({ type: "error", message: "DashScope connection failed." });
+        });
+      }),
+      async send({ session, event }) {
+        if (session.socket.readyState !== WebSocket.OPEN) throw new Error("DashScope stream is not open.");
+        session.socket.send(event.isBinary ? Buffer.from(event.data, "base64") : event.data, { binary: event.isBinary === true });
+        return { sent: true };
+      },
+      close: ({ session }) => new Promise((resolveClose) => {
+        session.socket.removeAllListeners("message");
+        session.socket.removeAllListeners("error");
+        session.socket.removeAllListeners("unexpected-response");
+        if (session.socket.readyState === WebSocket.CLOSED) {
+          resolveClose({ closed: true });
+          return;
+        }
+        session.socket.once("close", () => resolveClose({ closed: true }));
+        session.socket.close();
+      }),
+    };
+  }
+
   function cleanConversationHistory(history) {
     if (!Array.isArray(history)) return [];
     return history
@@ -574,25 +776,24 @@ export function createPreachermanServer(options = {}) {
     if (!configuredEnv.DEEPSEEK_API_KEY) return fallback;
     try {
       const model = configuredEnv.DEEPSEEK_MODEL || "deepseek-v4-flash";
-      const upstream = await fetchImpl("https://api.deepseek.com/chat/completions", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${configuredEnv.DEEPSEEK_API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const providerResult = await airiObservabilityRuntime.trace({
+        caller: "preacherman-companion",
+        target: "provider:deepseek:chat",
+        input: { messageCount: cleanConversationHistory(history).length + 2, model },
+      }, () => airiProviderRuntime.invoke("deepseek", {
+        capability: "chat",
+        input: {
           model,
           temperature: 0.45,
-          max_tokens: 600,
-          response_format: { type: "json_object" },
+          maxTokens: 600,
           messages: [
             { role: "system", content: "你是 Preacherman，一位自然、可靠的数字伙伴。理解用户的上下文并直接回答，不要自称 A 或 Agent。返回 JSON：message（完整文字）、speechText（不超过80汉字）、action（reply 或 propose_task）。只有用户明确要求生成、整理、制作路演或演示方案时才使用 propose_task。不要编造已完成的工作。" },
             ...cleanConversationHistory(history),
             { role: "user", content: input },
           ],
-        }),
-        signal: AbortSignal.timeout(20_000),
-      });
-      const payload = await upstream.json();
-      if (!upstream.ok) return companionFallback(locale, proposalRequested, "provider_request_failed");
-      return parseCompanionResponse(payload?.choices?.[0]?.message?.content, fallback, model);
+        },
+      }));
+      return parseCompanionResponse(providerResult?.content, fallback, providerResult?.model || model);
     } catch {
       return companionFallback(locale, proposalRequested, "provider_request_failed");
     }
@@ -726,29 +927,53 @@ export function createPreachermanServer(options = {}) {
     return run;
   }
 
-  function createPluginToolProposal({ id, objective, locale }) {
+  function createPluginToolProposal({ id, objective, locale, toolName = "preacherman-runtime::task_summary", toolArguments = {} }) {
     const chinese = locale === "zh-CN";
+    const shortToolName = toolName.slice(toolName.indexOf("::") + 2);
     return {
       proposalId: id,
       revision: 1,
       kind: "plugin-tool",
       objective,
       executor: chinese ? "AIRI 插件工具执行器" : "AIRI plugin tool executor",
-      inputs: ["preacherman-runtime::task_summary"],
-      outputs: ["task_summary-result.json"],
-      allowedTools: ["preacherman-runtime::task_summary"],
+      inputs: [toolName],
+      outputs: [`${shortToolName}-result.json`],
+      allowedTools: [toolName],
+      toolName,
+      toolArguments,
       successCriteria: [chinese ? "生成可在 Ledger 审阅的结构化产物" : "Produce a structured artifact reviewable in Ledger"],
       editableFields: ["objective"],
     };
   }
 
   async function startPluginToolRun(proposal) {
-    const result = await executePluginToolAsTask("preacherman-runtime::task_summary", {}, {
+    const result = await executePluginToolAsTask(proposal.toolName || "preacherman-runtime::task_summary", proposal.toolArguments ?? {}, {
       callerPluginId: "preacherman-runtime",
       approved: true,
     });
     const stored = await taskStore.get(result.task.taskId);
     return { ...stored, runId: stored.taskId, proposalId: proposal.proposalId };
+  }
+
+  function parseExplicitPluginToolRequest(input) {
+    const match = input.match(/(?:run|execute|调用|运行)\s+(?:(?:the\s+)?plugin\s+tool\s+|插件工具\s+)?([A-Za-z0-9_-]+::[A-Za-z0-9_.-]+)(?:\s+(?:with|参数)\s+(\{[\s\S]*\}))?$/i);
+    if (!match) return null;
+    let toolArguments = {};
+    if (match[2]) {
+      try {
+        toolArguments = JSON.parse(match[2]);
+      } catch {
+        const error = new Error("Plugin tool arguments must be a valid JSON object.");
+        error.statusCode = 400;
+        throw error;
+      }
+      if (!toolArguments || typeof toolArguments !== "object" || Array.isArray(toolArguments)) {
+        const error = new Error("Plugin tool arguments must be a JSON object.");
+        error.statusCode = 400;
+        throw error;
+      }
+    }
+    return { toolName: match[1], toolArguments };
   }
 
   function requestOrigin(request) {
@@ -795,22 +1020,24 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/settings/test") {
-        const config = await runtimeEnv();
-        const result = {
-          deepseek: { configured: Boolean(config.DEEPSEEK_API_KEY), ok: false, message: "Not configured" },
-          asr: { configured: Boolean(config.DASHSCOPE_API_KEY && config.DASHSCOPE_WORKSPACE_ID), ok: false, message: "Not configured" },
-          tts: { configured: Boolean(config.DASHSCOPE_API_KEY), ok: false, message: "Not configured" },
-        };
-        if (config.DEEPSEEK_API_KEY) {
+        const runTest = async (providerId, capability) => {
           try {
-            const upstream = await fetchImpl("https://api.deepseek.com/models", { headers: { Authorization: `Bearer ${config.DEEPSEEK_API_KEY}` }, signal: AbortSignal.timeout(8_000) });
-            result.deepseek = { configured: true, ok: upstream.ok, message: upstream.ok ? "Connected" : `HTTP ${upstream.status}` };
-          } catch {
-            result.deepseek = { configured: true, ok: false, message: "Connection failed" };
+            const providerResult = await airiProviderRuntime.test(providerId, { capability });
+            return {
+              configured: providerResult.state !== "configuration-required",
+              ok: providerResult.ok === true,
+              message: providerResult.message || (providerResult.state === "configuration-required" ? "Not configured" : "Connection failed"),
+            };
+          } catch (error) {
+            return { configured: true, ok: false, message: error instanceof Error ? error.message : "Connection failed" };
           }
-        }
-        if (config.DASHSCOPE_API_KEY && config.DASHSCOPE_WORKSPACE_ID) result.asr = await testDashscopeConnection(dashscopeAsrUrl(config), config.DASHSCOPE_API_KEY);
-        if (config.DASHSCOPE_API_KEY) result.tts = await testDashscopeConnection(dashscopeTtsUrl(), config.DASHSCOPE_API_KEY);
+        };
+        const [deepseek, asr, tts] = await Promise.all([
+          runTest("deepseek", "chat"),
+          runTest("dashscope", "asr"),
+          runTest("dashscope", "tts"),
+        ]);
+        const result = { deepseek, asr, tts };
         json(response, 200, result, origin);
         return;
       }
@@ -835,7 +1062,11 @@ export function createPreachermanServer(options = {}) {
           json(response, 400, { error: "MCP tool name is required." }, origin);
           return;
         }
-        const result = await airiMcpRuntime.callTool(body.name, body.arguments ?? {});
+        const result = await airiObservabilityRuntime.trace({
+          caller: "preacherman-settings",
+          target: body.name,
+          input: { argumentKeys: Object.keys(body.arguments ?? {}).sort() },
+        }, () => airiMcpRuntime.callTool(body.name, body.arguments ?? {}));
         json(response, 200, { result }, origin);
         return;
       }
@@ -853,25 +1084,36 @@ export function createPreachermanServer(options = {}) {
       if (request.method === "POST" && url.pathname === "/api/plugins/install") {
         const body = await readJson(request);
         const plugin = await airiPluginRuntime.install(body.directory);
+        await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
         json(response, 201, { plugin }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/plugins/uninstall") {
         const body = await readJson(request);
         const result = await airiPluginRuntime.uninstall(body.name);
+        await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
         json(response, 200, { result }, origin);
         return;
       }
       const pluginMatch = url.pathname.match(/^\/api\/plugins\/([A-Za-z0-9_-]{1,80})$/);
       if (request.method === "PUT" && pluginMatch) {
         const plugin = await airiPluginRuntime.setEnabled(pluginMatch[1], (await readJson(request)).enabled);
+        await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
         json(response, 200, { plugin }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/plugins/reload") {
         const body = await readJson(request);
         const plugin = await airiPluginRuntime.reload(typeof body.name === "string" ? body.name : undefined);
+        await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
         json(response, 200, { plugin }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/observability") {
+        json(response, 200, await airiObservabilityRuntime.snapshot({
+          plugins: await airiPluginRuntime.listPlugins(),
+          tools: await airiPluginRuntime.listTools(),
+        }), origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/plugins/tools") {
@@ -932,17 +1174,53 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { session }, origin);
         return;
       }
+      const gameletLifecycleMatch = url.pathname.match(/^\/api\/gamelets\/sessions\/([^/]+)\/(pause|resume)$/);
+      if (request.method === "POST" && gameletLifecycleMatch) {
+        await readJson(request);
+        const sessionId = decodeURIComponent(gameletLifecycleMatch[1]);
+        const session = gameletLifecycleMatch[2] === "pause"
+          ? await airiGameletRuntime.pauseSession({ pluginId: "preacherman-runtime", sessionId })
+          : await airiGameletRuntime.resumeSession({ pluginId: "preacherman-runtime", sessionId });
+        json(response, 200, { session }, origin);
+        return;
+      }
+      const gameletDestroyMatch = url.pathname.match(/^\/api\/gamelets\/sessions\/([^/]+)$/);
+      if (request.method === "DELETE" && gameletDestroyMatch) {
+        const session = await airiGameletRuntime.destroySession({
+          pluginId: "preacherman-runtime",
+          sessionId: decodeURIComponent(gameletDestroyMatch[1]),
+          reason: "user-requested",
+        });
+        json(response, 200, { session }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/providers/catalog") {
         json(response, 200, { providers: await airiProviderRuntime.catalog() }, origin);
+        return;
+      }
+      const providerModelsMatch = url.pathname.match(/^\/api\/providers\/([^/]+)\/models$/);
+      if (request.method === "GET" && providerModelsMatch) {
+        const providerId = decodeURIComponent(providerModelsMatch[1]);
+        const result = await airiObservabilityRuntime.trace({
+          caller: "preacherman-settings",
+          target: `provider:${providerId}:models`,
+          input: {},
+        }, () => airiProviderRuntime.listModels(providerId));
+        json(response, 200, { result }, origin);
         return;
       }
       const providerOperationMatch = url.pathname.match(/^\/api\/providers\/([^/]+)\/(test|invoke)$/);
       if (request.method === "POST" && providerOperationMatch) {
         const body = await readJson(request);
         const providerId = decodeURIComponent(providerOperationMatch[1]);
-        const result = providerOperationMatch[2] === "test"
-          ? await airiProviderRuntime.test(providerId, { capability: body.capability })
-          : await airiProviderRuntime.invoke(providerId, { capability: body.capability, input: body.input });
+        const operation = providerOperationMatch[2];
+        const result = await airiObservabilityRuntime.trace({
+          caller: "preacherman-settings",
+          target: `provider:${providerId}:${operation}`,
+          input: { capability: body.capability },
+        }, () => operation === "test"
+          ? airiProviderRuntime.test(providerId, { capability: body.capability })
+          : airiProviderRuntime.invoke(providerId, { capability: body.capability, input: body.input }));
         json(response, 200, { result }, origin);
         return;
       }
@@ -967,6 +1245,15 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { memories: await airiMemoryPersonaRuntime.recall(await readJson(request)) }, origin);
         return;
       }
+      if (request.method === "GET" && url.pathname === "/api/memory/access") {
+        json(response, 200, { access: airiMemoryPersonaRuntime.getAccessPolicy() }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/memory/audit") {
+        const limit = Number.parseInt(url.searchParams.get("limit") || "50", 10);
+        json(response, 200, { events: await airiMemoryPersonaRuntime.listAuditEvents({ limit }) }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/connections") {
         json(response, 200, { connections: airiConnectionRuntime.list() }, origin);
         return;
@@ -976,26 +1263,120 @@ export function createPreachermanServer(options = {}) {
         const body = await readJson(request);
         const connectionId = decodeURIComponent(connectionOperationMatch[1]);
         const operation = connectionOperationMatch[2];
-        const connection = operation === "configure"
+        const connection = await airiObservabilityRuntime.trace({
+          caller: "preacherman-settings",
+          target: `connection:${connectionId}:${operation}`,
+          input: operation === "configure"
+            ? { configurationKeys: Object.keys(body.configuration ?? {}).sort() }
+            : {},
+        }, () => operation === "configure"
           ? airiConnectionRuntime.configure(connectionId, body.configuration ?? {})
           : operation === "test"
-            ? await airiConnectionRuntime.test(connectionId)
+            ? airiConnectionRuntime.test(connectionId)
             : operation === "connect"
-              ? await airiConnectionRuntime.connect(connectionId)
-              : await airiConnectionRuntime.disconnect(connectionId);
+              ? airiConnectionRuntime.connect(connectionId)
+              : airiConnectionRuntime.disconnect(connectionId));
         json(response, 200, { connection }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/computer-vision") {
-        json(response, 200, { capabilities: airiComputerVisionRuntime.list() }, origin);
+        const externalComputerUse = airiComputerVisionRuntime.computerUseStatus();
+        const domComputerUse = airiDomObservationRuntime.status();
+        const computerUseReady = externalComputerUse.phase === "ready" || domComputerUse.phase === "ready";
+        const targets = [...externalComputerUse.targets, ...domComputerUse.targets]
+          .filter((target, index, all) => all.findIndex((candidate) => candidate.kind === target.kind && candidate.id === target.id) === index);
+        json(response, 200, {
+          capabilities: airiComputerVisionRuntime.list(),
+          computerUse: {
+            ...externalComputerUse,
+            phase: computerUseReady ? "ready" : externalComputerUse.phase,
+            adapter: externalComputerUse.phase === "ready" ? externalComputerUse.adapter : domComputerUse.adapter,
+            targets,
+            lastTest: externalComputerUse.lastTest ?? domComputerUse.lastTest,
+          },
+          approvals: airiComputerVisionRuntime.listApprovals({ status: "pending" }),
+          operations: [...airiComputerVisionRuntime.logs({ limit: 20 }), ...airiDomObservationRuntime.logs({ limit: 20 })]
+            .sort((left, right) => String(right.at).localeCompare(String(left.at)))
+            .slice(0, 20),
+        }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/computer-vision/dom-snapshot") {
+        const result = airiDomObservationRuntime.ingestBrowserSnapshot(await readJson(request));
+        json(response, 202, { result }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/computer-vision/computer-use/test") {
+        await readJson(request);
+        const result = await airiObservabilityRuntime.trace({
+          caller: "preacherman-work",
+          target: "computer-use:test",
+          input: {},
+        }, () => airiComputerVisionRuntime.testComputerUse());
+        json(response, 200, { result }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/computer-vision/computer-use/observe") {
+        const body = await readJson(request);
+        const result = await airiObservabilityRuntime.trace({
+          caller: "preacherman-ui",
+          target: "computer-use:observe",
+          input: { target: body.target },
+        }, () => body.target?.kind === "web"
+          ? airiDomObservationRuntime.observe({ callerPluginId: "preacherman-ui", target: body.target })
+          : airiComputerVisionRuntime.observe({ callerPluginId: "preacherman-ui", target: body.target }));
+        json(response, 200, { result }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/computer-vision/computer-use/inspect-dom") {
+        const body = await readJson(request);
+        const result = await airiObservabilityRuntime.trace({
+          caller: "preacherman-ui",
+          target: "computer-use:inspect-dom",
+          input: { target: body.target, selector: body.selector, maxDepth: body.maxDepth },
+        }, () => body.target?.kind === "web"
+          ? airiDomObservationRuntime.inspectDom({
+            callerPluginId: "preacherman-ui",
+            target: body.target,
+            selector: body.selector,
+            maxDepth: body.maxDepth,
+          })
+          : airiComputerVisionRuntime.inspectDom({
+            callerPluginId: "preacherman-ui",
+            target: body.target,
+            selector: body.selector,
+            maxDepth: body.maxDepth,
+          }));
+        json(response, 200, { result }, origin);
+        return;
+      }
+      const computerUseApprovalMatch = url.pathname.match(/^\/api\/computer-vision\/computer-use\/approvals\/([^/]+)$/);
+      if (request.method === "POST" && computerUseApprovalMatch) {
+        const body = await readJson(request);
+        const result = await airiObservabilityRuntime.trace({
+          caller: "preacherman-ui",
+          target: "computer-use:approval",
+          input: { approvalId: computerUseApprovalMatch[1], decision: body.decision },
+        }, () => airiComputerVisionRuntime.approveAction({
+          approvalId: decodeURIComponent(computerUseApprovalMatch[1]),
+          decision: body.decision,
+          evidence: computerUseApprovalAuthority,
+        }));
+        json(response, 200, { result }, origin);
         return;
       }
       const computerVisionMatch = url.pathname.match(/^\/api\/computer-vision\/([^/]+)\/(test|invoke)$/);
       if (request.method === "POST" && computerVisionMatch) {
         const capability = decodeURIComponent(computerVisionMatch[1]);
-        const result = computerVisionMatch[2] === "test"
-          ? await airiComputerVisionRuntime.test(capability)
-          : await airiComputerVisionRuntime.invoke(capability, (await readJson(request)).input ?? {});
+        const body = await readJson(request);
+        const operation = computerVisionMatch[2];
+        const result = await airiObservabilityRuntime.trace({
+          caller: "preacherman-work",
+          target: `computer-vision:${capability}:${operation}`,
+          input: { capability, hasInput: Boolean(body.input) },
+        }, () => operation === "test"
+          ? airiComputerVisionRuntime.test(capability)
+          : airiComputerVisionRuntime.invoke(capability, body.input ?? {}));
         json(response, 200, { result }, origin);
         return;
       }
@@ -1039,11 +1420,21 @@ export function createPreachermanServer(options = {}) {
           json(response, 400, { error: "input must contain 1 to 4000 characters." }, origin);
           return;
         }
-        const pluginToolRequested = /(?:airi\s*)?(?:plugin|插件).*(?:summary|status|摘要|状态)|(?:summary|status|摘要|状态).*(?:plugin|插件)/i.test(input);
+        const explicitPluginTool = parseExplicitPluginToolRequest(input);
+        if (explicitPluginTool) {
+          const availableTools = await airiPluginRuntime.listTools();
+          if (!availableTools.some((tool) => tool.name === explicitPluginTool.toolName)) {
+            json(response, 404, { error: `Plugin tool is not available: ${explicitPluginTool.toolName}` }, origin);
+            return;
+          }
+        }
+        const pluginToolRequested = Boolean(explicitPluginTool)
+          || /(?:airi\s*)?(?:plugin|插件).*(?:summary|status|摘要|状态)|(?:summary|status|摘要|状态).*(?:plugin|插件)/i.test(input);
+        const selectedPluginTool = explicitPluginTool ?? { toolName: "preacherman-runtime::task_summary", toolArguments: {} };
         const turn = pluginToolRequested
           ? {
-              message: locale === "zh-CN" ? "我可以运行 AIRI 插件任务摘要工具；确认后，结果会作为 TaskRun 产物写入 Ledger。" : "I can run the AIRI plugin task-summary tool. After approval, its result will be written to Ledger as a TaskRun artifact.",
-              speechText: locale === "zh-CN" ? "请确认运行插件任务摘要工具。" : "Please approve the plugin task-summary tool.",
+              message: locale === "zh-CN" ? `我可以运行插件工具 ${selectedPluginTool.toolName}；确认后，结果会作为 TaskRun 产物写入 Ledger。` : `I can run plugin tool ${selectedPluginTool.toolName}. After approval, its result will be written to Ledger as a TaskRun artifact.`,
+              speechText: locale === "zh-CN" ? "请确认运行这个插件工具。" : "Please approve this plugin tool.",
               action: "propose_task",
               diagnostics: { source: "fallback", model: null, reason: "local_plugin_intent" },
             }
@@ -1051,7 +1442,7 @@ export function createPreachermanServer(options = {}) {
         let proposal = null;
         if (turn.action === "propose_task") {
           proposal = pluginToolRequested
-            ? createPluginToolProposal({ id: `proposal_${randomUUID()}`, objective: input, locale })
+            ? createPluginToolProposal({ id: `proposal_${randomUUID()}`, objective: input, locale, ...selectedPluginTool })
             : createPitchProposal({ id: `proposal_${randomUUID()}`, objective: input, locale });
           proposals.set(proposal.proposalId, proposal);
         }
@@ -1168,9 +1559,34 @@ export function createPreachermanServer(options = {}) {
           const cancelled = await taskStore.update(run.taskId, (task) => {
             if (!["queued", "running"].includes(task.status)) return;
             task.status = "cancelled";
-            appendTaskEvent(task, { type: "cancelled", stage: "terminal", message: "PitchKit cancelled" });
+            appendTaskEvent(task, { type: "cancelled", stage: "terminal", message: task.source === "airi-plugin" ? "Plugin TaskRun cancelled" : "PitchKit cancelled" });
           });
           json(response, 200, { run: cancelled }, origin);
+          return;
+        }
+        if (!["failed", "cancelled"].includes(run.status)) {
+          json(response, 409, { error: `TaskRun ${run.taskId} cannot be retried from ${run.status}.` }, origin);
+          return;
+        }
+        if (run.source === "airi-plugin") {
+          const body = await readJson(request);
+          const qualifiedName = run.toolCall?.qualifiedName
+            ?? (run.providerPluginId && run.toolCall?.name ? `${run.providerPluginId}::${run.toolCall.name}` : null);
+          if (!qualifiedName) {
+            json(response, 409, { error: "This plugin TaskRun predates retry metadata. Run the tool again from Work or Plugin Manager." }, origin);
+            return;
+          }
+          const parameterKeys = run.toolCall?.parameterSummary?.keys ?? [];
+          if (body.arguments === undefined && parameterKeys.length > 0) {
+            json(response, 409, { error: "Plugin arguments are not persisted. Run the tool again with its original arguments from Work or Plugin Manager." }, origin);
+            return;
+          }
+          const retryResult = await executePluginToolAsTask(qualifiedName, body.arguments ?? {}, {
+            callerPluginId: run.pluginId || "preacherman-runtime",
+            approved: body.approved === true,
+          });
+          const storedRetry = await taskStore.get(retryResult.task.taskId);
+          json(response, 202, { run: { ...storedRetry, runId: storedRetry.taskId }, previousRunId: run.runId }, origin);
           return;
         }
         const retry = await startPitchRun({ proposalId: run.proposalId, objective: run.objective });
@@ -1187,43 +1603,57 @@ export function createPreachermanServer(options = {}) {
   });
 
   const voiceProxy = new WebSocketServer({ noServer: true });
-  voiceProxy.on("connection", async (client, request, kind) => {
-    const config = await runtimeEnv();
-    if (!config.DASHSCOPE_API_KEY) {
-      client.close(1011, "Set DASHSCOPE_API_KEY in .env.local.");
-      return;
-    }
-    if (kind === "asr" && !config.DASHSCOPE_WORKSPACE_ID) {
-      client.close(1011, "Set DASHSCOPE_WORKSPACE_ID in Settings.");
-      return;
-    }
-    const upstream = new WebSocket(kind === "asr" ? dashscopeAsrUrl(config) : dashscopeTtsUrl(), {
-      headers: { Authorization: `Bearer ${config.DASHSCOPE_API_KEY}`, "OpenAI-Beta": "realtime=v1" },
-    });
+  voiceProxy.on("connection", async (client, _request, kind) => {
+    let providerSessionId;
+    let closing = false;
     const pendingMessages = [];
-    const closeBoth = () => {
-      if (upstream.readyState === WebSocket.OPEN || upstream.readyState === WebSocket.CONNECTING) upstream.close();
-      if (client.readyState === WebSocket.OPEN || client.readyState === WebSocket.CONNECTING) client.close();
+    const closeProvider = async (reason) => {
+      if (closing || !providerSessionId) return;
+      closing = true;
+      try { await airiProviderRuntime.closeStream(providerSessionId, { reason }); } catch { /* session is already terminal */ }
     };
-    upstream.on("open", () => {
-      client.send(JSON.stringify({ type: "preacherman.voice.ready", kind }));
-      for (const message of pendingMessages) upstream.send(message.data, { binary: message.isBinary });
-      pendingMessages.length = 0;
-    });
-    upstream.on("message", (data, isBinary) => {
-      if (client.readyState === WebSocket.OPEN) client.send(data, { binary: isBinary });
-    });
-    upstream.on("error", () => {
-      if (client.readyState === WebSocket.OPEN) client.send(JSON.stringify({ type: "preacherman.voice.error", message: "DashScope connection failed." }));
-    });
+    const sendToProvider = async ({ data, isBinary }) => {
+      await airiProviderRuntime.sendStream(providerSessionId, {
+        data: isBinary ? Buffer.from(data).toString("base64") : Buffer.from(data).toString("utf8"),
+        isBinary,
+      });
+    };
     client.on("message", (data, isBinary) => {
-      if (upstream.readyState === WebSocket.OPEN) upstream.send(data, { binary: isBinary });
-      else if (upstream.readyState === WebSocket.CONNECTING) pendingMessages.push({ data, isBinary });
+      const message = { data: Buffer.from(data), isBinary };
+      if (!providerSessionId) pendingMessages.push(message);
+      else void sendToProvider(message).catch(() => {
+        if (client.readyState === WebSocket.OPEN) client.send(JSON.stringify({ type: "preacherman.voice.error", message: "DashScope stream send failed." }));
+      });
     });
-    client.on("close", closeBoth);
-    upstream.on("close", () => {
-      if (client.readyState === WebSocket.OPEN) client.close();
-    });
+    client.on("close", () => { void closeProvider("client-closed"); });
+    try {
+      const session = await airiProviderRuntime.openStream("dashscope", {
+        capability: kind,
+        input: { transport: "preacherman-local-websocket" },
+        onEvent(event) {
+          if (client.readyState !== WebSocket.OPEN) return;
+          if (event?.type === "message") {
+            client.send(event.isBinary ? Buffer.from(event.data, "base64") : event.data, { binary: event.isBinary === true });
+          } else if (event?.type === "error") {
+            client.send(JSON.stringify({ type: "preacherman.voice.error", message: event.message || "DashScope connection failed." }));
+          } else if (event?.type === "close") {
+            client.close();
+          }
+        },
+      });
+      providerSessionId = session.id;
+      if (client.readyState !== WebSocket.OPEN) {
+        await closeProvider("client-closed-before-ready");
+        return;
+      }
+      client.send(JSON.stringify({ type: "preacherman.voice.ready", kind }));
+      for (const message of pendingMessages.splice(0)) await sendToProvider(message);
+    } catch (error) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: "preacherman.voice.error", message: error instanceof Error ? error.message : "DashScope connection failed." }));
+        client.close(1011, "Provider stream unavailable.");
+      }
+    }
   });
 
   server.on("upgrade", (request, socket, head) => {
@@ -1240,7 +1670,9 @@ export function createPreachermanServer(options = {}) {
   return {
     server,
     async listen(port = Number(env.PREACHERMAN_SERVICE_PORT) || DEFAULT_PORT) {
-      await Promise.all([airiMcpRuntime.initialize(), airiPluginRuntime.initialize(), initializeEcosystemRuntimes()]);
+      await initializeEcosystemRuntimes();
+      await Promise.all([airiMcpRuntime.initialize(), airiPluginRuntime.initialize()]);
+      await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
       return new Promise((resolveListen, reject) => {
         server.once("error", reject);
         server.listen(port, "127.0.0.1", () => {
@@ -1251,13 +1683,17 @@ export function createPreachermanServer(options = {}) {
     },
     async close() {
       for (const client of voiceProxy.clients) client.close();
+      await airiPluginRuntime.close();
+      ecosystemFacade.close();
       await Promise.all([
         airiMcpRuntime.close(),
-        airiPluginRuntime.close(),
         airiGameletRuntime.close(),
+        airiProviderRuntime.close(),
         airiMemoryPersonaRuntime.close(),
         airiConnectionRuntime.close(),
         airiComputerVisionRuntime.close(),
+        airiObservabilityRuntime.close(),
+        ...[...pluginMemoryRuntimes.values()].map((runtime) => runtime.close()),
       ]);
       return new Promise((resolveClose, reject) => {
         server.close((error) => error ? reject(error) : resolveClose());

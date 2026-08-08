@@ -14,7 +14,7 @@ export interface AiriGameletDefinition {
 export interface AiriGameletSession {
   readonly id: string;
   readonly gameletId: string;
-  readonly status: "active" | "completed" | "stopped";
+  readonly status: "active" | "paused" | "completed" | "stopped" | "destroyed";
   readonly state: {
     readonly board: readonly ("X" | "O" | null)[];
     readonly currentPlayer: "X" | "O" | null;
@@ -41,15 +41,22 @@ const copy = {
     ready: "Ready for a new game",
     start: "Start game",
     restart: "Play again",
+    pause: "Pause",
+    resume: "Resume",
     stop: "Stop game",
+    destroy: "Destroy",
     starting: "Starting…",
     moving: "Sending move…",
+    pausing: "Pausing…",
+    resuming: "Resuming…",
     stopping: "Stopping…",
-    pauseUnavailable: "Pause and resume are not available yet.",
+    destroying: "Destroying…",
     turn: (player: string) => `${player}'s turn`,
     won: (player: string) => `${player} wins`,
     draw: "Draw game",
     stopped: "Game stopped",
+    paused: "Game paused",
+    destroyed: "Session destroyed",
     board: "Tic-tac-toe board",
     emptyCell: (cell: number) => `Empty cell ${cell + 1}`,
     markedCell: (cell: number, mark: string) => `Cell ${cell + 1}, ${mark}`,
@@ -64,15 +71,22 @@ const copy = {
     ready: "可以开始新棋局",
     start: "开始游戏",
     restart: "再来一局",
+    pause: "暂停",
+    resume: "继续",
     stop: "停止棋局",
+    destroy: "销毁会话",
     starting: "正在开始…",
     moving: "正在提交落子…",
+    pausing: "正在暂停…",
+    resuming: "正在继续…",
     stopping: "正在停止…",
-    pauseUnavailable: "暂停和继续功能尚未提供。",
+    destroying: "正在销毁…",
     turn: (player: string) => `轮到 ${player} 落子`,
     won: (player: string) => `${player} 获胜`,
     draw: "本局平局",
     stopped: "棋局已停止",
+    paused: "棋局已暂停",
+    destroyed: "会话已销毁",
     board: "井字棋棋盘",
     emptyCell: (cell: number) => `空棋格 ${cell + 1}`,
     markedCell: (cell: number, mark: string) => `棋格 ${cell + 1}，${mark}`,
@@ -102,7 +116,7 @@ function parseSession(value: unknown): AiriGameletSession {
   const session = asObject(payload.session, "Gamelet session");
   const state = asObject(session.state, "Gamelet state");
   if (typeof session.id !== "string" || session.gameletId !== GAMELET_ID) throw new Error("Gamelet session identity is invalid.");
-  if (!(["active", "completed", "stopped"] as const).includes(session.status as AiriGameletSession["status"])) {
+  if (!(["active", "paused", "completed", "stopped", "destroyed"] as const).includes(session.status as AiriGameletSession["status"])) {
     throw new Error("Gamelet session status is invalid.");
   }
   if (!Array.isArray(state.board) || state.board.length !== 9 || state.board.some((cell) => cell !== null && cell !== "X" && cell !== "O")) {
@@ -150,10 +164,42 @@ export async function stopAiriGameletSession(
   ));
 }
 
+export async function pauseAiriGameletSession(
+  serviceRequest: AiriGameletServiceRequest,
+  sessionId: string,
+) {
+  return parseSession(await serviceRequest<unknown>(
+    `/api/gamelets/sessions/${encodeURIComponent(sessionId)}/pause`,
+    { method: "POST", body: JSON.stringify({}) },
+  ));
+}
+
+export async function resumeAiriGameletSession(
+  serviceRequest: AiriGameletServiceRequest,
+  sessionId: string,
+) {
+  return parseSession(await serviceRequest<unknown>(
+    `/api/gamelets/sessions/${encodeURIComponent(sessionId)}/resume`,
+    { method: "POST", body: JSON.stringify({}) },
+  ));
+}
+
+export async function destroyAiriGameletSession(
+  serviceRequest: AiriGameletServiceRequest,
+  sessionId: string,
+) {
+  return parseSession(await serviceRequest<unknown>(
+    `/api/gamelets/sessions/${encodeURIComponent(sessionId)}`,
+    { method: "DELETE" },
+  ));
+}
+
 function statusText(session: AiriGameletSession | null, locale: Locale) {
   const text = copy[locale];
   if (!session) return text.ready;
+  if (session.status === "paused") return text.paused;
   if (session.status === "stopped") return text.stopped;
+  if (session.status === "destroyed") return text.destroyed;
   if (session.status === "completed") {
     if (session.state.outcome === "won" && session.state.winner) return text.won(session.state.winner);
     if (session.state.outcome === "draw") return text.draw;
@@ -165,7 +211,7 @@ export function AiriGameletPanel({ locale, serviceRequest }: AiriGameletPanelPro
   const text = copy[locale];
   const [catalogState, setCatalogState] = useState<"loading" | "ready" | "unavailable">("loading");
   const [session, setSession] = useState<AiriGameletSession | null>(null);
-  const [pending, setPending] = useState<"start" | "move" | "stop" | null>(null);
+  const [pending, setPending] = useState<"start" | "move" | "pause" | "resume" | "stop" | "destroy" | null>(null);
   const [error, setError] = useState("");
   const cells = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -215,11 +261,50 @@ export function AiriGameletPanel({ locale, serviceRequest }: AiriGameletPanelPro
   };
 
   const stop = async () => {
-    if (!session || session.status !== "active" || pending) return;
+    if (!session || (session.status !== "active" && session.status !== "paused") || pending) return;
     setPending("stop");
     setError("");
     try {
       setSession(await stopAiriGameletSession(serviceRequest, session.id));
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setPending(null);
+    }
+  };
+
+  const pause = async () => {
+    if (!session || session.status !== "active" || pending) return;
+    setPending("pause");
+    setError("");
+    try {
+      setSession(await pauseAiriGameletSession(serviceRequest, session.id));
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setPending(null);
+    }
+  };
+
+  const resume = async () => {
+    if (!session || session.status !== "paused" || pending) return;
+    setPending("resume");
+    setError("");
+    try {
+      setSession(await resumeAiriGameletSession(serviceRequest, session.id));
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setPending(null);
+    }
+  };
+
+  const destroy = async () => {
+    if (!session || session.status === "destroyed" || pending) return;
+    setPending("destroy");
+    setError("");
+    try {
+      setSession(await destroyAiriGameletSession(serviceRequest, session.id));
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason));
     } finally {
@@ -237,7 +322,13 @@ export function AiriGameletPanel({ locale, serviceRequest }: AiriGameletPanelPro
           ? text.moving
           : pending === "stop"
             ? text.stopping
-            : statusText(session, locale);
+            : pending === "pause"
+              ? text.pausing
+              : pending === "resume"
+                ? text.resuming
+                : pending === "destroy"
+                  ? text.destroying
+                  : statusText(session, locale);
 
   return <section className="demo-airi-gamelet" data-airi-control="plugin.gamelets" aria-labelledby="airi-gamelet-title">
     <header className="demo-airi-gamelet__header">
@@ -248,21 +339,45 @@ export function AiriGameletPanel({ locale, serviceRequest }: AiriGameletPanelPro
       </div>
       <div className="demo-airi-gamelet__actions">
         {session?.status === "active" ? <button
+          className="demo-airi-gamelet__pause"
+          disabled={pending !== null}
+          onClick={() => void pause()}
+          type="button"
+        >
+          {pending === "pause" ? text.pausing : text.pause}
+        </button> : null}
+        {session?.status === "paused" ? <button
+          className="demo-airi-gamelet__resume"
+          disabled={pending !== null}
+          onClick={() => void resume()}
+          type="button"
+        >
+          {pending === "resume" ? text.resuming : text.resume}
+        </button> : null}
+        {session?.status === "active" || session?.status === "paused" ? <button
           className="demo-airi-gamelet__stop"
           disabled={pending !== null}
           onClick={() => void stop()}
           type="button"
         >
           {pending === "stop" ? text.stopping : text.stop}
-        </button> : <button
+        </button> : null}
+        {!session || session.status === "completed" || session.status === "stopped" || session.status === "destroyed" ? <button
           className="demo-airi-gamelet__start"
           disabled={catalogState !== "ready" || pending !== null}
           onClick={() => void start()}
           type="button"
         >
           {pending === "start" ? text.starting : session ? text.restart : text.start}
-        </button>}
-        <small>{text.pauseUnavailable}</small>
+        </button> : null}
+        {session && session.status !== "destroyed" ? <button
+          className="demo-airi-gamelet__destroy"
+          disabled={pending !== null}
+          onClick={() => void destroy()}
+          type="button"
+        >
+          {pending === "destroy" ? text.destroying : text.destroy}
+        </button> : null}
       </div>
     </header>
 

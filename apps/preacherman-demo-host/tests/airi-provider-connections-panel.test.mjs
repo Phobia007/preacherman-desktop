@@ -7,11 +7,12 @@ const packageRoot = join(import.meta.dirname, "..");
 const componentFile = join(packageRoot, "src", "airi", "AiriProviderConnectionsPanel.tsx");
 const stylesFile = join(packageRoot, "src", "airi", "airi-provider-connections-panel.css");
 
-test("provider connection loader reads both live service endpoints", async () => {
+test("provider connection loader reads the live catalog, connection, and settings endpoints", async () => {
   const component = await readFile(componentFile, "utf8");
   assert.match(component, /Promise\.all\(\[/);
   assert.match(component, /serviceRequest<[^>]+>\("\/api\/providers\/catalog"\)/);
   assert.match(component, /serviceRequest<[^>]+>\("\/api\/connections"\)/);
+  assert.match(component, /serviceRequest<ProviderSettingsStatus>\("\/api\/settings\/providers"\)/);
   assert.match(component, /providers: asArray<ProviderSnapshot>/);
   assert.match(component, /connections: asArray<ConnectionSnapshot>/);
 });
@@ -41,7 +42,7 @@ test("panel groups the complete commercial catalog with bilingual and accessible
   assert.match(component, /role="alert"/);
   assert.match(component, /aria-busy=\{loading\}/);
   assert.match(component, /disabled=\{loading\}/);
-  assert.doesNotMatch(component, /method:\s*"(?:PUT|DELETE)"/);
+  assert.doesNotMatch(component, /method:\s*"DELETE"/);
 });
 
 test("ready provider tests require explicit server confirmation and stay disabled otherwise", async () => {
@@ -68,8 +69,8 @@ test("connection actions follow live status and accept only confirmed response s
   assert.match(component, /updated\.status !== expectedStatus/);
   assert.match(component, /connections: current\.connections\.map/);
   assert.match(component, /\{ operation: action, phase: "running", message: runningMessage \}/);
-  assert.match(component, /aria-busy=\{busy && actionStatus\?\.operation === "test"\}/);
-  assert.match(component, /aria-busy=\{busy && actionStatus\?\.operation === "connect"\}/);
+  assert.match(component, /aria-busy=\{actionBusy && actionStatus\?\.operation === "test"\}/);
+  assert.match(component, /aria-busy=\{actionBusy && actionStatus\?\.operation === "connect"\}/);
   assert.match(component, /connection\?\.status === "connected" \? <button/);
   assert.match(component, /disabled=\{!canRunConnectionAction\(connection\?\.status, "test"\) \|\| busy\}/);
   assert.match(component, /disabled=\{!canRunConnectionAction\(connection\?\.status, "connect"\) \|\| busy\}/);
@@ -78,6 +79,54 @@ test("connection actions follow live status and accept only confirmed response s
   assert.match(component, /role=\{actionStatus\.phase === "failed" \? "alert" : "status"\}/);
   assert.match(styles, /__connection-action-button/);
   assert.match(styles, /__connection-action-result\[data-state="failed"\]/);
+});
+
+test("provider settings never rehydrate secrets and run existing real connection tests", async () => {
+  const [component, styles] = await Promise.all([readFile(componentFile, "utf8"), readFile(stylesFile, "utf8")]);
+  assert.match(component, /type="password"/);
+  assert.match(component, /deepseekConfigured: boolean/);
+  assert.match(component, /ttsConfigured: boolean/);
+  assert.match(component, /method: "PUT", body: JSON\.stringify\(next\)/);
+  assert.match(component, /serviceRequest<ProviderSettingsTestResult>\("\/api\/settings\/test", \{ method: "POST"/);
+  assert.match(component, /setDeepseekKey\(""\)/);
+  assert.match(component, /setDashscopeKey\(""\)/);
+  assert.match(component, /setWorkspaceId\(""\)/);
+  assert.doesNotMatch(component, /setDeepseekKey\([^)]*(?:response|settings)/);
+  assert.doesNotMatch(component, /setDashscopeKey\([^)]*(?:response|settings)/);
+  assert.match(component, /密钥内容不会返回，也不会再次显示/);
+  assert.match(styles, /__configuration-body input:focus-visible/);
+  assert.match(styles, /__configuration-body dd\[data-state="failed"\]/);
+});
+
+test("each external connection has a secret-safe configuration form", async () => {
+  const [component, styles] = await Promise.all([readFile(componentFile, "utf8"), readFile(stylesFile, "utf8")]);
+  assert.match(component, /discord: \[\{ name: "botToken", type: "password" \}\]/);
+  assert.match(component, /youtube: \[\{ name: "videoId", type: "text" \}, \{ name: "accessToken", type: "password" \}\]/);
+  assert.match(component, /minecraft: \[\{ name: "host", type: "text" \}, \{ name: "port", type: "number" \}, \{ name: "password", type: "password" \}\]/);
+  assert.match(component, /`\/api\/connections\/\$\{encodeURIComponent\(connection\.id\)\}\/configure`/);
+  assert.match(component, /body: JSON\.stringify\(\{ configuration \}\)/);
+  assert.match(component, /connection\.configuration\.secrets\[field\.name\] === true/);
+  assert.match(component, /value=\{draft\[field\.name\] \|\| ""\}/);
+  assert.match(component, /autoComplete=\{field\.type === "password" \? "new-password" : "off"\}/);
+  assert.match(component, /setConnectionDrafts\(\{\}\)/);
+  assert.doesNotMatch(component, /value=\{connection\.configuration/);
+  assert.match(component, /setConnectionDrafts\(\(current\) => \(\{ \.\.\.current, \[connection\.id\]: \{\} \}\)\)/);
+  assert.match(component, /status === "external-runtime-required"[\s\S]*?text\.connectionNeedsRuntime/);
+  assert.match(component, /密钥只发送到本地运行时，之后不会返回/);
+  assert.match(styles, /__connection-configuration input:focus-visible/);
+  assert.match(styles, /__connection-configuration p\[data-state="failed"\]/);
+});
+
+test("provider cards distinguish declared models from provider-verified models", async () => {
+  const [component, styles] = await Promise.all([readFile(componentFile, "utf8"), readFile(stylesFile, "utf8")]);
+  assert.match(component, /readonly source: "declared" \| "provider"/);
+  assert.match(component, /Array\.isArray\(response\.result\.models\)/);
+  assert.match(component, /models: response\.result\?\.models/);
+  assert.match(component, /model\.source === "provider" \? text\.providerModel : text\.declaredModel/);
+  assert.match(component, /服务商已验证/);
+  assert.match(component, /Declared/);
+  assert.match(styles, /__models > summary:focus-visible/);
+  assert.match(styles, /__models code/);
 });
 
 test("standalone panel styles use the shared light and dark theme contract", async () => {

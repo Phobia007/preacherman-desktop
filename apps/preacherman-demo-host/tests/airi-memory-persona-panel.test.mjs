@@ -33,6 +33,9 @@ const memory = {
   owner: "preacherman-runtime",
   personaId: persona.id,
   namespace: "work",
+  boundary: "persona",
+  sessionId: null,
+  sensitivity: "private",
   text: "Ship the demo",
   tags: [],
   redacted: false,
@@ -59,8 +62,8 @@ test("request helpers call the four real Memory/Persona service routes", async (
 
   assert.equal((await loadAiriPersonas(request)).selected.id, persona.id);
   assert.equal((await selectAiriPersona(request, persona.id)).id, persona.id);
-  assert.equal((await rememberAiriMemory(request, { personaId: persona.id, namespace: "work", text: "Ship the demo" })).id, memory.id);
-  assert.equal((await recallAiriMemories(request, { personaId: persona.id, namespace: "work", query: "demo", limit: 20 }))[0].id, memory.id);
+  assert.equal((await rememberAiriMemory(request, { personaId: persona.id, namespace: "work", boundary: "persona", text: "Ship the demo" })).id, memory.id);
+  assert.equal((await recallAiriMemories(request, { personaId: persona.id, namespace: "work", boundary: "persona", query: "demo", limit: 20 }))[0].id, memory.id);
 
   assert.deepEqual(calls.map(([path]) => path), [
     "/api/personas",
@@ -74,8 +77,8 @@ test("request helpers call the four real Memory/Persona service routes", async (
     assert.equal(init.headers["content-type"], "application/json");
   }
   assert.deepEqual(JSON.parse(calls[1][1].body), {});
-  assert.deepEqual(JSON.parse(calls[2][1].body), { personaId: persona.id, namespace: "work", text: "Ship the demo" });
-  assert.deepEqual(JSON.parse(calls[3][1].body), { personaId: persona.id, namespace: "work", query: "demo", limit: 20 });
+  assert.deepEqual(JSON.parse(calls[2][1].body), { personaId: persona.id, namespace: "work", boundary: "persona", text: "Ship the demo" });
+  assert.deepEqual(JSON.parse(calls[3][1].body), { personaId: persona.id, namespace: "work", boundary: "persona", query: "demo", limit: 20 });
 });
 
 test("malformed service results never become apparent success", async (t) => {
@@ -83,10 +86,10 @@ test("malformed service results never become apparent success", async (t) => {
   await assert.rejects(loadAiriPersonas(async () => ({ selected: null })), /persona list/i);
   await assert.rejects(selectAiriPersona(async () => ({ selected: null }), persona.id), /invalid response/i);
   await assert.rejects(rememberAiriMemory(async () => ({ memory: { id: "incomplete" } }), {
-    personaId: persona.id, namespace: "work", text: "demo",
+    personaId: persona.id, namespace: "work", boundary: "persona", text: "demo",
   }), /memory time metadata|invalid memory/i);
   await assert.rejects(recallAiriMemories(async () => ({ memories: null }), {
-    personaId: persona.id, namespace: "work", query: "", limit: 20,
+    personaId: persona.id, namespace: "work", boundary: "persona", query: "", limit: 20,
   }), /memory list/i);
 });
 
@@ -102,6 +105,9 @@ test("panel markup is bilingual, accessible, and does not collect restricted fie
   assert.match(english, /for="airi-memory-namespace"/);
   assert.match(english, /for="airi-memory-content"/);
   assert.match(english, /for="airi-memory-query"/);
+  assert.match(english, /for="airi-memory-boundary"/);
+  assert.match(english, /Memory boundary/);
+  assert.match(chinese, /记忆边界/);
   assert.match(english, /role="note"/);
   const source = await readFile(componentPath, "utf8");
   assert.match(source, /\/api\/personas\/\$\{encodeURIComponent\(personaId\)\}\/select/);
@@ -111,6 +117,7 @@ test("panel markup is bilingual, accessible, and does not collect restricted fie
   assert.doesNotMatch(english, /type="file"/);
   assert.doesNotMatch(english, /<audio/i);
   assert.doesNotMatch(english, /name="(?:credential|audio|token|password|apiKey)"/i);
+  assert.match(english, /memory calls are audited without storing their text/);
 });
 
 test("time labels are localized without discarding exact temporal metadata", async (t) => {
@@ -124,6 +131,8 @@ test("time labels are localized without discarding exact temporal metadata", asy
   assert.match(source, /memory\.temporal\.timezone/);
   assert.match(source, /memory\.temporal\.ageMs/);
   assert.match(source, /memory\.temporal\.isExpired/);
+  assert.match(source, /memory\.boundary/);
+  assert.match(source, /memory\.sessionId/);
 });
 
 test("standalone styles honor both themes through semantic variables only", async () => {

@@ -23,13 +23,16 @@ export interface TaskCancellationAdapter {
 
 type TranscriptListener = (text: string) => void;
 type SpeechListener = (lifecycle: SpeechLifecycle) => void;
+type ConversationEpochListener = (epoch: number) => void;
 
 export class LiveCoordinator {
   private presentationAdapter: PresentationAdapter | null = null;
   private taskCancellationAdapter: TaskCancellationAdapter | null = null;
   private readonly transcriptListeners = new Set<TranscriptListener>();
   private readonly speechListeners = new Set<SpeechListener>();
+  private readonly conversationEpochListeners = new Set<ConversationEpochListener>();
   private speechLifecycle: SpeechLifecycle = "idle";
+  private conversationEpoch = 0;
   private interactionEpoch = 0;
   private readonly presentationRuntime = createPresentationRuntime<SpeechRequest>({
     synthesize: async (segment) => ({
@@ -99,10 +102,34 @@ export class LiveCoordinator {
     return () => this.speechListeners.delete(listener);
   }
 
-  deliverFinalTranscript(text: string): void {
+  getConversationEpoch(): number {
+    return this.conversationEpoch;
+  }
+
+  isConversationEpochCurrent(epoch: number): boolean {
+    return epoch === this.conversationEpoch;
+  }
+
+  beginConversationEpoch(): number {
+    this.conversationEpoch += 1;
+    this.interactionEpoch += 1;
+    this.presentationRuntime.interruptPresentation("new_conversation");
+    this.presentationAdapter?.stopSpeech("new_request");
+    this.reportSpeechLifecycle("idle");
+    for (const listener of this.conversationEpochListeners) listener(this.conversationEpoch);
+    return this.conversationEpoch;
+  }
+
+  onConversationEpoch(listener: ConversationEpochListener): () => void {
+    this.conversationEpochListeners.add(listener);
+    return () => this.conversationEpochListeners.delete(listener);
+  }
+
+  deliverFinalTranscript(text: string, conversationEpoch = this.conversationEpoch): boolean {
     const content = text.trim();
-    if (!content) return;
+    if (!content || !this.isConversationEpochCurrent(conversationEpoch)) return false;
     for (const listener of this.transcriptListeners) listener(content);
+    return true;
   }
 
   onFinalTranscript(listener: TranscriptListener): () => void {

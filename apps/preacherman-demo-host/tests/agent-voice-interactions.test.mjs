@@ -102,11 +102,15 @@ test("the Live Coordinator keeps speech, transcript, and task cancellation in se
   assert.match(coordinator, /generationId/);
   assert.match(coordinator, /audioStreamId/);
   assert.match(coordinator, /interactionEpoch/);
+  assert.match(coordinator, /beginConversationEpoch/);
+  assert.match(coordinator, /onConversationEpoch/);
+  assert.match(coordinator, /isConversationEpochCurrent/);
   assert.match(context, /LiveCoordinatorProvider/);
   assert.match(app, /<LiveCoordinatorProvider>/);
 
   assert.match(voice, /labels\.stopSpeaking/);
   assert.match(consoleSource, /labels\.stopTask/);
+  assert.match(consoleSource, /coordinator\.beginConversationEpoch\(\)/);
   assert.doesNotMatch(voice, /preacherman:(?:speak|voice-transcript|tts-finished)/);
   assert.doesNotMatch(consoleSource, /preacherman:(?:speak|voice-transcript|tts-finished)/);
 });
@@ -143,4 +147,34 @@ test("the coordinator routes speech through the AIRI-derived Presentation Runtim
   assert.match(source, /openGeneration/);
   assert.match(source, /interruptPresentation/);
   assert.match(consoleSource, /\/api\/tasks\/\$\{taskRunId\}\/commands/);
+});
+
+test("a new conversation advances the epoch and rejects stale transcript or presentation work", async (t) => {
+  const { LiveCoordinator } = await loadCoordinator(t);
+  const coordinator = new LiveCoordinator();
+  const calls = [];
+  const transcripts = [];
+  const epochs = [];
+  coordinator.connectPresentationAdapter({
+    speak: async (request) => { calls.push(["speak", request.interactionEpoch]); },
+    stopSpeech: (reason) => calls.push(["stop-speech", reason]),
+  });
+  coordinator.onFinalTranscript((transcript) => transcripts.push(transcript));
+  coordinator.onConversationEpoch((epoch) => epochs.push(epoch));
+
+  const oldAsrEpoch = coordinator.getConversationEpoch();
+  assert.equal(coordinator.requestSpeech("Old reply", "en"), true);
+  assert.equal(coordinator.getConversationEpoch(), oldAsrEpoch);
+  await new Promise((resolve) => setImmediate(resolve));
+  coordinator.reportSpeechLifecycle("playing");
+  const nextEpoch = coordinator.beginConversationEpoch();
+
+  assert.equal(nextEpoch > oldAsrEpoch, true);
+  assert.deepEqual(epochs, [nextEpoch]);
+  assert.equal(coordinator.deliverFinalTranscript("stale transcript", oldAsrEpoch), false);
+  assert.equal(coordinator.deliverFinalTranscript("current transcript", nextEpoch), true);
+  assert.deepEqual(transcripts, ["current transcript"]);
+  assert.deepEqual(calls.map(([scope]) => scope), ["speak", "stop-speech"]);
+  assert.equal(calls[1][1], "new_request");
+  assert.equal(coordinator.getSpeechLifecycle(), "idle");
 });

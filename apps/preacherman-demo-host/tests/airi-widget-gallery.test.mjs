@@ -29,7 +29,11 @@ function widget(id = "task-card") {
     pluginId: "demo-plugin",
     revision: 2,
     phase: "ready",
-    manifest: { title: "Task card", description: "Current work", placement: "work", version: "1.1.0" },
+    placement: "work",
+    enabled: true,
+    error: null,
+    permissions: { requested: [], granted: [], missing: [] },
+    manifest: { title: "Task card", description: "Current work", placement: "work", permissions: [], version: "1.1.0" },
     schema: {
       type: "container",
       orientation: "vertical",
@@ -44,7 +48,7 @@ function widget(id = "task-card") {
   };
 }
 
-test("loads and validates widgets through only the injected GET service request", async (t) => {
+test("loads, validates, and filters widgets through only the injected GET request", async (t) => {
   const { loadAiriWidgets } = await loadGallery(t);
   const calls = [];
   const result = await loadAiriWidgets(async (path, init) => {
@@ -56,12 +60,29 @@ test("loads and validates widgets through only the injected GET service request"
   assert.equal(calls[0][1].method, "GET");
   assert.deepEqual(result.map(({ id }) => id), ["a-card", "z-card"]);
   assert.equal(result[0].schema.children[3].action.event, "open-task");
+
+  const legacy = widget("legacy-card");
+  delete legacy.placement;
+  delete legacy.enabled;
+  delete legacy.error;
+  delete legacy.permissions;
+  delete legacy.manifest.permissions;
+  const [migrated] = await loadAiriWidgets(async () => ({ widgets: [legacy] }));
+  assert.equal(migrated.placement, "work");
+  assert.equal(migrated.enabled, true);
+  assert.deepEqual(migrated.permissions.missing, []);
+
+  const settingsOnly = await loadAiriWidgets(async () => ({
+    widgets: [{ ...widget("settings-card"), placement: "settings" }, widget("work-card")],
+  }), { placement: "settings" });
+  assert.deepEqual(settingsOnly.map(({ id }) => id), ["settings-card"]);
 });
 
 test("rejects invalid and executable-looking response shapes before rendering", async (t) => {
   const { loadAiriWidgets } = await loadGallery(t);
   await assert.rejects(loadAiriWidgets(async () => ({ widgets: [{ ...widget(), schema: { type: "script", source: "alert(1)" } }] })), /Unsupported widget node/);
   await assert.rejects(loadAiriWidgets(async () => ({ widgets: [{ ...widget(), schema: { type: "button", label: "Run", action: { type: "javascript", event: "run" } } }] })), /button action is invalid/);
+  await assert.rejects(loadAiriWidgets(async () => ({ widgets: [{ ...widget(), placement: "global" }] })), /placement is invalid/);
   await assert.rejects(loadAiriWidgets(async () => ({ widgets: null })), /invalid response/);
 });
 
@@ -76,7 +97,28 @@ test("recursive renderer escapes text and emits only through the supplied local 
   assert.deepEqual(emitted, []);
 });
 
-test("gallery is bilingual, has complete states, and never executes widget code", async () => {
+test("card renders permission, disabled, and error states without mounting actions", async (t) => {
+  const { AiriWidgetCard } = await loadGallery(t);
+  const permission = {
+    ...widget("secure-card"), phase: "permission-required", placement: "settings",
+    permissions: { requested: ["ledger:read"], granted: [], missing: ["ledger:read"] },
+  };
+  const permissionMarkup = renderToStaticMarkup(createElement(AiriWidgetCard, { locale: "en", widget: permission }));
+  assert.match(permissionMarkup, /data-placement="settings"/);
+  assert.match(permissionMarkup, /Host permission is required/);
+  assert.match(permissionMarkup, /ledger:read/);
+  assert.doesNotMatch(permissionMarkup, /<button/);
+
+  const disabledMarkup = renderToStaticMarkup(createElement(AiriWidgetCard, { locale: "en", widget: { ...widget("disabled-card"), phase: "disabled", enabled: false } }));
+  assert.match(disabledMarkup, /aria-disabled="true"/);
+  assert.match(disabledMarkup, /disabled by the host/);
+
+  const errorMarkup = renderToStaticMarkup(createElement(AiriWidgetCard, { locale: "en", widget: { ...widget("error-card"), phase: "error", error: "Adapter unavailable" } }));
+  assert.match(errorMarkup, /role="alert"/);
+  assert.match(errorMarkup, /Adapter unavailable/);
+});
+
+test("gallery is bilingual, has complete runtime states, and never executes widget code", async () => {
   const source = await readFile(componentPath, "utf8");
   assert.match(source, /Widget gallery/);
   assert.match(source, /组件展廊/);
@@ -89,17 +131,20 @@ test("gallery is bilingual, has complete states, and never executes widget code"
   assert.match(source, /No plugin action was executed/);
   assert.match(source, /没有执行任何插件操作/);
   assert.match(source, /setEmitted/);
+  for (const placement of ["home", "work", "lab", "gallery", "ledger", "settings"]) assert.match(source, new RegExp(placement));
+  for (const state of ["loading", "permission-required", "disabled", "error"]) assert.match(source, new RegExp(state));
   assert.doesNotMatch(source, /dangerouslySetInnerHTML|\beval\s*\(|new Function|\.innerHTML\s*=/);
   assert.doesNotMatch(source, /\bfetch\s*\(/);
 });
 
-test("independent CSS statically covers light and dark appearances with semantic colors", async () => {
+test("independent CSS covers both appearances and every runtime state with semantic colors", async () => {
   const styles = await readFile(stylesPath, "utf8");
   assert.match(styles, /html\[data-appearance="light"\]/);
   assert.match(styles, /html\[data-appearance="dark"\]/);
   for (const token of ["text", "muted", "border", "border-strong", "surface", "surface-elevated", "focus", "loading", "error", "control-hover", "control-hover-bg"]) {
     assert.match(styles, new RegExp(`var\\(--demo-theme-${token}\\)`));
   }
+  for (const state of ["loading", "permission-required", "disabled", "error"]) assert.match(styles, new RegExp(state));
   assert.doesNotMatch(styles, /#[0-9a-f]{3,8}\b/i);
   assert.doesNotMatch(styles, /\brgba?\(/i);
   assert.doesNotMatch(styles, /\b(?:white|black|red|blue|green)\b/i);

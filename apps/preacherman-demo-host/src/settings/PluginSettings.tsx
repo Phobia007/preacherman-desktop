@@ -14,6 +14,8 @@ interface PluginSession {
   readonly permissions?: readonly string[];
   readonly sourceDirectory?: string;
   readonly kits?: readonly string[];
+  readonly usedKits?: readonly string[];
+  readonly providedKits?: readonly string[];
   readonly bindings?: readonly string[];
   readonly error?: string | null;
   readonly manifest: {
@@ -190,8 +192,9 @@ export function PluginSettings({ locale, serviceRequest }: PluginSettingsProps) 
         {plugin.sourceDirectory ? <code className="demo-settings__plugin-source" title={plugin.sourceDirectory}>{plugin.sourceDirectory}</code> : <small>{chinese ? "内置插件" : "Built-in plugin"}</small>}
         <div className="demo-settings__plugin-contracts">
           <div><span>{chinese ? "权限 Permissions" : "Permissions"}</span><p>{plugin.permissions?.length ? plugin.permissions.join(" · ") : (chinese ? "无宿主权限" : "No host permissions")}</p></div>
-          <div><span>{chinese ? "能力包 Kits" : "Kits"}</span><p>{plugin.kits?.length ? plugin.kits.join(" · ") : (chinese ? "未声明" : "None declared")}</p></div>
-          <div><span>{chinese ? "绑定 Bindings" : "Bindings"}</span><p>{plugin.bindings?.length ? plugin.bindings.join(" · ") : (chinese ? "未声明" : "None declared")}</p></div>
+          <div><span>{chinese ? "使用的能力包" : "Used Kits"}</span><p>{(plugin.usedKits ?? plugin.kits)?.length ? (plugin.usedKits ?? plugin.kits)?.join(" · ") : (chinese ? "未使用" : "None used")}</p></div>
+          <div><span>{chinese ? "提供的能力包" : "Provided Kits"}</span><p>{plugin.providedKits?.length ? plugin.providedKits.join(" · ") : (chinese ? "未提供" : "None provided")}</p></div>
+          <div><span>{chinese ? "自有绑定" : "Owned Bindings"}</span><p>{plugin.bindings?.length ? plugin.bindings.join(" · ") : (chinese ? "未声明" : "None declared")}</p></div>
         </div>
         {plugin.error ? <p className="demo-settings__plugin-error" role="alert">{plugin.error}</p> : null}
         <div className="demo-settings__mcp-actions">

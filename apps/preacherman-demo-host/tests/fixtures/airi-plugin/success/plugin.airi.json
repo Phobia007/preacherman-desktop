@@ -4,11 +4,18 @@
   "name": "fixture-plugin",
   "permissions": [
     "tasks:read",
-    "ledger:write"
+    "ledger:write",
+    "conversations:recent:read"
   ],
   "tools": [
     {
       "name": "echo"
+    },
+    {
+      "name": "binding_task"
+    },
+    {
+      "name": "recent_conversations"
     }
   ],
   "entrypoints": {

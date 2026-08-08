@@ -6,9 +6,20 @@ export interface ConversationLedgerEntry { readonly id: string; readonly locale:
 export interface TaskLedgerEntry {
   readonly taskId: string;
   readonly objective: string;
+  readonly pluginId?: string;
+  readonly providerPluginId?: string;
   readonly status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
   readonly updatedAt: string;
   readonly events: readonly { readonly stage: string; readonly message: string }[];
+  readonly toolCall?: {
+    readonly name: string;
+    readonly qualifiedName?: string;
+    readonly parameterSummary?: {
+      readonly keys: readonly string[];
+      readonly byteLength: number;
+    };
+    readonly structuredResult?: unknown;
+  };
   readonly artifact: {
     readonly name: string;
     readonly path: string;

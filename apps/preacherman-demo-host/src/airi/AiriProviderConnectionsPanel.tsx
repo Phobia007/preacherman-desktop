@@ -4,6 +4,13 @@ import "./airi-provider-connections-panel.css";
 
 const CAPABILITIES = ["chat", "asr", "tts", "vision", "image"] as const;
 const CONNECTIONS = ["discord", "telegram", "youtube", "minecraft", "factorio"] as const;
+const CONNECTION_CONFIGURATION_FIELDS = {
+  discord: [{ name: "botToken", type: "password" }],
+  telegram: [{ name: "botToken", type: "password" }],
+  youtube: [{ name: "videoId", type: "text" }, { name: "accessToken", type: "password" }],
+  minecraft: [{ name: "host", type: "text" }, { name: "port", type: "number" }, { name: "password", type: "password" }],
+  factorio: [{ name: "host", type: "text" }, { name: "port", type: "number" }, { name: "password", type: "password" }],
+} as const;
 
 type Capability = typeof CAPABILITIES[number];
 type CommercialState = "ready" | "configuration-required" | "external-runtime-required" | "adapter-required" | "error";
@@ -14,11 +21,19 @@ interface ProviderCapabilityStatus {
   readonly requirements?: readonly { readonly key: string; readonly label: string; readonly required?: boolean; readonly configured: boolean }[];
 }
 
+interface ProviderModel {
+  readonly id: string;
+  readonly label: string;
+  readonly capability: Capability;
+  readonly source: "declared" | "provider";
+}
+
 interface ProviderSnapshot {
   readonly id: string;
   readonly label: string;
   readonly adapter: { readonly pluginId: string; readonly capabilities: readonly string[] } | null;
   readonly capabilities: Readonly<Partial<Record<Capability, ProviderCapabilityStatus>>>;
+  readonly models?: readonly ProviderModel[];
 }
 
 interface ConnectionSnapshot {
@@ -29,6 +44,10 @@ interface ConnectionSnapshot {
   readonly configured: boolean;
   readonly connected: boolean;
   readonly adapter: { readonly pluginId: string } | null;
+  readonly configuration: {
+    readonly values: Readonly<Record<string, string | number>>;
+    readonly secrets: Readonly<Record<string, boolean>>;
+  };
   readonly lastError?: { readonly message?: string } | null;
 }
 
@@ -36,6 +55,7 @@ interface ProviderTestResult {
   readonly state: CommercialState;
   readonly ok: boolean;
   readonly message?: string;
+  readonly models?: readonly ProviderModel[];
 }
 
 interface ProviderTestStatus {
@@ -51,9 +71,28 @@ interface ConnectionActionStatus {
   readonly message: string;
 }
 
+interface ConnectionConfigurationStatus {
+  readonly phase: "saving" | "succeeded" | "failed";
+  readonly message: string;
+}
+
+interface ProviderSettingsStatus {
+  readonly deepseekConfigured: boolean;
+  readonly dashscopeWorkspaceConfigured: boolean;
+  readonly asrConfigured: boolean;
+  readonly ttsConfigured: boolean;
+}
+
+interface ProviderSettingsTestResult {
+  readonly deepseek: { readonly configured: boolean; readonly ok: boolean; readonly message: string };
+  readonly asr: { readonly configured: boolean; readonly ok: boolean; readonly message: string };
+  readonly tts: { readonly configured: boolean; readonly ok: boolean; readonly message: string };
+}
+
 export interface AiriProviderConnectionsData {
   readonly providers: readonly ProviderSnapshot[];
   readonly connections: readonly ConnectionSnapshot[];
+  readonly settings: ProviderSettingsStatus;
 }
 
 export interface AiriProviderConnectionsPanelProps {
@@ -95,6 +134,36 @@ const copy = {
     connectionActionFailed: "The connection did not confirm the requested state.",
     configureFirst: "Add the required configuration in Settings before testing or connecting.",
     runtimeFirst: "Register the external runtime adapter before testing or connecting.",
+    connectionConfiguration: "Configuration",
+    connectionConfigurationHint: "Secrets are sent to the local runtime and never returned.",
+    configureConnection: "Save connection configuration",
+    configuringConnection: "Saving…",
+    connectionConfigured: "Configuration saved. Connection is ready for testing.",
+    connectionNeedsRuntime: "Configuration saved. An external protocol adapter is still required.",
+    connectionIncomplete: "Configuration saved, but required fields are still missing.",
+    connectionConfigureFailed: "Connection configuration could not be saved.",
+    enterConnectionConfiguration: "Enter at least one new connection value.",
+    fieldConfigured: "Configured; leave blank to keep it",
+    connectionFields: { botToken: "Bot token", videoId: "Video ID", accessToken: "Access token", host: "Host", port: "Port", password: "RCON password" },
+    configuration: "Provider configuration",
+    configurationHint: "Saved by the local service. Secret values are never returned or shown again.",
+    deepseekKey: "DeepSeek API key",
+    dashscopeKey: "DashScope API key",
+    workspaceId: "DashScope workspace ID (Beijing)",
+    configuredPlaceholder: "Configured; leave blank to keep it",
+    keyPlaceholder: "Enter a new key",
+    workspacePlaceholder: "Enter the Model Studio workspace ID",
+    saveAndTest: "Save & run connection tests",
+    savingAndTesting: "Saving & testing…",
+    enterConfiguration: "Enter at least one new configuration value.",
+    settingsPassed: "Settings saved. Configured connections passed.",
+    settingsFailed: "Settings saved, but one or more configured connections failed.",
+    settingsUntested: "Settings saved. No complete connection is configured for testing yet.",
+    settingsSaveFailed: "Provider settings could not be saved.",
+    settingsTestFailed: "Settings were saved, but connection tests could not run.",
+    models: "Models",
+    declaredModel: "Declared",
+    providerModel: "Verified by provider",
     connected: "Connected",
     disconnected: "Ready · disconnected",
     states: {
@@ -139,6 +208,36 @@ const copy = {
     connectionActionFailed: "连接未确认目标状态。",
     configureFirst: "请先在设置中补齐必需配置，再测试或连接。",
     runtimeFirst: "请先注册外部运行时适配器，再测试或连接。",
+    connectionConfiguration: "连接配置",
+    connectionConfigurationHint: "密钥只发送到本地运行时，之后不会返回。",
+    configureConnection: "保存连接配置",
+    configuringConnection: "正在保存…",
+    connectionConfigured: "配置已保存，可以开始测试连接。",
+    connectionNeedsRuntime: "配置已保存，仍需外部协议适配器。",
+    connectionIncomplete: "配置已保存，但仍缺少必需字段。",
+    connectionConfigureFailed: "无法保存连接配置。",
+    enterConnectionConfiguration: "请至少输入一项新的连接配置。",
+    fieldConfigured: "已配置；留空可保留",
+    connectionFields: { botToken: "机器人令牌", videoId: "视频 ID", accessToken: "访问令牌", host: "主机", port: "端口", password: "RCON 密码" },
+    configuration: "服务商配置",
+    configurationHint: "由本地服务保存；密钥内容不会返回，也不会再次显示。",
+    deepseekKey: "DeepSeek API 密钥",
+    dashscopeKey: "DashScope API 密钥",
+    workspaceId: "DashScope 工作空间 ID（北京）",
+    configuredPlaceholder: "已配置；留空可保留",
+    keyPlaceholder: "输入新密钥",
+    workspacePlaceholder: "输入百炼工作空间 ID",
+    saveAndTest: "保存并运行连接测试",
+    savingAndTesting: "正在保存并测试…",
+    enterConfiguration: "请至少输入一项新的配置。",
+    settingsPassed: "配置已保存，已配置的连接测试通过。",
+    settingsFailed: "配置已保存，但一个或多个连接测试失败。",
+    settingsUntested: "配置已保存，目前尚无完整连接可供测试。",
+    settingsSaveFailed: "无法保存服务商配置。",
+    settingsTestFailed: "配置已保存，但无法运行连接测试。",
+    models: "模型",
+    declaredModel: "目录声明",
+    providerModel: "服务商已验证",
     connected: "已连接",
     disconnected: "就绪 · 未连接",
     states: {
@@ -158,13 +257,15 @@ function asArray<T>(value: unknown, label: string): readonly T[] {
 }
 
 export async function loadAiriProviderConnections(serviceRequest: ProviderServiceRequest): Promise<AiriProviderConnectionsData> {
-  const [providerResponse, connectionResponse] = await Promise.all([
+  const [providerResponse, connectionResponse, settings] = await Promise.all([
     serviceRequest<{ readonly providers?: unknown }>("/api/providers/catalog"),
     serviceRequest<{ readonly connections?: unknown }>("/api/connections"),
+    serviceRequest<ProviderSettingsStatus>("/api/settings/providers"),
   ]);
   return {
     providers: asArray<ProviderSnapshot>(providerResponse.providers, "Provider catalog"),
     connections: asArray<ConnectionSnapshot>(connectionResponse.connections, "Connections"),
+    settings,
   };
 }
 
@@ -197,17 +298,31 @@ function StatusBadge({ state, label }: { readonly state: CommercialState; readon
 export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriProviderConnectionsPanelProps) {
   const text = copy[locale];
   const titleId = useId();
-  const [data, setData] = useState<AiriProviderConnectionsData>({ providers: [], connections: [] });
+  const [data, setData] = useState<AiriProviderConnectionsData>({
+    providers: [],
+    connections: [],
+    settings: { deepseekConfigured: false, dashscopeWorkspaceConfigured: false, asrConfigured: false, ttsConfigured: false },
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [providerTests, setProviderTests] = useState<Readonly<Record<string, ProviderTestStatus>>>({});
   const [connectionActions, setConnectionActions] = useState<Readonly<Record<string, ConnectionActionStatus>>>({});
+  const [connectionDrafts, setConnectionDrafts] = useState<Readonly<Record<string, Readonly<Record<string, string>>>>>({});
+  const [connectionConfigurations, setConnectionConfigurations] = useState<Readonly<Record<string, ConnectionConfigurationStatus>>>({});
+  const [deepseekKey, setDeepseekKey] = useState("");
+  const [dashscopeKey, setDashscopeKey] = useState("");
+  const [workspaceId, setWorkspaceId] = useState("");
+  const [settingsBusy, setSettingsBusy] = useState(false);
+  const [settingsMessage, setSettingsMessage] = useState<{ readonly failed: boolean; readonly text: string } | null>(null);
+  const [settingsTests, setSettingsTests] = useState<ProviderSettingsTestResult | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError("");
     setProviderTests({});
     setConnectionActions({});
+    setConnectionConfigurations({});
+    setConnectionDrafts({});
     try {
       setData(await loadAiriProviderConnections(serviceRequest));
     } catch (reason) {
@@ -231,6 +346,14 @@ export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriPro
       if (response.result?.state !== "ready" || response.result.ok !== true) {
         throw new Error(response.result?.message || text.testNotConfirmed);
       }
+      if (Array.isArray(response.result.models)) {
+        setData((current) => ({
+          ...current,
+          providers: current.providers.map((candidate) => candidate.id === provider.id
+            ? { ...candidate, models: response.result?.models }
+            : candidate),
+        }));
+      }
       setProviderTests((current) => ({
         ...current,
         [key]: { phase: "succeeded", message: response.result?.message || text.testPassed },
@@ -240,6 +363,43 @@ export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriPro
         ...current,
         [key]: { phase: "failed", message: reason instanceof Error && reason.message ? reason.message : text.testFailed },
       }));
+    }
+  };
+
+  const saveProviderSettings = async () => {
+    const next = {
+      ...(deepseekKey.trim() ? { deepseekApiKey: deepseekKey.trim() } : {}),
+      ...(dashscopeKey.trim() ? { dashscopeApiKey: dashscopeKey.trim() } : {}),
+      ...(workspaceId.trim() ? { dashscopeWorkspaceId: workspaceId.trim() } : {}),
+    };
+    if (Object.keys(next).length === 0) {
+      setSettingsMessage({ failed: true, text: text.enterConfiguration });
+      return;
+    }
+    setSettingsBusy(true);
+    setSettingsMessage(null);
+    setSettingsTests(null);
+    let saved = false;
+    try {
+      await serviceRequest<ProviderSettingsStatus>("/api/settings/providers", { method: "PUT", body: JSON.stringify(next) });
+      saved = true;
+      setDeepseekKey("");
+      setDashscopeKey("");
+      setWorkspaceId("");
+      setData(await loadAiriProviderConnections(serviceRequest));
+      const results = await serviceRequest<ProviderSettingsTestResult>("/api/settings/test", { method: "POST", body: JSON.stringify({}) });
+      setSettingsTests(results);
+      const configured = Object.values(results).filter((result) => result.configured);
+      const failed = configured.some((result) => !result.ok);
+      setSettingsMessage({
+        failed,
+        text: configured.length === 0 ? text.settingsUntested : failed ? text.settingsFailed : text.settingsPassed,
+      });
+    } catch (reason) {
+      const detail = reason instanceof Error && reason.message ? ` ${reason.message}` : "";
+      setSettingsMessage({ failed: true, text: `${saved ? text.settingsTestFailed : text.settingsSaveFailed}${detail}` });
+    } finally {
+      setSettingsBusy(false);
     }
   };
 
@@ -274,6 +434,60 @@ export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriPro
     }
   };
 
+  const updateConnectionDraft = (connectionId: string, field: string, value: string) => {
+    setConnectionDrafts((current) => ({ ...current, [connectionId]: { ...current[connectionId], [field]: value } }));
+  };
+
+  const configureConnection = async (connection: ConnectionSnapshot) => {
+    const draft = connectionDrafts[connection.id] || {};
+    const fields = CONNECTION_CONFIGURATION_FIELDS[connection.id as keyof typeof CONNECTION_CONFIGURATION_FIELDS];
+    const configuration: Record<string, string | number> = {};
+    for (const field of fields) {
+      const value = draft[field.name]?.trim();
+      if (!value) continue;
+      if (field.type === "number") {
+        const parsed = Number(value);
+        if (!Number.isInteger(parsed) || parsed < 1 || parsed > 65_535) {
+          setConnectionConfigurations((current) => ({ ...current, [connection.id]: { phase: "failed", message: `${text.connectionFields.port}: 1–65535` } }));
+          return;
+        }
+        configuration[field.name] = parsed;
+      } else {
+        configuration[field.name] = value;
+      }
+    }
+    if (Object.keys(configuration).length === 0) {
+      setConnectionConfigurations((current) => ({ ...current, [connection.id]: { phase: "failed", message: text.enterConnectionConfiguration } }));
+      return;
+    }
+    setConnectionConfigurations((current) => ({ ...current, [connection.id]: { phase: "saving", message: text.configuringConnection } }));
+    try {
+      const response = await serviceRequest<{ readonly connection?: ConnectionSnapshot }>(
+        `/api/connections/${encodeURIComponent(connection.id)}/configure`,
+        { method: "POST", body: JSON.stringify({ configuration }) },
+      );
+      const updated = response.connection;
+      if (!updated || updated.id !== connection.id) throw new Error(text.connectionConfigureFailed);
+      setData((current) => ({
+        ...current,
+        connections: current.connections.map((candidate) => candidate.id === updated.id ? updated : candidate),
+      }));
+      setConnectionDrafts((current) => ({ ...current, [connection.id]: {} }));
+      const failed = updated.status === "error";
+      const message = updated.status === "disconnected"
+        ? text.connectionConfigured
+        : updated.status === "external-runtime-required"
+          ? text.connectionNeedsRuntime
+          : updated.status === "configuration-required" ? text.connectionIncomplete : text.connectionConfigureFailed;
+      setConnectionConfigurations((current) => ({ ...current, [connection.id]: { phase: failed ? "failed" : "succeeded", message } }));
+    } catch (reason) {
+      setConnectionConfigurations((current) => ({
+        ...current,
+        [connection.id]: { phase: "failed", message: reason instanceof Error && reason.message ? reason.message : text.connectionConfigureFailed },
+      }));
+    }
+  };
+
   return <section className="demo-airi-provider-connections" data-airi-control="provider.catalog connection.catalog" aria-labelledby={titleId}>
     <header className="demo-airi-provider-connections__header">
       <div>
@@ -293,6 +507,45 @@ export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriPro
       <p>{text.loadError} <small>{error}</small></p>
       <button onClick={() => void load()} type="button">{text.refresh}</button>
     </div> : null}
+
+    {!loading && !error ? <details className="demo-airi-provider-connections__configuration" data-airi-control="provider.credentials voice.providers vision.providers">
+      <summary>
+        <span>{text.configuration}</span>
+        <small>{text.configurationHint}</small>
+      </summary>
+      <div className="demo-airi-provider-connections__configuration-body">
+        <label>{text.deepseekKey}<input
+          autoComplete="off"
+          onChange={(event) => setDeepseekKey(event.target.value)}
+          placeholder={data.settings.deepseekConfigured ? text.configuredPlaceholder : text.keyPlaceholder}
+          type="password"
+          value={deepseekKey}
+        /></label>
+        <label>{text.dashscopeKey}<input
+          autoComplete="off"
+          onChange={(event) => setDashscopeKey(event.target.value)}
+          placeholder={data.settings.ttsConfigured ? text.configuredPlaceholder : text.keyPlaceholder}
+          type="password"
+          value={dashscopeKey}
+        /></label>
+        <label>{text.workspaceId}<input
+          autoComplete="off"
+          onChange={(event) => setWorkspaceId(event.target.value)}
+          placeholder={data.settings.dashscopeWorkspaceConfigured ? text.configuredPlaceholder : text.workspacePlaceholder}
+          value={workspaceId}
+        /></label>
+        <button disabled={settingsBusy} onClick={() => void saveProviderSettings()} type="button">
+          {settingsBusy ? text.savingAndTesting : text.saveAndTest}
+        </button>
+        {settingsMessage ? <p data-state={settingsMessage.failed ? "failed" : "succeeded"} role={settingsMessage.failed ? "alert" : "status"}>{settingsMessage.text}</p> : null}
+        {settingsTests ? <dl>
+          {(["deepseek", "asr", "tts"] as const).map((kind) => <div key={kind}>
+            <dt>{kind === "deepseek" ? "DeepSeek LLM" : kind.toUpperCase()}</dt>
+            <dd data-state={!settingsTests[kind].configured ? "unconfigured" : settingsTests[kind].ok ? "succeeded" : "failed"}>{settingsTests[kind].message}</dd>
+          </div>)}
+        </dl> : null}
+      </div>
+    </details> : null}
 
     {!loading && !error ? <div className="demo-airi-provider-connections__sections" aria-live="polite">
       <section aria-labelledby={`${titleId}-providers`}>
@@ -318,6 +571,7 @@ export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriPro
                   const required = requirements.length;
                   const testKey = `${provider.id}:${capability}`;
                   const testStatus = providerTests[testKey];
+                  const models = (provider.models || []).filter((model) => model.capability === capability);
                   return <li data-state={state} key={provider.id}>
                     <div>
                       <strong>{provider.label}</strong>
@@ -338,6 +592,13 @@ export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriPro
                       data-state={testStatus.phase}
                       role={testStatus.phase === "failed" ? "alert" : "status"}
                     >{testStatus.message}</small> : null}
+                    {models.length > 0 ? <details className="demo-airi-provider-connections__models">
+                      <summary>{text.models} · {models.length}</summary>
+                      <div>{models.map((model) => <span key={model.id}>
+                        <code>{model.label}</code>
+                        <small>{model.source === "provider" ? text.providerModel : text.declaredModel}</small>
+                      </span>)}</div>
+                    </details> : null}
                   </li>;
                 })}
               </ul>
@@ -356,7 +617,12 @@ export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriPro
             const connection = data.connections.find(({ id }) => id === connectionId);
             const state = connection ? normalizeConnectionState(connection.status) : "error";
             const actionStatus = connectionActions[connectionId];
-            const busy = actionStatus?.phase === "running";
+            const configurationStatus = connectionConfigurations[connectionId];
+            const actionBusy = actionStatus?.phase === "running";
+            const configurationBusy = configurationStatus?.phase === "saving";
+            const busy = actionBusy || configurationBusy;
+            const fields = CONNECTION_CONFIGURATION_FIELDS[connectionId];
+            const draft = connectionDrafts[connectionId] || {};
             const blockedReason = !connection
               ? text.missingConnection
               : connection.status === "configuration-required"
@@ -374,31 +640,54 @@ export function AiriProviderConnectionsPanel({ locale, serviceRequest }: AiriPro
                 ? connection.lastError?.message || blockedReason || (connection.connected ? text.connected : connection.status === "disconnected" ? text.disconnected : connection.status)
                 : text.missingConnection}</small>
               <span>{connection?.adapter ? `${text.adapter}: ${connection.adapter.pluginId}` : text.noAdapter}</span>
+              {connection ? <details className="demo-airi-provider-connections__connection-configuration" data-airi-control={`connection.${connectionId}`}>
+                <summary><span>{text.connectionConfiguration}</span><small>{text.connectionConfigurationHint}</small></summary>
+                <form onSubmit={(event) => { event.preventDefault(); void configureConnection(connection); }}>
+                  {fields.map((field) => {
+                    const configuredSecret = field.type === "password" && connection.configuration.secrets[field.name] === true;
+                    const currentValue = field.type !== "password" ? connection.configuration.values[field.name] : undefined;
+                    return <label key={field.name}>{text.connectionFields[field.name]}<input
+                      autoComplete={field.type === "password" ? "new-password" : "off"}
+                      disabled={connection.connected || busy}
+                      max={field.type === "number" ? 65_535 : undefined}
+                      min={field.type === "number" ? 1 : undefined}
+                      onChange={(event) => updateConnectionDraft(connection.id, field.name, event.target.value)}
+                      placeholder={configuredSecret ? text.fieldConfigured : currentValue !== undefined ? String(currentValue) : text.connectionFields[field.name]}
+                      type={field.type}
+                      value={draft[field.name] || ""}
+                    /></label>;
+                  })}
+                  <button className="demo-airi-provider-connections__connection-action-button" disabled={connection.connected || busy} type="submit">
+                    {configurationBusy ? text.configuringConnection : text.configureConnection}
+                  </button>
+                  {configurationStatus ? <p data-state={configurationStatus.phase} role={configurationStatus.phase === "failed" ? "alert" : "status"}>{configurationStatus.message}</p> : null}
+                </form>
+              </details> : null}
               <div className="demo-airi-provider-connections__connection-actions">
                 {connection?.status === "connected" ? <button
-                  aria-busy={busy && actionStatus?.operation === "disconnect"}
+                  aria-busy={actionBusy && actionStatus?.operation === "disconnect"}
                   aria-label={`${text.disconnect} ${connection.name}`}
                   className="demo-airi-provider-connections__connection-action-button"
                   disabled={!canRunConnectionAction(connection.status, "disconnect") || busy}
                   onClick={() => void runConnectionAction(connection, "disconnect")}
                   type="button"
-                >{busy && actionStatus?.operation === "disconnect" ? text.disconnecting : text.disconnect}</button> : <>
+                >{actionBusy && actionStatus?.operation === "disconnect" ? text.disconnecting : text.disconnect}</button> : <>
                   <button
-                    aria-busy={busy && actionStatus?.operation === "test"}
+                    aria-busy={actionBusy && actionStatus?.operation === "test"}
                     aria-label={`${text.connectionTest} ${connection?.name || connectionId}`}
                     className="demo-airi-provider-connections__connection-action-button"
                     disabled={!canRunConnectionAction(connection?.status, "test") || busy}
                     onClick={() => connection && void runConnectionAction(connection, "test")}
                     type="button"
-                  >{busy && actionStatus?.operation === "test" ? text.connectionTesting : text.connectionTest}</button>
+                  >{actionBusy && actionStatus?.operation === "test" ? text.connectionTesting : text.connectionTest}</button>
                   <button
-                    aria-busy={busy && actionStatus?.operation === "connect"}
+                    aria-busy={actionBusy && actionStatus?.operation === "connect"}
                     aria-label={`${text.connect} ${connection?.name || connectionId}`}
                     className="demo-airi-provider-connections__connection-action-button"
                     disabled={!canRunConnectionAction(connection?.status, "connect") || busy}
                     onClick={() => connection && void runConnectionAction(connection, "connect")}
                     type="button"
-                  >{busy && actionStatus?.operation === "connect" ? text.connecting : text.connect}</button>
+                  >{actionBusy && actionStatus?.operation === "connect" ? text.connecting : text.connect}</button>
                 </>}
               </div>
               {actionStatus ? <small

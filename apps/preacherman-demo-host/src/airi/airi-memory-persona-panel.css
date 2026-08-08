@@ -130,6 +130,7 @@
 }
 
 .demo-airi-memory input,
+.demo-airi-memory select,
 .demo-airi-memory textarea {
   width: 100%;
   box-sizing: border-box;
@@ -146,6 +147,11 @@
   padding: 8px 11px;
 }
 
+.demo-airi-memory select {
+  min-height: 40px;
+  padding: 8px 11px;
+}
+
 .demo-airi-memory textarea {
   min-height: 108px;
   padding: 10px 11px;
@@ -158,6 +164,7 @@
 }
 
 .demo-airi-memory input:focus-visible,
+.demo-airi-memory select:focus-visible,
 .demo-airi-memory textarea:focus-visible,
 .demo-airi-memory button:focus-visible {
   outline: 2px solid var(--demo-theme-focus);
@@ -172,7 +179,14 @@
 }
 
 .demo-airi-memory__namespace {
-  max-width: 360px;
+  min-width: 0;
+}
+
+.demo-airi-memory__scope {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 12px;
 }
 
 .demo-airi-memory__workflows {
@@ -296,13 +310,13 @@
 
 @media (max-width: 700px) {
   .demo-airi-memory__header,
+  .demo-airi-memory__scope,
   .demo-airi-memory__workflows {
     display: grid;
     grid-template-columns: 1fr;
   }
 
-  .demo-airi-memory__persona,
-  .demo-airi-memory__namespace {
+  .demo-airi-memory__persona {
     max-width: none;
   }
 }

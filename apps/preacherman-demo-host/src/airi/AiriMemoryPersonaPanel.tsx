@@ -3,6 +3,7 @@ import type { Locale } from "../preferences";
 import "./airi-memory-persona-panel.css";
 
 export type AiriMemoryPersonaServiceRequest = <T>(path: string, init?: RequestInit) => Promise<T>;
+export type AiriMemoryBoundary = "persona" | "session" | "long-term";
 
 export interface AiriPersonaSummary {
   readonly id: string;
@@ -16,6 +17,9 @@ export interface AiriMemoryResult {
   readonly owner: string;
   readonly personaId: string;
   readonly namespace: string;
+  readonly boundary: AiriMemoryBoundary;
+  readonly sessionId: string | null;
+  readonly sensitivity: "private";
   readonly text: string;
   readonly tags: readonly string[];
   readonly redacted: boolean;
@@ -51,7 +55,13 @@ const copy = {
     selectPersona: "Select",
     selectingPersona: "Selecting…",
     namespace: "Namespace",
-    namespaceHint: "Memories are isolated by persona and namespace.",
+    namespaceHint: "Memories are isolated by owner, persona, boundary, and namespace.",
+    boundary: "Memory boundary",
+    boundaryPersona: "Persona",
+    boundarySession: "Session",
+    boundaryLongTerm: "Long-term",
+    sessionId: "Session ID",
+    sessionHint: "Required for session memory and never shared with another session.",
     memory: "Memory content",
     memoryPlaceholder: "Remember a useful fact or preference",
     remember: "Remember",
@@ -64,7 +74,7 @@ const copy = {
     results: "Recalled memories",
     noResults: "No memories matched this persona and namespace.",
     loading: "Loading personas…",
-    privacy: "Do not enter passwords, tokens, API keys, credentials, or audio. The service rejects or redacts sensitive data.",
+    privacy: "Private by default. Do not enter passwords, tokens, API keys, credentials, or audio. Sensitive data is rejected or redacted, and memory calls are audited without storing their text.",
     redacted: "Sensitive text redacted",
     expired: "Expired",
     justNow: "just now",
@@ -83,7 +93,13 @@ const copy = {
     selectPersona: "选择",
     selectingPersona: "选择中…",
     namespace: "命名空间",
-    namespaceHint: "记忆按人格和命名空间严格隔离。",
+    namespaceHint: "记忆按所有者、人格、边界和命名空间严格隔离。",
+    boundary: "记忆边界",
+    boundaryPersona: "人格",
+    boundarySession: "会话",
+    boundaryLongTerm: "长期",
+    sessionId: "会话 ID",
+    sessionHint: "会话记忆必须指定 ID，且不会与其他会话共享。",
     memory: "记忆内容",
     memoryPlaceholder: "记录一条有用的事实或偏好",
     remember: "记住",
@@ -96,7 +112,7 @@ const copy = {
     results: "召回结果",
     noResults: "此人格与命名空间下没有匹配的记忆。",
     loading: "正在加载人格…",
-    privacy: "请勿输入密码、令牌、API 密钥、凭据或音频；服务会拒绝或脱敏敏感数据。",
+    privacy: "默认私有。请勿输入密码、令牌、API 密钥、凭据或音频；敏感数据会被拒绝或脱敏，记忆调用只审计元数据而不记录正文。",
     redacted: "敏感文本已脱敏",
     expired: "已过期",
     justNow: "刚刚",
@@ -121,6 +137,7 @@ function requireMemory(value: unknown): AiriMemoryResult {
   const memory = requireObject(value, "Memory service");
   const temporal = requireObject(memory.temporal, "Memory time metadata");
   if (typeof memory.id !== "string" || typeof memory.owner !== "string" || typeof memory.text !== "string" || typeof memory.namespace !== "string"
+    || !["persona", "session", "long-term"].includes(String(memory.boundary)) || memory.sensitivity !== "private"
     || typeof temporal.recordedAt !== "string" || typeof temporal.occurredAt !== "string") {
     throw new Error("Memory service returned an invalid memory.");
   }
@@ -138,7 +155,7 @@ export async function loadAiriPersonas(serviceRequest: AiriMemoryPersonaServiceR
 
 export async function rememberAiriMemory(
   serviceRequest: AiriMemoryPersonaServiceRequest,
-  input: { readonly personaId: string; readonly namespace: string; readonly text: string },
+  input: { readonly personaId: string; readonly namespace: string; readonly boundary: AiriMemoryBoundary; readonly sessionId?: string; readonly text: string },
 ): Promise<AiriMemoryResult> {
   const response = requireObject(await serviceRequest<unknown>("/api/memory/remember", {
     method: "POST",
@@ -162,7 +179,7 @@ export async function selectAiriPersona(
 
 export async function recallAiriMemories(
   serviceRequest: AiriMemoryPersonaServiceRequest,
-  input: { readonly personaId: string; readonly namespace: string; readonly query: string; readonly limit: number },
+  input: { readonly personaId: string; readonly namespace: string; readonly boundary: AiriMemoryBoundary; readonly sessionId?: string; readonly query: string; readonly limit: number },
 ): Promise<readonly AiriMemoryResult[]> {
   const response = requireObject(await serviceRequest<unknown>("/api/memory/recall", {
     method: "POST",
@@ -188,6 +205,8 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
   const [personas, setPersonas] = useState<readonly AiriPersonaSummary[]>([]);
   const [selectedPersona, setSelectedPersona] = useState<AiriPersonaSummary | null>(null);
   const [namespace, setNamespace] = useState("general");
+  const [boundary, setBoundary] = useState<AiriMemoryBoundary>("persona");
+  const [sessionId, setSessionId] = useState("");
   const [memoryText, setMemoryText] = useState("");
   const [query, setQuery] = useState("");
   const [memories, setMemories] = useState<readonly AiriMemoryResult[]>([]);
@@ -239,6 +258,8 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
       await rememberAiriMemory(serviceRequest, {
         personaId: selectedPersona.id,
         namespace: namespace.trim(),
+        boundary,
+        ...(boundary === "session" ? { sessionId: sessionId.trim() } : {}),
         text: memoryText.trim(),
       });
       setMemoryText("");
@@ -260,6 +281,8 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
       setMemories(await recallAiriMemories(serviceRequest, {
         personaId: selectedPersona.id,
         namespace: namespace.trim(),
+        boundary,
+        ...(boundary === "session" ? { sessionId: sessionId.trim() } : {}),
         query: query.trim(),
         limit: 20,
       }));
@@ -270,6 +293,7 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
     }
   };
 
+  const boundaryReady = boundary !== "session" || Boolean(sessionId.trim());
   const controlsDisabled = loading || !selectedPersona || busy !== null;
 
   return <section className="demo-airi-memory" data-airi-control="memory.persona memory.remember memory.recall" aria-labelledby="airi-memory-title">
@@ -296,17 +320,32 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
       })}
     </div>
 
-    <label className="demo-airi-memory__namespace" htmlFor="airi-memory-namespace">
-      <span>{text.namespace}</span>
-      <input id="airi-memory-namespace" maxLength={64} onChange={(event) => setNamespace(event.target.value)} pattern="[A-Za-z0-9][A-Za-z0-9_.-]{0,63}" required spellCheck={false} value={namespace} />
-      <small>{text.namespaceHint}</small>
-    </label>
+    <div className="demo-airi-memory__scope">
+      <label className="demo-airi-memory__namespace" htmlFor="airi-memory-namespace">
+        <span>{text.namespace}</span>
+        <input id="airi-memory-namespace" maxLength={64} onChange={(event) => setNamespace(event.target.value)} pattern="[A-Za-z0-9][A-Za-z0-9_.-]{0,63}" required spellCheck={false} value={namespace} />
+        <small>{text.namespaceHint}</small>
+      </label>
+      <label htmlFor="airi-memory-boundary">
+        <span>{text.boundary}</span>
+        <select id="airi-memory-boundary" onChange={(event) => setBoundary(event.target.value as AiriMemoryBoundary)} value={boundary}>
+          <option value="persona">{text.boundaryPersona}</option>
+          <option value="session">{text.boundarySession}</option>
+          <option value="long-term">{text.boundaryLongTerm}</option>
+        </select>
+      </label>
+      {boundary === "session" ? <label htmlFor="airi-memory-session">
+        <span>{text.sessionId}</span>
+        <input autoComplete="off" id="airi-memory-session" maxLength={100} onChange={(event) => setSessionId(event.target.value)} required value={sessionId} />
+        <small>{text.sessionHint}</small>
+      </label> : null}
+    </div>
 
     <div className="demo-airi-memory__workflows">
       <form onSubmit={(event) => void remember(event)}>
         <label htmlFor="airi-memory-content">{text.memory}</label>
         <textarea autoComplete="off" disabled={controlsDisabled} id="airi-memory-content" maxLength={8192} onChange={(event) => setMemoryText(event.target.value)} placeholder={text.memoryPlaceholder} required value={memoryText} />
-        <button disabled={controlsDisabled || !namespace.trim() || !memoryText.trim()} type="submit">
+        <button disabled={controlsDisabled || !boundaryReady || !namespace.trim() || !memoryText.trim()} type="submit">
           {busy === "remember" ? text.remembering : text.remember}
         </button>
       </form>
@@ -314,7 +353,7 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
       <form onSubmit={(event) => void recall(event)}>
         <label htmlFor="airi-memory-query">{text.query}</label>
         <input autoComplete="off" disabled={controlsDisabled} id="airi-memory-query" onChange={(event) => setQuery(event.target.value)} placeholder={text.queryPlaceholder} value={query} />
-        <button disabled={controlsDisabled || !namespace.trim()} type="submit">
+        <button disabled={controlsDisabled || !boundaryReady || !namespace.trim()} type="submit">
           {busy === "recall" ? text.recalling : text.recall}
         </button>
       </form>
@@ -331,6 +370,7 @@ export function AiriMemoryPersonaPanel({ locale, serviceRequest }: AiriMemoryPer
           <p>{memory.text}</p>
           <div>
             <span>{memory.namespace}</span>
+            <span>{memory.boundary}{memory.sessionId ? ` · ${memory.sessionId}` : ""}</span>
             <time dateTime={memory.temporal.occurredAt}>{new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(memory.temporal.occurredAt))}</time>
             <span>{memory.temporal.timezone} · {formatMemoryAge(memory.temporal.ageMs, locale)}</span>
             {memory.redacted ? <strong>{text.redacted}</strong> : null}

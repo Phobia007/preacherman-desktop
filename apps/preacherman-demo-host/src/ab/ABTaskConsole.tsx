@@ -18,6 +18,7 @@ interface TaskProposal {
 interface TaskRun {
   readonly runId: string;
   readonly objective: string;
+  readonly source?: "airi-plugin";
   readonly status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
   readonly events: readonly { readonly stage: string; readonly message: string }[];
   readonly toolCall?: {
@@ -127,11 +128,16 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
   }, [locale, messages, sessionKey]);
   useEffect(() => {
     if (!run || !["queued", "running"].includes(run.status)) return undefined;
+    const conversationEpoch = coordinator.getConversationEpoch();
     const timer = window.setInterval(() => {
-      void request<{ run: TaskRun }>(`/api/agent/runs/${run.runId}`).then(({ run: next }) => setRun(next)).catch((reason: Error) => setError(reason.message));
+      void request<{ run: TaskRun }>(`/api/agent/runs/${run.runId}`).then(({ run: next }) => {
+        if (coordinator.isConversationEpochCurrent(conversationEpoch)) setRun(next);
+      }).catch((reason: Error) => {
+        if (coordinator.isConversationEpochCurrent(conversationEpoch)) setError(reason.message);
+      });
     }, 700);
     return () => window.clearInterval(timer);
-  }, [run]);
+  }, [coordinator, run]);
   useEffect(() => {
     if (!run || run.status !== "succeeded" || announcedRunIds.current.has(run.runId)) return;
     announcedRunIds.current.add(run.runId);
@@ -143,19 +149,23 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
   const sendText = useCallback(async (candidate: string) => {
     const text = candidate.trim();
     if (!text || busy) return;
+    const conversationEpoch = coordinator.getConversationEpoch();
     setBusy(true); setError(null); setInput("");
     setMessages((current) => [...current, { role: "user", text }]);
     try {
       const response = await request<{ displayText: string; proposal: TaskProposal | null; diagnostics: TurnDiagnostics }>("/api/agent/turn", {
         method: "POST", body: JSON.stringify({ input: text, locale, history: [...messages, { role: "user", text }].slice(-10) }),
       });
+      if (!coordinator.isConversationEpochCurrent(conversationEpoch)) return;
       setMessages((current) => [...current, { role: "assistant", text: response.displayText }]);
       setDiagnostics(response.diagnostics);
       coordinator.requestSpeech(response.displayText.slice(0, 160), locale);
       setProposal(response.proposal);
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Unable to reach the companion service.");
-    } finally { setBusy(false); }
+      if (coordinator.isConversationEpochCurrent(conversationEpoch)) setError(reason instanceof Error ? reason.message : "Unable to reach the companion service.");
+    } finally {
+      if (coordinator.isConversationEpochCurrent(conversationEpoch)) setBusy(false);
+    }
   }, [busy, coordinator, locale, messages]);
 
   useEffect(() => {
@@ -169,25 +179,29 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
 
   const confirm = async () => {
     if (!proposal || busy) return;
+    const conversationEpoch = coordinator.getConversationEpoch();
     setBusy(true); setError(null);
     try {
       const response = await request<{ run: TaskRun }>(`/api/agent/proposals/${proposal.proposalId}/confirm`, {
         method: "POST", body: JSON.stringify({ objective: proposal.objective }),
       });
+      if (!coordinator.isConversationEpochCurrent(conversationEpoch)) return;
       setRun(response.run); setProposal(null);
       const startedMessage = proposal.kind === "plugin-tool" ? labels.pluginTaskStarted : labels.taskStarted;
       setMessages((current) => [...current, { role: "assistant", text: startedMessage }]);
       coordinator.requestSpeech(startedMessage.slice(0, 160), locale, response.run.runId);
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Unable to start the task.");
-    } finally { setBusy(false); }
+      if (coordinator.isConversationEpochCurrent(conversationEpoch)) setError(reason instanceof Error ? reason.message : "Unable to start the task.");
+    } finally {
+      if (coordinator.isConversationEpochCurrent(conversationEpoch)) setBusy(false);
+    }
   };
 
-  const controlRun = useCallback(async (taskRunId: string, action: "cancel" | "retry") => {
+  const controlRun = useCallback(async (taskRunId: string, action: "cancel" | "retry", approved = false) => {
     if (busy) return;
     setBusy(true); setError(null);
     try {
-      const response = await request<{ run: TaskRun }>(`/api/agent/runs/${taskRunId}/${action}`, { method: "POST", body: "{}" });
+      const response = await request<{ run: TaskRun }>(`/api/agent/runs/${taskRunId}/${action}`, { method: "POST", body: JSON.stringify({ approved }) });
       setRun(response.run);
     } catch (reason) { setError(reason instanceof Error ? reason.message : "Unable to update task."); }
     finally { setBusy(false); }
@@ -204,6 +218,7 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
   }), [coordinator]);
 
   const startNewConversation = () => {
+    coordinator.beginConversationEpoch();
     beginNewConversation();
     localStorage.removeItem(sessionKey);
     announcedRunIds.current.clear();
@@ -213,6 +228,7 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
     setRun(null);
     setError(null);
     setDiagnostics(null);
+    setBusy(false);
   };
 
   const hasActiveTask = run ? ["queued", "running"].includes(run.status) : false;
@@ -230,7 +246,7 @@ export function ABTaskConsole({ locale }: { readonly locale: Locale }) {
         <div className="ab-task-console__actions"><button className="ab-task-console__button ab-task-console__button--quiet" disabled={busy || hasActiveTask} onClick={() => void sendText(labels.demoPrompt)} type="button">{labels.tryDemo}</button><button className="ab-task-console__button ab-task-console__button--primary" disabled={!input.trim() || busy} type="submit">{labels.send}</button></div>
       </form>
       {proposal ? <section className="ab-task-console__approval"><span>{proposal.executor}</span><textarea aria-label={locale === "zh-CN" ? "任务目标" : "Task objective"} onChange={(event) => setProposal({ ...proposal, objective: event.target.value })} value={proposal.objective} /><p>{proposal.inputs.join(" · ")} → {proposal.outputs.join(" · ")}</p><button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.confirm" disabled={busy || !proposal.objective.trim()} onClick={() => void confirm()} type="button">{labels.confirm}</button></section> : null}
-      {run ? <section className="ab-task-console__activity"><strong>{run.status === "succeeded" ? labels.artifact : labels.running}</strong><ol className="ab-task-console__timeline">{run.events.slice(-4).map((event, index) => <li key={`${event.stage}-${index}`}><span>{event.stage}</span><p>{event.message}</p></li>)}</ol>{run.toolCall ? <p><span>{locale === "zh-CN" ? "已调用工具" : "Tool called"}</span> <code>{run.toolCall.name}</code></p> : null}{run.artifact ? <p><code>{run.artifact.path}</code></p> : null}{run.error ? <p data-error="true">{run.error}</p> : null}{["queued", "running"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" data-airi-control="task.cancel" disabled={busy} onClick={() => void coordinator.cancelTask(run.runId)} type="button">{labels.stopTask}</button> : null}{["failed", "cancelled"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.retry" disabled={busy} onClick={() => void controlRun(run.runId, "retry")} type="button">{labels.retry}</button> : null}{run.status === "succeeded" ? <button className="ab-task-console__button ab-task-console__button--primary" onClick={() => { sessionStorage.setItem("preacherman.ledger-view", "artifacts"); openLocalSurface("ledger"); }} type="button">{labels.viewLedger}</button> : null}</section> : null}
+      {run ? <section className="ab-task-console__activity"><strong>{run.status === "succeeded" ? labels.artifact : labels.running}</strong><ol className="ab-task-console__timeline">{run.events.slice(-4).map((event, index) => <li key={`${event.stage}-${index}`}><span>{event.stage}</span><p>{event.message}</p></li>)}</ol>{run.toolCall ? <p><span>{locale === "zh-CN" ? "已调用工具" : "Tool called"}</span> <code>{run.toolCall.name}</code></p> : null}{run.artifact ? <p><code>{run.artifact.path}</code></p> : null}{run.error ? <p data-error="true">{run.error}</p> : null}{["queued", "running"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" data-airi-control="task.cancel" disabled={busy} onClick={() => void coordinator.cancelTask(run.runId)} type="button">{labels.stopTask}</button> : null}{["failed", "cancelled"].includes(run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.retry" disabled={busy} onClick={() => void controlRun(run.runId, "retry", run.source === "airi-plugin")} type="button">{run.source === "airi-plugin" ? (locale === "zh-CN" ? "批准并重试工具" : "Approve and retry tool") : labels.retry}</button> : null}{run.status === "succeeded" ? <button className="ab-task-console__button ab-task-console__button--primary" onClick={() => { sessionStorage.setItem("preacherman.ledger-view", "artifacts"); openLocalSurface("ledger"); }} type="button">{labels.viewLedger}</button> : null}</section> : null}
     </section>
   );
 }

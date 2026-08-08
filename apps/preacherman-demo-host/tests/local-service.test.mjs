@@ -207,8 +207,13 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(pluginArtifact.body.artifact.content.taskCount, 1);
 
   const kits = await request(baseUrl, "/api/airi/kits");
-  assert.deepEqual(kits.body.kits.map((kit) => kit.name), ["ledger", "task", "tools"]);
+  assert.deepEqual(kits.body.kits.map((kit) => kit.name), [
+    "computer-vision", "connection", "gamelet", "ledger", "memory", "provider", "task", "tools", "widget",
+  ]);
+  assert.ok(kits.body.bindings.length >= 58);
   assert.ok(kits.body.bindings.some((binding) => binding.kit === "tools" && binding.operation === "call"));
+  assert.ok(kits.body.bindings.some((binding) => binding.kit === "tools" && binding.operation === "register"));
+  assert.ok(kits.body.bindings.some((binding) => binding.kit === "provider" && binding.operation === "register-adapter"));
 
   const widgets = await request(baseUrl, "/api/widgets");
   assert.deepEqual(widgets.body.widgets.map((widget) => widget.id), ["ecosystem-status"]);
@@ -300,8 +305,12 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
     method: "POST", body: JSON.stringify({ directory: fixturePlugin }),
   });
   assert.equal(installedPlugin.response.status, 201);
-  assert.deepEqual(installedPlugin.body.plugin.kits, ["ledger", "task"]);
-  assert.ok(installedPlugin.body.plugin.bindings.includes("ledger.write-artifact"));
+  assert.equal(installedPlugin.body.plugin.widgetCount, 0, "Binding-registered widgets are owned by the Widget Kit, not the Plugin Runtime");
+  assert.deepEqual(installedPlugin.body.plugin.kits, ["ledger", "memory", "task", "widget"]);
+  assert.deepEqual(installedPlugin.body.plugin.usedKits, ["ledger", "memory", "task", "widget"]);
+  assert.deepEqual(installedPlugin.body.plugin.providedKits, []);
+  assert.deepEqual(installedPlugin.body.plugin.bindings, [], "host-owned Task and Ledger bindings must not be attributed to the consumer plugin");
+  assert.ok((await request(baseUrl, "/api/widgets")).body.widgets.some((widget) => widget.pluginId === "fixture-plugin" && widget.id === "fixture-status"));
   const unapprovedPluginCall = await request(baseUrl, "/api/plugins/tools/call", {
     method: "POST", body: JSON.stringify({ name: "fixture-plugin::echo", arguments: { label: "closed-loop" } }),
   });
@@ -325,6 +334,52 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(persistedPluginTask.status, "succeeded");
   assert.equal(persistedPluginTask.toolCall.name, "echo");
 
+  const bindingTaskCall = await request(baseUrl, "/api/plugins/tools/call", {
+    method: "POST", body: JSON.stringify({
+      name: "fixture-plugin::binding_task",
+      arguments: { label: "binding-owned" },
+      approved: true,
+    }),
+  });
+  assert.equal(bindingTaskCall.response.status, 200);
+  const pluginOwnedTaskId = bindingTaskCall.body.result.structuredContent.bindingTaskId;
+  const pluginOwnedTask = (await request(baseUrl, `/api/tasks/${pluginOwnedTaskId}`)).body.task;
+  assert.equal(pluginOwnedTask.pluginId, "fixture-plugin");
+  assert.equal(pluginOwnedTask.status, "succeeded");
+  assert.equal(pluginOwnedTask.artifact.name, "fixture-binding.json");
+
+  await request(baseUrl, "/api/conversations/plugin-memory-scope", {
+    method: "PUT",
+    body: JSON.stringify({ locale: "en", messages: [{ role: "user", text: "private conversation body" }] }),
+  });
+  const recentConversationCall = await request(baseUrl, "/api/plugins/tools/call", {
+    method: "POST",
+    body: JSON.stringify({ name: "fixture-plugin::recent_conversations", arguments: {}, approved: true }),
+  });
+  assert.equal(recentConversationCall.response.status, 200);
+  assert.deepEqual(recentConversationCall.body.result.structuredContent.access.scopes, ["conversations:recent:read"]);
+  assert.equal(recentConversationCall.body.result.structuredContent.entries[0].id, "plugin-memory-scope");
+  assert.equal(recentConversationCall.body.result.structuredContent.entries[0].messageCount, 1);
+  assert.ok(!JSON.stringify(recentConversationCall.body.result.structuredContent).includes("private conversation body"));
+
+  const externalAgentTurn = await request(baseUrl, "/api/agent/turn", {
+    method: "POST",
+    body: JSON.stringify({
+      input: 'Run plugin tool fixture-plugin::echo with {"label":"agent-selected"}',
+      locale: "en",
+      history: [],
+    }),
+  });
+  assert.equal(externalAgentTurn.body.proposal.kind, "plugin-tool");
+  assert.deepEqual(externalAgentTurn.body.proposal.allowedTools, ["fixture-plugin::echo"]);
+  const externalAgentRun = await request(baseUrl, `/api/agent/proposals/${externalAgentTurn.body.proposal.proposalId}/confirm`, {
+    method: "POST",
+    body: JSON.stringify({ objective: externalAgentTurn.body.proposal.objective }),
+  });
+  assert.equal(externalAgentRun.response.status, 202);
+  assert.equal(externalAgentRun.body.run.status, "succeeded");
+  assert.equal(externalAgentRun.body.run.artifact.content.label, "agent-selected");
+
   const voicePluginTurn = await request(baseUrl, "/api/agent/turn", {
     method: "POST",
     body: JSON.stringify({ input: "Run the AIRI plugin status summary", locale: "en", history: [] }),
@@ -344,6 +399,12 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
     method: "POST", body: JSON.stringify({ name: "fixture-plugin" }),
   });
   assert.equal(uninstalledPlugin.body.result.uninstalled, true);
+  assert.ok(!(await request(baseUrl, "/api/widgets")).body.widgets.some((widget) => widget.pluginId === "fixture-plugin"));
+  const observability = await request(baseUrl, "/api/observability");
+  assert.equal(observability.response.status, 200);
+  assert.ok(observability.body.plugins.some((plugin) => plugin.id === "preacherman-runtime"));
+  assert.ok(observability.body.traces.some((trace) => trace.target === "fixture-plugin::echo" && trace.status === "succeeded"));
+  assert.ok(observability.body.activity.some((activity) => activity.pluginId === "fixture-plugin" && activity.phase === "uninstalled"));
 
   const external = await request(baseUrl, "/api/airi/capabilities/game.minecraft/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "zh-CN" }),
@@ -357,9 +418,17 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   });
   assert.equal(speech.body.event.state, "configuration-required");
 
-  const history = await request(baseUrl, "/api/airi/events?limit=10");
+  const history = await request(baseUrl, "/api/airi/events?limit=20");
   assert.equal(history.response.status, 200);
-  assert.deepEqual(history.body.events.map((event) => event.capabilityId), ["voice.tts", "game.minecraft", "agent.plugin-tools", "agent.mcp-tools", "task.create"]);
-  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-capability-events.v1.json"), "utf8")).events.length, 5);
+  assert.ok(history.body.events.some((event) => event.capabilityId === "voice.tts"));
+  assert.ok(history.body.events.some((event) => event.capabilityId === "game.minecraft"));
+  assert.ok(history.body.events.some((event) => event.capabilityId === "agent.mcp-tools"));
+  assert.ok(history.body.events.some((event) => event.capabilityId === "task.create"));
+  const recordedPluginCall = history.body.events.find((event) => event.capabilityId === "agent.plugin-tools"
+    && event.execution?.taskId === externalPluginCall.body.result.task.taskId);
+  assert.equal(recordedPluginCall.execution.status, "succeeded");
+  assert.equal(recordedPluginCall.execution.toolName, "fixture-plugin::echo");
+  assert.ok(!JSON.stringify(recordedPluginCall).includes("closed-loop"));
+  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-capability-events.v1.json"), "utf8")).events.length, history.body.events.length);
   assert.equal(JSON.parse(await readFile(join(dataDir, "airi-plugins.v1.json"), "utf8")).enabled, true);
 });

@@ -23,12 +23,15 @@ async function loadPanelModule() {
   return import(`data:text/javascript;base64,${Buffer.from(javascript.text).toString("base64")}`);
 }
 
-test("Gamelet request helpers use the real catalog, session, action, and stop endpoints", async () => {
+test("Gamelet request helpers use the real start, action, pause, resume, stop, and destroy endpoints", async () => {
   const {
     loadAiriGamelets,
     createAiriGameletSession,
     sendAiriGameletAction,
+    pauseAiriGameletSession,
+    resumeAiriGameletSession,
     stopAiriGameletSession,
+    destroyAiriGameletSession,
   } = await loadPanelModule();
   const calls = [];
   const active = {
@@ -46,12 +49,18 @@ test("Gamelet request helpers use the real catalog, session, action, and stop en
       state: { board: ["X", "X", "X", "O", "O", null, null, null, null], currentPlayer: null, moves: 5, outcome: "won", winner: "X" },
     },
   };
+  const paused = { session: { ...active.session, status: "paused" } };
+  const resumed = { session: { ...active.session, status: "active" } };
   const stopped = { session: { ...active.session, status: "stopped" } };
+  const destroyed = { session: { ...active.session, status: "destroyed" } };
   const serviceRequest = async (path, init) => {
     calls.push({ path, init });
     if (path === "/api/gamelets") return { gamelets: [{ id: "tic-tac-toe", title: "Tic-tac-toe", description: "Offline", version: "1.0.0" }] };
     if (path === "/api/gamelets/sessions") return active;
+    if (path.endsWith("/pause")) return paused;
+    if (path.endsWith("/resume")) return resumed;
     if (path.endsWith("/stop")) return stopped;
+    if (init?.method === "DELETE") return destroyed;
     return completed;
   };
 
@@ -60,15 +69,24 @@ test("Gamelet request helpers use the real catalog, session, action, and stop en
   const finalSession = await sendAiriGameletAction(serviceRequest, "game-1", 2);
   assert.equal(finalSession.status, "completed");
   assert.equal(finalSession.state.winner, "X", "winner must come from the service response");
+  assert.equal((await pauseAiriGameletSession(serviceRequest, "game-1")).status, "paused");
+  assert.equal((await resumeAiriGameletSession(serviceRequest, "game-1")).status, "active");
   assert.equal((await stopAiriGameletSession(serviceRequest, "game-1")).status, "stopped");
+  assert.equal((await destroyAiriGameletSession(serviceRequest, "game-1")).status, "destroyed");
   assert.deepEqual(calls.map(({ path }) => path), [
     "/api/gamelets",
     "/api/gamelets/sessions",
     "/api/gamelets/sessions/game-1/actions",
+    "/api/gamelets/sessions/game-1/pause",
+    "/api/gamelets/sessions/game-1/resume",
     "/api/gamelets/sessions/game-1/stop",
+    "/api/gamelets/sessions/game-1",
   ]);
   assert.deepEqual(JSON.parse(calls[2].init.body), { action: { type: "place", cell: 2 } });
-  assert.deepEqual(JSON.parse(calls[3].init.body), { reason: "user-requested" });
+  assert.deepEqual(JSON.parse(calls[3].init.body), {});
+  assert.deepEqual(JSON.parse(calls[4].init.body), {});
+  assert.deepEqual(JSON.parse(calls[5].init.body), { reason: "user-requested" });
+  assert.equal(calls[6].init.method, "DELETE");
 });
 
 test("panel provides bilingual server-authoritative status, keyboard buttons, and errors", async () => {
@@ -85,9 +103,13 @@ test("panel provides bilingual server-authoritative status, keyboard buttons, an
   assert.match(panel, /<button[\s\S]*onClick=\{\(\) => void place\(cell\)\}/);
   assert.match(panel, /cells\.current\[firstOpenCell\]\?\.focus/);
   assert.match(panel, /stopAiriGameletSession[\s\S]*\/api\/gamelets\/sessions\/\$\{encodeURIComponent\(sessionId\)\}\/stop/);
-  assert.match(panel, /Pause and resume are not available yet\./);
-  assert.match(panel, /暂停和继续功能尚未提供。/);
+  assert.match(panel, /pauseAiriGameletSession[\s\S]*\/pause/);
+  assert.match(panel, /resumeAiriGameletSession[\s\S]*\/resume/);
+  assert.match(panel, /destroyAiriGameletSession[\s\S]*method: "DELETE"/);
   assert.match(panel, /session\?\.status === "active"[\s\S]*onClick=\{\(\) => void stop\(\)\}/);
+  assert.match(panel, /onClick=\{\(\) => void pause\(\)\}/);
+  assert.match(panel, /onClick=\{\(\) => void resume\(\)\}/);
+  assert.match(panel, /onClick=\{\(\) => void destroy\(\)\}/);
 });
 
 test("Gamelet panel consumes semantic tokens supplied by both appearance modes", async () => {
