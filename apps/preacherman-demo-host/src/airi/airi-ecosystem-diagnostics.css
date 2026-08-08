@@ -10,6 +10,12 @@
   box-shadow: var(--demo-theme-activate-shadow);
 }
 
+.demo-host--test > .demo-airi-diagnostics {
+  position: absolute;
+  top: 410px;
+  left: 480px;
+}
+
 .demo-airi-diagnostics__header {
   display: flex;
   align-items: flex-start;

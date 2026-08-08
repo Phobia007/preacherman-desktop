@@ -125,6 +125,7 @@ test("diagnostics are bilingual, rerunnable, and use only semantic theme colors"
   assert.match(styles, /var\(--demo-theme-loading\)/);
   assert.match(styles, /var\(--demo-theme-error\)/);
   assert.match(styles, /var\(--demo-theme-focus\)/);
+  assert.match(styles, /\.demo-host--test > \.demo-airi-diagnostics\s*\{[^}]*top:\s*410px;/s);
   assert.doesNotMatch(styles, /#[0-9a-f]{3,8}\b/i);
   assert.doesNotMatch(styles, /\brgba?\(/i);
 });
