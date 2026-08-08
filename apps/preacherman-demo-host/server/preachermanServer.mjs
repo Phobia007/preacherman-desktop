@@ -489,6 +489,26 @@ export function createPreachermanServer(options = {}) {
         if (latest.revision !== executionRevision) continue;
         await taskStore.update(taskId, (task) => {
           if (task.status === "running" && task.revision === executionRevision) {
+            appendTaskEvent(task, { type: "tool_call", stage: "tool-call", message: "Inspecting runtime through the built-in MCP tool" });
+          }
+        });
+        const runtimeTool = await airiMcpRuntime.callTool("preacherman::preacherman_runtime_status", {});
+        if (runtimeTool.isError) throw new Error("The built-in MCP runtime status tool failed.");
+        latest = await taskStore.get(taskId);
+        if (!latest || latest.status !== "running") return;
+        if (latest.revision !== executionRevision) continue;
+        await taskStore.update(taskId, (task) => {
+          if (task.status === "running" && task.revision === executionRevision) {
+            task.toolCall = {
+              name: "preacherman::preacherman_runtime_status",
+              parameterSummary: { keys: [], byteLength: 2 },
+              structuredResult: runtimeTool.structuredContent,
+            };
+            appendTaskEvent(task, { type: "tool_result", stage: "tool-call", message: "Built-in MCP runtime status recorded" });
+          }
+        });
+        await taskStore.update(taskId, (task) => {
+          if (task.status === "running" && task.revision === executionRevision) {
             appendTaskEvent(task, { type: "progress", stage: "writing", message: "Writing the PitchKit artifact" });
           }
         });

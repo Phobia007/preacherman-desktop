@@ -80,6 +80,8 @@ test("local service persists private provider settings and completes the guarded
   assert.equal(confirmed.response.status, 202);
   const run = await waitForRun(baseUrl, confirmed.body.run.runId);
   assert.equal(run.status, "succeeded");
+  assert.equal(run.toolCall.name, "preacherman::preacherman_runtime_status");
+  assert.equal(typeof run.toolCall.structuredResult.checkedAt, "string");
   const markdown = await readFile(run.artifact.path, "utf8");
   assert.match(markdown, /# PitchKit/);
   assert.match(markdown, /## 10 页演示大纲/);
