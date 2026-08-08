@@ -8,7 +8,8 @@ const CLIENT_FAMILIES = new Set([
 ]);
 const LOCAL_CAPABILITIES = new Set([
   "companion.chat", "conversation.history", "plugin.activity",
-  "provider.smoke-test", "runtime.io-history",
+  "plugin.hot-reload", "plugin.manager", "provider.smoke-test",
+  "runtime.io-history", "runtime.plugin-inspector",
 ]);
 const EXTERNAL_FAMILIES = new Set([
   "artistry", "computer-use", "connection", "game", "mcp", "plugin", "vision",
@@ -49,10 +50,14 @@ function backendState(capabilityId, config) {
       : { state: "configuration-required", adapter: "preacherman-provider-gateway", requirements: ["provider credentials"] };
   }
   if (family === "agent") {
-    if (["agent.tool-approval", "agent.mcp-tools"].includes(capabilityId)) {
+    if (["agent.tool-approval", "agent.mcp-tools", "agent.plugin-tools"].includes(capabilityId)) {
       return {
         state: "available",
-        adapter: capabilityId === "agent.mcp-tools" ? "preacherman-airi-mcp" : "preacherman-task-orchestrator",
+        adapter: capabilityId === "agent.mcp-tools"
+          ? "preacherman-airi-mcp"
+          : capabilityId === "agent.plugin-tools"
+            ? "preacherman-airi-plugin-host"
+            : "preacherman-task-orchestrator",
         requirements: [],
       };
     }
@@ -102,7 +107,7 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapabi
       execution = {
         status: "failed",
         error: error instanceof Error ? error.message : String(error),
-        summary: context.locale === "zh-CN" ? "MCP 执行失败。" : "MCP execution failed.",
+        summary: context.locale === "zh-CN" ? "能力执行失败。" : "Capability execution failed.",
       };
     }
     const event = {

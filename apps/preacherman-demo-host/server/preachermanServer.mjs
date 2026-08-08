@@ -15,6 +15,7 @@ import {
 import { appendTaskEvent, createTaskStore } from "./taskStore.mjs";
 import { createAiriCapabilityRuntime } from "./airiCapabilityRuntime.mjs";
 import { createAiriMcpRuntime } from "./airiMcpRuntime.mjs";
+import { createAiriPluginRuntime } from "./airiPluginRuntime.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -76,6 +77,12 @@ export function createPreachermanServer(options = {}) {
   }
 
   const airiMcpRuntime = createAiriMcpRuntime({ configFile: mcpConfigFile(), taskStore });
+
+  function pluginStateFile() {
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-plugins.v1.json");
+  }
+
+  const airiPluginRuntime = createAiriPluginRuntime({ file: pluginStateFile(), taskStore });
 
   function providerConfigFile() {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "provider-settings.json");
@@ -143,7 +150,10 @@ export function createPreachermanServer(options = {}) {
   const airiCapabilityRuntime = createAiriCapabilityRuntime({
     file: airiCapabilityEventsFile(),
     getRuntimeEnv: runtimeEnv,
-    executeCapability: airiMcpRuntime.executeCapability,
+    async executeCapability(capabilityId, context) {
+      return await airiMcpRuntime.executeCapability(capabilityId, context)
+        ?? await airiPluginRuntime.executeCapability(capabilityId, context);
+    },
   });
 
   async function saveProviderConfig(next) {
@@ -462,6 +472,35 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { result }, origin);
         return;
       }
+      if (request.method === "GET" && url.pathname === "/api/plugins") {
+        json(response, 200, { plugins: await airiPluginRuntime.listPlugins() }, origin);
+        return;
+      }
+      const pluginMatch = url.pathname.match(/^\/api\/plugins\/([A-Za-z0-9_-]{1,80})$/);
+      if (request.method === "PUT" && pluginMatch) {
+        const plugin = await airiPluginRuntime.setEnabled(pluginMatch[1], (await readJson(request)).enabled);
+        json(response, 200, { plugin }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/plugins/reload") {
+        const body = await readJson(request);
+        const plugin = await airiPluginRuntime.reload(typeof body.name === "string" ? body.name : undefined);
+        json(response, 200, { plugin }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/plugins/tools") {
+        json(response, 200, { tools: await airiPluginRuntime.listTools() }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/plugins/tools/call") {
+        const body = await readJson(request);
+        if (typeof body.name !== "string" || body.name.length > 200) {
+          json(response, 400, { error: "Plugin tool name is required." }, origin);
+          return;
+        }
+        json(response, 200, { result: await airiPluginRuntime.callTool(body.name, body.arguments ?? {}) }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/conversations/recent") {
         json(response, 200, { entries: await readConversationLedger() }, origin);
         return;
@@ -676,7 +715,7 @@ export function createPreachermanServer(options = {}) {
   return {
     server,
     async listen(port = Number(env.PREACHERMAN_SERVICE_PORT) || DEFAULT_PORT) {
-      await airiMcpRuntime.initialize();
+      await Promise.all([airiMcpRuntime.initialize(), airiPluginRuntime.initialize()]);
       return new Promise((resolveListen, reject) => {
         server.once("error", reject);
         server.listen(port, "127.0.0.1", () => {

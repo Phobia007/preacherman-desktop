@@ -55,6 +55,22 @@ test("Settings exposes the real MCP configuration and execution console in both 
   assert.match(styles, /var\(--demo-theme-error\)/);
 });
 
+test("Settings exposes the AIRI plugin lifecycle and tool console in both themes", async () => {
+  const settings = await readFile(join(sourceRoot, "settings", "SettingsScreen.tsx"), "utf8");
+  const plugins = await readFile(join(sourceRoot, "settings", "PluginSettings.tsx"), "utf8");
+  const runtime = await readFile(join(hostRoot, "server", "airiPluginRuntime.mjs"), "utf8");
+  const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
+
+  assert.match(settings, /<PluginSettings\b/);
+  assert.match(plugins, /\/api\/plugins\/tools\/call/);
+  assert.match(plugins, /data-airi-control="plugin\.manager agent\.plugin-tools runtime\.plugin-inspector plugin\.hot-reload"/);
+  assert.match(runtime, /manifest\.plugin\.airi\.moeru\.ai/);
+  assert.match(runtime, /"loading", "loaded", "authenticating", "authenticated", "announced"/);
+  assert.match(styles, /\.demo-settings__plugin-list/);
+  assert.match(styles, /var\(--demo-theme-border\)/);
+  assert.match(styles, /var\(--demo-theme-focus\)/);
+});
+
 test("the persistent shell localizes navigation and maps supplied marks to each theme", async () => {
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const controls = await readFile(join(sourceRoot, "app-shell", "WindowControls.tsx"), "utf8");

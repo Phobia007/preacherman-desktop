@@ -452,6 +452,42 @@ html[data-appearance="dark"] #root {
   white-space: pre-wrap;
 }
 
+.demo-settings__plugin-list {
+  display: grid;
+  gap: 8px;
+}
+
+.demo-settings__plugin-list article {
+  display: grid;
+  gap: 7px;
+  padding: 10px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 10px;
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface);
+}
+
+.demo-settings__plugin-list article[data-ready="true"] {
+  border-color: var(--demo-theme-focus);
+}
+
+.demo-settings__plugin-list article > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.demo-settings__plugin-list strong {
+  font: 650 11px/1.2 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.demo-settings__plugin-list span,
+.demo-settings__plugin-list small {
+  color: var(--demo-theme-muted);
+  font: 500 9px/1.35 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
 .demo-settings__button--test {
   width: 100%;
   min-height: 38px;

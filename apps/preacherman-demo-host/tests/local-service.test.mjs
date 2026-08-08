@@ -163,6 +163,42 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(mcp.body.event.execution.result.taskCount, 0);
   assert.deepEqual(mcp.body.event.execution.tools, ["fixture::fixture_status", "preacherman::preacherman_runtime_status"]);
 
+  const plugins = await request(baseUrl, "/api/plugins");
+  assert.equal(plugins.response.status, 200);
+  assert.equal(plugins.body.plugins[0].manifest.apiVersion, "v1");
+  assert.equal(plugins.body.plugins[0].manifest.kind, "manifest.plugin.airi.moeru.ai");
+  assert.equal(plugins.body.plugins[0].phase, "ready");
+
+  const pluginTools = await request(baseUrl, "/api/plugins/tools");
+  assert.deepEqual(pluginTools.body.tools.map((tool) => tool.name), ["preacherman-runtime::task_summary"]);
+  const pluginCall = await request(baseUrl, "/api/plugins/tools/call", {
+    method: "POST", body: JSON.stringify({ name: "preacherman-runtime::task_summary", arguments: {} }),
+  });
+  assert.equal(pluginCall.body.result.isError, false);
+  assert.equal(pluginCall.body.result.structuredContent.taskCount, 0);
+
+  const pluginCapability = await request(baseUrl, "/api/airi/capabilities/agent.plugin-tools/invoke", {
+    method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
+  });
+  assert.equal(pluginCapability.body.event.state, "available");
+  assert.equal(pluginCapability.body.event.adapter, "preacherman-airi-plugin-host");
+  assert.equal(pluginCapability.body.event.execution.protocol, "airi-plugin");
+  assert.deepEqual(pluginCapability.body.event.execution.tools, ["preacherman-runtime::task_summary"]);
+
+  const disabledPlugin = await request(baseUrl, "/api/plugins/preacherman-runtime", {
+    method: "PUT", body: JSON.stringify({ enabled: false }),
+  });
+  assert.equal(disabledPlugin.body.plugin.phase, "stopped");
+  assert.deepEqual((await request(baseUrl, "/api/plugins/tools")).body.tools, []);
+  const enabledPlugin = await request(baseUrl, "/api/plugins/preacherman-runtime", {
+    method: "PUT", body: JSON.stringify({ enabled: true }),
+  });
+  assert.equal(enabledPlugin.body.plugin.phase, "ready");
+  const reloadedPlugin = await request(baseUrl, "/api/plugins/reload", {
+    method: "POST", body: JSON.stringify({ name: "preacherman-runtime" }),
+  });
+  assert.ok(reloadedPlugin.body.plugin.revision > enabledPlugin.body.plugin.revision);
+
   const external = await request(baseUrl, "/api/airi/capabilities/game.minecraft/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "zh-CN" }),
   });
@@ -177,6 +213,7 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
 
   const history = await request(baseUrl, "/api/airi/events?limit=10");
   assert.equal(history.response.status, 200);
-  assert.deepEqual(history.body.events.map((event) => event.capabilityId), ["voice.tts", "game.minecraft", "agent.mcp-tools", "task.create"]);
-  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-capability-events.v1.json"), "utf8")).events.length, 4);
+  assert.deepEqual(history.body.events.map((event) => event.capabilityId), ["voice.tts", "game.minecraft", "agent.plugin-tools", "agent.mcp-tools", "task.create"]);
+  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-capability-events.v1.json"), "utf8")).events.length, 5);
+  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-plugins.v1.json"), "utf8")).enabled, true);
 });
