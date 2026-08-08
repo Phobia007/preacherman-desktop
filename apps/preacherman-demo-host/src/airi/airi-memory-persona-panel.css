@@ -1,0 +1,297 @@
+.demo-airi-memory {
+  display: grid;
+  gap: 16px;
+  width: min(100%, 920px);
+  padding: 22px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 20px;
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface-elevated);
+  box-shadow: var(--demo-theme-activate-shadow);
+}
+
+.demo-airi-memory__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.demo-airi-memory__eyebrow {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--demo-theme-loading);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.demo-airi-memory h2,
+.demo-airi-memory h3,
+.demo-airi-memory p {
+  margin: 0;
+}
+
+.demo-airi-memory h2 {
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.demo-airi-memory__header > div:first-child > p {
+  max-width: 520px;
+  margin-top: 7px;
+  color: var(--demo-theme-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.demo-airi-memory__persona {
+  display: grid;
+  gap: 3px;
+  min-width: 190px;
+  padding: 11px 13px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 12px;
+  background: var(--demo-theme-surface);
+}
+
+.demo-airi-memory__persona span,
+.demo-airi-memory__persona small {
+  color: var(--demo-theme-muted);
+  font-size: 10px;
+}
+
+.demo-airi-memory__persona-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.demo-airi-memory__persona-list > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 999px;
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-control-hover-bg);
+  font-size: 11px;
+}
+
+.demo-airi-memory__persona-list > span[data-selected="true"] {
+  border-color: var(--demo-theme-border-strong);
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface);
+}
+
+.demo-airi-memory__persona-list small {
+  color: var(--demo-theme-loading);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.demo-airi-memory__unavailable,
+.demo-airi-memory__privacy {
+  padding: 10px 12px;
+  border: 1px dashed var(--demo-theme-border-strong);
+  border-radius: 10px;
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-control-hover-bg);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.demo-airi-memory label {
+  display: grid;
+  gap: 7px;
+  color: var(--demo-theme-text);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.demo-airi-memory label small {
+  color: var(--demo-theme-muted);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.demo-airi-memory input,
+.demo-airi-memory textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--demo-theme-border-strong);
+  border-radius: 10px;
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface);
+  font: inherit;
+  font-size: 12px;
+}
+
+.demo-airi-memory input {
+  min-height: 40px;
+  padding: 8px 11px;
+}
+
+.demo-airi-memory textarea {
+  min-height: 108px;
+  padding: 10px 11px;
+  resize: vertical;
+}
+
+.demo-airi-memory input::placeholder,
+.demo-airi-memory textarea::placeholder {
+  color: var(--demo-theme-muted);
+}
+
+.demo-airi-memory input:focus-visible,
+.demo-airi-memory textarea:focus-visible,
+.demo-airi-memory button:focus-visible {
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: 2px;
+}
+
+.demo-airi-memory input:disabled,
+.demo-airi-memory textarea:disabled {
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-control-hover-bg);
+  cursor: not-allowed;
+}
+
+.demo-airi-memory__namespace {
+  max-width: 360px;
+}
+
+.demo-airi-memory__workflows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.demo-airi-memory__workflows form {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 14px;
+  background: var(--demo-theme-surface);
+}
+
+.demo-airi-memory button {
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 1px solid var(--demo-theme-activate-rest-border);
+  border-radius: 10px;
+  color: var(--demo-theme-activate-fill-text);
+  background: var(--demo-theme-activate-fill);
+  box-shadow: var(--demo-theme-activate-shadow);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.demo-airi-memory button:hover:not(:disabled) {
+  box-shadow: var(--demo-theme-activate-hover-shadow);
+}
+
+.demo-airi-memory button:disabled {
+  border-color: var(--demo-theme-border-strong);
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-control-hover-bg);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.demo-airi-memory__message,
+.demo-airi-memory__error {
+  padding: 9px 11px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.demo-airi-memory__message {
+  color: var(--demo-theme-loading);
+  background: color-mix(in srgb, var(--demo-theme-loading) 9%, transparent);
+}
+
+.demo-airi-memory__error {
+  color: var(--demo-theme-error);
+  background: color-mix(in srgb, var(--demo-theme-error) 9%, transparent);
+}
+
+.demo-airi-memory__results {
+  display: grid;
+  gap: 9px;
+  padding-top: 2px;
+}
+
+.demo-airi-memory__results h3 {
+  font-size: 13px;
+}
+
+.demo-airi-memory__results > p {
+  padding: 14px;
+  border: 1px dashed var(--demo-theme-border);
+  border-radius: 10px;
+  color: var(--demo-theme-muted);
+  font-size: 11px;
+}
+
+.demo-airi-memory__results ol {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.demo-airi-memory__results li {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 11px;
+  background: var(--demo-theme-surface);
+}
+
+.demo-airi-memory__results li[data-expired="true"] {
+  border-color: color-mix(in srgb, var(--demo-theme-error) 45%, transparent);
+}
+
+.demo-airi-memory__results li > p {
+  color: var(--demo-theme-text);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.demo-airi-memory__results li > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  color: var(--demo-theme-muted);
+  font-size: 10px;
+}
+
+.demo-airi-memory__results strong {
+  color: var(--demo-theme-error);
+  font-size: 10px;
+}
+
+@media (max-width: 700px) {
+  .demo-airi-memory__header,
+  .demo-airi-memory__workflows {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .demo-airi-memory__persona,
+  .demo-airi-memory__namespace {
+    max-width: none;
+  }
+}

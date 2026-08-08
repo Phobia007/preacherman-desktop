@@ -18,6 +18,30 @@ async function loadFeaturePlacement() {
   return import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`);
 }
 
+test("AIRI catalog remains valid UTF-8 with natural Chinese labels", async () => {
+  const sourceBuffer = await readFile(join(packageRoot, "src", "airi", "featurePlacement.ts"));
+  const source = new TextDecoder("utf-8", { fatal: true }).decode(sourceBuffer);
+  assert.doesNotMatch(source, /\uFFFD/, "the catalog must not contain Unicode replacement characters");
+  assert.doesNotMatch(source, /銆|锛|鈥|鎻掍欢|涓伐鍏|鐢熷懡鍛ㄦ湡|鍚敤|鍋滅敤/, "the catalog must not contain common UTF-8 mojibake sequences");
+
+  const { airiFeaturePlacements } = await loadFeaturePlacement();
+  const labelById = new Map(airiFeaturePlacements.flatMap((placement) => placement.features)
+    .map((candidate) => [candidate.id, candidate.label["zh-CN"]]));
+  assert.equal(labelById.get("companion.chat"), "伙伴对话");
+  assert.equal(labelById.get("task.create"), "创建任务");
+  assert.equal(labelById.get("voice.asr"), "语音识别");
+  assert.equal(labelById.get("avatar.select"), "角色模型");
+  assert.equal(labelById.get("runtime.plugin-inspector"), "插件检查器");
+  assert.equal(labelById.get("conversation.history"), "对话记录");
+  assert.equal(labelById.get("plugin.manager"), "插件管理");
+
+  const sectionTitles = airiFeaturePlacements.flatMap((placement) => placement.sections)
+    .map((candidate) => candidate.title["zh-CN"]);
+  for (const title of ["开始使用", "智能体工具", "语音会话", "构建身份", "快速检查", "记忆层", "工具与扩展"]) {
+    assert.ok(sectionTitles.includes(title), `missing natural Chinese section title: ${title}`);
+  }
+});
+
 test("AIRI controls have one explicit Preacherman surface placement", async () => {
   const [registry, panel, panelStyles, app, styles] = await Promise.all([
     readFile(join(packageRoot, "src", "airi", "featurePlacement.ts"), "utf8"),

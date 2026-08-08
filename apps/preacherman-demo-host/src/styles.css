@@ -302,11 +302,31 @@ html[data-appearance="dark"] #root {
 
 .demo-settings__controls {
   display: grid;
-  width: 420px;
+  width: min(1040px, calc(100% - 120px));
   max-height: min(760px, calc(100% - 180px));
   gap: 14px;
   overflow: auto;
   padding: 4px 10px 14px;
+}
+
+.demo-airi-work-runtime {
+  position: absolute;
+  top: 96px;
+  left: 400px;
+  z-index: 6;
+  display: grid;
+  width: 610px;
+  max-height: 820px;
+  gap: 18px;
+  overflow: auto;
+  padding: 8px 12px 24px;
+}
+
+.demo-airi-work-runtime > .demo-airi-widget-gallery,
+.demo-airi-work-runtime > .demo-airi-gamelet {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
 }
 
 .demo-settings__button {
@@ -603,8 +623,10 @@ html[data-appearance="dark"] #root {
 
 .demo-ledger {
   display: grid;
+  grid-template-columns: minmax(480px, 650px) minmax(440px, 560px);
   width: 100%;
   height: 100%;
+  gap: 18px;
   place-items: center;
   color: var(--demo-theme-text);
 }
@@ -612,7 +634,7 @@ html[data-appearance="dark"] #root {
 .demo-ledger__content {
   display: grid;
   box-sizing: border-box;
-  width: min(720px, calc(100% - 160px));
+  width: 100%;
   max-height: 680px;
   gap: 16px;
   overflow: auto;
@@ -622,6 +644,13 @@ html[data-appearance="dark"] #root {
   background: color-mix(in srgb, var(--demo-theme-surface-elevated) 86%, transparent);
   box-shadow: var(--demo-theme-activate-shadow);
   backdrop-filter: blur(24px) saturate(145%);
+}
+
+.demo-ledger > .demo-airi-memory {
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 680px;
+  overflow: auto;
 }
 
 .demo-ledger__content > header { display: grid; gap: 6px; }

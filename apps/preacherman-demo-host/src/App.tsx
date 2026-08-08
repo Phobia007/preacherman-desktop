@@ -9,6 +9,8 @@ import { createDemoActionLog } from "./actionLog";
 import { ABTaskConsole } from "./ab/ABTaskConsole";
 import { AiriFeaturePanel } from "./airi/AiriFeaturePanel";
 import { AiriEcosystemDiagnostics } from "./airi/AiriEcosystemDiagnostics";
+import { AiriGameletPanel } from "./airi/AiriGameletPanel";
+import { AiriWidgetGallery } from "./airi/AiriWidgetGallery";
 import { airiServiceRequest } from "./airi/capabilityClient";
 import { featuresForSurface, findAiriFeature } from "./airi/featurePlacement";
 import { AppShell } from "./app-shell/AppShell";
@@ -165,6 +167,10 @@ export function App() {
       data-airi-features={featuresForSurface("workspace").join(" ")}
     >
       {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
+      <div className="demo-airi-work-runtime" data-airi-control="plugin.widgets plugin.gamelets game.tic-tac-toe">
+        <AiriWidgetGallery locale={preferences.locale} serviceRequest={airiServiceRequest} />
+        <AiriGameletPanel locale={preferences.locale} serviceRequest={airiServiceRequest} />
+      </div>
       <ABTaskConsole locale={preferences.locale} />
     </main>
   );
@@ -232,7 +238,7 @@ export function App() {
               />
             )
           : activeSurfaceType === "ledger"
-            ? <ConversationLedgerScreen locale={preferences.locale} />
+            ? <ConversationLedgerScreen locale={preferences.locale} serviceRequest={airiServiceRequest} />
           : activeSurfaceType === "test"
             ? testContent
           : (

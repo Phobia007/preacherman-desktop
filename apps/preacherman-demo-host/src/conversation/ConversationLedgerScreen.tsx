@@ -7,10 +7,14 @@ import {
 } from "../conversationLedger";
 import { loadAiriCapabilityEvents, type AiriCapabilityEvent } from "../airi/capabilityClient";
 import type { Locale } from "../preferences";
+import { AiriMemoryPersonaPanel } from "../airi/AiriMemoryPersonaPanel";
 
 type LedgerView = "conversations" | "tasks" | "artifacts" | "capabilities";
 
-export function ConversationLedgerScreen({ locale }: { readonly locale: Locale }) {
+export function ConversationLedgerScreen({ locale, serviceRequest }: {
+  readonly locale: Locale;
+  readonly serviceRequest: <T>(path: string, init?: RequestInit) => Promise<T>;
+}) {
   const [entries, setEntries] = useState<readonly ConversationLedgerEntry[]>([]);
   const [tasks, setTasks] = useState<readonly TaskLedgerEntry[]>([]);
   const [capabilityEvents, setCapabilityEvents] = useState<readonly AiriCapabilityEvent[]>([]);
@@ -43,5 +47,6 @@ export function ConversationLedgerScreen({ locale }: { readonly locale: Locale }
       {view === "artifacts" ? artifactTasks.length ? <ol className="demo-ledger__list">{artifactTasks.map((task) => <li key={task.taskId}><time>{new Date(task.updatedAt).toLocaleString()}</time><strong>{task.artifact?.name}</strong><p><code>{task.artifact?.path}</code></p>{task.artifact?.content !== undefined ? <pre className="demo-ledger__artifact-preview">{JSON.stringify(task.artifact.content, null, 2)}</pre> : null}</li>)}</ol> : <p className="demo-ledger__empty">{chinese ? "任务完成后，产物会出现在这里。" : "Completed task artifacts will appear here."}</p> : null}
       {view === "capabilities" ? capabilityEvents.length ? <ol className="demo-ledger__list">{capabilityEvents.map((event) => <li data-status={event.state} key={event.eventId}><time>{new Date(event.at).toLocaleString()} · {event.state}</time><strong>{event.capabilityId}</strong><p>{event.message}</p></li>)}</ol> : <p className="demo-ledger__empty">{chinese ? "点击任一 AIRI 功能后，后端适配结果会记录在这里。" : "Backend adapter results appear here after any AIRI capability is clicked."}</p> : null}
     </div>
+    <AiriMemoryPersonaPanel locale={locale} serviceRequest={serviceRequest} />
   </main>;
 }

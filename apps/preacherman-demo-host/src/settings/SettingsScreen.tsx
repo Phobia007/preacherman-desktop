@@ -3,6 +3,7 @@ import type { Appearance, Locale } from "../preferences";
 import { localServiceUrl, localServiceUrlForPort, readServicePort, saveServicePort } from "../serviceConfig";
 import { McpSettings } from "./McpSettings";
 import { PluginSettings } from "./PluginSettings";
+import { AiriProviderConnectionsPanel } from "../airi/AiriProviderConnectionsPanel";
 
 interface SettingsScreenProps {
   readonly appearance: Appearance;
@@ -89,6 +90,7 @@ export function SettingsScreen({ appearance, locale, onAppearanceChange, onLocal
         {message ? <p className="demo-settings__message" role="status">{message}</p> : null}
         {test ? <dl className="demo-settings__results"><div><dt>DeepSeek</dt><dd data-ok={test.deepseek.ok}>{test.deepseek.message}</dd></div><div><dt>Qwen ASR</dt><dd data-ok={test.asr.ok}>{test.asr.message}</dd></div><div><dt>Qwen TTS</dt><dd data-ok={test.tts.ok}>{test.tts.message}</dd></div></dl> : null}
       </section>
+      <AiriProviderConnectionsPanel locale={locale} serviceRequest={serviceRequest} />
       <McpSettings locale={locale} serviceRequest={serviceRequest} />
       <PluginSettings locale={locale} serviceRequest={serviceRequest} />
     </div>
