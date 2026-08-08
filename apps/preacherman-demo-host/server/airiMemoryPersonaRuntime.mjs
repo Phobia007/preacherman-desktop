@@ -14,6 +14,8 @@ const PERSONA_NAME_BYTES = 120;
 const PERSONA_DESCRIPTION_BYTES = 2 * 1024;
 const PERSONA_INSTRUCTIONS_BYTES = 8 * 1024;
 const NAMESPACE_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
+const OWNER_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/;
+const DEFAULT_OWNER = "preacherman-runtime";
 const SENSITIVE_FIELD_PATTERN = /^(?:api[-_]?key|access[-_]?key|secret(?:[-_]?key)?|token|authorization|password|cookie|audio(?:data|bytes|buffer)?|voice(?:data|bytes|buffer)?|private[-_]?key|encryption[-_]?key|keys?)$/i;
 
 function runtimeError(code, message, statusCode = 400, cause) {
@@ -136,7 +138,7 @@ async function writePrivateJson(target, value, maximumBytes) {
 }
 
 function validateLoadedState(value) {
-  if (!value || value.version !== 1 || !Array.isArray(value.personas) || !Array.isArray(value.memories)) {
+  if (!value || ![1, 2].includes(value.version) || !Array.isArray(value.personas) || !Array.isArray(value.memories)) {
     throw runtimeError("MEMORY_STORE_INVALID", "Memory/Persona store has an unsupported or invalid format.", 500);
   }
   if (value.selectedPersonaId !== null && typeof value.selectedPersonaId !== "string") {
@@ -145,7 +147,16 @@ function validateLoadedState(value) {
   if (value.selectedPersonaId && !value.personas.some((persona) => persona.id === value.selectedPersonaId)) {
     throw runtimeError("MEMORY_STORE_INVALID", "Selected persona does not exist in the Memory/Persona store.", 500);
   }
-  return value;
+  let migrated = value.version === 1;
+  const memories = value.memories.map((memory) => {
+    if (memory && typeof memory.owner === "string" && OWNER_PATTERN.test(memory.owner)) return memory;
+    migrated = true;
+    return { ...memory, owner: DEFAULT_OWNER };
+  });
+  return {
+    state: { ...value, version: 2, memories },
+    migrated,
+  };
 }
 
 function publicMemory(memory, currentTime) {
@@ -160,8 +171,12 @@ export function createAiriMemoryPersonaRuntime({
   now = () => new Date().toISOString(),
   limits: limitOverrides = {},
   defaultTimezone = "UTC",
+  principal = DEFAULT_OWNER,
 } = {}) {
   if (typeof file !== "string" || !file) throw new TypeError("Memory/Persona runtime requires a persistence file.");
+  if (typeof principal !== "string" || !OWNER_PATTERN.test(principal)) {
+    throw new TypeError("Memory/Persona principal must be a valid owner identifier.");
+  }
   const limits = Object.freeze({ ...MEMORY_PERSONA_LIMITS, ...limitOverrides });
   for (const [name, value] of Object.entries(limits)) {
     if (!Number.isInteger(value) || value < 1) throw new TypeError(`Memory/Persona limit ${name} must be a positive integer.`);
@@ -192,10 +207,12 @@ export function createAiriMemoryPersonaRuntime({
           if (details.size > limits.maxStoreBytes) {
             throw runtimeError("MEMORY_STORE_LIMIT", `Memory store exceeds the ${limits.maxStoreBytes}-byte limit.`, 413);
           }
-          state = validateLoadedState(JSON.parse(await readFile(file, "utf8")));
+          const loaded = validateLoadedState(JSON.parse(await readFile(file, "utf8")));
+          state = loaded.state;
+          if (loaded.migrated) await writePrivateJson(file, state, limits.maxStoreBytes);
         } catch (error) {
           if (error?.code !== "ENOENT") throw error;
-          state = { version: 1, selectedPersonaId: null, personas: [], memories: [], updatedAt: now() };
+          state = { version: 2, selectedPersonaId: null, personas: [], memories: [], updatedAt: now() };
           await writePrivateJson(file, state, limits.maxStoreBytes);
         }
         transition("ready");
@@ -333,13 +350,15 @@ export function createAiriMemoryPersonaRuntime({
       if (current.memories.length >= limits.maxTotalMemories) {
         throw runtimeError("MEMORY_LIMIT_REACHED", `Total memory limit of ${limits.maxTotalMemories} reached.`, 409);
       }
-      const scopeCount = current.memories.filter((memory) => memory.personaId === persona.id && memory.namespace === namespace).length;
+      const scopeCount = current.memories.filter((memory) => memory.owner === principal
+        && memory.personaId === persona.id && memory.namespace === namespace).length;
       if (scopeCount >= limits.maxMemoriesPerNamespace) {
         throw runtimeError("MEMORY_LIMIT_REACHED", `Memory limit of ${limits.maxMemoriesPerNamespace} reached for namespace ${namespace}.`, 409);
       }
       const recordedAt = now();
       const memory = {
         id: randomUUID(),
+        owner: principal,
         personaId: persona.id,
         namespace,
         text: text.value,
@@ -367,7 +386,8 @@ export function createAiriMemoryPersonaRuntime({
       const persona = findPersona(current, value.personaId);
       const currentTime = new Date(now());
       return current.memories
-        .filter((memory) => memory.personaId === persona.id && memory.namespace === namespace)
+        .filter((memory) => memory.owner === principal
+          && memory.personaId === persona.id && memory.namespace === namespace)
         .map((memory) => publicMemory(memory, currentTime))
         .filter((memory) => value.includeExpired || !memory.temporal.isExpired)
         .filter((memory) => !query || memory.text.toLocaleLowerCase().includes(query)
@@ -386,7 +406,7 @@ export function createAiriMemoryPersonaRuntime({
     return mutate((current) => {
       findPersona(current, personaId);
       const index = current.memories.findIndex((memory) => memory.id === memoryId
-        && memory.personaId === personaId && memory.namespace === namespace);
+        && memory.owner === principal && memory.personaId === personaId && memory.namespace === namespace);
       if (index < 0) throw runtimeError("MEMORY_NOT_FOUND", "Memory does not exist in the requested persona and namespace.", 404);
       current.memories.splice(index, 1);
       return { id: memoryId, personaId, namespace, deleted: true };

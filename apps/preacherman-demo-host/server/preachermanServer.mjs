@@ -182,64 +182,58 @@ export function createPreachermanServer(options = {}) {
     kit: "tools",
     operation: "call",
     versionRange: "^1.0.0",
-    handler(input) {
-      return executePluginToolAsTask(input?.name, input?.arguments ?? {});
+    handler(input, bindingContext) {
+      return executePluginToolAsTask(input?.name, input?.arguments ?? {}, {
+        callerPluginId: bindingContext.callerPluginId,
+        approved: false,
+      });
     },
   });
 
-  async function executePluginToolAsTask(name, args) {
+  async function executePluginToolAsTask(name, args, {
+    callerPluginId: callerId = "preacherman-runtime",
+    approved = false,
+  } = {}) {
     const separator = name.indexOf("::");
     if (separator < 1) {
       const error = new Error("Plugin tool name must include its plugin id.");
       error.statusCode = 400;
       throw error;
     }
-    const pluginId = name.slice(0, separator);
+    const providerPluginId = name.slice(0, separator);
     const toolName = name.slice(separator + 2);
-    const context = { callerPluginId: pluginId };
-    const created = await airiKitsRuntime.bindings.invoke({
-      kit: "task",
-      operation: "create",
-      versionRange: "^1.0.0",
-      input: { objective: `Execute AIRI plugin tool ${name}`, parameters: args, toolName },
-      context,
+    const invokeBinding = (kit, operation, input) => airiKitsRuntime.bindings.invokeAs(
+      callerId, kit, operation, input, { versionRange: "^1.0.0", providerPluginId },
+    );
+    const created = await invokeBinding("task", "create", {
+      objective: `Execute AIRI plugin tool ${name}`,
+      parameters: args,
+      toolName,
     });
     const taskId = created.task.taskId;
     let terminal = false;
     try {
-      await airiKitsRuntime.bindings.invoke({
-        kit: "ledger",
-        operation: "append",
-        versionRange: "^1.0.0",
-        input: { taskId, value: 0.35, stage: "tool-call", message: `Calling ${name}.` },
-        context,
-      });
-      const result = await airiPluginRuntime.callTool(name, args);
+      await invokeBinding("ledger", "append", { taskId, value: 0.35, stage: "tool-call", message: `Calling ${name}.` });
+      const result = await airiPluginRuntime.callTool(name, args, { approved, callerPluginId: callerId });
       if (result.isError) {
         await airiPluginTaskBinding.execute("fail", {
           taskId,
           error: `Plugin tool ${name} returned an error result.`,
           result: result.structuredContent,
-        }, { pluginId });
+        }, { pluginId: callerId });
         terminal = true;
         const error = new Error(`Plugin tool ${name} returned an error result.`);
         error.statusCode = 502;
         throw error;
       }
-      const completed = await airiKitsRuntime.bindings.invoke({
-        kit: "ledger",
-        operation: "write-artifact",
-        versionRange: "^1.0.0",
-        input: {
-          taskId,
-          result: result.structuredContent,
-          artifact: {
-            name: `${toolName}-result.json`,
-            mediaType: "application/json",
-            content: result.structuredContent,
-          },
+      const completed = await invokeBinding("ledger", "write-artifact", {
+        taskId,
+        result: result.structuredContent,
+        artifact: {
+          name: `${toolName}-result.json`,
+          mediaType: "application/json",
+          content: result.structuredContent,
         },
-        context,
       });
       terminal = true;
       return { ...result, task: completed.task, ledger: completed.ledger };
@@ -248,7 +242,7 @@ export function createPreachermanServer(options = {}) {
         await airiPluginTaskBinding.execute("fail", {
           taskId,
           error: error instanceof Error ? error.message : String(error),
-        }, { pluginId }).catch(() => undefined);
+        }, { pluginId: callerId }).catch(() => undefined);
       }
       throw error;
     }
@@ -394,7 +388,7 @@ export function createPreachermanServer(options = {}) {
     if (capabilityId.startsWith("connection.")) {
       const service = capabilityId.slice("connection.".length);
       const connection = airiConnectionRuntime.get(service);
-      return { status: "succeeded", protocol: "airi-connection", connection, summary: `${service} status: ${connection.status}.` };
+      return { status: "inspected", protocol: "airi-connection", connection, summary: `${service} status: ${connection.status}.` };
     }
     const computerVisionCapability = {
       "vision.screen": "screenshot",
@@ -419,9 +413,64 @@ export function createPreachermanServer(options = {}) {
     return undefined;
   }
 
+  async function resolveEcosystemCapabilityStatus(capabilityId) {
+    if (capabilityId.startsWith("connection.")) {
+      const service = capabilityId.slice("connection.".length);
+      try {
+        const connection = airiConnectionRuntime.get(service);
+        const state = connection.status === "configuration-required"
+          ? "configuration-required"
+          : connection.status === "external-runtime-required"
+            ? "external-runtime-required"
+            : "available";
+        return { state, adapter: `airi-connection-${service}`, requirements: state === "available" ? [] : ["connection configuration and adapter"] };
+      } catch {
+        return { state: "external-runtime-required", adapter: "airi-connection", requirements: ["connection adapter"] };
+      }
+    }
+    const computerVisionCapability = {
+      "vision.screen": "screenshot",
+      "vision.camera": "camera-window",
+      "computer-use.desktop": "cursor-monitor",
+      "computer-use.browser": "cursor-monitor",
+      "computer-use.dom": "cursor-monitor",
+      "computer-use.session": "cursor-monitor",
+      "computer-use.transcript": "cursor-monitor",
+    }[capabilityId];
+    if (computerVisionCapability) {
+      const capability = airiComputerVisionRuntime.status(computerVisionCapability);
+      return {
+        state: capability.phase === "ready" ? "available" : "external-runtime-required",
+        adapter: capability.adapter?.pluginId ?? "airi-computer-vision",
+        requirements: capability.phase === "ready" ? [] : ["desktop or vision adapter"],
+      };
+    }
+    const providerCapability = {
+      "voice.asr": ["dashscope", "asr"],
+      "voice.asr-test": ["dashscope", "asr"],
+      "voice.tts": ["dashscope", "tts"],
+      "voice.tts-preview": ["dashscope", "tts"],
+      "voice.tts-test": ["dashscope", "tts"],
+      "provider.credentials": ["deepseek", "chat"],
+      "provider.smoke-test": ["deepseek", "chat"],
+    }[capabilityId];
+    if (providerCapability) {
+      const [providerId, operation] = providerCapability;
+      const provider = await airiProviderRuntime.get(providerId);
+      const state = provider.capabilities[operation]?.state;
+      return {
+        state: state === "ready" ? "available" : state === "configuration-required" ? "configuration-required" : "external-runtime-required",
+        adapter: `airi-provider-${providerId}`,
+        requirements: state === "ready" ? [] : [`${providerId} ${operation} configuration and adapter`],
+      };
+    }
+    return undefined;
+  }
+
   const airiCapabilityRuntime = createAiriCapabilityRuntime({
     file: airiCapabilityEventsFile(),
     getRuntimeEnv: runtimeEnv,
+    resolveCapabilityStatus: resolveEcosystemCapabilityStatus,
     async executeCapability(capabilityId, context) {
       return await executeEcosystemCapability(capabilityId, context)
         ?? await airiMcpRuntime.executeCapability(capabilityId, context)
@@ -677,6 +726,31 @@ export function createPreachermanServer(options = {}) {
     return run;
   }
 
+  function createPluginToolProposal({ id, objective, locale }) {
+    const chinese = locale === "zh-CN";
+    return {
+      proposalId: id,
+      revision: 1,
+      kind: "plugin-tool",
+      objective,
+      executor: chinese ? "AIRI 插件工具执行器" : "AIRI plugin tool executor",
+      inputs: ["preacherman-runtime::task_summary"],
+      outputs: ["task_summary-result.json"],
+      allowedTools: ["preacherman-runtime::task_summary"],
+      successCriteria: [chinese ? "生成可在 Ledger 审阅的结构化产物" : "Produce a structured artifact reviewable in Ledger"],
+      editableFields: ["objective"],
+    };
+  }
+
+  async function startPluginToolRun(proposal) {
+    const result = await executePluginToolAsTask("preacherman-runtime::task_summary", {}, {
+      callerPluginId: "preacherman-runtime",
+      approved: true,
+    });
+    const stored = await taskStore.get(result.task.taskId);
+    return { ...stored, runId: stored.taskId, proposalId: proposal.proposalId };
+  }
+
   function requestOrigin(request) {
     const origin = request.headers.origin;
     if (!origin) return "http://127.0.0.1:1420";
@@ -810,7 +884,12 @@ export function createPreachermanServer(options = {}) {
           json(response, 400, { error: "Plugin tool name is required." }, origin);
           return;
         }
-        json(response, 200, { result: await executePluginToolAsTask(body.name, body.arguments ?? {}) }, origin);
+        json(response, 200, {
+          result: await executePluginToolAsTask(body.name, body.arguments ?? {}, {
+            callerPluginId: "preacherman-runtime",
+            approved: body.approved === true,
+          }),
+        }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/widgets") {
@@ -842,8 +921,29 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { session }, origin);
         return;
       }
+      const gameletStopMatch = url.pathname.match(/^\/api\/gamelets\/sessions\/([^/]+)\/stop$/);
+      if (request.method === "POST" && gameletStopMatch) {
+        const body = await readJson(request);
+        const session = await airiGameletRuntime.stopSession({
+          pluginId: "preacherman-runtime",
+          sessionId: decodeURIComponent(gameletStopMatch[1]),
+          reason: typeof body.reason === "string" ? body.reason : "requested",
+        });
+        json(response, 200, { session }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/providers/catalog") {
         json(response, 200, { providers: await airiProviderRuntime.catalog() }, origin);
+        return;
+      }
+      const providerOperationMatch = url.pathname.match(/^\/api\/providers\/([^/]+)\/(test|invoke)$/);
+      if (request.method === "POST" && providerOperationMatch) {
+        const body = await readJson(request);
+        const providerId = decodeURIComponent(providerOperationMatch[1]);
+        const result = providerOperationMatch[2] === "test"
+          ? await airiProviderRuntime.test(providerId, { capability: body.capability })
+          : await airiProviderRuntime.invoke(providerId, { capability: body.capability, input: body.input });
+        json(response, 200, { result }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/personas") {
@@ -851,6 +951,12 @@ export function createPreachermanServer(options = {}) {
           personas: await airiMemoryPersonaRuntime.listPersonas(),
           selected: await airiMemoryPersonaRuntime.getSelectedPersona(),
         }, origin);
+        return;
+      }
+      const personaSelectMatch = url.pathname.match(/^\/api\/personas\/([^/]+)\/select$/);
+      if (request.method === "POST" && personaSelectMatch) {
+        const selected = await airiMemoryPersonaRuntime.selectPersona(decodeURIComponent(personaSelectMatch[1]));
+        json(response, 200, { selected }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/memory/remember") {
@@ -863,6 +969,21 @@ export function createPreachermanServer(options = {}) {
       }
       if (request.method === "GET" && url.pathname === "/api/connections") {
         json(response, 200, { connections: airiConnectionRuntime.list() }, origin);
+        return;
+      }
+      const connectionOperationMatch = url.pathname.match(/^\/api\/connections\/([^/]+)\/(configure|test|connect|disconnect)$/);
+      if (request.method === "POST" && connectionOperationMatch) {
+        const body = await readJson(request);
+        const connectionId = decodeURIComponent(connectionOperationMatch[1]);
+        const operation = connectionOperationMatch[2];
+        const connection = operation === "configure"
+          ? airiConnectionRuntime.configure(connectionId, body.configuration ?? {})
+          : operation === "test"
+            ? await airiConnectionRuntime.test(connectionId)
+            : operation === "connect"
+              ? await airiConnectionRuntime.connect(connectionId)
+              : await airiConnectionRuntime.disconnect(connectionId);
+        json(response, 200, { connection }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/computer-vision") {
@@ -918,10 +1039,20 @@ export function createPreachermanServer(options = {}) {
           json(response, 400, { error: "input must contain 1 to 4000 characters." }, origin);
           return;
         }
-        const turn = await createCompanionTurn(input, locale, body.history);
+        const pluginToolRequested = /(?:airi\s*)?(?:plugin|插件).*(?:summary|status|摘要|状态)|(?:summary|status|摘要|状态).*(?:plugin|插件)/i.test(input);
+        const turn = pluginToolRequested
+          ? {
+              message: locale === "zh-CN" ? "我可以运行 AIRI 插件任务摘要工具；确认后，结果会作为 TaskRun 产物写入 Ledger。" : "I can run the AIRI plugin task-summary tool. After approval, its result will be written to Ledger as a TaskRun artifact.",
+              speechText: locale === "zh-CN" ? "请确认运行插件任务摘要工具。" : "Please approve the plugin task-summary tool.",
+              action: "propose_task",
+              diagnostics: { source: "fallback", model: null, reason: "local_plugin_intent" },
+            }
+          : await createCompanionTurn(input, locale, body.history);
         let proposal = null;
         if (turn.action === "propose_task") {
-          proposal = createPitchProposal({ id: `proposal_${randomUUID()}`, objective: input, locale });
+          proposal = pluginToolRequested
+            ? createPluginToolProposal({ id: `proposal_${randomUUID()}`, objective: input, locale })
+            : createPitchProposal({ id: `proposal_${randomUUID()}`, objective: input, locale });
           proposals.set(proposal.proposalId, proposal);
         }
         json(response, 200, { displayText: turn.message, speechText: turn.speechText || turn.message.slice(0, 80), action: turn.action, proposal, diagnostics: turn.diagnostics }, origin);
@@ -936,7 +1067,7 @@ export function createPreachermanServer(options = {}) {
         }
         const body = await readJson(request);
         if (typeof body.objective === "string" && body.objective.trim()) proposal.objective = body.objective.trim();
-        const run = await startPitchRun(proposal);
+        const run = proposal.kind === "plugin-tool" ? await startPluginToolRun(proposal) : await startPitchRun(proposal);
         json(response, 202, { run }, origin);
         return;
       }

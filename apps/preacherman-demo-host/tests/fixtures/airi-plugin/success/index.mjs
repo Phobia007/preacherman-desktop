@@ -11,7 +11,19 @@ export default {
         description: "Return the supplied label through the external plugin bridge.",
         inputSchema: {
           type: "object",
-          properties: { label: { type: "string" } },
+          properties: {
+            label: { type: "string" },
+            count: { type: "number" },
+            enabled: { type: "boolean" },
+            tags: { type: "array", items: { type: "string" } },
+            metadata: {
+              type: "object",
+              properties: { code: { type: "string" } },
+              required: ["code"],
+              additionalProperties: false
+            }
+          },
+          required: ["label"],
           additionalProperties: false
         },
         async execute(args) {

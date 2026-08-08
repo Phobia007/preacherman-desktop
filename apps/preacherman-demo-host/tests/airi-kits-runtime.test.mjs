@@ -71,19 +71,32 @@ test("binding registry uniquely maps kit operations to real async handlers", asy
     operation: "create",
     versionRange: "^1.0.0",
     async handler(input, context) {
-      const task = { id: `task-${tasks.size + 1}`, title: input.title, source: context.pluginId };
+      const task = {
+        id: `task-${tasks.size + 1}`,
+        title: input.title,
+        caller: context.callerPluginId,
+        provider: context.providerPluginId,
+        trustedCaller: context.trustedCaller,
+      };
       tasks.set(task.id, task);
       return task;
     },
   });
 
-  const created = await runtime.bindings.invoke({
-    kit: "task",
-    operation: "create",
-    versionRange: "~1.0.0",
-    input: { title: "Ship the demo" },
+  const created = await runtime.bindings.invokeTrusted(
+    "preacherman-runtime",
+    "task",
+    "create",
+    { title: "Ship the demo" },
+    { versionRange: "~1.0.0" },
+  );
+  assert.deepEqual(created, {
+    id: "task-1",
+    title: "Ship the demo",
+    caller: "preacherman-runtime",
+    provider: "task-adapter",
+    trustedCaller: true,
   });
-  assert.deepEqual(created, { id: "task-1", title: "Ship the demo", source: "task-adapter" });
   assert.deepEqual([...tasks.values()], [created]);
   assert.deepEqual(runtime.bindings.list(), [{ pluginId: "task-adapter", kit: "task", operation: "create", versionRange: "^1.0.0" }]);
 
@@ -92,9 +105,49 @@ test("binding registry uniquely maps kit operations to real async handlers", asy
     { code: "BINDING_ALREADY_REGISTERED", statusCode: 409 },
   );
   await assert.rejects(
-    runtime.bindings.invoke({ kit: "task", operation: "list", input: {} }),
+    runtime.bindings.invokeTrusted("preacherman-runtime", "task", "list", {}),
     { code: "BINDING_NOT_FOUND", statusCode: 404 },
   );
+});
+
+test("external callers must require a compatible kit before invokeAs", async () => {
+  const runtime = createAiriKitsRuntime();
+  const calls = [];
+  runtime.bindings.bind({
+    pluginId: "task-adapter",
+    kit: "task",
+    operation: "create",
+    versionRange: "^1.0.0",
+    handler(input, context) {
+      calls.push({ input, context });
+      return { accepted: true };
+    },
+  });
+
+  await assert.rejects(
+    runtime.bindings.invokeAs("calendar-plugin", "task", "create", { title: "Blocked" }),
+    { code: "KIT_CONSUMER_REQUIRED", statusCode: 403 },
+  );
+  runtime.kits.attachConsumer("calendar-plugin", "task", "^1.0.0");
+  await assert.rejects(
+    runtime.bindings.invokeAs("calendar-plugin", "task", "create", { title: "Future" }, { versionRange: "^2.0.0" }),
+    { code: "KIT_CONSUMER_VERSION_FORBIDDEN", statusCode: 403 },
+  );
+
+  assert.deepEqual(
+    await runtime.bindings.invokeAs("calendar-plugin", "task", "create", { title: "Allowed" }),
+    { accepted: true },
+  );
+  assert.deepEqual(calls, [{
+    input: { title: "Allowed" },
+    context: {
+      kit: "task",
+      operation: "create",
+      callerPluginId: "calendar-plugin",
+      providerPluginId: "task-adapter",
+      trustedCaller: false,
+    },
+  }]);
 });
 
 test("binding failures stay explicit and plugin cleanup removes all owned state", async () => {
@@ -110,7 +163,7 @@ test("binding failures stay explicit and plugin cleanup removes all owned state"
   });
 
   await assert.rejects(
-    runtime.bindings.invoke({ kit: "ledger", operation: "append", input: { event: "started" } }),
+    runtime.bindings.invokeAs("broken-plugin", "ledger", "append", { event: "started" }),
     (error) => error.code === "BINDING_EXECUTION_FAILED" && error.statusCode === 500 && error.cause?.message === "disk unavailable",
   );
 
@@ -118,7 +171,7 @@ test("binding failures stay explicit and plugin cleanup removes all owned state"
   assert.deepEqual(runtime.bindings.list({ pluginId: "broken-plugin" }), []);
   assert.deepEqual(runtime.kits.discover({ pluginId: "broken-plugin" }), []);
   await assert.rejects(
-    runtime.bindings.invoke({ kit: "ledger", operation: "append", input: {} }),
-    { code: "BINDING_NOT_FOUND", statusCode: 404 },
+    runtime.bindings.invokeAs("broken-plugin", "ledger", "append", {}),
+    { code: "KIT_CONSUMER_REQUIRED", statusCode: 403 },
   );
 });

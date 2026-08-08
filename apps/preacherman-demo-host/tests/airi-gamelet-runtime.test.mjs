@@ -96,8 +96,18 @@ test("adapter timeouts do not commit late state and active session limit is expl
   assert.deepEqual(unchanged.state, { turns: 0 });
   assert.equal(unchanged.history.length, 1);
 
-  const stopped = await runtime.stopSession({ pluginId: "first-player", sessionId: session.id });
+  const stopped = await runtime.stopSession({
+    pluginId: "first-player",
+    sessionId: session.id,
+    reason: "user-requested",
+  });
   assert.equal(stopped.status, "stopped");
+  assert.deepEqual(stopped.events.at(-1), {
+    sequence: 2,
+    at: "2026-08-08T00:00:01.000Z",
+    type: "session.stopped",
+    reason: "user-requested",
+  });
   const replacement = await runtime.createSession({ pluginId: "second-player", gameletId: "slow-game" });
   assert.equal(replacement.status, "active");
 });
@@ -133,4 +143,74 @@ test("removePlugin cleans provider and consumer sessions while ownership protect
   assert.equal(runtime.listSessions({ pluginId: "consumer-plugin" }).length, 0);
   assert.deepEqual(stopped.map(({ sessionId }) => sessionId).sort(), [consumerSession.id, providerSession.id].sort());
   assert.equal(stopped.every(({ reason }) => reason === "plugin-removed"), true);
+});
+
+test("adapter output must remain JSON-safe and within byte, depth, node, and event limits", async () => {
+  const definition = {
+    id: "bounded-game",
+    version: "1.0.0",
+    title: "Bounded game",
+    description: "Memory limit test adapter.",
+    actions: [{ type: "update" }],
+  };
+  const expectCreateFailure = async (options, create, expected) => {
+    const runtime = fixture({ includeBuiltin: false, ...options });
+    runtime.register({ pluginId: "bounded-provider", definition, adapter: { create, send: () => ({ state: {} }) } });
+    await assert.rejects(
+      runtime.createSession({ pluginId: "bounded-player", gameletId: "bounded-game" }),
+      expected,
+    );
+  };
+
+  await expectCreateFailure({}, () => ({ state: { createdAt: new Date() } }), {
+    code: "INVALID_GAMELET_STATE", statusCode: 500,
+  });
+  await expectCreateFailure({ maxStateBytes: 24 }, () => ({ state: { content: "x".repeat(64) } }), {
+    code: "GAMELET_JSON_LIMIT", statusCode: 413,
+  });
+  await expectCreateFailure({ maxJsonDepth: 2 }, () => ({ state: { a: { b: { c: true } } } }), {
+    code: "GAMELET_JSON_LIMIT", statusCode: 413,
+  });
+  await expectCreateFailure({ maxJsonNodes: 3 }, () => ({ state: { a: 1, b: 2, c: 3 } }), {
+    code: "GAMELET_JSON_LIMIT", statusCode: 413,
+  });
+  await expectCreateFailure({ maxAdapterEvents: 1 }, () => ({
+    state: {}, events: [{ type: "first" }, { type: "second" }],
+  }), { code: "GAMELET_EVENT_LIMIT", statusCode: 413 });
+});
+
+test("session histories and event logs retain the newest bounded entries with monotonic sequences", async () => {
+  const runtime = fixture({
+    includeBuiltin: false,
+    maxHistoryEntries: 3,
+    maxSessionEvents: 4,
+  });
+  runtime.register({
+    pluginId: "counter-provider",
+    definition: {
+      id: "bounded-counter",
+      version: "1.0.0",
+      title: "Bounded counter",
+      description: "Ring history test adapter.",
+      actions: [{ type: "increment" }],
+    },
+    adapter: {
+      create: () => ({ state: { value: 0 }, events: [{ type: "counter.ready" }] }),
+      send: ({ state }) => ({ state: { value: state.value + 1 }, events: [{ type: "counter.incremented" }] }),
+    },
+  });
+  let session = await runtime.createSession({ pluginId: "counter-player", gameletId: "bounded-counter" });
+  for (let index = 0; index < 5; index += 1) {
+    session = await runtime.sendAction({
+      pluginId: "counter-player",
+      sessionId: session.id,
+      action: { type: "increment" },
+    });
+  }
+
+  assert.equal(session.state.value, 5);
+  assert.deepEqual(session.history.map(({ sequence }) => sequence), [3, 4, 5]);
+  assert.equal(session.events.length, 4);
+  assert.deepEqual(session.events.map(({ sequence }) => sequence), [9, 10, 11, 12]);
+  assert.deepEqual(session.events.map(({ type }) => type), ["action.accepted", "counter.incremented", "action.accepted", "counter.incremented"]);
 });

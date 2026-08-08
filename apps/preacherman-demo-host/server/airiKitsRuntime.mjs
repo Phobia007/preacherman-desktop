@@ -171,6 +171,24 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
     return publicKit(record);
   }
 
+  function assertConsumer(pluginId, name, versionRange = "*") {
+    requireName(pluginId, "Plugin id");
+    const record = getRecord(name);
+    const consumer = record.consumers.get(pluginId);
+    if (!consumer) {
+      throw runtimeError("KIT_CONSUMER_REQUIRED", `Plugin ${pluginId} must require AIRI kit ${name} before invoking it.`, 403);
+    }
+    if (!isVersionCompatible(record.definition.version, consumer.versionRange)
+      || !isVersionCompatible(record.definition.version, versionRange)) {
+      throw runtimeError(
+        "KIT_CONSUMER_VERSION_FORBIDDEN",
+        `Plugin ${pluginId} cannot invoke AIRI kit ${name}@${record.definition.version} with ${versionRange}.`,
+        403,
+      );
+    }
+    return publicKit(record);
+  }
+
   function discover({ capability, pluginId } = {}) {
     return [...records.values()]
       .filter((record) => !capability || record.definition.capabilities.includes(capability))
@@ -190,7 +208,7 @@ export function createKitRegistry({ definitions = [], now = () => new Date().toI
 
   for (const definition of definitions) register(definition, { providerId: "preacherman-host" });
 
-  return { assertCompatible, attachConsumer, attachProvider, discover, get: (name) => publicKit(getRecord(name)), register, removePlugin, setPhase, unregister };
+  return { assertCompatible, assertConsumer, attachConsumer, attachProvider, discover, get: (name) => publicKit(getRecord(name)), register, removePlugin, setPhase, unregister };
 }
 
 export function createBindingRegistry({ kits }) {
@@ -224,14 +242,21 @@ export function createBindingRegistry({ kits }) {
     return { pluginId: binding.pluginId, kit, operation, versionRange: binding.versionRange };
   }
 
-  async function invoke({ kit, operation, versionRange = "*", input, context = {} }) {
+  async function executeBinding({ callerPluginId, trustedCaller, kit, operation, versionRange, input, context }) {
     kits.assertCompatible(kit, versionRange);
     const key = keyFor(kit, operation);
     const binding = bindings.get(key);
     if (!binding) throw runtimeError("BINDING_NOT_FOUND", `Missing AIRI binding: ${key}`, 404);
     kits.assertCompatible(kit, binding.versionRange);
     try {
-      return await binding.handler(input, { ...context, kit, operation, pluginId: binding.pluginId });
+      return await binding.handler(input, {
+        ...context,
+        kit,
+        operation,
+        callerPluginId,
+        providerPluginId: binding.pluginId,
+        trustedCaller,
+      });
     } catch (cause) {
       throw runtimeError(
         "BINDING_EXECUTION_FAILED",
@@ -240,6 +265,55 @@ export function createBindingRegistry({ kits }) {
         cause,
       );
     }
+  }
+
+  function splitInvocationContext(context) {
+    if (!context || typeof context !== "object" || Array.isArray(context)) {
+      throw runtimeError("INVALID_KIT_INPUT", "Binding context must be an object.");
+    }
+    const { versionRange = "*", ...handlerContext } = context;
+    return { handlerContext, versionRange };
+  }
+
+  async function invokeAs(callerPluginId, kit, operation, input, context = {}) {
+    requireName(callerPluginId, "Caller plugin id");
+    const { handlerContext, versionRange } = splitInvocationContext(context);
+    kits.assertConsumer(callerPluginId, kit, versionRange);
+    return executeBinding({
+      callerPluginId,
+      trustedCaller: false,
+      kit,
+      operation,
+      versionRange,
+      input,
+      context: handlerContext,
+    });
+  }
+
+  async function invokeTrusted(callerPluginId, kit, operation, input, context = {}) {
+    requireName(callerPluginId, "Trusted caller id");
+    const { handlerContext, versionRange } = splitInvocationContext(context);
+    return executeBinding({
+      callerPluginId,
+      trustedCaller: true,
+      kit,
+      operation,
+      versionRange,
+      input,
+      context: handlerContext,
+    });
+  }
+
+  // Compatibility bridge for current host call sites. Plugin calls already pass
+  // callerPluginId and therefore take the consumer-authorized path. New host
+  // integrations should use invokeTrusted() explicitly.
+  function invoke({ kit, operation, versionRange = "*", input, context = {} }) {
+    const callerPluginId = context?.callerPluginId;
+    const invocationContext = { ...context, versionRange };
+    delete invocationContext.callerPluginId;
+    return callerPluginId
+      ? invokeAs(callerPluginId, kit, operation, input, invocationContext)
+      : invokeTrusted("preacherman-host", kit, operation, input, invocationContext);
   }
 
   function list({ pluginId, kit } = {}) {
@@ -261,7 +335,7 @@ export function createBindingRegistry({ kits }) {
     return removed;
   }
 
-  return { bind, invoke, list, removePlugin, unbind };
+  return { bind, invoke, invokeAs, invokeTrusted, list, removePlugin, unbind };
 }
 
 export function createAiriKitsRuntime({ definitions = CORE_KIT_DEFINITIONS, now } = {}) {

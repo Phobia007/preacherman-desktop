@@ -13,6 +13,7 @@ export const CORE_PROVIDER_DEFINITIONS = Object.freeze([
     capabilities: ["chat"],
     requirements: [
       { key: "DEEPSEEK_API_KEY", label: "DeepSeek API key", secret: true, capabilities: ["chat"] },
+      { key: "DEEPSEEK_MODEL", label: "DeepSeek model", secret: false, required: false, capabilities: ["chat"] },
     ],
   },
   {
@@ -76,6 +77,7 @@ function normalizeDefinition(definition, ownerPluginId) {
       key: requirement.key,
       label: typeof requirement.label === "string" && requirement.label.trim() ? requirement.label.trim() : requirement.key,
       secret: requirement.secret !== false,
+      required: requirement.required !== false,
       capabilities: appliesTo,
     };
   });
@@ -210,10 +212,13 @@ export function createAiriProviderRuntime({
   }
 
   async function configuration(definition) {
-    const config = await getConfig();
-    if (!config || typeof config !== "object" || Array.isArray(config)) {
+    const source = await getConfig();
+    if (!source || typeof source !== "object" || Array.isArray(source)) {
       throw runtimeError("PROVIDER_CONFIG_FAILED", "Provider configuration source did not return an object.", 500);
     }
+    const config = Object.fromEntries(definition.requirements
+      .filter((requirement) => Object.hasOwn(source, requirement.key))
+      .map((requirement) => [requirement.key, source[requirement.key]]));
     const secrets = definition.requirements
       .filter((requirement) => requirement.secret && typeof config[requirement.key] === "string")
       .map((requirement) => config[requirement.key])
@@ -223,7 +228,7 @@ export function createAiriProviderRuntime({
 
   function capabilityState(definition, adapter, config, capability) {
     const missing = definition.requirements
-      .filter((requirement) => requirement.capabilities.includes(capability) && !config[requirement.key])
+      .filter((requirement) => requirement.required && requirement.capabilities.includes(capability) && !config[requirement.key])
       .map((requirement) => ({ key: requirement.key, label: requirement.label }));
     if (missing.length > 0) return { state: PROVIDER_STATES.configurationRequired, missing };
     if (!adapter || !adapter.capabilities.includes(capability)) return { state: PROVIDER_STATES.adapterRequired, missing: [] };
@@ -242,7 +247,7 @@ export function createAiriProviderRuntime({
         const status = capabilityState(definition, adapter, config, capability);
         return [capability, { state: status.state, requirements: definition.requirements
           .filter((requirement) => requirement.capabilities.includes(capability))
-          .map((requirement) => ({ key: requirement.key, label: requirement.label, configured: Boolean(config[requirement.key]) })) }];
+          .map((requirement) => ({ key: requirement.key, label: requirement.label, required: requirement.required, configured: Boolean(config[requirement.key]) })) }];
       })),
     };
   }

@@ -131,12 +131,24 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
 
   const capabilityStatuses = await request(baseUrl, "/api/airi/capabilities/status", {
     method: "POST",
-    body: JSON.stringify({ ids: ["agent.kits-api", "voice.tts", "game.minecraft"], locale: "en" }),
+    body: JSON.stringify({
+      ids: [
+        "agent.kits-api", "voice.tts", "voice.elevenlabs", "game.minecraft",
+        "connection.discord", "vision.screen", "avatar.vrm-import", "task.steer", "provider.ollama",
+      ],
+      locale: "en",
+    }),
   });
   assert.deepEqual(capabilityStatuses.body.capabilities.map(({ capabilityId, state }) => [capabilityId, state]), [
     ["agent.kits-api", "available"],
     ["voice.tts", "configuration-required"],
+    ["voice.elevenlabs", "external-runtime-required"],
     ["game.minecraft", "external-runtime-required"],
+    ["connection.discord", "configuration-required"],
+    ["vision.screen", "external-runtime-required"],
+    ["avatar.vrm-import", "external-runtime-required"],
+    ["task.steer", "external-runtime-required"],
+    ["provider.ollama", "external-runtime-required"],
   ]);
 
   const fixtureServer = fileURLToPath(new URL("./fixtures/mcp-status-server.mjs", import.meta.url));
@@ -212,13 +224,28 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   }
   assert.equal(gameSession.status, "completed");
   assert.equal(gameSession.state.winner, "X");
+  const stoppableSession = (await request(baseUrl, "/api/gamelets/sessions", {
+    method: "POST", body: JSON.stringify({ gameletId: "tic-tac-toe" }),
+  })).body.session;
+  const stoppedSession = await request(baseUrl, `/api/gamelets/sessions/${stoppableSession.id}/stop`, {
+    method: "POST", body: JSON.stringify({ reason: "acceptance-check" }),
+  });
+  assert.equal(stoppedSession.body.session.status, "stopped");
 
   const providerCatalog = await request(baseUrl, "/api/providers/catalog");
   assert.deepEqual(providerCatalog.body.providers.map((provider) => provider.id), ["dashscope", "deepseek"]);
   assert.equal(providerCatalog.body.providers.every((provider) => Object.values(provider.capabilities)
     .every((capability) => capability.state === "configuration-required")), true);
+  const providerTest = await request(baseUrl, "/api/providers/deepseek/test", {
+    method: "POST", body: JSON.stringify({ capability: "chat" }),
+  });
+  assert.equal(providerTest.body.result.state, "configuration-required");
   const personas = await request(baseUrl, "/api/personas");
   assert.equal(personas.body.selected.name, "Preacherman");
+  const selectedPersona = await request(baseUrl, `/api/personas/${personas.body.selected.id}/select`, {
+    method: "POST", body: "{}",
+  });
+  assert.equal(selectedPersona.body.selected.selected, true);
   await request(baseUrl, "/api/memory/remember", {
     method: "POST", body: JSON.stringify({ namespace: "demo", text: "Plugin ecosystem check passed" }),
   });
@@ -228,6 +255,10 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(recalled.body.memories[0].text, "Plugin ecosystem check passed");
   const connections = await request(baseUrl, "/api/connections");
   assert.equal(connections.body.connections.every((connection) => connection.status === "configuration-required"), true);
+  const connectionTest = await request(baseUrl, "/api/connections/discord/test", {
+    method: "POST", body: "{}",
+  });
+  assert.equal(connectionTest.body.connection.status, "configuration-required");
   const computerVision = await request(baseUrl, "/api/computer-vision");
   assert.deepEqual(computerVision.body.capabilities.map((capability) => capability.id), [
     "screenshot", "camera-window", "cursor-monitor", "vision-analysis",
@@ -271,8 +302,16 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(installedPlugin.response.status, 201);
   assert.deepEqual(installedPlugin.body.plugin.kits, ["ledger", "task"]);
   assert.ok(installedPlugin.body.plugin.bindings.includes("ledger.write-artifact"));
-  const externalPluginCall = await request(baseUrl, "/api/plugins/tools/call", {
+  const unapprovedPluginCall = await request(baseUrl, "/api/plugins/tools/call", {
     method: "POST", body: JSON.stringify({ name: "fixture-plugin::echo", arguments: { label: "closed-loop" } }),
+  });
+  assert.equal(unapprovedPluginCall.response.status, 403);
+  const externalPluginCall = await request(baseUrl, "/api/plugins/tools/call", {
+    method: "POST", body: JSON.stringify({
+      name: "fixture-plugin::echo",
+      arguments: { label: "closed-loop" },
+      approved: true,
+    }),
   });
   assert.equal(externalPluginCall.response.status, 200);
   assert.deepEqual(externalPluginCall.body.result.structuredContent, {
@@ -285,6 +324,21 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   const persistedPluginTask = (await request(baseUrl, `/api/tasks/${externalPluginCall.body.result.task.taskId}`)).body.task;
   assert.equal(persistedPluginTask.status, "succeeded");
   assert.equal(persistedPluginTask.toolCall.name, "echo");
+
+  const voicePluginTurn = await request(baseUrl, "/api/agent/turn", {
+    method: "POST",
+    body: JSON.stringify({ input: "Run the AIRI plugin status summary", locale: "en", history: [] }),
+  });
+  assert.equal(voicePluginTurn.body.proposal.kind, "plugin-tool");
+  assert.equal(voicePluginTurn.body.proposal.allowedTools[0], "preacherman-runtime::task_summary");
+  const voicePluginRun = await request(baseUrl, `/api/agent/proposals/${voicePluginTurn.body.proposal.proposalId}/confirm`, {
+    method: "POST",
+    body: JSON.stringify({ objective: voicePluginTurn.body.proposal.objective }),
+  });
+  assert.equal(voicePluginRun.response.status, 202);
+  assert.equal(voicePluginRun.body.run.status, "succeeded");
+  assert.equal(voicePluginRun.body.run.toolCall.name, "task_summary");
+  assert.equal((await request(baseUrl, `/api/tasks/${voicePluginRun.body.run.taskId}/artifact`)).response.status, 200);
   assert.equal(persistedPluginTask.artifact.content.label, "closed-loop");
   const uninstalledPlugin = await request(baseUrl, "/api/plugins/uninstall", {
     method: "POST", body: JSON.stringify({ name: "fixture-plugin" }),

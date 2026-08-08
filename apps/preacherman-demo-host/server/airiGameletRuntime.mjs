@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 
 const NAME_PATTERN = /^[a-z][a-z0-9-]{0,63}$/;
 const SESSION_PHASES = new Set(["active", "completed"]);
+const DEFAULT_JSON_LIMITS = Object.freeze({ maximumBytes: 64 * 1024, maximumDepth: 16, maximumNodes: 4_096 });
 
 function gameletError(code, message, statusCode = 400, cause) {
   const error = new Error(message, cause ? { cause } : undefined);
@@ -23,6 +24,52 @@ function clone(value, label) {
   } catch (cause) {
     throw gameletError("INVALID_GAMELET_STATE", `${label} must be structured-cloneable.`, 500, cause);
   }
+}
+
+function cloneJson(value, label, {
+  maximumBytes = DEFAULT_JSON_LIMITS.maximumBytes,
+  maximumDepth = DEFAULT_JSON_LIMITS.maximumDepth,
+  maximumNodes = DEFAULT_JSON_LIMITS.maximumNodes,
+} = {}) {
+  let nodes = 0;
+  const ancestors = new Set();
+  function visit(candidate, depth) {
+    nodes += 1;
+    if (nodes > maximumNodes) throw gameletError("GAMELET_JSON_LIMIT", `${label} exceeds ${maximumNodes} JSON nodes.`, 413);
+    if (depth > maximumDepth) throw gameletError("GAMELET_JSON_LIMIT", `${label} exceeds JSON depth ${maximumDepth}.`, 413);
+    if (candidate === null || typeof candidate === "string" || typeof candidate === "boolean") return;
+    if (typeof candidate === "number") {
+      if (!Number.isFinite(candidate)) throw gameletError("INVALID_GAMELET_STATE", `${label} contains a non-finite number.`, 500);
+      return;
+    }
+    if (typeof candidate !== "object") throw gameletError("INVALID_GAMELET_STATE", `${label} must contain only JSON values.`, 500);
+    if (ancestors.has(candidate)) throw gameletError("INVALID_GAMELET_STATE", `${label} contains a circular reference.`, 500);
+    const prototype = Object.getPrototypeOf(candidate);
+    if (!Array.isArray(candidate) && prototype !== Object.prototype && prototype !== null) {
+      throw gameletError("INVALID_GAMELET_STATE", `${label} must contain only plain JSON objects.`, 500);
+    }
+    ancestors.add(candidate);
+    if (Array.isArray(candidate)) {
+      for (let index = 0; index < candidate.length; index += 1) {
+        if (!(index in candidate)) throw gameletError("INVALID_GAMELET_STATE", `${label} contains a sparse array.`, 500);
+        visit(candidate[index], depth + 1);
+      }
+    } else {
+      for (const child of Object.values(candidate)) visit(child, depth + 1);
+    }
+    ancestors.delete(candidate);
+  }
+  visit(value, 0);
+  let serialized;
+  try {
+    serialized = JSON.stringify(value);
+  } catch (cause) {
+    throw gameletError("INVALID_GAMELET_STATE", `${label} must be valid JSON.`, 500, cause);
+  }
+  if (Buffer.byteLength(serialized, "utf8") > maximumBytes) {
+    throw gameletError("GAMELET_JSON_LIMIT", `${label} exceeds ${maximumBytes} bytes.`, 413);
+  }
+  return JSON.parse(serialized);
 }
 
 function withTimeout(operation, timeoutMs, label) {
@@ -86,7 +133,7 @@ function normalizeAdapter(adapter, id) {
   return adapter;
 }
 
-function normalizeAdapterResult(result, label) {
+function normalizeAdapterResult(result, label, limits) {
   if (!result || typeof result !== "object" || Array.isArray(result) || !("state" in result)) {
     throw gameletError("INVALID_GAMELET_STATE", `${label} must return an object containing state.`, 500);
   }
@@ -98,7 +145,22 @@ function normalizeAdapterResult(result, label) {
   if (!Array.isArray(events) || events.some((event) => !event || typeof event !== "object" || Array.isArray(event) || typeof event.type !== "string")) {
     throw gameletError("INVALID_GAMELET_STATE", `${label} returned invalid events.`, 500);
   }
-  return { state: clone(result.state, `${label} state`), status, events: clone(events, `${label} events`) };
+  if (events.length > limits.maxAdapterEvents) {
+    throw gameletError("GAMELET_EVENT_LIMIT", `${label} returned more than ${limits.maxAdapterEvents} events.`, 413);
+  }
+  return {
+    state: cloneJson(result.state, `${label} state`, {
+      maximumBytes: limits.maxStateBytes,
+      maximumDepth: limits.maxJsonDepth,
+      maximumNodes: limits.maxJsonNodes,
+    }),
+    status,
+    events: cloneJson(events, `${label} events`, {
+      maximumBytes: limits.maxEventBytes,
+      maximumDepth: limits.maxJsonDepth,
+      maximumNodes: limits.maxJsonNodes,
+    }),
+  };
 }
 
 function publicRegistration(record) {
@@ -193,6 +255,13 @@ export function createAiriGameletRuntime({
   includeBuiltin = true,
   timeoutMs = 2_000,
   maxSessions = 32,
+  maxStateBytes = 64 * 1024,
+  maxEventBytes = 16 * 1024,
+  maxJsonDepth = 16,
+  maxJsonNodes = 4_096,
+  maxAdapterEvents = 32,
+  maxHistoryEntries = 64,
+  maxSessionEvents = 256,
   now = () => new Date().toISOString(),
   createId = randomUUID,
 } = {}) {
@@ -202,8 +271,45 @@ export function createAiriGameletRuntime({
   if (!Number.isInteger(maxSessions) || maxSessions < 1 || maxSessions > 1_000) {
     throw new TypeError("Gamelet session limit must be an integer between 1 and 1000.");
   }
+  for (const [label, value, maximum] of [
+    ["state byte limit", maxStateBytes, 4 * 1024 * 1024],
+    ["event byte limit", maxEventBytes, 1024 * 1024],
+    ["JSON depth limit", maxJsonDepth, 64],
+    ["JSON node limit", maxJsonNodes, 100_000],
+    ["adapter event limit", maxAdapterEvents, 1_000],
+    ["history entry limit", maxHistoryEntries, 10_000],
+    ["session event limit", maxSessionEvents, 10_000],
+  ]) {
+    if (!Number.isInteger(value) || value < 1 || value > maximum) {
+      throw new TypeError(`Gamelet ${label} must be an integer between 1 and ${maximum}.`);
+    }
+  }
+  const limits = {
+    maxStateBytes,
+    maxEventBytes,
+    maxJsonDepth,
+    maxJsonNodes,
+    maxAdapterEvents,
+  };
   const registrations = new Map();
   const sessions = new Map();
+
+  function appendEvent(session, event, at) {
+    session.events.push({ ...event, sequence: session.nextEventSequence, at });
+    session.nextEventSequence += 1;
+    if (session.events.length > maxSessionEvents) session.events.splice(0, session.events.length - maxSessionEvents);
+  }
+
+  function appendHistory(session, action, state, at) {
+    session.history.push({
+      sequence: session.nextHistorySequence,
+      at,
+      action,
+      state: clone(state, "Gamelet history state"),
+    });
+    session.nextHistorySequence += 1;
+    if (session.history.length > maxHistoryEntries) session.history.splice(0, session.history.length - maxHistoryEntries);
+  }
 
   function register({ pluginId, definition, adapter }) {
     requireName(pluginId, "Plugin id");
@@ -256,10 +362,15 @@ export function createAiriGameletRuntime({
     }
     const id = String(createId());
     const createdAt = now();
+    const safeInput = cloneJson(input, "Gamelet input", {
+      maximumBytes: maxStateBytes,
+      maximumDepth: maxJsonDepth,
+      maximumNodes: maxJsonNodes,
+    });
     const result = normalizeAdapterResult(await callAdapter(
-      registration.adapter.create({ input: clone(input, "Gamelet input"), sessionId: id, pluginId }),
+      registration.adapter.create({ input: safeInput, sessionId: id, pluginId }),
       `Gamelet ${gameletId} create`,
-    ), `Gamelet ${gameletId} create`);
+    ), `Gamelet ${gameletId} create`, limits);
     const session = {
       id,
       gameletId,
@@ -269,11 +380,15 @@ export function createAiriGameletRuntime({
       createdAt,
       updatedAt: createdAt,
       state: result.state,
-      history: [{ sequence: 0, at: createdAt, action: null, state: clone(result.state, "Initial Gamelet state") }],
-      events: [{ sequence: 1, at: createdAt, type: "session.created" }],
+      history: [],
+      events: [],
+      nextHistorySequence: 0,
+      nextEventSequence: 1,
     };
-    for (const event of result.events) session.events.push({ ...event, sequence: session.events.length + 1, at: createdAt });
-    if (result.status === "completed") session.events.push({ sequence: session.events.length + 1, at: createdAt, type: "session.completed" });
+    appendHistory(session, null, result.state, createdAt);
+    appendEvent(session, { type: "session.created" }, createdAt);
+    for (const event of result.events) appendEvent(session, event, createdAt);
+    if (result.status === "completed") appendEvent(session, { type: "session.completed" }, createdAt);
     sessions.set(id, session);
     return publicSession(session);
   }
@@ -290,28 +405,28 @@ export function createAiriGameletRuntime({
     if (!registration.definition.actions.some((declared) => declared.type === action.type)) {
       throw gameletError("GAMELET_ILLEGAL_ACTION", `Gamelet ${session.gameletId} does not declare action ${action.type}.`);
     }
+    const safeAction = cloneJson(action, "Gamelet action", {
+      maximumBytes: maxEventBytes,
+      maximumDepth: maxJsonDepth,
+      maximumNodes: maxJsonNodes,
+    });
     const result = normalizeAdapterResult(await callAdapter(
       registration.adapter.send({
         state: clone(session.state, "Gamelet state"),
-        action: clone(action, "Gamelet action"),
+        action: safeAction,
         sessionId,
         pluginId,
       }),
       `Gamelet ${session.gameletId} action ${action.type}`,
-    ), `Gamelet ${session.gameletId} action ${action.type}`);
+    ), `Gamelet ${session.gameletId} action ${action.type}`, limits);
     const updatedAt = now();
     session.state = result.state;
     session.status = result.status;
     session.updatedAt = updatedAt;
-    session.history.push({
-      sequence: session.history.length,
-      at: updatedAt,
-      action: clone(action, "Gamelet action"),
-      state: clone(result.state, "Gamelet state"),
-    });
-    session.events.push({ sequence: session.events.length + 1, at: updatedAt, type: "action.accepted", action: clone(action, "Gamelet action") });
-    for (const event of result.events) session.events.push({ ...event, sequence: session.events.length + 1, at: updatedAt });
-    if (result.status === "completed") session.events.push({ sequence: session.events.length + 1, at: updatedAt, type: "session.completed" });
+    appendHistory(session, safeAction, result.state, updatedAt);
+    appendEvent(session, { type: "action.accepted", action: safeAction }, updatedAt);
+    for (const event of result.events) appendEvent(session, event, updatedAt);
+    if (result.status === "completed") appendEvent(session, { type: "session.completed" }, updatedAt);
     return publicSession(session);
   }
 
@@ -330,6 +445,9 @@ export function createAiriGameletRuntime({
   async function stopSession({ pluginId, sessionId, reason = "requested" }) {
     const session = requireOwnedSession(sessionId, pluginId);
     if (session.status === "stopped") return publicSession(session);
+    if (typeof reason !== "string" || !reason.trim() || Buffer.byteLength(reason, "utf8") > 512) {
+      throw gameletError("INVALID_GAMELET_INPUT", "Gamelet stop reason must be a non-empty string of at most 512 bytes.");
+    }
     const registration = registrations.get(session.gameletId);
     if (registration?.adapter.stop) {
       await callAdapter(registration.adapter.stop({
@@ -339,7 +457,7 @@ export function createAiriGameletRuntime({
     const updatedAt = now();
     session.status = "stopped";
     session.updatedAt = updatedAt;
-    session.events.push({ sequence: session.events.length + 1, at: updatedAt, type: "session.stopped", reason });
+    appendEvent(session, { type: "session.stopped", reason }, updatedAt);
     return publicSession(session);
   }
 

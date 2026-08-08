@@ -2,9 +2,10 @@ import { randomUUID } from "node:crypto";
 import { chmod, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
-const CLIENT_FAMILIES = new Set([
-  "airi-card", "appearance", "audio", "avatar", "locale", "motion",
-  "persona", "presentation", "scene", "shortcut", "stage",
+const CLIENT_CAPABILITIES = new Set([
+  "appearance.select", "avatar.preview", "avatar.select", "avatar.status",
+  "locale.select", "motion.select", "presentation.stop", "scene.transparent-background",
+  "voice.capture-mode", "voice.mic-test", "voice.quick-input", "voice.vad",
 ]);
 const LOCAL_CAPABILITIES = new Set([
   "agent.bindings-api", "agent.kits-api",
@@ -13,9 +14,12 @@ const LOCAL_CAPABILITIES = new Set([
   "plugin.gamelets", "plugin.hot-reload", "plugin.manager", "plugin.widgets",
   "provider.catalog", "provider.smoke-test",
   "runtime.io-history", "runtime.plugin-inspector", "mcp.servers",
+  "task.acceptance", "task.artifacts", "task.cancel", "task.confirm",
+  "task.create", "task.events", "task.retry",
 ]);
 const EXTERNAL_FAMILIES = new Set([
-  "artistry", "computer-use", "connection", "game", "mcp", "plugin", "vision",
+  "airi-card", "artistry", "audio", "avatar", "computer-use", "connection", "game",
+  "mcp", "motion", "persona", "plugin", "scene", "shortcut", "stage", "task", "vision",
 ]);
 
 function familyOf(capabilityId) {
@@ -32,25 +36,27 @@ async function writePrivateJson(target, value) {
 
 function backendState(capabilityId, config) {
   const family = familyOf(capabilityId);
-  if (LOCAL_CAPABILITIES.has(capabilityId) || family === "task") {
+  if (LOCAL_CAPABILITIES.has(capabilityId)) {
     return { state: "available", adapter: family === "task" ? "preacherman-task" : `preacherman-${family}`, requirements: [] };
   }
-  if (CLIENT_FAMILIES.has(family)) {
+  if (CLIENT_CAPABILITIES.has(capabilityId)) {
     return { state: "client-runtime", adapter: "preacherman-stage", requirements: [] };
   }
   if (family === "voice") {
-    if (["voice.capture-mode", "voice.mic-test", "voice.quick-input", "voice.vad"].includes(capabilityId)) {
-      return { state: "client-runtime", adapter: "preacherman-realtime-audio", requirements: [] };
+    const requirements = ["voice.asr", "voice.asr-test"].includes(capabilityId)
+      ? ["DASHSCOPE_API_KEY", "DASHSCOPE_WORKSPACE_ID"]
+      : ["voice.tts", "voice.tts-preview", "voice.tts-test"].includes(capabilityId)
+        ? ["DASHSCOPE_API_KEY"]
+        : null;
+    if (!requirements) {
+      return { state: "external-runtime-required", adapter: "airi-voice-extension", requirements: ["matching speech provider adapter"] };
     }
-    return config.DASHSCOPE_API_KEY
+    return requirements.every((key) => Boolean(config[key]))
       ? { state: "available", adapter: "preacherman-presentation-runtime", requirements: [] }
-      : { state: "configuration-required", adapter: "preacherman-presentation-runtime", requirements: ["speech provider credentials"] };
+      : { state: "configuration-required", adapter: "preacherman-presentation-runtime", requirements };
   }
   if (family === "provider") {
-    const configured = Boolean(config.DEEPSEEK_API_KEY || config.DASHSCOPE_API_KEY);
-    return configured
-      ? { state: "available", adapter: "preacherman-provider-gateway", requirements: [] }
-      : { state: "configuration-required", adapter: "preacherman-provider-gateway", requirements: ["provider credentials"] };
+    return { state: "external-runtime-required", adapter: "airi-provider-extension", requirements: ["matching provider adapter"] };
   }
   if (family === "agent") {
     if (["agent.mcp-tools", "agent.plugin-tools"].includes(capabilityId)) {
@@ -83,9 +89,23 @@ function localizedMessage(locale, state, adapter) {
   return chinese ? `后端适配入口已注册，需要外部运行时：${adapter}` : `Backend adapter registered; external runtime required: ${adapter}`;
 }
 
-export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapability, now = () => new Date().toISOString() }) {
+export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapability, resolveCapabilityStatus, now = () => new Date().toISOString() }) {
   let state;
   let mutationQueue = Promise.resolve();
+
+  async function resolveBackend(capabilityId, config, context) {
+    const resolved = await resolveCapabilityStatus?.(capabilityId, context);
+    if (!resolved) return backendState(capabilityId, config);
+    const allowedStates = new Set(["available", "client-runtime", "configuration-required", "external-runtime-required"]);
+    if (!allowedStates.has(resolved.state) || typeof resolved.adapter !== "string") {
+      throw new Error(`Invalid capability status resolver result for ${capabilityId}.`);
+    }
+    return {
+      state: resolved.state,
+      adapter: resolved.adapter,
+      requirements: Array.isArray(resolved.requirements) ? resolved.requirements.filter((entry) => typeof entry === "string") : [],
+    };
+  }
 
   async function load() {
     if (state) return state;
@@ -102,7 +122,7 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapabi
   async function invoke(capabilityId, context = {}) {
     if (!/^[a-z0-9][a-z0-9.-]{1,100}$/.test(capabilityId)) throw new Error("Invalid AIRI capability id.");
     const config = await getRuntimeEnv();
-    const backend = backendState(capabilityId, config);
+    let backend = await resolveBackend(capabilityId, config, context);
     let execution;
     try {
       execution = await executeCapability?.(capabilityId, context);
@@ -112,6 +132,9 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapabi
         error: error instanceof Error ? error.message : String(error),
         summary: context.locale === "zh-CN" ? "能力执行失败。" : "Capability execution failed.",
       };
+    }
+    if (["configuration-required", "external-runtime-required", "client-runtime"].includes(execution?.status)) {
+      backend = { ...backend, state: execution.status };
     }
     const event = {
       eventId: `airi_${randomUUID()}`,
@@ -148,19 +171,19 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapabi
       throw error;
     }
     const config = await getRuntimeEnv();
-    return capabilityIds.map((capabilityId) => {
+    return Promise.all(capabilityIds.map(async (capabilityId) => {
       if (typeof capabilityId !== "string" || !/^[a-z0-9][a-z0-9.-]{1,100}$/.test(capabilityId)) {
         const error = new Error("Invalid AIRI capability id.");
         error.statusCode = 400;
         throw error;
       }
-      const backend = backendState(capabilityId, config);
+      const backend = await resolveBackend(capabilityId, config, context);
       return {
         capabilityId,
         ...backend,
         message: localizedMessage(context.locale, backend.state, backend.adapter),
       };
-    });
+    }));
   }
 
   return { invoke, list, status };

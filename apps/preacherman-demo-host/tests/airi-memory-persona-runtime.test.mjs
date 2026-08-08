@@ -139,3 +139,53 @@ test("invalid persisted JSON produces an explicit lifecycle error", async () => 
   await assert.rejects(runtime.initialize(), { code: "MEMORY_STORE_INVALID", statusCode: 500 });
   assert.equal(runtime.getLifecycle().phase, "error");
 }));
+
+test("owner principal isolates remember, recall, and delete without accepting an input override", async () => withStore(async (file) => {
+  const host = createAiriMemoryPersonaRuntime({ file, now: tickingClock() });
+  const persona = await host.createPersona({ name: "Shared persona" });
+  const hostMemory = await host.remember({ personaId: persona.id, namespace: "work", text: "Host-only memory" });
+  await assert.rejects(
+    host.remember({ personaId: persona.id, namespace: "work", text: "Override", owner: "external-plugin" }),
+    /does not support field: owner/,
+  );
+  await assert.rejects(
+    host.recall({ personaId: persona.id, namespace: "work", principal: "external-plugin" }),
+    /does not support field: principal/,
+  );
+  await host.close();
+
+  const plugin = createAiriMemoryPersonaRuntime({ file, principal: "external-plugin", now: tickingClock() });
+  assert.deepEqual(await plugin.recall({ personaId: persona.id, namespace: "work" }), []);
+  const pluginMemory = await plugin.remember({ personaId: persona.id, namespace: "work", text: "Plugin-only memory" });
+  await assert.rejects(
+    plugin.deleteMemory({ personaId: persona.id, namespace: "work", memoryId: hostMemory.id }),
+    { code: "MEMORY_NOT_FOUND", statusCode: 404 },
+  );
+  assert.equal((await plugin.recall({ personaId: persona.id, namespace: "work" }))[0].id, pluginMemory.id);
+  await plugin.close();
+
+  const restartedHost = createAiriMemoryPersonaRuntime({ file });
+  assert.deepEqual((await restartedHost.recall({ personaId: persona.id, namespace: "work" })).map(({ id }) => id), [hostMemory.id]);
+}));
+
+test("version 1 memories migrate to the default host owner", async () => withStore(async (file) => {
+  const initial = createAiriMemoryPersonaRuntime({ file, now: tickingClock() });
+  const persona = await initial.createPersona({ name: "Legacy persona" });
+  const memory = await initial.remember({ personaId: persona.id, namespace: "legacy", text: "Legacy memory" });
+  await initial.close();
+
+  const legacyState = JSON.parse(await readFile(file, "utf8"));
+  legacyState.version = 1;
+  delete legacyState.memories[0].owner;
+  await writeFile(file, JSON.stringify(legacyState), "utf8");
+
+  const host = createAiriMemoryPersonaRuntime({ file });
+  assert.equal((await host.recall({ personaId: persona.id, namespace: "legacy" }))[0].id, memory.id);
+  await host.close();
+  const migratedState = JSON.parse(await readFile(file, "utf8"));
+  assert.equal(migratedState.version, 2);
+  assert.equal(migratedState.memories[0].owner, "preacherman-runtime");
+
+  const other = createAiriMemoryPersonaRuntime({ file, principal: "other-owner" });
+  assert.deepEqual(await other.recall({ personaId: persona.id, namespace: "legacy" }), []);
+}));

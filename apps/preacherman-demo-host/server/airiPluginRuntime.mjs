@@ -11,6 +11,8 @@ const MAX_MANIFEST_BYTES = 128 * 1024;
 const MAX_ENTRY_BYTES = 2 * 1024 * 1024;
 const PLUGIN_NAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/;
 const TOOL_NAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$/;
+const PERMISSION_PATTERN = /^[a-z][a-z0-9.-]*(?::[a-z][a-z0-9.-]*)?$/;
+const SUPPORTED_SCHEMA_TYPES = new Set(["array", "boolean", "integer", "number", "object", "string"]);
 const READY_LIFECYCLE = [
   "loading", "loaded", "authenticating", "authenticated", "announced",
   "preparing", "prepared", "configured", "ready",
@@ -19,6 +21,13 @@ const READY_LIFECYCLE = [
 function userError(message) {
   const error = new Error(message);
   error.statusCode = 400;
+  return error;
+}
+
+function approvalError(message) {
+  const error = new Error(message);
+  error.statusCode = 403;
+  error.code = "PLUGIN_APPROVAL_REQUIRED";
   return error;
 }
 
@@ -75,7 +84,32 @@ function parseManifest(text) {
   }
   if (isAbsolute(entrypoint)) throw userError("AIRI plugin entrypoint must be relative to the plugin directory.");
   if (!entrypoint.endsWith(".mjs")) throw userError("AIRI plugin entrypoint must be an .mjs module.");
-  return { manifest, entrypoint };
+  const permissions = manifest.permissions ?? [];
+  if (!Array.isArray(permissions) || permissions.length > 32 || permissions.some((permission) => typeof permission !== "string" || !PERMISSION_PATTERN.test(permission))) {
+    throw userError("AIRI plugin permissions must be an array of at most 32 permission identifiers.");
+  }
+  if (new Set(permissions).size !== permissions.length) throw userError("AIRI plugin permissions must not contain duplicates.");
+  const tools = manifest.tools ?? [];
+  if (!Array.isArray(tools) || tools.length > 64) throw userError("AIRI plugin manifest tools must be an array of at most 64 entries.");
+  const toolNames = new Set();
+  for (const tool of tools) {
+    if (!tool || typeof tool !== "object" || Array.isArray(tool) || typeof tool.name !== "string" || !TOOL_NAME_PATTERN.test(tool.name)) {
+      throw userError("AIRI plugin manifest contains an invalid tool declaration.");
+    }
+    if (tool.requiresApproval !== undefined && typeof tool.requiresApproval !== "boolean") {
+      throw userError(`AIRI plugin tool ${tool.name} requiresApproval must be a boolean.`);
+    }
+    if (toolNames.has(tool.name)) throw userError(`AIRI plugin manifest declares tool ${tool.name} more than once.`);
+    toolNames.add(tool.name);
+  }
+  return {
+    manifest: {
+      ...manifest,
+      permissions: [...permissions],
+      tools: tools.map((tool) => ({ name: tool.name, requiresApproval: tool.requiresApproval ?? true })),
+    },
+    entrypoint,
+  };
 }
 
 async function inspectSource(sourceDirectory) {
@@ -93,20 +127,84 @@ async function inspectSource(sourceDirectory) {
   return { root, manifest, entryPath };
 }
 
-function validateTool(pluginId, value) {
+function validateSchema(schema, label, depth = 0, ancestors = new Set()) {
+  if (!schema || typeof schema !== "object" || Array.isArray(schema)) throw userError(`${label} must be an object.`);
+  if (depth > 12) throw userError(`${label} exceeds the supported schema depth.`);
+  if (ancestors.has(schema)) throw userError(`${label} must not contain circular references.`);
+  const nextAncestors = new Set(ancestors).add(schema);
+  if (schema.type !== undefined && (typeof schema.type !== "string" || !SUPPORTED_SCHEMA_TYPES.has(schema.type))) {
+    throw userError(`${label} has an unsupported type.`);
+  }
+  if (schema.properties !== undefined) {
+    if (!schema.properties || typeof schema.properties !== "object" || Array.isArray(schema.properties)) throw userError(`${label}.properties must be an object.`);
+    for (const [name, propertySchema] of Object.entries(schema.properties)) {
+      validateSchema(propertySchema, `${label}.properties.${name}`, depth + 1, nextAncestors);
+    }
+  }
+  if (schema.required !== undefined) {
+    if (!Array.isArray(schema.required) || schema.required.some((name) => typeof name !== "string") || new Set(schema.required).size !== schema.required.length) {
+      throw userError(`${label}.required must be an array of unique property names.`);
+    }
+  }
+  if ((schema.properties !== undefined || schema.required !== undefined || schema.additionalProperties !== undefined) && schema.type !== "object") {
+    throw userError(`${label} must use type object with object constraints.`);
+  }
+  if (schema.additionalProperties !== undefined && typeof schema.additionalProperties !== "boolean") {
+    validateSchema(schema.additionalProperties, `${label}.additionalProperties`, depth + 1, nextAncestors);
+  }
+  if (schema.items !== undefined) {
+    if (schema.type !== "array") throw userError(`${label} must use type array with items.`);
+    validateSchema(schema.items, `${label}.items`, depth + 1, nextAncestors);
+  }
+}
+
+function valueMatchesType(value, type) {
+  if (type === "array") return Array.isArray(value);
+  if (type === "boolean") return typeof value === "boolean";
+  if (type === "integer") return typeof value === "number" && Number.isInteger(value);
+  if (type === "number") return typeof value === "number" && Number.isFinite(value);
+  if (type === "object") return value !== null && typeof value === "object" && !Array.isArray(value);
+  if (type === "string") return typeof value === "string";
+  return true;
+}
+
+function validateSchemaValue(value, schema, path = "arguments", depth = 0) {
+  if (depth > 12) throw userError(`${path} exceeds the supported nesting depth.`);
+  if (schema.type && !valueMatchesType(value, schema.type)) throw userError(`${path} must be of type ${schema.type}.`);
+  if (schema.type === "object") {
+    const properties = schema.properties ?? {};
+    for (const name of schema.required ?? []) {
+      if (!Object.prototype.hasOwnProperty.call(value, name)) throw userError(`${path}.${name} is required.`);
+    }
+    for (const [name, propertyValue] of Object.entries(value)) {
+      if (Object.prototype.hasOwnProperty.call(properties, name)) {
+        validateSchemaValue(propertyValue, properties[name], `${path}.${name}`, depth + 1);
+      } else if (schema.additionalProperties === false) {
+        throw userError(`${path}.${name} is not allowed.`);
+      } else if (schema.additionalProperties && typeof schema.additionalProperties === "object") {
+        validateSchemaValue(propertyValue, schema.additionalProperties, `${path}.${name}`, depth + 1);
+      }
+    }
+  }
+  if (schema.type === "array" && schema.items) {
+    value.forEach((item, index) => validateSchemaValue(item, schema.items, `${path}[${index}]`, depth + 1));
+  }
+}
+
+function validateTool(pluginId, value, requiresApproval = true) {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw userError(`Plugin ${pluginId} returned an invalid tool.`);
   if (typeof value.name !== "string" || !TOOL_NAME_PATTERN.test(value.name)) throw userError(`Plugin ${pluginId} returned an invalid tool name.`);
   if (typeof value.execute !== "function") throw userError(`Plugin ${pluginId} tool ${value.name} requires execute().`);
   if (value.description !== undefined && typeof value.description !== "string") throw userError(`Plugin ${pluginId} tool ${value.name} has an invalid description.`);
-  if (value.inputSchema !== undefined && (!value.inputSchema || typeof value.inputSchema !== "object" || Array.isArray(value.inputSchema))) {
-    throw userError(`Plugin ${pluginId} tool ${value.name} has an invalid input schema.`);
-  }
+  const inputSchema = value.inputSchema ?? { type: "object", properties: {}, additionalProperties: false };
+  validateSchema(inputSchema, `Plugin ${pluginId} tool ${value.name} inputSchema`);
   return {
     pluginId,
     name: `${pluginId}::${value.name}`,
     toolName: value.name,
     description: value.description ?? "",
-    inputSchema: value.inputSchema ?? { type: "object", properties: {}, additionalProperties: false },
+    inputSchema,
+    requiresApproval,
     execute: value.execute,
   };
 }
@@ -143,6 +241,8 @@ export function createAiriPluginRuntime({
     kind: MANIFEST_KIND,
     name: BUILTIN_PLUGIN_ID,
     entrypoints: { node: "builtin:preacherman-runtime" },
+    permissions: ["tasks:read"],
+    tools: [{ name: "task_summary", requiresApproval: false }],
   };
   let state;
   let initialized = false;
@@ -196,6 +296,7 @@ export function createAiriPluginRuntime({
         toolName: "task_summary",
         description: "Read the persisted Preacherman TaskRun and artifact summary.",
         inputSchema: { type: "object", properties: {}, additionalProperties: false },
+        requiresApproval: false,
         execute: async () => {
           const tasks = await taskStore.list(50);
           return {
@@ -253,13 +354,17 @@ export function createAiriPluginRuntime({
       abi: PLUGIN_ABI,
       pluginId: source.id,
       hostBridge,
+      permissions: Object.freeze([...inspected.manifest.permissions]),
       kits: kitFacade,
       bindings: bindingFacade,
       now,
     })), timeoutMs, `Plugin ${source.id} activation`);
     if (!activated || typeof activated !== "object" || Array.isArray(activated)) throw userError(`Plugin ${source.id} activate() must return an object.`);
     if (activated.dispose !== undefined && typeof activated.dispose !== "function") throw userError(`Plugin ${source.id} returned an invalid dispose hook.`);
-    const tools = Array.isArray(activated.tools) ? activated.tools.map((tool) => validateTool(source.id, tool)) : [];
+    const approvalByTool = new Map(inspected.manifest.tools.map((tool) => [tool.name, tool.requiresApproval]));
+    const tools = Array.isArray(activated.tools)
+      ? activated.tools.map((tool) => validateTool(source.id, tool, approvalByTool.get(tool?.name) ?? true))
+      : [];
     return {
       id: source.id,
       manifest: inspected.manifest,
@@ -286,7 +391,7 @@ export function createAiriPluginRuntime({
   function failedSession(source, error, previousRevision = 0) {
     return {
       id: source.id,
-      manifest: { apiVersion: "v1", kind: MANIFEST_KIND, name: source.id, entrypoints: {} },
+      manifest: { apiVersion: "v1", kind: MANIFEST_KIND, name: source.id, entrypoints: {}, permissions: [], tools: [] },
       version: "0.0.0",
       source: source.directory,
       phase: "failed",
@@ -343,6 +448,7 @@ export function createAiriPluginRuntime({
       error: session.error,
       enabled: session.phase !== "stopped",
       capabilities: ["tools", ...(session.id === BUILTIN_PLUGIN_ID ? ["tasks:read"] : [])],
+      permissions: [...(session.manifest.permissions ?? [])],
       kits: associatedKits,
       bindings: associatedBindings,
       toolCount: session.phase === "ready" ? session.tools.length : 0,
@@ -477,14 +583,19 @@ export function createAiriPluginRuntime({
       .sort((left, right) => left.name.localeCompare(right.name));
   }
 
-  async function callTool(name, args = {}) {
+  async function callTool(name, args = {}, approvalContext = {}) {
     if (typeof name !== "string") throw userError("Plugin tool name is required.");
     if (!args || typeof args !== "object" || Array.isArray(args)) throw userError("Plugin tool arguments must be an object.");
+    if (!approvalContext || typeof approvalContext !== "object" || Array.isArray(approvalContext)) throw userError("Plugin tool approval context must be an object.");
     await initialize();
     await mutationQueue;
     for (const session of sessions.values()) {
       const tool = session.phase === "ready" ? session.tools.find((item) => item.name === name) : undefined;
       if (tool) {
+        validateSchemaValue(args, tool.inputSchema);
+        if (tool.requiresApproval && approvalContext.approved !== true) {
+          throw approvalError(`Plugin tool ${tool.name} requires explicit approval for this invocation.`);
+        }
         return normalizeToolResult(await withTimeout(
           tool.execute(args),
           timeoutMs,

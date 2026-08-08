@@ -1,14 +1,12 @@
 {
   "apiVersion": "v1",
   "kind": "manifest.plugin.airi.moeru.ai",
-  "name": "fixture-plugin",
-  "permissions": [
-    "tasks:read",
-    "ledger:write"
-  ],
+  "name": "invalid-approval-plugin",
+  "permissions": [],
   "tools": [
     {
-      "name": "echo"
+      "name": "echo",
+      "requiresApproval": "yes"
     }
   ],
   "entrypoints": {

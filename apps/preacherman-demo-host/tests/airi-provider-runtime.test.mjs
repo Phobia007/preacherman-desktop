@@ -90,6 +90,41 @@ test("plugin adapters declare vision and image capabilities and are removed with
   await assert.rejects(() => runtime.get("local-vision"), { code: "PROVIDER_NOT_FOUND" });
 });
 
+test("provider adapters receive only configuration keys declared by their provider", async () => {
+  let receivedConfig;
+  const runtime = createAiriProviderRuntime({
+    getConfig: async () => ({
+      VISION_API_KEY: "vision-secret",
+      VISION_MODEL: "vision-model",
+      UNRELATED_API_KEY: "unrelated-api-secret",
+      DATABASE_PASSWORD: "database-secret",
+    }),
+  });
+  runtime.registerAdapter({
+    pluginId: "isolated-provider",
+    provider: {
+      id: "isolated-vision",
+      label: "Isolated Vision",
+      capabilities: ["vision"],
+      requirements: [
+        { key: "VISION_API_KEY", label: "Vision API key", secret: true },
+        { key: "VISION_MODEL", label: "Vision model", secret: false, required: false },
+      ],
+    },
+    invoke: async ({ config }) => {
+      receivedConfig = config;
+      return { configuration: config };
+    },
+  });
+
+  const result = await runtime.invoke("isolated-vision", { capability: "vision", input: {} });
+  assert.deepEqual(Object.keys(receivedConfig).sort(), ["VISION_API_KEY", "VISION_MODEL"]);
+  assert.equal(receivedConfig.UNRELATED_API_KEY, undefined);
+  assert.equal(receivedConfig.DATABASE_PASSWORD, undefined);
+  assert.deepEqual(result, { configuration: { VISION_API_KEY: "[REDACTED]", VISION_MODEL: "vision-model" } });
+  assert.doesNotMatch(JSON.stringify(result), /unrelated-api-secret|database-secret|vision-secret/);
+});
+
 test("provider adapters surface bounded timeout and redacted execution errors", async () => {
   const secret = "dashscope-secret-value";
   const runtime = createAiriProviderRuntime({
