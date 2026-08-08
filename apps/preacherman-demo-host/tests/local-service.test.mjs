@@ -228,6 +228,19 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(recalled.body.memories[0].text, "Plugin ecosystem check passed");
   const connections = await request(baseUrl, "/api/connections");
   assert.equal(connections.body.connections.every((connection) => connection.status === "configuration-required"), true);
+  const computerVision = await request(baseUrl, "/api/computer-vision");
+  assert.deepEqual(computerVision.body.capabilities.map((capability) => capability.id), [
+    "screenshot", "camera-window", "cursor-monitor", "vision-analysis",
+  ]);
+  assert.equal(computerVision.body.capabilities.every((capability) => capability.phase === "external-runtime-required"), true);
+  const screenshotTest = await request(baseUrl, "/api/computer-vision/screenshot/test", {
+    method: "POST", body: "{}",
+  });
+  assert.equal(screenshotTest.body.result.status, "external-runtime-required");
+  const screenshotInvoke = await request(baseUrl, "/api/computer-vision/screenshot/invoke", {
+    method: "POST", body: JSON.stringify({ input: {} }),
+  });
+  assert.equal(screenshotInvoke.body.result.status, "external-runtime-required");
 
   const pluginCapability = await request(baseUrl, "/api/airi/capabilities/agent.plugin-tools/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),

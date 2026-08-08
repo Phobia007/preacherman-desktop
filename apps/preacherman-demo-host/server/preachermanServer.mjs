@@ -23,6 +23,7 @@ import { createAiriGameletRuntime } from "./airiGameletRuntime.mjs";
 import { createAiriProviderRuntime } from "./airiProviderRuntime.mjs";
 import { createAiriMemoryPersonaRuntime } from "./airiMemoryPersonaRuntime.mjs";
 import { createAiriConnectionRuntime } from "./airiConnectionRuntime.mjs";
+import { createAiriComputerVisionRuntime } from "./airiComputerVisionRuntime.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -321,6 +322,7 @@ export function createPreachermanServer(options = {}) {
   const airiProviderRuntime = createAiriProviderRuntime({ getConfig: runtimeEnv, fetchImpl });
   const airiMemoryPersonaRuntime = createAiriMemoryPersonaRuntime({ file: memoryPersonaFile() });
   const airiConnectionRuntime = createAiriConnectionRuntime();
+  const airiComputerVisionRuntime = createAiriComputerVisionRuntime();
 
   async function initializeEcosystemRuntimes() {
     await airiMemoryPersonaRuntime.initialize();
@@ -393,6 +395,26 @@ export function createPreachermanServer(options = {}) {
       const service = capabilityId.slice("connection.".length);
       const connection = airiConnectionRuntime.get(service);
       return { status: "succeeded", protocol: "airi-connection", connection, summary: `${service} status: ${connection.status}.` };
+    }
+    const computerVisionCapability = {
+      "vision.screen": "screenshot",
+      "vision.camera": "camera-window",
+      "computer-use.desktop": "cursor-monitor",
+      "computer-use.browser": "cursor-monitor",
+      "computer-use.dom": "cursor-monitor",
+      "computer-use.session": "cursor-monitor",
+      "computer-use.transcript": "cursor-monitor",
+    }[capabilityId];
+    if (computerVisionCapability) {
+      const input = computerVisionCapability === "camera-window" ? { source: "camera" } : {};
+      const result = await airiComputerVisionRuntime.invoke(computerVisionCapability, input);
+      return {
+        ...result,
+        protocol: "airi-computer-vision",
+        summary: result.status === "succeeded"
+          ? `${computerVisionCapability} completed.`
+          : `${computerVisionCapability} requires an installed desktop or vision adapter.`,
+      };
     }
     return undefined;
   }
@@ -843,6 +865,19 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { connections: airiConnectionRuntime.list() }, origin);
         return;
       }
+      if (request.method === "GET" && url.pathname === "/api/computer-vision") {
+        json(response, 200, { capabilities: airiComputerVisionRuntime.list() }, origin);
+        return;
+      }
+      const computerVisionMatch = url.pathname.match(/^\/api\/computer-vision\/([^/]+)\/(test|invoke)$/);
+      if (request.method === "POST" && computerVisionMatch) {
+        const capability = decodeURIComponent(computerVisionMatch[1]);
+        const result = computerVisionMatch[2] === "test"
+          ? await airiComputerVisionRuntime.test(capability)
+          : await airiComputerVisionRuntime.invoke(capability, (await readJson(request)).input ?? {});
+        json(response, 200, { result }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/conversations/recent") {
         json(response, 200, { entries: await readConversationLedger() }, origin);
         return;
@@ -1091,6 +1126,7 @@ export function createPreachermanServer(options = {}) {
         airiGameletRuntime.close(),
         airiMemoryPersonaRuntime.close(),
         airiConnectionRuntime.close(),
+        airiComputerVisionRuntime.close(),
       ]);
       return new Promise((resolveClose, reject) => {
         server.close((error) => error ? reject(error) : resolveClose());
