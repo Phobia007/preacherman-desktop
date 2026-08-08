@@ -40,6 +40,21 @@ test("Settings owns persisted appearance and language controls", async () => {
   assert.match(app, /savePreferences/);
 });
 
+test("Settings exposes the real MCP configuration and execution console in both themes", async () => {
+  const settings = await readFile(join(sourceRoot, "settings", "SettingsScreen.tsx"), "utf8");
+  const mcp = await readFile(join(sourceRoot, "settings", "McpSettings.tsx"), "utf8");
+  const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
+
+  assert.match(settings, /<McpSettings\b/);
+  assert.match(mcp, /\/api\/mcp\/config/);
+  assert.match(mcp, /\/api\/mcp\/tools\/call/);
+  assert.match(mcp, /data-airi-control="mcp\.servers runtime\.mcp-test"/);
+  assert.match(styles, /\.demo-settings__service-button/);
+  assert.match(styles, /var\(--demo-theme-focus\)/);
+  assert.match(styles, /var\(--demo-theme-surface\)/);
+  assert.match(styles, /var\(--demo-theme-error\)/);
+});
+
 test("the persistent shell localizes navigation and maps supplied marks to each theme", async () => {
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const controls = await readFile(join(sourceRoot, "app-shell", "WindowControls.tsx"), "utf8");

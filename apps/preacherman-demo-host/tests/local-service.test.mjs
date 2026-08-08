@@ -3,6 +3,7 @@ import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { createPreachermanServer } from "../server/preachermanServer.mjs";
 
 const origin = "http://127.0.0.1:1420";
@@ -126,6 +127,30 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(local.body.event.state, "available");
   assert.equal(local.body.event.adapter, "preacherman-task");
 
+  const fixtureServer = fileURLToPath(new URL("./fixtures/mcp-status-server.mjs", import.meta.url));
+  const mcpConfig = JSON.stringify({
+    mcpServers: {
+      fixture: { command: process.execPath, args: [fixtureServer], enabled: true },
+    },
+  }, null, 2);
+  const configured = await request(baseUrl, "/api/mcp/config", {
+    method: "PUT", body: JSON.stringify({ text: mcpConfig }),
+  });
+  assert.equal(configured.response.status, 200);
+  assert.deepEqual(configured.body.result.started, ["fixture"], JSON.stringify(configured.body));
+  assert.equal(configured.body.status.servers.find((server) => server.name === "fixture").state, "running");
+
+  const tools = await request(baseUrl, "/api/mcp/tools");
+  assert.deepEqual(tools.body.tools.map((tool) => tool.name), [
+    "fixture::fixture_status",
+    "preacherman::preacherman_runtime_status",
+  ]);
+  const called = await request(baseUrl, "/api/mcp/tools/call", {
+    method: "POST", body: JSON.stringify({ name: "fixture::fixture_status", arguments: { label: "external" } }),
+  });
+  assert.equal(called.body.result.isError, false);
+  assert.deepEqual(called.body.result.structuredContent, { ok: true, label: "external" });
+
   const mcp = await request(baseUrl, "/api/airi/capabilities/agent.mcp-tools/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
   });
@@ -136,7 +161,7 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(mcp.body.event.execution.protocol, "mcp");
   assert.equal(mcp.body.event.execution.tool, "preacherman::preacherman_runtime_status");
   assert.equal(mcp.body.event.execution.result.taskCount, 0);
-  assert.deepEqual(mcp.body.event.execution.tools, ["preacherman::preacherman_runtime_status"]);
+  assert.deepEqual(mcp.body.event.execution.tools, ["fixture::fixture_status", "preacherman::preacherman_runtime_status"]);
 
   const external = await request(baseUrl, "/api/airi/capabilities/game.minecraft/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "zh-CN" }),

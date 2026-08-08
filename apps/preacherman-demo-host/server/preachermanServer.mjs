@@ -70,7 +70,12 @@ export function createPreachermanServer(options = {}) {
   }
 
   const taskStore = createTaskStore({ file: taskStoreFile() });
-  const airiMcpRuntime = createAiriMcpRuntime({ taskStore });
+
+  function mcpConfigFile() {
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "mcp.json");
+  }
+
+  const airiMcpRuntime = createAiriMcpRuntime({ configFile: mcpConfigFile(), taskStore });
 
   function providerConfigFile() {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "provider-settings.json");
@@ -432,6 +437,31 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, result, origin);
         return;
       }
+      if (request.method === "GET" && url.pathname === "/api/mcp/config") {
+        json(response, 200, { ...(await airiMcpRuntime.readConfigText()), status: airiMcpRuntime.getRuntimeStatus() }, origin);
+        return;
+      }
+      if (request.method === "PUT" && url.pathname === "/api/mcp/config") {
+        const body = await readJson(request);
+        const config = await airiMcpRuntime.writeConfigText(body.text);
+        const result = await airiMcpRuntime.applyAndRestart();
+        json(response, 200, { ...config, result, status: airiMcpRuntime.getRuntimeStatus() }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/mcp/tools") {
+        json(response, 200, { tools: await airiMcpRuntime.listTools(), status: airiMcpRuntime.getRuntimeStatus() }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/mcp/tools/call") {
+        const body = await readJson(request);
+        if (typeof body.name !== "string" || body.name.length > 200) {
+          json(response, 400, { error: "MCP tool name is required." }, origin);
+          return;
+        }
+        const result = await airiMcpRuntime.callTool(body.name, body.arguments ?? {});
+        json(response, 200, { result }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/conversations/recent") {
         json(response, 200, { entries: await readConversationLedger() }, origin);
         return;
@@ -645,7 +675,8 @@ export function createPreachermanServer(options = {}) {
 
   return {
     server,
-    listen(port = Number(env.PREACHERMAN_SERVICE_PORT) || DEFAULT_PORT) {
+    async listen(port = Number(env.PREACHERMAN_SERVICE_PORT) || DEFAULT_PORT) {
+      await airiMcpRuntime.initialize();
       return new Promise((resolveListen, reject) => {
         server.once("error", reject);
         server.listen(port, "127.0.0.1", () => {
