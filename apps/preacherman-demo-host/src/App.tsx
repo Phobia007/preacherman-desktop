@@ -8,6 +8,8 @@ import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { ABTaskConsole } from "./ab/ABTaskConsole";
 import { AiriFeaturePanel } from "./airi/AiriFeaturePanel";
+import { AiriEcosystemDiagnostics } from "./airi/AiriEcosystemDiagnostics";
+import { airiServiceRequest } from "./airi/capabilityClient";
 import { featuresForSurface, findAiriFeature } from "./airi/featurePlacement";
 import { AppShell } from "./app-shell/AppShell";
 import { DemoAvatarSlot } from "./avatar/DemoAvatarSlot";
@@ -191,6 +193,7 @@ export function App() {
           ? "从左侧逐项检查麦克风、模型、工具、插件和运行时入口；绿色入口已连接，空心入口等待对应服务。"
           : "Inspect microphone, model, tool, plugin, and runtime entries. Solid entries are connected; outlined entries require their service."}</p>
       </div>
+      <AiriEcosystemDiagnostics locale={preferences.locale} serviceRequest={airiServiceRequest} />
     </main>
   );
   const mainContent = route.kind === "index"

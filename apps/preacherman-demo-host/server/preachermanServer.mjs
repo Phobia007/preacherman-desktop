@@ -18,6 +18,11 @@ import { createAiriMcpRuntime } from "./airiMcpRuntime.mjs";
 import { createAiriKitsRuntime } from "./airiKitsRuntime.mjs";
 import { createAiriPluginRuntime } from "./airiPluginRuntime.mjs";
 import { createAiriPluginTaskBinding } from "./airiPluginTaskBinding.mjs";
+import { createAiriWidgetRuntime, AIRI_WIDGET_KIND } from "./airiWidgetRuntime.mjs";
+import { createAiriGameletRuntime } from "./airiGameletRuntime.mjs";
+import { createAiriProviderRuntime } from "./airiProviderRuntime.mjs";
+import { createAiriMemoryPersonaRuntime } from "./airiMemoryPersonaRuntime.mjs";
+import { createAiriConnectionRuntime } from "./airiConnectionRuntime.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -144,6 +149,14 @@ export function createPreachermanServer(options = {}) {
 
   function pluginStateFile() {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-plugins.v1.json");
+  }
+
+  function widgetStateFile() {
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-widgets.v1.json");
+  }
+
+  function memoryPersonaFile() {
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-memory-persona.v1.json");
   }
 
   let airiPluginRuntime;
@@ -303,11 +316,93 @@ export function createPreachermanServer(options = {}) {
     };
   }
 
+  const airiWidgetRuntime = createAiriWidgetRuntime({ file: widgetStateFile() });
+  const airiGameletRuntime = createAiriGameletRuntime();
+  const airiProviderRuntime = createAiriProviderRuntime({ getConfig: runtimeEnv, fetchImpl });
+  const airiMemoryPersonaRuntime = createAiriMemoryPersonaRuntime({ file: memoryPersonaFile() });
+  const airiConnectionRuntime = createAiriConnectionRuntime();
+
+  async function initializeEcosystemRuntimes() {
+    await airiMemoryPersonaRuntime.initialize();
+    if ((await airiMemoryPersonaRuntime.listPersonas()).length === 0) {
+      await airiMemoryPersonaRuntime.createPersona({
+        name: "Preacherman",
+        description: "Local demo companion persona",
+        instructions: "Be concise, auditable, and explicit about unavailable capabilities.",
+      });
+    }
+    if (!(await airiWidgetRuntime.list()).some((widget) => widget.id === "ecosystem-status")) {
+      await airiWidgetRuntime.register({
+        pluginId: "preacherman-runtime",
+        manifest: {
+          apiVersion: "v1",
+          kind: AIRI_WIDGET_KIND,
+          id: "ecosystem-status",
+          version: "1.0.0",
+          title: "AIRI ecosystem status",
+          placement: "work",
+        },
+        schema: {
+          type: "container",
+          orientation: "vertical",
+          gap: 8,
+          children: [
+            { type: "text", text: "AIRI runtimes are registered", variant: "heading", tone: "primary" },
+            { type: "metric", label: "Core kits", value: 3, tone: "success" },
+            { type: "button", label: "Open ledger", action: { type: "emit", event: "open-ledger" } },
+          ],
+        },
+      });
+    }
+  }
+
+  async function executeEcosystemCapability(capabilityId, context = {}) {
+    if (capabilityId === "agent.kits-api") {
+      const kits = airiKitsRuntime.kits.discover();
+      return { status: "succeeded", protocol: "airi-kits", kits, summary: `Discovered ${kits.length} AIRI kits.` };
+    }
+    if (capabilityId === "agent.bindings-api") {
+      const bindings = airiKitsRuntime.bindings.list();
+      return { status: "succeeded", protocol: "airi-bindings", bindings, summary: `Discovered ${bindings.length} AIRI bindings.` };
+    }
+    if (capabilityId === "plugin.widgets") {
+      const widgets = await airiWidgetRuntime.list();
+      return { status: "succeeded", protocol: "airi-widget", widgets, summary: `Loaded ${widgets.length} declarative widgets.` };
+    }
+    if (capabilityId === "plugin.gamelets") {
+      const gamelets = airiGameletRuntime.discover();
+      return { status: "succeeded", protocol: "airi-gamelet", gamelets, summary: `Loaded ${gamelets.length} gamelets.` };
+    }
+    if (capabilityId === "game.tic-tac-toe") {
+      const session = await airiGameletRuntime.createSession({ pluginId: "preacherman-runtime", gameletId: "tic-tac-toe" });
+      return { status: "succeeded", protocol: "airi-gamelet", session, summary: `Started offline gamelet ${session.id}.` };
+    }
+    if (capabilityId === "provider.catalog") {
+      const providers = await airiProviderRuntime.catalog();
+      return { status: "succeeded", protocol: "airi-provider", providers, summary: `Read ${providers.length} provider definitions.` };
+    }
+    if (capabilityId === "persona.select") {
+      const persona = await airiMemoryPersonaRuntime.getSelectedPersona();
+      return { status: "succeeded", protocol: "airi-persona", persona, summary: `Selected persona: ${persona?.name ?? "none"}.` };
+    }
+    if (capabilityId === "memory.recall" || capabilityId === "memory.time-awareness") {
+      const memories = await airiMemoryPersonaRuntime.recall({ namespace: "default", limit: 10 });
+      return { status: "succeeded", protocol: "airi-memory", memories, summary: `Recalled ${memories.length} local memories.` };
+    }
+    if (capabilityId.startsWith("connection.")) {
+      const service = capabilityId.slice("connection.".length);
+      const connection = airiConnectionRuntime.get(service);
+      return { status: "succeeded", protocol: "airi-connection", connection, summary: `${service} status: ${connection.status}.` };
+    }
+    return undefined;
+  }
+
   const airiCapabilityRuntime = createAiriCapabilityRuntime({
     file: airiCapabilityEventsFile(),
     getRuntimeEnv: runtimeEnv,
     async executeCapability(capabilityId, context) {
-      return await airiMcpRuntime.executeCapability(capabilityId, context)
+      return await executeEcosystemCapability(capabilityId, context)
+        ?? await airiMcpRuntime.executeCapability(capabilityId, context)
         ?? await airiPluginRuntime.executeCapability(capabilityId, context);
     },
   });
@@ -696,6 +791,58 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { result: await executePluginToolAsTask(body.name, body.arguments ?? {}) }, origin);
         return;
       }
+      if (request.method === "GET" && url.pathname === "/api/widgets") {
+        json(response, 200, { widgets: await airiWidgetRuntime.list() }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/gamelets") {
+        json(response, 200, { gamelets: airiGameletRuntime.discover() }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/gamelets/sessions") {
+        const body = await readJson(request);
+        const session = await airiGameletRuntime.createSession({
+          pluginId: "preacherman-runtime",
+          gameletId: body.gameletId,
+          input: body.input,
+        });
+        json(response, 201, { session }, origin);
+        return;
+      }
+      const gameletActionMatch = url.pathname.match(/^\/api\/gamelets\/sessions\/([^/]+)\/actions$/);
+      if (request.method === "POST" && gameletActionMatch) {
+        const body = await readJson(request);
+        const session = await airiGameletRuntime.sendAction({
+          pluginId: "preacherman-runtime",
+          sessionId: decodeURIComponent(gameletActionMatch[1]),
+          action: body.action,
+        });
+        json(response, 200, { session }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/providers/catalog") {
+        json(response, 200, { providers: await airiProviderRuntime.catalog() }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/personas") {
+        json(response, 200, {
+          personas: await airiMemoryPersonaRuntime.listPersonas(),
+          selected: await airiMemoryPersonaRuntime.getSelectedPersona(),
+        }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/memory/remember") {
+        json(response, 201, { memory: await airiMemoryPersonaRuntime.remember(await readJson(request)) }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/memory/recall") {
+        json(response, 200, { memories: await airiMemoryPersonaRuntime.recall(await readJson(request)) }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/connections") {
+        json(response, 200, { connections: airiConnectionRuntime.list() }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/conversations/recent") {
         json(response, 200, { entries: await readConversationLedger() }, origin);
         return;
@@ -927,7 +1074,7 @@ export function createPreachermanServer(options = {}) {
   return {
     server,
     async listen(port = Number(env.PREACHERMAN_SERVICE_PORT) || DEFAULT_PORT) {
-      await Promise.all([airiMcpRuntime.initialize(), airiPluginRuntime.initialize()]);
+      await Promise.all([airiMcpRuntime.initialize(), airiPluginRuntime.initialize(), initializeEcosystemRuntimes()]);
       return new Promise((resolveListen, reject) => {
         server.once("error", reject);
         server.listen(port, "127.0.0.1", () => {
@@ -938,7 +1085,13 @@ export function createPreachermanServer(options = {}) {
     },
     async close() {
       for (const client of voiceProxy.clients) client.close();
-      await Promise.all([airiMcpRuntime.close(), airiPluginRuntime.close()]);
+      await Promise.all([
+        airiMcpRuntime.close(),
+        airiPluginRuntime.close(),
+        airiGameletRuntime.close(),
+        airiMemoryPersonaRuntime.close(),
+        airiConnectionRuntime.close(),
+      ]);
       return new Promise((resolveClose, reject) => {
         server.close((error) => error ? reject(error) : resolveClose());
       });

@@ -99,13 +99,14 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("game.kerbal", "Play Kerbal Space Program", "玩坎巴拉太空计划"),
       feature("game.helldivers", "Co-play Helldivers 2", "协玩绝地潜兵 2"),
       feature("game.chess", "Chess gamelet", "国际象棋组件"),
+      feature("game.tic-tac-toe", "Offline tic-tac-toe", "离线井字棋", "live"),
     ],
     sections: [
       section("start", "Start a task", "开始任务", "primary", ["task.create", "task.confirm"]),
       section("control", "Run controls", "执行控制", "workflow", ["task.steer", "task.retry", "task.cancel"]),
       section("tools", "Agent tools", "智能体工具", "extension", ["agent.tool-approval", "agent.mcp-tools", "agent.plugin-tools", "agent.kits-api", "agent.bindings-api"]),
       section("computer", "Computer use", "电脑操作", "extension", ["computer-use.dom", "computer-use.session", "computer-use.transcript"]),
-      section("games", "Game integrations", "游戏连接", "system", ["game.minecraft", "game.factorio", "game.kerbal", "game.helldivers", "game.chess"]),
+      section("games", "Game integrations", "游戏连接", "system", ["game.minecraft", "game.factorio", "game.kerbal", "game.helldivers", "game.chess", "game.tic-tac-toe"]),
     ],
   },
   {

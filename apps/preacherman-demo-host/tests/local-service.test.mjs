@@ -198,6 +198,37 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.deepEqual(kits.body.kits.map((kit) => kit.name), ["ledger", "task", "tools"]);
   assert.ok(kits.body.bindings.some((binding) => binding.kit === "tools" && binding.operation === "call"));
 
+  const widgets = await request(baseUrl, "/api/widgets");
+  assert.deepEqual(widgets.body.widgets.map((widget) => widget.id), ["ecosystem-status"]);
+  const gamelets = await request(baseUrl, "/api/gamelets");
+  assert.deepEqual(gamelets.body.gamelets.map((gamelet) => gamelet.id), ["tic-tac-toe"]);
+  let gameSession = (await request(baseUrl, "/api/gamelets/sessions", {
+    method: "POST", body: JSON.stringify({ gameletId: "tic-tac-toe" }),
+  })).body.session;
+  for (const cell of [0, 3, 1, 4, 2]) {
+    gameSession = (await request(baseUrl, `/api/gamelets/sessions/${gameSession.id}/actions`, {
+      method: "POST", body: JSON.stringify({ action: { type: "place", cell } }),
+    })).body.session;
+  }
+  assert.equal(gameSession.status, "completed");
+  assert.equal(gameSession.state.winner, "X");
+
+  const providerCatalog = await request(baseUrl, "/api/providers/catalog");
+  assert.deepEqual(providerCatalog.body.providers.map((provider) => provider.id), ["dashscope", "deepseek"]);
+  assert.equal(providerCatalog.body.providers.every((provider) => Object.values(provider.capabilities)
+    .every((capability) => capability.state === "configuration-required")), true);
+  const personas = await request(baseUrl, "/api/personas");
+  assert.equal(personas.body.selected.name, "Preacherman");
+  await request(baseUrl, "/api/memory/remember", {
+    method: "POST", body: JSON.stringify({ namespace: "demo", text: "Plugin ecosystem check passed" }),
+  });
+  const recalled = await request(baseUrl, "/api/memory/recall", {
+    method: "POST", body: JSON.stringify({ namespace: "demo", query: "ecosystem" }),
+  });
+  assert.equal(recalled.body.memories[0].text, "Plugin ecosystem check passed");
+  const connections = await request(baseUrl, "/api/connections");
+  assert.equal(connections.body.connections.every((connection) => connection.status === "configuration-required"), true);
+
   const pluginCapability = await request(baseUrl, "/api/airi/capabilities/agent.plugin-tools/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
   });

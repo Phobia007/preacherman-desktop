@@ -9,7 +9,9 @@ const CLIENT_FAMILIES = new Set([
 const LOCAL_CAPABILITIES = new Set([
   "agent.bindings-api", "agent.kits-api",
   "companion.chat", "conversation.history", "plugin.activity",
-  "plugin.hot-reload", "plugin.manager", "provider.smoke-test",
+  "game.tic-tac-toe", "memory.recall", "memory.time-awareness", "persona.select",
+  "plugin.gamelets", "plugin.hot-reload", "plugin.manager", "plugin.widgets",
+  "provider.catalog", "provider.smoke-test",
   "runtime.io-history", "runtime.plugin-inspector", "mcp.servers",
 ]);
 const EXTERNAL_FAMILIES = new Set([

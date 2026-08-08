@@ -37,7 +37,7 @@ export interface AiriCapabilityStatus {
   readonly message: string;
 }
 
-async function serviceRequest<T>(path: string, init?: RequestInit): Promise<T> {
+export async function airiServiceRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(localServiceUrl(path), {
     headers: { "Content-Type": "application/json" },
     ...init,
@@ -52,7 +52,7 @@ export async function invokeAiriCapability(
   surface: DemoSurfaceType,
   locale: Locale,
 ): Promise<AiriCapabilityEvent> {
-  const payload = await serviceRequest<{ event: AiriCapabilityEvent }>(
+  const payload = await airiServiceRequest<{ event: AiriCapabilityEvent }>(
     `/api/airi/capabilities/${encodeURIComponent(capabilityId)}/invoke`,
     { method: "POST", body: JSON.stringify({ surface, locale }) },
   );
@@ -61,7 +61,7 @@ export async function invokeAiriCapability(
 
 export async function loadAiriCapabilityEvents(limit = 50): Promise<readonly AiriCapabilityEvent[]> {
   try {
-    const payload = await serviceRequest<{ events?: AiriCapabilityEvent[] }>(`/api/airi/events?limit=${limit}`);
+    const payload = await airiServiceRequest<{ events?: AiriCapabilityEvent[] }>(`/api/airi/events?limit=${limit}`);
     return Array.isArray(payload.events) ? payload.events : [];
   } catch {
     return [];
@@ -72,7 +72,7 @@ export async function loadAiriCapabilityStatuses(
   capabilityIds: readonly string[],
   locale: Locale,
 ): Promise<readonly AiriCapabilityStatus[]> {
-  const payload = await serviceRequest<{ capabilities?: AiriCapabilityStatus[] }>(
+  const payload = await airiServiceRequest<{ capabilities?: AiriCapabilityStatus[] }>(
     "/api/airi/capabilities/status",
     { method: "POST", body: JSON.stringify({ ids: capabilityIds, locale }) },
   );
