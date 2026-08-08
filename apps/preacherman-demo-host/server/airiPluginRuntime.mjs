@@ -327,7 +327,9 @@ export function createAiriPluginRuntime({
       ? kits.discover({ pluginId: session.id }).map((kit) => kit.name)
       : [];
     const associatedBindings = typeof bindings?.list === "function"
-      ? bindings.list({ pluginId: session.id }).map((binding) => `${binding.kit}.${binding.operation}`)
+      ? bindings.list()
+        .filter((binding) => associatedKits.includes(binding.kit))
+        .map((binding) => `${binding.kit}.${binding.operation}`)
       : [];
     return {
       id: session.id,

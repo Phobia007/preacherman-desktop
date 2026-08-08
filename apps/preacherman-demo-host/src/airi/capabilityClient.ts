@@ -29,6 +29,14 @@ export interface AiriCapabilityEvent {
   readonly at: string;
 }
 
+export interface AiriCapabilityStatus {
+  readonly capabilityId: string;
+  readonly state: AiriBackendState;
+  readonly adapter: string;
+  readonly requirements: readonly string[];
+  readonly message: string;
+}
+
 async function serviceRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(localServiceUrl(path), {
     headers: { "Content-Type": "application/json" },
@@ -58,4 +66,15 @@ export async function loadAiriCapabilityEvents(limit = 50): Promise<readonly Air
   } catch {
     return [];
   }
+}
+
+export async function loadAiriCapabilityStatuses(
+  capabilityIds: readonly string[],
+  locale: Locale,
+): Promise<readonly AiriCapabilityStatus[]> {
+  const payload = await serviceRequest<{ capabilities?: AiriCapabilityStatus[] }>(
+    "/api/airi/capabilities/status",
+    { method: "POST", body: JSON.stringify({ ids: capabilityIds, locale }) },
+  );
+  return Array.isArray(payload.capabilities) ? payload.capabilities : [];
 }

@@ -49,8 +49,9 @@ test("AIRI controls have one explicit Preacherman surface placement", async () =
   assert.match(app, /activeSurfaceType === "lab"[\s\S]*labContent/);
   assert.match(app, /<AiriFeaturePanel[\s\S]*onActivate=\{handleAiriFeatureActivate\}[\s\S]*surface=\{airiPanelSurface\}/);
   assert.match(panel, /onActivate\(candidate\.id\)/);
-  assert.match(panel, /Connected in this demo/);
-  assert.match(panel, /Entry integrated · runtime or provider required/);
+  assert.match(panel, /loadAiriCapabilityStatuses/);
+  assert.match(panel, /Backend available/);
+  assert.match(panel, /External runtime required/);
   assert.match(panel, /placement\.features\.length/);
   assert.match(panelStyles, /var\(--demo-theme-text\)/);
   assert.match(panelStyles, /var\(--demo-theme-surface-elevated\)/);

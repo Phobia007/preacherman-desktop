@@ -63,6 +63,7 @@ test("create, progress, and completion persist a structured TaskRun artifact and
   assert.equal(completed.task.status, "completed");
   assert.equal(completed.ledger.status, "completed");
   assert.deepEqual(completed.ledger.structuredResult, { sourceCount: 2, confidence: "verified" });
+  assert.equal(completed.ledger.artifact.path, `/api/tasks/${encodeURIComponent(created.task.taskId)}/artifact`);
   assert.deepEqual(completed.ledger.artifact.content.findings, ["Local-first", "Auditable"]);
   assert.deepEqual(completed.task.events.map((event) => event.sequence), [1, 2, 3, 4, 5]);
   assert.deepEqual(completed.task.events.slice(-2).map((event) => event.type), ["progress", "completed"]);

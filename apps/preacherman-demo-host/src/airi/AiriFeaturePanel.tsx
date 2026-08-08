@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Locale } from "../preferences";
-import { invokeAiriCapability, type AiriBackendState } from "./capabilityClient";
+import {
+  invokeAiriCapability,
+  loadAiriCapabilityStatuses,
+  type AiriBackendState,
+  type AiriCapabilityStatus,
+} from "./capabilityClient";
 import {
   featurePlacementForSurface,
   type DemoSurfaceType,
@@ -31,14 +36,35 @@ export function AiriFeaturePanel({
   const [activationState, setActivationState] = useState<"idle" | "focused" | "executed" | "unavailable">("idle");
   const [backendState, setBackendState] = useState<AiriBackendState | "checking" | "error" | "idle">("idle");
   const [backendMessage, setBackendMessage] = useState("");
+  const [capabilityStatuses, setCapabilityStatuses] = useState<Readonly<Record<string, AiriCapabilityStatus>>>({});
   const selected = placement.features.find((candidate) => candidate.id === selectedId);
   const chinese = locale === "zh-CN";
-  const connectedCount = placement.features.filter((candidate) => candidate.status === "live").length;
+  const selectedRuntimeState = selected ? capabilityStatuses[selected.id]?.state : undefined;
+  const connectedCount = placement.features.filter((candidate) => {
+    const state = capabilityStatuses[candidate.id]?.state;
+    return state === "available" || state === "client-runtime";
+  }).length;
+
+  useEffect(() => {
+    let current = true;
+    setCapabilityStatuses({});
+    void loadAiriCapabilityStatuses(placement.features.map((feature) => feature.id), locale)
+      .then((statuses) => {
+        if (!current) return;
+        setCapabilityStatuses(Object.fromEntries(statuses.map((status) => [status.capabilityId, status])));
+      })
+      .catch(() => {
+        if (current) setCapabilityStatuses({});
+      });
+    return () => { current = false; };
+  }, [locale, placement]);
 
   const activateFeature = (candidate: (typeof placement.features)[number]) => {
     setSelectedId(candidate.id);
     const activated = onActivate(candidate.id);
-    setActivationState(activated ? "focused" : candidate.status === "live" ? "unavailable" : "idle");
+    const state = capabilityStatuses[candidate.id]?.state;
+    const connected = state === "available" || state === "client-runtime";
+    setActivationState(activated ? "focused" : connected ? "unavailable" : "idle");
     setBackendState("checking");
     setBackendMessage(chinese ? "正在检查后端适配器…" : "Checking backend adapter…");
     void invokeAiriCapability(candidate.id, surface, locale).then((event) => {
@@ -56,12 +82,22 @@ export function AiriFeaturePanel({
       {featureIds.map((featureId) => {
         const candidate = placement.features.find((feature) => feature.id === featureId);
         if (!candidate) return null;
+        const runtimeStatus = capabilityStatuses[candidate.id]?.state ?? "checking";
+        const runtimeLabel = runtimeStatus === "available"
+          ? (chinese ? "可用" : "Live")
+          : runtimeStatus === "client-runtime"
+            ? (chinese ? "前端" : "Client")
+            : runtimeStatus === "configuration-required"
+              ? (chinese ? "配置" : "Setup")
+              : runtimeStatus === "external-runtime-required"
+                ? (chinese ? "外部" : "External")
+                : (chinese ? "检查" : "Check");
         return (
           <button
             aria-pressed={candidate.id === selected?.id}
             className="demo-airi-panel__feature"
             data-priority={priority}
-            data-status={candidate.status}
+            data-status={runtimeStatus}
             data-tone={["presentation.stop", "task.cancel"].includes(candidate.id) ? "danger" : "default"}
             key={candidate.id}
             onClick={() => activateFeature(candidate)}
@@ -69,6 +105,7 @@ export function AiriFeaturePanel({
           >
             <span aria-hidden="true" className="demo-airi-panel__status" />
             <span>{candidate.label[locale]}</span>
+            <small className="demo-airi-panel__runtime-label">{runtimeLabel}</small>
           </button>
         );
       })}
@@ -120,18 +157,20 @@ export function AiriFeaturePanel({
         <footer className="demo-airi-panel__detail" aria-live="polite">
           <strong>{selected.label[locale]}</strong>
           <code>{selected.id}</code>
-          <span data-status={selected.status}>
-            {selected.status === "live"
-              ? activationState === "executed"
-                ? (chinese ? "已通过连接的后端执行" : "Executed by the connected backend")
-                : activationState === "focused"
-                  ? (chinese ? "已定位到对应控件" : "Control focused")
-                  : activationState === "unavailable"
-                    ? (chinese ? "已接入 · 当前状态下暂不可用" : "Connected · unavailable in the current state")
-                    : (chinese ? "已接入当前 Demo" : "Connected in this demo")
+          <span data-status={selectedRuntimeState ?? "checking"}>
+            {activationState === "executed"
+              ? (chinese ? "已通过连接的后端执行" : "Executed by the connected backend")
               : activationState === "focused"
-                ? (chinese ? "已跳转到相关页面或控件" : "Opened the related surface or control")
-                : (chinese ? "入口已集成 · 等待运行时或 Provider" : "Entry integrated · runtime or provider required")}
+                ? (chinese ? "已定位到对应页面或控件" : "Opened the related surface or control")
+                : selectedRuntimeState === "available"
+                  ? (chinese ? "后端已连接" : "Backend available")
+                  : selectedRuntimeState === "client-runtime"
+                    ? (chinese ? "由前端运行时执行" : "Handled by the client runtime")
+                    : selectedRuntimeState === "configuration-required"
+                      ? (chinese ? "需要完成配置" : "Configuration required")
+                      : selectedRuntimeState === "external-runtime-required"
+                        ? (chinese ? "需要外部运行时" : "External runtime required")
+                        : (chinese ? "正在检查实际状态" : "Checking runtime status")}
           </span>
           <span data-backend-state={backendState}>
             {backendMessage || (chinese ? "点击后检查后端状态" : "Click to inspect backend state")}

@@ -314,6 +314,7 @@ export function createAiriPluginTaskBinding({
     const artifactInput = requirePlainObject(input.artifact, "Artifact");
     const artifact = {
       name: normalizeText(artifactInput.name, "Artifact name", 128),
+      path: `/api/tasks/${encodeURIComponent(taskId)}/artifact`,
       mediaType: artifactInput.mediaType === undefined
         ? "application/json"
         : normalizeText(artifactInput.mediaType, "Artifact media type", 128),

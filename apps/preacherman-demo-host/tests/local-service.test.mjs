@@ -127,6 +127,16 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(local.body.event.state, "available");
   assert.equal(local.body.event.adapter, "preacherman-task");
 
+  const capabilityStatuses = await request(baseUrl, "/api/airi/capabilities/status", {
+    method: "POST",
+    body: JSON.stringify({ ids: ["agent.kits-api", "voice.tts", "game.minecraft"], locale: "en" }),
+  });
+  assert.deepEqual(capabilityStatuses.body.capabilities.map(({ capabilityId, state }) => [capabilityId, state]), [
+    ["agent.kits-api", "available"],
+    ["voice.tts", "configuration-required"],
+    ["game.minecraft", "external-runtime-required"],
+  ]);
+
   const fixtureServer = fileURLToPath(new URL("./fixtures/mcp-status-server.mjs", import.meta.url));
   const mcpConfig = JSON.stringify({
     mcpServers: {
@@ -175,7 +185,16 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
     method: "POST", body: JSON.stringify({ name: "preacherman-runtime::task_summary", arguments: {} }),
   });
   assert.equal(pluginCall.body.result.isError, false);
-  assert.equal(pluginCall.body.result.structuredContent.taskCount, 0);
+  assert.equal(pluginCall.body.result.structuredContent.taskCount, 1);
+  assert.equal(pluginCall.body.result.task.status, "completed");
+  assert.equal(pluginCall.body.result.ledger.toolName, "task_summary");
+  const pluginArtifact = await request(baseUrl, pluginCall.body.result.task.artifact.path);
+  assert.equal(pluginArtifact.response.status, 200);
+  assert.equal(pluginArtifact.body.artifact.content.taskCount, 1);
+
+  const kits = await request(baseUrl, "/api/airi/kits");
+  assert.deepEqual(kits.body.kits.map((kit) => kit.name), ["ledger", "task", "tools"]);
+  assert.ok(kits.body.bindings.some((binding) => binding.kit === "tools" && binding.operation === "call"));
 
   const pluginCapability = await request(baseUrl, "/api/airi/capabilities/agent.plugin-tools/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
@@ -198,6 +217,33 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
     method: "POST", body: JSON.stringify({ name: "preacherman-runtime" }),
   });
   assert.ok(reloadedPlugin.body.plugin.revision > enabledPlugin.body.plugin.revision);
+
+  const fixturePlugin = fileURLToPath(new URL("./fixtures/airi-plugin/success", import.meta.url));
+  const installedPlugin = await request(baseUrl, "/api/plugins/install", {
+    method: "POST", body: JSON.stringify({ directory: fixturePlugin }),
+  });
+  assert.equal(installedPlugin.response.status, 201);
+  assert.deepEqual(installedPlugin.body.plugin.kits, ["ledger", "task"]);
+  assert.ok(installedPlugin.body.plugin.bindings.includes("ledger.write-artifact"));
+  const externalPluginCall = await request(baseUrl, "/api/plugins/tools/call", {
+    method: "POST", body: JSON.stringify({ name: "fixture-plugin::echo", arguments: { label: "closed-loop" } }),
+  });
+  assert.equal(externalPluginCall.response.status, 200);
+  assert.deepEqual(externalPluginCall.body.result.structuredContent, {
+    pluginId: "fixture-plugin",
+    label: "closed-loop",
+    hasKits: true,
+    hasBindings: true,
+  });
+  assert.equal(externalPluginCall.body.result.task.status, "completed");
+  const persistedPluginTask = (await request(baseUrl, `/api/tasks/${externalPluginCall.body.result.task.taskId}`)).body.task;
+  assert.equal(persistedPluginTask.status, "succeeded");
+  assert.equal(persistedPluginTask.toolCall.name, "echo");
+  assert.equal(persistedPluginTask.artifact.content.label, "closed-loop");
+  const uninstalledPlugin = await request(baseUrl, "/api/plugins/uninstall", {
+    method: "POST", body: JSON.stringify({ name: "fixture-plugin" }),
+  });
+  assert.equal(uninstalledPlugin.body.result.uninstalled, true);
 
   const external = await request(baseUrl, "/api/airi/capabilities/game.minecraft/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "zh-CN" }),

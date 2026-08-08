@@ -9,7 +9,12 @@ export interface TaskLedgerEntry {
   readonly status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
   readonly updatedAt: string;
   readonly events: readonly { readonly stage: string; readonly message: string }[];
-  readonly artifact: { readonly name: string; readonly path: string } | null;
+  readonly artifact: {
+    readonly name: string;
+    readonly path: string;
+    readonly mediaType?: string;
+    readonly content?: unknown;
+  } | null;
 }
 
 const LEDGER_KEY = "preacherman.conversation-ledger.v1";

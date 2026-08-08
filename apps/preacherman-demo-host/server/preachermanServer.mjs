@@ -15,7 +15,9 @@ import {
 import { appendTaskEvent, createTaskStore } from "./taskStore.mjs";
 import { createAiriCapabilityRuntime } from "./airiCapabilityRuntime.mjs";
 import { createAiriMcpRuntime } from "./airiMcpRuntime.mjs";
+import { createAiriKitsRuntime } from "./airiKitsRuntime.mjs";
 import { createAiriPluginRuntime } from "./airiPluginRuntime.mjs";
+import { createAiriPluginTaskBinding } from "./airiPluginTaskBinding.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -71,6 +73,68 @@ export function createPreachermanServer(options = {}) {
   }
 
   const taskStore = createTaskStore({ file: taskStoreFile() });
+  const airiKitsRuntime = createAiriKitsRuntime();
+  const airiPluginTaskBinding = createAiriPluginTaskBinding({ taskStore });
+
+  for (const kit of airiKitsRuntime.kits.discover()) {
+    airiKitsRuntime.kits.attachConsumer("preacherman-runtime", kit.name, "^1.0.0");
+  }
+
+  function callerPluginId(context) {
+    return typeof context?.callerPluginId === "string" ? context.callerPluginId : "preacherman-runtime";
+  }
+
+  function bindTaskOperation(kit, operation, bindingOperation = operation) {
+    airiKitsRuntime.bindings.bind({
+      pluginId: "preacherman-host",
+      kit,
+      operation,
+      versionRange: "^1.0.0",
+      handler(input, context) {
+        return airiPluginTaskBinding.execute(bindingOperation, input, {
+          pluginId: callerPluginId(context),
+          toolName: input?.toolName,
+        });
+      },
+    });
+  }
+
+  bindTaskOperation("task", "create");
+  bindTaskOperation("task", "get", "status");
+  bindTaskOperation("task", "cancel");
+  bindTaskOperation("task", "retry");
+  bindTaskOperation("ledger", "get", "status");
+  bindTaskOperation("ledger", "write-artifact", "complete-with-artifact");
+  airiKitsRuntime.bindings.bind({
+    pluginId: "preacherman-host",
+    kit: "task",
+    operation: "list",
+    versionRange: "^1.0.0",
+    async handler(_input, context) {
+      const pluginId = callerPluginId(context);
+      return { tasks: (await taskStore.list(50)).filter((task) => task.pluginId === pluginId) };
+    },
+  });
+  airiKitsRuntime.bindings.bind({
+    pluginId: "preacherman-host",
+    kit: "ledger",
+    operation: "list",
+    versionRange: "^1.0.0",
+    async handler(_input, context) {
+      const pluginId = callerPluginId(context);
+      return { entries: (await taskStore.list(50)).filter((task) => task.pluginId === pluginId) };
+    },
+  });
+  airiKitsRuntime.bindings.bind({
+    pluginId: "preacherman-host",
+    kit: "ledger",
+    operation: "append",
+    versionRange: "^1.0.0",
+    handler(input, context) {
+      const operation = input?.type === "failure" ? "fail" : "progress";
+      return airiPluginTaskBinding.execute(operation, input, { pluginId: callerPluginId(context) });
+    },
+  });
 
   function mcpConfigFile() {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "mcp.json");
@@ -82,7 +146,99 @@ export function createPreachermanServer(options = {}) {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-plugins.v1.json");
   }
 
-  const airiPluginRuntime = createAiriPluginRuntime({ file: pluginStateFile(), taskStore });
+  let airiPluginRuntime;
+  airiPluginRuntime = createAiriPluginRuntime({
+    file: pluginStateFile(),
+    taskStore,
+    hostBridge: Object.freeze({ abi: "preacherman.host.v1", service: "preacherman-demo-host" }),
+    kits: airiKitsRuntime.kits,
+    bindings: airiKitsRuntime.bindings,
+  });
+  airiKitsRuntime.bindings.bind({
+    pluginId: "preacherman-host",
+    kit: "tools",
+    operation: "list",
+    versionRange: "^1.0.0",
+    async handler() {
+      return { tools: await airiPluginRuntime.listTools() };
+    },
+  });
+  airiKitsRuntime.bindings.bind({
+    pluginId: "preacherman-host",
+    kit: "tools",
+    operation: "call",
+    versionRange: "^1.0.0",
+    handler(input) {
+      return executePluginToolAsTask(input?.name, input?.arguments ?? {});
+    },
+  });
+
+  async function executePluginToolAsTask(name, args) {
+    const separator = name.indexOf("::");
+    if (separator < 1) {
+      const error = new Error("Plugin tool name must include its plugin id.");
+      error.statusCode = 400;
+      throw error;
+    }
+    const pluginId = name.slice(0, separator);
+    const toolName = name.slice(separator + 2);
+    const context = { callerPluginId: pluginId };
+    const created = await airiKitsRuntime.bindings.invoke({
+      kit: "task",
+      operation: "create",
+      versionRange: "^1.0.0",
+      input: { objective: `Execute AIRI plugin tool ${name}`, parameters: args, toolName },
+      context,
+    });
+    const taskId = created.task.taskId;
+    let terminal = false;
+    try {
+      await airiKitsRuntime.bindings.invoke({
+        kit: "ledger",
+        operation: "append",
+        versionRange: "^1.0.0",
+        input: { taskId, value: 0.35, stage: "tool-call", message: `Calling ${name}.` },
+        context,
+      });
+      const result = await airiPluginRuntime.callTool(name, args);
+      if (result.isError) {
+        await airiPluginTaskBinding.execute("fail", {
+          taskId,
+          error: `Plugin tool ${name} returned an error result.`,
+          result: result.structuredContent,
+        }, { pluginId });
+        terminal = true;
+        const error = new Error(`Plugin tool ${name} returned an error result.`);
+        error.statusCode = 502;
+        throw error;
+      }
+      const completed = await airiKitsRuntime.bindings.invoke({
+        kit: "ledger",
+        operation: "write-artifact",
+        versionRange: "^1.0.0",
+        input: {
+          taskId,
+          result: result.structuredContent,
+          artifact: {
+            name: `${toolName}-result.json`,
+            mediaType: "application/json",
+            content: result.structuredContent,
+          },
+        },
+        context,
+      });
+      terminal = true;
+      return { ...result, task: completed.task, ledger: completed.ledger };
+    } catch (error) {
+      if (!terminal) {
+        await airiPluginTaskBinding.execute("fail", {
+          taskId,
+          error: error instanceof Error ? error.message : String(error),
+        }, { pluginId }).catch(() => undefined);
+      }
+      throw error;
+    }
+  }
 
   function providerConfigFile() {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "provider-settings.json");
@@ -476,6 +632,25 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { plugins: await airiPluginRuntime.listPlugins() }, origin);
         return;
       }
+      if (request.method === "GET" && url.pathname === "/api/airi/kits") {
+        json(response, 200, {
+          kits: airiKitsRuntime.kits.discover(),
+          bindings: airiKitsRuntime.bindings.list(),
+        }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/plugins/install") {
+        const body = await readJson(request);
+        const plugin = await airiPluginRuntime.install(body.directory);
+        json(response, 201, { plugin }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/plugins/uninstall") {
+        const body = await readJson(request);
+        const result = await airiPluginRuntime.uninstall(body.name);
+        json(response, 200, { result }, origin);
+        return;
+      }
       const pluginMatch = url.pathname.match(/^\/api\/plugins\/([A-Za-z0-9_-]{1,80})$/);
       if (request.method === "PUT" && pluginMatch) {
         const plugin = await airiPluginRuntime.setEnabled(pluginMatch[1], (await readJson(request)).enabled);
@@ -498,7 +673,7 @@ export function createPreachermanServer(options = {}) {
           json(response, 400, { error: "Plugin tool name is required." }, origin);
           return;
         }
-        json(response, 200, { result: await airiPluginRuntime.callTool(body.name, body.arguments ?? {}) }, origin);
+        json(response, 200, { result: await executePluginToolAsTask(body.name, body.arguments ?? {}) }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/conversations/recent") {
@@ -515,6 +690,13 @@ export function createPreachermanServer(options = {}) {
         const requestedLimit = Number.parseInt(url.searchParams.get("limit") || "50", 10);
         const limit = Number.isFinite(requestedLimit) ? requestedLimit : 50;
         json(response, 200, { events: await airiCapabilityRuntime.list(limit) }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/airi/capabilities/status") {
+        const body = await readJson(request);
+        json(response, 200, {
+          capabilities: await airiCapabilityRuntime.status(body.ids, { locale: body.locale }),
+        }, origin);
         return;
       }
       const airiCapabilityMatch = url.pathname.match(/^\/api\/airi\/capabilities\/([^/]+)\/invoke$/);
@@ -560,6 +742,16 @@ export function createPreachermanServer(options = {}) {
         const requestedLimit = Number.parseInt(url.searchParams.get("limit") || "10", 10);
         const limit = Number.isFinite(requestedLimit) ? requestedLimit : 10;
         json(response, 200, { tasks: await taskStore.list(limit) }, origin);
+        return;
+      }
+      const taskArtifactMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)\/artifact$/);
+      if (request.method === "GET" && taskArtifactMatch) {
+        const task = await taskStore.get(decodeURIComponent(taskArtifactMatch[1]));
+        if (!task?.artifact) {
+          json(response, 404, { error: "Task artifact not found." }, origin);
+          return;
+        }
+        json(response, 200, { artifact: task.artifact }, origin);
         return;
       }
       const taskMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)$/);
@@ -726,7 +918,7 @@ export function createPreachermanServer(options = {}) {
     },
     async close() {
       for (const client of voiceProxy.clients) client.close();
-      await airiMcpRuntime.close();
+      await Promise.all([airiMcpRuntime.close(), airiPluginRuntime.close()]);
       return new Promise((resolveClose, reject) => {
         server.close((error) => error ? reject(error) : resolveClose());
       });

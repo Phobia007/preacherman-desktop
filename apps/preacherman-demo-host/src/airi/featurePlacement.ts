@@ -1,5 +1,11 @@
 export type DemoSurfaceType = "home" | "workspace" | "lab" | "market" | "test" | "ledger" | "settings";
-export type AiriFeatureStatus = "live" | "ready";
+export type AiriFeatureStatus =
+  | "live"
+  | "ready"
+  | "available"
+  | "client-runtime"
+  | "configuration-required"
+  | "external-runtime-required";
 export type AiriFeatureSectionKind = "primary" | "workflow" | "extension" | "system";
 
 export interface AiriFeatureDefinition {

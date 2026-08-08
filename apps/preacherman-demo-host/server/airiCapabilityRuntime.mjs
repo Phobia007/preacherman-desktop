@@ -7,9 +7,10 @@ const CLIENT_FAMILIES = new Set([
   "persona", "presentation", "scene", "shortcut", "stage",
 ]);
 const LOCAL_CAPABILITIES = new Set([
+  "agent.bindings-api", "agent.kits-api",
   "companion.chat", "conversation.history", "plugin.activity",
   "plugin.hot-reload", "plugin.manager", "provider.smoke-test",
-  "runtime.io-history", "runtime.plugin-inspector",
+  "runtime.io-history", "runtime.plugin-inspector", "mcp.servers",
 ]);
 const EXTERNAL_FAMILIES = new Set([
   "artistry", "computer-use", "connection", "game", "mcp", "plugin", "vision",
@@ -50,7 +51,7 @@ function backendState(capabilityId, config) {
       : { state: "configuration-required", adapter: "preacherman-provider-gateway", requirements: ["provider credentials"] };
   }
   if (family === "agent") {
-    if (["agent.tool-approval", "agent.mcp-tools", "agent.plugin-tools"].includes(capabilityId)) {
+    if (["agent.mcp-tools", "agent.plugin-tools"].includes(capabilityId)) {
       return {
         state: "available",
         adapter: capabilityId === "agent.mcp-tools"
@@ -138,5 +139,27 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapabi
     return structuredClone(current.events.slice(0, Math.max(1, Math.min(200, limit))));
   }
 
-  return { invoke, list };
+  async function status(capabilityIds, context = {}) {
+    if (!Array.isArray(capabilityIds) || capabilityIds.length > 300) {
+      const error = new Error("Capability ids must be an array with at most 300 entries.");
+      error.statusCode = 400;
+      throw error;
+    }
+    const config = await getRuntimeEnv();
+    return capabilityIds.map((capabilityId) => {
+      if (typeof capabilityId !== "string" || !/^[a-z0-9][a-z0-9.-]{1,100}$/.test(capabilityId)) {
+        const error = new Error("Invalid AIRI capability id.");
+        error.statusCode = 400;
+        throw error;
+      }
+      const backend = backendState(capabilityId, config);
+      return {
+        capabilityId,
+        ...backend,
+        message: localizedMessage(context.locale, backend.state, backend.adapter),
+      };
+    });
+  }
+
+  return { invoke, list, status };
 }

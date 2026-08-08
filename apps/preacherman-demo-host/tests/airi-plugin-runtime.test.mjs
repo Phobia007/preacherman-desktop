@@ -23,7 +23,7 @@ test("installs, imports, persists, and calls a real external Preacherman bridge 
       return { name, version: "1.0.0", description: `${name} kit`, capabilities: ["call"], phase: "ready" };
     },
   };
-  const bindings = { list: ({ pluginId }) => pluginId === "fixture-plugin" ? [{ kit: "tools", operation: "call" }] : [] };
+  const bindings = { list: () => [{ kit: "tools", operation: "call" }] };
   const { file, runtime } = await createRuntime(t, { hostBridge: { name: "test-host" }, kits, bindings });
   t.after(() => runtime.close());
 
