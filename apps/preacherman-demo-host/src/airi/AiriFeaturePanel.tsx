@@ -33,6 +33,46 @@ export function AiriFeaturePanel({
   const [backendMessage, setBackendMessage] = useState("");
   const selected = placement.features.find((candidate) => candidate.id === selectedId);
   const chinese = locale === "zh-CN";
+  const connectedCount = placement.features.filter((candidate) => candidate.status === "live").length;
+
+  const activateFeature = (candidate: (typeof placement.features)[number]) => {
+    setSelectedId(candidate.id);
+    const activated = onActivate(candidate.id);
+    setActivationState(activated ? "focused" : candidate.status === "live" ? "unavailable" : "idle");
+    setBackendState("checking");
+    setBackendMessage(chinese ? "正在检查后端适配器…" : "Checking backend adapter…");
+    void invokeAiriCapability(candidate.id, surface, locale).then((event) => {
+      setBackendState(event.state);
+      setBackendMessage(event.message);
+    }).catch((reason: Error) => {
+      setBackendState("error");
+      setBackendMessage(reason.message);
+    });
+  };
+
+  const featureButtons = (featureIds: readonly string[], priority: "primary" | "normal") => (
+    <div className="demo-airi-panel__grid">
+      {featureIds.map((featureId) => {
+        const candidate = placement.features.find((feature) => feature.id === featureId);
+        if (!candidate) return null;
+        return (
+          <button
+            aria-pressed={candidate.id === selected?.id}
+            className="demo-airi-panel__feature"
+            data-priority={priority}
+            data-status={candidate.status}
+            data-tone={["presentation.stop", "task.cancel"].includes(candidate.id) ? "danger" : "default"}
+            key={candidate.id}
+            onClick={() => activateFeature(candidate)}
+            type="button"
+          >
+            <span aria-hidden="true" className="demo-airi-panel__status" />
+            <span>{candidate.label[locale]}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
 
   return (
     <aside
@@ -41,37 +81,39 @@ export function AiriFeaturePanel({
       data-surface={surface}
     >
       <header className="demo-airi-panel__header">
-        <span>AIRI · PREACHERMAN · {placement.features.length}</span>
+        <span>AIRI · PREACHERMAN</span>
         <h2>{surfaceTitles[surface][locale]}</h2>
         <p>{chinese ? "完整能力入口已归入当前页面；可先测试，再按需删减。" : "The complete capability set is here for testing and later pruning."}</p>
+        <div className="demo-airi-panel__summary">
+          <strong>{connectedCount}</strong> {chinese ? "项已连接" : "connected"}
+          <span aria-hidden="true">·</span>
+          <strong>{placement.features.length}</strong> {chinese ? "项能力" : "capabilities"}
+        </div>
       </header>
-      <div aria-label={chinese ? `${surfaceTitles[surface][locale]}功能` : `${surfaceTitles[surface][locale]} capabilities`} className="demo-airi-panel__grid" role="group">
-        {placement.features.map((candidate) => (
-          <button
-            aria-pressed={candidate.id === selected?.id}
-            className="demo-airi-panel__feature"
-            data-status={candidate.status}
-            key={candidate.id}
-            onClick={() => {
-              setSelectedId(candidate.id);
-              const activated = onActivate(candidate.id);
-              setActivationState(activated ? "focused" : candidate.status === "live" ? "unavailable" : "idle");
-              setBackendState("checking");
-              setBackendMessage(chinese ? "正在检查后端适配器…" : "Checking backend adapter…");
-              void invokeAiriCapability(candidate.id, surface, locale).then((event) => {
-                setBackendState(event.state);
-                setBackendMessage(event.message);
-              }).catch((reason: Error) => {
-                setBackendState("error");
-                setBackendMessage(reason.message);
-              });
-            }}
-            type="button"
-          >
-            <span aria-hidden="true" className="demo-airi-panel__status" />
-            <span>{candidate.label[locale]}</span>
-          </button>
-        ))}
+      <div aria-label={chinese ? `${surfaceTitles[surface][locale]}功能` : `${surfaceTitles[surface][locale]} capabilities`} className="demo-airi-panel__body">
+        {placement.sections.map((candidateSection) => {
+          const isDisclosure = candidateSection.kind === "extension" || candidateSection.kind === "system";
+          const sectionHeader = (
+            <span className="demo-airi-panel__section-title">
+              <span>{candidateSection.title[locale]}</span>
+              <small>{candidateSection.featureIds.length}</small>
+            </span>
+          );
+          if (isDisclosure) {
+            return (
+              <details className="demo-airi-panel__section demo-airi-panel__section--disclosure" data-kind={candidateSection.kind} key={candidateSection.id}>
+                <summary>{sectionHeader}</summary>
+                {featureButtons(candidateSection.featureIds, "normal")}
+              </details>
+            );
+          }
+          return (
+            <section className="demo-airi-panel__section" data-kind={candidateSection.kind} key={candidateSection.id}>
+              <header>{sectionHeader}</header>
+              {featureButtons(candidateSection.featureIds, candidateSection.kind === "primary" ? "primary" : "normal")}
+            </section>
+          );
+        })}
       </div>
       {selected ? (
         <footer className="demo-airi-panel__detail" aria-live="polite">

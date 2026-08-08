@@ -1,9 +1,22 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { build } from "esbuild";
 import test from "node:test";
 
 const packageRoot = join(import.meta.dirname, "..");
+
+async function loadFeaturePlacement() {
+  const result = await build({
+    bundle: true,
+    entryPoints: [join(packageRoot, "src", "airi", "featurePlacement.ts")],
+    format: "esm",
+    platform: "node",
+    target: "node22",
+    write: false,
+  });
+  return import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`);
+}
 
 test("AIRI controls have one explicit Preacherman surface placement", async () => {
   const [registry, panel, panelStyles, app, styles] = await Promise.all([
@@ -51,6 +64,17 @@ test("AIRI controls have one explicit Preacherman surface placement", async () =
   assert.doesNotMatch(styles.match(/\.demo-airi-lab__intro[\s\S]*?\.demo-app-shell/)?.[0] ?? "", /#[0-9a-f]{3,8}\b/i);
 });
 
+test("each surface has one commercial task hierarchy with no orphaned capability", async () => {
+  const { airiFeaturePlacements } = await loadFeaturePlacement();
+  for (const placement of airiFeaturePlacements) {
+    assert.equal(placement.sections[0].kind, "primary", `${placement.surface} must begin with its primary task`);
+    const featureIds = placement.features.map((feature) => feature.id);
+    const sectionIds = placement.sections.flatMap((section) => section.featureIds);
+    assert.equal(new Set(sectionIds).size, sectionIds.length, `${placement.surface} groups must not duplicate capabilities`);
+    assert.deepEqual(new Set(sectionIds), new Set(featureIds), `${placement.surface} groups must include every capability`);
+  }
+});
+
 test("live AIRI buttons focus controls and every button checks its backend adapter", async () => {
   const [app, panel, client, service, voice, task, gallery, model, settings, ledger] = await Promise.all([
     readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
@@ -69,6 +93,9 @@ test("live AIRI buttons focus controls and every button checks its backend adapt
   assert.match(app, /target\.focus\(\{ preventScroll: true \}\)/);
   assert.match(app, /findAiriFeature\(featureId\)\?\.target/);
   assert.match(panel, /invokeAiriCapability\(candidate\.id, surface, locale\)/);
+  assert.match(panel, /candidateSection\.kind === "extension" \|\| candidateSection\.kind === "system"/);
+  assert.match(panel, /<details className="demo-airi-panel__section/);
+  assert.match(panel, /data-priority=\{priority\}/);
   assert.match(client, /\/api\/airi\/capabilities\/\$\{encodeURIComponent\(capabilityId\)\}\/invoke/);
   assert.match(service, /airiCapabilityMatch/);
   assert.match(service, /\/api\/airi\/events/);

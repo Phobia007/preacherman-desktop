@@ -1,5 +1,6 @@
 export type DemoSurfaceType = "home" | "workspace" | "lab" | "market" | "test" | "ledger" | "settings";
 export type AiriFeatureStatus = "live" | "ready";
+export type AiriFeatureSectionKind = "primary" | "workflow" | "extension" | "system";
 
 export interface AiriFeatureDefinition {
   readonly id: string;
@@ -14,6 +15,14 @@ export interface AiriFeatureDefinition {
 export interface AiriFeaturePlacement {
   readonly surface: DemoSurfaceType;
   readonly features: readonly AiriFeatureDefinition[];
+  readonly sections: readonly AiriFeatureSection[];
+}
+
+export interface AiriFeatureSection {
+  readonly id: string;
+  readonly title: { readonly en: string; readonly "zh-CN": string };
+  readonly kind: AiriFeatureSectionKind;
+  readonly featureIds: readonly string[];
 }
 
 const feature = (
@@ -23,6 +32,14 @@ const feature = (
   status: AiriFeatureStatus = "ready",
   target?: AiriFeatureDefinition["target"],
 ): AiriFeatureDefinition => ({ id, label: { en, "zh-CN": zhCN }, status, target });
+
+const section = (
+  id: string,
+  en: string,
+  zhCN: string,
+  kind: AiriFeatureSectionKind,
+  featureIds: readonly string[],
+): AiriFeatureSection => ({ id, title: { en, "zh-CN": zhCN }, kind, featureIds });
 
 /**
  * The complete AIRI capability catalog is grouped under Preacherman's stable
@@ -48,6 +65,12 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("shortcut.global", "Global shortcuts", "全局快捷键"),
       feature("stage.pocket", "Pocket companion", "移动端伙伴"),
     ],
+    sections: [
+      section("start", "Start here", "开始使用", "primary", ["companion.chat", "companion.realtime-voice"]),
+      section("session", "Live session", "实时会话", "workflow", ["voice.quick-input", "presentation.stop", "avatar.status"]),
+      section("intelligence", "Perception & creation", "感知与创作", "extension", ["companion.reasoning", "vision.camera", "vision.screen", "artistry.image-generation"]),
+      section("device", "Device & stage", "设备与舞台", "system", ["computer-use.desktop", "computer-use.browser", "scene.transparent-background", "shortcut.global", "stage.pocket"]),
+    ],
   },
   {
     surface: "workspace",
@@ -70,6 +93,13 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("game.kerbal", "Play Kerbal Space Program", "玩坎巴拉太空计划"),
       feature("game.helldivers", "Co-play Helldivers 2", "协玩绝地潜兵 2"),
       feature("game.chess", "Chess gamelet", "国际象棋组件"),
+    ],
+    sections: [
+      section("start", "Start a task", "开始任务", "primary", ["task.create", "task.confirm"]),
+      section("control", "Run controls", "执行控制", "workflow", ["task.steer", "task.retry", "task.cancel"]),
+      section("tools", "Agent tools", "智能体工具", "extension", ["agent.tool-approval", "agent.mcp-tools", "agent.plugin-tools", "agent.kits-api", "agent.bindings-api"]),
+      section("computer", "Computer use", "电脑操作", "extension", ["computer-use.dom", "computer-use.session", "computer-use.transcript"]),
+      section("games", "Game integrations", "游戏连接", "system", ["game.minecraft", "game.factorio", "game.kerbal", "game.helldivers", "game.chess"]),
     ],
   },
   {
@@ -96,6 +126,12 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("stage.webxr", "WebXR stage", "WebXR 舞台"),
       feature("stage.godot", "Godot stage", "Godot 舞台"),
     ],
+    sections: [
+      section("voice", "Voice session", "语音会话", "primary", ["voice.capture-mode", "voice.asr", "voice.tts"]),
+      section("speech-control", "Speech controls", "语音控制", "workflow", ["voice.vad", "voice.tts-preview", "voice.client-asr"]),
+      section("body", "Avatar output", "角色输出", "extension", ["avatar.preview", "avatar.vrm", "avatar.live2d", "avatar.lip-sync", "motion.auto-blink", "motion.auto-look", "motion.idle-eyes", "motion.expression", "motion.runtime"]),
+      section("runtime", "Advanced runtime", "高级运行时", "system", ["voice.discord-input", "presentation.diagnostics", "stage.offset", "stage.webxr", "stage.godot"]),
+    ],
   },
   {
     surface: "market",
@@ -114,6 +150,12 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("plugin.library", "Plugin library", "插件库"),
       feature("plugin.widgets", "Plugin widgets", "插件组件"),
       feature("plugin.gamelets", "Gamelets", "游戏组件"),
+    ],
+    sections: [
+      section("identity", "Build identity", "构建身份", "primary", ["avatar.select", "persona.select", "voice.select", "motion.select"]),
+      section("imports", "Import & validate", "导入与校验", "workflow", ["avatar.vrm-import", "avatar.live2d-import", "avatar.asset-report"]),
+      section("presentation", "Presentation assets", "呈现资产", "extension", ["voice.generated-preview", "airi-card.create", "scene.background", "scene.background-transparent"]),
+      section("extensions", "Extensions", "扩展组件", "system", ["plugin.library", "plugin.widgets", "plugin.gamelets"]),
     ],
   },
   {
@@ -135,6 +177,11 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("plugin.hot-reload", "Plugin hot reload", "插件热重载"),
       feature("stage.mobile-preview", "Mobile stage preview", "移动舞台预览"),
     ],
+    sections: [
+      section("smoke", "Quick checks", "快速检查", "primary", ["voice.mic-test", "voice.asr-test", "voice.tts-test", "provider.smoke-test", "task.acceptance"]),
+      section("observability", "Observability", "运行观测", "workflow", ["runtime.io-tracer", "runtime.reasoning-trace", "runtime.plugin-inspector", "runtime.mcp-test"]),
+      section("platform", "Platform diagnostics", "平台诊断", "system", ["model.local-inference-test", "model.webgpu-test", "computer-use.dom-inspector", "computer-use.overlay", "plugin.hot-reload", "stage.mobile-preview"]),
+    ],
   },
   {
     surface: "ledger",
@@ -150,6 +197,11 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("journal.generated-images", "Image journal", "生成图像日志"),
       feature("runtime.io-history", "Runtime IO history", "运行时 IO 历史", "live"),
       feature("plugin.activity", "Plugin activity", "插件活动", "live"),
+    ],
+    sections: [
+      section("review", "Review activity", "查看活动", "primary", ["conversation.history", "task.events", "task.artifacts"]),
+      section("memory", "Memory layers", "记忆层", "extension", ["memory.recall", "memory.browser-database", "memory.alaya", "memory.lorebook", "memory.time-awareness"]),
+      section("runtime", "Runtime history", "运行历史", "workflow", ["journal.generated-images", "runtime.io-history", "plugin.activity"]),
     ],
   },
   {
@@ -185,6 +237,14 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("connection.factorio", "Factorio", "Factorio 连接"),
       feature("appearance.select", "Appearance", "外观", "live"),
       feature("locale.select", "Language", "语言", "live"),
+    ],
+    sections: [
+      section("setup", "Core setup", "核心配置", "primary", ["provider.credentials", "voice.providers"]),
+      section("ai", "AI providers", "AI 服务商", "extension", ["vision.providers", "provider.catalog", "provider.openai-compatible", "provider.ollama", "provider.lm-studio", "provider.cloudflare", "provider.azure-foundry", "provider.amazon-bedrock"]),
+      section("speech", "Speech pipeline", "语音链路", "extension", ["voice.elevenlabs", "voice.azure-speech", "voice.openai-compatible", "voice.alibaba", "voice.kokoro", "voice.xiaomi-mimo", "voice.aliyun-nls", "voice.stepfun", "audio.devices", "voice.defaults", "voice.vad-settings"]),
+      section("extensions", "Tools & extensions", "工具与扩展", "system", ["mcp.servers", "plugin.manager"]),
+      section("connections", "External connections", "外部连接", "system", ["connection.discord", "connection.telegram", "connection.youtube", "connection.minecraft", "connection.factorio"]),
+      section("preferences", "Preferences", "偏好设置", "workflow", ["appearance.select", "locale.select"]),
     ],
   },
 ];
