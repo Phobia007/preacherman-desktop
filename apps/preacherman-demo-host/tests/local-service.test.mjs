@@ -110,3 +110,36 @@ test("companion keeps recent context and does not discard a useful non-JSON Deep
   assert.deepEqual(modelRequest.messages.slice(1, 3), [{ role: "user", content: "你好" }, { role: "assistant", content: "你好，很高兴见到你。" }]);
   assert.match(modelRequest.messages[0].content, /不要自称 A/);
 });
+
+test("AIRI capability buttons reach an honest persistent backend adapter", async (t) => {
+  const dataDir = await mkdtemp(join(tmpdir(), "preacherman-airi-capabilities-"));
+  const service = createPreachermanServer({ env: { PREACHERMAN_DATA_DIR: dataDir } });
+  const address = await service.listen(0);
+  const port = typeof address === "object" && address ? address.port : 0;
+  const baseUrl = `http://127.0.0.1:${port}`;
+  t.after(async () => { await service.close(); await rm(dataDir, { recursive: true, force: true }); });
+
+  const local = await request(baseUrl, "/api/airi/capabilities/task.create/invoke", {
+    method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
+  });
+  assert.equal(local.response.status, 200);
+  assert.equal(local.body.event.state, "available");
+  assert.equal(local.body.event.adapter, "preacherman-task");
+
+  const external = await request(baseUrl, "/api/airi/capabilities/game.minecraft/invoke", {
+    method: "POST", body: JSON.stringify({ surface: "workspace", locale: "zh-CN" }),
+  });
+  assert.equal(external.response.status, 200);
+  assert.equal(external.body.event.state, "external-runtime-required");
+  assert.deepEqual(external.body.event.requirements, ["game runtime or provider"]);
+
+  const speech = await request(baseUrl, "/api/airi/capabilities/voice.tts/invoke", {
+    method: "POST", body: JSON.stringify({ surface: "lab", locale: "en" }),
+  });
+  assert.equal(speech.body.event.state, "configuration-required");
+
+  const history = await request(baseUrl, "/api/airi/events?limit=10");
+  assert.equal(history.response.status, 200);
+  assert.deepEqual(history.body.events.map((event) => event.capabilityId), ["voice.tts", "game.minecraft", "task.create"]);
+  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-capability-events.v1.json"), "utf8")).events.length, 3);
+});

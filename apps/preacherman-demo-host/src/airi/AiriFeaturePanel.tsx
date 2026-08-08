@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Locale } from "../preferences";
+import { invokeAiriCapability, type AiriBackendState } from "./capabilityClient";
 import {
   featurePlacementForSurface,
   type DemoSurfaceType,
@@ -28,6 +29,8 @@ export function AiriFeaturePanel({
   const placement = featurePlacementForSurface(surface);
   const [selectedId, setSelectedId] = useState("");
   const [activationState, setActivationState] = useState<"idle" | "focused" | "unavailable">("idle");
+  const [backendState, setBackendState] = useState<AiriBackendState | "checking" | "error" | "idle">("idle");
+  const [backendMessage, setBackendMessage] = useState("");
   const selected = placement.features.find((candidate) => candidate.id === selectedId);
   const chinese = locale === "zh-CN";
 
@@ -38,11 +41,11 @@ export function AiriFeaturePanel({
       data-surface={surface}
     >
       <header className="demo-airi-panel__header">
-        <span>AIRI · PREACHERMAN</span>
+        <span>AIRI · PREACHERMAN · {placement.features.length}</span>
         <h2>{surfaceTitles[surface][locale]}</h2>
-        <p>{chinese ? "功能入口已经归入当前页面。" : "AIRI capabilities assigned to this surface."}</p>
+        <p>{chinese ? "完整能力入口已归入当前页面；可先测试，再按需删减。" : "The complete capability set is here for testing and later pruning."}</p>
       </header>
-      <div className="demo-airi-panel__grid" role="group">
+      <div aria-label={chinese ? `${surfaceTitles[surface][locale]}功能` : `${surfaceTitles[surface][locale]} capabilities`} className="demo-airi-panel__grid" role="group">
         {placement.features.map((candidate) => (
           <button
             aria-pressed={candidate.id === selected?.id}
@@ -51,9 +54,17 @@ export function AiriFeaturePanel({
             key={candidate.id}
             onClick={() => {
               setSelectedId(candidate.id);
-              setActivationState(candidate.status === "live"
-                ? (onActivate(candidate.id) ? "focused" : "unavailable")
-                : "idle");
+              const activated = onActivate(candidate.id);
+              setActivationState(activated ? "focused" : candidate.status === "live" ? "unavailable" : "idle");
+              setBackendState("checking");
+              setBackendMessage(chinese ? "正在检查后端适配器…" : "Checking backend adapter…");
+              void invokeAiriCapability(candidate.id, surface, locale).then((event) => {
+                setBackendState(event.state);
+                setBackendMessage(event.message);
+              }).catch((reason: Error) => {
+                setBackendState("error");
+                setBackendMessage(reason.message);
+              });
             }}
             type="button"
           >
@@ -65,6 +76,7 @@ export function AiriFeaturePanel({
       {selected ? (
         <footer className="demo-airi-panel__detail" aria-live="polite">
           <strong>{selected.label[locale]}</strong>
+          <code>{selected.id}</code>
           <span data-status={selected.status}>
             {selected.status === "live"
               ? activationState === "focused"
@@ -72,7 +84,12 @@ export function AiriFeaturePanel({
                 : activationState === "unavailable"
                   ? (chinese ? "已接入 · 当前状态下暂不可用" : "Connected · unavailable in the current state")
                   : (chinese ? "已接入当前 Demo" : "Connected in this demo")
-              : (chinese ? "界面已就绪 · 等待运行时接线" : "UI ready · runtime connection follows")}
+              : activationState === "focused"
+                ? (chinese ? "已跳转到相关页面或控件" : "Opened the related surface or control")
+                : (chinese ? "入口已集成 · 等待运行时或 Provider" : "Entry integrated · runtime or provider required")}
+          </span>
+          <span data-backend-state={backendState}>
+            {backendMessage || (chinese ? "点击后检查后端状态" : "Click to inspect backend state")}
           </span>
         </footer>
       ) : null}

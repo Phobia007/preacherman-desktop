@@ -8,7 +8,7 @@ import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { ABTaskConsole } from "./ab/ABTaskConsole";
 import { AiriFeaturePanel } from "./airi/AiriFeaturePanel";
-import { featuresForSurface } from "./airi/featurePlacement";
+import { featuresForSurface, findAiriFeature } from "./airi/featurePlacement";
 import { AppShell } from "./app-shell/AppShell";
 import { DemoAvatarSlot } from "./avatar/DemoAvatarSlot";
 import { figmaScreenRegistry, findFigmaScreen } from "./demo/figmaScreenRegistry";
@@ -81,16 +81,17 @@ export function App() {
       target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
       target.dataset.airiHighlight = "true";
       window.setTimeout(() => delete target.dataset.airiHighlight, 900);
-      if (["presentation.stop", "task.cancel", "conversation.history", "task.events", "task.artifacts"].includes(controlId) && target instanceof HTMLButtonElement) {
+      if (["presentation.stop", "task.cancel", "conversation.history", "task.events", "task.artifacts", "runtime.io-history", "plugin.activity"].includes(controlId) && target instanceof HTMLButtonElement) {
         target.click();
       }
       return true;
     };
 
     if (focusControl(featureId)) return true;
-    if (featureId === "companion.chat") {
-      openLocalSurface("workspace");
-      window.setTimeout(() => focusControl("companion.chat"), 0);
+    const target = findAiriFeature(featureId)?.target;
+    if (target) {
+      openLocalSurface(target.surface);
+      window.setTimeout(() => focusControl(target.control ?? featureId), 0);
       return true;
     }
     return false;
@@ -178,6 +179,20 @@ export function App() {
       {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
     </main>
   );
+  const testContent = (
+    <main
+      className="demo-host demo-host--test"
+      data-airi-features={featuresForSurface("test").join(" ")}
+    >
+      <div className="demo-airi-test__intro">
+        <span>AIRI INTEGRATION CHECKPOINT</span>
+        <h1>{preferences.locale === "zh-CN" ? "全能力测试区" : "Complete capability test"}</h1>
+        <p>{preferences.locale === "zh-CN"
+          ? "从左侧逐项检查麦克风、模型、工具、插件和运行时入口；绿色入口已连接，空心入口等待对应服务。"
+          : "Inspect microphone, model, tool, plugin, and runtime entries. Solid entries are connected; outlined entries require their service."}</p>
+      </div>
+    </main>
+  );
   const mainContent = route.kind === "index"
     ? (
         <div className="demo-host">
@@ -215,6 +230,8 @@ export function App() {
             )
           : activeSurfaceType === "ledger"
             ? <ConversationLedgerScreen locale={preferences.locale} />
+          : activeSurfaceType === "test"
+            ? testContent
           : (
             <main
               aria-label={`${uiCopy[preferences.locale].emptySurfaceLabels[activeSurfaceType]} screen`}

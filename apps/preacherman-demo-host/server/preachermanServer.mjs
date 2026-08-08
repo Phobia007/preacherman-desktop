@@ -13,6 +13,7 @@ import {
   writePitchKit,
 } from "./agentRuntime.mjs";
 import { appendTaskEvent, createTaskStore } from "./taskStore.mjs";
+import { createAiriCapabilityRuntime } from "./airiCapabilityRuntime.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -77,6 +78,10 @@ export function createPreachermanServer(options = {}) {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "conversation-ledger.json");
   }
 
+  function airiCapabilityEventsFile() {
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-capability-events.v1.json");
+  }
+
   async function readConversationLedger() {
     try {
       const entries = JSON.parse(await readFile(conversationLedgerFile(), "utf8"));
@@ -127,6 +132,11 @@ export function createPreachermanServer(options = {}) {
       DASHSCOPE_WORKSPACE_ID: saved.dashscopeWorkspaceId || env.DASHSCOPE_WORKSPACE_ID || "",
     };
   }
+
+  const airiCapabilityRuntime = createAiriCapabilityRuntime({
+    file: airiCapabilityEventsFile(),
+    getRuntimeEnv: runtimeEnv,
+  });
 
   async function saveProviderConfig(next) {
     const current = await providerConfig();
@@ -427,6 +437,21 @@ export function createPreachermanServer(options = {}) {
       if (request.method === "PUT" && conversationMatch) {
         const entry = await saveConversation(decodeURIComponent(conversationMatch[1]), await readJson(request));
         json(response, 200, { entry }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/airi/events") {
+        const requestedLimit = Number.parseInt(url.searchParams.get("limit") || "50", 10);
+        const limit = Number.isFinite(requestedLimit) ? requestedLimit : 50;
+        json(response, 200, { events: await airiCapabilityRuntime.list(limit) }, origin);
+        return;
+      }
+      const airiCapabilityMatch = url.pathname.match(/^\/api\/airi\/capabilities\/([^/]+)\/invoke$/);
+      if (request.method === "POST" && airiCapabilityMatch) {
+        const event = await airiCapabilityRuntime.invoke(
+          decodeURIComponent(airiCapabilityMatch[1]),
+          await readJson(request),
+        );
+        json(response, 200, { event }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/agent/turn") {

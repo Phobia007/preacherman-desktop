@@ -17,32 +17,46 @@ test("AIRI controls have one explicit Preacherman surface placement", async () =
   for (const surface of ["home", "workspace", "lab", "market", "test", "ledger", "settings"]) {
     assert.match(registry, new RegExp(`surface: "${surface}"`));
   }
+  const featureIds = [...registry.matchAll(/feature\("([^"]+)"/g)].map((match) => match[1]);
+  assert.ok(featureIds.length >= 120, `expected the complete AIRI catalog, received ${featureIds.length}`);
+  assert.equal(new Set(featureIds).size, featureIds.length, "each AIRI capability must have one placement");
   assert.match(registry, /presentation\.stop/);
   assert.match(registry, /task\.cancel/);
   assert.match(registry, /presentation\.diagnostics/);
   assert.match(registry, /memory\.recall/);
   assert.match(registry, /voice\.providers/);
+  assert.match(registry, /computer-use\.desktop/);
+  assert.match(registry, /game\.minecraft/);
+  assert.match(registry, /avatar\.live2d-import/);
+  assert.match(registry, /agent\.mcp-tools/);
+  assert.match(registry, /connection\.telegram/);
+  assert.match(registry, /provider\.amazon-bedrock/);
   assert.match(registry, /status: AiriFeatureStatus/);
   assert.match(app, /activeSurfaceType === "workspace"[\s\S]*workspaceContent/);
   assert.match(app, /activeSurfaceType === "lab"[\s\S]*labContent/);
   assert.match(app, /<AiriFeaturePanel[\s\S]*onActivate=\{handleAiriFeatureActivate\}[\s\S]*surface=\{airiPanelSurface\}/);
   assert.match(panel, /onActivate\(candidate\.id\)/);
   assert.match(panel, /Connected in this demo/);
-  assert.match(panel, /UI ready · runtime connection follows/);
+  assert.match(panel, /Entry integrated · runtime or provider required/);
+  assert.match(panel, /placement\.features\.length/);
   assert.match(panelStyles, /var\(--demo-theme-text\)/);
   assert.match(panelStyles, /var\(--demo-theme-surface-elevated\)/);
   assert.match(panelStyles, /var\(--demo-theme-focus\)/);
   assert.doesNotMatch(panelStyles, /#[0-9a-f]{3,8}\b/i);
   assert.match(styles, /demo-airi-lab__intro/);
+  assert.match(styles, /demo-airi-test__intro/);
   assert.match(styles, /\.demo-app-viewport > \.demo-app-shell[\s\S]*?left: 50%;[\s\S]*?translate\(-50%, -50%\) scale/);
   assert.match(styles, /\.demo-settings[\s\S]*?width: 100%;[\s\S]*?height: 100%;/);
   assert.match(styles, /\.demo-ledger[\s\S]*?width: 100%;[\s\S]*?height: 100%;/);
   assert.doesNotMatch(styles.match(/\.demo-airi-lab__intro[\s\S]*?\.demo-app-shell/)?.[0] ?? "", /#[0-9a-f]{3,8}\b/i);
 });
 
-test("live AIRI buttons focus the matching existing control", async () => {
-  const [app, voice, task, gallery, model, settings, ledger] = await Promise.all([
+test("live AIRI buttons focus controls and every button checks its backend adapter", async () => {
+  const [app, panel, client, service, voice, task, gallery, model, settings, ledger] = await Promise.all([
     readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "airi", "AiriFeaturePanel.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "airi", "capabilityClient.ts"), "utf8"),
+    readFile(join(packageRoot, "server", "preachermanServer.mjs"), "utf8"),
     readFile(join(packageRoot, "src", "realtime", "VoiceSessionControl.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "gallery", "CortanaGallery.tsx"), "utf8"),
@@ -53,6 +67,11 @@ test("live AIRI buttons focus the matching existing control", async () => {
 
   assert.match(app, /querySelectorAll<HTMLElement>\("\[data-airi-control\]"\)/);
   assert.match(app, /target\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(app, /findAiriFeature\(featureId\)\?\.target/);
+  assert.match(panel, /invokeAiriCapability\(candidate\.id, surface, locale\)/);
+  assert.match(client, /\/api\/airi\/capabilities\/\$\{encodeURIComponent\(capabilityId\)\}\/invoke/);
+  assert.match(service, /airiCapabilityMatch/);
+  assert.match(service, /\/api\/airi\/events/);
   assert.match(voice, /data-airi-control="voice\.quick-input voice\.asr"/);
   assert.match(voice, /data-airi-control="presentation\.stop"/);
   assert.match(task, /data-airi-control="task\.create"/);

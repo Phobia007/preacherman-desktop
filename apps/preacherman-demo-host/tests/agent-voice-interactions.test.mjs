@@ -61,8 +61,8 @@ test("the demo exposes one guided AIRI path from proposal to Ledger artifact", a
   assert.match(consoleSource, /openLocalSurface\("ledger"\)/);
   assert.match(ledgerBoundary, /\/api\/tasks\?limit=10/);
   assert.match(ledger, /task\.artifact\?\.path/);
-  assert.match(app, /featureId === "companion\.chat"/);
-  assert.match(app, /openLocalSurface\("workspace"\)/);
+  assert.match(app, /findAiriFeature\(featureId\)\?\.target/);
+  assert.match(app, /openLocalSurface\(target\.surface\)/);
 });
 
 test("voice input exposes persisted push-to-talk and hands-free VAD modes", async () => {
