@@ -14,6 +14,7 @@ import {
 } from "./agentRuntime.mjs";
 import { appendTaskEvent, createTaskStore } from "./taskStore.mjs";
 import { createAiriCapabilityRuntime } from "./airiCapabilityRuntime.mjs";
+import { createAiriMcpRuntime } from "./airiMcpRuntime.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -69,6 +70,7 @@ export function createPreachermanServer(options = {}) {
   }
 
   const taskStore = createTaskStore({ file: taskStoreFile() });
+  const airiMcpRuntime = createAiriMcpRuntime({ taskStore });
 
   function providerConfigFile() {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "provider-settings.json");
@@ -136,6 +138,7 @@ export function createPreachermanServer(options = {}) {
   const airiCapabilityRuntime = createAiriCapabilityRuntime({
     file: airiCapabilityEventsFile(),
     getRuntimeEnv: runtimeEnv,
+    executeCapability: airiMcpRuntime.executeCapability,
   });
 
   async function saveProviderConfig(next) {
@@ -651,8 +654,9 @@ export function createPreachermanServer(options = {}) {
         });
       });
     },
-    close() {
+    async close() {
       for (const client of voiceProxy.clients) client.close();
+      await airiMcpRuntime.close();
       return new Promise((resolveClose, reject) => {
         server.close((error) => error ? reject(error) : resolveClose());
       });

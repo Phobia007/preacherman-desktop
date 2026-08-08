@@ -81,7 +81,7 @@ export const airiFeaturePlacements: readonly AiriFeaturePlacement[] = [
       feature("task.steer", "Steer task", "调整任务"),
       feature("task.cancel", "Stop task", "停止任务", "live"),
       feature("agent.tool-approval", "Tool approval", "工具审批", "ready", { surface: "workspace", control: "task.confirm" }),
-      feature("agent.mcp-tools", "MCP tools", "MCP 工具"),
+      feature("agent.mcp-tools", "MCP tools", "MCP 工具", "live"),
       feature("agent.plugin-tools", "Plugin tools", "插件工具"),
       feature("agent.kits-api", "Kits API", "Kits API"),
       feature("agent.bindings-api", "Bindings API", "Bindings API"),

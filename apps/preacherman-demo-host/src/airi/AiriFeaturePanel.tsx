@@ -28,7 +28,7 @@ export function AiriFeaturePanel({
 }) {
   const placement = featurePlacementForSurface(surface);
   const [selectedId, setSelectedId] = useState("");
-  const [activationState, setActivationState] = useState<"idle" | "focused" | "unavailable">("idle");
+  const [activationState, setActivationState] = useState<"idle" | "focused" | "executed" | "unavailable">("idle");
   const [backendState, setBackendState] = useState<AiriBackendState | "checking" | "error" | "idle">("idle");
   const [backendMessage, setBackendMessage] = useState("");
   const selected = placement.features.find((candidate) => candidate.id === selectedId);
@@ -42,7 +42,8 @@ export function AiriFeaturePanel({
     setBackendState("checking");
     setBackendMessage(chinese ? "正在检查后端适配器…" : "Checking backend adapter…");
     void invokeAiriCapability(candidate.id, surface, locale).then((event) => {
-      setBackendState(event.state);
+      setBackendState(event.execution?.status === "failed" ? "error" : event.state);
+      if (event.execution?.status === "succeeded") setActivationState("executed");
       setBackendMessage(event.message);
     }).catch((reason: Error) => {
       setBackendState("error");
@@ -121,11 +122,13 @@ export function AiriFeaturePanel({
           <code>{selected.id}</code>
           <span data-status={selected.status}>
             {selected.status === "live"
-              ? activationState === "focused"
-                ? (chinese ? "已定位到对应控件" : "Control focused")
-                : activationState === "unavailable"
-                  ? (chinese ? "已接入 · 当前状态下暂不可用" : "Connected · unavailable in the current state")
-                  : (chinese ? "已接入当前 Demo" : "Connected in this demo")
+              ? activationState === "executed"
+                ? (chinese ? "已通过连接的后端执行" : "Executed by the connected backend")
+                : activationState === "focused"
+                  ? (chinese ? "已定位到对应控件" : "Control focused")
+                  : activationState === "unavailable"
+                    ? (chinese ? "已接入 · 当前状态下暂不可用" : "Connected · unavailable in the current state")
+                    : (chinese ? "已接入当前 Demo" : "Connected in this demo")
               : activationState === "focused"
                 ? (chinese ? "已跳转到相关页面或控件" : "Opened the related surface or control")
                 : (chinese ? "入口已集成 · 等待运行时或 Provider" : "Entry integrated · runtime or provider required")}

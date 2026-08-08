@@ -126,6 +126,18 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(local.body.event.state, "available");
   assert.equal(local.body.event.adapter, "preacherman-task");
 
+  const mcp = await request(baseUrl, "/api/airi/capabilities/agent.mcp-tools/invoke", {
+    method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
+  });
+  assert.equal(mcp.response.status, 200);
+  assert.equal(mcp.body.event.state, "available");
+  assert.equal(mcp.body.event.adapter, "preacherman-airi-mcp");
+  assert.equal(mcp.body.event.execution.status, "succeeded");
+  assert.equal(mcp.body.event.execution.protocol, "mcp");
+  assert.equal(mcp.body.event.execution.tool, "preacherman::preacherman_runtime_status");
+  assert.equal(mcp.body.event.execution.result.taskCount, 0);
+  assert.deepEqual(mcp.body.event.execution.tools, ["preacherman::preacherman_runtime_status"]);
+
   const external = await request(baseUrl, "/api/airi/capabilities/game.minecraft/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "zh-CN" }),
   });
@@ -140,6 +152,6 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
 
   const history = await request(baseUrl, "/api/airi/events?limit=10");
   assert.equal(history.response.status, 200);
-  assert.deepEqual(history.body.events.map((event) => event.capabilityId), ["voice.tts", "game.minecraft", "task.create"]);
-  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-capability-events.v1.json"), "utf8")).events.length, 3);
+  assert.deepEqual(history.body.events.map((event) => event.capabilityId), ["voice.tts", "game.minecraft", "agent.mcp-tools", "task.create"]);
+  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-capability-events.v1.json"), "utf8")).events.length, 4);
 });

@@ -17,6 +17,15 @@ export interface AiriCapabilityEvent {
   readonly adapter: string;
   readonly requirements: readonly string[];
   readonly message: string;
+  readonly execution?: {
+    readonly status: "succeeded" | "failed";
+    readonly protocol?: string;
+    readonly server?: string;
+    readonly tool?: string;
+    readonly tools?: readonly string[];
+    readonly result?: Readonly<Record<string, unknown>>;
+    readonly error?: string;
+  };
   readonly at: string;
 }
 

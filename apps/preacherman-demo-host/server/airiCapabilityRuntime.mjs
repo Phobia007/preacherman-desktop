@@ -49,8 +49,12 @@ function backendState(capabilityId, config) {
       : { state: "configuration-required", adapter: "preacherman-provider-gateway", requirements: ["provider credentials"] };
   }
   if (family === "agent") {
-    if (capabilityId === "agent.tool-approval") {
-      return { state: "available", adapter: "preacherman-task-orchestrator", requirements: [] };
+    if (["agent.tool-approval", "agent.mcp-tools"].includes(capabilityId)) {
+      return {
+        state: "available",
+        adapter: capabilityId === "agent.mcp-tools" ? "preacherman-airi-mcp" : "preacherman-task-orchestrator",
+        requirements: [],
+      };
     }
     return { state: "external-runtime-required", adapter: "airi-extension-host", requirements: ["AIRI plugin or MCP runtime"] };
   }
@@ -71,7 +75,7 @@ function localizedMessage(locale, state, adapter) {
   return chinese ? `后端适配入口已注册，需要外部运行时：${adapter}` : `Backend adapter registered; external runtime required: ${adapter}`;
 }
 
-export function createAiriCapabilityRuntime({ file, getRuntimeEnv, now = () => new Date().toISOString() }) {
+export function createAiriCapabilityRuntime({ file, getRuntimeEnv, executeCapability, now = () => new Date().toISOString() }) {
   let state;
   let mutationQueue = Promise.resolve();
 
@@ -91,6 +95,16 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, now = () => n
     if (!/^[a-z0-9][a-z0-9.-]{1,100}$/.test(capabilityId)) throw new Error("Invalid AIRI capability id.");
     const config = await getRuntimeEnv();
     const backend = backendState(capabilityId, config);
+    let execution;
+    try {
+      execution = await executeCapability?.(capabilityId, context);
+    } catch (error) {
+      execution = {
+        status: "failed",
+        error: error instanceof Error ? error.message : String(error),
+        summary: context.locale === "zh-CN" ? "MCP 执行失败。" : "MCP execution failed.",
+      };
+    }
     const event = {
       eventId: `airi_${randomUUID()}`,
       capabilityId,
@@ -99,7 +113,8 @@ export function createAiriCapabilityRuntime({ file, getRuntimeEnv, now = () => n
       state: backend.state,
       adapter: backend.adapter,
       requirements: backend.requirements,
-      message: localizedMessage(context.locale, backend.state, backend.adapter),
+      message: execution?.summary || localizedMessage(context.locale, backend.state, backend.adapter),
+      ...(execution ? { execution } : {}),
       at: now(),
     };
     const write = mutationQueue.then(async () => {

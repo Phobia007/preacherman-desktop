@@ -97,6 +97,7 @@ test("live AIRI buttons focus controls and every button checks its backend adapt
   assert.match(panel, /<details className="demo-airi-panel__section/);
   assert.match(panel, /data-priority=\{priority\}/);
   assert.match(client, /\/api\/airi\/capabilities\/\$\{encodeURIComponent\(capabilityId\)\}\/invoke/);
+  assert.match(panel, /event\.execution\?\.status === "succeeded"/);
   assert.match(service, /airiCapabilityMatch/);
   assert.match(service, /\/api\/airi\/events/);
   assert.match(voice, /data-airi-control="voice\.quick-input voice\.asr"/);
