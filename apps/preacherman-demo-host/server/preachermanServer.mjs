@@ -4,6 +4,7 @@ import { createServer } from "node:http";
 import { homedir } from "node:os";
 import { mkdir, readFile, rename, writeFile, chmod } from "node:fs/promises";
 import { delimiter, dirname, join } from "node:path";
+import { Readable } from "node:stream";
 import { WebSocket, WebSocketServer } from "ws";
 import {
   createPitchProposal,
@@ -14,6 +15,7 @@ import {
   writePitchKit,
 } from "./agentRuntime.mjs";
 import { appendTaskEvent, createTaskStore } from "./taskStore.mjs";
+import { createTaskService } from "./taskService.mjs";
 import { createAiriCapabilityRuntime } from "./airiCapabilityRuntime.mjs";
 import { createAiriMcpRuntime } from "./airiMcpRuntime.mjs";
 import { createAiriKitsRuntime } from "./airiKitsRuntime.mjs";
@@ -28,6 +30,18 @@ import { createAiriConnectionRuntime } from "./airiConnectionRuntime.mjs";
 import { createAiriComputerVisionRuntime } from "./airiComputerVisionRuntime.mjs";
 import { createAiriDomObservationRuntime } from "./airiDomObservationRuntime.mjs";
 import { createAiriEcosystemBindingFacade } from "./airiEcosystemBindingFacade.mjs";
+import { createExecutionRouter } from "./execution/executionRouter.mjs";
+import { createHomeRailClient } from "./homerail/homeRailClient.mjs";
+import { createHomeRailExecutionAdapter, PREACHERMAN_HOMERAIL_CANONICAL_HASH, PREACHERMAN_HOMERAIL_WORKFLOW_REVISION } from "./homerail/homeRailExecutionAdapter.mjs";
+import { createHomeRailLinkStore } from "./homerail/homeRailLinkStore.mjs";
+import { createHomeRailEventProjector } from "./homerail/homeRailEventProjector.mjs";
+import { createHomeRailCommandAdapter } from "./homerail/homeRailCommandAdapter.mjs";
+import { createHomeRailApprovalAdapter } from "./homerail/homeRailApprovalAdapter.mjs";
+import { createHomeRailReconciler } from "./homerail/homeRailReconciler.mjs";
+import { createHomeRailArtifactAdapter } from "./homerail/homeRailArtifactAdapter.mjs";
+import { createHomeRailCapabilityCatalogAdapter } from "./homerail/homeRailCapabilityCatalogAdapter.mjs";
+import { createHomeRailDiagnosticsAdapter } from "./homerail/homeRailDiagnosticsAdapter.mjs";
+import { createHomeRailLedgerProjector } from "./homerail/homeRailLedgerProjector.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -80,6 +94,8 @@ export function createPreachermanServer(options = {}) {
   const allowedOrigins = new Set([
     "http://127.0.0.1:1420",
     "http://localhost:1420",
+    "http://127.0.0.1:1421",
+    "http://localhost:1421",
     "http://tauri.localhost",
     "https://tauri.localhost",
     "tauri://localhost",
@@ -93,8 +109,45 @@ export function createPreachermanServer(options = {}) {
   }
 
   const taskStore = createTaskStore({ file: taskStoreFile() });
+  const taskService = createTaskService({ taskStore });
+  const homeRailBaseUrl = env.PREACHERMAN_HOMERAIL_BASE_URL || env.HOMERAIL_MANAGER_URL || "http://127.0.0.1:19191";
+  const homeRailClient = options.homeRailClient ?? createHomeRailClient({
+    baseUrl: homeRailBaseUrl,
+    token: env.PREACHERMAN_HOMERAIL_DAG_TOKEN || env.HOMERAIL_DAG_MUTATION_TOKEN,
+    approvalToken: env.PREACHERMAN_HOMERAIL_APPROVAL_TOKEN || env.HOMERAIL_DAG_APPROVAL_TOKEN,
+    fetchImpl,
+  });
+  const homeRailConsoleUrl = env.PREACHERMAN_HOMERAIL_CONSOLE_URL || "http://127.0.0.1:19193";
+  const homeRailLinkStore = createHomeRailLinkStore({ file: join(dataDirectory, "homerail-links.v1.json") });
+  const homeRailCapabilityCatalog = createHomeRailCapabilityCatalogAdapter({
+    client: homeRailClient,
+    workflowId: env.PREACHERMAN_HOMERAIL_DEFAULT_WORKFLOW_ID || env.PREACHERMAN_HOMERAIL_WORKFLOW_ID || "preacherman-complex-task-v1",
+    expectedWorkflowRevision: Number.parseInt(env.PREACHERMAN_HOMERAIL_WORKFLOW_REVISION || String(PREACHERMAN_HOMERAIL_WORKFLOW_REVISION), 10),
+    expectedCanonicalHash: env.PREACHERMAN_HOMERAIL_CANONICAL_HASH || PREACHERMAN_HOMERAIL_CANONICAL_HASH,
+    profile: env.PREACHERMAN_HOMERAIL_PROFILE,
+    managerUrl: homeRailBaseUrl,
+    enabled: env.PREACHERMAN_HOMERAIL_ENABLED !== "false",
+  });
+  const homeRailDiagnostics = createHomeRailDiagnosticsAdapter({ capabilityCatalog: homeRailCapabilityCatalog });
+  const homeRailExecutionAdapter = createHomeRailExecutionAdapter({
+    client: homeRailClient,
+    taskService,
+    linkStore: homeRailLinkStore,
+    capabilityCatalog: homeRailCapabilityCatalog,
+  });
+  const homeRailEventProjector = createHomeRailEventProjector({ taskService });
+  const homeRailCommandAdapter = createHomeRailCommandAdapter({ client: homeRailClient, taskService });
+  const homeRailApprovalAdapter = createHomeRailApprovalAdapter({ client: homeRailClient, taskService });
+  const homeRailArtifactAdapter = createHomeRailArtifactAdapter({
+    client: homeRailClient,
+    taskService,
+    cacheDirectory: join(dataDirectory, "homerail-artifacts"),
+  });
+  const homeRailLedgerProjector = createHomeRailLedgerProjector({ taskService, eventProjector: homeRailEventProjector, artifactAdapter: homeRailArtifactAdapter });
+  const homeRailReconciler = createHomeRailReconciler({ client: homeRailClient, taskService, eventProjector: homeRailEventProjector, artifactAdapter: homeRailArtifactAdapter, ledgerProjector: homeRailLedgerProjector });
+  const executionRouter = createExecutionRouter({ homeRailStatus: () => homeRailExecutionAdapter.status() });
   const airiKitsRuntime = createAiriKitsRuntime();
-  const airiPluginTaskBinding = createAiriPluginTaskBinding({ taskStore });
+  const airiPluginTaskBinding = createAiriPluginTaskBinding({ taskService });
 
   for (const kit of airiKitsRuntime.kits.discover()) {
     airiKitsRuntime.kits.attachConsumer("preacherman-runtime", kit.name, "^1.0.0");
@@ -132,7 +185,7 @@ export function createPreachermanServer(options = {}) {
     versionRange: "^1.0.0",
     async handler(_input, context) {
       const pluginId = callerPluginId(context);
-      return { tasks: (await taskStore.list(50)).filter((task) => task.pluginId === pluginId) };
+      return { tasks: (await taskService.list(50)).filter((task) => task.pluginId === pluginId) };
     },
   });
   airiKitsRuntime.bindings.bind({
@@ -142,7 +195,7 @@ export function createPreachermanServer(options = {}) {
     versionRange: "^1.0.0",
     async handler(_input, context) {
       const pluginId = callerPluginId(context);
-      return { entries: (await taskStore.list(50)).filter((task) => task.pluginId === pluginId) };
+      return { entries: (await taskService.list(50)).filter((task) => task.pluginId === pluginId) };
     },
   });
   airiKitsRuntime.bindings.bind({
@@ -282,7 +335,7 @@ export function createPreachermanServer(options = {}) {
       toolName,
     });
     const taskId = created.task.taskId;
-    await taskStore.update(taskId, (task) => {
+    await taskService.update(taskId, (task) => {
       task.providerPluginId = providerPluginId;
       task.toolCall.qualifiedName = name;
     });
@@ -770,7 +823,7 @@ export function createPreachermanServer(options = {}) {
   }
 
   async function createCompanionTurn(input, locale, history) {
-    const proposalRequested = /pitch|路演|演示|方案|生成|制作/i.test(input);
+    const proposalRequested = /pitch|路演|演示|方案|生成|制作|research|compare|verify|parallel|multi[- ]?(?:agent|step)|研究|比较|验证|并行|多步骤|多智能体/i.test(input);
     const fallback = companionFallback(locale, proposalRequested, "provider_unavailable");
     const configuredEnv = await runtimeEnv();
     if (!configuredEnv.DEEPSEEK_API_KEY) return fallback;
@@ -801,7 +854,7 @@ export function createPreachermanServer(options = {}) {
 
   async function executePitchTask(taskId) {
     try {
-      await taskStore.update(taskId, (task) => {
+      await taskService.update(taskId, (task) => {
         if (task.status !== "queued") return;
         task.status = "running";
         appendTaskEvent(task, { type: "started", stage: "reading", message: "Reading the fixed PitchKit brief" });
@@ -809,7 +862,7 @@ export function createPreachermanServer(options = {}) {
       const brief = await readPitchBrief();
 
       while (true) {
-        const execution = await taskStore.update(taskId, (task) => {
+        const execution = await taskService.update(taskId, (task) => {
           if (task.status !== "running") return;
           appendTaskEvent(task, { type: "progress", stage: "generating", message: "Generating a constrained PitchKit" });
         });
@@ -820,21 +873,21 @@ export function createPreachermanServer(options = {}) {
         try {
           markdown = await generatePitchKit({ env: await runtimeEnv(), objective: execution.objective, brief, fetchImpl });
         } catch (error) {
-          const latest = await taskStore.get(taskId);
+          const latest = await taskService.get(taskId);
           if (latest?.status === "running" && latest.revision !== executionRevision) continue;
           throw error;
         }
 
-        let latest = await taskStore.get(taskId);
+        let latest = await taskService.get(taskId);
         if (!latest || latest.status !== "running") return;
         if (latest.revision !== executionRevision) {
-          await taskStore.update(taskId, (task) => {
+          await taskService.update(taskId, (task) => {
             if (task.status === "running") appendTaskEvent(task, { type: "revision_restarted", stage: "generating", message: "Restarting generation with the latest direction" });
           });
           continue;
         }
 
-        await taskStore.update(taskId, (task) => {
+        await taskService.update(taskId, (task) => {
           if (task.status === "running" && task.revision === executionRevision) {
             appendTaskEvent(task, { type: "progress", stage: "validating", message: "Validating required sections" });
           }
@@ -842,7 +895,7 @@ export function createPreachermanServer(options = {}) {
         try {
           validatePitchKit(markdown);
         } catch {
-          await taskStore.update(taskId, (task) => {
+          await taskService.update(taskId, (task) => {
             if (task.status === "running" && task.revision === executionRevision) {
               appendTaskEvent(task, { type: "progress", stage: "generating", message: "Repairing the required PitchKit format" });
             }
@@ -851,20 +904,20 @@ export function createPreachermanServer(options = {}) {
           validatePitchKit(markdown);
         }
 
-        latest = await taskStore.get(taskId);
+        latest = await taskService.get(taskId);
         if (!latest || latest.status !== "running") return;
         if (latest.revision !== executionRevision) continue;
-        await taskStore.update(taskId, (task) => {
+        await taskService.update(taskId, (task) => {
           if (task.status === "running" && task.revision === executionRevision) {
             appendTaskEvent(task, { type: "tool_call", stage: "tool-call", message: "Inspecting runtime through the built-in MCP tool" });
           }
         });
         const runtimeTool = await airiMcpRuntime.callTool("preacherman::preacherman_runtime_status", {});
         if (runtimeTool.isError) throw new Error("The built-in MCP runtime status tool failed.");
-        latest = await taskStore.get(taskId);
+        latest = await taskService.get(taskId);
         if (!latest || latest.status !== "running") return;
         if (latest.revision !== executionRevision) continue;
-        await taskStore.update(taskId, (task) => {
+        await taskService.update(taskId, (task) => {
           if (task.status === "running" && task.revision === executionRevision) {
             task.toolCall = {
               name: "preacherman::preacherman_runtime_status",
@@ -874,17 +927,17 @@ export function createPreachermanServer(options = {}) {
             appendTaskEvent(task, { type: "tool_result", stage: "tool-call", message: "Built-in MCP runtime status recorded" });
           }
         });
-        await taskStore.update(taskId, (task) => {
+        await taskService.update(taskId, (task) => {
           if (task.status === "running" && task.revision === executionRevision) {
             appendTaskEvent(task, { type: "progress", stage: "writing", message: "Writing the PitchKit artifact" });
           }
         });
         const artifactPath = await writePitchKit({ env, runId: taskId, markdown });
 
-        latest = await taskStore.get(taskId);
+        latest = await taskService.get(taskId);
         if (!latest || latest.status !== "running") return;
         if (latest.revision !== executionRevision) continue;
-        const completion = await taskStore.update(taskId, (task) => {
+        const completion = await taskService.update(taskId, (task) => {
           if (task.status !== "running" || task.revision !== executionRevision) return;
           task.artifact = { name: "pitch-kit.md", path: artifactPath, mediaType: "text/markdown" };
           task.status = "succeeded";
@@ -894,7 +947,7 @@ export function createPreachermanServer(options = {}) {
         return;
       }
     } catch (error) {
-      await taskStore.update(taskId, (task) => {
+      await taskService.update(taskId, (task) => {
         if (task.status === "cancelled") return;
         task.status = "failed";
         task.retryable = true;
@@ -904,7 +957,13 @@ export function createPreachermanServer(options = {}) {
     }
   }
 
+  function storedProposalSnapshot(proposal) {
+    const { confirmationPromise: _confirmationPromise, taskId: _taskId, ...snapshot } = proposal;
+    return structuredClone(snapshot);
+  }
+
   async function startPitchRun(proposal) {
+    if (proposal.taskId) return taskService.get(proposal.taskId);
     const taskId = `run_${randomUUID()}`;
     const createdAt = new Date().toISOString();
     const run = {
@@ -913,6 +972,8 @@ export function createPreachermanServer(options = {}) {
       proposalId: proposal.proposalId,
       objective: proposal.objective,
       executor: "pitchkit",
+      execution: { kind: "local-pitch", adapter: "pitchkit" },
+      proposalSnapshot: storedProposalSnapshot(proposal),
       revision: 1,
       status: "queued",
       retryable: false,
@@ -922,7 +983,8 @@ export function createPreachermanServer(options = {}) {
       createdAt,
       updatedAt: createdAt,
     };
-    await taskStore.create(run);
+    await taskService.createRecord(run);
+    proposal.taskId = taskId;
     void executePitchTask(taskId);
     return run;
   }
@@ -947,12 +1009,79 @@ export function createPreachermanServer(options = {}) {
   }
 
   async function startPluginToolRun(proposal) {
+    if (proposal.taskId) return taskService.get(proposal.taskId);
     const result = await executePluginToolAsTask(proposal.toolName || "preacherman-runtime::task_summary", proposal.toolArguments ?? {}, {
       callerPluginId: "preacherman-runtime",
       approved: true,
     });
-    const stored = await taskStore.get(result.task.taskId);
-    return { ...stored, runId: stored.taskId, proposalId: proposal.proposalId };
+    const stored = await taskService.update(result.task.taskId, (task) => {
+      task.proposalId = proposal.proposalId;
+      task.proposalSnapshot = storedProposalSnapshot(proposal);
+    });
+    proposal.taskId = stored.taskId;
+    return { ...stored, runId: stored.taskId };
+  }
+
+  async function startHomeRailRun(proposal, route) {
+    let task;
+    if (proposal.taskId) task = await taskService.get(proposal.taskId);
+    else {
+      task = await taskService.create({
+        taskId: `run_${randomUUID()}`,
+        proposalId: proposal.proposalId,
+        objective: proposal.objective,
+        executor: "homerail",
+        execution: { kind: "homerail-dag", adapter: "homerail" },
+        proposalSnapshot: storedProposalSnapshot(proposal),
+      });
+      proposal.taskId = task.taskId;
+    }
+    try {
+      const started = (await homeRailExecutionAdapter.start(task.taskId, {
+        idempotencyKey: `${proposal.proposalId}:${proposal.revision ?? 1}:attempt:${Math.max(1, task.attempts.length)}`,
+      })).task;
+      void homeRailReconciler.reconcileTask(started);
+      return started;
+    } catch (error) {
+      let latest = await taskService.get(task.taskId);
+      if (["queued", "running", "waiting_for_input", "waiting_for_approval"].includes(latest.status)) {
+        latest = await taskService.transition(task.taskId, "failed", {
+          error: { code: error.code ?? "HOMERAIL_START_FAILED", message: error.message, retryable: true },
+          event: { type: "failed", stage: "terminal", message: error.message },
+        });
+      }
+      return { ...latest, executionRoute: route };
+    }
+  }
+
+  async function retryHomeRailTask(task) {
+    await taskService.retry(task.taskId, { provider: "homerail" });
+    const snapshot = task.proposalSnapshot ?? {
+      proposalId: task.proposalId ?? `retry_${task.taskId}`,
+      revision: task.revision,
+      objective: task.objective,
+    };
+    return startHomeRailRun({ ...snapshot, taskId: task.taskId, objective: task.objective }, {
+      kind: "homerail-dag",
+      adapter: "homerail",
+      reason: "retry",
+    });
+  }
+
+  async function startProposalRun(proposal) {
+    if (proposal.confirmationPromise) return proposal.confirmationPromise;
+    const promise = (async () => {
+      const route = await executionRouter.route(proposal);
+      if (route.kind === "local-plugin") return startPluginToolRun(proposal);
+      if (route.kind === "homerail-dag") return startHomeRailRun(proposal, route);
+      return startPitchRun(proposal);
+    })();
+    proposal.confirmationPromise = promise;
+    try {
+      return await promise;
+    } finally {
+      proposal.confirmationPromise = null;
+    }
   }
 
   function parseExplicitPluginToolRequest(input) {
@@ -1458,19 +1587,65 @@ export function createPreachermanServer(options = {}) {
         }
         const body = await readJson(request);
         if (typeof body.objective === "string" && body.objective.trim()) proposal.objective = body.objective.trim();
-        const run = proposal.kind === "plugin-tool" ? await startPluginToolRun(proposal) : await startPitchRun(proposal);
+        const run = await startProposalRun(proposal);
         json(response, 202, { run }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/tasks") {
         const requestedLimit = Number.parseInt(url.searchParams.get("limit") || "10", 10);
         const limit = Number.isFinite(requestedLimit) ? requestedLimit : 10;
-        json(response, 200, { tasks: await taskStore.list(limit) }, origin);
+        json(response, 200, { tasks: await taskService.list(limit) }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/execution/providers/status") {
+        json(response, 200, { providers: [await homeRailDiagnostics.status()] }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/execution/providers/homerail/workflows") {
+        json(response, 200, await homeRailDiagnostics.workflows(), origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/execution/providers/homerail/console") {
+        response.writeHead(302, {
+          "Access-Control-Allow-Origin": origin,
+          Location: homeRailConsoleUrl,
+          Vary: "Origin",
+        });
+        response.end();
+        return;
+      }
+      const taskArtifactsMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)\/artifacts$/);
+      if (request.method === "GET" && taskArtifactsMatch) {
+        const task = await taskService.get(decodeURIComponent(taskArtifactsMatch[1])).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
+        if (!task) {
+          json(response, 404, { error: "Task run not found." }, origin);
+          return;
+        }
+        json(response, 200, { taskId: task.taskId, artifacts: task.artifacts, total: task.artifacts.length }, origin);
+        return;
+      }
+      const taskArtifactContentMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)\/artifacts\/([^/]+)\/content$/);
+      if (request.method === "GET" && taskArtifactContentMatch) {
+        const taskId = decodeURIComponent(taskArtifactContentMatch[1]);
+        const artifactId = decodeURIComponent(taskArtifactContentMatch[2]);
+        const upstream = await homeRailArtifactAdapter.content(taskId, artifactId, {
+          range: typeof request.headers.range === "string" ? request.headers.range : undefined,
+        });
+        const headers = {
+          "Access-Control-Allow-Origin": origin,
+          Vary: "Origin",
+          ...Object.fromEntries(["content-type", "content-length", "content-range", "accept-ranges", "etag", "last-modified"]
+            .map((name) => [name, upstream.headers.get(name)])
+            .filter(([, value]) => value !== null)),
+        };
+        response.writeHead(upstream.status, headers);
+        if (upstream.body) Readable.fromWeb(upstream.body).pipe(response);
+        else response.end();
         return;
       }
       const taskArtifactMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)\/artifact$/);
       if (request.method === "GET" && taskArtifactMatch) {
-        const task = await taskStore.get(decodeURIComponent(taskArtifactMatch[1]));
+        const task = await taskService.get(decodeURIComponent(taskArtifactMatch[1])).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
         if (!task?.artifact) {
           json(response, 404, { error: "Task artifact not found." }, origin);
           return;
@@ -1480,7 +1655,7 @@ export function createPreachermanServer(options = {}) {
       }
       const taskMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)$/);
       if (request.method === "GET" && taskMatch) {
-        const task = await taskStore.get(decodeURIComponent(taskMatch[1]));
+        const task = await taskService.get(decodeURIComponent(taskMatch[1])).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
         if (!task) {
           json(response, 404, { error: "Task run not found." }, origin);
           return;
@@ -1491,7 +1666,7 @@ export function createPreachermanServer(options = {}) {
       const taskCommandMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)\/commands$/);
       if (request.method === "POST" && taskCommandMatch) {
         const taskId = decodeURIComponent(taskCommandMatch[1]);
-        const existing = await taskStore.get(taskId);
+        const existing = await taskService.get(taskId).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
         if (!existing) {
           json(response, 404, { error: "Task run not found." }, origin);
           return;
@@ -1499,12 +1674,41 @@ export function createPreachermanServer(options = {}) {
         const body = await readJson(request);
         const type = body.type;
         if (type === "cancel") {
-          const task = await taskStore.update(taskId, (current) => {
+          if (existing.execution?.kind === "homerail-dag") {
+            const result = await homeRailCommandAdapter.cancel(taskId);
+            json(response, 200, { task: result.task, command: { type: "cancel", accepted: result.accepted, reused: result.reused } }, origin);
+            return;
+          }
+          const task = await taskService.update(taskId, (current) => {
             if (!["queued", "running"].includes(current.status)) return;
             current.status = "cancelled";
             appendTaskEvent(current, { type: "cancelled", stage: "terminal", message: "PitchKit cancelled" });
           });
           json(response, 200, { task, command: { type: "cancel", accepted: task.status === "cancelled" } }, origin);
+          return;
+        }
+        if ((type === "approve" || type === "reject") && existing.execution?.kind === "homerail-dag") {
+          const approvalId = typeof body.approvalId === "string" ? body.approvalId : existing.pendingApproval?.approvalId;
+          const result = await homeRailApprovalAdapter.decide(taskId, {
+            approvalId,
+            decision: type === "approve" ? "approved" : "rejected",
+          });
+          json(response, 200, { task: result.task, command: { type, accepted: true, reused: result.reused } }, origin);
+          return;
+        }
+        if ((type === "resume" || type === "steer") && existing.execution?.kind === "homerail-dag") {
+          const input = typeof body.input === "string" && body.input.trim()
+            ? body.input
+            : typeof body.instruction === "string" && body.instruction.trim()
+              ? body.instruction
+              : typeof body.objective === "string" ? body.objective : "";
+          const result = await homeRailCommandAdapter.sendInput(taskId, input, { mode: type });
+          json(response, 202, { task: result.task, command: { type, accepted: true } }, origin);
+          return;
+        }
+        if (type === "retry" && existing.execution?.kind === "homerail-dag") {
+          const task = await retryHomeRailTask(existing);
+          json(response, 202, { task, command: { type, accepted: true, attempt: task.attempts.at(-1)?.attempt } }, origin);
           return;
         }
         if (type === "steer") {
@@ -1518,7 +1722,7 @@ export function createPreachermanServer(options = {}) {
             json(response, 409, { error: "Only an active task can be steered.", task: existing }, origin);
             return;
           }
-          const task = await taskStore.update(taskId, (current) => {
+          const task = await taskService.update(taskId, (current) => {
             if (!["queued", "running"].includes(current.status)) return;
             current.revision += 1;
             current.objective = objective || `${current.objective}\n\nAdditional direction: ${instruction}`;
@@ -1535,12 +1739,12 @@ export function createPreachermanServer(options = {}) {
           json(response, 202, { task, command: { type: "steer", accepted: true, revision: task.revision } }, origin);
           return;
         }
-        json(response, 400, { error: "command type must be cancel or steer." }, origin);
+        json(response, 400, { error: "command type must be cancel, steer, resume, retry, approve, or reject." }, origin);
         return;
       }
       const runMatch = url.pathname.match(/^\/api\/agent\/runs\/([^/]+)$/);
       if (request.method === "GET" && runMatch) {
-        const run = await taskStore.get(decodeURIComponent(runMatch[1]));
+        const run = await taskService.get(decodeURIComponent(runMatch[1])).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
         if (!run) {
           json(response, 404, { error: "Task run not found." }, origin);
           return;
@@ -1550,13 +1754,18 @@ export function createPreachermanServer(options = {}) {
       }
       const runActionMatch = url.pathname.match(/^\/api\/agent\/runs\/([^/]+)\/(cancel|retry)$/);
       if (request.method === "POST" && runActionMatch) {
-        const run = await taskStore.get(decodeURIComponent(runActionMatch[1]));
+        const run = await taskService.get(decodeURIComponent(runActionMatch[1])).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
         if (!run) {
           json(response, 404, { error: "Task run not found." }, origin);
           return;
         }
         if (runActionMatch[2] === "cancel") {
-          const cancelled = await taskStore.update(run.taskId, (task) => {
+          if (run.execution?.kind === "homerail-dag") {
+            const result = await homeRailCommandAdapter.cancel(run.taskId);
+            json(response, 200, { run: result.task }, origin);
+            return;
+          }
+          const cancelled = await taskService.update(run.taskId, (task) => {
             if (!["queued", "running"].includes(task.status)) return;
             task.status = "cancelled";
             appendTaskEvent(task, { type: "cancelled", stage: "terminal", message: task.source === "airi-plugin" ? "Plugin TaskRun cancelled" : "PitchKit cancelled" });
@@ -1566,6 +1775,11 @@ export function createPreachermanServer(options = {}) {
         }
         if (!["failed", "cancelled"].includes(run.status)) {
           json(response, 409, { error: `TaskRun ${run.taskId} cannot be retried from ${run.status}.` }, origin);
+          return;
+        }
+        if (run.execution?.kind === "homerail-dag") {
+          const retried = await retryHomeRailTask(run);
+          json(response, 202, { run: retried, previousRunId: run.runId, sameTask: true }, origin);
           return;
         }
         if (run.source === "airi-plugin") {
@@ -1585,7 +1799,7 @@ export function createPreachermanServer(options = {}) {
             callerPluginId: run.pluginId || "preacherman-runtime",
             approved: body.approved === true,
           });
-          const storedRetry = await taskStore.get(retryResult.task.taskId);
+          const storedRetry = await taskService.get(retryResult.task.taskId);
           json(response, 202, { run: { ...storedRetry, runId: storedRetry.taskId }, previousRunId: run.runId }, origin);
           return;
         }
@@ -1596,8 +1810,12 @@ export function createPreachermanServer(options = {}) {
       json(response, 404, { error: "Route not found." }, origin);
     } catch (error) {
       const status = Number.isInteger(error?.statusCode) ? error.statusCode : 500;
+      const failedTask = error?.taskId
+        ? await taskService.get(error.taskId).catch(() => undefined)
+        : undefined;
       json(response, status, {
         error: error instanceof Error ? error.message : "Unexpected service error.",
+        ...(failedTask ? { task: failedTask } : {}),
       }, origin);
     }
   });
@@ -1673,6 +1891,8 @@ export function createPreachermanServer(options = {}) {
       await initializeEcosystemRuntimes();
       await Promise.all([airiMcpRuntime.initialize(), airiPluginRuntime.initialize()]);
       await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
+      await homeRailReconciler.reconcileAll();
+      homeRailReconciler.start();
       return new Promise((resolveListen, reject) => {
         server.once("error", reject);
         server.listen(port, "127.0.0.1", () => {
@@ -1682,6 +1902,7 @@ export function createPreachermanServer(options = {}) {
       });
     },
     async close() {
+      homeRailReconciler.stop();
       for (const client of voiceProxy.clients) client.close();
       await airiPluginRuntime.close();
       ecosystemFacade.close();

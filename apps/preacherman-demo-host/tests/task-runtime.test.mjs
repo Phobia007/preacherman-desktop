@@ -103,7 +103,7 @@ test("TaskRun persists, restarts stale revisions, and remains readable through t
 
   const storeFile = join(dataDir, "task-store.v1.json");
   const persisted = JSON.parse(await readFile(storeFile, "utf8"));
-  assert.equal(persisted.version, 1);
+  assert.equal(persisted.version, 2);
   assert.equal(persisted.tasks[0].status, "succeeded");
   if (process.platform !== "win32") assert.equal((await stat(storeFile)).mode & 0o777, 0o600);
 

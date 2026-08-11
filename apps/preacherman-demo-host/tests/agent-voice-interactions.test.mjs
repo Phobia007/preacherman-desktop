@@ -41,7 +41,7 @@ test("the chat can start a new conversation without erasing saved history", asyn
   assert.match(consoleSource, /startNewConversation/);
   assert.match(consoleSource, /beginNewConversation\(\)/);
   assert.match(consoleSource, /newConversation/);
-  assert.match(consoleSource, /disabled=\{busy \|\| hasActiveTask\}/);
+  assert.match(consoleSource, /disabled=\{workspace\.busy \|\| hasActiveTask\}/);
 });
 
 test("the companion sends conversation history and exposes its reply source", async () => {
@@ -49,7 +49,7 @@ test("the companion sends conversation history and exposes its reply source", as
   assert.match(source, /history: \[\.\.\.messages, \{ role: "user", text \}\]/);
   assert.match(source, /TurnDiagnostics/);
   assert.match(source, /deepseek-unstructured/);
-  assert.match(source, /fallbackReply/);
+  assert.match(source, /diagnostics\.source/);
 });
 
 test("the demo exposes one guided AIRI path from proposal to Ledger artifact", async () => {
@@ -146,7 +146,7 @@ test("the coordinator routes speech through the AIRI-derived Presentation Runtim
   assert.match(source, /createPresentationRuntime/);
   assert.match(source, /openGeneration/);
   assert.match(source, /interruptPresentation/);
-  assert.match(consoleSource, /\/api\/tasks\/\$\{taskRunId\}\/commands/);
+  assert.match(consoleSource, /\/api\/tasks\/\$\{taskId\(run\)\}\/commands/);
 });
 
 test("a new conversation advances the epoch and rejects stale transcript or presentation work", async (t) => {

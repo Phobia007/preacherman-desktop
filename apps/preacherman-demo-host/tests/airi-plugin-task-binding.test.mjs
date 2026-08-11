@@ -7,6 +7,7 @@ import {
   AIRI_PLUGIN_TASK_BINDING,
   createAiriPluginTaskBinding,
 } from "../server/airiPluginTaskBinding.mjs";
+import { createTaskService } from "../server/taskService.mjs";
 import { createTaskStore } from "../server/taskStore.mjs";
 
 const context = { pluginId: "demo-plugin", toolName: "build_report" };
@@ -18,7 +19,7 @@ async function fixture(t) {
   let tick = 0;
   const now = () => `2026-08-08T00:00:${String(tick++).padStart(2, "0")}.000Z`;
   const taskStore = createTaskStore({ file, now });
-  const binding = createAiriPluginTaskBinding({ taskStore, now, createId: () => `test-${++id}` });
+  const binding = createAiriPluginTaskBinding({ taskService: createTaskService({ taskStore, now }), now, createId: () => `test-${++id}` });
   t.after(async () => { await rm(directory, { recursive: true, force: true }); });
   return { binding, directory, file, now, taskStore };
 }
@@ -75,7 +76,7 @@ test("create, progress, and completion persist a structured TaskRun artifact and
   assert.doesNotMatch(await readFile(file, "utf8"), /operators/);
 
   const restartedStore = createTaskStore({ file, now });
-  const restartedBinding = createAiriPluginTaskBinding({ taskStore: restartedStore, now });
+  const restartedBinding = createAiriPluginTaskBinding({ taskService: createTaskService({ taskStore: restartedStore, now }), now });
   const recovered = await restartedBinding.execute("status", { taskId: created.task.taskId }, context);
   assert.equal(recovered.task.status, "completed");
   assert.deepEqual(recovered.ledger.artifact.content, completed.ledger.artifact.content);

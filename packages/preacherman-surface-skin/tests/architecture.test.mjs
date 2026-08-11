@@ -288,7 +288,7 @@ test("exported persistent navigation exposes exactly seven semantic buttons", as
   for (const label of ["Home", "Work", "Lab", "Gallery", "Test", "Ledger", "Settings"]) {
     assert.match(markup, new RegExp(`>${label}<\\/span>`));
   }
-  assert.equal((markup.match(/pm-workspace__nav-indicator-line/g) ?? []).length, 2);
+  assert.equal((markup.match(/pm-workspace__nav-indicator-line/g) ?? []).length, 0);
 });
 
 test("implemented page surfaces do not duplicate the persistent bottom navigation", async () => {
@@ -302,7 +302,7 @@ test("implemented page surfaces do not duplicate the persistent bottom navigatio
   }
 });
 
-test("bottom navigation is an 820px floating panel revealed by the bottom zone", async () => {
+test("bottom navigation is an 820px persistent floating panel", async () => {
   const componentPath = join(packageRoot, "src", "surfaces", "workspace", "BottomNavigation.tsx");
   const cssPath = join(packageRoot, "src", "surfaces", "workspace", "workspace.css");
   const source = await readFile(componentPath, "utf8");
@@ -316,16 +316,9 @@ test("bottom navigation is an 820px floating panel revealed by the bottom zone",
   assert.match(panel, /bottom:\s*16px/);
   assert.match(panel, /border-radius:\s*14px/);
   assert.match(panel, /box-shadow:/);
-  assert.match(panel, /opacity:\s*0/);
-  assert.match(panel, /visibility:\s*hidden/);
-  assert.match(panel, /pointer-events:\s*none/);
-  assert.match(source, /NAVIGATION_HIDE_DELAY_MS\s*=\s*360/);
-  assert.match(source, /setTimeout\([\s\S]*NAVIGATION_HIDE_DELAY_MS/);
-  assert.match(source, /onMouseEnter=\{showNavigation\}/);
-  assert.match(source, /onMouseLeave=\{scheduleNavigationHide\}/);
-  assert.equal((source.match(/<span className="pm-workspace__navigation-dot"/g) ?? []).length, 3);
-  assert.match(css, /@keyframes pm-navigation-dot-breathe/);
-  assert.match(css, /animation-delay:\s*-0\.36s/);
+  assert.match(source, /bottom-navigation-zone is-visible/);
+  assert.doesNotMatch(source, /NAVIGATION_HIDE_DELAY_MS|scheduleNavigationHide|navigation-dot/);
+  assert.match(source, /tabIndex=\{0\}/);
   assert.match(css, /\.pm-workspace__bottom-navigation-zone\.is-visible[^{]*\.pm-workspace__bottom-navigation/);
 });
 

@@ -32,6 +32,7 @@ export function AiriFeaturePanel({
   readonly surface: DemoSurfaceType;
 }) {
   const placement = featurePlacementForSurface(surface);
+  const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const [activationState, setActivationState] = useState<"idle" | "focused" | "executed" | "unavailable">("idle");
   const [backendState, setBackendState] = useState<AiriBackendState | "checking" | "error" | "idle">("idle");
@@ -44,6 +45,21 @@ export function AiriFeaturePanel({
     const state = capabilityStatuses[candidate.id]?.state;
     return state === "available" || state === "client-runtime";
   }).length;
+  const panelId = `airi-capability-library-${surface}`;
+
+  useEffect(() => {
+    setOpen(false);
+    setSelectedId("");
+  }, [surface]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
 
   useEffect(() => {
     let current = true;
@@ -116,67 +132,78 @@ export function AiriFeaturePanel({
     <aside
       aria-label={chinese ? "AIRI 功能" : "AIRI features"}
       className="demo-airi-panel"
+      data-open={open}
       data-surface={surface}
     >
-      <header className="demo-airi-panel__header">
-        <span>AIRI · PREACHERMAN</span>
-        <h2>{surfaceTitles[surface][locale]}</h2>
-        <p>{chinese ? "完整能力入口已归入当前页面；可先测试，再按需删减。" : "The complete capability set is here for testing and later pruning."}</p>
-        <div className="demo-airi-panel__summary">
-          <strong>{connectedCount}</strong> {chinese ? "项已连接" : "connected"}
-          <span aria-hidden="true">·</span>
-          <strong>{placement.features.length}</strong> {chinese ? "项能力" : "capabilities"}
-        </div>
-      </header>
-      <div aria-label={chinese ? `${surfaceTitles[surface][locale]}功能` : `${surfaceTitles[surface][locale]} capabilities`} className="demo-airi-panel__body">
-        {placement.sections.map((candidateSection) => {
-          const isDisclosure = candidateSection.kind === "extension" || candidateSection.kind === "system";
-          const sectionHeader = (
-            <span className="demo-airi-panel__section-title">
-              <span>{candidateSection.title[locale]}</span>
-              <small>{candidateSection.featureIds.length}</small>
-            </span>
-          );
-          if (isDisclosure) {
-            return (
-              <details className="demo-airi-panel__section demo-airi-panel__section--disclosure" data-kind={candidateSection.kind} key={candidateSection.id}>
-                <summary>{sectionHeader}</summary>
-                {featureButtons(candidateSection.featureIds, "normal")}
-              </details>
+      <button
+        aria-controls={panelId}
+        aria-expanded={open}
+        className="demo-airi-panel__trigger"
+        onClick={() => setOpen((current) => !current)}
+        type="button"
+      >
+        <span>{chinese ? "能力库" : "Capabilities"}</span>
+        <small>{connectedCount}/{placement.features.length}</small>
+      </button>
+      <div className="demo-airi-panel__surface" id={panelId}>
+        <header className="demo-airi-panel__header">
+          <div>
+            <h2>{surfaceTitles[surface][locale]}</h2>
+            <p>{chinese ? "核心操作在页面中，其余能力按需展开。" : "Core actions stay on the page. Open the rest when needed."}</p>
+          </div>
+          <button aria-label={chinese ? "关闭能力库" : "Close capabilities"} className="demo-airi-panel__close" onClick={() => setOpen(false)} type="button">
+            {chinese ? "关闭" : "Close"}
+          </button>
+        </header>
+        <div aria-label={chinese ? `${surfaceTitles[surface][locale]}功能` : `${surfaceTitles[surface][locale]} capabilities`} className="demo-airi-panel__body">
+          {placement.sections.map((candidateSection) => {
+            const sectionHeader = (
+              <span className="demo-airi-panel__section-title">
+                <span>{candidateSection.title[locale]}</span>
+                <small>{candidateSection.featureIds.length}</small>
+              </span>
             );
-          }
-          return (
-            <section className="demo-airi-panel__section" data-kind={candidateSection.kind} key={candidateSection.id}>
-              <header>{sectionHeader}</header>
-              {featureButtons(candidateSection.featureIds, candidateSection.kind === "primary" ? "primary" : "normal")}
-            </section>
-          );
-        })}
+            if (candidateSection.kind !== "primary") {
+              return (
+                <details className="demo-airi-panel__section demo-airi-panel__section--disclosure" data-kind={candidateSection.kind} key={candidateSection.id}>
+                  <summary>{sectionHeader}</summary>
+                  {featureButtons(candidateSection.featureIds, "normal")}
+                </details>
+              );
+            }
+            return (
+              <section className="demo-airi-panel__section" data-kind={candidateSection.kind} key={candidateSection.id}>
+                <header>{sectionHeader}</header>
+                {featureButtons(candidateSection.featureIds, "primary")}
+              </section>
+            );
+          })}
+        </div>
+        {selected ? (
+          <footer className="demo-airi-panel__detail" aria-live="polite">
+            <strong>{selected.label[locale]}</strong>
+            <code>{selected.id}</code>
+            <span data-status={selectedRuntimeState ?? "checking"}>
+              {activationState === "executed"
+                ? (chinese ? "已通过连接的后端执行" : "Executed by the connected backend")
+                : activationState === "focused"
+                  ? (chinese ? "已定位到对应页面或控件" : "Opened the related surface or control")
+                  : selectedRuntimeState === "available"
+                    ? (chinese ? "后端已连接" : "Backend available")
+                    : selectedRuntimeState === "client-runtime"
+                      ? (chinese ? "由前端运行时执行" : "Handled by the client runtime")
+                      : selectedRuntimeState === "configuration-required"
+                        ? (chinese ? "需要完成配置" : "Configuration required")
+                        : selectedRuntimeState === "external-runtime-required"
+                          ? (chinese ? "需要外部运行时" : "External runtime required")
+                          : (chinese ? "正在检查实际状态" : "Checking runtime status")}
+            </span>
+            <span data-backend-state={backendState}>
+              {backendMessage || (chinese ? "点击后检查后端状态" : "Click to inspect backend state")}
+            </span>
+          </footer>
+        ) : null}
       </div>
-      {selected ? (
-        <footer className="demo-airi-panel__detail" aria-live="polite">
-          <strong>{selected.label[locale]}</strong>
-          <code>{selected.id}</code>
-          <span data-status={selectedRuntimeState ?? "checking"}>
-            {activationState === "executed"
-              ? (chinese ? "已通过连接的后端执行" : "Executed by the connected backend")
-              : activationState === "focused"
-                ? (chinese ? "已定位到对应页面或控件" : "Opened the related surface or control")
-                : selectedRuntimeState === "available"
-                  ? (chinese ? "后端已连接" : "Backend available")
-                  : selectedRuntimeState === "client-runtime"
-                    ? (chinese ? "由前端运行时执行" : "Handled by the client runtime")
-                    : selectedRuntimeState === "configuration-required"
-                      ? (chinese ? "需要完成配置" : "Configuration required")
-                      : selectedRuntimeState === "external-runtime-required"
-                        ? (chinese ? "需要外部运行时" : "External runtime required")
-                        : (chinese ? "正在检查实际状态" : "Checking runtime status")}
-          </span>
-          <span data-backend-state={backendState}>
-            {backendMessage || (chinese ? "点击后检查后端状态" : "Click to inspect backend state")}
-          </span>
-        </footer>
-      ) : null}
     </aside>
   );
 }

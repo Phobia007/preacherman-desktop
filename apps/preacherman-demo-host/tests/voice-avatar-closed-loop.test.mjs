@@ -62,7 +62,7 @@ test("Home and Lab mount the shared conversation and avatar surfaces", async () 
   ]);
 
   assert.match(app, /const homeContent[\s\S]*?<CortanaModelStage ariaLabel="Activated Cortana model" \/>[\s\S]*?<VoiceSessionControl[\s\S]*?<ABTaskConsole/);
-  assert.match(app, /const labContent[\s\S]*?<CortanaModelStage ariaLabel="Cortana voice and avatar lab model" \/>[\s\S]*?<VoiceSessionControl/);
+  assert.match(app, /const labContent[\s\S]*?<CortanaModelStage ariaLabel="Cortana voice and avatar lab model" showControls \/>[\s\S]*?<VoiceSessionControl/);
   assert.match(styles, /\.demo-host--home > \.ab-task-console\s*\{[\s\S]*right:\s*auto;[\s\S]*left:\s*72px;/);
 });
 

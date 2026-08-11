@@ -1,0 +1,187 @@
+api_version: homerail.ai/v1
+kind: Workflow
+metadata:
+  id: preacherman-complex-task-v1
+  name: Preacherman Complex Task
+spec:
+  description: Planner-led data-driven fan-out with bounded parallelism, fresh verification, and required reviewable artifacts.
+  workspace:
+    mode: isolated
+  contracts:
+    Objective:
+      type: string
+      minLength: 1
+    Plan:
+      type: object
+      required: [context, work_items]
+      properties:
+        context:
+          type: string
+          minLength: 1
+        work_items:
+          type: array
+          minItems: 1
+          maxItems: 8
+          items:
+            type: object
+            required: [id, task, acceptance_criteria]
+            properties:
+              id:
+                type: string
+                minLength: 1
+              task:
+                type: string
+                minLength: 1
+              acceptance_criteria:
+                type: array
+                minItems: 1
+                items:
+                  type: string
+                  minLength: 1
+    WorkerResult:
+      type: object
+      required: [status, evidence]
+      properties:
+        status:
+          enum: [success, failed]
+        evidence: {}
+    VerificationResult:
+      type: object
+      required: [status, summary, evidence]
+      properties:
+        status:
+          enum: [verified, failed]
+        summary:
+          type: string
+          minLength: 1
+        evidence:
+          type: array
+          minItems: 1
+          items: {}
+  artifacts:
+    - name: plan.json
+      source: { type: handoff, node: plan, port: planned }
+      media_type: application/json
+      contract: Plan
+      required: true
+      publish: always
+    - name: verification.json
+      source: { type: handoff, node: verify, port: verified }
+      media_type: application/json
+      contract: VerificationResult
+      required: true
+      publish: success
+    - name: verification-failure.json
+      source: { type: handoff, node: verify, port: failed }
+      media_type: application/json
+      contract: VerificationResult
+      required: false
+      publish: failure
+  agents:
+    orchestrator:
+      system: >-
+        Plan only: never inspect repositories, read task files, call shell tools, or execute any work item.
+        Copy the supplied objective verbatim into the top-level context field so every worker receives the same
+        immutable source context, then decompose it into 1..N non-overlapping work_items. Every item must contain
+        exactly id as a non-empty string, task as a non-empty string, and acceptance_criteria as a non-empty JSON
+        array of strings; acceptance_criteria must never be a single string. Workers must report status using
+        exactly success or failed; never ask for pass/fail or any alternative status vocabulary. Never precompute
+        findings, evidence, status, or result values for a worker. The DAG already has a separate verifier after
+        fan-out: never add verifier, reviewer, aggregator, coordinator, or summary items to work_items. Your first
+        and only tool call must hand off on the exact port planned, never plan or plan.planned, with only top-level
+        context and work_items.
+    worker:
+      system: >-
+        Execute only the supplied fan-out item. Its envelope contains item plus the original immutable context;
+        use that context as source evidence and inspect additional real inputs only when the task requires them.
+        Use the minimum tools needed to produce grounded evidence and do not wait for other workers. After the
+        work is complete, your final tool call must hand off on the exact port result, with exactly one JSON object
+        containing top-level status set to success or failed and top-level evidence grounded in the work performed.
+        Use status failed when an acceptance criterion cannot be checked. Never use done, completed, pass, or any
+        other port or status vocabulary; never copy planner claims as evidence; never omit, nest, or rename status
+        or evidence.
+    verifier:
+      system: >-
+        Independently verify the combined fan-out evidence against the original objective. Your first and only
+        tool call must hand off exactly one JSON object containing top-level status, summary, and evidence.
+        Evidence must be a non-empty JSON array of concrete evidence references or concise grounded findings.
+        Use the exact port verified with status set to verified only when every worker result is grounded and the
+        objective is satisfied. Otherwise use the exact port failed with status set to failed and explain the
+        unmet condition in summary. Never hand off plain text or omit the evidence array.
+  nodes:
+    plan:
+      kind: agent
+      agent: orchestrator
+      allowed_builtin_tools: []
+      allowed_dag_tools: [handoff]
+      inputs:
+        objective: { contract: Objective }
+      outputs:
+        planned: { contract: Plan }
+    fanout:
+      kind: fanout
+      inputs:
+        plan: { contract: Plan }
+      outputs:
+        passed: {}
+        failed: {}
+      config:
+        input: plan
+        item_field: work_items
+        context_field: context
+        worker_agent: worker
+        max_items: 8
+        max_parallelism: 4
+        completion: all
+        result_contract: WorkerResult
+        success_field: status
+        success_values: [success]
+        result_port: passed
+        failed_port: failed
+        cancel_remaining: false
+    verify:
+      kind: agent
+      agent: verifier
+      allowed_builtin_tools: []
+      allowed_dag_tools: [handoff]
+      inputs:
+        aggregate: {}
+      outputs:
+        verified: { contract: VerificationResult }
+        failed: { contract: VerificationResult }
+    done:
+      kind: terminal
+      outcome: success
+      inputs:
+        result: { contract: VerificationResult }
+    worker_failed:
+      kind: terminal
+      outcome: failure
+      inputs:
+        result: {}
+    verification_failed:
+      kind: terminal
+      outcome: failure
+      inputs:
+        result: { contract: VerificationResult }
+  edges:
+    - { from: $run.input, to: plan.objective }
+    - { from: plan.planned, to: fanout.plan }
+    - { from: fanout.passed, to: verify.aggregate }
+    - { from: fanout.failed, to: worker_failed.result, condition: on_failure }
+    - { from: verify.verified, to: done.result }
+    - { from: verify.failed, to: verification_failed.result, condition: on_failure }
+  policies:
+    max_nodes: 300
+    max_parallelism: 4
+    max_dispatches: 1000
+    max_corrections_per_node: 3
+  pattern:
+    id: orchestrator-workers
+    version: 1.2.0
+    source: https://x.com/i/status/2074169173178212621
+    parameters:
+      workflow_id: preacherman-complex-task-v1
+      name: Preacherman Complex Task
+      max_workers: 8
+      max_parallelism: 4

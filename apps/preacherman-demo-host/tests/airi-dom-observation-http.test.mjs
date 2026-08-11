@@ -26,6 +26,13 @@ test("browser DOM bridge becomes a real read-only Computer Use target over HTTP"
     await rm(dataDir, { recursive: true, force: true });
   });
 
+  const previewPreflight = await fetch(`${baseUrl}/api/computer-vision/dom-snapshot`, {
+    method: "OPTIONS",
+    headers: { Origin: "http://127.0.0.1:1421" },
+  });
+  assert.equal(previewPreflight.status, 204);
+  assert.equal(previewPreflight.headers.get("access-control-allow-origin"), "http://127.0.0.1:1421");
+
   const posted = await request(baseUrl, "/api/computer-vision/dom-snapshot", {
     method: "POST",
     body: JSON.stringify({

@@ -47,7 +47,7 @@ function normalizeNode(value, index) {
 }
 
 export function createAiriDomObservationRuntime({
-  allowedOrigins = ["http://127.0.0.1:1420"],
+  allowedOrigins = ["http://127.0.0.1:1420", "http://127.0.0.1:1421"],
   allowedPaths = ["/__surfaces/home", "/__surfaces/workspace", "/__surfaces/lab", "/__surfaces/market", "/__surfaces/ledger", "/__surfaces/settings", "/__surfaces/test"],
   maxAgeMs = 15_000,
   maxNodes = 200,

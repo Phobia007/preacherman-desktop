@@ -8,9 +8,10 @@ import { useAvatarInteractionState } from "../live/LiveCoordinatorContext";
 
 interface CortanaModelStageProps {
   readonly ariaLabel: string;
+  readonly showControls?: boolean;
 }
 
-export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
+export function CortanaModelStage({ ariaLabel, showControls = false }: CortanaModelStageProps) {
   const interactionState = useAvatarInteractionState();
   const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading");
   const [actions, setActions] = useState<readonly AvatarActionDescriptor[]>([]);
@@ -71,7 +72,7 @@ export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
         actionId={playingActionId}
         actionRequestKey={actionRequestKey}
         assetBaseUrl={localAvatarAssetBaseUrl()}
-        debug={import.meta.env.DEV}
+        debug={import.meta.env.DEV && showControls}
         onActionsReady={receiveActions}
         onError={handleError}
         onReady={handleReady}
@@ -89,7 +90,7 @@ export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
           The local model could not be loaded.
         </div>
       ) : null}
-      <aside className="cortana-motion-picker" aria-label="Cortana motion library">
+      {showControls ? <aside className="cortana-motion-picker" aria-label="Cortana motion library">
         <span className="cortana-motion-picker__eyebrow">Motion library</span>
         <strong>{motionActions.length || "—"} actions</strong>
         <select
@@ -112,7 +113,7 @@ export function CortanaModelStage({ ariaLabel }: CortanaModelStageProps) {
         >
           Play motion
         </button>
-      </aside>
+      </aside> : null}
       <div aria-hidden="true" className="cortana-model-stage__ground" />
     </section>
   );

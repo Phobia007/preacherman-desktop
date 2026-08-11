@@ -188,7 +188,8 @@ test("AB console uses the existing semantic theme and is mounted beside voice", 
     readFile(join(packageRoot, "src", "ab", "ab-task-console.css"), "utf8"),
   ]);
 
-  assert.match(app, /<VoiceSessionControl locale=\{preferences\.locale\} \/>[\s\S]*<ABTaskConsole locale=\{preferences\.locale\} \/>/);
+  assert.match(app, /<VoiceSessionControl locale=\{preferences\.locale\} \/>[\s\S]*<ABTaskConsole locale=\{preferences\.locale\} mode="home" \/>/);
+  assert.match(app, /<TaskWorkspaceProvider locale=\{preferences\.locale\}>/);
   assert.match(component, /\/api\/agent\/turn/);
   assert.match(component, /\/api\/agent\/proposals\//);
   assert.match(component, /coordinator\.onFinalTranscript/);

@@ -131,13 +131,13 @@ function response(task) {
 }
 
 export function createAiriPluginTaskBinding({
-  taskStore,
+  taskService,
   now = () => new Date().toISOString(),
   createId = () => randomUUID(),
 }) {
-  if (!taskStore || typeof taskStore.create !== "function" || typeof taskStore.get !== "function"
-    || typeof taskStore.update !== "function") {
-    throw new TypeError("A TaskStore with create, get, and update is required.");
+  if (!taskService || typeof taskService.createRecord !== "function" || typeof taskService.get !== "function"
+    || typeof taskService.update !== "function") {
+    throw new TypeError("A TaskService with createRecord, get, and update is required.");
   }
 
   function event(task, details) {
@@ -154,7 +154,10 @@ export function createAiriPluginTaskBinding({
 
   async function ownedTask(taskId, pluginId) {
     const normalizedId = normalizeText(taskId, "Task id", 128);
-    const task = await taskStore.get(normalizedId);
+    const task = await taskService.get(normalizedId).catch((error) => {
+      if (error?.code === "TASK_NOT_FOUND") return null;
+      throw error;
+    });
     if (!task) throw bindingError(`Unknown TaskRun: ${normalizedId}`, 404, "task_not_found");
     if (task.pluginId !== pluginId) {
       throw bindingError(`Plugin ${pluginId} cannot access TaskRun ${normalizedId}.`, 403, "task_forbidden");
@@ -206,7 +209,7 @@ export function createAiriPluginTaskBinding({
     const objective = normalizeText(input.objective, "Objective", 2_000);
     const parameters = normalizeJson(input.parameters ?? {}, "Tool parameters", MAX_PARAMETERS_BYTES, { requireObject: true });
     const task = makeTask({ ...identity, toolName, objective, parameters });
-    await taskStore.create(task);
+    await taskService.createRecord(task);
     return response(task);
   }
 
@@ -226,7 +229,7 @@ export function createAiriPluginTaskBinding({
     }
     const stage = normalizeText(input.stage, "Progress stage", 64);
     const message = normalizeText(input.message, "Progress message", 1_000);
-    const task = await taskStore.update(taskId, (current) => {
+    const task = await taskService.update(taskId, (current) => {
       if (current.pluginId !== pluginId) throw bindingError("Task ownership changed.", 403, "task_forbidden");
       if (TERMINAL_STATUSES.has(current.status)) {
         throw bindingError(`TaskRun ${taskId} is already ${publicTask(current).status}.`, 409, "task_terminal");
@@ -247,7 +250,7 @@ export function createAiriPluginTaskBinding({
     const taskId = normalizeText(input.taskId, "Task id", 128);
     await ownedTask(taskId, pluginId);
     const reason = normalizeText(input.reason ?? "Plugin task cancelled.", "Cancellation reason", 1_000);
-    const task = await taskStore.update(taskId, (current) => {
+    const task = await taskService.update(taskId, (current) => {
       if (current.pluginId !== pluginId) throw bindingError("Task ownership changed.", 403, "task_forbidden");
       if (current.status === "cancelled") return;
       if (TERMINAL_STATUSES.has(current.status)) {
@@ -270,7 +273,7 @@ export function createAiriPluginTaskBinding({
     const structuredResult = input.result === undefined
       ? null
       : normalizeJson(input.result, "Tool result", MAX_RESULT_BYTES);
-    const task = await taskStore.update(taskId, (current) => {
+    const task = await taskService.update(taskId, (current) => {
       if (current.pluginId !== pluginId) throw bindingError("Task ownership changed.", 403, "task_forbidden");
       if (TERMINAL_STATUSES.has(current.status)) {
         throw bindingError(`TaskRun ${taskId} is already ${publicTask(current).status}.`, 409, "task_terminal");
@@ -301,7 +304,7 @@ export function createAiriPluginTaskBinding({
       retryOf: original.taskId,
       attempt: (original.attempt ?? 1) + 1,
     });
-    await taskStore.create(task);
+    await taskService.createRecord(task);
     return response(task);
   }
 
@@ -323,7 +326,7 @@ export function createAiriPluginTaskBinding({
     if (artifact.mediaType !== "application/json") {
       throw bindingError("Structured plugin artifacts must use application/json.");
     }
-    const task = await taskStore.update(taskId, (current) => {
+    const task = await taskService.update(taskId, (current) => {
       if (current.pluginId !== pluginId) throw bindingError("Task ownership changed.", 403, "task_forbidden");
       if (TERMINAL_STATUSES.has(current.status)) {
         throw bindingError(`TaskRun ${taskId} is already ${publicTask(current).status}.`, 409, "task_terminal");

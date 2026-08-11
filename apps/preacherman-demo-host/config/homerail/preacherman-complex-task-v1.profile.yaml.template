@@ -1,0 +1,12 @@
+# Copy this file to a private path, replace model_alias with an active HomeRail
+# database model alias, and select the harness compatible with that setting.
+# Supported production harnesses are claude-sdk, codex_appserver, and kimi_code.
+# Never put an API key in a runtime profile.
+
+profile_id: preacherman-complex-default
+workflow_id: preacherman-complex-task-v1
+description: Model-backed runtime mapping for the fixed Preacherman complex-task workflow.
+
+default:
+  model_alias: replace-with-active-homerail-model-alias
+  agent_type: claude-sdk

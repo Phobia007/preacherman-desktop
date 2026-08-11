@@ -8,9 +8,39 @@ export interface TaskLedgerEntry {
   readonly objective: string;
   readonly pluginId?: string;
   readonly providerPluginId?: string;
-  readonly status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
+  readonly status: "queued" | "running" | "waiting_for_input" | "waiting_for_approval" | "succeeded" | "failed" | "cancelled";
   readonly updatedAt: string;
-  readonly events: readonly { readonly stage: string; readonly message: string }[];
+  readonly execution?: {
+    readonly kind?: string;
+    readonly adapter?: string;
+    readonly workflowId?: string;
+    readonly workflowRevision?: number;
+    readonly canonicalHash?: string;
+  };
+  readonly attempts?: readonly {
+    readonly attempt: number;
+    readonly provider: "local" | "homerail";
+    readonly status: string;
+    readonly externalRunId?: string;
+    readonly startedAt?: string;
+    readonly completedAt?: string;
+  }[];
+  readonly pendingApproval?: { readonly approvalId: string; readonly proposalHash: string; readonly title: string; readonly description: string; readonly requestedAt?: string } | null;
+  readonly approvalHistory?: readonly { readonly approvalId: string; readonly proposalHash: string; readonly title: string; readonly status: string; readonly requestedAt?: string; readonly actor?: string; readonly decidedAt?: string }[];
+  readonly events: readonly {
+    readonly type?: string;
+    readonly stage: string;
+    readonly message: string;
+    readonly at?: string;
+    readonly sourceId?: string;
+    readonly evidence?: {
+      readonly provider?: string;
+      readonly externalRunId?: string;
+      readonly sourceEvent?: string;
+      readonly sourceIndex?: number;
+      readonly errorCode?: string;
+    };
+  }[];
   readonly toolCall?: {
     readonly name: string;
     readonly qualifiedName?: string;
@@ -21,11 +51,25 @@ export interface TaskLedgerEntry {
     readonly structuredResult?: unknown;
   };
   readonly artifact: {
+    readonly artifactId?: string;
     readonly name: string;
     readonly path: string;
+    readonly contentPath?: string;
     readonly mediaType?: string;
+    readonly status?: string;
+    readonly primary?: boolean;
     readonly content?: unknown;
   } | null;
+  readonly artifacts?: readonly {
+    readonly artifactId?: string;
+    readonly name: string;
+    readonly path?: string;
+    readonly contentPath?: string;
+    readonly mediaType?: string;
+    readonly status?: string;
+    readonly primary?: boolean;
+    readonly content?: unknown;
+  }[];
 }
 
 const LEDGER_KEY = "preacherman.conversation-ledger.v1";

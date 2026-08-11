@@ -1,5 +1,8 @@
 const PORT_STORAGE_KEY = "preacherman.service-port";
-const DEFAULT_PORT = 8787;
+const configuredDefaultPort = Number(import.meta.env.VITE_PREACHERMAN_SERVICE_PORT);
+const DEFAULT_PORT = Number.isInteger(configuredDefaultPort) && configuredDefaultPort >= 1024 && configuredDefaultPort <= 65535
+  ? configuredDefaultPort
+  : 8787;
 
 export function readServicePort(): number {
   const parsed = Number(window.localStorage.getItem(PORT_STORAGE_KEY));

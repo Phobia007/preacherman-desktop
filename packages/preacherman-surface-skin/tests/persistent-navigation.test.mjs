@@ -20,26 +20,17 @@ test("bottom navigation keeps stable keys while exposing the requested short lab
   }
 });
 
-test("one persistent two-line indicator accelerates and brakes between navigation labels", async () => {
+test("one persistent navigation uses a restrained active pill", async () => {
   const source = await readFile(join(sourceRoot, "surfaces", "workspace", "BottomNavigation.tsx"), "utf8");
   const css = await readFile(join(sourceRoot, "surfaces", "workspace", "workspace.css"), "utf8");
   const activeRule = css.match(/\.pm-workspace__nav-item\.is-active\s*\{[^}]*\}/s)?.[0] ?? "";
-  const indicatorRule = css.match(/\.pm-workspace__nav-indicator\s*\{[^}]*\}/s)?.[0] ?? "";
-  const lineRule = css.match(/\.pm-workspace__nav-indicator-line\s*\{[^}]*\}/s)?.[0] ?? "";
 
   assert.match(source, /activeSurfaceType/);
   assert.match(source, /aria-current=\{isActive\s*\?\s*["']page["']/);
-  assert.match(source, /useLayoutEffect/);
-  assert.match(source, /typeof window\s*===\s*["']undefined["']\s*\?\s*useEffect\s*:\s*useLayoutEffect/);
-  assert.match(source, /indicatorRef/);
-  assert.equal((source.match(/pm-workspace__nav-indicator-line/g) ?? []).length, 2);
-  assert.doesNotMatch(source, /isActive\s*\?\s*<span[^>]+nav-active-line/);
-  assert.match(indicatorRule, /position:\s*absolute/);
-  assert.match(indicatorRule, /transition:[^}]*transform[^}]*cubic-bezier\(0\.45,\s*0,\s*0\.2,\s*1\)/s);
-  assert.match(lineRule, /height:\s*11px/);
-  assert.match(activeRule, /background:\s*transparent/);
+  assert.doesNotMatch(source, /nav-indicator|useLayoutEffect|indicatorRef/);
+  assert.match(activeRule, /background:\s*var\(--demo-theme-activate-fill/);
+  assert.match(activeRule, /color:\s*var\(--demo-theme-activate-fill-text/);
   assert.match(activeRule, /box-shadow:\s*none/);
-  assert.doesNotMatch(activeRule, /border-radius/);
 });
 
 test("page surfaces retain content but no longer render persistent shell or corner account controls", async () => {

@@ -39,3 +39,13 @@ test("DOM snapshot ingestion rejects secrets, user text, unknown URLs, and overs
   assert.throws(() => runtime.ingest(snapshot({ url: "https://example.com/__surfaces/workspace" })), { code: "DOM_TARGET_OUT_OF_SCOPE", statusCode: 403 });
   assert.throws(() => runtime.ingest(snapshot({ nodes: Array.from({ length: 201 }, () => snapshot().nodes[0]) })), /at most 200 nodes/);
 });
+
+test("DOM observation accepts the dedicated AIRI preview origin", () => {
+  const runtime = createAiriDomObservationRuntime();
+  const previewSnapshot = snapshot({ url: "http://127.0.0.1:1421/__surfaces/workspace" });
+  assert.equal(runtime.ingest(previewSnapshot).status, "ready");
+  assert.match(
+    runtime.observe({ callerPluginId: "preacherman-ui", target: { kind: "web", id: previewSnapshot.url } }).result.summary,
+    /1 structural DOM nodes/,
+  );
+});

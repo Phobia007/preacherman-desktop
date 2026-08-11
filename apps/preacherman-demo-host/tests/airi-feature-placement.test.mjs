@@ -81,12 +81,13 @@ test("AIRI controls have one explicit Preacherman surface placement", async () =
   assert.match(panelStyles, /var\(--demo-theme-surface-elevated\)/);
   assert.match(panelStyles, /var\(--demo-theme-focus\)/);
   assert.doesNotMatch(panelStyles, /#[0-9a-f]{3,8}\b/i);
-  assert.match(styles, /demo-airi-lab__intro/);
-  assert.match(styles, /demo-airi-test__intro/);
+  assert.match(styles, /demo-surface-toolbar/);
+  assert.match(panel, /aria-expanded=\{open\}/);
+  assert.match(panel, /candidateSection\.kind !== "primary"/);
   assert.match(styles, /\.demo-app-viewport > \.demo-app-shell[\s\S]*?left: 50%;[\s\S]*?translate\(-50%, -50%\) scale/);
   assert.match(styles, /\.demo-settings[\s\S]*?width: 100%;[\s\S]*?height: 100%;/);
   assert.match(styles, /\.demo-ledger[\s\S]*?width: 100%;[\s\S]*?height: 100%;/);
-  assert.doesNotMatch(styles.match(/\.demo-airi-lab__intro[\s\S]*?\.demo-app-shell/)?.[0] ?? "", /#[0-9a-f]{3,8}\b/i);
+  assert.doesNotMatch(styles.match(/\.demo-surface-toolbar\s*\{[\s\S]*?\}/)?.[0] ?? "", /#[0-9a-f]{3,8}\b/i);
 });
 
 test("each surface has one commercial task hierarchy with no orphaned capability", async () => {
@@ -118,7 +119,7 @@ test("live AIRI buttons focus controls and every button checks its backend adapt
   assert.match(app, /target\.focus\(\{ preventScroll: true \}\)/);
   assert.match(app, /findAiriFeature\(featureId\)\?\.target/);
   assert.match(panel, /invokeAiriCapability\(candidate\.id, surface, locale\)/);
-  assert.match(panel, /candidateSection\.kind === "extension" \|\| candidateSection\.kind === "system"/);
+  assert.match(panel, /candidateSection\.kind !== "primary"/);
   assert.match(panel, /<details className="demo-airi-panel__section/);
   assert.match(panel, /data-priority=\{priority\}/);
   assert.match(client, /\/api\/airi\/capabilities\/\$\{encodeURIComponent\(capabilityId\)\}\/invoke/);

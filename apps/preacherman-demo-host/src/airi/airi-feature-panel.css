@@ -1,40 +1,88 @@
 .demo-airi-panel {
   position: absolute;
-  top: 104px;
-  left: 72px;
-  z-index: 12;
+  top: 82px;
+  right: 72px;
+  z-index: 18;
+  font-family: "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+}
+
+.demo-airi-panel__trigger {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border: 1px solid var(--demo-theme-border-strong);
+  border-radius: 999px;
+  color: var(--demo-theme-text);
+  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 90%, transparent);
+  box-shadow: 0 12px 28px -22px color-mix(in srgb, var(--demo-theme-text) 34%, transparent);
+  font: 650 10px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+  backdrop-filter: blur(16px) saturate(130%);
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.demo-airi-panel__trigger small {
+  color: var(--demo-theme-muted);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+
+.demo-airi-panel__trigger:hover,
+.demo-airi-panel__trigger:focus-visible,
+.demo-airi-panel[data-open="true"] .demo-airi-panel__trigger {
+  border-color: var(--demo-theme-text);
+  background: var(--demo-theme-surface-elevated);
+}
+
+.demo-airi-panel__trigger:active {
+  transform: scale(0.98);
+}
+
+.demo-airi-panel__trigger:focus-visible,
+.demo-airi-panel__close:focus-visible {
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: 2px;
+}
+
+.demo-airi-panel__surface {
+  position: absolute;
+  top: 48px;
+  right: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   box-sizing: border-box;
-  width: 356px;
-  max-height: 760px;
+  width: 380px;
+  max-height: 740px;
   gap: 16px;
   padding: 20px;
   border: 1px solid var(--demo-theme-border);
-  border-radius: 22px;
+  border-radius: 16px;
   color: var(--demo-theme-text);
-  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 86%, transparent);
+  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 96%, transparent);
   box-shadow: var(--demo-theme-activate-shadow);
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  backdrop-filter: blur(24px) saturate(145%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  pointer-events: none;
+  backdrop-filter: blur(20px) saturate(135%);
+  transition: opacity 150ms ease, transform 150ms ease, visibility 0s linear 150ms;
 }
 
-.demo-airi-panel[data-surface="home"],
-.demo-airi-panel[data-surface="market"] {
-  right: 72px;
-  left: auto;
+.demo-airi-panel[data-open="true"] .demo-airi-panel__surface {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0s;
 }
 
 .demo-airi-panel__header {
-  display: grid;
-  gap: 6px;
-}
-
-.demo-airi-panel__header > span {
-  color: var(--demo-theme-muted);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
 }
 
 .demo-airi-panel__header h2,
@@ -43,30 +91,26 @@
 }
 
 .demo-airi-panel__header h2 {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 620;
   letter-spacing: -0.025em;
 }
 
 .demo-airi-panel__header p {
+  max-width: 250px;
+  margin-top: 5px;
   color: var(--demo-theme-muted);
-  font-size: 10px;
-  line-height: 1.45;
+  font-size: 11px;
+  line-height: 1.5;
 }
 
-.demo-airi-panel__summary {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-  padding-top: 5px;
+.demo-airi-panel__close {
+  padding: 6px 0;
+  border: 0;
   color: var(--demo-theme-muted);
-  font-size: 9px;
-}
-
-.demo-airi-panel__summary strong {
-  color: var(--demo-theme-text);
-  font-size: 10px;
-  font-weight: 650;
+  background: transparent;
+  font: 650 9px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
 }
 
 .demo-airi-panel__body {
