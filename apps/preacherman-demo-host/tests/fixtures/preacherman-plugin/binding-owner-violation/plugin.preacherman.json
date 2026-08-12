@@ -1,0 +1,10 @@
+{
+  "apiVersion": "v1",
+  "kind": "manifest.plugin.preacherman.local",
+  "name": "binding-owner-violation",
+  "permissions": [],
+  "tools": [],
+  "entrypoints": {
+    "node": "index.mjs"
+  }
+}

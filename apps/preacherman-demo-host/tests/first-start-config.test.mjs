@@ -14,13 +14,13 @@ test("first service start creates private local ecosystem state without develope
     await rm(dataDir, { recursive: true, force: true });
   });
 
-  for (const name of ["airi-plugins.v1.json", "airi-memory-persona.v1.json", "airi-observability.v1.json"]) {
+  for (const name of ["preacherman-plugins.v1.json", "preacherman-memory-persona.v1.json", "preacherman-observability.v1.json"]) {
     await access(join(dataDir, name));
     assert.doesNotMatch(await readFile(join(dataDir, name), "utf8"), /api[_-]?key|bearer\s+|password/i);
   }
   await access(join(dataDir, "vision-inputs"));
   await access(join(dataDir, "plugins"));
-  const plugins = JSON.parse(await readFile(join(dataDir, "airi-plugins.v1.json"), "utf8"));
+  const plugins = JSON.parse(await readFile(join(dataDir, "preacherman-plugins.v1.json"), "utf8"));
   assert.equal(plugins.builtinEnabled, true);
   assert.deepEqual(plugins.sources, []);
 });

@@ -102,7 +102,7 @@ test("network access stays on approved local Agent and voice boundaries and neve
     if (/\b(?:fetch|axios|EventSource|WebSocket)\b/i.test(source)) {
       assert.ok([
         join(sourceRoot, "ab", "ABTaskConsole.tsx"),
-        join(sourceRoot, "airi", "capabilityClient.ts"),
+        join(sourceRoot, "preacherman", "capabilityClient.ts"),
         join(sourceRoot, "conversationLedger.ts"),
         join(sourceRoot, "settings", "SettingsScreen.tsx"),
         join(sourceRoot, "realtime", "VoiceSessionControl.tsx"),

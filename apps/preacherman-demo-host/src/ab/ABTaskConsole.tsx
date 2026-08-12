@@ -29,7 +29,7 @@ type TaskStatus = "queued" | "running" | "waiting_for_input" | "waiting_for_appr
 
 interface TaskAttempt {
   readonly attempt: number;
-  readonly provider: "local" | "homerail";
+  readonly provider: "local" | "preacherman-execution";
   readonly status: string;
   readonly externalRunId?: string;
 }
@@ -54,7 +54,7 @@ interface TaskRun {
   readonly taskId?: string;
   readonly runId: string;
   readonly objective: string;
-  readonly source?: "airi-plugin";
+  readonly source?: "preacherman-plugin";
   readonly status: TaskStatus;
   readonly execution?: { readonly kind?: string; readonly adapter?: string };
   readonly attempts?: readonly TaskAttempt[];
@@ -110,7 +110,7 @@ const copy = {
     proposalReady: "A task proposal is ready. Review and approve it in Work.",
     noTask: "No task is running. Start with the companion on Home or describe a task here.",
     taskStarted: "The task has started. Progress and approvals are available in Work; evidence will be retained in Ledger.",
-    pluginTaskStarted: "The approved AIRI plugin tool is running. Its structured result will be written to Ledger.",
+    pluginTaskStarted: "The approved Preacherman plugin tool is running. Its structured result will be written to Ledger.",
     taskBlocked: "The task was accepted, but its execution service still needs attention. Review the failure below and retry after configuration.",
   },
   "zh-CN": {
@@ -130,7 +130,7 @@ const copy = {
     proposalReady: "任务方案已经准备好，请前往 Work 审阅并批准执行。",
     noTask: "当前没有执行中的任务。可以从 Home 与伙伴对话，也可以在这里描述任务。",
     taskStarted: "任务已开始。进度与审批集中在 Work，执行证据会保留到 Ledger。",
-    pluginTaskStarted: "已批准的 AIRI 插件工具正在执行，结构化结果会写入 Ledger。",
+    pluginTaskStarted: "已批准的 Preacherman 插件工具正在执行，结构化结果会写入 Ledger。",
     taskBlocked: "任务已被接受，但执行服务还需要处理。请查看下方原因，完成配置后重试。",
   },
 } as const;
@@ -267,10 +267,10 @@ export function TaskWorkspaceProvider({ children, locale }: { readonly children:
     if (!run || busy) return;
     setBusy(true); setError(null);
     try {
-      if (type === "retry" && run.execution?.kind !== "homerail-dag") {
+      if (type === "retry" && run.execution?.kind !== "preacherman-execution-dag") {
         const response = await request<{ run: TaskRun }>(`/api/agent/runs/${taskId(run)}/retry`, {
           method: "POST",
-          body: JSON.stringify({ approved: run.source === "airi-plugin" }),
+          body: JSON.stringify({ approved: run.source === "preacherman-plugin" }),
         });
         setRun(response.run);
         return;
@@ -335,7 +335,7 @@ export function ABTaskConsole({ locale, mode = "work" }: { readonly locale: Loca
   const openLedger = () => { sessionStorage.setItem("preacherman.ledger-view", "artifacts"); openLocalSurface("ledger"); };
 
   return (
-    <section className="ab-task-console" data-airi-control="companion.chat" data-mode={mode} data-state={workspace.run?.status || "idle"} tabIndex={-1}>
+    <section className="ab-task-console" data-preacherman-control="companion.chat" data-mode={mode} data-state={workspace.run?.status || "idle"} tabIndex={-1}>
       <header className="ab-task-console__header">
         <div><span className="ab-task-console__eyebrow">{labels.eyebrow}</span><h2>{mode === "home" ? labels.homeTitle : labels.workTitle}</h2></div>
         <button aria-label={labels.newConversation} className="ab-task-console__button ab-task-console__button--quiet" disabled={workspace.busy || hasActiveTask} onClick={workspace.startNewConversation} type="button">{labels.newConversation}</button>
@@ -348,7 +348,7 @@ export function ABTaskConsole({ locale, mode = "work" }: { readonly locale: Loca
       </div>
 
       <form className="ab-task-console__form" onSubmit={submit}>
-        <textarea aria-label={labels.placeholder} data-airi-control="task.create" disabled={workspace.busy} onChange={(event) => workspace.setInput(event.target.value)} placeholder={labels.placeholder} rows={mode === "home" ? 2 : 3} value={workspace.input} />
+        <textarea aria-label={labels.placeholder} data-preacherman-control="task.create" disabled={workspace.busy} onChange={(event) => workspace.setInput(event.target.value)} placeholder={labels.placeholder} rows={mode === "home" ? 2 : 3} value={workspace.input} />
         <div className="ab-task-console__actions">
           <button className="ab-task-console__button ab-task-console__button--quiet" disabled={workspace.busy || hasActiveTask} onClick={() => void workspace.sendText(labels.demoPrompt)} type="button">{labels.tryDemo}</button>
           <button className="ab-task-console__button ab-task-console__button--primary" disabled={!workspace.input.trim() || workspace.busy} type="submit">{labels.send}</button>
@@ -361,22 +361,22 @@ export function ABTaskConsole({ locale, mode = "work" }: { readonly locale: Loca
       </div> : null}
 
       {mode === "work" ? <>
-        {workspace.proposal ? <section className="ab-task-console__approval" data-airi-control="task.proposal">
+        {workspace.proposal ? <section className="ab-task-console__approval" data-preacherman-control="task.proposal">
           <span>{workspace.proposal.executor}</span>
           <textarea aria-label={locale === "zh-CN" ? "任务目标" : "Task objective"} onChange={(event) => workspace.setProposal({ ...workspace.proposal!, objective: event.target.value })} value={workspace.proposal.objective} />
           <p>{workspace.proposal.inputs.join(" · ")} → {workspace.proposal.outputs.join(" · ")}</p>
-          <button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.confirm" disabled={workspace.busy || !workspace.proposal.objective.trim()} onClick={() => void workspace.confirm()} type="button">{labels.confirm}</button>
+          <button className="ab-task-console__button ab-task-console__button--primary" data-preacherman-control="task.confirm" disabled={workspace.busy || !workspace.proposal.objective.trim()} onClick={() => void workspace.confirm()} type="button">{labels.confirm}</button>
         </section> : null}
         {workspace.run ? <section className="ab-task-console__activity">
           <div className="ab-task-console__summary-line"><StatusBadge locale={locale} status={workspace.run.status} /><strong>{workspace.run.objective}</strong></div>
-          <dl className="ab-task-console__attempts"><div><dt>{locale === "zh-CN" ? "执行方式" : "Executor"}</dt><dd>{workspace.run.execution?.kind === "homerail-dag" ? "HomeRail DAG" : "Preacherman local"}</dd></div><div><dt>{locale === "zh-CN" ? "尝试" : "Attempt"}</dt><dd>{workspace.run.attempts?.at(-1)?.attempt ?? 0}</dd></div></dl>
-          {workspace.run.pendingApproval ? <div className="ab-task-console__decision" data-airi-control="task.approval"><strong>{workspace.run.pendingApproval.title}</strong><p>{workspace.run.pendingApproval.description}</p><div><button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.approve" disabled={workspace.busy} onClick={() => void workspace.command("approve")} type="button">{locale === "zh-CN" ? "批准" : "Approve"}</button><button className="ab-task-console__button ab-task-console__button--quiet" data-airi-control="task.reject" disabled={workspace.busy} onClick={() => void workspace.command("reject")} type="button">{locale === "zh-CN" ? "拒绝" : "Reject"}</button></div></div> : null}
-          {["running", "waiting_for_input"].includes(workspace.run.status) ? <div className="ab-task-console__steer"><label htmlFor="task-instruction">{workspace.run.status === "waiting_for_input" ? (locale === "zh-CN" ? "补充所需信息" : "Provide requested input") : (locale === "zh-CN" ? "追加执行指令" : "Steer this task")}</label><textarea id="task-instruction" onChange={(event) => setInstruction(event.target.value)} rows={2} value={instruction} /><button className="ab-task-console__button ab-task-console__button--quiet" data-airi-control={workspace.run.status === "waiting_for_input" ? "task.resume" : "task.steer"} disabled={workspace.busy || !instruction.trim()} onClick={() => sendCommand(workspace.run!.status === "waiting_for_input" ? "resume" : "steer")} type="button">{workspace.run.status === "waiting_for_input" ? (locale === "zh-CN" ? "提交并继续" : "Submit and resume") : (locale === "zh-CN" ? "发送指令" : "Send direction")}</button></div> : null}
+          <dl className="ab-task-console__attempts"><div><dt>{locale === "zh-CN" ? "执行方式" : "Executor"}</dt><dd>{workspace.run.execution?.kind === "preacherman-execution-dag" ? "Preacherman Execution DAG" : "Preacherman local"}</dd></div><div><dt>{locale === "zh-CN" ? "尝试" : "Attempt"}</dt><dd>{workspace.run.attempts?.at(-1)?.attempt ?? 0}</dd></div></dl>
+          {workspace.run.pendingApproval ? <div className="ab-task-console__decision" data-preacherman-control="task.approval"><strong>{workspace.run.pendingApproval.title}</strong><p>{workspace.run.pendingApproval.description}</p><div><button className="ab-task-console__button ab-task-console__button--primary" data-preacherman-control="task.approve" disabled={workspace.busy} onClick={() => void workspace.command("approve")} type="button">{locale === "zh-CN" ? "批准" : "Approve"}</button><button className="ab-task-console__button ab-task-console__button--quiet" data-preacherman-control="task.reject" disabled={workspace.busy} onClick={() => void workspace.command("reject")} type="button">{locale === "zh-CN" ? "拒绝" : "Reject"}</button></div></div> : null}
+          {["running", "waiting_for_input"].includes(workspace.run.status) ? <div className="ab-task-console__steer"><label htmlFor="task-instruction">{workspace.run.status === "waiting_for_input" ? (locale === "zh-CN" ? "补充所需信息" : "Provide requested input") : (locale === "zh-CN" ? "追加执行指令" : "Steer this task")}</label><textarea id="task-instruction" onChange={(event) => setInstruction(event.target.value)} rows={2} value={instruction} /><button className="ab-task-console__button ab-task-console__button--quiet" data-preacherman-control={workspace.run.status === "waiting_for_input" ? "task.resume" : "task.steer"} disabled={workspace.busy || !instruction.trim()} onClick={() => sendCommand(workspace.run!.status === "waiting_for_input" ? "resume" : "steer")} type="button">{workspace.run.status === "waiting_for_input" ? (locale === "zh-CN" ? "提交并继续" : "Submit and resume") : (locale === "zh-CN" ? "发送指令" : "Send direction")}</button></div> : null}
           <ol className="ab-task-console__timeline">{workspace.run.events.slice(-6).map((event, index) => <li key={`${event.stage}-${index}`}><span>{event.stage}</span><p>{event.message}</p></li>)}</ol>
           {errorText(workspace.run.error) ? <p data-error="true">{errorText(workspace.run.error)}</p> : null}
           <div className="ab-task-console__actions">
-            {["queued", "running", "waiting_for_input", "waiting_for_approval"].includes(workspace.run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" data-airi-control="task.cancel" disabled={workspace.busy} onClick={() => void workspace.command("cancel")} type="button">{labels.stopTask}</button> : null}
-            {["failed", "cancelled"].includes(workspace.run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" data-airi-control="task.retry" disabled={workspace.busy} onClick={() => void workspace.command("retry")} type="button">{labels.retry}</button> : null}
+            {["queued", "running", "waiting_for_input", "waiting_for_approval"].includes(workspace.run.status) ? <button className="ab-task-console__button ab-task-console__button--quiet" data-preacherman-control="task.cancel" disabled={workspace.busy} onClick={() => void workspace.command("cancel")} type="button">{labels.stopTask}</button> : null}
+            {["failed", "cancelled"].includes(workspace.run.status) ? <button className="ab-task-console__button ab-task-console__button--primary" data-preacherman-control="task.retry" disabled={workspace.busy} onClick={() => void workspace.command("retry")} type="button">{labels.retry}</button> : null}
             {workspace.run.artifacts?.length || workspace.run.artifact ? <button className="ab-task-console__button ab-task-console__button--quiet" onClick={openLedger} type="button">{labels.viewLedger}</button> : null}
           </div>
         </section> : !workspace.proposal ? <p className="ab-task-console__empty">{labels.noTask}</p> : null}

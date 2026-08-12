@@ -38,4 +38,4 @@ Each `enqueue` starts synthesis immediately. Results may arrive in any order, bu
 - Keep TaskRun cancellation outside this package. `taskId` is metadata for correlation only.
 - Call `dispose()` when the owning coordinator is released.
 
-See [PROVENANCE.md](./PROVENANCE.md) for the AIRI behavioral reference used to shape this package.
+See [PROVENANCE.md](./PROVENANCE.md) for the Preacherman behavioral reference used to shape this package.

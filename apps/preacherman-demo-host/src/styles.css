@@ -149,7 +149,7 @@ html[data-appearance="dark"] #root {
 }
 
 .demo-surface-module,
-.demo-airi-test-runtime {
+.demo-preacherman-test-runtime {
   position: absolute;
   top: 158px;
   right: 132px;
@@ -162,13 +162,13 @@ html[data-appearance="dark"] #root {
   scrollbar-width: thin;
 }
 
-.demo-surface-module > .demo-airi-widget-gallery {
+.demo-surface-module > .demo-preacherman-widget-gallery {
   box-sizing: border-box;
   margin-top: 0;
 }
 
-.demo-surface-module > .demo-airi-gamelet,
-.demo-airi-test-runtime > * {
+.demo-surface-module > .demo-preacherman-gamelet,
+.demo-preacherman-test-runtime > * {
   box-sizing: border-box;
   width: min(1100px, 100%);
   margin: 0 auto;
@@ -432,8 +432,8 @@ html[data-appearance="dark"] #root {
   min-width: 0;
 }
 
-.demo-settings__panel > .demo-airi-widget-gallery,
-.demo-ledger > .demo-airi-widget-gallery {
+.demo-settings__panel > .demo-preacherman-widget-gallery,
+.demo-ledger > .demo-preacherman-widget-gallery {
   box-sizing: border-box;
   width: 100%;
   max-width: 1080px;
@@ -477,7 +477,7 @@ html[data-appearance="dark"] #root {
   gap: 10px;
 }
 
-.demo-airi-work-runtime {
+.demo-preacherman-work-runtime {
   position: absolute;
   top: 158px;
   right: 132px;
@@ -491,10 +491,10 @@ html[data-appearance="dark"] #root {
   scrollbar-width: thin;
 }
 
-.demo-airi-work-runtime > div,
-.demo-airi-work-runtime > div > .demo-airi-widget-gallery,
-.demo-airi-work-runtime > div > .demo-airi-gamelet,
-.demo-airi-work-runtime > div > .demo-airi-computer-vision {
+.demo-preacherman-work-runtime > div,
+.demo-preacherman-work-runtime > div > .demo-preacherman-widget-gallery,
+.demo-preacherman-work-runtime > div > .demo-preacherman-gamelet,
+.demo-preacherman-work-runtime > div > .demo-preacherman-computer-vision {
   box-sizing: border-box;
   width: min(1100px, 100%);
   margin: 0 auto;
@@ -880,7 +880,7 @@ html[data-appearance="dark"] #root {
   backdrop-filter: blur(24px) saturate(145%);
 }
 
-.demo-ledger > .demo-airi-memory {
+.demo-ledger > .demo-preacherman-memory {
   box-sizing: border-box;
   width: 100%;
   max-width: 1080px;

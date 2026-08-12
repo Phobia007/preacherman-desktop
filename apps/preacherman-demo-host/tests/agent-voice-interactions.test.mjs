@@ -52,7 +52,7 @@ test("the companion sends conversation history and exposes its reply source", as
   assert.match(source, /diagnostics\.source/);
 });
 
-test("the demo exposes one guided AIRI path from proposal to Ledger artifact", async () => {
+test("the demo exposes one guided PREACHERMAN path from proposal to Ledger artifact", async () => {
   const [consoleSource, ledger, ledgerBoundary, app] = await Promise.all([
     readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "conversation", "ConversationLedgerScreen.tsx"), "utf8"),
@@ -65,7 +65,7 @@ test("the demo exposes one guided AIRI path from proposal to Ledger artifact", a
   assert.match(consoleSource, /openLocalSurface\("ledger"\)/);
   assert.match(ledgerBoundary, /\/api\/tasks\?limit=10/);
   assert.match(ledger, /task\.artifact\?\.path/);
-  assert.match(app, /findAiriFeature\(featureId\)\?\.target/);
+  assert.match(app, /findPreachermanFeature\(featureId\)\?\.target/);
   assert.match(app, /openLocalSurface\(target\.surface\)/);
 });
 
@@ -140,7 +140,7 @@ test("stopping presentation never cancels a TaskRun", async (t) => {
   assert.match(calls[0][1].audioStreamId, /^audio_/);
 });
 
-test("the coordinator routes speech through the AIRI-derived Presentation Runtime", async () => {
+test("the coordinator routes speech through the PREACHERMAN-derived Presentation Runtime", async () => {
   const source = await readFile(join(packageRoot, "src", "live", "LiveCoordinator.ts"), "utf8");
   const consoleSource = await readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8");
   assert.match(source, /createPresentationRuntime/);

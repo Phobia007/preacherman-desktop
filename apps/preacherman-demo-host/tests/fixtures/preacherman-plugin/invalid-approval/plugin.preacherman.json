@@ -1,0 +1,15 @@
+{
+  "apiVersion": "v1",
+  "kind": "manifest.plugin.preacherman.local",
+  "name": "invalid-approval-plugin",
+  "permissions": [],
+  "tools": [
+    {
+      "name": "echo",
+      "requiresApproval": "yes"
+    }
+  ],
+  "entrypoints": {
+    "node": "index.mjs"
+  }
+}

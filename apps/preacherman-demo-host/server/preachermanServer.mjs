@@ -16,32 +16,33 @@ import {
 } from "./agentRuntime.mjs";
 import { appendTaskEvent, createTaskStore } from "./taskStore.mjs";
 import { createTaskService } from "./taskService.mjs";
-import { createAiriCapabilityRuntime } from "./airiCapabilityRuntime.mjs";
-import { createAiriMcpRuntime } from "./airiMcpRuntime.mjs";
-import { createAiriKitsRuntime } from "./airiKitsRuntime.mjs";
-import { createAiriPluginRuntime } from "./airiPluginRuntime.mjs";
-import { createAiriPluginTaskBinding } from "./airiPluginTaskBinding.mjs";
-import { createAiriWidgetRuntime, AIRI_WIDGET_KIND } from "./airiWidgetRuntime.mjs";
-import { createAiriGameletRuntime } from "./airiGameletRuntime.mjs";
-import { createAiriProviderRuntime, createDashScopeStreamingAdapter } from "./airiProviderRuntime.mjs";
-import { createAiriMemoryPersonaRuntime, MEMORY_PLUGIN_SCOPES } from "./airiMemoryPersonaRuntime.mjs";
-import { createAiriObservabilityRuntime } from "./airiObservabilityRuntime.mjs";
-import { createAiriConnectionRuntime } from "./airiConnectionRuntime.mjs";
-import { createAiriComputerVisionRuntime } from "./airiComputerVisionRuntime.mjs";
-import { createAiriDomObservationRuntime } from "./airiDomObservationRuntime.mjs";
-import { createAiriEcosystemBindingFacade } from "./airiEcosystemBindingFacade.mjs";
+import { createPreachermanCapabilityRuntime } from "./preachermanCapabilityRuntime.mjs";
+import { createPreachermanMcpRuntime } from "./preachermanMcpRuntime.mjs";
+import { createPreachermanKitsRuntime } from "./preachermanKitsRuntime.mjs";
+import { createPreachermanPluginRuntime } from "./preachermanPluginRuntime.mjs";
+import { createPreachermanPluginTaskBinding } from "./preachermanPluginTaskBinding.mjs";
+import { createPreachermanWidgetRuntime, PREACHERMAN_WIDGET_KIND } from "./preachermanWidgetRuntime.mjs";
+import { createPreachermanGameletRuntime } from "./preachermanGameletRuntime.mjs";
+import { createPreachermanProviderRuntime, createDashScopeStreamingAdapter } from "./preachermanProviderRuntime.mjs";
+import { createPreachermanMemoryPersonaRuntime, MEMORY_PLUGIN_SCOPES } from "./preachermanMemoryPersonaRuntime.mjs";
+import { createPreachermanObservabilityRuntime } from "./preachermanObservabilityRuntime.mjs";
+import { createPreachermanConnectionRuntime } from "./preachermanConnectionRuntime.mjs";
+import { createPreachermanComputerVisionRuntime } from "./preachermanComputerVisionRuntime.mjs";
+import { createPreachermanDomObservationRuntime } from "./preachermanDomObservationRuntime.mjs";
+import { createPreachermanEcosystemBindingFacade } from "./preachermanEcosystemBindingFacade.mjs";
 import { createExecutionRouter } from "./execution/executionRouter.mjs";
-import { createHomeRailClient } from "./homerail/homeRailClient.mjs";
-import { createHomeRailExecutionAdapter, PREACHERMAN_HOMERAIL_CANONICAL_HASH, PREACHERMAN_HOMERAIL_WORKFLOW_REVISION } from "./homerail/homeRailExecutionAdapter.mjs";
-import { createHomeRailLinkStore } from "./homerail/homeRailLinkStore.mjs";
-import { createHomeRailEventProjector } from "./homerail/homeRailEventProjector.mjs";
-import { createHomeRailCommandAdapter } from "./homerail/homeRailCommandAdapter.mjs";
-import { createHomeRailApprovalAdapter } from "./homerail/homeRailApprovalAdapter.mjs";
-import { createHomeRailReconciler } from "./homerail/homeRailReconciler.mjs";
-import { createHomeRailArtifactAdapter } from "./homerail/homeRailArtifactAdapter.mjs";
-import { createHomeRailCapabilityCatalogAdapter } from "./homerail/homeRailCapabilityCatalogAdapter.mjs";
-import { createHomeRailDiagnosticsAdapter } from "./homerail/homeRailDiagnosticsAdapter.mjs";
-import { createHomeRailLedgerProjector } from "./homerail/homeRailLedgerProjector.mjs";
+import { createPreachermanExecutionClient } from "./preacherman-execution/preachermanExecutionClient.mjs";
+import { createPreachermanExecutionAdapter, PREACHERMAN_EXECUTION_CANONICAL_HASH, PREACHERMAN_EXECUTION_WORKFLOW_REVISION } from "./preacherman-execution/preachermanExecutionAdapter.mjs";
+import { createPreachermanExecutionLinkStore } from "./preacherman-execution/preachermanExecutionLinkStore.mjs";
+import { createPreachermanExecutionEventProjector } from "./preacherman-execution/preachermanExecutionEventProjector.mjs";
+import { createPreachermanExecutionCommandAdapter } from "./preacherman-execution/preachermanExecutionCommandAdapter.mjs";
+import { createPreachermanExecutionApprovalAdapter } from "./preacherman-execution/preachermanExecutionApprovalAdapter.mjs";
+import { createPreachermanExecutionReconciler } from "./preacherman-execution/preachermanExecutionReconciler.mjs";
+import { createPreachermanExecutionArtifactAdapter } from "./preacherman-execution/preachermanExecutionArtifactAdapter.mjs";
+import { createPreachermanExecutionCapabilityCatalogAdapter } from "./preacherman-execution/preachermanExecutionCapabilityCatalogAdapter.mjs";
+import { createPreachermanExecutionDiagnosticsAdapter } from "./preacherman-execution/preachermanExecutionDiagnosticsAdapter.mjs";
+import { createPreachermanExecutionLedgerProjector } from "./preacherman-execution/preachermanExecutionLedgerProjector.mjs";
+import { migratePreachermanBrandData } from "./preachermanBrandMigration.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -83,7 +84,7 @@ export function createPreachermanServer(options = {}) {
   const fetchImpl = options.fetchImpl ?? fetch;
   const dataDirectory = env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo");
   const pluginDirectory = join(dataDirectory, "plugins");
-  const developmentPluginFixtures = join(process.cwd(), "tests", "fixtures", "airi-plugin");
+  const developmentPluginFixtures = join(process.cwd(), "tests", "fixtures", "preacherman-plugin");
   const trustedPluginRoots = [
     pluginDirectory,
     ...(typeof env.PREACHERMAN_PLUGIN_ROOTS === "string"
@@ -125,47 +126,47 @@ export function createPreachermanServer(options = {}) {
 
   const taskStore = createTaskStore({ file: taskStoreFile() });
   const taskService = createTaskService({ taskStore });
-  const homeRailBaseUrl = env.PREACHERMAN_HOMERAIL_BASE_URL || env.HOMERAIL_MANAGER_URL || "http://127.0.0.1:19191";
-  const homeRailClient = options.homeRailClient ?? createHomeRailClient({
-    baseUrl: homeRailBaseUrl,
-    token: env.PREACHERMAN_HOMERAIL_DAG_TOKEN || env.HOMERAIL_DAG_MUTATION_TOKEN,
-    approvalToken: env.PREACHERMAN_HOMERAIL_APPROVAL_TOKEN || env.HOMERAIL_DAG_APPROVAL_TOKEN,
+  const preachermanExecutionBaseUrl = env.PREACHERMAN_EXECUTION_BASE_URL || env.PREACHERMAN_EXECUTION_MANAGER_URL || "http://127.0.0.1:19191";
+  const preachermanExecutionClient = options.preachermanExecutionClient ?? createPreachermanExecutionClient({
+    baseUrl: preachermanExecutionBaseUrl,
+    token: env.PREACHERMAN_EXECUTION_DAG_TOKEN || env.PREACHERMAN_EXECUTION_DAG_MUTATION_TOKEN,
+    approvalToken: env.PREACHERMAN_EXECUTION_APPROVAL_TOKEN || env.PREACHERMAN_EXECUTION_DAG_APPROVAL_TOKEN,
     fetchImpl,
   });
-  const homeRailConsoleUrl = env.PREACHERMAN_HOMERAIL_CONSOLE_URL || "http://127.0.0.1:19193";
-  const homeRailLinkStore = createHomeRailLinkStore({ file: join(dataDirectory, "homerail-links.v1.json") });
-  const homeRailCapabilityCatalog = createHomeRailCapabilityCatalogAdapter({
-    client: homeRailClient,
-    workflowId: env.PREACHERMAN_HOMERAIL_DEFAULT_WORKFLOW_ID || env.PREACHERMAN_HOMERAIL_WORKFLOW_ID || "preacherman-complex-task-v1",
-    expectedWorkflowRevision: Number.parseInt(env.PREACHERMAN_HOMERAIL_WORKFLOW_REVISION || String(PREACHERMAN_HOMERAIL_WORKFLOW_REVISION), 10),
-    expectedCanonicalHash: env.PREACHERMAN_HOMERAIL_CANONICAL_HASH || PREACHERMAN_HOMERAIL_CANONICAL_HASH,
-    profile: env.PREACHERMAN_HOMERAIL_PROFILE,
-    managerUrl: homeRailBaseUrl,
-    enabled: env.PREACHERMAN_HOMERAIL_ENABLED !== "false",
+  const preachermanExecutionConsoleUrl = env.PREACHERMAN_EXECUTION_CONSOLE_URL || "http://127.0.0.1:19193";
+  const preachermanExecutionLinkStore = createPreachermanExecutionLinkStore({ file: join(dataDirectory, "preacherman-execution-links.v1.json") });
+  const preachermanExecutionCapabilityCatalog = createPreachermanExecutionCapabilityCatalogAdapter({
+    client: preachermanExecutionClient,
+    workflowId: env.PREACHERMAN_EXECUTION_DEFAULT_WORKFLOW_ID || env.PREACHERMAN_EXECUTION_WORKFLOW_ID || "preacherman-complex-task-v1",
+    expectedWorkflowRevision: Number.parseInt(env.PREACHERMAN_EXECUTION_WORKFLOW_REVISION || String(PREACHERMAN_EXECUTION_WORKFLOW_REVISION), 10),
+    expectedCanonicalHash: env.PREACHERMAN_EXECUTION_CANONICAL_HASH || PREACHERMAN_EXECUTION_CANONICAL_HASH,
+    profile: env.PREACHERMAN_EXECUTION_PROFILE,
+    managerUrl: preachermanExecutionBaseUrl,
+    enabled: env.PREACHERMAN_EXECUTION_ENABLED !== "false",
   });
-  const homeRailDiagnostics = createHomeRailDiagnosticsAdapter({ capabilityCatalog: homeRailCapabilityCatalog });
-  const homeRailExecutionAdapter = createHomeRailExecutionAdapter({
-    client: homeRailClient,
+  const preachermanExecutionDiagnostics = createPreachermanExecutionDiagnosticsAdapter({ capabilityCatalog: preachermanExecutionCapabilityCatalog });
+  const preachermanExecutionAdapter = createPreachermanExecutionAdapter({
+    client: preachermanExecutionClient,
     taskService,
-    linkStore: homeRailLinkStore,
-    capabilityCatalog: homeRailCapabilityCatalog,
+    linkStore: preachermanExecutionLinkStore,
+    capabilityCatalog: preachermanExecutionCapabilityCatalog,
   });
-  const homeRailEventProjector = createHomeRailEventProjector({ taskService });
-  const homeRailCommandAdapter = createHomeRailCommandAdapter({ client: homeRailClient, taskService });
-  const homeRailApprovalAdapter = createHomeRailApprovalAdapter({ client: homeRailClient, taskService });
-  const homeRailArtifactAdapter = createHomeRailArtifactAdapter({
-    client: homeRailClient,
+  const preachermanExecutionEventProjector = createPreachermanExecutionEventProjector({ taskService });
+  const preachermanExecutionCommandAdapter = createPreachermanExecutionCommandAdapter({ client: preachermanExecutionClient, taskService });
+  const preachermanExecutionApprovalAdapter = createPreachermanExecutionApprovalAdapter({ client: preachermanExecutionClient, taskService });
+  const preachermanExecutionArtifactAdapter = createPreachermanExecutionArtifactAdapter({
+    client: preachermanExecutionClient,
     taskService,
-    cacheDirectory: join(dataDirectory, "homerail-artifacts"),
+    cacheDirectory: join(dataDirectory, "preacherman-execution-artifacts"),
   });
-  const homeRailLedgerProjector = createHomeRailLedgerProjector({ taskService, eventProjector: homeRailEventProjector, artifactAdapter: homeRailArtifactAdapter });
-  const homeRailReconciler = createHomeRailReconciler({ client: homeRailClient, taskService, eventProjector: homeRailEventProjector, artifactAdapter: homeRailArtifactAdapter, ledgerProjector: homeRailLedgerProjector });
-  const executionRouter = createExecutionRouter({ homeRailStatus: () => homeRailExecutionAdapter.status() });
-  const airiKitsRuntime = createAiriKitsRuntime();
-  const airiPluginTaskBinding = createAiriPluginTaskBinding({ taskService });
+  const preachermanExecutionLedgerProjector = createPreachermanExecutionLedgerProjector({ taskService, eventProjector: preachermanExecutionEventProjector, artifactAdapter: preachermanExecutionArtifactAdapter });
+  const preachermanExecutionReconciler = createPreachermanExecutionReconciler({ client: preachermanExecutionClient, taskService, eventProjector: preachermanExecutionEventProjector, artifactAdapter: preachermanExecutionArtifactAdapter, ledgerProjector: preachermanExecutionLedgerProjector });
+  const executionRouter = createExecutionRouter({ preachermanExecutionStatus: () => preachermanExecutionAdapter.status() });
+  const preachermanKitsRuntime = createPreachermanKitsRuntime();
+  const preachermanPluginTaskBinding = createPreachermanPluginTaskBinding({ taskService });
 
-  for (const kit of airiKitsRuntime.kits.discover()) {
-    airiKitsRuntime.kits.attachConsumer("preacherman-runtime", kit.name, "^1.0.0");
+  for (const kit of preachermanKitsRuntime.kits.discover()) {
+    preachermanKitsRuntime.kits.attachConsumer("preacherman-runtime", kit.name, "^1.0.0");
   }
 
   function callerPluginId(context) {
@@ -173,13 +174,13 @@ export function createPreachermanServer(options = {}) {
   }
 
   function bindTaskOperation(kit, operation, bindingOperation = operation) {
-    airiKitsRuntime.bindings.bind({
+    preachermanKitsRuntime.bindings.bind({
       pluginId: "preacherman-host",
       kit,
       operation,
       versionRange: "^1.0.0",
       handler(input, context) {
-        return airiPluginTaskBinding.execute(bindingOperation, input, {
+        return preachermanPluginTaskBinding.execute(bindingOperation, input, {
           pluginId: callerPluginId(context),
           toolName: input?.toolName,
         });
@@ -193,7 +194,7 @@ export function createPreachermanServer(options = {}) {
   bindTaskOperation("task", "retry");
   bindTaskOperation("ledger", "get", "status");
   bindTaskOperation("ledger", "write-artifact", "complete-with-artifact");
-  airiKitsRuntime.bindings.bind({
+  preachermanKitsRuntime.bindings.bind({
     pluginId: "preacherman-host",
     kit: "task",
     operation: "list",
@@ -203,7 +204,7 @@ export function createPreachermanServer(options = {}) {
       return { tasks: (await taskService.list(50)).filter((task) => task.pluginId === pluginId) };
     },
   });
-  airiKitsRuntime.bindings.bind({
+  preachermanKitsRuntime.bindings.bind({
     pluginId: "preacherman-host",
     kit: "ledger",
     operation: "list",
@@ -213,14 +214,14 @@ export function createPreachermanServer(options = {}) {
       return { entries: (await taskService.list(50)).filter((task) => task.pluginId === pluginId) };
     },
   });
-  airiKitsRuntime.bindings.bind({
+  preachermanKitsRuntime.bindings.bind({
     pluginId: "preacherman-host",
     kit: "ledger",
     operation: "append",
     versionRange: "^1.0.0",
     handler(input, context) {
       const operation = input?.type === "failure" ? "fail" : "progress";
-      return airiPluginTaskBinding.execute(operation, input, { pluginId: callerPluginId(context) });
+      return preachermanPluginTaskBinding.execute(operation, input, { pluginId: callerPluginId(context) });
     },
   });
 
@@ -228,38 +229,38 @@ export function createPreachermanServer(options = {}) {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "mcp.json");
   }
 
-  const airiMcpRuntime = createAiriMcpRuntime({ configFile: mcpConfigFile(), taskStore });
+  const preachermanMcpRuntime = createPreachermanMcpRuntime({ configFile: mcpConfigFile(), taskStore });
 
   function pluginStateFile() {
-    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-plugins.v1.json");
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "preacherman-plugins.v1.json");
   }
 
   function widgetStateFile() {
-    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-widgets.v1.json");
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "preacherman-widgets.v1.json");
   }
 
   function memoryPersonaFile() {
-    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-memory-persona.v1.json");
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "preacherman-memory-persona.v1.json");
   }
 
   function observabilityFile() {
-    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-observability.v1.json");
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "preacherman-observability.v1.json");
   }
 
-  let airiWidgetRuntime;
+  let preachermanWidgetRuntime;
   const pluginMemoryRuntimes = new Map();
 
   function memoryRuntimeForPlugin(pluginId, permissions) {
     let runtime = pluginMemoryRuntimes.get(pluginId);
     if (runtime) return runtime;
     const scopes = permissions.filter((permission) => MEMORY_PLUGIN_SCOPES.includes(permission));
-    runtime = createAiriMemoryPersonaRuntime({
-      file: join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-plugin-memory", `${pluginId}.v1.json`),
+    runtime = createPreachermanMemoryPersonaRuntime({
+      file: join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "preacherman-plugin-memory", `${pluginId}.v1.json`),
       principal: pluginId,
       scopes,
       recentConversationReader: async ({ limit }) => (await readConversationLedger()).slice(0, limit),
       onAuditEvent(event) {
-        void airiObservabilityRuntime.recordTrace({
+        void preachermanObservabilityRuntime.recordTrace({
           caller: pluginId,
           target: event.operation,
           durationMs: 0,
@@ -274,14 +275,14 @@ export function createPreachermanServer(options = {}) {
     return runtime;
   }
 
-  let airiPluginRuntime;
+  let preachermanPluginRuntime;
   let ecosystemFacade;
-  airiPluginRuntime = createAiriPluginRuntime({
+  preachermanPluginRuntime = createPreachermanPluginRuntime({
     file: pluginStateFile(),
     taskStore,
     hostBridge: Object.freeze({ abi: "preacherman.host.v1", service: "preacherman-demo-host" }),
-    kits: airiKitsRuntime.kits,
-    bindings: airiKitsRuntime.bindings,
+    kits: preachermanKitsRuntime.kits,
+    bindings: preachermanKitsRuntime.bindings,
     trustedRoots: trustedPluginRoots,
     releasePluginResources: (pluginId) => ecosystemFacade?.removePlugin(pluginId),
     createPluginBridge({ pluginId, permissions, hostBridge }) {
@@ -289,34 +290,34 @@ export function createPreachermanServer(options = {}) {
       return hostBridge;
     },
   });
-  airiKitsRuntime.bindings.bind({
+  preachermanKitsRuntime.bindings.bind({
     pluginId: "preacherman-host",
     kit: "tools",
     operation: "list",
     versionRange: "^1.0.0",
     async handler() {
-      return { tools: await airiPluginRuntime.listTools() };
+      return { tools: await preachermanPluginRuntime.listTools() };
     },
   });
-  airiKitsRuntime.bindings.bind({
+  preachermanKitsRuntime.bindings.bind({
     pluginId: "preacherman-host",
     kit: "tools",
     operation: "register",
     versionRange: "^1.0.0",
     async handler(input, bindingContext) {
-      return airiPluginRuntime.registerTool(bindingContext.callerPluginId, input?.tool);
+      return preachermanPluginRuntime.registerTool(bindingContext.callerPluginId, input?.tool);
     },
   });
-  airiKitsRuntime.bindings.bind({
+  preachermanKitsRuntime.bindings.bind({
     pluginId: "preacherman-host",
     kit: "tools",
     operation: "unregister",
     versionRange: "^1.0.0",
     async handler(input, bindingContext) {
-      return airiPluginRuntime.unregisterTool(bindingContext.callerPluginId, input?.name);
+      return preachermanPluginRuntime.unregisterTool(bindingContext.callerPluginId, input?.name);
     },
   });
-  airiKitsRuntime.bindings.bind({
+  preachermanKitsRuntime.bindings.bind({
     pluginId: "preacherman-host",
     kit: "tools",
     operation: "call",
@@ -341,11 +342,11 @@ export function createPreachermanServer(options = {}) {
     }
     const providerPluginId = name.slice(0, separator);
     const toolName = name.slice(separator + 2);
-    const invokeBinding = (kit, operation, input) => airiKitsRuntime.bindings.invokeAs(
+    const invokeBinding = (kit, operation, input) => preachermanKitsRuntime.bindings.invokeAs(
       callerId, kit, operation, input, { versionRange: "^1.0.0", providerPluginId },
     );
     const created = await invokeBinding("task", "create", {
-      objective: `Execute AIRI plugin tool ${name}`,
+      objective: `Execute PREACHERMAN plugin tool ${name}`,
       parameters: args,
       toolName,
     });
@@ -357,13 +358,13 @@ export function createPreachermanServer(options = {}) {
     let terminal = false;
     try {
       await invokeBinding("ledger", "append", { taskId, value: 0.35, stage: "tool-call", message: `Calling ${name}.` });
-      const result = await airiObservabilityRuntime.trace({
+      const result = await preachermanObservabilityRuntime.trace({
         caller: callerId,
         target: name,
         input: { argumentKeys: Object.keys(args).sort(), approved },
-      }, () => airiPluginRuntime.callTool(name, args, { approved, callerPluginId: callerId }));
+      }, () => preachermanPluginRuntime.callTool(name, args, { approved, callerPluginId: callerId }));
       if (result.isError) {
-        await airiPluginTaskBinding.execute("fail", {
+        await preachermanPluginTaskBinding.execute("fail", {
           taskId,
           error: `Plugin tool ${name} returned an error result.`,
           result: result.structuredContent,
@@ -383,7 +384,7 @@ export function createPreachermanServer(options = {}) {
         },
       });
       terminal = true;
-      await airiCapabilityRuntime.record("agent.plugin-tools", {
+      await preachermanCapabilityRuntime.record("agent.plugin-tools", {
         surface: "work",
         execution: {
           status: "succeeded",
@@ -396,12 +397,12 @@ export function createPreachermanServer(options = {}) {
       return { ...result, task: completed.task, ledger: completed.ledger };
     } catch (error) {
       if (!terminal) {
-        await airiPluginTaskBinding.execute("fail", {
+        await preachermanPluginTaskBinding.execute("fail", {
           taskId,
           error: error instanceof Error ? error.message : String(error),
         }, { pluginId: callerId }).catch(() => undefined);
       }
-      await airiCapabilityRuntime.record("agent.plugin-tools", {
+      await preachermanCapabilityRuntime.record("agent.plugin-tools", {
         surface: "work",
         execution: {
           status: "failed",
@@ -423,8 +424,8 @@ export function createPreachermanServer(options = {}) {
     return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "conversation-ledger.json");
   }
 
-  function airiCapabilityEventsFile() {
-    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "airi-capability-events.v1.json");
+  function preachermanCapabilityEventsFile() {
+    return join(env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo"), "preacherman-capability-events.v1.json");
   }
 
   async function readConversationLedger() {
@@ -478,11 +479,11 @@ export function createPreachermanServer(options = {}) {
     };
   }
 
-  airiWidgetRuntime = createAiriWidgetRuntime({ file: widgetStateFile() });
-  const airiObservabilityRuntime = createAiriObservabilityRuntime({ file: observabilityFile() });
-  const airiGameletRuntime = createAiriGameletRuntime();
-  const airiProviderRuntime = createAiriProviderRuntime({ getConfig: runtimeEnv, fetchImpl });
-  airiProviderRuntime.registerAdapter({
+  preachermanWidgetRuntime = createPreachermanWidgetRuntime({ file: widgetStateFile() });
+  const preachermanObservabilityRuntime = createPreachermanObservabilityRuntime({ file: observabilityFile() });
+  const preachermanGameletRuntime = createPreachermanGameletRuntime();
+  const preachermanProviderRuntime = createPreachermanProviderRuntime({ getConfig: runtimeEnv, fetchImpl });
+  preachermanProviderRuntime.registerAdapter({
     pluginId: "preacherman-dashscope-stream",
     providerId: "dashscope",
     ...createDashScopeStreamingAdapter({
@@ -490,11 +491,11 @@ export function createPreachermanServer(options = {}) {
       tts: createDashscopeVoiceProtocol("tts"),
     }),
   });
-  const airiMemoryPersonaRuntime = createAiriMemoryPersonaRuntime({
+  const preachermanMemoryPersonaRuntime = createPreachermanMemoryPersonaRuntime({
     file: memoryPersonaFile(),
     recentConversationReader: async ({ limit }) => (await readConversationLedger()).slice(0, limit),
   });
-  const airiConnectionRuntime = createAiriConnectionRuntime({ file: join(dataDirectory, "connection-settings.json") });
+  const preachermanConnectionRuntime = createPreachermanConnectionRuntime({ file: join(dataDirectory, "connection-settings.json") });
   const computerUseApprovalAuthority = Object.freeze({ authority: "preacherman-local-host" });
   const localImageRoots = [
     join(dataDirectory, "vision-inputs"),
@@ -502,19 +503,19 @@ export function createPreachermanServer(options = {}) {
       ? env.PREACHERMAN_VISION_IMAGE_ROOTS.split(delimiter).filter(Boolean)
       : []),
   ];
-  const airiComputerVisionRuntime = createAiriComputerVisionRuntime({
+  const preachermanComputerVisionRuntime = createPreachermanComputerVisionRuntime({
     localImageRoots,
     approvalVerifier: ({ evidence }) => evidence === computerUseApprovalAuthority,
   });
-  const airiDomObservationRuntime = createAiriDomObservationRuntime({ allowedOrigins: [...allowedOrigins] });
-  ecosystemFacade = createAiriEcosystemBindingFacade({
-    kits: airiKitsRuntime.kits,
-    bindings: airiKitsRuntime.bindings,
-    widgetRuntime: airiWidgetRuntime,
-    gameletRuntime: airiGameletRuntime,
-    providerRuntime: airiProviderRuntime,
-    connectionRuntime: airiConnectionRuntime,
-    computerVisionRuntime: airiComputerVisionRuntime,
+  const preachermanDomObservationRuntime = createPreachermanDomObservationRuntime({ allowedOrigins: [...allowedOrigins] });
+  ecosystemFacade = createPreachermanEcosystemBindingFacade({
+    kits: preachermanKitsRuntime.kits,
+    bindings: preachermanKitsRuntime.bindings,
+    widgetRuntime: preachermanWidgetRuntime,
+    gameletRuntime: preachermanGameletRuntime,
+    providerRuntime: preachermanProviderRuntime,
+    connectionRuntime: preachermanConnectionRuntime,
+    computerVisionRuntime: preachermanComputerVisionRuntime,
     getMemoryRuntime(pluginId) {
       const runtime = pluginMemoryRuntimes.get(pluginId);
       if (runtime) return runtime;
@@ -532,28 +533,28 @@ export function createPreachermanServer(options = {}) {
 
   async function initializeEcosystemRuntimes() {
     await Promise.all([
-      airiMemoryPersonaRuntime.initialize(),
-      airiObservabilityRuntime.initialize(),
-      airiConnectionRuntime.initialize(),
+      preachermanMemoryPersonaRuntime.initialize(),
+      preachermanObservabilityRuntime.initialize(),
+      preachermanConnectionRuntime.initialize(),
     ]);
     await mkdir(pluginDirectory, { recursive: true });
     await mkdir(localImageRoots[0], { recursive: true });
-    if ((await airiMemoryPersonaRuntime.listPersonas()).length === 0) {
-      await airiMemoryPersonaRuntime.createPersona({
+    if ((await preachermanMemoryPersonaRuntime.listPersonas()).length === 0) {
+      await preachermanMemoryPersonaRuntime.createPersona({
         name: "Preacherman",
         description: "Local demo companion persona",
         instructions: "Be concise, auditable, and explicit about unavailable capabilities.",
       });
     }
-    if (!(await airiWidgetRuntime.list()).some((widget) => widget.id === "ecosystem-status")) {
-      await airiWidgetRuntime.register({
+    if (!(await preachermanWidgetRuntime.list()).some((widget) => widget.id === "ecosystem-status")) {
+      await preachermanWidgetRuntime.register({
         pluginId: "preacherman-runtime",
         manifest: {
           apiVersion: "v1",
-          kind: AIRI_WIDGET_KIND,
+          kind: PREACHERMAN_WIDGET_KIND,
           id: "ecosystem-status",
           version: "1.0.0",
-          title: "AIRI ecosystem status",
+          title: "Preacherman ecosystem status",
           placement: "work",
         },
         schema: {
@@ -561,7 +562,7 @@ export function createPreachermanServer(options = {}) {
           orientation: "vertical",
           gap: 8,
           children: [
-            { type: "text", text: "AIRI runtimes are registered", variant: "heading", tone: "primary" },
+            { type: "text", text: "Preacherman runtimes are registered", variant: "heading", tone: "primary" },
             { type: "metric", label: "Registered Kits", value: 9, tone: "success" },
             { type: "button", label: "Open ledger", action: { type: "emit", event: "open-ledger" } },
           ],
@@ -572,41 +573,41 @@ export function createPreachermanServer(options = {}) {
 
   async function executeEcosystemCapability(capabilityId, context = {}) {
     if (capabilityId === "agent.kits-api") {
-      const kits = airiKitsRuntime.kits.discover();
-      return { status: "succeeded", protocol: "airi-kits", kits, summary: `Discovered ${kits.length} AIRI kits.` };
+      const kits = preachermanKitsRuntime.kits.discover();
+      return { status: "succeeded", protocol: "preacherman-kits", kits, summary: `Discovered ${kits.length} Preacherman kits.` };
     }
     if (capabilityId === "agent.bindings-api") {
-      const bindings = airiKitsRuntime.bindings.list();
-      return { status: "succeeded", protocol: "airi-bindings", bindings, summary: `Discovered ${bindings.length} AIRI bindings.` };
+      const bindings = preachermanKitsRuntime.bindings.list();
+      return { status: "succeeded", protocol: "preacherman-bindings", bindings, summary: `Discovered ${bindings.length} Preacherman bindings.` };
     }
     if (capabilityId === "plugin.widgets") {
-      const widgets = await airiWidgetRuntime.list();
-      return { status: "succeeded", protocol: "airi-widget", widgets, summary: `Loaded ${widgets.length} declarative widgets.` };
+      const widgets = await preachermanWidgetRuntime.list();
+      return { status: "succeeded", protocol: "preacherman-widget", widgets, summary: `Loaded ${widgets.length} declarative widgets.` };
     }
     if (capabilityId === "plugin.gamelets") {
-      const gamelets = airiGameletRuntime.discover();
-      return { status: "succeeded", protocol: "airi-gamelet", gamelets, summary: `Loaded ${gamelets.length} gamelets.` };
+      const gamelets = preachermanGameletRuntime.discover();
+      return { status: "succeeded", protocol: "preacherman-gamelet", gamelets, summary: `Loaded ${gamelets.length} gamelets.` };
     }
     if (capabilityId === "game.tic-tac-toe") {
-      const session = await airiGameletRuntime.createSession({ pluginId: "preacherman-runtime", gameletId: "tic-tac-toe" });
-      return { status: "succeeded", protocol: "airi-gamelet", session, summary: `Started offline gamelet ${session.id}.` };
+      const session = await preachermanGameletRuntime.createSession({ pluginId: "preacherman-runtime", gameletId: "tic-tac-toe" });
+      return { status: "succeeded", protocol: "preacherman-gamelet", session, summary: `Started offline gamelet ${session.id}.` };
     }
     if (capabilityId === "provider.catalog") {
-      const providers = await airiProviderRuntime.catalog();
-      return { status: "succeeded", protocol: "airi-provider", providers, summary: `Read ${providers.length} provider definitions.` };
+      const providers = await preachermanProviderRuntime.catalog();
+      return { status: "succeeded", protocol: "preacherman-provider", providers, summary: `Read ${providers.length} provider definitions.` };
     }
     if (capabilityId === "persona.select") {
-      const persona = await airiMemoryPersonaRuntime.getSelectedPersona();
-      return { status: "succeeded", protocol: "airi-persona", persona, summary: `Selected persona: ${persona?.name ?? "none"}.` };
+      const persona = await preachermanMemoryPersonaRuntime.getSelectedPersona();
+      return { status: "succeeded", protocol: "preacherman-persona", persona, summary: `Selected persona: ${persona?.name ?? "none"}.` };
     }
     if (capabilityId === "memory.recall" || capabilityId === "memory.time-awareness") {
-      const memories = await airiMemoryPersonaRuntime.recall({ namespace: "default", limit: 10 });
-      return { status: "succeeded", protocol: "airi-memory", memories, summary: `Recalled ${memories.length} local memories.` };
+      const memories = await preachermanMemoryPersonaRuntime.recall({ namespace: "default", limit: 10 });
+      return { status: "succeeded", protocol: "preacherman-memory", memories, summary: `Recalled ${memories.length} local memories.` };
     }
     if (capabilityId.startsWith("connection.")) {
       const service = capabilityId.slice("connection.".length);
-      const connection = airiConnectionRuntime.get(service);
-      return { status: "inspected", protocol: "airi-connection", connection, summary: `${service} status: ${connection.status}.` };
+      const connection = preachermanConnectionRuntime.get(service);
+      return { status: "inspected", protocol: "preacherman-connection", connection, summary: `${service} status: ${connection.status}.` };
     }
     const computerVisionCapability = {
       "vision.screen": "screenshot",
@@ -619,10 +620,10 @@ export function createPreachermanServer(options = {}) {
     }[capabilityId];
     if (computerVisionCapability) {
       const input = computerVisionCapability === "camera-window" ? { source: "camera" } : {};
-      const result = await airiComputerVisionRuntime.invoke(computerVisionCapability, input);
+      const result = await preachermanComputerVisionRuntime.invoke(computerVisionCapability, input);
       return {
         ...result,
-        protocol: "airi-computer-vision",
+        protocol: "preacherman-computer-vision",
         summary: result.status === "succeeded"
           ? `${computerVisionCapability} completed.`
           : `${computerVisionCapability} requires an installed desktop or vision adapter.`,
@@ -635,15 +636,15 @@ export function createPreachermanServer(options = {}) {
     if (capabilityId.startsWith("connection.")) {
       const service = capabilityId.slice("connection.".length);
       try {
-        const connection = airiConnectionRuntime.get(service);
+        const connection = preachermanConnectionRuntime.get(service);
         const state = connection.status === "configuration-required"
           ? "configuration-required"
           : connection.status === "external-runtime-required"
             ? "external-runtime-required"
             : "available";
-        return { state, adapter: `airi-connection-${service}`, requirements: state === "available" ? [] : ["connection configuration and adapter"] };
+        return { state, adapter: `preacherman-connection-${service}`, requirements: state === "available" ? [] : ["connection configuration and adapter"] };
       } catch {
-        return { state: "external-runtime-required", adapter: "airi-connection", requirements: ["connection adapter"] };
+        return { state: "external-runtime-required", adapter: "preacherman-connection", requirements: ["connection adapter"] };
       }
     }
     const computerVisionCapability = {
@@ -656,10 +657,10 @@ export function createPreachermanServer(options = {}) {
       "computer-use.transcript": "cursor-monitor",
     }[capabilityId];
     if (computerVisionCapability) {
-      const capability = airiComputerVisionRuntime.status(computerVisionCapability);
+      const capability = preachermanComputerVisionRuntime.status(computerVisionCapability);
       return {
         state: capability.phase === "ready" ? "available" : "external-runtime-required",
-        adapter: capability.adapter?.pluginId ?? "airi-computer-vision",
+        adapter: capability.adapter?.pluginId ?? "preacherman-computer-vision",
         requirements: capability.phase === "ready" ? [] : ["desktop or vision adapter"],
       };
     }
@@ -674,25 +675,25 @@ export function createPreachermanServer(options = {}) {
     }[capabilityId];
     if (providerCapability) {
       const [providerId, operation] = providerCapability;
-      const provider = await airiProviderRuntime.get(providerId);
+      const provider = await preachermanProviderRuntime.get(providerId);
       const state = provider.capabilities[operation]?.state;
       return {
         state: state === "ready" ? "available" : state === "configuration-required" ? "configuration-required" : "external-runtime-required",
-        adapter: `airi-provider-${providerId}`,
+        adapter: `preacherman-provider-${providerId}`,
         requirements: state === "ready" ? [] : [`${providerId} ${operation} configuration and adapter`],
       };
     }
     return undefined;
   }
 
-  const airiCapabilityRuntime = createAiriCapabilityRuntime({
-    file: airiCapabilityEventsFile(),
+  const preachermanCapabilityRuntime = createPreachermanCapabilityRuntime({
+    file: preachermanCapabilityEventsFile(),
     getRuntimeEnv: runtimeEnv,
     resolveCapabilityStatus: resolveEcosystemCapabilityStatus,
     async executeCapability(capabilityId, context) {
       return await executeEcosystemCapability(capabilityId, context)
-        ?? await airiMcpRuntime.executeCapability(capabilityId, context)
-        ?? await airiPluginRuntime.executeCapability(capabilityId, context);
+        ?? await preachermanMcpRuntime.executeCapability(capabilityId, context)
+        ?? await preachermanPluginRuntime.executeCapability(capabilityId, context);
     },
   });
 
@@ -844,11 +845,11 @@ export function createPreachermanServer(options = {}) {
     if (!configuredEnv.DEEPSEEK_API_KEY) return fallback;
     try {
       const model = configuredEnv.DEEPSEEK_MODEL || "deepseek-v4-flash";
-      const providerResult = await airiObservabilityRuntime.trace({
+      const providerResult = await preachermanObservabilityRuntime.trace({
         caller: "preacherman-companion",
         target: "provider:deepseek:chat",
         input: { messageCount: cleanConversationHistory(history).length + 2, model },
-      }, () => airiProviderRuntime.invoke("deepseek", {
+      }, () => preachermanProviderRuntime.invoke("deepseek", {
         capability: "chat",
         input: {
           model,
@@ -927,7 +928,7 @@ export function createPreachermanServer(options = {}) {
             appendTaskEvent(task, { type: "tool_call", stage: "tool-call", message: "Inspecting runtime through the built-in MCP tool" });
           }
         });
-        const runtimeTool = await airiMcpRuntime.callTool("preacherman::preacherman_runtime_status", {});
+        const runtimeTool = await preachermanMcpRuntime.callTool("preacherman::preacherman_runtime_status", {});
         if (runtimeTool.isError) throw new Error("The built-in MCP runtime status tool failed.");
         latest = await taskService.get(taskId);
         if (!latest || latest.status !== "running") return;
@@ -1012,7 +1013,7 @@ export function createPreachermanServer(options = {}) {
       revision: 1,
       kind: "plugin-tool",
       objective,
-      executor: chinese ? "AIRI 插件工具执行器" : "AIRI plugin tool executor",
+      executor: chinese ? "Preacherman 插件工具执行器" : "Preacherman plugin tool executor",
       inputs: [toolName],
       outputs: [`${shortToolName}-result.json`],
       allowedTools: [toolName],
@@ -1037,7 +1038,7 @@ export function createPreachermanServer(options = {}) {
     return { ...stored, runId: stored.taskId };
   }
 
-  async function startHomeRailRun(proposal, route) {
+  async function startPreachermanExecutionRun(proposal, route) {
     let task;
     if (proposal.taskId) task = await taskService.get(proposal.taskId);
     else {
@@ -1045,23 +1046,23 @@ export function createPreachermanServer(options = {}) {
         taskId: `run_${randomUUID()}`,
         proposalId: proposal.proposalId,
         objective: proposal.objective,
-        executor: "homerail",
-        execution: { kind: "homerail-dag", adapter: "homerail" },
+        executor: "preacherman-execution",
+        execution: { kind: "preacherman-execution-dag", adapter: "preacherman-execution" },
         proposalSnapshot: storedProposalSnapshot(proposal),
       });
       proposal.taskId = task.taskId;
     }
     try {
-      const started = (await homeRailExecutionAdapter.start(task.taskId, {
+      const started = (await preachermanExecutionAdapter.start(task.taskId, {
         idempotencyKey: `${proposal.proposalId}:${proposal.revision ?? 1}:attempt:${Math.max(1, task.attempts.length)}`,
       })).task;
-      void homeRailReconciler.reconcileTask(started);
+      void preachermanExecutionReconciler.reconcileTask(started);
       return started;
     } catch (error) {
       let latest = await taskService.get(task.taskId);
       if (["queued", "running", "waiting_for_input", "waiting_for_approval"].includes(latest.status)) {
         latest = await taskService.transition(task.taskId, "failed", {
-          error: { code: error.code ?? "HOMERAIL_START_FAILED", message: error.message, retryable: true },
+          error: { code: error.code ?? "PREACHERMAN_EXECUTION_START_FAILED", message: error.message, retryable: true },
           event: { type: "failed", stage: "terminal", message: error.message },
         });
       }
@@ -1069,16 +1070,16 @@ export function createPreachermanServer(options = {}) {
     }
   }
 
-  async function retryHomeRailTask(task) {
-    await taskService.retry(task.taskId, { provider: "homerail" });
+  async function retryPreachermanExecutionTask(task) {
+    await taskService.retry(task.taskId, { provider: "preacherman-execution" });
     const snapshot = task.proposalSnapshot ?? {
       proposalId: task.proposalId ?? `retry_${task.taskId}`,
       revision: task.revision,
       objective: task.objective,
     };
-    return startHomeRailRun({ ...snapshot, taskId: task.taskId, objective: task.objective }, {
-      kind: "homerail-dag",
-      adapter: "homerail",
+    return startPreachermanExecutionRun({ ...snapshot, taskId: task.taskId, objective: task.objective }, {
+      kind: "preacherman-execution-dag",
+      adapter: "preacherman-execution",
       reason: "retry",
     });
   }
@@ -1088,7 +1089,7 @@ export function createPreachermanServer(options = {}) {
     const promise = (async () => {
       const route = await executionRouter.route(proposal);
       if (route.kind === "local-plugin") return startPluginToolRun(proposal);
-      if (route.kind === "homerail-dag") return startHomeRailRun(proposal, route);
+      if (route.kind === "preacherman-execution-dag") return startPreachermanExecutionRun(proposal, route);
       return startPitchRun(proposal);
     })();
     proposal.confirmationPromise = promise;
@@ -1166,7 +1167,7 @@ export function createPreachermanServer(options = {}) {
       if (request.method === "POST" && url.pathname === "/api/settings/test") {
         const runTest = async (providerId, capability) => {
           try {
-            const providerResult = await airiProviderRuntime.test(providerId, { capability });
+            const providerResult = await preachermanProviderRuntime.test(providerId, { capability });
             return {
               configured: providerResult.state !== "configuration-required",
               ok: providerResult.ok === true,
@@ -1186,18 +1187,18 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/mcp/config") {
-        json(response, 200, { ...(await airiMcpRuntime.readConfigText()), status: airiMcpRuntime.getRuntimeStatus() }, origin);
+        json(response, 200, { ...(await preachermanMcpRuntime.readConfigText()), status: preachermanMcpRuntime.getRuntimeStatus() }, origin);
         return;
       }
       if (request.method === "PUT" && url.pathname === "/api/mcp/config") {
         const body = await readJson(request);
-        const config = await airiMcpRuntime.writeConfigText(body.text);
-        const result = await airiMcpRuntime.applyAndRestart();
-        json(response, 200, { ...config, result, status: airiMcpRuntime.getRuntimeStatus() }, origin);
+        const config = await preachermanMcpRuntime.writeConfigText(body.text);
+        const result = await preachermanMcpRuntime.applyAndRestart();
+        json(response, 200, { ...config, result, status: preachermanMcpRuntime.getRuntimeStatus() }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/mcp/tools") {
-        json(response, 200, { tools: await airiMcpRuntime.listTools(), status: airiMcpRuntime.getRuntimeStatus() }, origin);
+        json(response, 200, { tools: await preachermanMcpRuntime.listTools(), status: preachermanMcpRuntime.getRuntimeStatus() }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/mcp/tools/call") {
@@ -1206,62 +1207,62 @@ export function createPreachermanServer(options = {}) {
           json(response, 400, { error: "MCP tool name is required." }, origin);
           return;
         }
-        const result = await airiObservabilityRuntime.trace({
+        const result = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-settings",
           target: body.name,
           input: { argumentKeys: Object.keys(body.arguments ?? {}).sort() },
-        }, () => airiMcpRuntime.callTool(body.name, body.arguments ?? {}));
+        }, () => preachermanMcpRuntime.callTool(body.name, body.arguments ?? {}));
         json(response, 200, { result }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/plugins") {
-        json(response, 200, { plugins: await airiPluginRuntime.listPlugins() }, origin);
+        json(response, 200, { plugins: await preachermanPluginRuntime.listPlugins() }, origin);
         return;
       }
-      if (request.method === "GET" && url.pathname === "/api/airi/kits") {
+      if (request.method === "GET" && url.pathname === "/api/preacherman/kits") {
         json(response, 200, {
-          kits: airiKitsRuntime.kits.discover(),
-          bindings: airiKitsRuntime.bindings.list(),
+          kits: preachermanKitsRuntime.kits.discover(),
+          bindings: preachermanKitsRuntime.bindings.list(),
         }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/plugins/install") {
         const body = await readJson(request);
-        const plugin = await airiPluginRuntime.install(body.directory);
-        await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
+        const plugin = await preachermanPluginRuntime.install(body.directory);
+        await preachermanObservabilityRuntime.syncPluginSessions(await preachermanPluginRuntime.listPlugins());
         json(response, 201, { plugin }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/plugins/uninstall") {
         const body = await readJson(request);
-        const result = await airiPluginRuntime.uninstall(body.name);
-        await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
+        const result = await preachermanPluginRuntime.uninstall(body.name);
+        await preachermanObservabilityRuntime.syncPluginSessions(await preachermanPluginRuntime.listPlugins());
         json(response, 200, { result }, origin);
         return;
       }
       const pluginMatch = url.pathname.match(/^\/api\/plugins\/([A-Za-z0-9_-]{1,80})$/);
       if (request.method === "PUT" && pluginMatch) {
-        const plugin = await airiPluginRuntime.setEnabled(pluginMatch[1], (await readJson(request)).enabled);
-        await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
+        const plugin = await preachermanPluginRuntime.setEnabled(pluginMatch[1], (await readJson(request)).enabled);
+        await preachermanObservabilityRuntime.syncPluginSessions(await preachermanPluginRuntime.listPlugins());
         json(response, 200, { plugin }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/plugins/reload") {
         const body = await readJson(request);
-        const plugin = await airiPluginRuntime.reload(typeof body.name === "string" ? body.name : undefined);
-        await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
+        const plugin = await preachermanPluginRuntime.reload(typeof body.name === "string" ? body.name : undefined);
+        await preachermanObservabilityRuntime.syncPluginSessions(await preachermanPluginRuntime.listPlugins());
         json(response, 200, { plugin }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/observability") {
-        json(response, 200, await airiObservabilityRuntime.snapshot({
-          plugins: await airiPluginRuntime.listPlugins(),
-          tools: await airiPluginRuntime.listTools(),
+        json(response, 200, await preachermanObservabilityRuntime.snapshot({
+          plugins: await preachermanPluginRuntime.listPlugins(),
+          tools: await preachermanPluginRuntime.listTools(),
         }), origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/plugins/tools") {
-        json(response, 200, { tools: await airiPluginRuntime.listTools() }, origin);
+        json(response, 200, { tools: await preachermanPluginRuntime.listTools() }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/plugins/tools/call") {
@@ -1279,16 +1280,16 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/widgets") {
-        json(response, 200, { widgets: await airiWidgetRuntime.list() }, origin);
+        json(response, 200, { widgets: await preachermanWidgetRuntime.list() }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/gamelets") {
-        json(response, 200, { gamelets: airiGameletRuntime.discover() }, origin);
+        json(response, 200, { gamelets: preachermanGameletRuntime.discover() }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/gamelets/sessions") {
         const body = await readJson(request);
-        const session = await airiGameletRuntime.createSession({
+        const session = await preachermanGameletRuntime.createSession({
           pluginId: "preacherman-runtime",
           gameletId: body.gameletId,
           input: body.input,
@@ -1299,7 +1300,7 @@ export function createPreachermanServer(options = {}) {
       const gameletActionMatch = url.pathname.match(/^\/api\/gamelets\/sessions\/([^/]+)\/actions$/);
       if (request.method === "POST" && gameletActionMatch) {
         const body = await readJson(request);
-        const session = await airiGameletRuntime.sendAction({
+        const session = await preachermanGameletRuntime.sendAction({
           pluginId: "preacherman-runtime",
           sessionId: decodeURIComponent(gameletActionMatch[1]),
           action: body.action,
@@ -1310,7 +1311,7 @@ export function createPreachermanServer(options = {}) {
       const gameletStopMatch = url.pathname.match(/^\/api\/gamelets\/sessions\/([^/]+)\/stop$/);
       if (request.method === "POST" && gameletStopMatch) {
         const body = await readJson(request);
-        const session = await airiGameletRuntime.stopSession({
+        const session = await preachermanGameletRuntime.stopSession({
           pluginId: "preacherman-runtime",
           sessionId: decodeURIComponent(gameletStopMatch[1]),
           reason: typeof body.reason === "string" ? body.reason : "requested",
@@ -1323,14 +1324,14 @@ export function createPreachermanServer(options = {}) {
         await readJson(request);
         const sessionId = decodeURIComponent(gameletLifecycleMatch[1]);
         const session = gameletLifecycleMatch[2] === "pause"
-          ? await airiGameletRuntime.pauseSession({ pluginId: "preacherman-runtime", sessionId })
-          : await airiGameletRuntime.resumeSession({ pluginId: "preacherman-runtime", sessionId });
+          ? await preachermanGameletRuntime.pauseSession({ pluginId: "preacherman-runtime", sessionId })
+          : await preachermanGameletRuntime.resumeSession({ pluginId: "preacherman-runtime", sessionId });
         json(response, 200, { session }, origin);
         return;
       }
       const gameletDestroyMatch = url.pathname.match(/^\/api\/gamelets\/sessions\/([^/]+)$/);
       if (request.method === "DELETE" && gameletDestroyMatch) {
-        const session = await airiGameletRuntime.destroySession({
+        const session = await preachermanGameletRuntime.destroySession({
           pluginId: "preacherman-runtime",
           sessionId: decodeURIComponent(gameletDestroyMatch[1]),
           reason: "user-requested",
@@ -1339,17 +1340,17 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/providers/catalog") {
-        json(response, 200, { providers: await airiProviderRuntime.catalog() }, origin);
+        json(response, 200, { providers: await preachermanProviderRuntime.catalog() }, origin);
         return;
       }
       const providerModelsMatch = url.pathname.match(/^\/api\/providers\/([^/]+)\/models$/);
       if (request.method === "GET" && providerModelsMatch) {
         const providerId = decodeURIComponent(providerModelsMatch[1]);
-        const result = await airiObservabilityRuntime.trace({
+        const result = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-settings",
           target: `provider:${providerId}:models`,
           input: {},
-        }, () => airiProviderRuntime.listModels(providerId));
+        }, () => preachermanProviderRuntime.listModels(providerId));
         json(response, 200, { result }, origin);
         return;
       }
@@ -1358,48 +1359,48 @@ export function createPreachermanServer(options = {}) {
         const body = await readJson(request);
         const providerId = decodeURIComponent(providerOperationMatch[1]);
         const operation = providerOperationMatch[2];
-        const result = await airiObservabilityRuntime.trace({
+        const result = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-settings",
           target: `provider:${providerId}:${operation}`,
           input: { capability: body.capability },
         }, () => operation === "test"
-          ? airiProviderRuntime.test(providerId, { capability: body.capability })
-          : airiProviderRuntime.invoke(providerId, { capability: body.capability, input: body.input }));
+          ? preachermanProviderRuntime.test(providerId, { capability: body.capability })
+          : preachermanProviderRuntime.invoke(providerId, { capability: body.capability, input: body.input }));
         json(response, 200, { result }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/personas") {
         json(response, 200, {
-          personas: await airiMemoryPersonaRuntime.listPersonas(),
-          selected: await airiMemoryPersonaRuntime.getSelectedPersona(),
+          personas: await preachermanMemoryPersonaRuntime.listPersonas(),
+          selected: await preachermanMemoryPersonaRuntime.getSelectedPersona(),
         }, origin);
         return;
       }
       const personaSelectMatch = url.pathname.match(/^\/api\/personas\/([^/]+)\/select$/);
       if (request.method === "POST" && personaSelectMatch) {
-        const selected = await airiMemoryPersonaRuntime.selectPersona(decodeURIComponent(personaSelectMatch[1]));
+        const selected = await preachermanMemoryPersonaRuntime.selectPersona(decodeURIComponent(personaSelectMatch[1]));
         json(response, 200, { selected }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/memory/remember") {
-        json(response, 201, { memory: await airiMemoryPersonaRuntime.remember(await readJson(request)) }, origin);
+        json(response, 201, { memory: await preachermanMemoryPersonaRuntime.remember(await readJson(request)) }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/memory/recall") {
-        json(response, 200, { memories: await airiMemoryPersonaRuntime.recall(await readJson(request)) }, origin);
+        json(response, 200, { memories: await preachermanMemoryPersonaRuntime.recall(await readJson(request)) }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/memory/access") {
-        json(response, 200, { access: airiMemoryPersonaRuntime.getAccessPolicy() }, origin);
+        json(response, 200, { access: preachermanMemoryPersonaRuntime.getAccessPolicy() }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/memory/audit") {
         const limit = Number.parseInt(url.searchParams.get("limit") || "50", 10);
-        json(response, 200, { events: await airiMemoryPersonaRuntime.listAuditEvents({ limit }) }, origin);
+        json(response, 200, { events: await preachermanMemoryPersonaRuntime.listAuditEvents({ limit }) }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/connections") {
-        json(response, 200, { connections: airiConnectionRuntime.list() }, origin);
+        json(response, 200, { connections: preachermanConnectionRuntime.list() }, origin);
         return;
       }
       const connectionOperationMatch = url.pathname.match(/^\/api\/connections\/([^/]+)\/(configure|test|connect|disconnect)$/);
@@ -1407,30 +1408,30 @@ export function createPreachermanServer(options = {}) {
         const body = await readJson(request);
         const connectionId = decodeURIComponent(connectionOperationMatch[1]);
         const operation = connectionOperationMatch[2];
-        const connection = await airiObservabilityRuntime.trace({
+        const connection = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-settings",
           target: `connection:${connectionId}:${operation}`,
           input: operation === "configure"
             ? { configurationKeys: Object.keys(body.configuration ?? {}).sort() }
             : {},
         }, () => operation === "configure"
-          ? airiConnectionRuntime.configure(connectionId, body.configuration ?? {})
+          ? preachermanConnectionRuntime.configure(connectionId, body.configuration ?? {})
           : operation === "test"
-            ? airiConnectionRuntime.test(connectionId)
+            ? preachermanConnectionRuntime.test(connectionId)
             : operation === "connect"
-              ? airiConnectionRuntime.connect(connectionId)
-              : airiConnectionRuntime.disconnect(connectionId));
+              ? preachermanConnectionRuntime.connect(connectionId)
+              : preachermanConnectionRuntime.disconnect(connectionId));
         json(response, 200, { connection }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/computer-vision") {
-        const externalComputerUse = airiComputerVisionRuntime.computerUseStatus();
-        const domComputerUse = airiDomObservationRuntime.status();
+        const externalComputerUse = preachermanComputerVisionRuntime.computerUseStatus();
+        const domComputerUse = preachermanDomObservationRuntime.status();
         const computerUseReady = externalComputerUse.phase === "ready" || domComputerUse.phase === "ready";
         const targets = [...externalComputerUse.targets, ...domComputerUse.targets]
           .filter((target, index, all) => all.findIndex((candidate) => candidate.kind === target.kind && candidate.id === target.id) === index);
         json(response, 200, {
-          capabilities: airiComputerVisionRuntime.list(),
+          capabilities: preachermanComputerVisionRuntime.list(),
           computerUse: {
             ...externalComputerUse,
             phase: computerUseReady ? "ready" : externalComputerUse.phase,
@@ -1438,54 +1439,54 @@ export function createPreachermanServer(options = {}) {
             targets,
             lastTest: externalComputerUse.lastTest ?? domComputerUse.lastTest,
           },
-          approvals: airiComputerVisionRuntime.listApprovals({ status: "pending" }),
-          operations: [...airiComputerVisionRuntime.logs({ limit: 20 }), ...airiDomObservationRuntime.logs({ limit: 20 })]
+          approvals: preachermanComputerVisionRuntime.listApprovals({ status: "pending" }),
+          operations: [...preachermanComputerVisionRuntime.logs({ limit: 20 }), ...preachermanDomObservationRuntime.logs({ limit: 20 })]
             .sort((left, right) => String(right.at).localeCompare(String(left.at)))
             .slice(0, 20),
         }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/computer-vision/dom-snapshot") {
-        const result = airiDomObservationRuntime.ingestBrowserSnapshot(await readJson(request));
+        const result = preachermanDomObservationRuntime.ingestBrowserSnapshot(await readJson(request));
         json(response, 202, { result }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/computer-vision/computer-use/test") {
         await readJson(request);
-        const result = await airiObservabilityRuntime.trace({
+        const result = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-work",
           target: "computer-use:test",
           input: {},
-        }, () => airiComputerVisionRuntime.testComputerUse());
+        }, () => preachermanComputerVisionRuntime.testComputerUse());
         json(response, 200, { result }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/computer-vision/computer-use/observe") {
         const body = await readJson(request);
-        const result = await airiObservabilityRuntime.trace({
+        const result = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-ui",
           target: "computer-use:observe",
           input: { target: body.target },
         }, () => body.target?.kind === "web"
-          ? airiDomObservationRuntime.observe({ callerPluginId: "preacherman-ui", target: body.target })
-          : airiComputerVisionRuntime.observe({ callerPluginId: "preacherman-ui", target: body.target }));
+          ? preachermanDomObservationRuntime.observe({ callerPluginId: "preacherman-ui", target: body.target })
+          : preachermanComputerVisionRuntime.observe({ callerPluginId: "preacherman-ui", target: body.target }));
         json(response, 200, { result }, origin);
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/computer-vision/computer-use/inspect-dom") {
         const body = await readJson(request);
-        const result = await airiObservabilityRuntime.trace({
+        const result = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-ui",
           target: "computer-use:inspect-dom",
           input: { target: body.target, selector: body.selector, maxDepth: body.maxDepth },
         }, () => body.target?.kind === "web"
-          ? airiDomObservationRuntime.inspectDom({
+          ? preachermanDomObservationRuntime.inspectDom({
             callerPluginId: "preacherman-ui",
             target: body.target,
             selector: body.selector,
             maxDepth: body.maxDepth,
           })
-          : airiComputerVisionRuntime.inspectDom({
+          : preachermanComputerVisionRuntime.inspectDom({
             callerPluginId: "preacherman-ui",
             target: body.target,
             selector: body.selector,
@@ -1497,11 +1498,11 @@ export function createPreachermanServer(options = {}) {
       const computerUseApprovalMatch = url.pathname.match(/^\/api\/computer-vision\/computer-use\/approvals\/([^/]+)$/);
       if (request.method === "POST" && computerUseApprovalMatch) {
         const body = await readJson(request);
-        const result = await airiObservabilityRuntime.trace({
+        const result = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-ui",
           target: "computer-use:approval",
           input: { approvalId: computerUseApprovalMatch[1], decision: body.decision },
-        }, () => airiComputerVisionRuntime.approveAction({
+        }, () => preachermanComputerVisionRuntime.approveAction({
           approvalId: decodeURIComponent(computerUseApprovalMatch[1]),
           decision: body.decision,
           evidence: computerUseApprovalAuthority,
@@ -1514,13 +1515,13 @@ export function createPreachermanServer(options = {}) {
         const capability = decodeURIComponent(computerVisionMatch[1]);
         const body = await readJson(request);
         const operation = computerVisionMatch[2];
-        const result = await airiObservabilityRuntime.trace({
+        const result = await preachermanObservabilityRuntime.trace({
           caller: "preacherman-work",
           target: `computer-vision:${capability}:${operation}`,
           input: { capability, hasInput: Boolean(body.input) },
         }, () => operation === "test"
-          ? airiComputerVisionRuntime.test(capability)
-          : airiComputerVisionRuntime.invoke(capability, body.input ?? {}));
+          ? preachermanComputerVisionRuntime.test(capability)
+          : preachermanComputerVisionRuntime.invoke(capability, body.input ?? {}));
         json(response, 200, { result }, origin);
         return;
       }
@@ -1534,23 +1535,23 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { entry }, origin);
         return;
       }
-      if (request.method === "GET" && url.pathname === "/api/airi/events") {
+      if (request.method === "GET" && url.pathname === "/api/preacherman/events") {
         const requestedLimit = Number.parseInt(url.searchParams.get("limit") || "50", 10);
         const limit = Number.isFinite(requestedLimit) ? requestedLimit : 50;
-        json(response, 200, { events: await airiCapabilityRuntime.list(limit) }, origin);
+        json(response, 200, { events: await preachermanCapabilityRuntime.list(limit) }, origin);
         return;
       }
-      if (request.method === "POST" && url.pathname === "/api/airi/capabilities/status") {
+      if (request.method === "POST" && url.pathname === "/api/preacherman/capabilities/status") {
         const body = await readJson(request);
         json(response, 200, {
-          capabilities: await airiCapabilityRuntime.status(body.ids, { locale: body.locale }),
+          capabilities: await preachermanCapabilityRuntime.status(body.ids, { locale: body.locale }),
         }, origin);
         return;
       }
-      const airiCapabilityMatch = url.pathname.match(/^\/api\/airi\/capabilities\/([^/]+)\/invoke$/);
-      if (request.method === "POST" && airiCapabilityMatch) {
-        const event = await airiCapabilityRuntime.invoke(
-          decodeURIComponent(airiCapabilityMatch[1]),
+      const preachermanCapabilityMatch = url.pathname.match(/^\/api\/preacherman\/capabilities\/([^/]+)\/invoke$/);
+      if (request.method === "POST" && preachermanCapabilityMatch) {
+        const event = await preachermanCapabilityRuntime.invoke(
+          decodeURIComponent(preachermanCapabilityMatch[1]),
           await readJson(request),
         );
         json(response, 200, { event }, origin);
@@ -1566,14 +1567,14 @@ export function createPreachermanServer(options = {}) {
         }
         const explicitPluginTool = parseExplicitPluginToolRequest(input);
         if (explicitPluginTool) {
-          const availableTools = await airiPluginRuntime.listTools();
+          const availableTools = await preachermanPluginRuntime.listTools();
           if (!availableTools.some((tool) => tool.name === explicitPluginTool.toolName)) {
             json(response, 404, { error: `Plugin tool is not available: ${explicitPluginTool.toolName}` }, origin);
             return;
           }
         }
         const pluginToolRequested = Boolean(explicitPluginTool)
-          || /(?:airi\s*)?(?:plugin|插件).*(?:summary|status|摘要|状态)|(?:summary|status|摘要|状态).*(?:plugin|插件)/i.test(input);
+          || /(?:preacherman\s*)?(?:plugin|插件).*(?:summary|status|摘要|状态)|(?:summary|status|摘要|状态).*(?:plugin|插件)/i.test(input);
         const selectedPluginTool = explicitPluginTool ?? { toolName: "preacherman-runtime::task_summary", toolArguments: {} };
         const turn = pluginToolRequested
           ? {
@@ -1613,17 +1614,17 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/execution/providers/status") {
-        json(response, 200, { providers: [await homeRailDiagnostics.status()] }, origin);
+        json(response, 200, { providers: [await preachermanExecutionDiagnostics.status()] }, origin);
         return;
       }
-      if (request.method === "GET" && url.pathname === "/api/execution/providers/homerail/workflows") {
-        json(response, 200, await homeRailDiagnostics.workflows(), origin);
+      if (request.method === "GET" && url.pathname === "/api/execution/providers/preacherman-execution/workflows") {
+        json(response, 200, await preachermanExecutionDiagnostics.workflows(), origin);
         return;
       }
-      if (request.method === "GET" && url.pathname === "/api/execution/providers/homerail/console") {
+      if (request.method === "GET" && url.pathname === "/api/execution/providers/preacherman-execution/console") {
         response.writeHead(302, {
           "Access-Control-Allow-Origin": origin,
-          Location: homeRailConsoleUrl,
+          Location: preachermanExecutionConsoleUrl,
           Vary: "Origin",
         });
         response.end();
@@ -1643,7 +1644,7 @@ export function createPreachermanServer(options = {}) {
       if (request.method === "GET" && taskArtifactContentMatch) {
         const taskId = decodeURIComponent(taskArtifactContentMatch[1]);
         const artifactId = decodeURIComponent(taskArtifactContentMatch[2]);
-        const upstream = await homeRailArtifactAdapter.content(taskId, artifactId, {
+        const upstream = await preachermanExecutionArtifactAdapter.content(taskId, artifactId, {
           range: typeof request.headers.range === "string" ? request.headers.range : undefined,
         });
         const headers = {
@@ -1689,8 +1690,8 @@ export function createPreachermanServer(options = {}) {
         const body = await readJson(request);
         const type = body.type;
         if (type === "cancel") {
-          if (existing.execution?.kind === "homerail-dag") {
-            const result = await homeRailCommandAdapter.cancel(taskId);
+          if (existing.execution?.kind === "preacherman-execution-dag") {
+            const result = await preachermanExecutionCommandAdapter.cancel(taskId);
             json(response, 200, { task: result.task, command: { type: "cancel", accepted: result.accepted, reused: result.reused } }, origin);
             return;
           }
@@ -1702,27 +1703,27 @@ export function createPreachermanServer(options = {}) {
           json(response, 200, { task, command: { type: "cancel", accepted: task.status === "cancelled" } }, origin);
           return;
         }
-        if ((type === "approve" || type === "reject") && existing.execution?.kind === "homerail-dag") {
+        if ((type === "approve" || type === "reject") && existing.execution?.kind === "preacherman-execution-dag") {
           const approvalId = typeof body.approvalId === "string" ? body.approvalId : existing.pendingApproval?.approvalId;
-          const result = await homeRailApprovalAdapter.decide(taskId, {
+          const result = await preachermanExecutionApprovalAdapter.decide(taskId, {
             approvalId,
             decision: type === "approve" ? "approved" : "rejected",
           });
           json(response, 200, { task: result.task, command: { type, accepted: true, reused: result.reused } }, origin);
           return;
         }
-        if ((type === "resume" || type === "steer") && existing.execution?.kind === "homerail-dag") {
+        if ((type === "resume" || type === "steer") && existing.execution?.kind === "preacherman-execution-dag") {
           const input = typeof body.input === "string" && body.input.trim()
             ? body.input
             : typeof body.instruction === "string" && body.instruction.trim()
               ? body.instruction
               : typeof body.objective === "string" ? body.objective : "";
-          const result = await homeRailCommandAdapter.sendInput(taskId, input, { mode: type });
+          const result = await preachermanExecutionCommandAdapter.sendInput(taskId, input, { mode: type });
           json(response, 202, { task: result.task, command: { type, accepted: true } }, origin);
           return;
         }
-        if (type === "retry" && existing.execution?.kind === "homerail-dag") {
-          const task = await retryHomeRailTask(existing);
+        if (type === "retry" && existing.execution?.kind === "preacherman-execution-dag") {
+          const task = await retryPreachermanExecutionTask(existing);
           json(response, 202, { task, command: { type, accepted: true, attempt: task.attempts.at(-1)?.attempt } }, origin);
           return;
         }
@@ -1775,15 +1776,15 @@ export function createPreachermanServer(options = {}) {
           return;
         }
         if (runActionMatch[2] === "cancel") {
-          if (run.execution?.kind === "homerail-dag") {
-            const result = await homeRailCommandAdapter.cancel(run.taskId);
+          if (run.execution?.kind === "preacherman-execution-dag") {
+            const result = await preachermanExecutionCommandAdapter.cancel(run.taskId);
             json(response, 200, { run: result.task }, origin);
             return;
           }
           const cancelled = await taskService.update(run.taskId, (task) => {
             if (!["queued", "running"].includes(task.status)) return;
             task.status = "cancelled";
-            appendTaskEvent(task, { type: "cancelled", stage: "terminal", message: task.source === "airi-plugin" ? "Plugin TaskRun cancelled" : "PitchKit cancelled" });
+            appendTaskEvent(task, { type: "cancelled", stage: "terminal", message: task.source === "preacherman-plugin" ? "Plugin TaskRun cancelled" : "PitchKit cancelled" });
           });
           json(response, 200, { run: cancelled }, origin);
           return;
@@ -1792,12 +1793,12 @@ export function createPreachermanServer(options = {}) {
           json(response, 409, { error: `TaskRun ${run.taskId} cannot be retried from ${run.status}.` }, origin);
           return;
         }
-        if (run.execution?.kind === "homerail-dag") {
-          const retried = await retryHomeRailTask(run);
+        if (run.execution?.kind === "preacherman-execution-dag") {
+          const retried = await retryPreachermanExecutionTask(run);
           json(response, 202, { run: retried, previousRunId: run.runId, sameTask: true }, origin);
           return;
         }
-        if (run.source === "airi-plugin") {
+        if (run.source === "preacherman-plugin") {
           const body = await readJson(request);
           const qualifiedName = run.toolCall?.qualifiedName
             ?? (run.providerPluginId && run.toolCall?.name ? `${run.providerPluginId}::${run.toolCall.name}` : null);
@@ -1843,10 +1844,10 @@ export function createPreachermanServer(options = {}) {
     const closeProvider = async (reason) => {
       if (closing || !providerSessionId) return;
       closing = true;
-      try { await airiProviderRuntime.closeStream(providerSessionId, { reason }); } catch { /* session is already terminal */ }
+      try { await preachermanProviderRuntime.closeStream(providerSessionId, { reason }); } catch { /* session is already terminal */ }
     };
     const sendToProvider = async ({ data, isBinary }) => {
-      await airiProviderRuntime.sendStream(providerSessionId, {
+      await preachermanProviderRuntime.sendStream(providerSessionId, {
         data: isBinary ? Buffer.from(data).toString("base64") : Buffer.from(data).toString("utf8"),
         isBinary,
       });
@@ -1860,7 +1861,7 @@ export function createPreachermanServer(options = {}) {
     });
     client.on("close", () => { void closeProvider("client-closed"); });
     try {
-      const session = await airiProviderRuntime.openStream("dashscope", {
+      const session = await preachermanProviderRuntime.openStream("dashscope", {
         capability: kind,
         input: { transport: "preacherman-local-websocket" },
         onEvent(event) {
@@ -1903,11 +1904,12 @@ export function createPreachermanServer(options = {}) {
   return {
     server,
     async listen(port = Number(env.PREACHERMAN_SERVICE_PORT) || DEFAULT_PORT) {
+      await migratePreachermanBrandData(dataDirectory);
       await initializeEcosystemRuntimes();
-      await Promise.all([airiMcpRuntime.initialize(), airiPluginRuntime.initialize()]);
-      await airiObservabilityRuntime.syncPluginSessions(await airiPluginRuntime.listPlugins());
-      await homeRailReconciler.reconcileAll();
-      homeRailReconciler.start();
+      await Promise.all([preachermanMcpRuntime.initialize(), preachermanPluginRuntime.initialize()]);
+      await preachermanObservabilityRuntime.syncPluginSessions(await preachermanPluginRuntime.listPlugins());
+      await preachermanExecutionReconciler.reconcileAll();
+      preachermanExecutionReconciler.start();
       return new Promise((resolveListen, reject) => {
         server.once("error", reject);
         server.listen(port, "127.0.0.1", () => {
@@ -1917,18 +1919,18 @@ export function createPreachermanServer(options = {}) {
       });
     },
     async close() {
-      homeRailReconciler.stop();
+      preachermanExecutionReconciler.stop();
       for (const client of voiceProxy.clients) client.close();
-      await airiPluginRuntime.close();
+      await preachermanPluginRuntime.close();
       ecosystemFacade.close();
       await Promise.all([
-        airiMcpRuntime.close(),
-        airiGameletRuntime.close(),
-        airiProviderRuntime.close(),
-        airiMemoryPersonaRuntime.close(),
-        airiConnectionRuntime.close(),
-        airiComputerVisionRuntime.close(),
-        airiObservabilityRuntime.close(),
+        preachermanMcpRuntime.close(),
+        preachermanGameletRuntime.close(),
+        preachermanProviderRuntime.close(),
+        preachermanMemoryPersonaRuntime.close(),
+        preachermanConnectionRuntime.close(),
+        preachermanComputerVisionRuntime.close(),
+        preachermanObservabilityRuntime.close(),
         ...[...pluginMemoryRuntimes.values()].map((runtime) => runtime.close()),
       ]);
       return new Promise((resolveClose, reject) => {

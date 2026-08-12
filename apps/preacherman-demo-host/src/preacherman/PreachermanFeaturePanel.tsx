@@ -1,0 +1,209 @@
+import { useEffect, useState } from "react";
+import type { Locale } from "../preferences";
+import {
+  invokePreachermanCapability,
+  loadPreachermanCapabilityStatuses,
+  type PreachermanBackendState,
+  type PreachermanCapabilityStatus,
+} from "./capabilityClient";
+import {
+  featurePlacementForSurface,
+  type DemoSurfaceType,
+} from "./featurePlacement";
+import "./preacherman-feature-panel.css";
+
+const surfaceTitles: Record<DemoSurfaceType, { readonly en: string; readonly "zh-CN": string }> = {
+  home: { en: "Companion", "zh-CN": "数字伙伴" },
+  workspace: { en: "Agent work", "zh-CN": "智能体工作" },
+  lab: { en: "Voice & body", "zh-CN": "声音与身体" },
+  market: { en: "Identity", "zh-CN": "角色身份" },
+  test: { en: "Diagnostics", "zh-CN": "功能诊断" },
+  ledger: { en: "Memory & history", "zh-CN": "记忆与历史" },
+  settings: { en: "Connections", "zh-CN": "连接设置" },
+};
+
+export function PreachermanFeaturePanel({
+  locale,
+  onActivate,
+  surface,
+}: {
+  readonly locale: Locale;
+  readonly onActivate: (featureId: string) => boolean;
+  readonly surface: DemoSurfaceType;
+}) {
+  const placement = featurePlacementForSurface(surface);
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
+  const [activationState, setActivationState] = useState<"idle" | "focused" | "executed" | "unavailable">("idle");
+  const [backendState, setBackendState] = useState<PreachermanBackendState | "checking" | "error" | "idle">("idle");
+  const [backendMessage, setBackendMessage] = useState("");
+  const [capabilityStatuses, setCapabilityStatuses] = useState<Readonly<Record<string, PreachermanCapabilityStatus>>>({});
+  const selected = placement.features.find((candidate) => candidate.id === selectedId);
+  const chinese = locale === "zh-CN";
+  const selectedRuntimeState = selected ? capabilityStatuses[selected.id]?.state : undefined;
+  const connectedCount = placement.features.filter((candidate) => {
+    const state = capabilityStatuses[candidate.id]?.state;
+    return state === "available" || state === "client-runtime";
+  }).length;
+  const panelId = `preacherman-capability-library-${surface}`;
+
+  useEffect(() => {
+    setOpen(false);
+    setSelectedId("");
+  }, [surface]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
+
+  useEffect(() => {
+    let current = true;
+    setCapabilityStatuses({});
+    void loadPreachermanCapabilityStatuses(placement.features.map((feature) => feature.id), locale)
+      .then((statuses) => {
+        if (!current) return;
+        setCapabilityStatuses(Object.fromEntries(statuses.map((status) => [status.capabilityId, status])));
+      })
+      .catch(() => {
+        if (current) setCapabilityStatuses({});
+      });
+    return () => { current = false; };
+  }, [locale, placement]);
+
+  const activateFeature = (candidate: (typeof placement.features)[number]) => {
+    setSelectedId(candidate.id);
+    const activated = onActivate(candidate.id);
+    const state = capabilityStatuses[candidate.id]?.state;
+    const connected = state === "available" || state === "client-runtime";
+    setActivationState(activated ? "focused" : connected ? "unavailable" : "idle");
+    setBackendState("checking");
+    setBackendMessage(chinese ? "正在检查后端适配器…" : "Checking backend adapter…");
+    void invokePreachermanCapability(candidate.id, surface, locale).then((event) => {
+      setBackendState(event.execution?.status === "failed" ? "error" : event.state);
+      if (event.execution?.status === "succeeded") setActivationState("executed");
+      setBackendMessage(event.message);
+    }).catch((reason: Error) => {
+      setBackendState("error");
+      setBackendMessage(reason.message);
+    });
+  };
+
+  const featureButtons = (featureIds: readonly string[], priority: "primary" | "normal") => (
+    <div className="demo-preacherman-panel__grid">
+      {featureIds.map((featureId) => {
+        const candidate = placement.features.find((feature) => feature.id === featureId);
+        if (!candidate) return null;
+        const runtimeStatus = capabilityStatuses[candidate.id]?.state ?? "checking";
+        const runtimeLabel = runtimeStatus === "available"
+          ? (chinese ? "可用" : "Live")
+          : runtimeStatus === "client-runtime"
+            ? (chinese ? "前端" : "Client")
+            : runtimeStatus === "configuration-required"
+              ? (chinese ? "配置" : "Setup")
+              : runtimeStatus === "external-runtime-required"
+                ? (chinese ? "外部" : "External")
+                : (chinese ? "检查" : "Check");
+        return (
+          <button
+            aria-pressed={candidate.id === selected?.id}
+            className="demo-preacherman-panel__feature"
+            data-priority={priority}
+            data-status={runtimeStatus}
+            data-tone={["presentation.stop", "task.cancel"].includes(candidate.id) ? "danger" : "default"}
+            key={candidate.id}
+            onClick={() => activateFeature(candidate)}
+            type="button"
+          >
+            <span aria-hidden="true" className="demo-preacherman-panel__status" />
+            <span>{candidate.label[locale]}</span>
+            <small className="demo-preacherman-panel__runtime-label">{runtimeLabel}</small>
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <aside
+      aria-label={chinese ? "Preacherman 功能" : "Preacherman features"}
+      className="demo-preacherman-panel"
+      data-open={open}
+      data-surface={surface}
+    >
+      <button
+        aria-controls={panelId}
+        aria-expanded={open}
+        className="demo-preacherman-panel__trigger"
+        onClick={() => setOpen((current) => !current)}
+        type="button"
+      >
+        <span>{chinese ? "能力库" : "Capabilities"}</span>
+        <small>{connectedCount}/{placement.features.length}</small>
+      </button>
+      <div className="demo-preacherman-panel__surface" id={panelId}>
+        <header className="demo-preacherman-panel__header">
+          <div>
+            <h2>{surfaceTitles[surface][locale]}</h2>
+            <p>{chinese ? "核心操作在页面中，其余能力按需展开。" : "Core actions stay on the page. Open the rest when needed."}</p>
+          </div>
+          <button aria-label={chinese ? "关闭能力库" : "Close capabilities"} className="demo-preacherman-panel__close" onClick={() => setOpen(false)} type="button">
+            {chinese ? "关闭" : "Close"}
+          </button>
+        </header>
+        <div aria-label={chinese ? `${surfaceTitles[surface][locale]}功能` : `${surfaceTitles[surface][locale]} capabilities`} className="demo-preacherman-panel__body">
+          {placement.sections.map((candidateSection) => {
+            const sectionHeader = (
+              <span className="demo-preacherman-panel__section-title">
+                <span>{candidateSection.title[locale]}</span>
+                <small>{candidateSection.featureIds.length}</small>
+              </span>
+            );
+            if (candidateSection.kind !== "primary") {
+              return (
+                <details className="demo-preacherman-panel__section demo-preacherman-panel__section--disclosure" data-kind={candidateSection.kind} key={candidateSection.id}>
+                  <summary>{sectionHeader}</summary>
+                  {featureButtons(candidateSection.featureIds, "normal")}
+                </details>
+              );
+            }
+            return (
+              <section className="demo-preacherman-panel__section" data-kind={candidateSection.kind} key={candidateSection.id}>
+                <header>{sectionHeader}</header>
+                {featureButtons(candidateSection.featureIds, "primary")}
+              </section>
+            );
+          })}
+        </div>
+        {selected ? (
+          <footer className="demo-preacherman-panel__detail" aria-live="polite">
+            <strong>{selected.label[locale]}</strong>
+            <code>{selected.id}</code>
+            <span data-status={selectedRuntimeState ?? "checking"}>
+              {activationState === "executed"
+                ? (chinese ? "已通过连接的后端执行" : "Executed by the connected backend")
+                : activationState === "focused"
+                  ? (chinese ? "已定位到对应页面或控件" : "Opened the related surface or control")
+                  : selectedRuntimeState === "available"
+                    ? (chinese ? "后端已连接" : "Backend available")
+                    : selectedRuntimeState === "client-runtime"
+                      ? (chinese ? "由前端运行时执行" : "Handled by the client runtime")
+                      : selectedRuntimeState === "configuration-required"
+                        ? (chinese ? "需要完成配置" : "Configuration required")
+                        : selectedRuntimeState === "external-runtime-required"
+                          ? (chinese ? "需要外部运行时" : "External runtime required")
+                          : (chinese ? "正在检查实际状态" : "Checking runtime status")}
+            </span>
+            <span data-backend-state={backendState}>
+              {backendMessage || (chinese ? "点击后检查后端状态" : "Click to inspect backend state")}
+            </span>
+          </footer>
+        ) : null}
+      </div>
+    </aside>
+  );
+}

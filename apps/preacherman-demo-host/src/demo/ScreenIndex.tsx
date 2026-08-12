@@ -12,7 +12,7 @@ export function ScreenIndex({ onOpenScreen }: ScreenIndexProps) {
   return (
     <section aria-labelledby="screen-index-title" className="screen-index">
       <header className="screen-index__header">
-        <p className="screen-index__eyebrow">PREACHERMAN · DEMO HOST</p>
+        <p className="screen-index__eyebrow">PREACHERMAN · DESKTOP DEMO</p>
         <h1 id="screen-index-title">Figma Screen Index</h1>
         <p>
           {implementedCount} implemented · {figmaScreenRegistry.length - implementedCount} pending · {pdfReconciliation}

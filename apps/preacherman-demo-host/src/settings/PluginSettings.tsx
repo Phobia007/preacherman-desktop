@@ -171,16 +171,16 @@ export function PluginSettings({ locale, serviceRequest }: PluginSettingsProps) 
     }
   };
 
-  return <section className="demo-settings__service demo-settings__service--plugins" data-airi-control="plugin.manager agent.plugin-tools runtime.plugin-inspector plugin.hot-reload" tabIndex={-1}>
+  return <section className="demo-settings__service demo-settings__service--plugins" data-preacherman-control="plugin.manager agent.plugin-tools runtime.plugin-inspector plugin.hot-reload" tabIndex={-1}>
     <header>
       <span>{chinese ? "插件管理" : "Plugin manager"}</span>
-      <small>{chinese ? "管理 AIRI ManifestV1 生命周期、Kits、Bindings 与插件工具。" : "Manage AIRI ManifestV1 lifecycles, Kits, Bindings, and plugin tools."}</small>
+      <small>{chinese ? "管理 Preacherman ManifestV1 生命周期、Kits、Bindings 与插件工具。" : "Manage Preacherman ManifestV1 lifecycles, Kits, Bindings, and plugin tools."}</small>
     </header>
     <p className="demo-settings__plugin-warning" role="note">
       {chinese ? "仅安装你信任的目录。插件代码以 Preacherman 本地服务权限运行，可以访问该服务有权访问的数据和系统资源。" : "Install trusted directories only. Plugin code runs with Preacherman local service permissions and can access data and system resources available to that service."}
     </p>
     <div className="demo-settings__plugin-install">
-      <label>{chinese ? "可信本地插件目录" : "Trusted local plugin directory"}<input disabled={busy} onChange={(event) => setInstallDirectory(event.target.value)} placeholder={chinese ? "例如 D:\\plugins\\my-airi-plugin" : "For example, D:\\plugins\\my-airi-plugin"} spellCheck={false} value={installDirectory} /></label>
+      <label>{chinese ? "可信本地插件目录" : "Trusted local plugin directory"}<input disabled={busy} onChange={(event) => setInstallDirectory(event.target.value)} placeholder={chinese ? "例如 D:\\plugins\\my-preacherman-plugin" : "For example, D:\\plugins\\my-preacherman-plugin"} spellCheck={false} value={installDirectory} /></label>
       <button className="demo-settings__service-button demo-settings__service-button--primary" disabled={busy || !installDirectory.trim()} onClick={() => void installPlugin()} type="button">{busy ? (chinese ? "处理中…" : "Working…") : (chinese ? "安装插件" : "Install plugin")}</button>
     </div>
     <div className="demo-settings__plugin-list" aria-busy={loading}>

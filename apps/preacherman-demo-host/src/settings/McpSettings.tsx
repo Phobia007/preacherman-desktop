@@ -98,10 +98,10 @@ export function McpSettings({ locale, serviceRequest }: { readonly locale: Local
     } finally { setBusy(false); }
   };
 
-  return <section className="demo-settings__service demo-settings__service--mcp" data-airi-control="mcp.servers runtime.mcp-test" tabIndex={-1}>
+  return <section className="demo-settings__service demo-settings__service--mcp" data-preacherman-control="mcp.servers runtime.mcp-test" tabIndex={-1}>
     <header>
       <span>{chinese ? "MCP 服务器" : "MCP servers"}</span>
-      <small>{chinese ? "兼容 AIRI mcp.json；保存后在本地启动 stdio 服务。环境变量会显示在编辑器中。" : "AIRI-compatible mcp.json. Saving starts local stdio servers; environment values remain visible in this editor."}</small>
+      <small>{chinese ? "兼容 Preacherman mcp.json；保存后在本地启动 stdio 服务。环境变量会显示在编辑器中。" : "Preacherman-compatible mcp.json. Saving starts local stdio servers; environment values remain visible in this editor."}</small>
     </header>
     <label>{chinese ? "服务器配置" : "Server configuration"}<textarea aria-label={chinese ? "MCP 服务器配置" : "MCP server configuration"} onChange={(event) => setConfigText(event.target.value)} spellCheck={false} value={configText} /></label>
     <div className="demo-settings__mcp-actions">

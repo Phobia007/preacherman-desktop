@@ -3,8 +3,8 @@ import type { Appearance, Locale } from "../preferences";
 import { localServiceUrl, localServiceUrlForPort, readServicePort, saveServicePort } from "../serviceConfig";
 import { McpSettings } from "./McpSettings";
 import { PluginSettings } from "./PluginSettings";
-import { AiriProviderConnectionsPanel } from "../airi/AiriProviderConnectionsPanel";
-import { HomeRailExecutionCard } from "./HomeRailExecutionCard";
+import { PreachermanProviderConnectionsPanel } from "../preacherman/PreachermanProviderConnectionsPanel";
+import { PreachermanExecutionCard } from "./PreachermanExecutionCard";
 
 interface SettingsScreenProps {
   readonly appearance: Appearance;
@@ -122,11 +122,11 @@ export function SettingsScreen({ appearance, locale, onAppearanceChange, onLocal
       {view === "preferences" ? <section className="demo-settings__preferences">
         <header><h2>{isChinese ? "界面偏好" : "Interface preferences"}</h2><p>{isChinese ? "这些设置会立即生效，并保存在本机。" : "These choices apply immediately and stay on this device."}</p></header>
         <div>
-          <button aria-pressed={appearance === "dark"} className="demo-settings__button" data-airi-control="appearance.select" onClick={() => onAppearanceChange(appearance === "light" ? "dark" : "light")} type="button"><span>{isChinese ? "外观" : "Appearance"}</span><strong>{appearanceValue}</strong></button>
-          <button aria-pressed={locale === "zh-CN"} className="demo-settings__button" data-airi-control="locale.select" onClick={() => onLocaleChange(locale === "en" ? "zh-CN" : "en")} type="button"><span>{isChinese ? "语言" : "Language"}</span><strong>{languageValue}</strong></button>
+          <button aria-pressed={appearance === "dark"} className="demo-settings__button" data-preacherman-control="appearance.select" onClick={() => onAppearanceChange(appearance === "light" ? "dark" : "light")} type="button"><span>{isChinese ? "外观" : "Appearance"}</span><strong>{appearanceValue}</strong></button>
+          <button aria-pressed={locale === "zh-CN"} className="demo-settings__button" data-preacherman-control="locale.select" onClick={() => onLocaleChange(locale === "en" ? "zh-CN" : "en")} type="button"><span>{isChinese ? "语言" : "Language"}</span><strong>{languageValue}</strong></button>
         </div>
       </section> : null}
-      {view === "providers" ? <section className="demo-settings__service" data-airi-control="provider.credentials voice.providers" tabIndex={-1}>
+      {view === "providers" ? <section className="demo-settings__service" data-preacherman-control="provider.credentials voice.providers" tabIndex={-1}>
         <header><span>{isChinese ? "AI 与语音服务" : "AI & Voice services"}</span><small>{isChinese ? "Key 仅保存在本机服务端，不会回显。" : "Keys stay in the local service and are never shown again."}</small></header>
         <label>{isChinese ? "本地服务端口" : "Local service port"}<input inputMode="numeric" max="65535" min="1024" onChange={(event) => setPort(event.target.valueAsNumber || 0)} type="number" value={port} /></label>
         <label>DeepSeek API Key <input autoComplete="off" onChange={(event) => setDeepseekKey(event.target.value)} placeholder={status?.deepseekConfigured ? (isChinese ? "已配置；留空可保留当前 Key" : "Configured; leave blank to keep it") : "sk-…"} type="password" value={deepseekKey} /></label>
@@ -136,7 +136,7 @@ export function SettingsScreen({ appearance, locale, onAppearanceChange, onLocal
         {message ? <p className="demo-settings__message" role="status">{message}</p> : null}
         {test ? <dl className="demo-settings__results"><div><dt>DeepSeek</dt><dd data-ok={test.deepseek.ok}>{test.deepseek.message}</dd></div><div><dt>Qwen ASR</dt><dd data-ok={test.asr.ok}>{test.asr.message}</dd></div><div><dt>Qwen TTS</dt><dd data-ok={test.tts.ok}>{test.tts.message}</dd></div></dl> : null}
       </section> : null}
-      {view === "connections" ? <div className="demo-settings__connection-stack"><HomeRailExecutionCard locale={locale} serviceRequest={serviceRequest} /><AiriProviderConnectionsPanel locale={locale} serviceRequest={serviceRequest} /></div> : null}
+      {view === "connections" ? <div className="demo-settings__connection-stack"><PreachermanExecutionCard locale={locale} serviceRequest={serviceRequest} /><PreachermanProviderConnectionsPanel locale={locale} serviceRequest={serviceRequest} /></div> : null}
       {view === "mcp" ? <McpSettings locale={locale} serviceRequest={serviceRequest} /> : null}
       {view === "plugins" ? <PluginSettings locale={locale} serviceRequest={serviceRequest} /> : null}
       {view === "widgets" ? widgets : null}

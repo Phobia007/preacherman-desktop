@@ -1,0 +1,14 @@
+{
+  "apiVersion": "v1",
+  "kind": "manifest.plugin.preacherman.local",
+  "name": "dynamic-tools-failure",
+  "permissions": [],
+  "tools": [
+    {
+      "name": "orphan"
+    }
+  ],
+  "entrypoints": {
+    "node": "index.mjs"
+  }
+}

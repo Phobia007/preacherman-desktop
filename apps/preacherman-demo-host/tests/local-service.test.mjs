@@ -114,22 +114,22 @@ test("companion keeps recent context and does not discard a useful non-JSON Deep
   assert.match(modelRequest.messages[0].content, /不要自称 A/);
 });
 
-test("AIRI capability buttons reach an honest persistent backend adapter", async (t) => {
-  const dataDir = await mkdtemp(join(tmpdir(), "preacherman-airi-capabilities-"));
+test("PREACHERMAN capability buttons reach an honest persistent backend adapter", async (t) => {
+  const dataDir = await mkdtemp(join(tmpdir(), "preacherman-preacherman-capabilities-"));
   const service = createPreachermanServer({ env: { PREACHERMAN_DATA_DIR: dataDir } });
   const address = await service.listen(0);
   const port = typeof address === "object" && address ? address.port : 0;
   const baseUrl = `http://127.0.0.1:${port}`;
   t.after(async () => { await service.close(); await rm(dataDir, { recursive: true, force: true }); });
 
-  const local = await request(baseUrl, "/api/airi/capabilities/task.create/invoke", {
+  const local = await request(baseUrl, "/api/preacherman/capabilities/task.create/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
   });
   assert.equal(local.response.status, 200);
   assert.equal(local.body.event.state, "available");
   assert.equal(local.body.event.adapter, "preacherman-task");
 
-  const capabilityStatuses = await request(baseUrl, "/api/airi/capabilities/status", {
+  const capabilityStatuses = await request(baseUrl, "/api/preacherman/capabilities/status", {
     method: "POST",
     body: JSON.stringify({
       ids: [
@@ -175,12 +175,12 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(called.body.result.isError, false);
   assert.deepEqual(called.body.result.structuredContent, { ok: true, label: "external" });
 
-  const mcp = await request(baseUrl, "/api/airi/capabilities/agent.mcp-tools/invoke", {
+  const mcp = await request(baseUrl, "/api/preacherman/capabilities/agent.mcp-tools/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
   });
   assert.equal(mcp.response.status, 200);
   assert.equal(mcp.body.event.state, "available");
-  assert.equal(mcp.body.event.adapter, "preacherman-airi-mcp");
+  assert.equal(mcp.body.event.adapter, "preacherman-preacherman-mcp");
   assert.equal(mcp.body.event.execution.status, "succeeded");
   assert.equal(mcp.body.event.execution.protocol, "mcp");
   assert.equal(mcp.body.event.execution.tool, "preacherman::preacherman_runtime_status");
@@ -190,7 +190,7 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   const plugins = await request(baseUrl, "/api/plugins");
   assert.equal(plugins.response.status, 200);
   assert.equal(plugins.body.plugins[0].manifest.apiVersion, "v1");
-  assert.equal(plugins.body.plugins[0].manifest.kind, "manifest.plugin.airi.moeru.ai");
+  assert.equal(plugins.body.plugins[0].manifest.kind, "manifest.plugin.preacherman.local");
   assert.equal(plugins.body.plugins[0].phase, "ready");
 
   const pluginTools = await request(baseUrl, "/api/plugins/tools");
@@ -206,7 +206,7 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(pluginArtifact.response.status, 200);
   assert.equal(pluginArtifact.body.artifact.content.taskCount, 1);
 
-  const kits = await request(baseUrl, "/api/airi/kits");
+  const kits = await request(baseUrl, "/api/preacherman/kits");
   assert.deepEqual(kits.body.kits.map((kit) => kit.name), [
     "computer-vision", "connection", "gamelet", "ledger", "memory", "provider", "task", "tools", "widget",
   ]);
@@ -278,12 +278,12 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   });
   assert.equal(screenshotInvoke.body.result.status, "external-runtime-required");
 
-  const pluginCapability = await request(baseUrl, "/api/airi/capabilities/agent.plugin-tools/invoke", {
+  const pluginCapability = await request(baseUrl, "/api/preacherman/capabilities/agent.plugin-tools/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "en" }),
   });
   assert.equal(pluginCapability.body.event.state, "available");
-  assert.equal(pluginCapability.body.event.adapter, "preacherman-airi-plugin-host");
-  assert.equal(pluginCapability.body.event.execution.protocol, "airi-plugin");
+  assert.equal(pluginCapability.body.event.adapter, "preacherman-preacherman-plugin-host");
+  assert.equal(pluginCapability.body.event.execution.protocol, "preacherman-plugin");
   assert.deepEqual(pluginCapability.body.event.execution.tools, ["preacherman-runtime::task_summary"]);
 
   const disabledPlugin = await request(baseUrl, "/api/plugins/preacherman-runtime", {
@@ -300,7 +300,7 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   });
   assert.ok(reloadedPlugin.body.plugin.revision > enabledPlugin.body.plugin.revision);
 
-  const fixturePlugin = fileURLToPath(new URL("./fixtures/airi-plugin/success", import.meta.url));
+  const fixturePlugin = fileURLToPath(new URL("./fixtures/preacherman-plugin/success", import.meta.url));
   const installedPlugin = await request(baseUrl, "/api/plugins/install", {
     method: "POST", body: JSON.stringify({ directory: fixturePlugin }),
   });
@@ -382,7 +382,7 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
 
   const voicePluginTurn = await request(baseUrl, "/api/agent/turn", {
     method: "POST",
-    body: JSON.stringify({ input: "Run the AIRI plugin status summary", locale: "en", history: [] }),
+    body: JSON.stringify({ input: "Run the PREACHERMAN plugin status summary", locale: "en", history: [] }),
   });
   assert.equal(voicePluginTurn.body.proposal.kind, "plugin-tool");
   assert.equal(voicePluginTurn.body.proposal.allowedTools[0], "preacherman-runtime::task_summary");
@@ -406,19 +406,19 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.ok(observability.body.traces.some((trace) => trace.target === "fixture-plugin::echo" && trace.status === "succeeded"));
   assert.ok(observability.body.activity.some((activity) => activity.pluginId === "fixture-plugin" && activity.phase === "uninstalled"));
 
-  const external = await request(baseUrl, "/api/airi/capabilities/game.minecraft/invoke", {
+  const external = await request(baseUrl, "/api/preacherman/capabilities/game.minecraft/invoke", {
     method: "POST", body: JSON.stringify({ surface: "workspace", locale: "zh-CN" }),
   });
   assert.equal(external.response.status, 200);
   assert.equal(external.body.event.state, "external-runtime-required");
   assert.deepEqual(external.body.event.requirements, ["game runtime or provider"]);
 
-  const speech = await request(baseUrl, "/api/airi/capabilities/voice.tts/invoke", {
+  const speech = await request(baseUrl, "/api/preacherman/capabilities/voice.tts/invoke", {
     method: "POST", body: JSON.stringify({ surface: "lab", locale: "en" }),
   });
   assert.equal(speech.body.event.state, "configuration-required");
 
-  const history = await request(baseUrl, "/api/airi/events?limit=20");
+  const history = await request(baseUrl, "/api/preacherman/events?limit=20");
   assert.equal(history.response.status, 200);
   assert.ok(history.body.events.some((event) => event.capabilityId === "voice.tts"));
   assert.ok(history.body.events.some((event) => event.capabilityId === "game.minecraft"));
@@ -429,6 +429,6 @@ test("AIRI capability buttons reach an honest persistent backend adapter", async
   assert.equal(recordedPluginCall.execution.status, "succeeded");
   assert.equal(recordedPluginCall.execution.toolName, "fixture-plugin::echo");
   assert.ok(!JSON.stringify(recordedPluginCall).includes("closed-loop"));
-  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-capability-events.v1.json"), "utf8")).events.length, history.body.events.length);
-  assert.equal(JSON.parse(await readFile(join(dataDir, "airi-plugins.v1.json"), "utf8")).enabled, true);
+  assert.equal(JSON.parse(await readFile(join(dataDir, "preacherman-capability-events.v1.json"), "utf8")).events.length, history.body.events.length);
+  assert.equal(JSON.parse(await readFile(join(dataDir, "preacherman-plugins.v1.json"), "utf8")).enabled, true);
 });

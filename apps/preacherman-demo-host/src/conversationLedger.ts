@@ -19,7 +19,7 @@ export interface TaskLedgerEntry {
   };
   readonly attempts?: readonly {
     readonly attempt: number;
-    readonly provider: "local" | "homerail";
+    readonly provider: "local" | "preacherman-execution";
     readonly status: string;
     readonly externalRunId?: string;
     readonly startedAt?: string;

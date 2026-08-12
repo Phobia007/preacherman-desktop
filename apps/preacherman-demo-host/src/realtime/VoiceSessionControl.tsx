@@ -397,11 +397,11 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
 
   return (
     <section className="preacherman-live" data-speech-state={speechLifecycle} data-state={speechLifecycle === "playing" ? "speaking" : state}>
-      <div className="preacherman-live__status" data-airi-control="voice.tts" role="status" tabIndex={-1}>
+      <div className="preacherman-live__status" data-preacherman-control="voice.tts" role="status" tabIndex={-1}>
         <span>{locale === "zh-CN" ? "语音输入" : "Voice input"}</span>
         <strong>{state === "error" ? errorMessage : transcript || labels[state]}</strong>
       </div>
-      <div aria-label={locale === "zh-CN" ? "语音输入模式" : "Voice input mode"} className="preacherman-live__mode" data-airi-control="voice.capture-mode" role="group" tabIndex={-1}>
+      <div aria-label={locale === "zh-CN" ? "语音输入模式" : "Voice input mode"} className="preacherman-live__mode" data-preacherman-control="voice.capture-mode" role="group" tabIndex={-1}>
         <button aria-pressed={captureMode === "pushToTalk"} disabled={state === "listening" || state === "finalizing"} onClick={() => { handsFreeActive.current = false; setCaptureMode("pushToTalk"); }} type="button">{labels.pushToTalk}</button>
         <button aria-pressed={captureMode === "handsFree"} disabled={state === "listening" || state === "finalizing"} onClick={() => setCaptureMode("handsFree")} type="button">{labels.handsFree}</button>
       </div>
@@ -409,7 +409,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         <button
           aria-pressed={state === "listening"}
           className="preacherman-live__button"
-          data-airi-control="voice.quick-input voice.asr"
+          data-preacherman-control="voice.quick-input voice.asr"
           disabled={state === "finalizing"}
           onClick={captureMode === "handsFree" ? () => { if (state === "listening") finish(true); else { handsFreeActive.current = true; void start(); } } : undefined}
           onPointerCancel={captureMode === "pushToTalk" ? () => finish() : undefined}
@@ -421,7 +421,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
           <span aria-hidden="true" className="preacherman-live__signal"><i /><i /><i /></span>
           <span>{state === "error" ? (locale === "zh-CN" ? "点按重试" : "Tap to retry") : captureMode === "handsFree" ? (state === "listening" ? labels.handsFreeStop : labels.handsFreeStart) : labels[state]}</span>
         </button>
-        <button className="preacherman-live__cancel" data-airi-control="presentation.stop" disabled={speechLifecycle === "idle"} onClick={() => coordinator.stopSpeech()} type="button">{labels.stopSpeaking}</button>
+        <button className="preacherman-live__cancel" data-preacherman-control="presentation.stop" disabled={speechLifecycle === "idle"} onClick={() => coordinator.stopSpeech()} type="button">{labels.stopSpeaking}</button>
       </div>
     </section>
   );

@@ -11,10 +11,10 @@ export type TaskActionId =
   | "task.retry"
   | "task.events"
   | "task.artifacts"
-  | "execution.homerail"
+  | "execution.preacherman-execution"
   | "execution.acceptance"
   | "execution.trace"
-  | "execution.console";
+  ;
 
 export interface ActionPlacement {
   readonly owner: LocalSurfaceType;
@@ -37,10 +37,9 @@ export const actionPlacement: Readonly<Record<TaskActionId, ActionPlacement>> = 
   "task.retry": { owner: "workspace", shortcuts: ["home", "ledger"], intent: "execute" },
   "task.events": { owner: "ledger", shortcuts: ["workspace", "test"], intent: "inspect" },
   "task.artifacts": { owner: "ledger", shortcuts: ["workspace", "test"], intent: "inspect" },
-  "execution.homerail": { owner: "settings", shortcuts: ["workspace", "test"], intent: "configure" },
+  "execution.preacherman-execution": { owner: "settings", shortcuts: ["workspace", "test"], intent: "configure" },
   "execution.acceptance": { owner: "test", shortcuts: ["settings"], intent: "execute" },
   "execution.trace": { owner: "test", shortcuts: ["workspace", "ledger"], intent: "inspect" },
-  "execution.console": { owner: "settings", shortcuts: ["test"], intent: "inspect" },
 });
 
 export function placementForAction(actionId: TaskActionId): ActionPlacement {

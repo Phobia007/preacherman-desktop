@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { createPreachermanServer } from "../server/preachermanServer.mjs";
 
 const origin = "http://127.0.0.1:1420";
-const fixture = join(dirname(fileURLToPath(import.meta.url)), "fixtures", "airi-plugin", "success");
+const fixture = join(dirname(fileURLToPath(import.meta.url)), "fixtures", "preacherman-plugin", "success");
 
 async function request(baseUrl, path, options = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
@@ -42,7 +42,7 @@ test("plugin retry re-executes the original qualified tool and never starts Pitc
 
   const listed = await request(baseUrl, "/api/tasks?limit=10");
   const failed = listed.body.tasks.find((task) => task.toolCall?.qualifiedName === "fixture-plugin::recent_conversations");
-  assert.equal(failed.source, "airi-plugin");
+  assert.equal(failed.source, "preacherman-plugin");
   assert.equal(failed.providerPluginId, "fixture-plugin");
   assert.equal(failed.status, "failed");
 

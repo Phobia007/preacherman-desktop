@@ -40,7 +40,7 @@ test("TaskStore migrates v1 tasks to canonical v2 without losing the legacy prim
   assert.equal(JSON.parse(await readFile(file, "utf8")).version, 2);
 });
 
-test("restart fails interrupted local work but preserves HomeRail work for reconciliation", async (t) => {
+test("restart fails interrupted local work but preserves Preacherman Execution work for reconciliation", async (t) => {
   const directory = await mkdtemp(join(tmpdir(), "preacherman-task-recovery-"));
   const file = join(directory, "task-store.v2.json");
   t.after(() => rm(directory, { recursive: true, force: true }));
@@ -53,8 +53,8 @@ test("restart fails interrupted local work but preserves HomeRail work for recon
         runId: "external",
         status: "running",
         artifact: null,
-        execution: { kind: "homerail-dag", adapter: "homerail", workflowId: "preacherman-complex-task-v1" },
-        attempts: [{ attempt: 1, provider: "homerail", externalRunId: "hr_1", status: "active", startedAt: "2026-08-01T00:00:00.000Z" }],
+        execution: { kind: "preacherman-execution-dag", adapter: "preacherman-execution", workflowId: "preacherman-complex-task-v1" },
+        attempts: [{ attempt: 1, provider: "preacherman-execution", externalRunId: "hr_1", status: "active", startedAt: "2026-08-01T00:00:00.000Z" }],
       }),
     ],
   }));

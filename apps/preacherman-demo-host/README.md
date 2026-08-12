@@ -2,7 +2,7 @@
 
 Preacherman Demo Host 是一个本地优先的桌面数字伙伴原型，包含响应式 Web UI、Cortana 3D Avatar、DeepSeek 对话与 PitchKit 任务、阿里云百炼实时语音以及 Tauri Windows 打包能力。
 
-AIRI 兼容层的运行入口、能力矩阵、插件开发契约、完整演示脚本、外部依赖和交付检查见 [AIRI × Preacherman ecosystem demo](./AIRI-ECOSYSTEM-DEMO.md)。
+PREACHERMAN 兼容层的运行入口、能力矩阵、插件开发契约、完整演示脚本、外部依赖和交付检查见 [PREACHERMAN × Preacherman ecosystem demo](./PREACHERMAN-ECOSYSTEM-DEMO.md)。
 
 ## 当前能力
 
@@ -11,7 +11,7 @@ AIRI 兼容层的运行入口、能力矩阵、插件开发契约、完整演示
 - 使用阿里云百炼 Qwen ASR/TTS 进行语音识别和流式语音合成。
 - 支持按住说话和自由对话两种输入模式。
 - 支持 PitchKit 提案确认、执行、取消、重试和本地产物写入。
-- 支持 AIRI 兼容插件、Kits/Bindings、MCP、Widget、Gamelet、Provider、Memory、外部连接、Computer/Vision 和可观测性面板。
+- 支持 PREACHERMAN 兼容插件、Kits/Bindings、MCP、Widget、Gamelet、Provider、Memory、外部连接、Computer/Vision 和可观测性面板。
 - 插件工具可由 Agent 提案并在用户批准后执行，结构化结果会进入 TaskRun、产物和 Ledger。
 - Key 只保存在本机服务端，不通过浏览器接口回显。
 - 保存最近文本会话，不保存音频或 Provider Key。

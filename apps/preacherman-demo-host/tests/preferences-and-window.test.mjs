@@ -48,17 +48,17 @@ test("Settings exposes the real MCP configuration and execution console in both 
   assert.match(settings, /<McpSettings\b/);
   assert.match(mcp, /\/api\/mcp\/config/);
   assert.match(mcp, /\/api\/mcp\/tools\/call/);
-  assert.match(mcp, /data-airi-control="mcp\.servers runtime\.mcp-test"/);
+  assert.match(mcp, /data-preacherman-control="mcp\.servers runtime\.mcp-test"/);
   assert.match(styles, /\.demo-settings__service-button/);
   assert.match(styles, /var\(--demo-theme-focus\)/);
   assert.match(styles, /var\(--demo-theme-surface\)/);
   assert.match(styles, /var\(--demo-theme-error\)/);
 });
 
-test("Settings exposes the AIRI plugin lifecycle and tool console in both themes", async () => {
+test("Settings exposes the PREACHERMAN plugin lifecycle and tool console in both themes", async () => {
   const settings = await readFile(join(sourceRoot, "settings", "SettingsScreen.tsx"), "utf8");
   const plugins = await readFile(join(sourceRoot, "settings", "PluginSettings.tsx"), "utf8");
-  const runtime = await readFile(join(hostRoot, "server", "airiPluginRuntime.mjs"), "utf8");
+  const runtime = await readFile(join(hostRoot, "server", "preachermanPluginRuntime.mjs"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
 
   assert.match(settings, /<PluginSettings\b/);
@@ -69,8 +69,8 @@ test("Settings exposes the AIRI plugin lifecycle and tool console in both themes
   assert.match(plugins, /plugin\.usedKits/);
   assert.match(plugins, /plugin\.providedKits/);
   assert.match(plugins, /Owned Bindings/);
-  assert.match(plugins, /data-airi-control="plugin\.manager agent\.plugin-tools runtime\.plugin-inspector plugin\.hot-reload"/);
-  assert.match(runtime, /manifest\.plugin\.airi\.moeru\.ai/);
+  assert.match(plugins, /data-preacherman-control="plugin\.manager agent\.plugin-tools runtime\.plugin-inspector plugin\.hot-reload"/);
+  assert.match(runtime, /manifest\.plugin\.preacherman\.local/);
   assert.match(runtime, /"loading", "loaded", "authenticating", "authenticated", "announced"/);
   assert.match(styles, /\.demo-settings__plugin-list/);
   assert.match(styles, /\.demo-settings__plugin-approval/);

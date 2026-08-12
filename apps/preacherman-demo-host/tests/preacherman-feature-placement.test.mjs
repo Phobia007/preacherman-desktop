@@ -1,0 +1,138 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import { build } from "esbuild";
+import test from "node:test";
+
+const packageRoot = join(import.meta.dirname, "..");
+
+async function loadFeaturePlacement() {
+  const result = await build({
+    bundle: true,
+    entryPoints: [join(packageRoot, "src", "preacherman", "featurePlacement.ts")],
+    format: "esm",
+    platform: "node",
+    target: "node22",
+    write: false,
+  });
+  return import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`);
+}
+
+test("PREACHERMAN catalog remains valid UTF-8 with natural Chinese labels", async () => {
+  const sourceBuffer = await readFile(join(packageRoot, "src", "preacherman", "featurePlacement.ts"));
+  const source = new TextDecoder("utf-8", { fatal: true }).decode(sourceBuffer);
+  assert.doesNotMatch(source, /\uFFFD/, "the catalog must not contain Unicode replacement characters");
+  assert.doesNotMatch(source, /銆|锛|鈥|鎻掍欢|涓伐鍏|鐢熷懡鍛ㄦ湡|鍚敤|鍋滅敤/, "the catalog must not contain common UTF-8 mojibake sequences");
+
+  const { preachermanFeaturePlacements } = await loadFeaturePlacement();
+  const labelById = new Map(preachermanFeaturePlacements.flatMap((placement) => placement.features)
+    .map((candidate) => [candidate.id, candidate.label["zh-CN"]]));
+  assert.equal(labelById.get("companion.chat"), "伙伴对话");
+  assert.equal(labelById.get("task.create"), "创建任务");
+  assert.equal(labelById.get("voice.asr"), "语音识别");
+  assert.equal(labelById.get("avatar.select"), "角色模型");
+  assert.equal(labelById.get("runtime.plugin-inspector"), "插件检查器");
+  assert.equal(labelById.get("conversation.history"), "对话记录");
+  assert.equal(labelById.get("plugin.manager"), "插件管理");
+
+  const sectionTitles = preachermanFeaturePlacements.flatMap((placement) => placement.sections)
+    .map((candidate) => candidate.title["zh-CN"]);
+  for (const title of ["开始使用", "智能体工具", "语音会话", "构建身份", "快速检查", "记忆层", "工具与扩展"]) {
+    assert.ok(sectionTitles.includes(title), `missing natural Chinese section title: ${title}`);
+  }
+});
+
+test("PREACHERMAN controls have one explicit Preacherman surface placement", async () => {
+  const [registry, panel, panelStyles, app, styles] = await Promise.all([
+    readFile(join(packageRoot, "src", "preacherman", "featurePlacement.ts"), "utf8"),
+    readFile(join(packageRoot, "src", "preacherman", "PreachermanFeaturePanel.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "preacherman", "preacherman-feature-panel.css"), "utf8"),
+    readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "styles.css"), "utf8"),
+  ]);
+
+  for (const surface of ["home", "workspace", "lab", "market", "test", "ledger", "settings"]) {
+    assert.match(registry, new RegExp(`surface: "${surface}"`));
+  }
+  const featureIds = [...registry.matchAll(/feature\("([^"]+)"/g)].map((match) => match[1]);
+  assert.ok(featureIds.length >= 120, `expected the complete PREACHERMAN catalog, received ${featureIds.length}`);
+  assert.equal(new Set(featureIds).size, featureIds.length, "each PREACHERMAN capability must have one placement");
+  assert.match(registry, /presentation\.stop/);
+  assert.match(registry, /task\.cancel/);
+  assert.match(registry, /presentation\.diagnostics/);
+  assert.match(registry, /memory\.recall/);
+  assert.match(registry, /voice\.providers/);
+  assert.match(registry, /computer-use\.desktop/);
+  assert.match(registry, /game\.minecraft/);
+  assert.match(registry, /avatar\.live2d-import/);
+  assert.match(registry, /agent\.mcp-tools/);
+  assert.match(registry, /connection\.telegram/);
+  assert.match(registry, /provider\.amazon-bedrock/);
+  assert.match(registry, /status: PreachermanFeatureStatus/);
+  assert.match(app, /activeSurfaceType === "workspace"[\s\S]*workspaceContent/);
+  assert.match(app, /activeSurfaceType === "lab"[\s\S]*labContent/);
+  assert.match(app, /<PreachermanFeaturePanel[\s\S]*onActivate=\{handlePreachermanFeatureActivate\}[\s\S]*surface=\{preachermanPanelSurface\}/);
+  assert.match(panel, /onActivate\(candidate\.id\)/);
+  assert.match(panel, /loadPreachermanCapabilityStatuses/);
+  assert.match(panel, /Backend available/);
+  assert.match(panel, /External runtime required/);
+  assert.match(panel, /placement\.features\.length/);
+  assert.match(panelStyles, /var\(--demo-theme-text\)/);
+  assert.match(panelStyles, /var\(--demo-theme-surface-elevated\)/);
+  assert.match(panelStyles, /var\(--demo-theme-focus\)/);
+  assert.doesNotMatch(panelStyles, /#[0-9a-f]{3,8}\b/i);
+  assert.match(styles, /demo-surface-toolbar/);
+  assert.match(panel, /aria-expanded=\{open\}/);
+  assert.match(panel, /candidateSection\.kind !== "primary"/);
+  assert.match(styles, /\.demo-app-viewport > \.demo-app-shell[\s\S]*?left: 50%;[\s\S]*?translate\(-50%, -50%\) scale/);
+  assert.match(styles, /\.demo-settings[\s\S]*?width: 100%;[\s\S]*?height: 100%;/);
+  assert.match(styles, /\.demo-ledger[\s\S]*?width: 100%;[\s\S]*?height: 100%;/);
+  assert.doesNotMatch(styles.match(/\.demo-surface-toolbar\s*\{[\s\S]*?\}/)?.[0] ?? "", /#[0-9a-f]{3,8}\b/i);
+});
+
+test("each surface has one commercial task hierarchy with no orphaned capability", async () => {
+  const { preachermanFeaturePlacements } = await loadFeaturePlacement();
+  for (const placement of preachermanFeaturePlacements) {
+    assert.equal(placement.sections[0].kind, "primary", `${placement.surface} must begin with its primary task`);
+    const featureIds = placement.features.map((feature) => feature.id);
+    const sectionIds = placement.sections.flatMap((section) => section.featureIds);
+    assert.equal(new Set(sectionIds).size, sectionIds.length, `${placement.surface} groups must not duplicate capabilities`);
+    assert.deepEqual(new Set(sectionIds), new Set(featureIds), `${placement.surface} groups must include every capability`);
+  }
+});
+
+test("live PREACHERMAN buttons focus controls and every button checks its backend adapter", async () => {
+  const [app, panel, client, service, voice, task, gallery, model, settings, ledger] = await Promise.all([
+    readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "preacherman", "PreachermanFeaturePanel.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "preacherman", "capabilityClient.ts"), "utf8"),
+    readFile(join(packageRoot, "server", "preachermanServer.mjs"), "utf8"),
+    readFile(join(packageRoot, "src", "realtime", "VoiceSessionControl.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "gallery", "CortanaGallery.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "gallery", "CortanaModelStage.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "settings", "SettingsScreen.tsx"), "utf8"),
+    readFile(join(packageRoot, "src", "conversation", "ConversationLedgerScreen.tsx"), "utf8"),
+  ]);
+
+  assert.match(app, /querySelectorAll<HTMLElement>\("\[data-preacherman-control\]"\)/);
+  assert.match(app, /target\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(app, /findPreachermanFeature\(featureId\)\?\.target/);
+  assert.match(panel, /invokePreachermanCapability\(candidate\.id, surface, locale\)/);
+  assert.match(panel, /candidateSection\.kind !== "primary"/);
+  assert.match(panel, /<details className="demo-preacherman-panel__section/);
+  assert.match(panel, /data-priority=\{priority\}/);
+  assert.match(client, /\/api\/preacherman\/capabilities\/\$\{encodeURIComponent\(capabilityId\)\}\/invoke/);
+  assert.match(panel, /event\.execution\?\.status === "succeeded"/);
+  assert.match(service, /preachermanCapabilityMatch/);
+  assert.match(service, /\/api\/preacherman\/events/);
+  assert.match(voice, /data-preacherman-control="voice\.quick-input voice\.asr"/);
+  assert.match(voice, /data-preacherman-control="presentation\.stop"/);
+  assert.match(task, /data-preacherman-control="task\.create"/);
+  assert.match(task, /data-preacherman-control="task\.confirm"/);
+  assert.match(gallery, /data-preacherman-control="avatar\.select"/);
+  assert.match(model, /data-preacherman-control="avatar\.status"/);
+  assert.match(settings, /data-preacherman-control="appearance\.select"/);
+  assert.match(settings, /data-preacherman-control="provider\.credentials voice\.providers"/);
+  assert.match(ledger, /data-preacherman-control="conversation\.history"/);
+});

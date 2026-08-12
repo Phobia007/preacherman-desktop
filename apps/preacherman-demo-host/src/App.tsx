@@ -7,15 +7,15 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { ABTaskConsole, TaskWorkspaceProvider } from "./ab/ABTaskConsole";
-import { AiriFeaturePanel } from "./airi/AiriFeaturePanel";
-import { AiriEcosystemDiagnostics } from "./airi/AiriEcosystemDiagnostics";
-import { AiriComputerVisionPanel } from "./airi/AiriComputerVisionPanel";
-import { AiriDomObservationBridge } from "./airi/AiriDomObservationBridge";
-import { AiriGameletPanel } from "./airi/AiriGameletPanel";
-import { AiriObservabilityPanel } from "./airi/AiriObservabilityPanel";
-import { AiriWidgetGallery } from "./airi/AiriWidgetGallery";
-import { airiServiceRequest } from "./airi/capabilityClient";
-import { featuresForSurface, findAiriFeature } from "./airi/featurePlacement";
+import { PreachermanFeaturePanel } from "./preacherman/PreachermanFeaturePanel";
+import { PreachermanEcosystemDiagnostics } from "./preacherman/PreachermanEcosystemDiagnostics";
+import { PreachermanComputerVisionPanel } from "./preacherman/PreachermanComputerVisionPanel";
+import { PreachermanDomObservationBridge } from "./preacherman/PreachermanDomObservationBridge";
+import { PreachermanGameletPanel } from "./preacherman/PreachermanGameletPanel";
+import { PreachermanObservabilityPanel } from "./preacherman/PreachermanObservabilityPanel";
+import { PreachermanWidgetGallery } from "./preacherman/PreachermanWidgetGallery";
+import { preachermanServiceRequest } from "./preacherman/capabilityClient";
+import { featuresForSurface, findPreachermanFeature } from "./preacherman/featurePlacement";
 import { AppShell } from "./app-shell/AppShell";
 import { SurfaceToolbar, type SurfaceToolbarTab } from "./app-shell/SurfaceToolbar";
 import { DemoAvatarSlot } from "./avatar/DemoAvatarSlot";
@@ -46,7 +46,7 @@ import {
 import { VoiceSessionControl } from "./realtime/VoiceSessionControl";
 import { SettingsScreen } from "./settings/SettingsScreen";
 import { ConversationLedgerScreen } from "./conversation/ConversationLedgerScreen";
-import { HomeRailFusionPanel } from "./homerail/HomeRailFusionPanel";
+import { PreachermanExecutionFusionPanel } from "./preacherman-execution/PreachermanExecutionFusionPanel";
 
 const manifest: SurfaceManifest = {
   surfaceType: "workspace",
@@ -147,15 +147,15 @@ export function App() {
   const [testView, setTestView] = useState("diagnostics");
   const [requestedControl, setRequestedControl] = useState<string | null>(null);
   const handleIntroComplete = useCallback(() => setShowStartupIntro(false), []);
-  const handleAiriFeatureActivate = useCallback((featureId: string): boolean => {
+  const handlePreachermanFeatureActivate = useCallback((featureId: string): boolean => {
     const focusControl = (controlId: string): boolean => {
-      const target = Array.from(document.querySelectorAll<HTMLElement>("[data-airi-control]"))
-        .find((candidate) => candidate.dataset.airiControl?.split(" ").includes(controlId));
+      const target = Array.from(document.querySelectorAll<HTMLElement>("[data-preacherman-control]"))
+        .find((candidate) => candidate.dataset.preachermanControl?.split(" ").includes(controlId));
       if (!target || (target instanceof HTMLButtonElement && target.disabled)) return false;
       target.focus({ preventScroll: true });
       target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-      target.dataset.airiHighlight = "true";
-      window.setTimeout(() => delete target.dataset.airiHighlight, 900);
+      target.dataset.preachermanHighlight = "true";
+      window.setTimeout(() => delete target.dataset.preachermanHighlight, 900);
       if (["presentation.stop", "task.cancel", "conversation.history", "task.events", "task.artifacts", "runtime.io-history", "plugin.activity"].includes(controlId) && target instanceof HTMLButtonElement) {
         target.click();
       }
@@ -185,7 +185,7 @@ export function App() {
 
     if (focusControl(featureId)) return true;
     if (revealLocalModule(featureId)) return true;
-    const target = findAiriFeature(featureId)?.target;
+    const target = findPreachermanFeature(featureId)?.target;
     if (target) {
       const targetControl = target.control ?? featureId;
       setRequestedControl(targetControl);
@@ -242,7 +242,7 @@ export function App() {
       : `screen-${route.screenId ?? acceptedScreenId}`;
   const HomeSurface = adapter.resolve(manifest).component;
   const isCortanaActive = preferences.activeModelId === "cortana";
-  const airiPanelSurface: LocalSurfaceType | null = route.kind === "surface"
+  const preachermanPanelSurface: LocalSurfaceType | null = route.kind === "surface"
     ? activeSurfaceType
     : route.kind === "screen" && (screen?.manifest?.surfaceId ?? manifest.surfaceId) === manifest.surfaceId
       ? "home"
@@ -261,46 +261,46 @@ export function App() {
           <ABTaskConsole locale={preferences.locale} mode="home" />
         </>
       ) : null}
-      {homeView === "widgets" ? <div className="demo-surface-module"><AiriWidgetGallery placement="home" locale={preferences.locale} serviceRequest={airiServiceRequest} /></div> : null}
+      {homeView === "widgets" ? <div className="demo-surface-module"><PreachermanWidgetGallery placement="home" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
     </main>
   );
   const workspaceContent = (
     <main
       className="demo-host demo-host--workspace"
-      data-airi-features={featuresForSurface("workspace").join(" ")}
+      data-preacherman-features={featuresForSurface("workspace").join(" ")}
       data-view={workView}
     >
       {workView === "task" ? <>
         {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
         <ABTaskConsole locale={preferences.locale} mode="work" />
       </> : null}
-      {workView !== "task" ? <div className="demo-airi-work-runtime" data-view={workView}>
-        {workView === "tools" ? <div data-airi-control="plugin.widgets agent.mcp-tools agent.plugin-tools agent.kits-api agent.bindings-api"><AiriWidgetGallery placement="work" locale={preferences.locale} serviceRequest={airiServiceRequest} /></div> : null}
-        {workView === "games" ? <div data-airi-control="plugin.gamelets game.tic-tac-toe"><AiriGameletPanel locale={preferences.locale} serviceRequest={airiServiceRequest} /></div> : null}
-        {workView === "vision" ? <div data-airi-control="computer-use.session computer-use.dom computer-use.transcript vision.screen vision.camera"><AiriComputerVisionPanel locale={preferences.locale} serviceRequest={airiServiceRequest} /></div> : null}
+      {workView !== "task" ? <div className="demo-preacherman-work-runtime" data-view={workView}>
+        {workView === "tools" ? <div data-preacherman-control="plugin.widgets agent.mcp-tools agent.plugin-tools agent.kits-api agent.bindings-api"><PreachermanWidgetGallery placement="work" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
+        {workView === "games" ? <div data-preacherman-control="plugin.gamelets game.tic-tac-toe"><PreachermanGameletPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
+        {workView === "vision" ? <div data-preacherman-control="computer-use.session computer-use.dom computer-use.transcript vision.screen vision.camera"><PreachermanComputerVisionPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
       </div> : null}
     </main>
   );
   const labContent = (
     <main
       className="demo-host demo-host--lab"
-      data-airi-features={featuresForSurface("lab").join(" ")}
+      data-preacherman-features={featuresForSurface("lab").join(" ")}
     >
       {labView === "voice" && isCortanaActive ? <>
         <CortanaModelStage ariaLabel="Cortana voice and avatar lab model" showControls />
         <VoiceSessionControl locale={preferences.locale} />
       </> : null}
-      {labView === "widgets" ? <div className="demo-surface-module"><AiriWidgetGallery placement="lab" locale={preferences.locale} serviceRequest={airiServiceRequest} /></div> : null}
+      {labView === "widgets" ? <div className="demo-surface-module"><PreachermanWidgetGallery placement="lab" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
     </main>
   );
   const testContent = (
     <main
       className="demo-host demo-host--test"
-      data-airi-features={featuresForSurface("test").join(" ")}
+      data-preacherman-features={featuresForSurface("test").join(" ")}
     >
-      <div className="demo-airi-test-runtime" data-view={testView}>
-        {testView === "diagnostics" ? <><HomeRailFusionPanel locale={preferences.locale} serviceRequest={airiServiceRequest} /><AiriEcosystemDiagnostics locale={preferences.locale} serviceRequest={airiServiceRequest} /></> : null}
-        {testView === "observability" ? <><HomeRailFusionPanel locale={preferences.locale} serviceRequest={airiServiceRequest} view="trace" /><AiriObservabilityPanel locale={preferences.locale} serviceRequest={airiServiceRequest} /></> : null}
+      <div className="demo-preacherman-test-runtime" data-view={testView}>
+        {testView === "diagnostics" ? <><PreachermanExecutionFusionPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /><PreachermanEcosystemDiagnostics locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></> : null}
+        {testView === "observability" ? <><PreachermanExecutionFusionPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} view="trace" /><PreachermanObservabilityPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></> : null}
       </div>
     </main>
   );
@@ -328,7 +328,7 @@ export function App() {
                 setPreferences((current) => ({ ...current, locale }));
               }}
               requestedControl={requestedControl}
-              widgets={<AiriWidgetGallery placement="settings" locale={preferences.locale} serviceRequest={airiServiceRequest} />}
+              widgets={<PreachermanWidgetGallery placement="settings" locale={preferences.locale} serviceRequest={preachermanServiceRequest} />}
             />
           : activeSurfaceType === "market"
             ? galleryView === "characters"
@@ -340,16 +340,16 @@ export function App() {
                 />
               : <main className="demo-host demo-host--gallery-runtime">
                 <div className="demo-surface-module">
-                  {galleryView === "widgets" ? <AiriWidgetGallery placement="gallery" locale={preferences.locale} serviceRequest={airiServiceRequest} /> : null}
-                  {galleryView === "games" ? <AiriGameletPanel locale={preferences.locale} serviceRequest={airiServiceRequest} /> : null}
+                  {galleryView === "widgets" ? <PreachermanWidgetGallery placement="gallery" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /> : null}
+                  {galleryView === "games" ? <PreachermanGameletPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /> : null}
                 </div>
               </main>
           : activeSurfaceType === "ledger"
             ? <ConversationLedgerScreen
                 locale={preferences.locale}
                 requestedControl={requestedControl}
-                serviceRequest={airiServiceRequest}
-                widgets={<AiriWidgetGallery placement="ledger" locale={preferences.locale} serviceRequest={airiServiceRequest} />}
+                serviceRequest={preachermanServiceRequest}
+                widgets={<PreachermanWidgetGallery placement="ledger" locale={preferences.locale} serviceRequest={preachermanServiceRequest} />}
               />
           : activeSurfaceType === "test"
             ? testContent
@@ -372,26 +372,26 @@ export function App() {
         );
       })();
 
-  const activeSurfaceTab = airiPanelSurface === "home"
+  const activeSurfaceTab = preachermanPanelSurface === "home"
     ? homeView
-    : airiPanelSurface === "workspace"
+    : preachermanPanelSurface === "workspace"
       ? workView
-      : airiPanelSurface === "lab"
+      : preachermanPanelSurface === "lab"
         ? labView
-        : airiPanelSurface === "market"
+        : preachermanPanelSurface === "market"
           ? galleryView
-          : airiPanelSurface === "test"
+          : preachermanPanelSurface === "test"
             ? testView
             : undefined;
   const changeSurfaceTab = (tabId: string) => {
-    if (airiPanelSurface === "home") setHomeView(tabId);
-    if (airiPanelSurface === "workspace") setWorkView(tabId);
-    if (airiPanelSurface === "lab") setLabView(tabId);
-    if (airiPanelSurface === "market") setGalleryView(tabId);
-    if (airiPanelSurface === "test") setTestView(tabId);
+    if (preachermanPanelSurface === "home") setHomeView(tabId);
+    if (preachermanPanelSurface === "workspace") setWorkView(tabId);
+    if (preachermanPanelSurface === "lab") setLabView(tabId);
+    if (preachermanPanelSurface === "market") setGalleryView(tabId);
+    if (preachermanPanelSurface === "test") setTestView(tabId);
   };
-  const surfaceTabs = airiPanelSurface && airiPanelSurface in tabs
-    ? tabs[airiPanelSurface as keyof typeof tabs]
+  const surfaceTabs = preachermanPanelSurface && preachermanPanelSurface in tabs
+    ? tabs[preachermanPanelSurface as keyof typeof tabs]
     : [];
 
   const app = showStartupIntro ? (
@@ -408,25 +408,25 @@ export function App() {
       entering={animateMainEntrance}
       locale={preferences.locale}
     >
-      <AiriDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={airiServiceRequest} />
+      <PreachermanDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={preachermanServiceRequest} />
       <div className="demo-app-shell__screen-page" key={contentKey}>
         {mainContent}
-        {airiPanelSurface ? (
+        {preachermanPanelSurface ? (
           <SurfaceToolbar
             activeTab={activeSurfaceTab}
-            description={surfaceCopy[airiPanelSurface].description}
+            description={surfaceCopy[preachermanPanelSurface].description}
             locale={preferences.locale}
             onTabChange={changeSurfaceTab}
-            surface={airiPanelSurface}
+            surface={preachermanPanelSurface}
             tabs={surfaceTabs}
-            title={surfaceCopy[airiPanelSurface].title}
+            title={surfaceCopy[preachermanPanelSurface].title}
           />
         ) : null}
-        {airiPanelSurface ? (
-          <AiriFeaturePanel
+        {preachermanPanelSurface ? (
+          <PreachermanFeaturePanel
             locale={preferences.locale}
-            onActivate={handleAiriFeatureActivate}
-            surface={airiPanelSurface}
+            onActivate={handlePreachermanFeatureActivate}
+            surface={preachermanPanelSurface}
           />
         ) : null}
       </div>

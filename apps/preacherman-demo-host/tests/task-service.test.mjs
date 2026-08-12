@@ -16,14 +16,14 @@ async function fixture(t) {
   return { taskStore, taskService };
 }
 
-test("TaskService keeps one parent task while linking a revision-pinned HomeRail attempt", async (t) => {
+test("TaskService keeps one parent task while linking a revision-pinned Preacherman Execution attempt", async (t) => {
   const { taskService } = await fixture(t);
   const task = await taskService.create({
     objective: "Research and verify three launch options",
-    execution: { kind: "homerail-dag", adapter: "homerail", workflowId: "preacherman-complex-task-v1" },
+    execution: { kind: "preacherman-execution-dag", adapter: "preacherman-execution", workflowId: "preacherman-complex-task-v1" },
   });
   assert.equal(task.attempts.length, 0);
-  await taskService.startAttempt(task.taskId, { provider: "homerail" });
+  await taskService.startAttempt(task.taskId, { provider: "preacherman-execution" });
   const linked = await taskService.linkExternalRun(task.taskId, {
     externalRunId: "hr_run_1",
     eventCursor: 0,
@@ -55,7 +55,7 @@ test("TaskService de-duplicates projected events and artifacts", async (t) => {
 test("TaskService owns approval hash validation and idempotent decisions", async (t) => {
   const { taskService } = await fixture(t);
   const task = await taskService.create({ objective: "Publish a reviewed result" });
-  await taskService.startAttempt(task.taskId, { provider: "homerail", status: "active" });
+  await taskService.startAttempt(task.taskId, { provider: "preacherman-execution", status: "active" });
   const waiting = await taskService.requestApproval(task.taskId, {
     approvalId: "approval-1",
     proposalHash: "sha256:abc",
@@ -81,7 +81,7 @@ test("retry adds a new attempt to the same TaskRun", async (t) => {
   const task = await taskService.create({ objective: "Execute a complex workflow" });
   await taskService.startAttempt(task.taskId, { provider: "local", status: "active" });
   await taskService.transition(task.taskId, "failed", { error: { code: "EXECUTION_FAILED", message: "Worker failed", retryable: true } });
-  const retried = await taskService.retry(task.taskId, { provider: "homerail" });
+  const retried = await taskService.retry(task.taskId, { provider: "preacherman-execution" });
   assert.equal(retried.taskId, task.taskId);
   assert.equal(retried.attempts.length, 2);
   assert.equal(retried.attempts[1].attempt, 2);

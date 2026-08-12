@@ -1,0 +1,245 @@
+.demo-preacherman-gamelet {
+  display: grid;
+  gap: 20px;
+  width: min(100%, 760px);
+  padding: 22px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 20px;
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface-elevated);
+  box-shadow: var(--demo-theme-activate-shadow);
+}
+
+.demo-preacherman-gamelet__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.demo-preacherman-gamelet__eyebrow {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--demo-theme-loading);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.demo-preacherman-gamelet h2,
+.demo-preacherman-gamelet p {
+  margin: 0;
+}
+
+.demo-preacherman-gamelet h2 {
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.demo-preacherman-gamelet__header p {
+  max-width: 480px;
+  margin-top: 7px;
+  color: var(--demo-theme-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.demo-preacherman-gamelet button {
+  color: var(--demo-theme-text);
+  font: inherit;
+}
+
+.demo-preacherman-gamelet__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+  max-width: 320px;
+}
+
+.demo-preacherman-gamelet__start,
+.demo-preacherman-gamelet__pause,
+.demo-preacherman-gamelet__resume,
+.demo-preacherman-gamelet__stop,
+.demo-preacherman-gamelet__destroy {
+  flex: 0 0 auto;
+  min-width: 112px;
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid var(--demo-theme-activate-rest-border);
+  border-radius: 10px;
+  color: var(--demo-theme-activate-fill-text);
+  background: var(--demo-theme-activate-fill);
+  box-shadow: var(--demo-theme-activate-shadow);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.demo-preacherman-gamelet__start:hover:not(:disabled) {
+  box-shadow: var(--demo-theme-activate-hover-shadow);
+}
+
+.demo-preacherman-gamelet__pause,
+.demo-preacherman-gamelet__resume,
+.demo-preacherman-gamelet__stop {
+  color: var(--demo-theme-activate-rest-text);
+  background: var(--demo-theme-activate-rest-bg);
+}
+
+.demo-preacherman-gamelet__pause:hover:not(:disabled),
+.demo-preacherman-gamelet__resume:hover:not(:disabled) {
+  border-color: var(--demo-theme-control-hover);
+  background: var(--demo-theme-control-hover-bg);
+}
+
+.demo-preacherman-gamelet__destroy {
+  color: var(--demo-theme-error);
+  background: var(--demo-theme-surface);
+}
+
+.demo-preacherman-gamelet__destroy:hover:not(:disabled),
+.demo-preacherman-gamelet__stop:hover:not(:disabled) {
+  border-color: var(--demo-theme-error);
+  color: var(--demo-theme-error);
+  background: var(--demo-theme-control-hover-bg);
+}
+
+.demo-preacherman-gamelet button:focus-visible {
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: 3px;
+}
+
+.demo-preacherman-gamelet button:disabled {
+  cursor: not-allowed;
+}
+
+.demo-preacherman-gamelet__start:disabled,
+.demo-preacherman-gamelet__pause:disabled,
+.demo-preacherman-gamelet__resume:disabled,
+.demo-preacherman-gamelet__stop:disabled,
+.demo-preacherman-gamelet__destroy:disabled {
+  border-color: var(--demo-theme-border-strong);
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-surface);
+}
+
+.demo-preacherman-gamelet__status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 38px;
+  padding: 8px 11px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 11px;
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-surface);
+  font-size: 12px;
+}
+
+.demo-preacherman-gamelet__status > span {
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--demo-theme-border-strong);
+  border-radius: 50%;
+  background: var(--demo-theme-surface-elevated);
+}
+
+.demo-preacherman-gamelet__status[data-status="active"] {
+  color: var(--demo-theme-text);
+}
+
+.demo-preacherman-gamelet__status[data-status="active"] > span {
+  border-color: var(--demo-theme-loading);
+  background: var(--demo-theme-loading);
+}
+
+.demo-preacherman-gamelet__status[data-status="completed"] > span {
+  border-color: var(--demo-theme-control-hover);
+  background: var(--demo-theme-control-hover);
+}
+
+.demo-preacherman-gamelet__status[data-status="paused"] > span {
+  border-color: var(--demo-theme-border-strong);
+  background: var(--demo-theme-muted);
+}
+
+.demo-preacherman-gamelet__status[data-status="error"] {
+  border-color: var(--demo-theme-error);
+  color: var(--demo-theme-error);
+}
+
+.demo-preacherman-gamelet__status[data-status="error"] > span {
+  border-color: var(--demo-theme-error);
+  background: var(--demo-theme-error);
+}
+
+.demo-preacherman-gamelet__board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: min(100%, 360px);
+  margin: 0 auto;
+}
+
+.demo-preacherman-gamelet__cell {
+  aspect-ratio: 1;
+  border: 1px solid var(--demo-theme-border-strong);
+  border-radius: 14px;
+  background: var(--demo-theme-surface);
+  box-shadow: var(--demo-theme-activate-shadow);
+  cursor: pointer;
+  font-size: clamp(28px, 8vw, 52px);
+  font-weight: 750;
+  line-height: 1;
+}
+
+.demo-preacherman-gamelet__cell:hover:not(:disabled) {
+  border-color: var(--demo-theme-control-hover);
+  background: var(--demo-theme-control-hover-bg);
+}
+
+.demo-preacherman-gamelet__cell[data-mark="X"],
+.demo-preacherman-gamelet__cell[data-mark="O"] {
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-control-hover-bg);
+}
+
+.demo-preacherman-gamelet__cell:disabled[data-mark="empty"] {
+  color: var(--demo-theme-muted);
+  background: var(--demo-theme-surface);
+  box-shadow: none;
+}
+
+.demo-preacherman-gamelet__error {
+  padding: 10px 12px;
+  border: 1px solid var(--demo-theme-error);
+  border-radius: 10px;
+  color: var(--demo-theme-error);
+  background: var(--demo-theme-surface);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .demo-preacherman-gamelet__header {
+    display: grid;
+  }
+
+  .demo-preacherman-gamelet__start {
+    width: 100%;
+  }
+
+  .demo-preacherman-gamelet__actions {
+    display: grid;
+    max-width: none;
+  }
+
+  .demo-preacherman-gamelet__pause,
+  .demo-preacherman-gamelet__resume,
+  .demo-preacherman-gamelet__stop,
+  .demo-preacherman-gamelet__destroy {
+    width: 100%;
+  }
+}

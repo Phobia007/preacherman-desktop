@@ -80,7 +80,7 @@ test("a microphone-free final transcript completes the real HTTP plugin TaskRun 
   });
 
   const transcriptEpoch = coordinator.getConversationEpoch();
-  assert.equal(coordinator.deliverFinalTranscript("Run the AIRI plugin status summary", transcriptEpoch), true);
+  assert.equal(coordinator.deliverFinalTranscript("Run the PREACHERMAN plugin status summary", transcriptEpoch), true);
   const result = await flow;
   await new Promise((resolve) => setImmediate(resolve));
   await new Promise((resolve) => setImmediate(resolve));

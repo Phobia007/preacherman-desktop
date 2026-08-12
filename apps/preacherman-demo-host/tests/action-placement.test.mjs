@@ -13,10 +13,10 @@ test("task actions have one commercial surface owner and optional shortcuts", as
   assert.match(source, /"task\.create": \{ owner: "home"/);
   assert.match(source, /"task\.events": \{ owner: "ledger"/);
   assert.match(source, /"task\.artifacts": \{ owner: "ledger"/);
-  assert.match(source, /"execution\.homerail": \{ owner: "settings"/);
+  assert.match(source, /"execution\.preacherman-execution": \{ owner: "settings"/);
   assert.match(source, /"execution\.acceptance": \{ owner: "test"/);
   assert.match(source, /"execution\.trace": \{ owner: "test"/);
-  assert.match(source, /"execution\.console": \{ owner: "settings"/);
+  assert.doesNotMatch(source, /execution\.console/);
 });
 
 test("Home and Work share one provider while Home contains no execution controls", async () => {
@@ -28,6 +28,6 @@ test("Home and Work share one provider while Home contains no execution controls
   assert.match(app, /<ABTaskConsole locale=\{preferences\.locale\} mode="home"/);
   assert.match(app, /<ABTaskConsole locale=\{preferences\.locale\} mode="work"/);
   assert.match(consoleSource, /mode === "work"/);
-  assert.match(consoleSource, /data-airi-control="task\.approve"/);
+  assert.match(consoleSource, /data-preacherman-control="task\.approve"/);
   assert.match(consoleSource, /"task\.resume" : "task\.steer"/);
 });

@@ -1,0 +1,9 @@
+{
+  "apiVersion": "v1",
+  "kind": "manifest.plugin.preacherman.local",
+  "name": "invalid-permissions-plugin",
+  "permissions": ["Tasks Read"],
+  "entrypoints": {
+    "node": "index.mjs"
+  }
+}

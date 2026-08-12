@@ -95,7 +95,7 @@ export function createTaskService({ taskStore, now = () => new Date().toISOStrin
         const canonical = {
           ...task.artifact,
           artifactId,
-          provider: task.artifact.provider ?? (task.execution?.kind === "homerail-dag" ? "homerail" : "local"),
+          provider: task.artifact.provider ?? (task.execution?.kind === "preacherman-execution-dag" ? "preacherman-execution" : "local"),
           status: task.artifact.status ?? "ready",
           contentPath: task.artifact.contentPath ?? task.artifact.path,
           primary: true,
@@ -127,7 +127,7 @@ export function createTaskService({ taskStore, now = () => new Date().toISOStrin
 
   async function startAttempt(taskId, input) {
     const provider = input.provider;
-    if (!new Set(["local", "homerail"]).has(provider)) throw taskError("TASK_ATTEMPT_INVALID", "Attempt provider must be local or homerail.");
+    if (!new Set(["local", "preacherman-execution"]).has(provider)) throw taskError("TASK_ATTEMPT_INVALID", "Attempt provider must be local or preacherman-execution.");
     const existing = await requireTask(taskId);
     if (currentAttempt(existing) && !ATTEMPT_TERMINAL.has(currentAttempt(existing).status)) {
       throw taskError("TASK_ATTEMPT_ACTIVE", `TaskRun ${taskId} already has an active attempt.`, 409);
@@ -158,17 +158,17 @@ export function createTaskService({ taskStore, now = () => new Date().toISOStrin
     const at = now();
     return taskStore.update(existing.taskId, (task) => {
       const attempt = currentAttempt(task);
-      if (!attempt || attempt.provider !== "homerail") throw taskError("TASK_ATTEMPT_INVALID", "A HomeRail attempt must exist before linking a Run.", 409);
+      if (!attempt || attempt.provider !== "preacherman-execution") throw taskError("TASK_ATTEMPT_INVALID", "A Preacherman Execution attempt must exist before linking a Run.", 409);
       if (attempt.externalRunId && attempt.externalRunId !== externalRunId) {
-        throw taskError("TASK_EXTERNAL_RUN_CONFLICT", "The current attempt is already linked to another HomeRail Run.", 409);
+        throw taskError("TASK_EXTERNAL_RUN_CONFLICT", "The current attempt is already linked to another Preacherman Execution Run.", 409);
       }
       attempt.externalRunId = text(externalRunId, "External run id", 256);
       attempt.status = "active";
       if (eventCursor !== undefined) attempt.eventCursor = eventCursor;
       task.execution = {
         ...task.execution,
-        kind: "homerail-dag",
-        adapter: "homerail",
+        kind: "preacherman-execution-dag",
+        adapter: "preacherman-execution",
         ...(workflowId ? { workflowId } : {}),
         ...(workflowRevision ? { workflowRevision } : {}),
         ...(canonicalHash ? { canonicalHash } : {}),

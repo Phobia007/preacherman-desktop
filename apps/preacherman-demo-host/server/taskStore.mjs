@@ -21,7 +21,7 @@ async function writePrivateJson(target, value) {
 
 function executionKind(task) {
   if (task.execution?.kind) return task.execution.kind;
-  if (task.source === "airi-plugin") return "local-plugin";
+  if (task.source === "preacherman-plugin") return "local-plugin";
   if (task.executor === "pitchkit") return "local-pitch";
   if (task.toolCall?.name) return "local-mcp";
   return "local-pitch";
@@ -41,7 +41,7 @@ function canonicalArtifact(artifact, task, index = 0) {
   return {
     ...clone(artifact),
     artifactId: artifact.artifactId ?? `artifact_${index + 1}`,
-    provider: artifact.provider ?? (task.execution?.kind === "homerail-dag" ? "homerail" : "local"),
+    provider: artifact.provider ?? (task.execution?.kind === "preacherman-execution-dag" ? "preacherman-execution" : "local"),
     status: artifact.status ?? "ready",
     contentPath,
     path: artifact.path ?? contentPath,
@@ -81,7 +81,7 @@ export function normalizeTaskV2(task, now = () => new Date().toISOString()) {
     ? normalized.attempts
     : [{
         attempt: Number.isSafeInteger(normalized.attempt) && normalized.attempt > 0 ? normalized.attempt : 1,
-        provider: normalized.execution.kind === "homerail-dag" ? "homerail" : "local",
+        provider: normalized.execution.kind === "preacherman-execution-dag" ? "preacherman-execution" : "local",
         status: attemptStatus(normalized.status),
         startedAt: timestamp,
         ...(TERMINAL_STATUSES.has(normalized.status) ? { completedAt: normalized.updatedAt ?? timestamp } : {}),
@@ -132,7 +132,7 @@ export function createTaskStore({ file, legacyFiles = [], now = () => new Date()
     for (const task of state.tasks) {
       if (!ACTIVE_STATUSES.has(task.status)) continue;
       const currentAttempt = task.attempts.at(-1);
-      if (task.execution.kind === "homerail-dag" || currentAttempt?.provider === "homerail") {
+      if (task.execution.kind === "preacherman-execution-dag" || currentAttempt?.provider === "preacherman-execution") {
         task.recoveryPending = true;
         if (!task.events.some((event) => event.type === "recovery_pending")) {
           task.events.push({
