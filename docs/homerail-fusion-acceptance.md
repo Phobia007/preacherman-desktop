@@ -4,9 +4,9 @@
 
 ## 结论
 
-融合代码、产品边界、自动化测试入口和真实验收入口已经落地，但当前提供的模型凭据被 DeepSeek 官方 Responses 接口以 HTTP 401 拒绝，因此本任务 **不能标记为完整完成**。
+融合代码、产品边界、自动化测试入口和真实验收入口已经落地，但当前提供的凭据属于 `llm-center.modelbest.co` 公司内网网关，并不属于 DeepSeek 官方接口。本机当前可将该域名解析到私网地址，但无法连接其 443 端口，因此本任务 **不能标记为完整完成**。
 
-HomeRail 已有加密模型 Setting、显式 Runtime Profile 和在线 Node。首次真实运行还暴露并修复了 Codex App Server 与 Claude 风格 `allowed_builtin_tools` 不兼容的问题，固定工作流已升级为 revision 3，三个 Agent 角色均使用显式只读的 `backend_native` 策略。随后真实 Provider 探测确认当前凭据无效。Preacherman 现在会在创建 Proposal/Task/Attempt 之前执行短时缓存的 Responses 探测，并诚实返回 `configuration-required`，不会仅凭“Key 已保存”显示假 ready。
+HomeRail 已有显式 Runtime Profile 和在线 Node。首次真实运行还暴露并修复了 Codex App Server 与 Claude 风格 `allowed_builtin_tools` 不兼容的问题，固定工作流已升级为 revision 3，三个 Agent 角色均使用显式只读的 `backend_native` 策略。此前把公司网关 Key 错配到 DeepSeek 官方地址，真实 Provider 探测因此得到 HTTP 401；该 Setting 现已停用，Key 仍由 HomeRail 加密保存。Preacherman 会在创建 Proposal/Task/Attempt 之前执行短时缓存的 Responses 探测，并诚实返回 `configuration-required`，不会仅凭“Key 已保存”显示假 ready。
 
 ## 权威边界
 
@@ -38,7 +38,7 @@ HomeRail 已有加密模型 Setting、显式 Runtime Profile 和在线 Node。�
 | 不增加 HomeRail 主导航或重复操作体系 | 已证明 | 仍为 7 个一级页面；Action Placement 与 UI flow 测试 |
 | Light/Dark 与关键页面人工 smoke | 已证明 | Home、Work、Ledger、Settings、Test 已进行双主题浏览器检查，控制台 0 error |
 | Test 一键真实融合验收 | 已落实但受配置阻塞 | `runHomeRailFusionAcceptance` 走真实 Proposal→重复确认→Task→Attempt→Artifact API；Provider 未 ready 时诚实禁用 |
-| Proposal 确认后真实固定 Workflow 完成 | **阻塞** | Setting/Profile/Node 均存在；DeepSeek Responses 实测返回 HTTP 401，当前凭据无效 |
+| Proposal 确认后真实固定 Workflow 完成 | **阻塞** | Profile/Node 均存在；公司网关只在内网可达，本机当前无法连接 `llm-center.modelbest.co:443` |
 
 ## 固定工作流
 
@@ -52,17 +52,20 @@ HomeRail 已有加密模型 Setting、显式 Runtime Profile 和在线 Node。�
 
 - HomeRail Manager 可达。
 - 一个 Docker-capable Node 已连接；空闲时 Worker 为 0 属于正常状态。
-- 加密 Setting 与 `preacherman-complex-default` Profile 已绑定到固定工作流；公开状态不暴露凭据。
+- 旧加密 Setting 与 `preacherman-complex-default` Profile 曾绑定到固定工作流；公开状态不暴露凭据。该错误 Setting 已停用且未删除。
 - 真实 Run `preacherman_run_4f7f0a13-056a-4ec1-b489-dc88d3f3894d_1` 证明 revision 3 已进入 Codex App Server，但 Provider 请求被当前凭据拒绝。
-- `/api/llm/models/detect-runtime` 对同一 Setting 的 Responses、Chat Completions 与 Anthropic 兼容入口均返回 HTTP 401；错误仅保留脱敏尾号。
+- `/api/llm/models/detect-runtime` 对错误指向 DeepSeek 官方地址的旧 Setting，在 Responses、Chat Completions 与 Anthropic 兼容入口均返回 HTTP 401；错误仅保留脱敏尾号。
+- 用户提供的接口说明确认正确 Base URL 为 `https://llm-center.modelbest.co`，并声明 `/v1/responses`；域名在本机解析为私网地址 `10.88.1.54`，但当前 TCP 443 超时，符合页面“内网”说明。
+- HomeRail 已创建独立 `modelbest` 自定义 Provider，默认模型暂为不可执行的 `pending-model-discovery`；未创建或激活伪造模型 Setting。
 - HomeRail 官方 `public-two-node-template` 曾完成真实 Run `12b8b4ec88349fd4822b777d`，证明 Manager → Node → Docker Worker 基础链路可执行。
 - 固定 Preacherman 工作流没有被错误绑定到 deterministic profile，也没有用伪造结果绕过模型依赖。
 
 ## 完成最后一项所需操作
 
-1. 用有效的 DeepSeek API Key 重新运行 `npm run configure:homerail -- -Provider deepseek -ModelName deepseek-v4-flash -AgentType codex_appserver`；脚本只通过 stdin 传递密钥，HomeRail 加密保存，并在激活 Profile 前真实探测 Responses API。探测失败不会改写 Preacherman 激活配置。
-2. 执行 `npm run verify:homerail`；Provider 探测必须先返回 ready。
-3. 验证同一个 Proposal 重复确认只产生一个父 Task、一个 Attempt、一个 HomeRail Run，并取得校验通过的 `plan.json` 与 `verification.json`。
+1. 连接可访问 `10.88.1.54:443` 的公司内网或 VPN。
+2. 运行 `npm run configure:homerail -- -Provider modelbest -ResponsesBaseUrl https://llm-center.modelbest.co -AgentType codex_appserver`。脚本从 `/v1/models` 自动发现模型（多个模型时在本地窗口选择），只通过 stdin 传递密钥，HomeRail 加密保存，并在激活 Profile 前真实探测 `/v1/responses`。探测失败不会改写 Preacherman 激活配置。
+3. 执行 `npm run verify:homerail`；Provider 探测必须先返回 ready。
+4. 验证同一个 Proposal 重复确认只产生一个父 Task、一个 Attempt、一个 HomeRail Run，并取得校验通过的 `plan.json` 与 `verification.json`。
 
 只有第 5 步通过后，才能把融合任务标记为完成。
 
@@ -75,5 +78,6 @@ HomeRail 已有加密模型 Setting、显式 Runtime Profile 和在线 Node。�
 - `npm run build`：通过；Vite 生产包完成（仅保留既有的大 chunk 提示）。
 - `git diff --check`：通过。
 - Settings → Connections：Light/Dark 实际浏览器检查通过，控制台 0 error，桌面窗口控制均可访问。
-- revision 3 首次真实运行：进入 Codex App Server，随后因 Provider 401 失败；没有伪造 Artifact。
+- revision 3 首次真实运行：进入 Codex App Server，随后因公司 Key 错指 DeepSeek 官方地址而 401 失败；没有伪造 Artifact。
 - 增加 Provider 实测门禁后，`npm run verify:homerail` 按预期以退出码 1 停在 readiness gate，不再创建无意义的 Proposal、Task 或 Attempt。
+- 公司网关无凭据网络检查：DNS 成功解析到 `10.88.1.54`，TCP 443 与 `/v1/models`、`/v1/responses` 均超时；未把 Key 发送到不可达端点。

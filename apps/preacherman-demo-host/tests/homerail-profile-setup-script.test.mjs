@@ -34,13 +34,16 @@ test("HomeRail profile setup supports a keyless local Responses endpoint without
   const script = await readFile(join(packageRoot, "scripts", "configure-homerail-profile.ps1"), "utf8");
 
   assert.match(script, /\[switch\] \$LocalNoAuth/);
-  assert.match(script, /'--responses-endpoint', \$ResponsesBaseUrl/);
+  assert.match(script, /Resolve-GatewayModelName -BaseUrl \$ResponsesBaseUrl -ApiKey \$plainKey/);
+  assert.match(script, /'\/v1\/models'/);
+  assert.match(script, /Authorization = "Bearer \$ApiKey"/);
+  assert.match(script, /'provider', 'upsert'/);
+  assert.match(script, /'--responses-base-url', \$ResponsesBaseUrl/);
   assert.match(script, /'local-no-auth'/);
   assert.match(script, /'127\.0\.0\.1', 'localhost', 'host\.docker\.internal'/);
   assert.match(script, /\$AgentType = 'codex_appserver'/);
-  assert.match(script, /Custom Responses endpoints require -ModelName/);
   assert.match(script, /Custom Responses endpoints cannot use a catalog EndpointId/);
   assert.match(script, /Custom Responses endpoints require a custom -Provider ID/);
-  assert.match(script, /'--provider-id', \$Provider, '--responses-endpoint', \$ResponsesBaseUrl/);
+  assert.doesNotMatch(script, /'--api-key', \$plainKey/);
   assert.match(script, /-LocalNoAuth is restricted to an HTTP loopback or host\.docker\.internal endpoint/);
 });

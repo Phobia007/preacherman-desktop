@@ -118,13 +118,53 @@ function Test-HomeRailModelRuntime {
   }
 }
 
+function Resolve-GatewayModelName {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string] $BaseUrl,
+    [Parameter(Mandatory = $true)]
+    [string] $ApiKey
+  )
+
+  $modelsUrl = $BaseUrl.TrimEnd('/') + '/v1/models'
+  try {
+    $response = Invoke-RestMethod `
+      -Method Get `
+      -Uri $modelsUrl `
+      -Headers @{ Authorization = "Bearer $ApiKey" } `
+      -TimeoutSec 30
+  } catch {
+    throw 'The company gateway model catalog is unavailable. Connect its private network or VPN, then retry.'
+  }
+
+  $models = @($response.data) |
+    ForEach-Object { [string] $_.id } |
+    Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+    Sort-Object -Unique
+  if ($models.Count -eq 0) {
+    throw 'The company gateway returned no usable model IDs.'
+  }
+  if ($models.Count -eq 1) {
+    Write-Host "Discovered model: $($models[0])"
+    return $models[0]
+  }
+
+  Write-Host 'Available company gateway models:'
+  for ($index = 0; $index -lt $models.Count; $index += 1) {
+    Write-Host "  $($index + 1). $($models[$index])"
+  }
+  $selection = Read-Host "Select model [1-$($models.Count)]"
+  $selectedIndex = 0
+  if (-not [int]::TryParse($selection, [ref] $selectedIndex) -or $selectedIndex -lt 1 -or $selectedIndex -gt $models.Count) {
+    throw 'Model selection was invalid.'
+  }
+  return $models[$selectedIndex - 1]
+}
+
 if (-not (Test-Path -LiteralPath $homeRailCli -PathType Leaf)) {
   throw "HomeRail CLI was not found at $homeRailCli"
 }
 
-if ($ResponsesBaseUrl -and -not $ModelName) {
-  throw 'Custom Responses endpoints require -ModelName.'
-}
 if ($ResponsesBaseUrl -and $EndpointId) {
   throw 'Custom Responses endpoints cannot use a catalog EndpointId.'
 }
@@ -164,10 +204,25 @@ try {
     throw 'Provider API key cannot be empty.'
   }
 
+  if ($ResponsesBaseUrl -and -not $ModelName) {
+    $ModelName = Resolve-GatewayModelName -BaseUrl $ResponsesBaseUrl -ApiKey $plainKey
+  }
+
+  if ($ResponsesBaseUrl) {
+    Invoke-HomeRailJson -Arguments @(
+      'provider', 'upsert',
+      '--id', $Provider,
+      '--name', "$Provider company gateway",
+      '--default-model', $ModelName,
+      '--provider-base-url', $ResponsesBaseUrl,
+      '--responses-base-url', $ResponsesBaseUrl,
+      '--status', 'active'
+    ) | Out-Null
+  }
+
   $modelArguments = @('model', 'configure', $Provider, '--api-key-stdin')
   if ($EndpointId) { $modelArguments += @('--endpoint-id', $EndpointId) }
   if ($ModelName) { $modelArguments += @('--model-name', $ModelName) }
-  if ($ResponsesBaseUrl) { $modelArguments += @('--provider-id', $Provider, '--responses-endpoint', $ResponsesBaseUrl) }
   $setting = Invoke-HomeRailJson -Arguments $modelArguments -StandardInput $plainKey
 } finally {
   $plainKey = $null
