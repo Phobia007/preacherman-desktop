@@ -70,7 +70,7 @@ HomeRail 已有加密模型 Setting、显式 Runtime Profile 和在线 Node。�
 
 ## 本轮验证结果
 
-- `npm test`：305/305 通过。
+- `npm test`：306/306 通过。
 - `npm run typecheck`：通过。
 - `npm run build`：通过；Vite 生产包完成（仅保留既有的大 chunk 提示）。
 - `git diff --check`：通过。
