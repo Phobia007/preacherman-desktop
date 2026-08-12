@@ -44,6 +44,7 @@ export {
   type AvatarPose,
   type AvatarQuality,
   type AvatarReadyDetail,
+  type AvatarSceneEnvironment,
   type AvatarViewportProps,
   type InteractiveAvatarViewportProps,
 } from "./types";

@@ -6,8 +6,8 @@
 }
 .preacherman-avatar-viewport canvas {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   pointer-events: none;
 }
 

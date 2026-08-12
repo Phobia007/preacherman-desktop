@@ -16,6 +16,8 @@ interface AppShellProps {
   readonly dispatch: SurfaceHostBridge["execute"];
   readonly entering: boolean;
   readonly locale: Locale;
+  readonly scene?: ReactNode;
+  readonly sceneHidden?: boolean;
 }
 
 export function AppShell({
@@ -25,6 +27,8 @@ export function AppShell({
   dispatch,
   entering,
   locale,
+  scene,
+  sceneHidden = false,
 }: AppShellProps) {
   const copy = uiCopy[locale];
   const [scale, setScale] = useState(() => {
@@ -52,6 +56,7 @@ export function AppShell({
       className={`demo-app-shell${entering ? " demo-host--entering" : ""}`}
       data-appearance={appearance}
       data-locale={locale}
+      data-scene-hidden={sceneHidden ? "true" : "false"}
       style={{ "--demo-app-scale": scale } as CSSProperties}
     >
       <header className="demo-app-shell__chrome">
@@ -71,6 +76,9 @@ export function AppShell({
         />
         <WindowControls dispatch={dispatch} locale={locale} />
       </header>
+      <div aria-hidden={sceneHidden ? "true" : undefined} className="demo-app-shell__scene">
+        {scene}
+      </div>
       <div className="demo-app-shell__screen-content">{children}</div>
       <BottomNavigation
         activeSurfaceType={activeSurfaceType}

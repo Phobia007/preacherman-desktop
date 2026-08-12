@@ -39,6 +39,7 @@ export function InteractiveAvatarViewport({
   quality = "balanced",
   resetKey = 0,
   jawOpen = 0,
+  environment = "transparent",
 }: InteractiveAvatarViewportProps) {
   const [loadState, setLoadState] = useState<AvatarLoadState>("loading");
   const [animationDebug, setAnimationDebug] =
@@ -87,6 +88,7 @@ export function InteractiveAvatarViewport({
         .filter(Boolean)
         .join(" ")}
       data-avatar-load-state={loadState}
+      data-avatar-environment={environment}
     >
       <AvatarErrorBoundary onError={reportError}>
         <Canvas
@@ -94,16 +96,17 @@ export function InteractiveAvatarViewport({
           dpr={dpr}
           frameloop="always"
           gl={{
-            alpha: true,
+            alpha: environment !== "cinematic",
             antialias: true,
             powerPreference: "high-performance",
           }}
           onCreated={({ gl }) => {
             gl.info.autoReset = true;
-            configureHologramRenderer(gl);
-            gl.setClearColor(0x000000, 0);
+            if (environment === "cinematic") configureHologramRenderer(gl, environment);
+            else configureHologramRenderer(gl);
+            gl.setClearColor(0x010409, environment === "cinematic" ? 1 : 0);
           }}
-          shadows={false}
+          shadows={environment === "cinematic"}
         >
           <Suspense fallback={null}>
             <InteractiveAvatarScene
@@ -118,6 +121,7 @@ export function InteractiveAvatarViewport({
               pose={pose}
               resetKey={resetKey}
               jawOpen={jawOpen}
+              environment={environment}
             />
           </Suspense>
         </Canvas>

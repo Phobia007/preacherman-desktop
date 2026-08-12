@@ -8,6 +8,7 @@ export type AvatarLoadState =
 
 export type AvatarQuality = "low" | "balanced" | "high";
 export type AvatarPose = "rest" | "standby";
+export type AvatarSceneEnvironment = "transparent" | "cinematic";
 
 export type AvatarErrorCode =
   | "WEBGL_UNAVAILABLE"
@@ -46,6 +47,7 @@ export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   readonly resetKey?: number;
   /** Procedural mouth opening driven by actual output audio (0 through 1). */
   readonly jawOpen?: number;
+  readonly environment?: AvatarSceneEnvironment;
 }
 
 export class AvatarError extends Error {

@@ -8,7 +8,7 @@ const hostRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = join(hostRoot, "src");
 const workspaceRoot = join(hostRoot, "..", "..");
 
-test("Gallery activation persists the selected model and Home plus Lab reuse the same stage", async () => {
+test("Gallery activation persists the selected model and the shell owns the shared stage", async () => {
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const preferences = await readFile(join(sourceRoot, "preferences.ts"), "utf8");
   const gallery = await readFile(
@@ -25,7 +25,7 @@ test("Gallery activation persists the selected model and Home plus Lab reuse the
   assert.match(preferences, /value === "cortana"/);
   assert.match(app, /const isCortanaActive = preferences\.activeModelId === "cortana"/);
   assert.match(app, /data-model-active=\{isCortanaActive\}/);
-  assert.match(app, /isCortanaActive \? \([\s\S]*<HomeSurface[\s\S]*<CortanaModelStage/);
+  assert.match(app, /scene=\{isCortanaActive \? \([\s\S]*<CortanaModelStage[\s\S]*variant="persistent"/);
   assert.match(app, /selectedManifest\.surfaceId === manifest\.surfaceId[\s\S]*return homeContent/);
   assert.match(app, /<CortanaGallery[\s\S]*activeModelId=\{preferences\.activeModelId\}/);
   assert.match(app, /setPreferences\(\(current\) => \(\{ \.\.\.current, activeModelId \}\)\)/);
@@ -34,7 +34,7 @@ test("Gallery activation persists the selected model and Home plus Lab reuse the
   assert.match(gallery, /activeModelId === activeItem\.id \? null : activeItem\.id/);
   assert.match(gallery, /onActiveModelChange:\s*\(modelId: ModelId \| null\) => void/);
   const stageUsages = (`${app}\n${gallery}`).match(/<CortanaModelStage\b/g) ?? [];
-  assert.equal(stageUsages.length, 3);
+  assert.equal(stageUsages.length, 2);
   assert.match(stage, /pose="standby"/);
   assert.match(stage, /quality="high"/);
 });

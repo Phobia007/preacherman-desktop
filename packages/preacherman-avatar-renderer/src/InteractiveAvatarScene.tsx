@@ -3,8 +3,9 @@ import { useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { AvatarModel } from "./AvatarModel";
-import { HologramLights } from "./HologramLights";
-import { AvatarError, type AvatarPerformanceSnapshot, type AvatarPose } from "./types";
+import { CinematicEnvironment } from "./CinematicEnvironment";
+import { CinematicHologramLights, HologramLights } from "./HologramLights";
+import { AvatarError, type AvatarPerformanceSnapshot, type AvatarPose, type AvatarSceneEnvironment } from "./types";
 import type {
   AvatarActionDescriptor,
   AvatarAnimationDebugSnapshot,
@@ -25,23 +26,27 @@ interface InteractiveAvatarSceneProps {
   readonly pose: AvatarPose;
   readonly resetKey: number;
   readonly jawOpen: number;
+  readonly environment: AvatarSceneEnvironment;
 }
 
 function CameraRig({
+  environment,
   resetKey,
-}: Pick<InteractiveAvatarSceneProps, "resetKey">) {
+}: Pick<InteractiveAvatarSceneProps, "environment" | "resetKey">) {
   const { camera, invalidate } = useThree();
   const controls = useRef<OrbitControlsImpl>(null);
 
   useEffect(() => {
     camera.position.set(0, 0.86, 3.35);
+    if (environment === "cinematic") camera.position.set(0, 0.94, 4.35);
     camera.near = 0.01;
     camera.far = 100;
     camera.updateProjectionMatrix();
     controls.current?.target.set(0, 0.86, 0);
+    if (environment === "cinematic") controls.current?.target.set(0, 0.92, 0);
     controls.current?.update();
     invalidate();
-  }, [camera, invalidate, resetKey]);
+  }, [camera, environment, invalidate, resetKey]);
 
   return (
     <OrbitControls
@@ -91,10 +96,12 @@ export function InteractiveAvatarScene({
   pose,
   resetKey,
   jawOpen,
+  environment,
 }: InteractiveAvatarSceneProps) {
   return (
     <>
-      <HologramLights />
+      {environment === "cinematic" ? <CinematicEnvironment /> : null}
+      {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
       <PresentationControls
         azimuth={[-Infinity, Infinity]}
         config={{ mass: 1, tension: 220, friction: 30 }}
@@ -115,7 +122,7 @@ export function InteractiveAvatarScene({
           jawOpen={jawOpen}
         />
       </PresentationControls>
-      <CameraRig resetKey={resetKey} />
+      <CameraRig environment={environment} resetKey={resetKey} />
       <ContextLossListener onContextLost={onContextLost} />
     </>
   );

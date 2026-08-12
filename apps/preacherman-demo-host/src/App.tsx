@@ -255,8 +255,6 @@ export function App() {
     >
       {homeView === "companion" && isCortanaActive ? (
         <>
-          <HomeSurface manifest={manifest} projection={projection} />
-          <CortanaModelStage ariaLabel="Activated Cortana model" />
           <VoiceSessionControl locale={preferences.locale} />
           <ABTaskConsole locale={preferences.locale} mode="home" />
         </>
@@ -287,7 +285,6 @@ export function App() {
       data-preacherman-features={featuresForSurface("lab").join(" ")}
     >
       {labView === "voice" && isCortanaActive ? <>
-        <CortanaModelStage ariaLabel="Cortana voice and avatar lab model" showControls />
         <VoiceSessionControl locale={preferences.locale} />
       </> : null}
       {labView === "widgets" ? <div className="demo-surface-module"><PreachermanWidgetGallery placement="lab" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
@@ -407,6 +404,14 @@ export function App() {
       dispatch={adapter.dispatch}
       entering={animateMainEntrance}
       locale={preferences.locale}
+      scene={isCortanaActive ? (
+        <CortanaModelStage
+          ariaLabel="Persistent Cortana companion scene"
+          environment="cinematic"
+          variant="persistent"
+        />
+      ) : null}
+      sceneHidden={activeSurfaceType === "market"}
     >
       <PreachermanDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={preachermanServiceRequest} />
       <div className="demo-app-shell__screen-page" key={contentKey}>

@@ -58,8 +58,9 @@ test("the persistent shell exposes semantic theme tokens and themed window contr
   );
   assert.match(
     styles,
-    /\.demo-app-shell__screen-content\s*\{[\s\S]*background:\s*var\(--demo-theme-canvas\)/,
+    /\.demo-app-shell__screen-content\s*\{[\s\S]*background:\s*transparent/,
   );
+  assert.match(styles, /\.demo-window-controls__button\s*\{[\s\S]*background:\s*color-mix\(in srgb, var\(--demo-theme-surface-elevated\)/);
 });
 
 test("Gallery and model detail chrome inherit the active appearance without recoloring the model", async () => {
@@ -140,9 +141,9 @@ test("Gallery and model detail chrome inherit the active appearance without reco
   assert.doesNotMatch(galleryStyles, /\.cortana-model-stage__ground\s*\{[^}]*display:\s*none/);
   assert.match(modelStage, /<InteractiveAvatarViewport\b/);
   assert.doesNotMatch(modelStage, /appearance=|theme=|material=/);
-  assert.match(viewport, /alpha:\s*true/);
-  assert.match(viewport, /setClearColor\(0x000000,\s*0\)/);
-  assert.doesNotMatch(scene, /attach="background"/);
+  assert.match(viewport, /alpha:\s*environment !== "cinematic"/);
+  assert.match(viewport, /setClearColor\(0x010409,\s*environment === "cinematic" \? 1 : 0\)/);
+  assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment \/>/);
   assert.match(galleryStyles, /var\(--demo-theme-loading\)/);
   assert.match(galleryStyles, /var\(--demo-theme-error\)/);
   assert.match(
