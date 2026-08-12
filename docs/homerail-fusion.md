@@ -59,6 +59,8 @@ PREACHERMAN_HOMERAIL_PROFILE=my-runtime-profile
 PREACHERMAN_HOMERAIL_CONSOLE_URL=http://127.0.0.1:19193
 ```
 
+Parallel worktrees can use a different Vite port without widening the browser API boundary. Add the exact local origin to the service environment, for example `PREACHERMAN_PREVIEW_ORIGINS=http://127.0.0.1:1422`. The value is comma-separated and accepts only `http://127.0.0.1:<port>` or `http://localhost:<port>` origins; remote hosts, HTTPS, paths, queries, and fragments are rejected at startup. The default 1420/1421 and Tauri origins remain unchanged.
+
 Do not commit real tokens. Configure HomeRail model credentials in HomeRail's encrypted database through its CLI or Settings UI; do not copy Preacherman Provider keys into source files.
 
 The configuration script performs a live Responses API probe immediately after HomeRail encrypts the credential. It does not activate the Preacherman profile or write `.env.local` unless that probe succeeds. A rejected newly-created setting is removed on a best-effort basis so an invalid credential cannot become a green configuration state.
@@ -220,6 +222,7 @@ The focused suite covers TaskStore migration, TaskService authority, routing, cl
 - HomeRail Manager and one Docker-capable Node were reachable.
 - `homerail-worker:latest` was present.
 - HomeRail's official `public-two-node-template` completed as real Run `12b8b4ec88349fd4822b777d` with 2 dispatches and 2 handoffs, proving Manager → Node → Docker Worker execution.
-- The fixed Preacherman workflow remained honestly gated because this machine had zero HomeRail LLM settings and zero attached runtime profiles. No fake fixed-workflow success was recorded.
-
-The fusion can be considered fully production-ready only after an actual model-backed profile is configured and one proposal-confirmed `preacherman-complex-task-v1` Run completes through Preacherman with its projected milestones and artifacts.
+- A DeepSeek official credential was stored only in HomeRail's encrypted settings and passed live Responses, Chat Completions, and Anthropic-compatible probes. No credential was written to this repository or `.env.local`.
+- The explicit `preacherman-complex-default` profile ran revision 3 through Preacherman Task `run_53dad2d9-f223-4f18-83b6-1fc9d97bd521`, Attempt 1, and HomeRail Run `preacherman_run_53dad2d9-f223-4f18-83b6-1fc9d97bd521_1`.
+- Planner, three bounded fan-out workers, aggregation, and independent verification completed. Required `plan.json` and `verification.json` artifacts were fetched through Preacherman and their sizes and SHA-256 digests were verified again after a Preacherman service restart.
+- This closes the scoped fusion acceptance. Production deployment still requires normal operational hardening such as credential rotation, monitoring, backup, and environment-specific access control.

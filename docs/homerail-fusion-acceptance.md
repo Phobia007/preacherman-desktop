@@ -4,9 +4,9 @@
 
 ## 结论
 
-融合代码、产品边界、自动化测试入口和真实验收入口已经落地，但当前提供的凭据属于 `llm-center.modelbest.co` 公司内网网关，并不属于 DeepSeek 官方接口。本机当前可将该域名解析到私网地址，但无法连接其 443 端口，因此本任务 **不能标记为完整完成**。
+融合代码、产品边界、自动化测试入口和真实验收入口已经落地。新的 DeepSeek 官方凭据已由 HomeRail 加密保存，并通过 Responses、Chat Completions 和 Anthropic 兼容入口的实时 HTTP 200 探测。固定工作流已从 Preacherman Proposal 确认真实完成，父 Task、Attempt、HomeRail Run 和两个 required Artifact 均已校验。
 
-HomeRail 已有显式 Runtime Profile 和在线 Node。首次真实运行还暴露并修复了 Codex App Server 与 Claude 风格 `allowed_builtin_tools` 不兼容的问题，固定工作流已升级为 revision 3，三个 Agent 角色均使用显式只读的 `backend_native` 策略。此前把公司网关 Key 错配到 DeepSeek 官方地址，真实 Provider 探测因此得到 HTTP 401；该 Setting 现已停用，Key 仍由 HomeRail 加密保存。Preacherman 会在创建 Proposal/Task/Attempt 之前执行短时缓存的 Responses 探测，并诚实返回 `configuration-required`，不会仅凭“Key 已保存”显示假 ready。
+HomeRail 使用显式 Runtime Profile、在线 Node 和 revision 3 固定工作流，三个 Agent 角色均使用只读 `backend_native` 策略。Preacherman 会在创建 Proposal/Task/Attempt 之前执行短时缓存的 Responses 探测，不会仅凭“Key 已保存”显示假 ready。验收目标带有明确、可引用的输入事实；Planner 完成拆分，三个 Worker 并行完成，Verifier 独立验证，且没有自动 handoff fallback。
 
 ## 权威边界
 
@@ -37,8 +37,8 @@ HomeRail 已有显式 Runtime Profile 和在线 Node。首次真实运行还暴�
 | 浏览器不直连 HomeRail、不持有 Token | 已证明 | 浏览器 API 只访问 Preacherman；公开状态和 Workflow catalog 均脱敏 |
 | 不增加 HomeRail 主导航或重复操作体系 | 已证明 | 仍为 7 个一级页面；Action Placement 与 UI flow 测试 |
 | Light/Dark 与关键页面人工 smoke | 已证明 | Home、Work、Ledger、Settings、Test 已进行双主题浏览器检查，控制台 0 error |
-| Test 一键真实融合验收 | 已落实但受配置阻塞 | `runHomeRailFusionAcceptance` 走真实 Proposal→重复确认→Task→Attempt→Artifact API；Provider 未 ready 时诚实禁用 |
-| Proposal 确认后真实固定 Workflow 完成 | **阻塞** | Profile/Node 均存在；公司网关只在内网可达，本机当前无法连接 `llm-center.modelbest.co:443` |
+| Test 一键真实融合验收 | 已证明 | `runHomeRailFusionAcceptance` 与 CLI 验收器走真实 Proposal→重复确认→Task→Attempt→Artifact API；Provider 未 ready 时诚实禁用 |
+| Proposal 确认后真实固定 Workflow 完成 | 已证明 | Task `run_53dad2d9-f223-4f18-83b6-1fc9d97bd521`、Attempt 1、HomeRail Run `preacherman_run_53dad2d9-f223-4f18-83b6-1fc9d97bd521_1` 均为成功终态 |
 
 ## 固定工作流
 
@@ -52,32 +52,40 @@ HomeRail 已有显式 Runtime Profile 和在线 Node。首次真实运行还暴�
 
 - HomeRail Manager 可达。
 - 一个 Docker-capable Node 已连接；空闲时 Worker 为 0 属于正常状态。
-- 旧加密 Setting 与 `preacherman-complex-default` Profile 曾绑定到固定工作流；公开状态不暴露凭据。该错误 Setting 已停用且未删除。
+- 加密 Setting 与 `preacherman-complex-default` Profile 绑定到固定工作流；公开状态始终不暴露凭据。该 Setting 在安全配置流程中更新为本次通过实时探测的 DeepSeek 官方凭据并保持激活。
 - 真实 Run `preacherman_run_4f7f0a13-056a-4ec1-b489-dc88d3f3894d_1` 证明 revision 3 已进入 Codex App Server，但 Provider 请求被当前凭据拒绝。
 - `/api/llm/models/detect-runtime` 对错误指向 DeepSeek 官方地址的旧 Setting，在 Responses、Chat Completions 与 Anthropic 兼容入口均返回 HTTP 401；错误仅保留脱敏尾号。
 - 用户提供的接口说明确认正确 Base URL 为 `https://llm-center.modelbest.co`，并声明 `/v1/responses`；域名在本机解析为私网地址 `10.88.1.54`，但当前 TCP 443 超时，符合页面“内网”说明。
 - HomeRail 已创建独立 `modelbest` 自定义 Provider，默认模型暂为不可执行的 `pending-model-discovery`；未创建或激活伪造模型 Setting。
 - HomeRail 官方 `public-two-node-template` 曾完成真实 Run `12b8b4ec88349fd4822b777d`，证明 Manager → Node → Docker Worker 基础链路可执行。
 - 固定 Preacherman 工作流没有被错误绑定到 deterministic profile，也没有用伪造结果绕过模型依赖。
+- DeepSeek 官方 Setting 的 Responses、Chat Completions 与 Anthropic 兼容入口实时探测均为 HTTP 200；推荐 harness 为 `codex_appserver`。
+- 成功父 Task：`run_53dad2d9-f223-4f18-83b6-1fc9d97bd521`；状态 `succeeded`；Attempt 数量 1。
+- 成功 HomeRail Run：`preacherman_run_53dad2d9-f223-4f18-83b6-1fc9d97bd521_1`；状态 `completed`；Planner、三个 fan-out Worker、fanout 聚合和 Verifier 全部 `COMPLETED`；6 个非空 handoff，0 个自动 handoff。
+- `plan.json`：3890 bytes，SHA-256 `39e4037ee0c617b3f487a966c6a9b28218bf823b34ab16c45ada3ecaff19232a`。
+- `verification.json`：2818 bytes，SHA-256 `234f6517c463d5ac9754474d6cab9875c97020d7d22984798a0df0f0de393f20`。
+- 成功运行中的可选 `verification-failure.json` 按 `publish: failure` 策略诚实标为 `skipped`，不会被误算为 required Artifact 失败。
+- 关闭首次嵌入式 Preacherman 服务后，新实例从持久化 TaskStore/LinkStore 重新读取同一 Task，并经内容代理重新验证两个 Artifact 的 byte length 与 SHA-256，证明 Preacherman 重启后没有丢失或误报。
 
-## 完成最后一项所需操作
+## 复验入口
 
-1. 连接可访问 `10.88.1.54:443` 的公司内网或 VPN。
-2. 运行 `npm run configure:homerail -- -Provider modelbest -ResponsesBaseUrl https://llm-center.modelbest.co -AgentType codex_appserver`。脚本从 `/v1/models` 自动发现模型（多个模型时在本地窗口选择），只通过 stdin 传递密钥，HomeRail 加密保存，并在激活 Profile 前真实探测 `/v1/responses`。探测失败不会改写 Preacherman 激活配置。
-3. 执行 `npm run verify:homerail`；Provider 探测必须先返回 ready。
-4. 验证同一个 Proposal 重复确认只产生一个父 Task、一个 Attempt、一个 HomeRail Run，并取得校验通过的 `plan.json` 与 `verification.json`。
-
-只有第 5 步通过后，才能把融合任务标记为完成。
+1. 新执行：运行 `npm run verify:homerail`；它会先要求 Provider ready，再走 Proposal、重复确认、唯一父 Task/Attempt/Run 和 required Artifact 内容校验。
+2. 无模型费用复验既有成功 Task：设置 `PREACHERMAN_FUSION_TASK_ID=run_53dad2d9-f223-4f18-83b6-1fc9d97bd521` 后运行同一命令。
+3. 只有 `plan.json` 与 `verification.json` 两个 required Artifact 必须 ready；按相反终态策略未发布的可选 Artifact 可以是 skipped。
 
 没有云端 API Key 时，可以改用 LM Studio 本地 `/v1/responses` 服务。当前机器的 32GB RAM、RTX 5070 Ti 16GB VRAM 足以优先尝试 7B–14B 量化、支持工具调用的模型；Docker Actor 通过 `host.docker.internal` 访问宿主服务。最终完成标准不变，仍必须实际跑通固定 Workflow 并校验两项 required Artifact。
 
 ## 本轮验证结果
 
-- `npm test`：306/306 通过。
+- `npm test`：308/308 通过；新增并覆盖并行 worktree 预览 Origin 的本地白名单约束。
 - `npm run typecheck`：通过。
 - `npm run build`：通过；Vite 生产包完成（仅保留既有的大 chunk 提示）。
 - `git diff --check`：通过。
-- Settings → Connections：Light/Dark 实际浏览器检查通过，控制台 0 error，桌面窗口控制均可访问。
+- 当前融合 worktree 的 Settings → Connections 与 Test：Light/Dark 实际浏览器检查通过，控制台 0 error，桌面窗口控制均可访问；1422 预览只通过显式本地 Origin 白名单访问服务。
 - revision 3 首次真实运行：进入 Codex App Server，随后因公司 Key 错指 DeepSeek 官方地址而 401 失败；没有伪造 Artifact。
 - 增加 Provider 实测门禁后，`npm run verify:homerail` 按预期以退出码 1 停在 readiness gate，不再创建无意义的 Proposal、Task 或 Attempt。
 - 公司网关无凭据网络检查：DNS 成功解析到 `10.88.1.54`，TCP 443 与 `/v1/models`、`/v1/responses` 均超时；未把 Key 发送到不可达端点。
+- 新 DeepSeek 官方凭据三协议实时探测均为 HTTP 200。
+- 首个有效 Provider Run 暴露验收目标缺少 Track C 来源事实，第三个 Worker诚实返回 failed，fanout 正确 fail-closed；没有伪造成功。
+- 修正为显式 FACT A/B/C 后，真实固定工作流在 89 秒内完成，Task/Attempt/Run/Artifact 验收全部通过。
+- 验收器现以最终权威 Task 判断重复确认后的唯一 Attempt，并只校验 required Artifact；支持不创建新 Run 的既有 Task 复验。

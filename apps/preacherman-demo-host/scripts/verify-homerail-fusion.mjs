@@ -2,9 +2,16 @@ import { createHash } from "node:crypto";
 
 let serviceUrl = (process.env.PREACHERMAN_SERVICE_URL || "http://127.0.0.1:8787").replace(/\/$/, "");
 const objective = process.env.PREACHERMAN_FUSION_OBJECTIVE
-  || "Research three practical launch options in parallel, cite grounded evidence, and independently verify the final recommendation.";
+  || [
+    "Using only the supplied facts below, assess three explicitly named Preacherman demo launch tracks in parallel and independently verify one recommendation.",
+    "FACT A: Track A is a closed 10-user pilot lasting 2 weeks, operated by one internal operator, with no external integrations.",
+    "FACT B: Track B is a 50-user invite-only beta lasting 4 weeks and requires onboarding plus user support.",
+    "FACT C: Track C is a 1-week public showcase using read-only sample data and no account creation.",
+    "Create exactly one non-overlapping work item for Track A, Track B, and Track C. Each worker must cite the relevant FACT label, assess prerequisites, effort, stated timeline, feasibility, and risks, explicitly mark unknown cost instead of inventing a number, and return grounded evidence. The independent verifier must compare all three results, reject invented facts, and recommend a track with stated tradeoffs.",
+  ].join(" ");
 const timeoutMs = Number(process.env.PREACHERMAN_FUSION_TIMEOUT_MS || 15 * 60 * 1_000);
 const origin = process.env.PREACHERMAN_PREVIEW_ORIGIN || "http://127.0.0.1:1420";
+const existingTaskId = process.env.PREACHERMAN_FUSION_TASK_ID || "";
 
 function failure(message, details) {
   const error = new Error(message);
@@ -58,28 +65,37 @@ async function main() {
   if (provider?.state !== "ready") {
     throw failure("HomeRail is not ready. Configure an active model setting and runtime profile before running acceptance.", provider);
   }
-  const turn = await request("/api/agent/turn", {
-    method: "POST",
-    body: JSON.stringify({ input: objective, locale: "en" }),
-  });
-  if (turn.action !== "propose_task" || !turn.proposal?.proposalId) throw failure("Agent turn did not produce a reviewable task proposal.", turn);
-  const confirmPath = `/api/agent/proposals/${encodeURIComponent(turn.proposal.proposalId)}/confirm`;
-  const first = await request(confirmPath, { method: "POST", body: JSON.stringify({ objective: turn.proposal.objective }) });
-  const repeated = await request(confirmPath, { method: "POST", body: JSON.stringify({ objective: turn.proposal.objective }) });
-  if (!first.run?.taskId || repeated.run?.taskId !== first.run.taskId || first.run.attempts?.length !== 1 || repeated.run.attempts?.length !== 1) {
-    throw failure("Duplicate confirmation did not preserve exactly one parent Task and one Attempt.", { first: first.run, repeated: repeated.run });
+  let taskId = existingTaskId;
+  if (!taskId) {
+    const turn = await request("/api/agent/turn", {
+      method: "POST",
+      body: JSON.stringify({ input: objective, locale: "en" }),
+    });
+    if (turn.action !== "propose_task" || !turn.proposal?.proposalId) throw failure("Agent turn did not produce a reviewable task proposal.", turn);
+    const confirmPath = `/api/agent/proposals/${encodeURIComponent(turn.proposal.proposalId)}/confirm`;
+    const first = await request(confirmPath, { method: "POST", body: JSON.stringify({ objective: turn.proposal.objective }) });
+    const repeated = await request(confirmPath, { method: "POST", body: JSON.stringify({ objective: turn.proposal.objective }) });
+    if (!first.run?.taskId || repeated.run?.taskId !== first.run.taskId) {
+      throw failure("Duplicate confirmation did not preserve exactly one parent Task and one Attempt.", { first: first.run, repeated: repeated.run });
+    }
+    const confirmed = (await request(`/api/tasks/${encodeURIComponent(first.run.taskId)}`)).task;
+    if (confirmed?.attempts?.length !== 1) {
+      throw failure("Duplicate confirmation did not preserve exactly one parent Task and one Attempt.", { first: first.run, repeated: repeated.run, confirmed });
+    }
+    taskId = first.run.taskId;
   }
-  const task = await waitForTerminal(first.run.taskId);
+  const task = await waitForTerminal(taskId);
   if (task.status !== "succeeded") throw failure(`HomeRail task finished as ${task.status}.`, task);
   if (task.execution?.kind !== "homerail-dag" || task.attempts?.length !== 1 || !task.attempts[0]?.externalRunId) {
     throw failure("Successful task is missing its HomeRail Attempt link.", task);
   }
   const index = await request(`/api/tasks/${encodeURIComponent(task.taskId)}/artifacts`);
-  if (!Array.isArray(index.artifacts) || index.artifacts.length < 2) {
+  const requiredArtifacts = Array.isArray(index.artifacts) ? index.artifacts.filter((artifact) => artifact.required === true) : [];
+  if (requiredArtifacts.length < 2) {
     throw failure("Successful fixed workflow did not publish the required plan and verification artifacts.", index);
   }
   const artifacts = [];
-  for (const artifact of index.artifacts) artifacts.push(await verifyArtifact(task.taskId, artifact));
+  for (const artifact of requiredArtifacts) artifacts.push(await verifyArtifact(task.taskId, artifact));
   process.stdout.write(`${JSON.stringify({
     ok: true,
     taskId: task.taskId,

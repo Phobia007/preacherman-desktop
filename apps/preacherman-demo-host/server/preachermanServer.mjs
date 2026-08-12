@@ -91,6 +91,20 @@ export function createPreachermanServer(options = {}) {
       : []),
     ...(existsSync(developmentPluginFixtures) ? [developmentPluginFixtures] : []),
   ];
+  const configuredPreviewOrigins = typeof env.PREACHERMAN_PREVIEW_ORIGINS === "string"
+    ? env.PREACHERMAN_PREVIEW_ORIGINS.split(",").map((origin) => origin.trim()).filter(Boolean)
+    : [];
+  for (const origin of configuredPreviewOrigins) {
+    let parsed;
+    try {
+      parsed = new URL(origin);
+    } catch {
+      throw new Error(`Invalid PREACHERMAN_PREVIEW_ORIGINS entry: ${origin}`);
+    }
+    if (parsed.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(parsed.hostname) || parsed.pathname !== "/" || parsed.search || parsed.hash || !parsed.port) {
+      throw new Error(`PREACHERMAN_PREVIEW_ORIGINS must contain only local HTTP origins with an explicit port: ${origin}`);
+    }
+  }
   const allowedOrigins = new Set([
     "http://127.0.0.1:1420",
     "http://localhost:1420",
@@ -99,6 +113,7 @@ export function createPreachermanServer(options = {}) {
     "http://tauri.localhost",
     "https://tauri.localhost",
     "tauri://localhost",
+    ...configuredPreviewOrigins,
   ]);
   const proposals = new Map();
   let savedProviderConfig = null;
@@ -491,7 +506,7 @@ export function createPreachermanServer(options = {}) {
     localImageRoots,
     approvalVerifier: ({ evidence }) => evidence === computerUseApprovalAuthority,
   });
-  const airiDomObservationRuntime = createAiriDomObservationRuntime();
+  const airiDomObservationRuntime = createAiriDomObservationRuntime({ allowedOrigins: [...allowedOrigins] });
   ecosystemFacade = createAiriEcosystemBindingFacade({
     kits: airiKitsRuntime.kits,
     bindings: airiKitsRuntime.bindings,

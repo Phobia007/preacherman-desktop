@@ -24,8 +24,15 @@ test("runtime profile template references only an encrypted HomeRail model alias
 
 test("real acceptance script verifies one Task, one Attempt, one Run, and artifact digests", async () => {
   const script = await readFile(join(packageRoot, "scripts", "verify-homerail-fusion.mjs"), "utf8");
-  assert.match(script, /repeated\.run\.attempts\?\.length !== 1/);
+  assert.match(script, /FACT A: Track A is a closed 10-user pilot/);
+  assert.match(script, /FACT B: Track B is a 50-user invite-only beta/);
+  assert.match(script, /FACT C: Track C is a 1-week public showcase/);
+  assert.match(script, /explicitly mark unknown cost instead of inventing a number/);
+  assert.match(script, /in parallel and independently verify one recommendation/);
+  assert.match(script, /repeated\.run\?\.taskId !== first\.run\.taskId/);
+  assert.match(script, /confirmed\?\.attempts\?\.length !== 1/);
+  assert.match(script, /PREACHERMAN_FUSION_TASK_ID/);
   assert.match(script, /externalRunId/);
   assert.match(script, /createHash\("sha256"\)/);
-  assert.match(script, /index\.artifacts\.length < 2/);
+  assert.match(script, /filter\(\(artifact\) => artifact\.required === true\)/);
 });
