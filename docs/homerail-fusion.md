@@ -13,9 +13,9 @@ The browser calls only the Preacherman local service. HomeRail mutation and appr
 The first controlled workflow is the official `orchestrator-workers@1.2.0` pattern instantiated as:
 
 - workflow ID: `preacherman-complex-task-v1`
-- revision: `2`
+- revision: `3`
 - compiler: `6`
-- canonical SHA-256: `a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2`
+- canonical SHA-256: `bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee`
 - shape: planner → bounded fan-out (maximum 8 items, 4 parallel workers) → independent verifier → terminal result
 - required success artifacts: `plan.json` and `verification.json`; failed verification may also publish `verification-failure.json`
 
@@ -53,8 +53,8 @@ PREACHERMAN_HOMERAIL_BASE_URL=http://127.0.0.1:19191
 PREACHERMAN_HOMERAIL_DAG_TOKEN=
 PREACHERMAN_HOMERAIL_APPROVAL_TOKEN=
 PREACHERMAN_HOMERAIL_DEFAULT_WORKFLOW_ID=preacherman-complex-task-v1
-PREACHERMAN_HOMERAIL_WORKFLOW_REVISION=2
-PREACHERMAN_HOMERAIL_CANONICAL_HASH=a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2
+PREACHERMAN_HOMERAIL_WORKFLOW_REVISION=3
+PREACHERMAN_HOMERAIL_CANONICAL_HASH=bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee
 PREACHERMAN_HOMERAIL_PROFILE=my-runtime-profile
 PREACHERMAN_HOMERAIL_CONSOLE_URL=http://127.0.0.1:19193
 ```

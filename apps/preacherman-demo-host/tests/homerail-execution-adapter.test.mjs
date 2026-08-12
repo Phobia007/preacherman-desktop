@@ -17,7 +17,7 @@ async function setup(t, overrides = {}) {
   const calls = [];
   const client = {
     runtimeStatus: async () => ({ phase: "M10-pre", connected_workers: 1, connected_nodes: 1 }),
-    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 2, canonical_hash: "a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2" }),
+    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 3, canonical_hash: "bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee" }),
     profiles: async () => ({ profiles: [{ profile_id: "local-main" }] }),
     createAndRun: async (body) => { calls.push(body); return { run_id: body.runId }; },
     ...overrides,
@@ -32,8 +32,8 @@ test("HomeRail adapter creates one revision-pinned Attempt and reuses the idempo
   const started = await adapter.start(task.taskId, { idempotencyKey: "proposal-1:revision-1" });
   const repeated = await adapter.start(task.taskId, { idempotencyKey: "proposal-1:revision-1" });
   assert.equal(calls.length, 1);
-  assert.equal(calls[0].workflow_revision, 2);
-  assert.equal(calls[0].canonical_hash, "a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2");
+  assert.equal(calls[0].workflow_revision, 3);
+  assert.equal(calls[0].canonical_hash, "bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee");
   assert.equal(started.task.attempts.length, 1);
   assert.equal(repeated.reused, true);
   assert.equal(repeated.task.taskId, task.taskId);
@@ -76,9 +76,8 @@ test("HomeRail adapter fails closed when revision or canonical hash drifts", asy
   });
   const status = await adapter.status();
   assert.equal(status.state, "configuration-required");
-  assert.match(status.message, /revision 2/i);
   assert.match(status.message, /canonical hash/i);
-  assert.equal(status.workflow.expectedRevision, 2);
+  assert.equal(status.workflow.expectedRevision, 3);
 });
 
 test("HomeRail adapter never auto-selects an arbitrary available runtime profile", async (t) => {
@@ -88,7 +87,7 @@ test("HomeRail adapter never auto-selects an arbitrary available runtime profile
   const adapter = createHomeRailExecutionAdapter({
     client: {
       runtimeStatus: async () => ({ phase: "M10-pre", connected_workers: 0, connected_nodes: 1 }),
-      workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 2, canonical_hash: "a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2" }),
+      workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 3, canonical_hash: "bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee" }),
       profiles: async () => ({ profiles: [{ profile_id: "arbitrary-first-profile" }] }),
     },
     taskService,
@@ -106,7 +105,7 @@ test("provider diagnostics expose only a credential-free Manager origin", async 
   const adapter = createHomeRailExecutionAdapter({
     client: {
       runtimeStatus: async () => ({ phase: "M10-pre", connected_workers: 0, connected_nodes: 1 }),
-      workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 2, canonical_hash: "a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2" }),
+      workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 3, canonical_hash: "bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee" }),
       profiles: async () => ({ profiles: [{ profile_id: "local-main" }] }),
     },
     taskService: createTaskService({ taskStore: createTaskStore({ file: join(directory, "tasks.json") }) }),

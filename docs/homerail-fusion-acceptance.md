@@ -4,9 +4,9 @@
 
 ## 结论
 
-融合代码、产品边界、自动化测试入口和真实验收入口已经落地，但当前机器尚未满足任务书 Definition of Done 的第 1 项，因此本任务 **不能标记为完整完成**。
+融合代码、产品边界、自动化测试入口和真实验收入口已经落地，但当前提供的模型凭据被 DeepSeek 官方 Responses 接口以 HTTP 401 拒绝，因此本任务 **不能标记为完整完成**。
 
-唯一尚未完成的发布阻塞是：HomeRail 当前没有为固定工作流配置真实模型 Setting 和显式 Runtime Profile，因而还不能从 Preacherman Proposal 确认后完成一次真实的 `preacherman-complex-task-v1` Run。系统对此返回 `configuration-required`，Test/Acceptance 的真实运行按钮保持禁用，不创建模拟 Attempt 或伪造 Artifact。
+HomeRail 已有加密模型 Setting、显式 Runtime Profile 和在线 Node。首次真实运行还暴露并修复了 Codex App Server 与 Claude 风格 `allowed_builtin_tools` 不兼容的问题，固定工作流已升级为 revision 3，三个 Agent 角色均使用显式只读的 `backend_native` 策略。随后真实 Provider 探测确认当前凭据无效。Preacherman 现在会在创建 Proposal/Task/Attempt 之前执行短时缓存的 Responses 探测，并诚实返回 `configuration-required`，不会仅凭“Key 已保存”显示假 ready。
 
 ## 权威边界
 
@@ -27,7 +27,7 @@
 | 一个目标只有一个父 TaskRun | 已证明 | 重复 confirm HTTP/面板测试；HomeRail Link 幂等测试 |
 | HomeRail Run 是 Attempt，不替代 Task ID | 已证明 | `homeRailExecutionAdapter`、`homeRailLinkStore`、Ledger Attempt 展示 |
 | Router 保持 Plugin/MCP 本地执行 | 已证明 | `execution-router.test.mjs` 和全量回归测试 |
-| 固定 Workflow revision/hash 漂移失败关闭 | 已证明 | revision `2`、canonical hash 固定；workflow contract 与 execution adapter 测试 |
+| 固定 Workflow revision/hash 漂移失败关闭 | 已证明 | revision `3`、canonical hash 固定；workflow contract 与 execution adapter 测试 |
 | 状态和白名单事件投影 | 已证明 | `homerail-event-projector.test.mjs`，内容指纹去重且支持乱序插入 |
 | Cancel/steer/resume/retry | 已证明（适配层与 HTTP 假服务） | `homerail-command-adapter.test.mjs`、`homerail-integration-http.test.mjs` |
 | Waiting input 与单一审批 | 已证明（适配层与 HTTP 假服务） | approval/event/UI flow 测试；审批历史包含 request、decision、actor、time、proposal hash |
@@ -38,13 +38,13 @@
 | 不增加 HomeRail 主导航或重复操作体系 | 已证明 | 仍为 7 个一级页面；Action Placement 与 UI flow 测试 |
 | Light/Dark 与关键页面人工 smoke | 已证明 | Home、Work、Ledger、Settings、Test 已进行双主题浏览器检查，控制台 0 error |
 | Test 一键真实融合验收 | 已落实但受配置阻塞 | `runHomeRailFusionAcceptance` 走真实 Proposal→重复确认→Task→Attempt→Artifact API；Provider 未 ready 时诚实禁用 |
-| Proposal 确认后真实固定 Workflow 完成 | **阻塞** | Manager 和 1 个 Node 在线，但 HomeRail LLM Settings=0、显式 Profile 缺失 |
+| Proposal 确认后真实固定 Workflow 完成 | **阻塞** | Setting/Profile/Node 均存在；DeepSeek Responses 实测返回 HTTP 401，当前凭据无效 |
 
 ## 固定工作流
 
 - Workflow ID：`preacherman-complex-task-v1`
-- Revision：`2`
-- Canonical SHA-256：`a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2`
+- Revision：`3`
+- Canonical SHA-256：`bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee`
 - 成功必需产物：`plan.json`、`verification.json`
 - 并行上限：4 个 Worker；计划条目上限：8
 
@@ -52,16 +52,17 @@
 
 - HomeRail Manager 可达。
 - 一个 Docker-capable Node 已连接；空闲时 Worker 为 0 属于正常状态。
+- 加密 Setting 与 `preacherman-complex-default` Profile 已绑定到固定工作流；公开状态不暴露凭据。
+- 真实 Run `preacherman_run_4f7f0a13-056a-4ec1-b489-dc88d3f3894d_1` 证明 revision 3 已进入 Codex App Server，但 Provider 请求被当前凭据拒绝。
+- `/api/llm/models/detect-runtime` 对同一 Setting 的 Responses、Chat Completions 与 Anthropic 兼容入口均返回 HTTP 401；错误仅保留脱敏尾号。
 - HomeRail 官方 `public-two-node-template` 曾完成真实 Run `12b8b4ec88349fd4822b777d`，证明 Manager → Node → Docker Worker 基础链路可执行。
 - 固定 Preacherman 工作流没有被错误绑定到 deterministic profile，也没有用伪造结果绕过模型依赖。
 
 ## 完成最后一项所需操作
 
-1. 在 HomeRail 中配置一个真实 provider-backed LLM Setting。
-2. 运行 `npm run configure:homerail -- -Provider deepseek -ModelName deepseek-v4-flash`，或由模板生成私有 Profile；交互脚本只通过 stdin 传递密钥，并显式绑定固定 Workflow。
-3. 设置 `PREACHERMAN_HOMERAIL_PROFILE=<profile-name>`，重启 Preacherman。
-4. 在 Test → Acceptance 点击“运行融合验收”，或执行 `npm run verify:homerail`。
-5. 验证同一个 Proposal 重复确认只产生一个父 Task、一个 Attempt、一个 HomeRail Run，并取得校验通过的 `plan.json` 与 `verification.json`。
+1. 用有效的 DeepSeek API Key 重新运行 `npm run configure:homerail -- -Provider deepseek -ModelName deepseek-v4-flash -AgentType codex_appserver`；脚本只通过 stdin 传递密钥，HomeRail 加密保存。
+2. 执行 `npm run verify:homerail`；Provider 探测必须先返回 ready。
+3. 验证同一个 Proposal 重复确认只产生一个父 Task、一个 Attempt、一个 HomeRail Run，并取得校验通过的 `plan.json` 与 `verification.json`。
 
 只有第 5 步通过后，才能把融合任务标记为完成。
 
@@ -69,9 +70,10 @@
 
 ## 本轮验证结果
 
-- `npm test`：304/304 通过。
+- `npm test`：305/305 通过。
 - `npm run typecheck`：通过。
 - `npm run build`：通过；Vite 生产包完成（仅保留既有的大 chunk 提示）。
 - `git diff --check`：通过。
 - Settings → Connections：Light/Dark 实际浏览器检查通过，控制台 0 error，桌面窗口控制均可访问。
-- `npm run verify:homerail`：按预期以退出码 1 停在 Provider readiness gate；未创建 Proposal、Task、Attempt 或伪造 Artifact。
+- revision 3 首次真实运行：进入 Codex App Server，随后因 Provider 401 失败；没有伪造 Artifact。
+- 增加 Provider 实测门禁后，`npm run verify:homerail` 按预期以退出码 1 停在 readiness gate，不再创建无意义的 Proposal、Task 或 Attempt。

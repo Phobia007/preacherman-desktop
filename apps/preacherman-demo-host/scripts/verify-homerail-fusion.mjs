@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-const serviceUrl = (process.env.PREACHERMAN_SERVICE_URL || "http://127.0.0.1:8787").replace(/\/$/, "");
+let serviceUrl = (process.env.PREACHERMAN_SERVICE_URL || "http://127.0.0.1:8787").replace(/\/$/, "");
 const objective = process.env.PREACHERMAN_FUSION_OBJECTIVE
   || "Research three practical launch options in parallel, cite grounded evidence, and independently verify the final recommendation.";
 const timeoutMs = Number(process.env.PREACHERMAN_FUSION_TIMEOUT_MS || 15 * 60 * 1_000);
@@ -92,7 +92,23 @@ async function main() {
   }, null, 2)}\n`);
 }
 
-main().catch((error) => {
+async function run() {
+  let embeddedService;
+  try {
+    if (process.env.PREACHERMAN_FUSION_EMBED_SERVICE === "true") {
+      const { createPreachermanServer } = await import("../server/preachermanServer.mjs");
+      embeddedService = createPreachermanServer();
+      const address = await embeddedService.listen(0);
+      if (!address || typeof address !== "object") throw failure("Embedded Preacherman service did not return a listening address.");
+      serviceUrl = `http://127.0.0.1:${address.port}`;
+    }
+    await main();
+  } finally {
+    await embeddedService?.close();
+  }
+}
+
+run().catch((error) => {
   process.stderr.write(`${JSON.stringify({ ok: false, error: error.message, details: error.details }, null, 2)}\n`);
   process.exitCode = 1;
 });

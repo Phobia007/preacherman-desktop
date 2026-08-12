@@ -21,7 +21,7 @@ param(
 
   [Parameter()]
   [ValidateSet('claude-sdk', 'codex_appserver', 'kimi_code')]
-  [string] $AgentType = 'claude-sdk',
+  [string] $AgentType = 'codex_appserver',
 
   [Parameter()]
   [ValidatePattern('^[A-Za-z0-9._-]+$')]
@@ -33,8 +33,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $workflowId = 'preacherman-complex-task-v1'
-$workflowRevision = '2'
-$canonicalHash = 'a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2'
+$workflowRevision = '3'
+$canonicalHash = 'bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee'
 $packageRoot = Split-Path -Parent $PSScriptRoot
 $homeRailCli = Join-Path $HomeRailRoot 'homerail_cli\dist\cli.js'
 $envFile = Join-Path $packageRoot '.env.local'

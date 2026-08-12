@@ -127,6 +127,11 @@ export function createHomeRailClient({
     workflows: () => request("/api/dag/workflows"),
     workflow: (workflowId) => request(`/api/dag/workflows/${encodeURIComponent(workflowId)}`),
     profiles: (workflowId) => request(`/api/dag/profiles?workflow_id=${encodeURIComponent(workflowId)}`),
+    detectModelRuntime: (settingId, options) => request("/api/llm/models/detect-runtime", {
+      method: "POST",
+      body: { setting_id: settingId },
+      ...options,
+    }),
     createAndRun: (input, options) => request("/api/runs/create-and-run", { method: "POST", body: input, ...options }),
     runStatus: (runId, options) => request(`/api/runs/${encodeURIComponent(runId)}/status`, options),
     runEvents: (runId, options) => request(`/api/runs/${encodeURIComponent(runId)}/events`, options),

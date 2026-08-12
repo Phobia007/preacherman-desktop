@@ -7,7 +7,7 @@ import test from "node:test";
 import { createPreachermanServer } from "../server/preachermanServer.mjs";
 
 const origin = "http://127.0.0.1:1420";
-const workflowHash = "a5ea80a2755e94d5e77819507502d4a4f747e72ec3e68d3618f2eebf66c486e2";
+const workflowHash = "bf7783be10cfc62b5e16154d026ef434c6990c387432401f1604c8b23e52c4ee";
 
 function readyEnv(dataDirectory) {
   return { PREACHERMAN_DATA_DIR: dataDirectory, PREACHERMAN_HOMERAIL_PROFILE: "local-main" };
@@ -26,8 +26,8 @@ test("complex Proposal confirm creates one Preacherman Task and one HomeRail Att
   const launches = [];
   const homeRailClient = {
     runtimeStatus: async () => ({ phase: "M10-pre", connected_workers: 1, connected_nodes: 1 }),
-    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 2, canonical_hash: workflowHash }),
-    workflows: async () => ({ workflows: [{ workflow_id: "preacherman-complex-task-v1", name: "Complex Task", description: "Pinned", head_revision: 2, canonical_hash: workflowHash, compiler_version: "6", yaml_text: "must not escape", source_path: "D:\\private" }] }),
+    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 3, canonical_hash: workflowHash }),
+    workflows: async () => ({ workflows: [{ workflow_id: "preacherman-complex-task-v1", name: "Complex Task", description: "Pinned", head_revision: 3, canonical_hash: workflowHash, compiler_version: "6", yaml_text: "must not escape", source_path: "D:\\private" }] }),
     profiles: async () => ({ profiles: [{ profile_id: "local-main" }] }),
     createAndRun: async (body) => { launches.push(body); return { run_id: body.runId }; },
   };
@@ -74,7 +74,7 @@ test("unconfigured HomeRail fails honestly while retaining one retryable parent 
   const dataDirectory = await mkdtemp(join(tmpdir(), "preacherman-homerail-config-"));
   const homeRailClient = {
     runtimeStatus: async () => ({ phase: "M10-pre", connected_workers: 0, connected_nodes: 1 }),
-    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 2, canonical_hash: workflowHash }),
+    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 3, canonical_hash: workflowHash }),
     profiles: async () => ({ profiles: [] }),
     createAndRun: async () => { throw new Error("must not launch"); },
   };
@@ -106,7 +106,7 @@ test("approval and waiting input use the single Preacherman command API", async 
   const commands = [];
   const homeRailClient = {
     runtimeStatus: async () => ({ phase: "M10-pre", connected_workers: 1, connected_nodes: 1 }),
-    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 2, canonical_hash: workflowHash }),
+    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 3, canonical_hash: workflowHash }),
     profiles: async () => ({ profiles: [{ profile_id: "local-main" }] }),
     createAndRun: async (body) => ({ run_id: body.runId }),
     runStatus: async () => ({ status: runState, current_round: { round_id: "round-2", target_actor_ids: ["researcher"] } }),
@@ -163,7 +163,7 @@ test("completed HomeRail artifacts are indexed and range-proxied through Preache
   const contentCalls = [];
   const homeRailClient = {
     runtimeStatus: async () => ({ phase: "M10-pre", connected_workers: 1, connected_nodes: 1 }),
-    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 2, canonical_hash: workflowHash }),
+    workflow: async () => ({ workflow_id: "preacherman-complex-task-v1", head_revision: 3, canonical_hash: workflowHash }),
     profiles: async () => ({ profiles: [{ profile_id: "local-main" }] }),
     createAndRun: async (body) => ({ run_id: body.runId }),
     runStatus: async () => ({ status: runState }),

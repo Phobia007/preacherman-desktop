@@ -112,7 +112,11 @@ spec:
     plan:
       kind: agent
       agent: orchestrator
-      allowed_builtin_tools: []
+      builtin_tool_policy: backend_native
+      codex_sandbox: read-only
+      workspace_access:
+        writable_paths: []
+        readonly_paths: []
       allowed_dag_tools: [handoff]
       inputs:
         objective: { contract: Objective }
@@ -130,6 +134,13 @@ spec:
         item_field: work_items
         context_field: context
         worker_agent: worker
+        worker_policy:
+          builtin_tool_policy: backend_native
+          codex_sandbox: read-only
+          workspace_access:
+            writable_paths: []
+            readonly_paths: []
+          allowed_dag_tools: [handoff]
         max_items: 8
         max_parallelism: 4
         completion: all
@@ -142,7 +153,11 @@ spec:
     verify:
       kind: agent
       agent: verifier
-      allowed_builtin_tools: []
+      builtin_tool_policy: backend_native
+      codex_sandbox: read-only
+      workspace_access:
+        writable_paths: []
+        readonly_paths: []
       allowed_dag_tools: [handoff]
       inputs:
         aggregate: {}
