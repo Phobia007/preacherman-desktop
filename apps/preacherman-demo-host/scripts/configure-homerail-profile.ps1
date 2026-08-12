@@ -88,12 +88,48 @@ function Set-DotEnvValue {
   return $Content + $line + [Environment]::NewLine
 }
 
+function Test-HomeRailModelRuntime {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string] $ManagerUrl,
+    [Parameter(Mandatory = $true)]
+    [string] $SettingId
+  )
+
+  $origin = ([Uri] $ManagerUrl).GetLeftPart([UriPartial]::Authority).TrimEnd('/')
+  $body = @{ setting_id = $SettingId } | ConvertTo-Json -Compress
+  try {
+    $response = Invoke-RestMethod `
+      -Method Post `
+      -Uri "$origin/api/llm/models/detect-runtime" `
+      -ContentType 'application/json' `
+      -Body $body `
+      -TimeoutSec 30
+  } catch {
+    throw 'HomeRail could not complete the live model runtime probe.'
+  }
+
+  $responses = $response.data.endpoints.responses
+  if ($response.success -ne $true -or $response.data.available -ne $true -or $responses.available -ne $true) {
+    if ($responses.status -eq 401) {
+      throw 'The provider rejected the API key. Verify the credential and endpoint before activating this profile.'
+    }
+    throw 'The configured model did not pass a live Responses API probe.'
+  }
+}
+
 if (-not (Test-Path -LiteralPath $homeRailCli -PathType Leaf)) {
   throw "HomeRail CLI was not found at $homeRailCli"
 }
 
 if ($ResponsesBaseUrl -and -not $ModelName) {
   throw 'Custom Responses endpoints require -ModelName.'
+}
+if ($ResponsesBaseUrl -and $EndpointId) {
+  throw 'Custom Responses endpoints cannot use a catalog EndpointId.'
+}
+if ($ResponsesBaseUrl -and $Provider -eq 'deepseek') {
+  throw 'Custom Responses endpoints require a custom -Provider ID so a company gateway key is never sent to the DeepSeek preset.'
 }
 if ($LocalNoAuth -and -not $ResponsesBaseUrl) {
   throw '-LocalNoAuth is only valid with a custom -ResponsesBaseUrl.'
@@ -131,7 +167,7 @@ try {
   $modelArguments = @('model', 'configure', $Provider, '--api-key-stdin')
   if ($EndpointId) { $modelArguments += @('--endpoint-id', $EndpointId) }
   if ($ModelName) { $modelArguments += @('--model-name', $ModelName) }
-  if ($ResponsesBaseUrl) { $modelArguments += @('--responses-endpoint', $ResponsesBaseUrl) }
+  if ($ResponsesBaseUrl) { $modelArguments += @('--provider-id', $Provider, '--responses-endpoint', $ResponsesBaseUrl) }
   $setting = Invoke-HomeRailJson -Arguments $modelArguments -StandardInput $plainKey
 } finally {
   $plainKey = $null
@@ -143,6 +179,17 @@ try {
 $settingId = [string] $setting.id
 if ([string]::IsNullOrWhiteSpace($settingId)) {
   throw 'HomeRail did not return the encrypted LLM setting ID.'
+}
+
+try {
+  Test-HomeRailModelRuntime -ManagerUrl ([string] $runtime.managerUrl) -SettingId $settingId
+} catch {
+  try {
+    Invoke-HomeRailJson -Arguments @('llm-settings', 'delete', $settingId) | Out-Null
+  } catch {
+    # The runtime probe remains authoritative even if cleanup is unavailable.
+  }
+  throw
 }
 
 $privateRoot = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'Preacherman\HomeRail'
@@ -192,6 +239,7 @@ if ($selected.Count -ne 1) {
 
 Write-Host ''
 Write-Host "Configured encrypted setting: $settingId"
+Write-Host 'Verified provider Responses runtime: ready'
 Write-Host "Synced runtime profile: $workflowId/$ProfileId"
 Write-Host "Updated local configuration: $envFile"
 Write-Host 'Restart the Preacherman service, then run: npm run verify:homerail'

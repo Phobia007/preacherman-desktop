@@ -60,7 +60,7 @@ HomeRail 已有加密模型 Setting、显式 Runtime Profile 和在线 Node。�
 
 ## 完成最后一项所需操作
 
-1. 用有效的 DeepSeek API Key 重新运行 `npm run configure:homerail -- -Provider deepseek -ModelName deepseek-v4-flash -AgentType codex_appserver`；脚本只通过 stdin 传递密钥，HomeRail 加密保存。
+1. 用有效的 DeepSeek API Key 重新运行 `npm run configure:homerail -- -Provider deepseek -ModelName deepseek-v4-flash -AgentType codex_appserver`；脚本只通过 stdin 传递密钥，HomeRail 加密保存，并在激活 Profile 前真实探测 Responses API。探测失败不会改写 Preacherman 激活配置。
 2. 执行 `npm run verify:homerail`；Provider 探测必须先返回 ready。
 3. 验证同一个 Proposal 重复确认只产生一个父 Task、一个 Attempt、一个 HomeRail Run，并取得校验通过的 `plan.json` 与 `verification.json`。
 

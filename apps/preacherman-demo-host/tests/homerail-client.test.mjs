@@ -35,6 +35,26 @@ test("HomeRail Client reports invalid responses and redacts credentials", async 
   });
 });
 
+test("HomeRail Client probes an encrypted setting by ID without transporting provider credentials", async () => {
+  const calls = [];
+  const client = createHomeRailClient({
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      return response(200, {
+        success: true,
+        message: "runtime detected",
+        data: { available: true, preferred_harness: "codex_appserver", endpoints: { responses: { available: true, status: 200 } } },
+      });
+    },
+  });
+
+  const result = await client.detectModelRuntime("encrypted-setting-1");
+  assert.equal(result.endpoints.responses.available, true);
+  assert.equal(calls[0].url, "http://127.0.0.1:19191/api/llm/models/detect-runtime");
+  assert.deepEqual(JSON.parse(calls[0].init.body), { setting_id: "encrypted-setting-1" });
+  assert.doesNotMatch(JSON.stringify(calls), /api[_-]?key|sk-|provider-secret/i);
+});
+
 test("HomeRail Client enforces a bounded timeout", async () => {
   const client = createHomeRailClient({
     timeoutMs: 5,

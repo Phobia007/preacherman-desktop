@@ -61,6 +61,16 @@ PREACHERMAN_HOMERAIL_CONSOLE_URL=http://127.0.0.1:19193
 
 Do not commit real tokens. Configure HomeRail model credentials in HomeRail's encrypted database through its CLI or Settings UI; do not copy Preacherman Provider keys into source files.
 
+The configuration script performs a live Responses API probe immediately after HomeRail encrypts the credential. It does not activate the Preacherman profile or write `.env.local` unless that probe succeeds. A rejected newly-created setting is removed on a best-effort basis so an invalid credential cannot become a green configuration state.
+
+For a company model gateway, use a custom provider ID instead of `deepseek`, and pass the gateway's Responses base URL and exact model ID. This prevents a gateway credential from ever being sent to the built-in DeepSeek domain:
+
+```powershell
+npm run configure:homerail -- -Provider company-gateway -ResponsesBaseUrl https://gateway.example/v1 -ModelName company-coding-model -AgentType codex_appserver
+```
+
+The gateway must implement the OpenAI Responses API used by Codex App Server. A Chat Completions-only endpoint is not sufficient for the strong execution layer.
+
 On Windows, the shortest guarded setup path is the package script below. It prompts for the provider key as a `SecureString`, sends it only to HomeRail CLI stdin, creates a private profile that references the encrypted setting ID, syncs that profile, and updates only the fixed HomeRail values in `.env.local`:
 
 ```powershell

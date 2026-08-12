@@ -22,6 +22,12 @@ test("HomeRail profile setup keeps credentials on stdin and pins the fixed workf
   assert.match(script, /PREACHERMAN_HOMERAIL_WORKFLOW_REVISION = \$workflowRevision/);
   assert.match(script, /PREACHERMAN_HOMERAIL_CANONICAL_HASH = \$canonicalHash/);
   assert.match(script, /profile', 'list', '--workflow', \$workflowId/);
+  assert.match(script, /api\/llm\/models\/detect-runtime/);
+  assert.match(script, /\$response\.data\.available -ne \$true/);
+  assert.match(script, /\$responses\.available -ne \$true/);
+  assert.match(script, /\$responses\.status -eq 401/);
+  assert.match(script, /llm-settings', 'delete', \$settingId/);
+  assert.ok(script.indexOf("Test-HomeRailModelRuntime") < script.indexOf("profile', 'sync'"));
 });
 
 test("HomeRail profile setup supports a keyless local Responses endpoint without opening remote no-auth access", async () => {
@@ -33,5 +39,8 @@ test("HomeRail profile setup supports a keyless local Responses endpoint without
   assert.match(script, /'127\.0\.0\.1', 'localhost', 'host\.docker\.internal'/);
   assert.match(script, /\$AgentType = 'codex_appserver'/);
   assert.match(script, /Custom Responses endpoints require -ModelName/);
+  assert.match(script, /Custom Responses endpoints cannot use a catalog EndpointId/);
+  assert.match(script, /Custom Responses endpoints require a custom -Provider ID/);
+  assert.match(script, /'--provider-id', \$Provider, '--responses-endpoint', \$ResponsesBaseUrl/);
   assert.match(script, /-LocalNoAuth is restricted to an HTTP loopback or host\.docker\.internal endpoint/);
 });
