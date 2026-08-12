@@ -27,12 +27,15 @@ html[data-appearance="dark"] #root {
 }
 
 .demo-host {
-  background: var(--demo-theme-canvas, #f7f5f1);
+  background: transparent;
   font-family: "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 }
 
 .demo-host--home {
   position: relative;
+  width: 100%;
+  height: 100%;
+  background: transparent;
 }
 
 .demo-host--home[data-view="widgets"],
@@ -59,7 +62,7 @@ html[data-appearance="dark"] #root {
   position: relative;
   width: 100%;
   height: 100%;
-  background: var(--demo-theme-canvas);
+  background: transparent;
 }
 
 .demo-surface-toolbar {
@@ -79,8 +82,15 @@ html[data-appearance="dark"] #root {
 
 .demo-surface-toolbar__copy {
   display: grid;
+  box-sizing: border-box;
   min-width: 220px;
   gap: 4px;
+  padding: 13px 16px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 92%, transparent);
+  box-shadow: var(--demo-theme-activate-shadow);
+  backdrop-filter: blur(22px) saturate(140%);
 }
 
 .demo-surface-toolbar h1,
@@ -291,11 +301,17 @@ html[data-appearance="dark"] #root {
 
 .demo-app-shell__brand-mark {
   position: absolute;
-  top: 17px;
-  left: 24px;
+  top: 13px;
+  left: 20px;
   display: block;
-  width: 36px;
-  height: 32px;
+  box-sizing: border-box;
+  width: 44px;
+  height: 40px;
+  padding: 6px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 90%, transparent);
+  box-shadow: var(--demo-theme-activate-shadow);
   object-fit: contain;
   pointer-events: auto;
   user-select: none;
@@ -318,10 +334,10 @@ html[data-appearance="dark"] #root {
   margin: 0;
   padding: 0;
   place-items: center;
-  border: 0;
+  border: 1px solid var(--demo-theme-border);
   border-radius: 8px;
   color: var(--demo-theme-control);
-  background: transparent;
+  background: color-mix(in srgb, var(--demo-theme-surface-elevated) 88%, transparent);
   cursor: pointer;
   transition: color 140ms ease, background-color 140ms ease, opacity 140ms ease;
 }
@@ -360,9 +376,55 @@ html[data-appearance="dark"] #root {
 }
 
 .demo-app-shell__screen-content {
-  z-index: 1;
+  z-index: 2;
   color: var(--demo-theme-text);
+  background: transparent;
+}
+
+.demo-app-shell__scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #010409;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 260ms ease, visibility 0s linear 0s;
+}
+
+.demo-app-shell__scene::after {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background:
+    radial-gradient(ellipse 31% 70% at 50% 46%, transparent 35%, rgb(0 3 8 / 32%) 74%, rgb(0 2 6 / 82%) 100%),
+    linear-gradient(90deg, rgb(0 2 7 / 48%) 0%, transparent 29%, transparent 71%, rgb(0 2 7 / 52%) 100%);
+  content: "";
+  pointer-events: none;
+}
+
+.demo-app-shell[data-scene-hidden="true"] .demo-app-shell__scene {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 220ms ease, visibility 0s linear 220ms;
+}
+
+.demo-app-shell[data-scene-hidden="true"] .demo-host--gallery-runtime {
   background: var(--demo-theme-canvas);
+}
+
+.demo-app-shell__scene .cortana-model-stage--persistent {
+  inset: 0;
+  z-index: 1;
+}
+
+.demo-app-shell__scene .cortana-model-stage--persistent,
+.demo-app-shell__scene .cortana-model-stage--persistent canvas {
+  pointer-events: none;
+}
+
+.demo-app-shell__scene .cortana-model-stage__ground {
+  display: none;
 }
 
 .demo-settings {
@@ -503,11 +565,11 @@ html[data-appearance="dark"] #root {
 .demo-host--workspace[data-view="task"] .ab-task-console {
   top: 170px;
   right: auto;
-  left: 50%;
-  width: 620px;
+  left: 72px;
+  width: 560px;
   max-height: 650px;
   overflow: auto;
-  transform: translateX(-50%);
+  transform: none;
 }
 
 .demo-host--workspace[data-view="task"] .preacherman-live {
@@ -991,7 +1053,7 @@ html[data-appearance="dark"] #root {
 .demo-app-shell[data-appearance="dark"] .pm-workspace,
 .demo-app-shell[data-appearance="dark"] .pm-home-flow {
   color: var(--demo-theme-text);
-  background: var(--demo-theme-canvas);
+  background: transparent;
 }
 
 .demo-app-shell[data-appearance="dark"] .pm-home-flow__trace,
@@ -1009,6 +1071,14 @@ html[data-appearance="dark"] #root {
 body {
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-app-shell__scene,
+  .demo-app-shell__screen-page {
+    animation: none;
+    transition: none;
+  }
 }
 
 .demo-host--entering {

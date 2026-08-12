@@ -115,20 +115,21 @@ test("all seven stable navigation keys have local routes without adding a router
   assert.doesNotMatch(app + route, /react-router|createBrowserRouter/);
 });
 
-test("Home and the five empty destinations share the semantic theme canvas while Settings keeps controls", async () => {
+test("non-Gallery destinations share the persistent scene while Settings keeps controls", async () => {
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
   const hostRule = styles.match(/\.demo-host\s*\{[^}]*\}/s)?.[0] ?? "";
   const emptyRule = styles.match(/(?:^|\n)\.demo-host--empty\s*\{[^}]*\}/s)?.[0] ?? "";
-  const darkHostRule = styles.match(/\.demo-app-shell\[data-appearance="dark"\][\s\S]*?\.demo-host--empty,[\s\S]*?\{[^}]*background:\s*var\(--demo-theme-canvas\)[^}]*\}/)?.[0] ?? "";
+  const sceneRule = styles.match(/\.demo-app-shell__scene\s*\{[^}]*\}/s)?.[0] ?? "";
 
   assert.match(app, /activeSurfaceType\s*===\s*["']home["']/);
   assert.match(app, /activeSurfaceType\s*===\s*["']settings["']/);
   assert.match(app, /<SettingsScreen\b/);
   assert.match(app, /demo-host--empty/);
-  assert.match(hostRule, /background:\s*var\(--demo-theme-canvas,\s*#f7f5f1\)/);
+  assert.match(hostRule, /background:\s*transparent/);
   assert.equal(emptyRule, "");
-  assert.match(darkHostRule, /\.demo-host--empty/);
+  assert.match(sceneRule, /background:\s*#010409/);
+  assert.match(app, /sceneHidden=\{activeSurfaceType === "market"\}/);
   assert.doesNotMatch(app, /workspace:\s*\{\s*surfaceType:\s*["']workspace["']/);
 });
 

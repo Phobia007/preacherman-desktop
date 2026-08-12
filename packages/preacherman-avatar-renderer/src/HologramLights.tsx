@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import {
+  ACESFilmicToneMapping,
   NoToneMapping,
   RectAreaLight,
   SRGBColorSpace,
@@ -11,10 +12,17 @@ RectAreaLightUniformsLib.init();
 
 export const HOLOGRAM_TONE_MAPPING_EXPOSURE = 1;
 
-export function configureHologramRenderer(renderer: WebGLRenderer): void {
+export function configureHologramRenderer(
+  renderer: WebGLRenderer,
+  variant: "transparent" | "cinematic" = "transparent",
+): void {
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = NoToneMapping;
   renderer.toneMappingExposure = HOLOGRAM_TONE_MAPPING_EXPOSURE;
+  if (variant === "cinematic") {
+    renderer.toneMapping = ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.82;
+  }
 }
 
 export const HOLOGRAM_LIGHTS = {
@@ -104,5 +112,73 @@ export function HologramLights() {
         definition={HOLOGRAM_LIGHTS.areaUnder}
       />
     </>
+  );
+}
+
+export function CinematicHologramLights() {
+  return (
+    <>
+      <ambientLight color="#07111d" intensity={0.015} />
+      <CinematicAreaLight
+        color="#d7f1ff"
+        height={1.55}
+        intensity={11.5}
+        position={[-1.35, 1.75, 1.35]}
+        target={[-0.08, 1.18, 0]}
+        width={0.46}
+      />
+      <CinematicAreaLight
+        color="#1676df"
+        height={1.7}
+        intensity={7.4}
+        position={[1.18, 1.55, -0.42]}
+        target={[0.08, 1.15, 0.08]}
+        width={0.32}
+      />
+      <CinematicAreaLight
+        color="#5baee8"
+        height={0.5}
+        intensity={0.72}
+        position={[0.2, 1.52, 1.75]}
+        target={[0, 1.35, 0]}
+        width={0.42}
+      />
+      <CinematicAreaLight
+        color="#36a9e6"
+        height={1.8}
+        intensity={0.32}
+        position={[0, -0.12, 0.12]}
+        target={[0, 0.75, 0]}
+        width={1.8}
+      />
+    </>
+  );
+}
+
+interface CinematicAreaLightProps {
+  readonly color: string;
+  readonly height: number;
+  readonly intensity: number;
+  readonly position: readonly [number, number, number];
+  readonly target: readonly [number, number, number];
+  readonly width: number;
+}
+
+function CinematicAreaLight({ color, height, intensity, position, target, width }: CinematicAreaLightProps) {
+  const light = useRef<RectAreaLight>(null);
+
+  useLayoutEffect(() => {
+    light.current?.lookAt(...target);
+  }, [target]);
+
+  return (
+    <rectAreaLight
+      color={color}
+      height={height}
+      intensity={intensity}
+      position={position}
+      ref={light}
+      width={width}
+    />
   );
 }

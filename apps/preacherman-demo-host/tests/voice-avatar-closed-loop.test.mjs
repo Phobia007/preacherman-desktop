@@ -55,14 +55,16 @@ test("a microphone-free transcript fixture drives the complete avatar response l
   assert.deepEqual(states, ["listening", "thinking", "speaking", "idle"]);
 });
 
-test("Home and Lab mount the shared conversation and avatar surfaces", async () => {
+test("the shell owns one persistent avatar while Home and Lab mount conversation controls", async () => {
   const [app, styles] = await Promise.all([
     readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "styles.css"), "utf8"),
   ]);
 
-  assert.match(app, /const homeContent[\s\S]*?<CortanaModelStage ariaLabel="Activated Cortana model" \/>[\s\S]*?<VoiceSessionControl[\s\S]*?<ABTaskConsole/);
-  assert.match(app, /const labContent[\s\S]*?<CortanaModelStage ariaLabel="Cortana voice and avatar lab model" showControls \/>[\s\S]*?<VoiceSessionControl/);
+  assert.match(app, /scene=\{isCortanaActive \? \([\s\S]*<CortanaModelStage[\s\S]*environment="cinematic"[\s\S]*variant="persistent"/);
+  assert.match(app, /const homeContent[\s\S]*?<VoiceSessionControl[\s\S]*?<ABTaskConsole/);
+  assert.match(app, /const labContent[\s\S]*?<VoiceSessionControl/);
+  assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.match(styles, /\.demo-host--home > \.ab-task-console\s*\{[\s\S]*right:\s*auto;[\s\S]*left:\s*72px;/);
 });
 

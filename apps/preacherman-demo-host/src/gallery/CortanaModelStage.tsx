@@ -1,6 +1,7 @@
 import {
   InteractiveAvatarViewport,
   type AvatarActionDescriptor,
+  type AvatarSceneEnvironment,
 } from "@preacherman/avatar-renderer";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { localAvatarAssetBaseUrl } from "../avatar/avatarAssets";
@@ -8,10 +9,17 @@ import { useAvatarInteractionState } from "../live/LiveCoordinatorContext";
 
 interface CortanaModelStageProps {
   readonly ariaLabel: string;
+  readonly environment?: AvatarSceneEnvironment;
   readonly showControls?: boolean;
+  readonly variant?: "embedded" | "persistent";
 }
 
-export function CortanaModelStage({ ariaLabel, showControls = false }: CortanaModelStageProps) {
+export function CortanaModelStage({
+  ariaLabel,
+  environment = "transparent",
+  showControls = false,
+  variant = "embedded",
+}: CortanaModelStageProps) {
   const interactionState = useAvatarInteractionState();
   const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading");
   const [actions, setActions] = useState<readonly AvatarActionDescriptor[]>([]);
@@ -67,7 +75,14 @@ export function CortanaModelStage({ ariaLabel, showControls = false }: CortanaMo
   }, []);
 
   return (
-    <section aria-label={ariaLabel} className="cortana-model-stage" data-airi-control="avatar.status" data-avatar-state={interactionState} tabIndex={-1}>
+    <section
+      aria-label={ariaLabel}
+      className={`cortana-model-stage cortana-model-stage--${variant}`}
+      data-airi-control="avatar.status"
+      data-avatar-state={interactionState}
+      data-scene-environment={environment}
+      tabIndex={-1}
+    >
       <InteractiveAvatarViewport
         actionId={playingActionId}
         actionRequestKey={actionRequestKey}
@@ -79,6 +94,7 @@ export function CortanaModelStage({ ariaLabel, showControls = false }: CortanaMo
         pose="standby"
         quality="high"
         jawOpen={jawOpen}
+        environment={environment}
       />
       {loadState === "loading" ? (
         <div aria-label="Loading Cortana" className="cortana-model-stage__loading" role="status">
