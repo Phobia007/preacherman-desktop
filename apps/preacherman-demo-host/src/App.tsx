@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { ABTaskConsole, TaskWorkspaceProvider } from "./ab/ABTaskConsole";
+import { PreachermanAgentWorkspace } from "./ab/PreachermanAgentWorkspace";
 import { PreachermanFeaturePanel } from "./preacherman/PreachermanFeaturePanel";
 import { PreachermanEcosystemDiagnostics } from "./preacherman/PreachermanEcosystemDiagnostics";
 import { PreachermanComputerVisionPanel } from "./preacherman/PreachermanComputerVisionPanel";
@@ -112,9 +113,9 @@ const tabs = {
     { id: "widgets", label: { en: "Widgets", "zh-CN": "组件" } },
   ],
   workspace: [
-    { id: "task", label: { en: "Task", "zh-CN": "任务" } },
+    { id: "agent", label: { en: "Agent", "zh-CN": "Agent" } },
+    { id: "task", label: { en: "Tasks", "zh-CN": "任务" } },
     { id: "tools", label: { en: "Tools", "zh-CN": "工具" } },
-    { id: "games", label: { en: "Games", "zh-CN": "游戏" } },
     { id: "vision", label: { en: "Vision", "zh-CN": "视觉" } },
   ],
   lab: [
@@ -141,7 +142,7 @@ export function App() {
   const [showStartupIntro, setShowStartupIntro] = useState(startupIntroEnabled);
   const [animateMainEntrance] = useState(showStartupIntro);
   const [homeView, setHomeView] = useState("companion");
-  const [workView, setWorkView] = useState("task");
+  const [workView, setWorkView] = useState("agent");
   const [labView, setLabView] = useState("voice");
   const [galleryView, setGalleryView] = useState("characters");
   const [testView, setTestView] = useState("diagnostics");
@@ -170,7 +171,10 @@ export function App() {
       else if (activeSurfaceType === "ledger" && (controlId.startsWith("conversation.") || controlId.startsWith("memory.") || controlId === "task.events" || controlId === "task.artifacts" || controlId === "runtime.io-history" || controlId === "plugin.activity")) {
         window.dispatchEvent(new CustomEvent("preacherman:reveal-control", { detail: { controlId } }));
       }
-      else if (controlId.startsWith("game.")) setWorkView("games");
+      else if (controlId.startsWith("game.")) {
+        setGalleryView("games");
+        openLocalSurface("market");
+      }
       else if (controlId.startsWith("vision.") || controlId.startsWith("computer-use.")) setWorkView("vision");
       else if (controlId.startsWith("agent.") || controlId.startsWith("plugin.widgets")) setWorkView("tools");
       else if (controlId.startsWith("task.") || controlId.startsWith("companion.")) setWorkView("task");
@@ -268,13 +272,22 @@ export function App() {
       data-preacherman-features={featuresForSurface("workspace").join(" ")}
       data-view={workView}
     >
+      {workView === "agent" ? <PreachermanAgentWorkspace
+        locale={preferences.locale}
+        onOpenSettings={() => {
+          setRequestedControl("agent-access.native");
+          openLocalSurface("settings");
+        }}
+        onOpenTask={() => setWorkView("task")}
+        onOpenArtifact={() => openLocalSurface("ledger")}
+        serviceRequest={preachermanServiceRequest}
+      /> : null}
       {workView === "task" ? <>
         {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
         <ABTaskConsole locale={preferences.locale} mode="work" />
       </> : null}
-      {workView !== "task" ? <div className="demo-preacherman-work-runtime" data-view={workView}>
+      {workView !== "task" && workView !== "agent" ? <div className="demo-preacherman-work-runtime" data-view={workView}>
         {workView === "tools" ? <div data-preacherman-control="plugin.widgets agent.mcp-tools agent.plugin-tools agent.kits-api agent.bindings-api"><PreachermanWidgetGallery placement="work" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
-        {workView === "games" ? <div data-preacherman-control="plugin.gamelets game.tic-tac-toe"><PreachermanGameletPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
         {workView === "vision" ? <div data-preacherman-control="computer-use.session computer-use.dom computer-use.transcript vision.screen vision.camera"><PreachermanComputerVisionPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
       </div> : null}
     </main>

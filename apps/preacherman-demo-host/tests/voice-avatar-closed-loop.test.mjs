@@ -81,6 +81,7 @@ test("voice and model components share explicit four-state avatar control withou
   assert.match(voice, /setAvatarState\("speaking"\)/);
   assert.match(voice, /setAvatarState\("idle"\)/);
   assert.match(model, /interactionState === "thinking"/);
+  assert.match(model, /: \["idle\.catwalk"\]/);
   assert.match(model, /data-avatar-state=\{interactionState\}/);
   assert.match(voice, /coordinator\.stopSpeech\(\)/);
   assert.doesNotMatch(voice, /cancelTask/);

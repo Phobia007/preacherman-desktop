@@ -64,6 +64,9 @@ export function normalizeTaskV2(task, now = () => new Date().toISOString()) {
   normalized.execution = {
     kind: executionKind(normalized),
     adapter: normalized.execution?.adapter ?? normalized.executor ?? "preacherman-local",
+    ...(normalized.execution?.agentId ? { agentId: normalized.execution.agentId } : {}),
+    ...(normalized.execution?.workspaceId ? { workspaceId: normalized.execution.workspaceId } : {}),
+    ...(normalized.execution?.localRunId ? { localRunId: normalized.execution.localRunId } : {}),
     ...(normalized.execution?.workflowId ? { workflowId: normalized.execution.workflowId } : {}),
     ...(normalized.execution?.workflowRevision ? { workflowRevision: normalized.execution.workflowRevision } : {}),
     ...(normalized.execution?.canonicalHash ? { canonicalHash: normalized.execution.canonicalHash } : {}),
@@ -211,11 +214,37 @@ export function createTaskStore({ file, legacyFiles = [], now = () => new Date()
         .slice(0, Math.max(1, Math.min(50, limit))));
     },
 
+    async listOwned(principalId, limit = 10) {
+      await mutationQueue;
+      const current = await load();
+      return clone([...current.tasks]
+        .filter((task) => task.ownership?.principalId === principalId)
+        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+        .slice(0, Math.max(1, Math.min(50, limit))));
+    },
+
     async update(taskId, update) {
       return mutate((current) => {
         const task = current.tasks.find((candidate) => candidate.taskId === taskId);
         if (!task) return null;
         update(task);
+        task.updatedAt = now();
+        return task;
+      });
+    },
+
+    async updateOwned(taskId, principalId, update) {
+      return mutate((current) => {
+        const task = current.tasks.find((candidate) => candidate.taskId === taskId);
+        if (!task || task.ownership?.principalId !== principalId) return null;
+        const ownership = clone(task.ownership);
+        update(task);
+        if (JSON.stringify(task.ownership) !== JSON.stringify(ownership)) {
+          const error = new Error("Task ownership is immutable.");
+          error.code = "TASK_OWNERSHIP_IMMUTABLE";
+          error.statusCode = 409;
+          throw error;
+        }
         task.updatedAt = now();
         return task;
       });

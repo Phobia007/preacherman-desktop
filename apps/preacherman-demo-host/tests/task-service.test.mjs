@@ -87,3 +87,18 @@ test("retry adds a new attempt to the same TaskRun", async (t) => {
   assert.equal(retried.attempts[1].attempt, 2);
   assert.equal(retried.status, "queued");
 });
+
+test("TaskService accepts registered-style local agent provider identifiers without widening shell authority", async (t) => {
+  const { taskService } = await fixture(t);
+  const task = await taskService.create({
+    objective: "Execute through the local Codex subscription",
+    execution: { kind: "local-agent", adapter: "codex-cli" },
+  });
+  const started = await taskService.startAttempt(task.taskId, { provider: "codex-cli", status: "active" });
+  assert.equal(started.attempts[0].provider, "codex-cli");
+  assert.equal(started.status, "running");
+  await assert.rejects(
+    taskService.startAttempt(task.taskId, { provider: "codex-cli;whoami" }),
+    { code: "TASK_ATTEMPT_INVALID" },
+  );
+});

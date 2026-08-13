@@ -365,5 +365,9 @@ export function AvatarModel({
     };
   }, [controller]);
 
-  return root ? <primitive object={root} dispose={null} /> : null;
+  return root ? (
+    <group rotation={[0, -Math.PI / 2, 0]}>
+      <primitive object={root} dispose={null} />
+    </group>
+  ) : null;
 }

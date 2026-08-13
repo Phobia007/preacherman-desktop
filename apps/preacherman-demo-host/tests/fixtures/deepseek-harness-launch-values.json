@@ -1,0 +1,17 @@
+{
+  "HARNESS_NODE_EXECUTABLE": "C:\\Program Files\\nodejs\\node.exe",
+  "HARNESS_ACP_BIN": "D:\\deepseek-harness\\packages\\examples\\acp-demo\\lib\\bin.js",
+  "HARNESS_INCLUDE_PLUGIN_URL": "file:///D:/deepseek-harness/vendor/include/lib/index.js",
+  "HARNESS_MCP_CLIENT_URL": "file:///D:/deepseek-harness/packages/mcp/mcp-client/lib/index.js",
+  "HARNESS_ACP_BASE_CONFIG_URL": "file:///D:/deepseek-harness/examples/acp-agent/cordis.yml",
+  "HARNESS_HOME": "C:\\Users\\Ada\\AppData\\Local\\Preacherman\\harness",
+  "HARNESS_SESSION_ROOT": "C:\\Users\\Ada\\AppData\\Local\\Preacherman\\harness-runs\\sessions",
+  "PERMISSION_MODE": "workspace-write",
+  "PROVIDER_ID": "deepseek-official",
+  "MODEL_ID": "deepseek-v4-flash",
+  "PREACHERMAN_MCP_GATEWAY_SCRIPT": "C:\\Program Files\\Preacherman\\scripts\\preacherman-mcp-gateway.mjs",
+  "PREACHERMAN_MCP_GATEWAY_URL": "http://127.0.0.1:8789",
+  "PREACHERMAN_MCP_BOOTSTRAP_FILE": "C:\\Users\\Ada\\AppData\\Local\\Preacherman\\mcp-gateway.bootstrap",
+  "PREACHERMAN_HARNESS_COMPOSITION": "C:\\Users\\Ada\\AppData\\Local\\Preacherman\\harness-runs\\preacherman-native.json",
+  "WORKSPACE_ROOT": "C:\\Users\\Ada\\Projects\\demo"
+}

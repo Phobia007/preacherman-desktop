@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "distribution": "@deepseek-ai/dsh",
+  "version": "0.1.0-rc.5",
+  "developmentSourceRoot": "D:\\deepseek-harness",
+  "upstreamContracts": {
+    "packages/bundle/base/cordis.patch.yml": "9870a518274194c0e1ebd870cee2737fbc2ffc04ae36887871ffe6fcf74beac1",
+    "packages/bundle/headless/cordis.patch.yml": "534dc49c84b0fb9c2d3278dc8990f577d57b7a88442941444b58c96ac1a09ba0",
+    "packages/mcp/mcp-client/src/index.ts": "823220ce9d41e6645076e123b4bfbfcffc84afaeecd0c3f991cb4e48683b32af"
+  }
+}

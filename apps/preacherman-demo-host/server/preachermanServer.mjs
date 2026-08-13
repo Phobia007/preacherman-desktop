@@ -1,9 +1,10 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
 import { mkdir, readFile, rename, writeFile, chmod } from "node:fs/promises";
-import { delimiter, dirname, join } from "node:path";
+import { delimiter, dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { Readable } from "node:stream";
 import { WebSocket, WebSocketServer } from "ws";
 import {
@@ -43,6 +44,8 @@ import { createPreachermanExecutionCapabilityCatalogAdapter } from "./preacherma
 import { createPreachermanExecutionDiagnosticsAdapter } from "./preacherman-execution/preachermanExecutionDiagnosticsAdapter.mjs";
 import { createPreachermanExecutionLedgerProjector } from "./preacherman-execution/preachermanExecutionLedgerProjector.mjs";
 import { migratePreachermanBrandData } from "./preachermanBrandMigration.mjs";
+import { createLocalAgentRegistry, createCodexCliAdapter, createDeepSeekHarnessAdapter, deepSeekHarnessPinnedVersion } from "./local-agent/index.mjs";
+import { createPreachermanAgentAccessRuntime } from "./preachermanAgentAccessRuntime.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -126,6 +129,33 @@ export function createPreachermanServer(options = {}) {
 
   const taskStore = createTaskStore({ file: taskStoreFile() });
   const taskService = createTaskService({ taskStore });
+  const configuredWorkspaceRoots = typeof env.PREACHERMAN_LOCAL_AGENT_ROOTS === "string"
+    ? env.PREACHERMAN_LOCAL_AGENT_ROOTS.split(delimiter).map((entry) => resolve(entry.trim())).filter(Boolean)
+    : [resolve(process.cwd(), "../..")];
+  let localServicePort = null;
+  const gatewayCredentialFile = join(dataDirectory, "mcp-gateway.bootstrap");
+  const gatewayScript = fileURLToPath(new URL("../scripts/preacherman-mcp-gateway.mjs", import.meta.url));
+  const harnessCompositionTemplate = fileURLToPath(new URL("../../../config/deepseek-harness/preacherman-native/acp-overlay-template.json", import.meta.url));
+  const localAgentRegistry = options.localAgentRegistry ?? createLocalAgentRegistry({
+    adapters: [
+      createDeepSeekHarnessAdapter({
+        allowedWorkspaceRoots: configuredWorkspaceRoots,
+        envSource: runtimeEnv,
+        harnessRoot: env.PREACHERMAN_HARNESS_ROOT || "D:\\deepseek-harness",
+        runtimeStateRoot: join(dataDirectory, "native-agent-runs"),
+        compositionTemplate: harnessCompositionTemplate,
+        gatewayScript,
+        gatewayCredentialFile,
+        gatewayUrl: () => localServicePort ? `http://127.0.0.1:${localServicePort}` : "",
+      }),
+      createCodexCliAdapter({ allowedWorkspaceRoots: configuredWorkspaceRoots }),
+    ],
+  });
+  const localAgentWorkspaces = configuredWorkspaceRoots.map((workspacePath, index) => ({
+    id: `workspace-${index + 1}`,
+    label: index === 0 ? "Preacherman workspace" : `Approved workspace ${index + 1}`,
+    path: workspacePath,
+  }));
   const preachermanExecutionBaseUrl = env.PREACHERMAN_EXECUTION_BASE_URL || env.PREACHERMAN_EXECUTION_MANAGER_URL || "http://127.0.0.1:19191";
   const preachermanExecutionClient = options.preachermanExecutionClient ?? createPreachermanExecutionClient({
     baseUrl: preachermanExecutionBaseUrl,
@@ -723,6 +753,95 @@ export function createPreachermanServer(options = {}) {
     };
   }
 
+  const nativePreferencesFile = join(dataDirectory, "native-agent-preferences.json");
+  const nativeDefaultPreferences = Object.freeze({
+    agentId: "preacherman-native",
+    providerId: "deepseek-official",
+    modelId: "deepseek-v4-pro",
+    policy: "ask",
+  });
+
+  async function readNativePreferences() {
+    try {
+      const parsed = JSON.parse(await readFile(nativePreferencesFile, "utf8"));
+      return { ...nativeDefaultPreferences, ...(parsed?.defaults ?? {}) };
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+      return { ...nativeDefaultPreferences };
+    }
+  }
+
+  async function writeNativePreferences(defaults) {
+    const catalog = await agentWorkspaceCatalog();
+    const agent = catalog.agents.find((candidate) => candidate.id === defaults?.agentId);
+    const provider = agent?.providers.find((candidate) => candidate.id === defaults?.providerId);
+    const model = provider?.models.find((candidate) => candidate.id === defaults?.modelId);
+    if (!agent || !provider || !model || !new Set(["auto", "ask", "strict"]).has(defaults?.policy)) {
+      throw Object.assign(new Error("Native defaults must reference a catalogued Agent, provider, model and policy."), { statusCode: 400 });
+    }
+    const normalized = { agentId: agent.id, providerId: provider.id, modelId: model.id, policy: defaults.policy };
+    await mkdir(dirname(nativePreferencesFile), { recursive: true });
+    const temporary = `${nativePreferencesFile}.${process.pid}.${randomUUID()}.tmp`;
+    await writeFile(temporary, JSON.stringify({ version: 1, defaults: normalized }), { mode: 0o600 });
+    await rename(temporary, nativePreferencesFile);
+    if (process.platform !== "win32") await chmod(nativePreferencesFile, 0o600);
+    return normalized;
+  }
+
+  function availabilityForAgent(agent) {
+    if (!agent.installed) return "external-runtime-required";
+    if (agent.auth?.state === "ready") return "ready";
+    if (agent.auth?.state === "login-required") return "login-required";
+    if (agent.auth?.state === "error") return "error";
+    return "configuration-required";
+  }
+
+  async function agentWorkspaceCatalog() {
+    const agents = await agentAccessRuntime.listLocalAgents();
+    return {
+      agents: agents.map((agent) => {
+        const status = availabilityForAgent(agent);
+        const providers = agent.id === "preacherman-native"
+          ? [{
+              id: "deepseek-official",
+              label: "DeepSeek Official",
+              status,
+              models: [{ id: "deepseek-v4-pro", label: "DeepSeek V4 Pro", status, verified: status === "ready" }],
+            }]
+          : [{
+              id: agent.id,
+              label: agent.id === "codex-cli" ? "Codex subscription / CLI" : agent.label,
+              status,
+              models: [{ id: "default", label: "CLI default", status, verified: status === "ready" }],
+            }];
+        return { id: agent.id, label: agent.label, status, description: agent.id === "preacherman-native" ? "Built-in execution powered by a pinned DeepSeek Harness." : "Installed local Agent adapter.", providers };
+      }),
+      workspaces: agentAccessRuntime.listWorkspaces().map(({ id, label }) => ({ id, label })),
+    };
+  }
+
+  async function nativeStatus({ healthCheck = false } = {}) {
+    const catalog = await agentWorkspaceCatalog();
+    const agent = catalog.agents.find((candidate) => candidate.id === "preacherman-native");
+    const record = (await agentAccessRuntime.listLocalAgents()).find((candidate) => candidate.id === "preacherman-native");
+    const status = agent?.status ?? "external-runtime-required";
+    const gatewayState = agentAccessRuntime.gatewayStatus().state === "ready" ? "ready" : "error";
+    return {
+      native: {
+        id: "preacherman-native",
+        label: "Preacherman Native",
+        status,
+        installed: record?.installed === true,
+        version: record?.version ?? null,
+        auth: { state: status, providerId: "deepseek-official", modelId: "deepseek-v4-pro", providers: agent?.providers ?? [] },
+        health: { state: status, message: healthCheck ? (status === "ready" ? "Harness, provider and MCP Gateway are ready." : "Complete the reported Native Agent configuration before execution.") : undefined, checkedAt: healthCheck ? new Date().toISOString() : undefined },
+        capabilities: { ...(record?.capabilities ?? {}), permissionPolicies: ["auto", "ask", "strict"] },
+        harness: { compatibilityVersion: deepSeekHarnessPinnedVersion, license: "MIT", attribution: "Powered by DeepSeek Harness" },
+        gateway: { state: gatewayState },
+      },
+    };
+  }
+
   function dashscopeAsrUrl(config) {
     const model = "qwen3-asr-flash-realtime";
     return `wss://${config.DASHSCOPE_WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=${encodeURIComponent(model)}`;
@@ -1100,6 +1219,88 @@ export function createPreachermanServer(options = {}) {
     }
   }
 
+  async function startApprovedGatewayTask(task) {
+    const proposal = {
+      ...(task.proposalSnapshot ?? {}),
+      proposalId: task.proposalId ?? `gateway_${task.taskId}`,
+      taskId: task.taskId,
+      objective: task.objective,
+      revision: task.revision,
+    };
+    const route = await executionRouter.route(proposal);
+    if (route.kind === "preacherman-execution-dag") {
+      await taskService.update(task.taskId, (current) => {
+        current.execution = { kind: "preacherman-execution-dag", adapter: "preacherman-execution" };
+      });
+      return startPreachermanExecutionRun(proposal, route);
+    }
+    await taskService.update(task.taskId, (current) => {
+      current.executor = "pitchkit";
+      current.execution = { kind: "local-pitch", adapter: "pitchkit" };
+    });
+    const latest = await taskService.get(task.taskId);
+    if (!latest.attempts.at(-1) || ["completed", "failed", "cancelled"].includes(latest.attempts.at(-1).status)) {
+      await taskService.startAttempt(task.taskId, { provider: "local", status: "active" });
+    }
+    void executePitchTask(task.taskId);
+    return taskService.get(task.taskId);
+  }
+
+  async function commandAgentTask(task, type, input = {}, { actor } = {}) {
+    if (task.execution?.kind === "local-agent") {
+      if (type === "cancel") return agentAccessRuntime.cancelLocalTask(task);
+      if (type === "retry") return agentAccessRuntime.retryLocalTask(task);
+      throw Object.assign(new Error("This Local Agent does not support steering or resume."), { code: "LOCAL_AGENT_CAPABILITY_UNSUPPORTED", statusCode: 409 });
+    }
+    if (type === "cancel") {
+      if (task.execution?.kind === "preacherman-execution-dag") return (await preachermanExecutionCommandAdapter.cancel(task.taskId)).task;
+      if (!new Set(["queued", "running", "waiting_for_input", "waiting_for_approval"]).has(task.status)) return task;
+      return taskService.transition(task.taskId, "cancelled", { event: { type: "cancelled", stage: "terminal", message: "Task cancelled." } });
+    }
+    if (type === "retry") {
+      if (!new Set(["failed", "cancelled"]).has(task.status)) throw Object.assign(new Error(`TaskRun ${task.taskId} cannot be retried from ${task.status}.`), { statusCode: 409 });
+      if (task.execution?.kind === "preacherman-execution-dag") return retryPreachermanExecutionTask(task);
+      if (task.source === "mcp-gateway") {
+        const queued = await taskService.update(task.taskId, (current) => {
+          current.status = "queued";
+          current.error = null;
+          current.pendingApproval = null;
+          current.retryable = false;
+          appendTaskEvent(current, { type: "retry_requested", stage: "queued", message: "External Agent requested a new approved attempt." });
+        });
+        return taskService.requestApproval(queued.taskId, {
+          proposalHash: createHash("sha256").update(JSON.stringify({ taskId: queued.taskId, objective: queued.objective, revision: queued.revision })).digest("hex"),
+          title: "Retry external Agent task",
+          description: "The external Agent requested a retry. Approve it in Preacherman before execution restarts.",
+        });
+      }
+    }
+    if (type === "steer") {
+      if (task.source === "mcp-gateway" && task.execution?.kind !== "preacherman-execution-dag") {
+        if (task.status !== "running") throw Object.assign(new Error("TaskRun is not steerable in its current state."), { statusCode: 409 });
+        return taskService.update(task.taskId, (current) => {
+          current.objective = `${current.objective}\n\nAdditional direction: ${String(input.instruction ?? "").trim()}`;
+          current.revision += 1;
+          appendTaskEvent(current, { type: "steered", stage: "executing", message: "External Agent supplied additional direction." });
+        });
+      }
+      throw Object.assign(new Error("The selected backend does not support steering."), { code: "STEERING_UNSUPPORTED", statusCode: 409 });
+    }
+    throw Object.assign(new Error(`Unsupported task command: ${type}`), { statusCode: 400 });
+  }
+
+  const agentAccessRuntime = createPreachermanAgentAccessRuntime({
+    taskService,
+    localAgentRegistry,
+    workspaces: localAgentWorkspaces,
+    gatewayCredentialFile,
+    gatewayScript,
+    artifactRoots: [join(dataDirectory, "artifacts")],
+    gatewayAuthenticate: options.gatewayAuthenticate,
+    startApprovedTask: startApprovedGatewayTask,
+    commandTask: commandAgentTask,
+  });
+
   function parseExplicitPluginToolRequest(input) {
     const match = input.match(/(?:run|execute|调用|运行)\s+(?:(?:the\s+)?plugin\s+tool\s+|插件工具\s+)?([A-Za-z0-9_-]+::[A-Za-z0-9_.-]+)(?:\s+(?:with|参数)\s+(\{[\s\S]*\}))?$/i);
     if (!match) return null;
@@ -1127,6 +1328,13 @@ export function createPreachermanServer(options = {}) {
     return allowedOrigins.has(origin) ? origin : null;
   }
 
+  function bearerCredential(request) {
+    const header = request.headers.authorization;
+    const match = typeof header === "string" ? /^Bearer ([A-Za-z0-9._~+\/-]{8,512})$/.exec(header) : null;
+    if (!match) throw Object.assign(new Error("A valid Bearer credential is required."), { code: "UNAUTHENTICATED", statusCode: 401 });
+    return match[1];
+  }
+
   const server = createServer(async (request, response) => {
     const origin = requestOrigin(request);
     if (!origin) {
@@ -1152,6 +1360,147 @@ export function createPreachermanServer(options = {}) {
           ok: true,
           ...status,
         }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/mcp/gateway") {
+        json(response, 200, agentAccessRuntime.gatewayStatus(), origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/mcp/gateway/templates") {
+        json(response, 200, { templates: await agentAccessRuntime.gatewayTemplates() }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/mcp/gateway/sessions") {
+        json(response, 200, { sessions: agentAccessRuntime.gatewaySessions() }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/mcp/gateway/audit") {
+        json(response, 200, { events: agentAccessRuntime.gatewayAudit() }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/mcp/gateway/credentials/rotate") {
+        await readJson(request);
+        json(response, 200, { result: await agentAccessRuntime.gatewayRotateCredential() }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/mcp/gateway/test") {
+        await readJson(request);
+        json(response, 200, { result: await agentAccessRuntime.gatewayTest() }, origin);
+        return;
+      }
+      const gatewayRevokeMatch = url.pathname.match(/^\/api\/mcp\/gateway\/sessions\/([^/]+)\/revoke$/);
+      if (request.method === "POST" && gatewayRevokeMatch) {
+        await readJson(request);
+        json(response, 200, { session: agentAccessRuntime.gatewayRevokeSession(decodeURIComponent(gatewayRevokeMatch[1])) }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/mcp/gateway/bridge/sessions") {
+        const body = await readJson(request);
+        const result = await agentAccessRuntime.gatewayCreateSession({
+          bootstrapCredential: bearerCredential(request),
+          client: body.client,
+          transport: body.transport,
+        });
+        json(response, 200, {
+          server: { name: "preacherman", version: "1.0" },
+          session: { id: result.session.sessionId, accessToken: result.accessToken, expiresAt: null },
+          tools: result.tools,
+        }, origin);
+        return;
+      }
+      const gatewayCallMatch = url.pathname.match(/^\/api\/mcp\/gateway\/bridge\/sessions\/([^/]+)\/calls$/);
+      if (request.method === "POST" && gatewayCallMatch) {
+        const body = await readJson(request);
+        json(response, 200, await agentAccessRuntime.gatewayCall({
+          sessionId: decodeURIComponent(gatewayCallMatch[1]),
+          accessToken: bearerCredential(request),
+          name: body.name,
+          arguments: body.arguments,
+        }), origin);
+        return;
+      }
+      const gatewayCloseMatch = url.pathname.match(/^\/api\/mcp\/gateway\/bridge\/sessions\/([^/]+)$/);
+      if (request.method === "DELETE" && gatewayCloseMatch) {
+        json(response, 200, { session: agentAccessRuntime.gatewayCloseSession(decodeURIComponent(gatewayCloseMatch[1]), bearerCredential(request)) }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/execution/local-agents") {
+        json(response, 200, { agents: await agentAccessRuntime.listLocalAgents() }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/agent-workspace/catalog") {
+        json(response, 200, await agentWorkspaceCatalog(), origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/agent-workspace/turn") {
+        const body = await readJson(request);
+        const input = typeof body.input === "string" ? body.input.trim() : "";
+        const selection = body.selection ?? {};
+        const policy = body.policy;
+        if (!input || input.length > 2_000) throw Object.assign(new Error("Agent workspace input must contain 1 to 2000 characters."), { statusCode: 400 });
+        if (!new Set(["auto", "ask", "strict"]).has(policy)) throw Object.assign(new Error("Unknown approval policy."), { statusCode: 400 });
+        const catalog = await agentWorkspaceCatalog();
+        const agent = catalog.agents.find((candidate) => candidate.id === selection.agentId);
+        const provider = agent?.providers.find((candidate) => candidate.id === selection.providerId);
+        const model = provider?.models.find((candidate) => candidate.id === selection.modelId);
+        if (!agent || !provider || !model) throw Object.assign(new Error("The selected Agent, provider and model combination is not supported."), { statusCode: 400 });
+        if (agent.status !== "ready" || provider.status !== "ready" || model.status !== "ready") throw Object.assign(new Error("The selected Agent configuration is not ready."), { statusCode: 409 });
+        if (agent.id !== "preacherman-native") throw Object.assign(new Error("This Agent is discovered but its Agent Workspace flow is not available yet."), { statusCode: 409 });
+        const record = (await agentAccessRuntime.listLocalAgents()).find((candidate) => candidate.id === agent.id);
+        const task = await agentAccessRuntime.createAgentWorkspaceTask({
+          objective: input,
+          agentId: agent.id,
+          providerId: provider.id,
+          modelId: model.id,
+          workspaceId: body.workspaceId,
+          policy,
+          adapterVersion: record?.version,
+          capabilities: record?.capabilities ?? {},
+        });
+        json(response, 200, {
+          displayText: body.locale === "zh-CN" ? "任务提案已准备好。批准后，Preacherman Native 才会启动执行。" : "The task proposal is ready. Preacherman Native will start only after approval.",
+          proposal: {
+            proposalId: `proposal_${task.taskId}`,
+            taskId: task.taskId,
+            approvalId: task.pendingApproval.approvalId,
+            objective: task.objective,
+            executor: "Preacherman Native",
+            inputs: [provider.label, model.label],
+            outputs: ["TaskRun", "Ledger artifact"],
+          },
+          task,
+        }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/execution/native/status") {
+        json(response, 200, await nativeStatus(), origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/execution/native/health") {
+        await readJson(request);
+        json(response, 200, await nativeStatus({ healthCheck: true }), origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/execution/native/preferences") {
+        json(response, 200, { defaults: await readNativePreferences() }, origin);
+        return;
+      }
+      if (request.method === "PUT" && url.pathname === "/api/execution/native/preferences") {
+        const body = await readJson(request);
+        json(response, 200, { defaults: await writeNativePreferences(body.defaults) }, origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/execution/workspaces") {
+        json(response, 200, { workspaces: agentAccessRuntime.listWorkspaces() }, origin);
+        return;
+      }
+      const localAgentTestMatch = url.pathname.match(/^\/api\/execution\/local-agents\/([^/]+)\/test$/);
+      if (request.method === "POST" && localAgentTestMatch) {
+        await readJson(request);
+        const id = decodeURIComponent(localAgentTestMatch[1]);
+        const agent = (await agentAccessRuntime.listLocalAgents()).find((candidate) => candidate.id === id);
+        if (!agent) throw Object.assign(new Error("Local Agent adapter was not found."), { statusCode: 404 });
+        json(response, 200, { agent }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/settings/providers") {
@@ -1613,6 +1962,21 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { tasks: await taskService.list(limit) }, origin);
         return;
       }
+      if (request.method === "POST" && url.pathname === "/api/tasks") {
+        const body = await readJson(request);
+        if (body.source !== "local-agent-runner") throw Object.assign(new Error("Only the registered Local Agent launcher can create tasks through this route."), { statusCode: 400 });
+        json(response, 201, { task: await agentAccessRuntime.createLocalTask(body.objective) }, origin);
+        return;
+      }
+      const localAgentStartMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)\/local-agent\/start$/);
+      if (request.method === "POST" && localAgentStartMatch) {
+        const body = await readJson(request);
+        const allowed = new Set(["agentId", "workspaceId", "policy"]);
+        if (Object.keys(body).some((key) => !allowed.has(key))) throw Object.assign(new Error("Local Agent start accepts only agentId, workspaceId, and policy."), { statusCode: 400 });
+        const task = await agentAccessRuntime.startLocalTask(decodeURIComponent(localAgentStartMatch[1]), body);
+        json(response, 202, { task }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/execution/providers/status") {
         json(response, 200, { providers: [await preachermanExecutionDiagnostics.status()] }, origin);
         return;
@@ -1644,6 +2008,38 @@ export function createPreachermanServer(options = {}) {
       if (request.method === "GET" && taskArtifactContentMatch) {
         const taskId = decodeURIComponent(taskArtifactContentMatch[1]);
         const artifactId = decodeURIComponent(taskArtifactContentMatch[2]);
+        const task = await taskService.get(taskId).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
+        const artifact = task?.artifacts?.find((candidate) => candidate.artifactId === artifactId);
+        if (!task || !artifact) {
+          json(response, 404, { error: "Task artifact not found." }, origin);
+          return;
+        }
+        if (task.execution?.kind !== "preacherman-execution-dag") {
+          if (artifact.content === undefined) {
+            json(response, 409, { error: "This local artifact has no host-owned inline content." }, origin);
+            return;
+          }
+          const payload = artifact.mediaType === "application/json"
+            ? Buffer.from(JSON.stringify(artifact.content, null, 2), "utf8")
+            : Buffer.from(typeof artifact.content === "string" ? artifact.content : JSON.stringify(artifact.content), "utf8");
+          if (payload.byteLength > 2 * 1024 * 1024) {
+            json(response, 413, { error: "Task artifact is too large to download." }, origin);
+            return;
+          }
+          const filename = String(artifact.name || "artifact")
+            .replace(/[\r\n"\\/:*?<>|]+/g, "-")
+            .slice(0, 160) || "artifact";
+          response.writeHead(200, {
+            "Access-Control-Allow-Origin": origin,
+            "Cache-Control": "no-store",
+            "Content-Disposition": `attachment; filename="${filename}"`,
+            "Content-Length": String(payload.byteLength),
+            "Content-Type": artifact.mediaType || "application/octet-stream",
+            Vary: "Origin",
+          });
+          response.end(payload);
+          return;
+        }
         const upstream = await preachermanExecutionArtifactAdapter.content(taskId, artifactId, {
           range: typeof request.headers.range === "string" ? request.headers.range : undefined,
         });
@@ -1669,6 +2065,31 @@ export function createPreachermanServer(options = {}) {
         json(response, 200, { artifact: task.artifact }, origin);
         return;
       }
+      const taskSummaryMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)\/summary$/);
+      if (request.method === "POST" && taskSummaryMatch) {
+        const body = await readJson(request);
+        const taskId = decodeURIComponent(taskSummaryMatch[1]);
+        const task = await taskService.get(taskId).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
+        if (!task) {
+          json(response, 404, { error: "Task run not found." }, origin);
+          return;
+        }
+        if (task.status !== "succeeded") throw Object.assign(new Error("Only a succeeded TaskRun can be summarized."), { statusCode: 409 });
+        if (!task.aAgentSummary) {
+          const artifactNames = (task.artifacts ?? []).map((artifact) => artifact.name).slice(0, 20).join(", ");
+          const executorResult = String(task.localAgentSummary ?? "").trim();
+          if (!executorResult) throw Object.assign(new Error("The completed TaskRun has no verified executor result to summarize."), { statusCode: 409 });
+          const summary = body.locale === "zh-CN"
+            ? `Preacherman 已核对 TaskRun 的真实结果：\n\n${executorResult.slice(0, 6_000)}\n\n可查看产物：${artifactNames || "无"}`
+            : `Preacherman verified the real TaskRun result:\n\n${executorResult.slice(0, 6_000)}\n\nAvailable artifacts: ${artifactNames || "none"}`;
+          await taskService.update(task.taskId, (current) => {
+            current.aAgentSummary = summary;
+            appendTaskEvent(current, { type: "result_summarized", stage: "reporting", message: "Preacherman summarized the verified TaskResult." });
+          });
+        }
+        json(response, 200, { task: await taskService.get(task.taskId) }, origin);
+        return;
+      }
       const taskMatch = url.pathname.match(/^\/api\/tasks\/([^/]+)$/);
       if (request.method === "GET" && taskMatch) {
         const task = await taskService.get(decodeURIComponent(taskMatch[1])).catch((error) => error?.code === "TASK_NOT_FOUND" ? null : Promise.reject(error));
@@ -1689,6 +2110,44 @@ export function createPreachermanServer(options = {}) {
         }
         const body = await readJson(request);
         const type = body.type;
+        if (existing.execution?.kind === "local-agent") {
+          if (type === "approve" || type === "reject") {
+            const approval = existing.pendingApproval;
+            if (!approval || (body.approvalId && body.approvalId !== approval.approvalId)) {
+              json(response, 409, { error: "The Local Agent approval does not match the pending request." }, origin);
+              return;
+            }
+            const task = await agentAccessRuntime.decideLocalTaskApproval(existing, type === "approve" ? "approved" : "rejected");
+            json(response, type === "approve" ? 202 : 200, { task, command: { type, accepted: true } }, origin);
+            return;
+          }
+          if (type === "resume" || type === "steer") {
+            json(response, 409, { error: "The selected Local Agent does not support this command." }, origin);
+            return;
+          }
+          const task = await commandAgentTask(existing, type, body);
+          json(response, type === "retry" ? 202 : 200, { task, command: { type, accepted: true } }, origin);
+          return;
+        }
+        if ((type === "approve" || type === "reject") && existing.source === "mcp-gateway") {
+          const approval = existing.pendingApproval;
+          if (!approval) throw Object.assign(new Error("No approval is pending."), { statusCode: 409 });
+          let task = await taskService.resolveApproval(existing.taskId, {
+            approvalId: approval.approvalId,
+            proposalHash: approval.proposalHash,
+            decision: type === "approve" ? "approved" : "rejected",
+            actor: "preacherman-user",
+          });
+          if (type === "approve") task = await agentAccessRuntime.startApprovedTask(task);
+          else task = await taskService.transition(task.taskId, "cancelled", { event: { type: "rejected", stage: "terminal", message: "User rejected the external Agent task." } });
+          json(response, 200, { task, command: { type, accepted: true } }, origin);
+          return;
+        }
+        if (existing.source === "mcp-gateway" && new Set(["cancel", "retry", "steer"]).has(type)) {
+          const task = await commandAgentTask(existing, type, body);
+          json(response, type === "retry" || type === "steer" ? 202 : 200, { task, command: { type, accepted: true } }, origin);
+          return;
+        }
         if (type === "cancel") {
           if (existing.execution?.kind === "preacherman-execution-dag") {
             const result = await preachermanExecutionCommandAdapter.cancel(taskId);
@@ -1912,9 +2371,15 @@ export function createPreachermanServer(options = {}) {
       preachermanExecutionReconciler.start();
       return new Promise((resolveListen, reject) => {
         server.once("error", reject);
-        server.listen(port, "127.0.0.1", () => {
+        server.listen(port, "127.0.0.1", async () => {
           server.off("error", reject);
-          resolveListen(server.address());
+          try {
+            localServicePort = server.address().port;
+            await agentAccessRuntime.initialize(localServicePort);
+            resolveListen(server.address());
+          } catch (error) {
+            server.close(() => reject(error));
+          }
         });
       });
     },
@@ -1922,6 +2387,7 @@ export function createPreachermanServer(options = {}) {
       preachermanExecutionReconciler.stop();
       for (const client of voiceProxy.clients) client.close();
       await preachermanPluginRuntime.close();
+      await agentAccessRuntime.close();
       ecosystemFacade.close();
       await Promise.all([
         preachermanMcpRuntime.close(),

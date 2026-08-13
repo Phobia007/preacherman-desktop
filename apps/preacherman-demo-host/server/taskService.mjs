@@ -80,16 +80,54 @@ export function createTaskService({ taskStore, now = () => new Date().toISOStrin
     return taskStore.create(task);
   }
 
+  async function createOwned(input, actor) {
+    const principalId = text(actor?.principalId, "Owner principal id", 200);
+    const sessionId = text(actor?.sessionId, "Creator session id", 200);
+    return create({
+      ...structuredClone(input),
+      ownership: { kind: "mcp-principal", principalId },
+      createdBy: {
+        sessionId,
+        clientName: text(actor?.clientName ?? "unknown-mcp-client", "Creator client name", 100),
+        transport: text(actor?.transport ?? "stdio", "Creator transport", 30),
+      },
+    });
+  }
+
+  async function requireOwned(taskId, principalId) {
+    const task = await requireTask(taskId);
+    if (task.ownership?.principalId !== text(principalId, "Owner principal id", 200)) {
+      throw taskError("TASK_NOT_FOUND", `TaskRun not found: ${taskId}`, 404);
+    }
+    return task;
+  }
+
+  async function updateOwned(taskId, principalId, mutator) {
+    const normalizedTaskId = text(taskId, "Task id", 128);
+    const normalizedPrincipal = text(principalId, "Owner principal id", 200);
+    const existing = await taskStore.updateOwned?.(normalizedTaskId, normalizedPrincipal, (task) => {
+      mutator(task);
+    });
+    if (!existing) throw taskError("TASK_NOT_FOUND", `TaskRun not found: ${taskId}`, 404);
+    return existing;
+  }
+
   async function createRecord(record) {
     return taskStore.create(record);
   }
 
   async function update(taskId, mutator) {
     const existing = await requireTask(taskId);
+    const immutableExecutionSnapshot = existing.executionSnapshot === undefined
+      ? undefined
+      : JSON.stringify(existing.executionSnapshot);
     const at = now();
     return taskStore.update(existing.taskId, (task) => {
       const previousStatus = task.status;
       mutator(task);
+      if (immutableExecutionSnapshot !== undefined && JSON.stringify(task.executionSnapshot) !== immutableExecutionSnapshot) {
+        throw taskError("TASK_EXECUTION_SNAPSHOT_IMMUTABLE", "The approved execution snapshot cannot be changed.", 409);
+      }
       if (task.artifact) {
         const artifactId = task.artifact.artifactId ?? "artifact_1";
         const canonical = {
@@ -126,8 +164,10 @@ export function createTaskService({ taskStore, now = () => new Date().toISOStrin
   }
 
   async function startAttempt(taskId, input) {
-    const provider = input.provider;
-    if (!new Set(["local", "preacherman-execution"]).has(provider)) throw taskError("TASK_ATTEMPT_INVALID", "Attempt provider must be local or preacherman-execution.");
+    const provider = text(input.provider, "Attempt provider", 128);
+    if (!/^[a-z][a-z0-9-]*$/.test(provider)) {
+      throw taskError("TASK_ATTEMPT_INVALID", "Attempt provider must use lowercase letters, numbers, and hyphens.");
+    }
     const existing = await requireTask(taskId);
     if (currentAttempt(existing) && !ATTEMPT_TERMINAL.has(currentAttempt(existing).status)) {
       throw taskError("TASK_ATTEMPT_ACTIVE", `TaskRun ${taskId} already has an active attempt.`, 409);
@@ -179,6 +219,26 @@ export function createTaskService({ taskStore, now = () => new Date().toISOStrin
     });
   }
 
+  async function linkAttemptRun(taskId, { provider, externalRunId, eventCursor }) {
+    const existing = await requireTask(taskId);
+    const at = now();
+    return taskStore.update(existing.taskId, (task) => {
+      const attempt = currentAttempt(task);
+      if (!attempt || attempt.provider !== text(provider, "Attempt provider", 128)) {
+        throw taskError("TASK_ATTEMPT_INVALID", "A matching attempt must exist before linking a Run.", 409);
+      }
+      if (attempt.externalRunId && attempt.externalRunId !== externalRunId) {
+        throw taskError("TASK_EXTERNAL_RUN_CONFLICT", "The current attempt is already linked to another Run.", 409);
+      }
+      attempt.externalRunId = text(externalRunId, "External run id", 256);
+      attempt.status = "active";
+      if (eventCursor !== undefined) attempt.eventCursor = eventCursor;
+      task.status = "running";
+      task.recoveryPending = false;
+      appendTaskEvent(task, { type: "run_linked", stage: "executing", message: "Execution run started.", attempt: attempt.attempt }, at);
+    });
+  }
+
   async function appendEvent(taskId, event, { sourceId } = {}) {
     const existing = await requireTask(taskId);
     if (sourceId && existing.events.some((candidate) => candidate.sourceId === sourceId)) return existing;
@@ -198,7 +258,7 @@ export function createTaskService({ taskStore, now = () => new Date().toISOStrin
       name: text(artifact.name, "Artifact name", 256),
       mediaType: text(artifact.mediaType ?? "application/octet-stream", "Artifact media type", 128),
       status: artifact.status ?? "ready",
-      contentPath: text(artifact.contentPath ?? artifact.path, "Artifact content path", 2_000),
+      contentPath: text(artifact.contentPath ?? artifact.path ?? `/api/tasks/${encodeURIComponent(existing.taskId)}/artifacts/${encodeURIComponent(artifactId)}/content`, "Artifact content path", 2_000),
       path: artifact.path ?? artifact.contentPath,
       primary: artifact.primary === true || existing.artifacts.length === 0,
     };
@@ -279,13 +339,18 @@ export function createTaskService({ taskStore, now = () => new Date().toISOStrin
 
   return {
     create,
+    createOwned,
     createRecord,
     get: requireTask,
+    getOwned: requireOwned,
     list: (limit) => taskStore.list(limit),
+    listOwned: (principalId, limit) => taskStore.listOwned?.(text(principalId, "Owner principal id", 200), limit) ?? [],
     update,
+    updateOwned,
     transition,
     startAttempt,
     linkExternalRun,
+    linkAttemptRun,
     appendEvent,
     addArtifact,
     requestApproval,

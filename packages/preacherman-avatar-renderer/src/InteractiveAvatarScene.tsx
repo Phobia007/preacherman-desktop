@@ -1,4 +1,4 @@
-import { OrbitControls, PresentationControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -102,26 +102,17 @@ export function InteractiveAvatarScene({
     <>
       {environment === "cinematic" ? <CinematicEnvironment /> : null}
       {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
-      <PresentationControls
-        azimuth={[-Infinity, Infinity]}
-        config={{ mass: 1, tension: 220, friction: 30 }}
-        cursor
-        global
-        polar={[-0.12, 0.12]}
-        speed={1.7}
-      >
-        <AvatarModel
-          actionId={actionId}
-          actionRequestKey={actionRequestKey}
-          assetBaseUrl={assetBaseUrl}
-          onActionsReady={onActionsReady}
-          onAnimationDebug={onAnimationDebug}
-          onAnimationError={onAnimationError}
-          onFirstFrame={onFirstFrame}
-          pose={pose}
-          jawOpen={jawOpen}
-        />
-      </PresentationControls>
+      <AvatarModel
+        actionId={actionId}
+        actionRequestKey={actionRequestKey}
+        assetBaseUrl={assetBaseUrl}
+        onActionsReady={onActionsReady}
+        onAnimationDebug={onAnimationDebug}
+        onAnimationError={onAnimationError}
+        onFirstFrame={onFirstFrame}
+        pose={pose}
+        jawOpen={jawOpen}
+      />
       <CameraRig environment={environment} resetKey={resetKey} />
       <ContextLossListener onContextLost={onContextLost} />
     </>

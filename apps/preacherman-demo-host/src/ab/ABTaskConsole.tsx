@@ -14,6 +14,7 @@ import { localServiceUrl } from "../serviceConfig";
 import { beginNewConversation, saveConversation, type LedgerMessage } from "../conversationLedger";
 import { openLocalSurface } from "../demo/screenRoute";
 import { useLiveCoordinator } from "../live/LiveCoordinatorContext";
+import { LocalAgentTaskLauncher, type LocalAgentTask } from "./LocalAgentTaskLauncher";
 import "./ab-task-console.css";
 
 interface TaskProposal {
@@ -29,7 +30,7 @@ type TaskStatus = "queued" | "running" | "waiting_for_input" | "waiting_for_appr
 
 interface TaskAttempt {
   readonly attempt: number;
-  readonly provider: "local" | "preacherman-execution";
+  readonly provider: string;
   readonly status: string;
   readonly externalRunId?: string;
 }
@@ -54,7 +55,7 @@ interface TaskRun {
   readonly taskId?: string;
   readonly runId: string;
   readonly objective: string;
-  readonly source?: "preacherman-plugin";
+  readonly source?: "preacherman-plugin" | "mcp-gateway" | "local-agent-runner";
   readonly status: TaskStatus;
   readonly execution?: { readonly kind?: string; readonly adapter?: string };
   readonly attempts?: readonly TaskAttempt[];
@@ -88,6 +89,7 @@ interface TaskWorkspaceValue {
   confirm(): Promise<void>;
   command(type: "approve" | "cancel" | "reject" | "resume" | "retry" | "steer", input?: string): Promise<void>;
   startNewConversation(): void;
+  adoptTask(task: LocalAgentTask): void;
 }
 
 const TaskWorkspaceContext = createContext<TaskWorkspaceValue | null>(null);
@@ -186,6 +188,14 @@ export function TaskWorkspaceProvider({ children, locale }: { readonly children:
   const announcedRunIds = useRef(new Set<string>());
 
   useEffect(() => {
+    if (run) return;
+    void request<{ tasks: TaskRun[] }>("/api/tasks?limit=20").then(({ tasks }) => {
+      const pending = tasks.find((task) => task.source === "mcp-gateway" && task.status === "waiting_for_approval");
+      if (pending) setRun(pending);
+    }).catch(() => undefined);
+  }, [run]);
+
+  useEffect(() => {
     if (messages.length) localStorage.setItem(sessionKey, JSON.stringify(messages.slice(-10)));
     else localStorage.removeItem(sessionKey);
     saveConversation(locale, messages);
@@ -267,7 +277,7 @@ export function TaskWorkspaceProvider({ children, locale }: { readonly children:
     if (!run || busy) return;
     setBusy(true); setError(null);
     try {
-      if (type === "retry" && run.execution?.kind !== "preacherman-execution-dag") {
+      if (type === "retry" && run.execution?.kind !== "preacherman-execution-dag" && run.execution?.kind !== "local-agent" && run.source !== "mcp-gateway") {
         const response = await request<{ run: TaskRun }>(`/api/agent/runs/${taskId(run)}/retry`, {
           method: "POST",
           body: JSON.stringify({ approved: run.source === "preacherman-plugin" }),
@@ -299,10 +309,16 @@ export function TaskWorkspaceProvider({ children, locale }: { readonly children:
     setMessages([]); setInput(""); setProposalState(null); setRun(null); setError(null); setDiagnostics(null); setBusy(false);
   }, [coordinator, sessionKey]);
 
+  const adoptTask = useCallback((task: LocalAgentTask) => {
+    setProposalState(null);
+    setError(null);
+    setRun(task as unknown as TaskRun);
+  }, []);
+
   const value = useMemo<TaskWorkspaceValue>(() => ({
     messages, input, proposal, run, error, diagnostics, busy, setInput,
-    setProposal: setProposalState, sendText, confirm, command, startNewConversation,
-  }), [busy, command, confirm, diagnostics, error, input, messages, proposal, run, sendText, startNewConversation]);
+    setProposal: setProposalState, sendText, confirm, command, startNewConversation, adoptTask,
+  }), [adoptTask, busy, command, confirm, diagnostics, error, input, messages, proposal, run, sendText, startNewConversation]);
   return <TaskWorkspaceContext.Provider value={value}>{children}</TaskWorkspaceContext.Provider>;
 }
 
@@ -347,13 +363,19 @@ export function ABTaskConsole({ locale, mode = "work" }: { readonly locale: Loca
         {workspace.diagnostics ? <span className="ab-task-console__diagnostic" data-source={workspace.diagnostics.source}>{workspace.diagnostics.source}{workspace.diagnostics.model ? ` · ${workspace.diagnostics.model}` : null}</span> : null}
       </div>
 
-      <form className="ab-task-console__form" onSubmit={submit}>
+      {mode === "home" ? <form className="ab-task-console__form" onSubmit={submit}>
         <textarea aria-label={labels.placeholder} data-preacherman-control="task.create" disabled={workspace.busy} onChange={(event) => workspace.setInput(event.target.value)} placeholder={labels.placeholder} rows={mode === "home" ? 2 : 3} value={workspace.input} />
         <div className="ab-task-console__actions">
           <button className="ab-task-console__button ab-task-console__button--quiet" disabled={workspace.busy || hasActiveTask} onClick={() => void workspace.sendText(labels.demoPrompt)} type="button">{labels.tryDemo}</button>
           <button className="ab-task-console__button ab-task-console__button--primary" disabled={!workspace.input.trim() || workspace.busy} type="submit">{labels.send}</button>
         </div>
-      </form>
+      </form> : <LocalAgentTaskLauncher
+        embedded
+        locale={locale}
+        onPreachermanSubmit={workspace.sendText}
+        onTaskCreated={workspace.adoptTask}
+        serviceRequest={request}
+      />}
 
       {mode === "home" ? <div className="ab-task-console__home-summary">
         {workspace.proposal ? <><p>{labels.proposalReady}</p><button className="ab-task-console__button ab-task-console__button--primary" onClick={openWork} type="button">{labels.openWork}</button></> : null}
@@ -369,9 +391,9 @@ export function ABTaskConsole({ locale, mode = "work" }: { readonly locale: Loca
         </section> : null}
         {workspace.run ? <section className="ab-task-console__activity">
           <div className="ab-task-console__summary-line"><StatusBadge locale={locale} status={workspace.run.status} /><strong>{workspace.run.objective}</strong></div>
-          <dl className="ab-task-console__attempts"><div><dt>{locale === "zh-CN" ? "执行方式" : "Executor"}</dt><dd>{workspace.run.execution?.kind === "preacherman-execution-dag" ? "Preacherman Execution DAG" : "Preacherman local"}</dd></div><div><dt>{locale === "zh-CN" ? "尝试" : "Attempt"}</dt><dd>{workspace.run.attempts?.at(-1)?.attempt ?? 0}</dd></div></dl>
+          <dl className="ab-task-console__attempts"><div><dt>{locale === "zh-CN" ? "执行方式" : "Executor"}</dt><dd>{workspace.run.execution?.kind === "preacherman-execution-dag" ? "Preacherman Execution DAG" : workspace.run.execution?.kind === "local-agent" ? `Local Agent · ${workspace.run.execution.adapter}` : workspace.run.source === "mcp-gateway" ? "External Agent via MCP" : "Preacherman local"}</dd></div><div><dt>{locale === "zh-CN" ? "尝试" : "Attempt"}</dt><dd>{workspace.run.attempts?.at(-1)?.attempt ?? 0}</dd></div></dl>
           {workspace.run.pendingApproval ? <div className="ab-task-console__decision" data-preacherman-control="task.approval"><strong>{workspace.run.pendingApproval.title}</strong><p>{workspace.run.pendingApproval.description}</p><div><button className="ab-task-console__button ab-task-console__button--primary" data-preacherman-control="task.approve" disabled={workspace.busy} onClick={() => void workspace.command("approve")} type="button">{locale === "zh-CN" ? "批准" : "Approve"}</button><button className="ab-task-console__button ab-task-console__button--quiet" data-preacherman-control="task.reject" disabled={workspace.busy} onClick={() => void workspace.command("reject")} type="button">{locale === "zh-CN" ? "拒绝" : "Reject"}</button></div></div> : null}
-          {["running", "waiting_for_input"].includes(workspace.run.status) ? <div className="ab-task-console__steer"><label htmlFor="task-instruction">{workspace.run.status === "waiting_for_input" ? (locale === "zh-CN" ? "补充所需信息" : "Provide requested input") : (locale === "zh-CN" ? "追加执行指令" : "Steer this task")}</label><textarea id="task-instruction" onChange={(event) => setInstruction(event.target.value)} rows={2} value={instruction} /><button className="ab-task-console__button ab-task-console__button--quiet" data-preacherman-control={workspace.run.status === "waiting_for_input" ? "task.resume" : "task.steer"} disabled={workspace.busy || !instruction.trim()} onClick={() => sendCommand(workspace.run!.status === "waiting_for_input" ? "resume" : "steer")} type="button">{workspace.run.status === "waiting_for_input" ? (locale === "zh-CN" ? "提交并继续" : "Submit and resume") : (locale === "zh-CN" ? "发送指令" : "Send direction")}</button></div> : null}
+          {["running", "waiting_for_input"].includes(workspace.run.status) && workspace.run.execution?.kind !== "local-agent" ? <div className="ab-task-console__steer"><label htmlFor="task-instruction">{workspace.run.status === "waiting_for_input" ? (locale === "zh-CN" ? "补充所需信息" : "Provide requested input") : (locale === "zh-CN" ? "追加执行指令" : "Steer this task")}</label><textarea id="task-instruction" onChange={(event) => setInstruction(event.target.value)} rows={2} value={instruction} /><button className="ab-task-console__button ab-task-console__button--quiet" data-preacherman-control={workspace.run.status === "waiting_for_input" ? "task.resume" : "task.steer"} disabled={workspace.busy || !instruction.trim()} onClick={() => sendCommand(workspace.run!.status === "waiting_for_input" ? "resume" : "steer")} type="button">{workspace.run.status === "waiting_for_input" ? (locale === "zh-CN" ? "提交并继续" : "Submit and resume") : (locale === "zh-CN" ? "发送指令" : "Send direction")}</button></div> : null}
           <ol className="ab-task-console__timeline">{workspace.run.events.slice(-6).map((event, index) => <li key={`${event.stage}-${index}`}><span>{event.stage}</span><p>{event.message}</p></li>)}</ol>
           {errorText(workspace.run.error) ? <p data-error="true">{errorText(workspace.run.error)}</p> : null}
           <div className="ab-task-console__actions">

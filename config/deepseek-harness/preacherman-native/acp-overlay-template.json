@@ -1,0 +1,53 @@
+[
+  {
+    "id": "preacherman-native-base",
+    "name": "{{HARNESS_INCLUDE_PLUGIN_URL}}",
+    "config": {
+      "path": "{{HARNESS_ACP_BASE_CONFIG_URL}}",
+      "patches": [
+        {
+          "id": "acp-agent",
+          "name": "@deepseek-ai/dsh-acp-demo",
+          "config": {
+            "provider": "{{PROVIDER_ID}}",
+            "model": "{{MODEL_ID}}",
+            "persistenceRoot": "{{HARNESS_SESSION_ROOT}}",
+            "workspaceContext": {
+              "maxBytes": 65536
+            },
+            "persona": "You are the Preacherman Native coding agent powered by the {{model}} model. Your working directory is {{cwd}}. Verify work with real checks and report factual results."
+          }
+        },
+        {
+          "insert": [
+            {
+              "id": "preacherman-mcp",
+              "name": "{{HARNESS_MCP_CLIENT_URL}}",
+              "config": {
+                "serverName": "preacherman",
+                "transport": "stdio",
+                "command": "{{HARNESS_NODE_EXECUTABLE}}",
+                "args": [
+                  "{{PREACHERMAN_MCP_GATEWAY_SCRIPT}}"
+                ],
+                "env": {
+                  "PREACHERMAN_MCP_GATEWAY_URL": "{{PREACHERMAN_MCP_GATEWAY_URL}}",
+                  "PREACHERMAN_MCP_BOOTSTRAP_FILE": "{{PREACHERMAN_MCP_BOOTSTRAP_FILE}}"
+                },
+                "cwd": "{{WORKSPACE_ROOT}}",
+                "toolCallTimeoutMs": 60000,
+                "failOnStartupError": true,
+                "reconnect": {
+                  "enabled": true,
+                  "initialDelayMs": 500,
+                  "maxDelayMs": 5000,
+                  "maxAttempts": 5
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

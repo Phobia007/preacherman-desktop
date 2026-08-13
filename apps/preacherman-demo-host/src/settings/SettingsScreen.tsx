@@ -5,6 +5,8 @@ import { McpSettings } from "./McpSettings";
 import { PluginSettings } from "./PluginSettings";
 import { PreachermanProviderConnectionsPanel } from "../preacherman/PreachermanProviderConnectionsPanel";
 import { PreachermanExecutionCard } from "./PreachermanExecutionCard";
+import { AgentAccessSettings } from "./AgentAccessSettings";
+import { NativeAgentSettings } from "./NativeAgentSettings";
 
 interface SettingsScreenProps {
   readonly appearance: Appearance;
@@ -28,13 +30,14 @@ interface TestResult {
   readonly tts: { readonly configured: boolean; readonly ok: boolean; readonly message: string };
 }
 
-type SettingsView = "preferences" | "providers" | "connections" | "mcp" | "plugins" | "widgets";
+type SettingsView = "preferences" | "providers" | "connections" | "mcp" | "agent-access" | "plugins" | "widgets";
 
 const settingsViews: readonly { readonly id: SettingsView; readonly en: string; readonly "zh-CN": string }[] = [
   { id: "preferences", en: "Preferences", "zh-CN": "偏好" },
   { id: "providers", en: "AI & Voice", "zh-CN": "AI 与语音" },
   { id: "connections", en: "Connections", "zh-CN": "外部连接" },
   { id: "mcp", en: "MCP", "zh-CN": "MCP" },
+  { id: "agent-access", en: "Agent Access", "zh-CN": "Agent 接入" },
   { id: "plugins", en: "Plugins", "zh-CN": "插件" },
   { id: "widgets", en: "Widgets", "zh-CN": "组件" },
 ];
@@ -43,6 +46,7 @@ function settingsViewForControl(controlId: string): SettingsView {
   if (controlId === "appearance.select" || controlId === "locale.select") return "preferences";
   if (controlId === "plugin.widgets") return "widgets";
   if (controlId.startsWith("connection.")) return "connections";
+  if (controlId === "mcp.agent-access" || controlId.startsWith("agent-access.")) return "agent-access";
   if (controlId.startsWith("mcp.") || controlId === "runtime.mcp-test") return "mcp";
   if (controlId.startsWith("plugin.") || controlId === "agent.plugin-tools" || controlId === "runtime.plugin-inspector") return "plugins";
   return "providers";
@@ -138,6 +142,7 @@ export function SettingsScreen({ appearance, locale, onAppearanceChange, onLocal
       </section> : null}
       {view === "connections" ? <div className="demo-settings__connection-stack"><PreachermanExecutionCard locale={locale} serviceRequest={serviceRequest} /><PreachermanProviderConnectionsPanel locale={locale} serviceRequest={serviceRequest} /></div> : null}
       {view === "mcp" ? <McpSettings locale={locale} serviceRequest={serviceRequest} /> : null}
+      {view === "agent-access" ? <div className="demo-settings__connection-stack"><NativeAgentSettings locale={locale} serviceRequest={serviceRequest} /><AgentAccessSettings locale={locale} serviceRequest={serviceRequest} /></div> : null}
       {view === "plugins" ? <PluginSettings locale={locale} serviceRequest={serviceRequest} /> : null}
       {view === "widgets" ? widgets : null}
       </div>

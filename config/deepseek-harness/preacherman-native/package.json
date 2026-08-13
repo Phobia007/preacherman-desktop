@@ -1,0 +1,17 @@
+{
+  "name": "preacherman-native-harness-profile",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dsh": {
+    "profile": {
+      "bundles": [
+        "@deepseek-ai/dsh-base"
+      ]
+    }
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-acp": "0.1.0-rc.5",
+    "@deepseek-ai/dsh-mcp-client": "0.1.0-rc.5"
+  }
+}

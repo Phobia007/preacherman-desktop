@@ -1,0 +1,287 @@
+.local-agent-launcher {
+  display: grid;
+  gap: 16px;
+  color: var(--demo-theme-text);
+}
+
+.local-agent-launcher[data-embedded="true"] {
+  gap: 10px;
+  padding-top: 2px;
+  border-top: 1px solid var(--demo-theme-border);
+}
+
+.local-agent-launcher[data-embedded="true"] .local-agent-launcher__header {
+  display: none;
+}
+
+.local-agent-launcher__header {
+  display: grid;
+  gap: 6px;
+}
+
+.local-agent-launcher__header h2,
+.local-agent-launcher__header p,
+.local-agent-launcher__eyebrow {
+  margin: 0;
+}
+
+.local-agent-launcher__header h2 {
+  font-size: 17px;
+  font-weight: 620;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.local-agent-launcher__header > p:last-child,
+.local-agent-launcher__field > small,
+.local-agent-launcher__choice small {
+  color: var(--demo-theme-muted);
+}
+
+.local-agent-launcher__eyebrow {
+  color: var(--demo-theme-control);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.local-agent-launcher__form {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 16px;
+  background: var(--demo-theme-surface-elevated);
+  box-shadow: var(--demo-theme-activate-shadow);
+}
+
+.local-agent-launcher[data-embedded="true"] .local-agent-launcher__form {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.local-agent-launcher__field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.local-agent-launcher__field label,
+.local-agent-launcher__mode legend {
+  color: var(--demo-theme-muted);
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.local-agent-launcher textarea,
+.local-agent-launcher select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--demo-theme-border-strong);
+  border-radius: 10px;
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface);
+  font: inherit;
+}
+
+.local-agent-launcher textarea {
+  min-height: 80px;
+  padding: 13px 14px;
+  font-size: 11px;
+  line-height: 1.55;
+  resize: none;
+}
+
+.local-agent-launcher select {
+  min-height: 36px;
+  padding: 8px 36px 8px 12px;
+  font-size: 10px;
+}
+
+.local-agent-launcher textarea::placeholder {
+  color: var(--demo-theme-muted);
+}
+
+.local-agent-launcher textarea:focus-visible,
+.local-agent-launcher select:focus-visible,
+.local-agent-launcher button:focus-visible,
+.local-agent-launcher input:focus-visible + span {
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: 2px;
+}
+
+.local-agent-launcher__mode {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.local-agent-launcher__mode legend {
+  grid-column: 1 / -1;
+  margin-bottom: 3px;
+}
+
+.local-agent-launcher__choice {
+  position: relative;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.local-agent-launcher__choice input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.local-agent-launcher__choice span {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 11px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 10px;
+  background: var(--demo-theme-surface);
+}
+
+.local-agent-launcher__choice strong {
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.local-agent-launcher[data-embedded="true"] .local-agent-launcher__choice small {
+  display: none;
+}
+
+.local-agent-launcher__choice input:checked + span {
+  border-color: var(--demo-theme-activate-rest-border);
+  box-shadow: inset 0 0 0 1px var(--demo-theme-activate-rest-border);
+}
+
+.local-agent-launcher__choice:hover span {
+  background: var(--demo-theme-control-hover-bg);
+}
+
+.local-agent-launcher__choice small {
+  line-height: 1.35;
+}
+
+.local-agent-launcher__agent-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.local-agent-launcher__notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 12px;
+  color: var(--demo-theme-loading);
+  background: var(--demo-theme-surface);
+}
+
+.local-agent-launcher__notice--error,
+.local-agent-launcher__result--error {
+  color: var(--demo-theme-error);
+}
+
+.local-agent-launcher__notice button {
+  flex: 0 0 auto;
+  border: 0;
+  color: var(--demo-theme-text);
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.local-agent-launcher__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.local-agent-launcher__result {
+  min-height: 1.3em;
+  margin: 0;
+  color: var(--demo-theme-muted);
+  font-size: 9px;
+}
+
+.local-agent-launcher__result--submitting {
+  color: var(--demo-theme-loading);
+}
+
+.local-agent-launcher__result--succeeded {
+  color: var(--demo-theme-text);
+}
+
+.local-agent-launcher__submit {
+  min-height: 32px;
+  padding: 0 13px;
+  border: 1px solid var(--demo-theme-activate-rest-border);
+  border-radius: 10px;
+  color: var(--demo-theme-activate-fill-text);
+  background: var(--demo-theme-activate-fill);
+  box-shadow: var(--demo-theme-activate-shadow);
+  font: inherit;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.local-agent-launcher__submit:hover:not(:disabled) {
+  box-shadow: var(--demo-theme-activate-hover-shadow);
+}
+
+.local-agent-launcher__submit:disabled,
+.local-agent-launcher select:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (max-width: 680px) {
+  .local-agent-launcher__mode,
+  .local-agent-launcher__agent-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .local-agent-launcher__form {
+    padding: 16px;
+  }
+
+  .local-agent-launcher__footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .local-agent-launcher__submit {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .local-agent-launcher * {
+    scroll-behavior: auto;
+  }
+}

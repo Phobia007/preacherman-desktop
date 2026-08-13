@@ -1,0 +1,38 @@
+# Preacherman Native: an ACP stdio surface over the Harness base bundle.
+# This profile deliberately mounts no HTTP/browser surface.
+
+- id: hmr
+  disabled: true
+
+# Preacherman owns product telemetry. Do not send Harness session telemetry.
+- id: session-telemetry-otel
+  disabled: true
+
+- insert:
+    - id: preacherman-mcp
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: preacherman
+        transport: stdio
+        command: !!js process.execPath
+        args: !!js "[process.env.PREACHERMAN_MCP_GATEWAY_SCRIPT]"
+        env:
+          PREACHERMAN_MCP_GATEWAY_URL: !!js process.env.PREACHERMAN_MCP_GATEWAY_URL
+          PREACHERMAN_MCP_BOOTSTRAP_FILE: !!js process.env.PREACHERMAN_MCP_BOOTSTRAP_FILE
+        cwd: !!js process.cwd()
+        toolCallTimeoutMs: 60000
+        failOnStartupError: true
+        reconnect:
+          enabled: true
+          initialDelayMs: 500
+          maxDelayMs: 5000
+          maxAttempts: 5
+
+    # ACP owns stdout as newline-delimited JSON-RPC and creates a fresh Harness
+    # Agent for each session/new. Provider credentials remain in Harness's
+    # managed credential store; no key is accepted by this patch.
+    - id: preacherman-acp
+      name: '@deepseek-ai/dsh-acp'
+      config:
+        provider: !!js process.env.PREACHERMAN_HARNESS_PROVIDER ?? 'deepseek-official'
+        model: !!js process.env.PREACHERMAN_HARNESS_MODEL ?? 'deepseek-v4-flash'

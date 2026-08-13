@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "transport": "stdio",
+  "webUi": false,
+  "command": "{{HARNESS_NODE_EXECUTABLE}}",
+  "args": [
+    "{{HARNESS_ACP_BIN}}",
+    "--config",
+    "{{PREACHERMAN_HARNESS_COMPOSITION}}"
+  ],
+  "compositionTemplate": "acp-overlay-template.json",
+  "compositionOutput": "{{PREACHERMAN_HARNESS_COMPOSITION}}",
+  "env": {
+    "DSH_HOME": "{{HARNESS_HOME}}",
+    "DSH_PERMISSION_MODE": "{{PERMISSION_MODE}}"
+  },
+  "requiredFiles": [
+    "{{HARNESS_ACP_BIN}}",
+    "{{PREACHERMAN_HARNESS_COMPOSITION}}",
+    "{{PREACHERMAN_MCP_GATEWAY_SCRIPT}}",
+    "{{PREACHERMAN_MCP_BOOTSTRAP_FILE}}"
+  ],
+  "redactEnvironment": [
+    "DEEPSEEK_API_KEY"
+  ]
+}

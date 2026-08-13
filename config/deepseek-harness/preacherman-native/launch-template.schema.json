@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://preacherman.local/schemas/deepseek-harness-launch-template.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "transport",
+    "webUi",
+    "command",
+    "args",
+    "compositionTemplate",
+    "compositionOutput",
+    "env",
+    "requiredFiles",
+    "redactEnvironment"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "transport": { "const": "stdio" },
+    "webUi": { "const": false },
+    "command": { "type": "string", "minLength": 1 },
+    "args": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "compositionTemplate": { "const": "acp-overlay-template.json" },
+    "compositionOutput": { "type": "string", "minLength": 1 },
+    "env": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "DSH_HOME",
+        "DSH_PERMISSION_MODE"
+      ],
+      "properties": {
+        "DSH_HOME": { "type": "string", "minLength": 1 },
+        "DSH_PERMISSION_MODE": { "type": "string", "minLength": 1 }
+      }
+    },
+    "requiredFiles": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "redactEnvironment": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

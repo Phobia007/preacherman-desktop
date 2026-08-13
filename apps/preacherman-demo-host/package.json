@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/dev.mjs",
+    "dev:desktop": "node scripts/desktop-dev.mjs",
     "dev:ui": "vite --host 127.0.0.1 --port 1420 --strictPort",
     "dev:service": "node --env-file-if-exists=.env.local server/index.mjs",
     "build": "tsc --noEmit && vite build",

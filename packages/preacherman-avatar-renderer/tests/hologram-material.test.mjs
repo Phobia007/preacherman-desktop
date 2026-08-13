@@ -255,21 +255,18 @@ test("face uses the body color pipeline with skin-energy gain and no global tint
   assert.doesNotMatch(source, /FACE_RAMP|faceEnergy|neckBodyColor|faceBodyTint/);
 });
 
-test("interactive lighting stays in world space while only the avatar rotates", async () => {
+test("interactive lighting and avatar stay in world space", async () => {
   const source = await readFile(
     join(packageRoot, "src", "InteractiveAvatarScene.tsx"),
     "utf8",
   );
-  const controlsStart = source.indexOf("<PresentationControls");
-  const controlsEnd = source.indexOf("</PresentationControls>", controlsStart);
-  const controlledContent = source.slice(controlsStart, controlsEnd);
 
-  assert.ok(source.indexOf("<HologramLights />") < controlsStart);
-  assert.doesNotMatch(controlledContent, /HologramLights/);
-  assert.match(controlledContent, /<AvatarModel\b/);
+  assert.match(source, /<HologramLights \/>/);
+  assert.match(source, /<AvatarModel\b/);
+  assert.doesNotMatch(source, /PresentationControls/);
 });
 
-test("interactive viewport keeps the model at a fixed size while drag rotation remains enabled", async () => {
+test("interactive viewport keeps the model at a fixed size and front-facing", async () => {
   const source = await readFile(
     join(packageRoot, "src", "InteractiveAvatarScene.tsx"),
     "utf8",
@@ -277,7 +274,7 @@ test("interactive viewport keeps the model at a fixed size while drag rotation r
 
   assert.match(source, /camera\.position\.set\(0, 0\.86, 3\.35\)/);
   assert.match(source, /<OrbitControls[\s\S]*?enableZoom=\{false\}/);
-  assert.match(source, /<PresentationControls[\s\S]*?\bglobal\b/);
+  assert.doesNotMatch(source, /PresentationControls/);
 });
 
 test("runtime animation replaces component-local standby bone posing", async () => {
@@ -290,6 +287,16 @@ test("runtime animation replaces component-local standby bone posing", async () 
   assert.match(source, /controller\.setState\("idle"\)/);
   assert.match(source, /useFrame\(\(_, deltaSeconds\) => \{[\s\S]*adapter\.update\(deltaSeconds\)/);
   assert.doesNotMatch(source, /aimBoneAt|pose\.bones|new Vector3/);
+});
+
+test("avatar source forward axis is aligned with the front camera", async () => {
+  const source = await readFile(
+    join(packageRoot, "src", "AvatarModel.tsx"),
+    "utf8",
+  );
+
+  assert.match(source, /<group rotation=\{\[0, -Math\.PI \/ 2, 0\]\}>/);
+  assert.match(source, /<group[\s\S]*?<primitive object=\{root\}/);
 });
 
 test("runtime animation disposal survives the StrictMode effect replay", async () => {

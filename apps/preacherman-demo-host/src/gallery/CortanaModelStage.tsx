@@ -58,7 +58,7 @@ export function CortanaModelStage({
         ? ["listening", "looking_around", "conversation_loop"]
         : interactionState === "thinking"
           ? ["thinking", "pondering", "looking_around", "conversation_loop"]
-          : ["conversation_loop"];
+          : ["idle.catwalk"];
     const action = preferred
       .map((id) => actions.find((candidate) => candidate.id === id))
       .find(Boolean)
