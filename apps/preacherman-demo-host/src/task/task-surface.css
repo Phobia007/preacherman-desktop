@@ -1,0 +1,191 @@
+.task-surface {
+  position: absolute;
+  top: 68px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+  color: var(--demo-theme-task-text);
+  background: transparent;
+}
+
+.task-surface,
+.task-surface *,
+.task-surface *::before,
+.task-surface *::after {
+  box-sizing: border-box;
+}
+
+.task-surface__aperture {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  background: transparent;
+  clip-path: inset(50% 0 50%);
+  pointer-events: none;
+}
+
+.task-surface__aperture[data-state="ready"] {
+  animation: task-surface-aperture 1040ms cubic-bezier(0.16, 1, 0.3, 1) 320ms both;
+  pointer-events: auto;
+  will-change: clip-path;
+}
+
+.task-surface__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  color: var(--demo-theme-task-text);
+  background: transparent;
+}
+
+.task-surface__scan-line {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  z-index: 6;
+  height: 1px;
+  background: var(--demo-theme-task-text);
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: task-surface-scan-line 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.task-surface__status {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 16px;
+  padding: 32px;
+  color: var(--demo-theme-text);
+  background: color-mix(in srgb, var(--demo-theme-task-loading-canvas) 58%, transparent);
+  text-align: center;
+}
+
+.task-surface__status p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--demo-theme-muted);
+  font: 500 13px/1.55 "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+}
+
+.task-surface__loading-mark {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--demo-theme-border);
+  border-top-color: var(--demo-theme-loading);
+  border-radius: 50%;
+  animation: task-surface-loading 720ms linear infinite;
+}
+
+.task-surface__status--error {
+  color: var(--demo-theme-error);
+}
+
+.task-surface__status--error p {
+  color: var(--demo-theme-error);
+}
+
+.task-surface__status button {
+  min-width: 92px;
+  min-height: 36px;
+  padding: 0 18px;
+  border: 1px solid var(--demo-theme-border);
+  border-radius: 12px;
+  color: var(--demo-theme-text);
+  background: var(--demo-theme-surface-elevated);
+  font: 650 12px/1 "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.task-surface__status button:hover {
+  border-color: var(--demo-theme-text);
+}
+
+.task-surface__status button:active {
+  transform: scale(0.98);
+}
+
+.task-surface__status button:focus-visible {
+  outline: 2px solid var(--demo-theme-focus);
+  outline-offset: 3px;
+}
+
+.task-preview-switchboard {
+  position: absolute;
+  inset: 68px 0 0;
+  background: transparent;
+}
+
+@keyframes task-surface-scan-line {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+
+  72% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes task-surface-aperture {
+  0% {
+    clip-path: inset(50% 0 50%);
+  }
+
+  14% {
+    clip-path: inset(42% 0 42%);
+  }
+
+  28% {
+    clip-path: inset(46% 0 46%);
+  }
+
+  48% {
+    clip-path: inset(36% 0 36%);
+  }
+
+  72%,
+  100% {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes task-surface-loading {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-surface__aperture[data-state="ready"] {
+    animation: none;
+    clip-path: inset(0);
+  }
+
+  .task-surface__scan-line {
+    display: none;
+    animation: none;
+  }
+
+  .task-surface__loading-mark,
+  .task-surface__status button {
+    animation: none;
+    transition: none;
+  }
+}

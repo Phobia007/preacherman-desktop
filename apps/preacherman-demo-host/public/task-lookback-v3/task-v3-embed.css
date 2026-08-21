@@ -1,0 +1,59 @@
+:root {
+  --task-embed-text: CanvasText;
+  --task-embed-muted: GrayText;
+  --task-embed-border: currentColor;
+  --task-embed-focus: Highlight;
+  --task-embed-surface: Canvas;
+  color-scheme: light dark;
+}
+
+html,
+body,
+#__nuxt {
+  min-height: 100%;
+  background: transparent !important;
+}
+
+html[data-preacherman-appearance="light"] {
+  color-scheme: light;
+}
+
+html[data-preacherman-appearance="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  color: var(--task-embed-text);
+}
+
+.about .bg-black {
+  background-color: transparent !important;
+}
+
+.js-load-mask,
+.intro,
+audio,
+button[aria-label^="Play "],
+button[aria-label^="Pause "] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html[data-preacherman-appearance="dark"] body:not(.is-about) {
+  color: var(--task-embed-text);
+}
+
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[data-url]:focus-visible {
+  outline: 2px solid var(--task-embed-focus) !important;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+}
