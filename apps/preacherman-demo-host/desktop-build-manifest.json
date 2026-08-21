@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "buildId": "empty-primary-surfaces-20260820T042928+0800",
+  "productVersion": "0.1.0",
+  "sourceTask": "clear-task-gallery-settings-content-keep-home-scene",
+  "sourceThread": "01a01b90-0829-71e2-b153-c97b28c89a31",
+  "sourceState": "Task, Gallery, and Settings render empty transparent content layers while every navigation destination retains the same Home background, active companion model, and viewport scaling.",
+  "shortcutPath": "C:\\Users\\Administrator\\Desktop\\Preacherman Desktop Demo.lnk",
+  "executablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
+  "builtAt": "2026-08-20T04:29:28.4889679+08:00",
+  "deployedAt": "2026-08-20T04:40:14.1372083+08:00",
+  "sizeBytes": 476368896,
+  "sha256": "311A516C56E8BA37A9E21BF36CEDC398001D1EE5F01B5DB24EA62FBA19028DAC",
+  "verification": {
+    "taskContentEmpty": "passed",
+    "galleryContentEmpty": "passed",
+    "settingsContentEmpty": "passed",
+    "homeScenePersistentAcrossNavigation": "passed",
+    "homeViewportScalePersistentAcrossNavigation": "passed",
+    "lightModeTaskGallerySettings": "passed",
+    "darkModeTaskGallerySettings": "passed",
+    "browserConsoleErrors": 0,
+    "typescript": "passed",
+    "productionWebBuild": "passed",
+    "productionTauriBuild": "passed",
+    "focusedRegressionTests": "12 passed",
+    "shortcutTarget": "passed",
+    "shortcutTargetHash": "passed",
+    "shortcutLaunch": "passed",
+    "nativeProcessId": 27120
+  }
+}

@@ -182,6 +182,7 @@ export function createHologramMaterial(
   scanlineMap: Texture,
   irisNormalMap?: Texture,
   controlMap?: Texture,
+  avatarGain = 1,
 ): MeshStandardMaterial {
   const profile = hologramProfileFor(source.name);
   const ramp = rampUniforms(profile);
@@ -219,7 +220,7 @@ export function createHologramMaterial(
     resolvedIrisNormalConnected,
   };
   material.customProgramCacheKey = () =>
-    `preacherman-source-node-chain-v21:${source.name}`;
+    `preacherman-source-node-chain-v22:${source.name}:${avatarGain}`;
   material.onBeforeCompile = (shader, renderer) => {
     shader.uniforms.uHoloScanlineMap = { value: scanlineMap };
     shader.uniforms.uHoloScanlineScale = { value: profile.scanlineScale };
@@ -259,6 +260,7 @@ export function createHologramMaterial(
     shader.uniforms.uHoloReferenceSaturation = {
       value: HOLOGRAM_REFERENCE_GRADE.saturation,
     };
+    shader.uniforms.uHoloAvatarGain = { value: avatarGain };
     material.userData.hologramShader = shader;
     shader.vertexShader = `
 varying float vHoloModelY;
@@ -294,6 +296,7 @@ uniform float uHoloCorneaEnabled;
 uniform float uHoloReferenceContrastExponent;
 uniform float uHoloReferenceOutputGain;
 uniform float uHoloReferenceSaturation;
+uniform float uHoloAvatarGain;
 varying float vHoloModelY;
 
 float holoLuma(vec3 value) {
@@ -401,7 +404,7 @@ if (uHoloFamily == 0 || uHoloFamily == 1) {
   holoOpacity = diffuseColor.a;
 }
 
-holoColor *= 1.189207115;
+holoColor *= 1.189207115 * uHoloAvatarGain;
 holoColor = uHoloReferenceOutputGain * pow(
   max(holoColor, vec3(0.0)),
   vec3(uHoloReferenceContrastExponent)

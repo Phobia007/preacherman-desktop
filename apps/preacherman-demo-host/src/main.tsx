@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
-import { App } from "./App";
 import { applyPreferences, readPreferences } from "./preferences";
+import { StartupBootstrap } from "./StartupBootstrap";
 import "./styles.css";
 
 const root = document.getElementById("root");
@@ -10,4 +10,4 @@ if (!root) {
 }
 
 applyPreferences(readPreferences());
-createRoot(root).render(<App />);
+createRoot(root).render(<StartupBootstrap />);

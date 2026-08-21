@@ -1,4 +1,4 @@
-import { windowCommand, type SurfaceHostBridge } from "@preacherman/surface-skin";
+import type { SurfaceCommand, SurfaceHostBridge } from "@preacherman/surface-skin";
 import closeIcon from "../assets/window-controls/window-close.svg";
 import maximizeIcon from "../assets/window-controls/window-maximize.svg";
 import minimizeIcon from "../assets/window-controls/window-minimize.svg";
@@ -14,6 +14,10 @@ const controls = [
   { action: "toggle-maximize", labelKey: "maximize", icon: maximizeIcon },
   { action: "close", labelKey: "close", icon: closeIcon },
 ] as const;
+
+function windowCommand(action: (typeof controls)[number]["action"]): SurfaceCommand {
+  return { type: `demo.window.${action}` };
+}
 
 export function WindowControls({ dispatch, locale }: WindowControlsProps) {
   const labels = uiCopy[locale].windowControls;

@@ -19,14 +19,16 @@ test("task actions have one commercial surface owner and optional shortcuts", as
   assert.doesNotMatch(source, /execution\.console/);
 });
 
-test("Home and Work share one provider while Home contains no execution controls", async () => {
+test("Task starts blank while its disconnected backend console remains available", async () => {
   const [app, consoleSource] = await Promise.all([
     readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
   ]);
-  assert.match(app, /<TaskWorkspaceProvider/);
-  assert.match(app, /<ABTaskConsole locale=\{preferences\.locale\} mode="home"/);
-  assert.match(app, /<ABTaskConsole locale=\{preferences\.locale\} mode="work"/);
+  assert.doesNotMatch(app, /<TaskWorkspaceProvider/);
+  assert.doesNotMatch(app, /<ABTaskConsole/);
+  assert.match(app, /const \[workView, setWorkView\] = useState\("task"\)/);
+  assert.match(app, /visiblePanelSurface && visiblePanelSurface !== "workspace"/);
+  assert.match(app, /preachermanPanelSurface === "home" \|\| preachermanPanelSurface === "market"/);
   assert.match(consoleSource, /mode === "work"/);
   assert.match(consoleSource, /data-preacherman-control="task\.approve"/);
   assert.match(consoleSource, /"task\.resume" : "task\.steer"/);

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -8,116 +8,60 @@ const hostRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = join(hostRoot, "src");
 const introRoot = join(sourceRoot, "intro");
 
-async function exists(path) {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
-}
+test("startup welcome plays the existing signal lock inside a three-second sequence", async () => {
+  const splash = await readFile(join(introRoot, "IntroSplash.tsx"), "utf8");
+  const styles = await readFile(join(introRoot, "animated-preacherman-logo.css"), "utf8");
+  const timing = await readFile(join(sourceRoot, "introSequence.ts"), "utf8");
 
-test("animated intro preserves the supplied seven-stroke sequence and smooth loop", async () => {
-  const componentPath = join(introRoot, "AnimatedPreachermanLogo.tsx");
-  const timelinePath = join(introRoot, "logoAnimationTimeline.ts");
-  assert.equal(await exists(componentPath), true, "animated logo component must exist");
-  assert.equal(await exists(timelinePath), true, "logo animation timeline must exist");
-
-  const component = await readFile(componentPath, "utf8");
-  const timeline = await readFile(timelinePath, "utf8");
-
-  for (const entry of [
-    [7, "177.3", 45, -1],
-    [6, "80.8", 35, 1],
-    [5, "80.8", 55, 1],
-    [4, "125.8", 40, -1],
-    [3, "67.7", 30, 1],
-    [2, "67.6", 70, 1],
-    [1, "830", 0, -1],
-  ]) {
-    const [stroke, duration, gap, direction] = entry;
-    assert.match(
-      timeline,
-      new RegExp(`stroke:\\s*${stroke},[\\s\\S]*?duration:\\s*${duration},[\\s\\S]*?gap:\\s*${gap},[\\s\\S]*?direction:\\s*${direction}`),
-    );
-  }
-
-  assert.match(timeline, /turnTime:\s*0\.6/);
-  assert.match(timeline, /turnProgress:\s*0\.44/);
-  assert.match(timeline, /startVelocity:\s*0\.75/);
-  assert.match(timeline, /turnVelocity:\s*0\.7/);
-  assert.match(timeline, /endVelocity:\s*0\.85/);
-  assert.match(timeline, /function quinticHermite/);
-  assert.match(timeline, /function smoothLoopEase/);
-  assert.match(timeline, /sampleCount\s*=\s*120/);
-  assert.match(timeline, /LOGO_ANIMATION_TOTAL_MS\s*=\s*2525/);
-  assert.match(component, /LOGO_STROKE_SEQUENCE/);
-  assert.match(component, /path\.animate/);
-  assert.match(component, /wordmark\.animate/);
+  assert.match(timing, /signalLockMs:\s*2000/);
+  assert.match(timing, /totalDurationMs:\s*3000/);
+  assert.match(timing, /mainFadeInMs:\s*700/);
+  assert.doesNotMatch(timing, /LOGO_ANIMATION_TOTAL_MS|whiteHoldMs|logoDrawMs|logoFadeOutMs/);
+  assert.match(splash, /if \(!visualReady\) return;[\s\S]*setTimeout\(onComplete, STARTUP_INTRO_TIMING\.totalDurationMs\)/);
+  assert.match(splash, /data-ready=\{visualReady\}/);
+  assert.match(splash, /decoding="sync"/);
+  assert.match(splash, /preacherman-mark-light\.png/);
+  assert.match(splash, /preacherman-mark-dark\.png/);
+  assert.doesNotMatch(splash, /AnimatedPreachermanLogo|LOGO_STROKE_SEQUENCE/);
+  assert.match(styles, /@keyframes demo-signal-snow/);
+  assert.match(styles, /@keyframes demo-signal-sync/);
+  assert.match(styles, /@keyframes demo-signal-lock/);
+  assert.match(styles, /\.demo-intro-splash\[data-ready="true"\][\s\S]*animation-play-state:\s*running/);
+  assert.match(styles, /animation-play-state:\s*paused/);
+  assert.doesNotMatch(splash + styles, /demo-intro-splash__wordmark|demo-signal-wordmark/);
 });
 
-test("animated intro localizes every supplied SVG path on a white splash", async () => {
-  const componentPath = join(introRoot, "AnimatedPreachermanLogo.tsx");
-  const cssPath = join(introRoot, "animated-preacherman-logo.css");
-  const splashPath = join(introRoot, "IntroSplash.tsx");
-  assert.equal(await exists(componentPath), true);
-  assert.equal(await exists(cssPath), true);
-  assert.equal(await exists(splashPath), true);
-
-  const component = await readFile(componentPath, "utf8");
-  const css = await readFile(cssPath, "utf8");
-  const splash = await readFile(splashPath, "utf8");
-
-  for (const guide of [
-    "M388 152 C440 154 492 163 530 182",
-    "M539 257 L550 296",
-    "M528 216 L538 251",
-    "M530 216 C521 246 510 278 497 313",
-    "M482 258 L500 313",
-    "M463 189 L482 254",
-    "M464 190 C450 238 431 309 408 384",
-  ]) {
-    assert.match(component, new RegExp(guide.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
-  }
-
-  assert.match(component, /const LOGO_PATHS\s*=\s*\[/);
-  assert.match(component, /const WORDMARK_PATH\s*=/);
-  assert.match(component, /viewBox="0 0 982 574"/);
-  assert.doesNotMatch(component, /<rect|fill="#000"|iframe|https?:\/\//i);
-  assert.match(component, /stroke="white"/);
-  assert.match(component, /fill=\{ink\}/);
-  assert.match(component, /prefers-reduced-motion:\s*reduce/);
-  assert.match(component, /opacity\s*=\s*["']0["']/);
-  assert.match(css, /width:\s*var\(--demo-animated-logo-size\)/);
-  assert.match(css, /height:\s*var\(--demo-animated-logo-size\)/);
-  assert.match(splash, /size=\{600\}/);
-  assert.match(splash, /appearance\s*===\s*["']dark["']\s*\?\s*["']#f7f5f1["']\s*:\s*["']#111111["']/);
-  assert.match(splash, /ink=\{introInk\}/);
-  assert.match(splash, /replayOnClick=\{false\}/);
-});
-
-test("intro splash owns the 5.6 second handoff without persistent storage", async () => {
-  const splashPath = join(introRoot, "IntroSplash.tsx");
-  assert.equal(await exists(splashPath), true, "intro splash component must exist");
+test("welcome removes all account choices and advances directly to Home", async () => {
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
-  const intro = await readFile(join(sourceRoot, "introSequence.ts"), "utf8");
-  const splash = await readFile(splashPath, "utf8");
-  const main = await readFile(join(sourceRoot, "main.tsx"), "utf8");
+  const bootstrap = await readFile(join(sourceRoot, "StartupBootstrap.tsx"), "utf8");
+  const splash = await readFile(join(introRoot, "IntroSplash.tsx"), "utf8");
+  const styles = await readFile(join(introRoot, "animated-preacherman-logo.css"), "utf8");
 
-  assert.match(intro, /whiteHoldMs:\s*800/);
-  assert.match(intro, /logoDrawMs:\s*LOGO_ANIMATION_TOTAL_MS/);
-  assert.match(intro, /logoVisibleMs:\s*1000/);
-  assert.match(intro, /logoFadeOutMs:\s*600/);
-  assert.match(intro, /mainFadeInMs:\s*700/);
-  assert.match(intro, /STARTUP_INTRO_FAILSAFE_MS\s*=\s*STARTUP_INTRO_TOTAL_MS\s*\+\s*1000/);
-  assert.match(intro, /claimStartupIntro/);
-  assert.doesNotMatch(intro + app + splash, /localStorage|sessionStorage/);
-  assert.doesNotMatch(main, /StrictMode/);
-  assert.match(splash, /STARTUP_INTRO_TIMING\.whiteHoldMs/);
-  assert.match(splash, /STARTUP_INTRO_TIMING\.logoVisibleMs/);
-  assert.match(splash, /STARTUP_INTRO_TIMING\.logoFadeOutMs/);
-  assert.match(splash, /window\.setTimeout\(\s*onComplete,\s*STARTUP_INTRO_FAILSAFE_MS/);
-  assert.match(splash, /window\.clearTimeout\(failsafeTimer\)/);
-  assert.match(app, /<IntroSplash[\s\S]*onComplete=\{handleIntroComplete\}/);
-  assert.doesNotMatch(app, /STARTUP_INTRO_TOTAL_MS|setTimeout\([\s\S]*setShowStartupIntro/);
+  assert.doesNotMatch(splash, />\s*(?:Login|Register|Visitor)\s*</);
+  assert.doesNotMatch(splash, /<button\b|<nav\b|preacherman:auth-requested|WelcomeChargeRing/);
+  assert.doesNotMatch(styles, /demo-intro-splash__(?:actions|account-actions|nav-item|account-notice)/);
+  assert.match(splash, /setTimeout\(onComplete, STARTUP_INTRO_TIMING\.totalDurationMs\)/);
+  assert.match(app, /handleIntroComplete[\s\S]*openLocalSurface\("home"\)[\s\S]*setShowStartupIntro\(false\)/);
+  assert.match(app, /showStartupIntro\s*\?\s*\(\s*<IntroSplash[\s\S]*onComplete=\{handleIntroComplete\}/);
+  assert.match(app, /dispatch=\{adapter\.dispatch\}/);
+  assert.match(bootstrap, /handleIntroComplete[\s\S]*openLocalSurface\("home"\)[\s\S]*setIntroComplete\(true\)/);
+  assert.match(bootstrap, /introComplete && DeferredApp/);
+});
+
+test("welcome supports both appearances, reduced motion, and persistent desktop controls", async () => {
+  const splash = await readFile(join(introRoot, "IntroSplash.tsx"), "utf8");
+  const styles = await readFile(join(introRoot, "animated-preacherman-logo.css"), "utf8");
+  const themeStyles = await readFile(join(sourceRoot, "styles.css"), "utf8");
+
+  assert.match(splash, /data-appearance=\{appearance\}/);
+  assert.match(splash, /appearance === "dark" \? preachermanMarkDark : preachermanMarkLight/);
+  assert.match(splash, /<WindowControls\b/);
+  assert.match(splash, /<WindowResizeHandles\b/);
+  assert.match(splash, /demo\.window\.start-dragging/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(styles, /var\(--demo-theme-canvas\)/);
+  assert.match(styles, /var\(--demo-theme-text\)/);
+  assert.match(themeStyles, /\.demo-intro-splash\s*\{[\s\S]*--demo-theme-signal-static:/);
+  assert.match(themeStyles, /\.demo-intro-splash\[data-appearance="dark"\]\s*\{[\s\S]*--demo-theme-signal-static:/);
+  assert.doesNotMatch(themeStyles, /--demo-theme-welcome-control-/);
 });

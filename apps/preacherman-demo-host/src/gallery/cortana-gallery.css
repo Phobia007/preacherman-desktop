@@ -1,221 +1,185 @@
-.cortana-gallery,
-.cortana-detail {
-  position: relative;
+.cortana-gallery {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   box-sizing: border-box;
   width: var(--demo-app-width);
   height: var(--demo-app-height);
   overflow: hidden;
-  color: var(--demo-theme-text);
-  background: var(--demo-theme-canvas);
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  transition: color 180ms ease, background-color 180ms ease;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
-.cortana-gallery {
-  padding-top: 126px;
+.cortana-gallery[data-active="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.demo-app-shell:has(.cortana-gallery[data-active="true"])
+  .demo-app-shell__scene {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.cortana-gallery__detail-model {
+  position: absolute;
+  top: 72px;
+  right: 204px;
+  bottom: 24px;
+  z-index: 5;
+  width: 840px;
+  overflow: hidden;
+  background: var(--demo-theme-gallery-detail-surface);
+  contain: layout paint style;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateZ(0);
+  visibility: hidden;
+  will-change: opacity;
+  transition:
+    opacity 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 160ms;
+}
+
+.cortana-gallery__detail-model[data-visible="true"] {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 520ms cubic-bezier(0.16, 1, 0.3, 1) 80ms,
+    visibility 0s linear 0s;
+}
+
+.cortana-gallery__detail-model .cortana-model-stage {
+  inset: 0;
+}
+
+.cortana-gallery__detail-model .cortana-model-stage__ground {
+  bottom: 34px;
+  width: 620px;
+  height: 110px;
+}
+
+.cortana-gallery[data-active="true"][data-transition="spatial"] {
+  animation: gallery-spatial-reveal 1100ms linear both;
+  transform-origin: 50% 50%;
 }
 
 .cortana-gallery::before {
   position: absolute;
-  inset: 68px 56px 86px;
-  border: 1px solid var(--demo-theme-border);
+  top: 50%;
+  right: 0;
+  left: 0;
+  z-index: 11;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--demo-theme-gallery-scan) 16%,
+    var(--demo-theme-gallery-scan) 84%,
+    transparent 100%
+  );
   content: "";
+  opacity: 0;
   pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
 }
 
-.cortana-gallery__header {
-  position: relative;
-  z-index: 1;
-  width: max-content;
-  margin: 0 0 76px 92px;
+.cortana-gallery[data-active="true"][data-transition="spatial"]::before {
+  animation: gallery-spatial-scan 1100ms linear both;
 }
 
-.cortana-gallery__header h1 {
-  margin: 0;
-  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
-  font-size: 58px;
-  font-weight: 400;
-  letter-spacing: -0.035em;
-  line-height: 0.96;
-}
-
-.cortana-gallery__collection {
-  position: relative;
-  z-index: 1;
-  width: 920px;
-  margin: 0 auto;
-}
-
-.cortana-card {
-  position: relative;
-  display: grid;
-  box-sizing: border-box;
-  width: 920px;
-  height: 410px;
-  grid-template-columns: 42% 58%;
-  overflow: hidden;
-  padding: 0;
-  border: 1px solid var(--demo-theme-border-strong);
-  border-radius: 2px;
-  color: inherit;
-  background: var(--demo-theme-surface);
-  box-shadow: 0 20px 54px -46px rgb(20 19 17 / 45%);
-  text-align: left;
-  cursor: pointer;
+.demo-app-shell:has(.cortana-gallery[data-active="true"][data-transition="spatial"])
+  .demo-app-shell__scene {
+  transform: scale(1);
   transition:
-    border-color 220ms ease,
-    box-shadow 220ms ease,
-    transform 220ms ease;
+    opacity 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 420ms;
 }
 
-.cortana-card:hover,
-.cortana-card:focus-visible {
-  border-color: var(--demo-theme-text);
-  box-shadow: 0 28px 70px -42px rgb(20 19 17 / 55%);
-  transform: translateY(-3px);
+@keyframes gallery-spatial-reveal {
+  0% {
+    clip-path: inset(49.96% 48% 49.96% 0);
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  12% {
+    clip-path: inset(49.7% 0 49.7% 0);
+    opacity: 0.8;
+    transform: scale(0.972);
+  }
+
+  32% {
+    clip-path: inset(46% 0 46% 0);
+    opacity: 1;
+    transform: scale(0.976);
+  }
+
+  56% {
+    clip-path: inset(37% 0 37% 0);
+    transform: scale(0.982);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.18, 1);
+  }
+
+  74% {
+    clip-path: inset(20% 0 20% 0);
+    transform: scale(0.992);
+  }
+
+  88% {
+    clip-path: inset(0);
+    transform: scale(1);
+  }
+
+  100% {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.cortana-card:focus-visible {
-  outline: 1px solid var(--demo-theme-text);
-  outline-offset: 4px;
-}
+@keyframes gallery-spatial-scan {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.52) scaleY(0.5);
+  }
 
-.cortana-card__info {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  min-width: 0;
-  place-items: center;
-  border-right: 1px solid var(--demo-theme-border);
-  background: var(--demo-theme-surface);
-}
+  12% {
+    opacity: 0.72;
+    transform: scaleX(1) scaleY(0.7);
+  }
 
-.cortana-card__title {
-  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
-  font-size: 52px;
-  letter-spacing: -0.035em;
-  line-height: 1;
-}
+  32% {
+    opacity: 0.86;
+    transform: scaleX(1) scaleY(1);
+  }
 
-.cortana-card__portrait {
-  position: relative;
-  overflow: hidden;
-  background: var(--demo-theme-surface-elevated);
-}
+  56% {
+    opacity: 1;
+    transform: scaleX(1) scaleY(2.4);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.18, 1);
+  }
 
-.cortana-card__portrait img {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
+  74% {
+    opacity: 0.42;
+    transform: scaleX(1) scaleY(1.6);
+  }
 
-.cortana-card:hover .cortana-card__portrait img {
-  transform: scale(1.012);
-}
+  88% {
+    opacity: 0;
+    transform: scaleX(1) scaleY(1);
+  }
 
-.cortana-gallery__arrow {
-  position: absolute;
-  z-index: 6;
-  display: grid;
-  padding: 0;
-  place-items: center;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.cortana-gallery__arrow {
-  top: 446px;
-  width: 88px;
-  height: 120px;
-  color: inherit;
-}
-
-.cortana-gallery__arrow--left {
-  left: 244px;
-}
-
-.cortana-gallery__arrow--right {
-  right: 244px;
-}
-
-.cortana-gallery__arrow img {
-  width: 18px;
-  height: 18px;
-  filter: var(--demo-theme-icon-filter);
-  opacity: 0.38;
-  transition: filter 180ms ease, opacity 160ms ease, transform 160ms ease;
-}
-
-.cortana-gallery__arrow img.is-left,
-.cortana-detail__back img {
-  transform: rotate(180deg);
-}
-
-.cortana-gallery__arrow:hover img,
-.cortana-gallery__arrow:focus-visible img {
-  opacity: 0.92;
-}
-
-.cortana-gallery__arrow--left:hover img,
-.cortana-gallery__arrow--left:focus-visible img {
-  transform: rotate(180deg) translateX(3px);
-}
-
-.cortana-gallery__arrow--right:hover img,
-.cortana-gallery__arrow--right:focus-visible img {
-  transform: translateX(3px);
-}
-
-.cortana-gallery__arrow:focus-visible {
-  outline: 1px solid currentColor;
-  outline-offset: -12px;
-}
-
-.cortana-detail__header {
-  position: absolute;
-  z-index: 7;
-  top: 96px;
-  left: 92px;
-}
-
-.cortana-detail__back {
-  display: inline-flex;
-  width: max-content;
-  align-items: center;
-  gap: 10px;
-  padding: 0;
-  border: 0;
-  color: var(--demo-theme-muted);
-  background: transparent;
-  font: 550 10px/1 Inter, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: color 160ms ease, transform 160ms ease;
-}
-
-.cortana-detail__back img {
-  width: 13px;
-  height: 13px;
-  filter: var(--demo-theme-icon-filter);
-  opacity: 0.72;
-}
-
-.cortana-detail__back:hover,
-.cortana-detail__back:focus-visible {
-  color: var(--demo-theme-text);
-  transform: translateX(-2px);
-}
-
-.cortana-detail__back:focus-visible {
-  outline: 1px solid var(--demo-theme-focus);
-  outline-offset: 5px;
+  100% {
+    opacity: 0;
+    transform: scaleX(1) scaleY(1);
+  }
 }
 
 .cortana-model-stage {
@@ -355,137 +319,30 @@
   opacity: 0.5;
 }
 
-.cortana-detail__activate {
-  position: absolute;
-  right: 72px;
-  bottom: 112px;
-  z-index: 7;
-  box-sizing: border-box;
-  width: 156px;
-  height: 48px;
-  padding: 0;
-  overflow: visible;
-  border: 1px solid var(--demo-theme-activate-rest-border);
-  border-radius: 999px;
-  color: var(--demo-theme-activate-rest-text);
-  background: var(--demo-theme-activate-rest-bg);
-  box-shadow: var(--demo-theme-activate-shadow);
-  backdrop-filter: blur(22px) saturate(160%);
-  font: 600 11px/1 Inter, sans-serif;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  isolation: isolate;
-  touch-action: none;
-  user-select: none;
-  transition:
-    box-shadow 180ms ease,
-    transform 180ms ease;
-}
-
-.cortana-detail__activate::before {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: var(--demo-theme-activate-fill);
-  clip-path: inset(0 50% 0 50% round 999px);
-  content: "";
-  pointer-events: none;
-  transition: clip-path 220ms ease-out;
-}
-
-.cortana-detail__activate::after {
-  position: absolute;
-  inset: -3px;
-  z-index: 3;
-  border: 1px solid var(--demo-theme-activate-flash);
-  border-radius: inherit;
-  content: "";
-  opacity: 0;
-  pointer-events: none;
-}
-
-.cortana-detail__activate-copy {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  color: var(--demo-theme-activate-rest-text);
-  pointer-events: none;
-}
-
-.cortana-detail__activate-copy--filled {
-  z-index: 2;
-  color: var(--demo-theme-activate-fill-text);
-  clip-path: inset(0 50% 0 50%);
-  transition: clip-path 220ms ease-out;
-}
-
-.cortana-detail__activate:hover {
-  box-shadow: var(--demo-theme-activate-hover-shadow);
-  transform: translateY(-2px);
-}
-
-.cortana-detail__activate:active {
-  transform: translateY(0) scale(0.985);
-}
-
-.cortana-detail__activate:focus-visible {
-  outline: 2px solid var(--demo-theme-focus);
-  outline-offset: 3px;
-}
-
-.cortana-detail__activate[data-state="activated"]::before,
-.cortana-detail__activate[data-state="activated"] .cortana-detail__activate-copy--filled {
-  clip-path: inset(0);
-}
-
-.cortana-detail__activate[data-state="idle"][data-holding="true"]::before,
-.cortana-detail__activate[data-state="idle"][data-holding="true"] .cortana-detail__activate-copy--filled {
-  clip-path: inset(0);
-  transition-duration: 1500ms;
-  transition-timing-function: cubic-bezier(0.72, 0, 1, 1);
-}
-
-.cortana-detail__activate[data-state="activated"][data-holding="true"]::before,
-.cortana-detail__activate[data-state="activated"][data-holding="true"] .cortana-detail__activate-copy--filled {
-  clip-path: inset(0 50% 0 50% round 999px);
-  transition-duration: 1500ms;
-  transition-timing-function: cubic-bezier(0.72, 0, 1, 1);
-}
-
-.cortana-detail__activate[data-flashing="true"]::after {
-  animation: cortana-activate-flash 240ms ease-out;
-}
-
-@keyframes cortana-activate-flash {
-  0% {
-    opacity: 0.9;
-    transform: scale(1.01);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.12);
-  }
-}
-
 @keyframes cortana-load {
   from { transform: translateX(-100%); }
   to { transform: translateX(200%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cortana-card,
-  .cortana-card__portrait img,
-  .cortana-gallery__arrow img,
-  .cortana-model-stage__loading > span::after,
-  .cortana-detail__activate,
-  .cortana-detail__activate::before,
-  .cortana-detail__activate::after,
-  .cortana-detail__activate-copy--filled {
+  .cortana-gallery[data-active="true"][data-transition="spatial"],
+  .cortana-gallery[data-active="true"][data-transition="spatial"]::before {
     animation: none;
+  }
+
+  .demo-app-shell:has(.cortana-gallery[data-active="true"][data-transition="spatial"])
+    .demo-app-shell__scene {
+    transform: none;
+    transition: none;
+  }
+
+  .cortana-model-stage__loading > span::after {
+    animation: none;
+    transition: none;
+  }
+
+  .cortana-gallery__detail-model,
+  .cortana-gallery__detail-model[data-visible="true"] {
     transition: none;
   }
 }

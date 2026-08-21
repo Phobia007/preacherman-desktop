@@ -71,7 +71,8 @@ test("PREACHERMAN controls have one explicit Preacherman surface placement", asy
   assert.match(registry, /status: PreachermanFeatureStatus/);
   assert.match(app, /activeSurfaceType === "workspace"[\s\S]*workspaceContent/);
   assert.match(app, /activeSurfaceType === "lab"[\s\S]*labContent/);
-  assert.match(app, /<PreachermanFeaturePanel[\s\S]*onActivate=\{handlePreachermanFeatureActivate\}[\s\S]*surface=\{preachermanPanelSurface\}/);
+  assert.match(app, /preachermanPanelSurface === "home" \|\| preachermanPanelSurface === "market"/);
+  assert.match(app, /<PreachermanFeaturePanel[\s\S]*onActivate=\{handlePreachermanFeatureActivate\}[\s\S]*surface=\{visiblePanelSurface\}/);
   assert.match(panel, /onActivate\(candidate\.id\)/);
   assert.match(panel, /loadPreachermanCapabilityStatuses/);
   assert.match(panel, /Backend available/);
@@ -101,17 +102,15 @@ test("each surface has one commercial task hierarchy with no orphaned capability
   }
 });
 
-test("live PREACHERMAN buttons focus controls and every button checks its backend adapter", async () => {
-  const [app, panel, client, service, voice, task, gallery, model, settings, ledger] = await Promise.all([
+test("mounted PREACHERMAN buttons focus controls and every button checks its backend adapter", async () => {
+  const [app, panel, client, service, voice, task, model, ledger] = await Promise.all([
     readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "preacherman", "PreachermanFeaturePanel.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "preacherman", "capabilityClient.ts"), "utf8"),
     readFile(join(packageRoot, "server", "preachermanServer.mjs"), "utf8"),
     readFile(join(packageRoot, "src", "realtime", "VoiceSessionControl.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
-    readFile(join(packageRoot, "src", "gallery", "CortanaGallery.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "gallery", "CortanaModelStage.tsx"), "utf8"),
-    readFile(join(packageRoot, "src", "settings", "SettingsScreen.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "conversation", "ConversationLedgerScreen.tsx"), "utf8"),
   ]);
 
@@ -130,9 +129,8 @@ test("live PREACHERMAN buttons focus controls and every button checks its backen
   assert.match(voice, /data-preacherman-control="presentation\.stop"/);
   assert.match(task, /data-preacherman-control="task\.create"/);
   assert.match(task, /data-preacherman-control="task\.confirm"/);
-  assert.match(gallery, /data-preacherman-control="avatar\.select"/);
   assert.match(model, /data-preacherman-control="avatar\.status"/);
-  assert.match(settings, /data-preacherman-control="appearance\.select"/);
-  assert.match(settings, /data-preacherman-control="provider\.credentials voice\.providers"/);
+  assert.doesNotMatch(app, /<SettingsScreen\b/);
+  assert.equal((app.match(/visiblePanelSurface !== "settings"/g) ?? []).length, 2);
   assert.match(ledger, /data-preacherman-control="conversation\.history"/);
 });

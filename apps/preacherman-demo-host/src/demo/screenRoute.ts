@@ -9,7 +9,8 @@ export type LocalSurfaceType =
   | "market"
   | "test"
   | "ledger"
-  | "settings";
+  | "settings"
+  | "account";
 
 export interface DemoScreenRoute {
   readonly kind: "index" | "screen" | "surface";

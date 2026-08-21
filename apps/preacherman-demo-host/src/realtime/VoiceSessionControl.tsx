@@ -3,11 +3,28 @@ import type { SpeechRequest } from "../live/LiveCoordinator";
 import { useAvatarInteractionController, useLiveCoordinator, type AvatarInteractionState } from "../live/LiveCoordinatorContext";
 import type { Locale } from "../preferences";
 import { localServiceWebSocketUrl } from "../serviceConfig";
+import { speechMotionRuntime, type AudioFaceInputStream } from "../motion/SpeechMotionRuntime";
+import { captureCortanaVoiceTiming, type CortanaVoiceMilestone } from "../telemetry/cortanaVoiceTiming";
 import "./voice-session.css";
 
 type VoiceState = "idle" | "listening" | "finalizing" | "error";
 type CaptureMode = "pushToTalk" | "handsFree";
 const VOICE_MODE_STORAGE_KEY = "preacherman.voice-capture-mode";
+
+interface VoiceTimingTrace {
+  readonly traceId: string;
+  readonly startedAt: number;
+  readonly conversationEpoch: number;
+  readonly captureMode: CaptureMode;
+  readonly trigger: "wake_control" | "voice_control" | "hands_free_restart";
+  readonly recorded: Set<CortanaVoiceMilestone>;
+}
+
+function reportWakeState(active: boolean) {
+  window.dispatchEvent(new CustomEvent("preacherman:voice-wake-state", {
+    detail: { active },
+  }));
+}
 
 function eventId(): string { return `event_${crypto.randomUUID()}`; }
 
@@ -38,6 +55,13 @@ function audioEnergy(samples: Int16Array): number {
   return Math.min(1, Math.sqrt(sum / samples.length) * 3.2);
 }
 
+function estimatedSpeechDuration(text: string, locale: Locale): number {
+  const units = locale === "zh-CN"
+    ? text.replace(/[\s\p{P}\p{S}]/gu, "").length
+    : text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.min(30, Math.max(1, units / (locale === "zh-CN" ? 5.2 : 2.7)));
+}
+
 function isMeaningfulTranscript(value: string): boolean {
   const content = value.replace(/[\s\p{P}\p{S}]/gu, "");
   return content.length >= 2;
@@ -49,7 +73,13 @@ function copy(locale: Locale) {
     : { idle: "Hold to talk", listening: "Release to send", finalizing: "Finalizing speech", pushToTalk: "Hold", handsFree: "Hands-free", handsFreeStart: "Start listening", handsFreeStop: "Stop listening", stopSpeaking: "Stop speaking" };
 }
 
-export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
+export function VoiceSessionControl({
+  locale,
+  headless = false,
+}: {
+  readonly locale: Locale;
+  readonly headless?: boolean;
+}) {
   const coordinator = useLiveCoordinator();
   const avatarInteraction = useAvatarInteractionController();
   const [state, setState] = useState<VoiceState>("idle");
@@ -68,6 +98,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   const playbackCursor = useRef(0);
   const activeTts = useRef<WebSocket | null>(null);
   const activePlaybackSources = useRef(new Set<AudioBufferSourceNode>());
+  const jawTimers = useRef(new Set<number>());
   const playbackCompletionTimer = useRef<number | null>(null);
   const ttsFallbackTimer = useRef<number | null>(null);
   const thinkingFallbackTimer = useRef<number | null>(null);
@@ -77,7 +108,53 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
   const handsFreeActive = useRef(false);
   const awaitingAssistantReply = useRef(false);
   const expectedSocketClose = useRef(false);
+  const voiceTiming = useRef<VoiceTimingTrace | null>(null);
   const labels = copy(locale);
+
+  const beginVoiceTiming = (
+    conversationEpoch: number,
+    trigger: VoiceTimingTrace["trigger"],
+  ) => {
+    const trace: VoiceTimingTrace = {
+      traceId: `voice_${crypto.randomUUID()}`,
+      startedAt: performance.now(),
+      conversationEpoch,
+      captureMode: captureModeRef.current,
+      trigger,
+      recorded: new Set(),
+    };
+    voiceTiming.current = trace;
+    trace.recorded.add("wake");
+    captureCortanaVoiceTiming("wake", {
+      traceId: trace.traceId,
+      elapsedMs: 0,
+      conversationEpoch,
+      captureMode: trace.captureMode,
+      trigger,
+    });
+  };
+
+  const recordVoiceTiming = (
+    milestone: CortanaVoiceMilestone,
+    details: {
+      interactionEpoch?: number;
+      driver?: "speech2motion" | "audio2face";
+      fallbackReason?: "tts_timeout" | "tts_error" | "tts_empty";
+      completion?: "stream" | "speech_synthesis";
+    } = {},
+  ) => {
+    const trace = voiceTiming.current;
+    if (!trace || trace.recorded.has(milestone)) return;
+    trace.recorded.add(milestone);
+    captureCortanaVoiceTiming(milestone, {
+      traceId: trace.traceId,
+      elapsedMs: performance.now() - trace.startedAt,
+      conversationEpoch: trace.conversationEpoch,
+      captureMode: trace.captureMode,
+      trigger: trace.trigger,
+      ...details,
+    });
+  };
 
   const setAvatarState = (next: AvatarInteractionState) => {
     avatarInteraction.setState(next);
@@ -106,6 +183,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     setState("error");
     clearThinkingFallback();
     setAvatarState("idle");
+    voiceTiming.current = null;
   };
 
   useEffect(() => { stateRef.current = state; }, [state]);
@@ -136,6 +214,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     stateRef.current = "idle";
     setState("idle");
     setAvatarState("idle");
+    voiceTiming.current = null;
   }), [coordinator]);
 
   useEffect(() => {
@@ -159,11 +238,18 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         try { source.stop(); } catch { /* source already ended */ }
       }
       activePlaybackSources.current.clear();
+      for (const timerId of jawTimers.current) window.clearTimeout(timerId);
+      jawTimers.current.clear();
       playbackCursor.current = 0;
+      speechMotionRuntime.cancel(activeSpeechEpoch.current ?? undefined, "speech-stopped");
       window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
     };
-    const finishPlayback = (expectedEpoch = activeSpeechEpoch.current) => {
+    const finishPlayback = (
+      expectedEpoch = activeSpeechEpoch.current,
+      completion?: "stream" | "speech_synthesis",
+    ) => {
       if (expectedEpoch !== activeSpeechEpoch.current) return;
+      if (completion) recordVoiceTiming("complete", { interactionEpoch: expectedEpoch ?? undefined, completion });
       removeAbortListener?.();
       removeAbortListener = null;
       clearPlayback();
@@ -174,6 +260,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       const resolve = resolveActivePlayback;
       resolveActivePlayback = null;
       resolve?.();
+      if (completion) voiceTiming.current = null;
     };
     const stopSpeech = (_reason: "user_action" | "new_request") => {
       coordinator.reportSpeechLifecycle("stopping");
@@ -181,6 +268,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     };
     const play = ({ text, locale: speechLocale, interactionEpoch }: SpeechRequest, signal: AbortSignal) => new Promise<void>((resolve) => {
       if (!text) { resolve(); return; }
+      clearPlayback();
       activeSpeechEpoch.current = interactionEpoch;
       awaitingAssistantReply.current = false;
       clearThinkingFallback();
@@ -189,32 +277,102 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
       signal.addEventListener("abort", handleAbort, { once: true });
       removeAbortListener = () => signal.removeEventListener("abort", handleAbort);
       if (signal.aborted) { handleAbort(); return; }
-      clearPlayback();
       coordinator.reportSpeechLifecycle("starting");
       setAvatarState("speaking");
       const ws = new WebSocket(localServiceWebSocketUrl("/api/voice/tts"));
       activeTts.current = ws;
       let receivedAudio = false;
       let usedFallback = false;
-      const fallback = () => {
+      let playbackStarted = false;
+      let streamFinalized = false;
+      let faceInput: AudioFaceInputStream | null = null;
+      const fallback = (reason: "tts_timeout" | "tts_error" | "tts_empty") => {
         if (activeSpeechEpoch.current !== interactionEpoch) return;
-        if (usedFallback) return;
+        if (usedFallback || receivedAudio) return;
         usedFallback = true;
+        recordVoiceTiming("fallback", { interactionEpoch, fallbackReason: reason });
         activeTts.current = null;
         ws.onopen = null;
         ws.onmessage = null;
         ws.onerror = null;
         ws.close();
         speechSynthesis.cancel();
+        speechMotionRuntime.cancel(interactionEpoch, "tts-fallback");
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.onstart = () => {
           if (activeSpeechEpoch.current === interactionEpoch) coordinator.reportSpeechLifecycle("playing");
         };
-        utterance.onend = () => finishPlayback(interactionEpoch);
-        utterance.onerror = () => finishPlayback(interactionEpoch);
+        utterance.onend = () => finishPlayback(interactionEpoch, "speech_synthesis");
+        utterance.onerror = () => finishPlayback(interactionEpoch, "speech_synthesis");
         speechSynthesis.speak(utterance);
       };
-      ttsFallbackTimer.current = window.setTimeout(fallback, 600);
+      const startDrivers = (firstPcm: Int16Array) => {
+        const firstMotion = (driver: "speech2motion" | "audio2face") => (ready: boolean) => {
+          if (ready && activeSpeechEpoch.current === interactionEpoch && !signal.aborted) {
+            recordVoiceTiming("first_motion", { interactionEpoch, driver });
+          }
+        };
+        void speechMotionRuntime.start({
+          text,
+          duration: estimatedSpeechDuration(text, speechLocale),
+          interactionEpoch,
+          signal,
+        }).then(firstMotion("speech2motion"));
+        faceInput = speechMotionRuntime.startFaceStream({
+          sampleRate: 24_000,
+          interactionEpoch,
+          signal,
+        });
+        void faceInput.firstFrame.then(firstMotion("audio2face"));
+        faceInput.append(firstPcm);
+      };
+      const scheduleAudio = (pcm: Int16Array) => {
+        const audio = playbackContext.current || new AudioContext({ sampleRate: 24_000 });
+        playbackContext.current = audio;
+        const leadTime = playbackStarted ? 0.02 : 0.08;
+        const startAt = Math.max(playbackCursor.current, audio.currentTime + leadTime);
+        const buffer = audio.createBuffer(1, pcm.length, 24_000);
+        const channel = buffer.getChannelData(0);
+        for (let index = 0; index < pcm.length; index += 1) channel[index] = pcm[index] / 0x8000;
+        const source = audio.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audio.destination);
+        activePlaybackSources.current.add(source);
+        source.onended = () => activePlaybackSources.current.delete(source);
+        source.start(startAt);
+        const jawTimer = window.setTimeout(() => {
+          jawTimers.current.delete(jawTimer);
+          if (activeSpeechEpoch.current === interactionEpoch) {
+            window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: audioEnergy(pcm) }));
+          }
+        }, Math.max(0, (startAt - audio.currentTime) * 1000));
+        jawTimers.current.add(jawTimer);
+        playbackCursor.current = startAt + pcm.length / 24_000;
+        if (!playbackStarted) {
+          playbackStarted = true;
+          coordinator.reportSpeechLifecycle("playing");
+          recordVoiceTiming("first_audio", { interactionEpoch });
+        }
+      };
+      const finishStream = () => {
+        if (streamFinalized || activeSpeechEpoch.current !== interactionEpoch) return;
+        streamFinalized = true;
+        if (ttsFallbackTimer.current) window.clearTimeout(ttsFallbackTimer.current);
+        ttsFallbackTimer.current = null;
+        if (!receivedAudio) { fallback("tts_empty"); return; }
+        faceInput?.finish();
+        activeTts.current = null;
+        ws.onopen = null;
+        ws.onmessage = null;
+        ws.onerror = null;
+        ws.close();
+        const audio = playbackContext.current;
+        playbackCompletionTimer.current = window.setTimeout(
+          () => finishPlayback(interactionEpoch, "stream"),
+          Math.max(0, ((playbackCursor.current || audio?.currentTime || 0) - (audio?.currentTime || 0)) * 1000),
+        );
+      };
+      ttsFallbackTimer.current = window.setTimeout(() => fallback("tts_timeout"), 600);
       ws.onopen = () => {
         if (activeSpeechEpoch.current !== interactionEpoch) return;
         ws.send(JSON.stringify({ event_id: eventId(), type: "session.update", session: { voice: "Serena", response_format: "pcm", sample_rate: 24000, mode: "server_commit", language_type: speechLocale === "zh-CN" ? "Chinese" : "English" } }));
@@ -230,34 +388,25 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
           return;
         }
         if (payload.type === "response.audio.delta" && payload.delta) {
-          receivedAudio = true;
           if (ttsFallbackTimer.current) window.clearTimeout(ttsFallbackTimer.current);
           ttsFallbackTimer.current = null;
-          coordinator.reportSpeechLifecycle("playing");
-          const audio = playbackContext.current || new AudioContext({ sampleRate: 24000 });
-          playbackContext.current = audio;
           const pcm = fromBase64(payload.delta);
-          window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: audioEnergy(pcm) }));
-          const buffer = audio.createBuffer(1, pcm.length, 24000);
-          const channel = buffer.getChannelData(0);
-          for (let index = 0; index < pcm.length; index += 1) channel[index] = pcm[index] / 0x8000;
-          const source = audio.createBufferSource(); source.buffer = buffer; source.connect(audio.destination);
-          activePlaybackSources.current.add(source);
-          source.onended = () => activePlaybackSources.current.delete(source);
-          const startAt = Math.max(audio.currentTime + 0.08, playbackCursor.current);
-          source.start(startAt); playbackCursor.current = startAt + buffer.duration;
+          if (!receivedAudio) {
+            receivedAudio = true;
+            startDrivers(pcm);
+          } else {
+            faceInput?.append(pcm);
+          }
+          scheduleAudio(pcm);
         }
         if (payload.type === "response.audio.done" || payload.type === "response.done") {
-          if (ttsFallbackTimer.current) window.clearTimeout(ttsFallbackTimer.current);
-          ttsFallbackTimer.current = null;
-          playbackCompletionTimer.current = window.setTimeout(() => finishPlayback(interactionEpoch), Math.max(0, (playbackCursor.current - (playbackContext.current?.currentTime || 0)) * 1000));
-          window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
+          finishStream();
         }
-        if (payload.type === "error") fallback();
+        if (payload.type === "error") receivedAudio ? finishStream() : fallback("tts_error");
       };
       ws.onerror = () => {
         if (activeSpeechEpoch.current !== interactionEpoch) return;
-        if (!receivedAudio) fallback();
+        receivedAudio ? finishStream() : fallback("tts_error");
       };
     });
     const disconnect = coordinator.connectPresentationAdapter({ speak: play, stopSpeech });
@@ -278,9 +427,10 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     cleanup();
   };
 
-  const start = async () => {
+  const start = async (trigger: VoiceTimingTrace["trigger"] = "voice_control") => {
     if (!["idle", "error"].includes(stateRef.current)) return;
     const conversationEpoch = coordinator.getConversationEpoch();
+    beginVoiceTiming(conversationEpoch, trigger);
     activeAsrEpoch.current = conversationEpoch;
     try {
       coordinator.stopSpeech();
@@ -310,6 +460,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
         source.connect(node); node.connect(audio.destination);
         stateRef.current = "listening";
         setState("listening");
+        reportWakeState(true);
         timer.current = window.setTimeout(() => finish(captureModeRef.current === "handsFree"), captureModeRef.current === "handsFree" ? 45_000 : 20_000);
       };
       ws.onmessage = (event) => {
@@ -331,6 +482,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
             return;
           }
           if (!coordinator.deliverFinalTranscript(finalText, conversationEpoch)) return;
+          recordVoiceTiming("asr");
           awaitingAssistantReply.current = true;
           beginThinking();
           activeAsrEpoch.current = null;
@@ -370,7 +522,7 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
           ws.close();
           return;
         }
-        const turnDetection = captureMode === "handsFree"
+        const turnDetection = captureModeRef.current === "handsFree"
           ? { type: "server_vad", threshold: 0.2, silence_duration_ms: 900 }
           : null;
         ws.send(JSON.stringify({ event_id: eventId(), type: "session.update", session: { modalities: ["text"], input_audio_format: "pcm", sample_rate: 16000, input_audio_transcription: { language: locale === "zh-CN" ? "zh" : "en" }, turn_detection: turnDetection } }));
@@ -385,15 +537,49 @@ export function VoiceSessionControl({ locale }: { readonly locale: Locale }) {
     }
   };
 
+  useEffect(() => {
+    const handleWakeRequest = (event: Event) => {
+      const active = Boolean((event as CustomEvent<{ active?: boolean }>).detail?.active);
+      if (active) {
+        captureModeRef.current = "handsFree";
+        setCaptureMode("handsFree");
+        handsFreeActive.current = true;
+        reportWakeState(true);
+        void start("wake_control");
+        return;
+      }
+
+      handsFreeActive.current = false;
+      awaitingAssistantReply.current = false;
+      activeAsrEpoch.current = null;
+      expectedSocketClose.current = true;
+      coordinator.stopSpeech();
+      socket.current?.close();
+      socket.current = null;
+      cleanup();
+      clearThinkingFallback();
+      stateRef.current = "idle";
+      setState("idle");
+      setAvatarState("idle");
+      voiceTiming.current = null;
+      reportWakeState(false);
+    };
+
+    window.addEventListener("preacherman:voice-wake-request", handleWakeRequest);
+    return () => window.removeEventListener("preacherman:voice-wake-request", handleWakeRequest);
+  });
+
   useEffect(() => coordinator.onSpeechLifecycle((lifecycle) => {
     if (lifecycle === "idle") {
       if (!handsFreeActive.current || !awaitingAssistantReply.current || captureModeRef.current !== "handsFree") return;
       awaitingAssistantReply.current = false;
       stateRef.current = "idle";
       setState("idle");
-      window.setTimeout(() => { if (handsFreeActive.current) void start(); }, 180);
+      window.setTimeout(() => { if (handsFreeActive.current) void start("hands_free_restart"); }, 180);
     }
   }));
+
+  if (headless) return null;
 
   return (
     <section className="preacherman-live" data-speech-state={speechLifecycle} data-state={speechLifecycle === "playing" ? "speaking" : state}>

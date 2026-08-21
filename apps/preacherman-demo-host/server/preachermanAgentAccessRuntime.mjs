@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { chmod, mkdir, readFile, realpath, stat, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { createPreachermanMcpGatewayRuntime } from "./mcp-gateway/preachermanMcpGatewayRuntime.mjs";
@@ -116,6 +116,7 @@ export function createPreachermanAgentAccessRuntime({
   gatewayCredentialFile,
   gatewayScript,
   artifactRoots = [],
+  visionEnhancementRuntime,
   gatewayAuthenticate,
   startApprovedTask,
   commandTask,
@@ -133,6 +134,25 @@ export function createPreachermanAgentAccessRuntime({
     label: workspace.label ?? `Workspace ${index + 1}`,
     path: resolve(workspace.path),
   }));
+
+  function contains(root, target) {
+    const result = relative(root, target);
+    return result === "" || (!result.startsWith("..") && !isAbsolute(result));
+  }
+
+  async function resolveGatewaySessionContext({ workspacePath }) {
+    if (typeof workspacePath !== "string" || !workspacePath) return {};
+    const requested = await realpath(resolve(workspacePath)).catch(() => null);
+    if (!requested) return {};
+    const candidates = await Promise.all(workspaceRecords.map(async (workspace) => ({
+      workspace,
+      root: await realpath(workspace.path).catch(() => null),
+    })));
+    const matched = candidates
+      .filter(({ root }) => root && contains(root, requested))
+      .sort((left, right) => right.root.length - left.root.length)[0];
+    return matched ? { workspaceId: matched.workspace.id } : {};
+  }
 
   async function owned(actor, taskId) {
     return taskService.getOwned(taskId, actor.principalId);
@@ -171,12 +191,22 @@ export function createPreachermanAgentAccessRuntime({
 
   function gatewayBridge() {
     return {
-      capabilities: async () => ({
-        executionBackends: [
+      capabilities: async ({ actor } = {}) => {
+        const vision = visionEnhancementRuntime ? await visionEnhancementRuntime.status() : { state: "unsupported" };
+        const visionState = actor?.workspaceId ? vision.state : "configuration-required";
+        return {
+          tools: {
+            "preacherman.vision.analyze": {
+              state: visionState,
+              ...(actor?.workspaceId ? {} : { reason: "Start the MCP client inside an approved Preacherman workspace." }),
+            },
+          },
+          executionBackends: [
           { id: "preacherman-local", state: "ready", progress: true, approval: true, cancellation: true, retry: true, resume: false, steering: true, artifacts: true },
           ...(await localAgentRegistry.list()).map((agent) => ({ id: agent.id, state: agent.installed && agent.auth.state === "ready" ? "ready" : agent.installed ? "configuration-required" : "external-runtime-required", ...agent.capabilities })),
-        ],
-      }),
+          ],
+        };
+      },
       task: {
         create: async ({ actor, input }) => {
           const task = await taskService.createOwned({
@@ -221,13 +251,31 @@ export function createPreachermanAgentAccessRuntime({
         read: async ({ actor, input }) => readArtifact(await owned(actor, input.taskId), input.artifactId, input.offset, input.limit),
       },
       ledger: { get: async ({ actor, input }) => safeLedger(await owned(actor, input.taskId)) },
+      ...(visionEnhancementRuntime ? {
+        vision: {
+          analyze: async ({ actor, input }) => {
+            const workspace = workspaceRecords.find((candidate) => candidate.id === actor.workspaceId);
+            if (!workspace) throw codedError("VISION_WORKSPACE_REQUIRED", "Vision analysis requires an approved workspace.", 409);
+            return visionEnhancementRuntime.analyze({
+              workspaceRoot: workspace.path,
+              filePath: input.filePath,
+              question: input.question,
+            });
+          },
+        },
+      } : {}),
     };
   }
 
   async function initialize(servicePort) {
     port = servicePort;
     bootstrapCredential = await privateCredential(gatewayCredentialFile);
-    gateway = createPreachermanMcpGatewayRuntime({ bridge: gatewayBridge(), bootstrapCredential, authenticate: gatewayAuthenticate });
+    gateway = createPreachermanMcpGatewayRuntime({
+      bridge: gatewayBridge(),
+      bootstrapCredential,
+      authenticate: gatewayAuthenticate,
+      resolveSessionContext: resolveGatewaySessionContext,
+    });
   }
 
   function requireGateway() {

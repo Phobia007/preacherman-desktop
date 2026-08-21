@@ -40,6 +40,11 @@ export function InteractiveAvatarViewport({
   resetKey = 0,
   jawOpen = 0,
   environment = "transparent",
+  awakened = false,
+  motionSource,
+  motionRigBinding,
+  renderActive = true,
+  modelId = "cortana",
 }: InteractiveAvatarViewportProps) {
   const [loadState, setLoadState] = useState<AvatarLoadState>("loading");
   const [animationDebug, setAnimationDebug] =
@@ -83,7 +88,7 @@ export function InteractiveAvatarViewport({
 
   return (
     <div
-      aria-label="Interactive Cortana model"
+      aria-label={`Interactive ${modelId === "cortana" ? "Cortana" : "Zima"} model`}
       className={["preacherman-avatar-viewport", "preacherman-avatar-viewport--interactive", className]
         .filter(Boolean)
         .join(" ")}
@@ -94,7 +99,7 @@ export function InteractiveAvatarViewport({
         <Canvas
           camera={{ fov: 30, near: 0.01, far: 100, position: [0, 0.86, 3.35] }}
           dpr={dpr}
-          frameloop="always"
+          frameloop={renderActive ? "always" : "demand"}
           gl={{
             alpha: environment !== "cinematic",
             antialias: true,
@@ -122,6 +127,10 @@ export function InteractiveAvatarViewport({
               resetKey={resetKey}
               jawOpen={jawOpen}
               environment={environment}
+              awakened={awakened}
+              motionSource={motionSource}
+              motionRigBinding={motionRigBinding}
+              modelId={modelId}
             />
           </Suspense>
         </Canvas>

@@ -70,6 +70,7 @@ export function AvatarScene({
       <HologramLights />
       <AvatarModel
         assetBaseUrl={assetBaseUrl}
+        modelId="cortana"
         onAnimationDebug={onAnimationDebug}
         onAnimationError={onAnimationError}
         onFirstFrame={onFirstFrame}

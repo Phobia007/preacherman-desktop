@@ -1,80 +1,78 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  STARTUP_INTRO_FAILSAFE_MS,
-  STARTUP_INTRO_TIMING,
-} from "../introSequence";
+import type { SurfaceHostBridge } from "@preacherman/surface-skin";
+import { useEffect, useState, type CSSProperties, type MouseEvent } from "react";
+import preachermanMarkDark from "../assets/preacherman-mark-dark.png";
+import preachermanMarkLight from "../assets/preacherman-mark-light.png";
+import { WindowControls } from "../app-shell/WindowControls";
+import { WindowResizeHandles } from "../app-shell/WindowResizeHandles";
+import { STARTUP_INTRO_TIMING } from "../introSequence";
 import { uiCopy, type Appearance, type Locale } from "../preferences";
-import { AnimatedPreachermanLogo } from "./AnimatedPreachermanLogo";
 import "./animated-preacherman-logo.css";
 
 interface IntroSplashProps {
   readonly appearance: Appearance;
+  readonly dispatch: SurfaceHostBridge["execute"];
   readonly locale: Locale;
   readonly onComplete: () => void;
 }
 
-export function IntroSplash({ appearance, locale, onComplete }: IntroSplashProps) {
-  const [showLogo, setShowLogo] = useState(false);
-  const [isFading, setIsFading] = useState(false);
-  const completionHandledRef = useRef(false);
-  const holdTimerRef = useRef<number>();
-  const fadeTimerRef = useRef<number>();
+export function IntroSplash({ appearance, dispatch, locale, onComplete }: IntroSplashProps) {
+  const [visualReady, setVisualReady] = useState(false);
+  const [scale, setScale] = useState(() => {
+    if (typeof window === "undefined") return 1;
+    return Math.min(window.innerWidth / 1800, window.innerHeight / 1000);
+  });
 
   useEffect(() => {
-    const whiteHoldTimer = window.setTimeout(
-      () => setShowLogo(true),
-      STARTUP_INTRO_TIMING.whiteHoldMs,
-    );
-    const failsafeTimer = window.setTimeout(
-      onComplete,
-      STARTUP_INTRO_FAILSAFE_MS,
-    );
-    return () => {
-      window.clearTimeout(whiteHoldTimer);
-      window.clearTimeout(failsafeTimer);
-    };
-  }, [onComplete]);
-
-  useEffect(() => () => {
-    if (holdTimerRef.current !== undefined) {
-      window.clearTimeout(holdTimerRef.current);
-    }
-    if (fadeTimerRef.current !== undefined) {
-      window.clearTimeout(fadeTimerRef.current);
-    }
+    const updateScale = () => setScale(Math.min(window.innerWidth / 1800, window.innerHeight / 1000));
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
   }, []);
 
-  const handleLogoComplete = useCallback(() => {
-    if (completionHandledRef.current) {
-      return;
-    }
-    completionHandledRef.current = true;
-    holdTimerRef.current = window.setTimeout(() => {
-      setIsFading(true);
-      fadeTimerRef.current = window.setTimeout(
-        onComplete,
-        STARTUP_INTRO_TIMING.logoFadeOutMs,
-      );
-    }, STARTUP_INTRO_TIMING.logoVisibleMs);
-  }, [onComplete]);
-  const introInk = appearance === "dark" ? "#f7f5f1" : "#111111";
+  useEffect(() => {
+    if (!visualReady) return;
+    const completeTimer = window.setTimeout(onComplete, STARTUP_INTRO_TIMING.totalDurationMs);
+    return () => window.clearTimeout(completeTimer);
+  }, [onComplete, visualReady]);
+
+  const startDragging = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    void dispatch({ type: "demo.window.start-dragging" });
+  };
 
   return (
     <section
+      aria-busy="true"
       aria-label={uiCopy[locale].introLabel}
       className="demo-intro-splash"
       data-appearance={appearance}
+      data-ready={visualReady}
     >
-      <div className={`demo-intro-splash__logo${isFading ? " is-fading" : ""}`}>
-        {showLogo ? (
-          <AnimatedPreachermanLogo
-            autoPlay
-            ink={introInk}
-            onComplete={handleLogoComplete}
-            replayOnClick={false}
-            size={600}
+      <div
+        className="demo-intro-splash__stage"
+        style={{ "--demo-intro-scale": scale } as CSSProperties}
+      >
+        <div aria-hidden="true" className="demo-intro-splash__snow" />
+        <div aria-hidden="true" className="demo-intro-splash__scanlines" />
+        <div aria-hidden="true" className="demo-intro-splash__sync-line" />
+
+        <div className="demo-intro-splash__drag-region" onMouseDown={startDragging} />
+        <WindowControls dispatch={dispatch} locale={locale} />
+
+        <div className="demo-intro-splash__logo" role="img" aria-label="Preacherman">
+          <img
+            alt=""
+            className="demo-intro-splash__mark"
+            decoding="sync"
+            draggable="false"
+            onError={() => setVisualReady(true)}
+            onLoad={() => setVisualReady(true)}
+            src={appearance === "dark" ? preachermanMarkDark : preachermanMarkLight}
           />
-        ) : null}
+        </div>
+
+        <WindowResizeHandles dispatch={dispatch} />
       </div>
     </section>
   );

@@ -181,15 +181,15 @@ test("orchestrator rejects an executor adapter without AB v1 approval capability
   );
 });
 
-test("AB console uses the existing semantic theme and is mounted beside voice", async () => {
+test("AB console stays available for later integration while Task leaves it unmounted", async () => {
   const [app, component, styles] = await Promise.all([
     readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "ab", "ABTaskConsole.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "ab", "ab-task-console.css"), "utf8"),
   ]);
 
-  assert.match(app, /<VoiceSessionControl locale=\{preferences\.locale\} \/>[\s\S]*<ABTaskConsole locale=\{preferences\.locale\} mode="home" \/>/);
-  assert.match(app, /<TaskWorkspaceProvider locale=\{preferences\.locale\}>/);
+  assert.doesNotMatch(app, /<ABTaskConsole/);
+  assert.doesNotMatch(app, /<TaskWorkspaceProvider/);
   assert.match(component, /\/api\/agent\/turn/);
   assert.match(component, /\/api\/agent\/proposals\//);
   assert.match(component, /coordinator\.onFinalTranscript/);

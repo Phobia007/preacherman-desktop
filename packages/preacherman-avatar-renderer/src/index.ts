@@ -5,6 +5,14 @@ export { InteractiveAvatarViewport } from "./InteractiveAvatarViewport";
 export { createAvatarAssetUrls } from "./AvatarModel";
 export { HOLOGRAM_LIGHTS } from "./HologramLights";
 export type { AvatarAnimationPort } from "./avatar/contracts/AvatarAnimationPort";
+export type {
+  AvatarMotionRestJoint,
+  AvatarMotionRigBinding,
+  AvatarMotionStreamEvent,
+  AvatarMotionStreamMetadata,
+  AvatarMotionStreamSource,
+} from "./avatar/contracts/AvatarMotionStream";
+export { ThreeAvatarMotionStreamPlayer } from "./avatar/adapters/ThreeAvatarMotionStreamPlayer";
 export { ThreeAvatarAnimationAdapter } from "./avatar/adapters/ThreeAvatarAnimationAdapter";
 export { CortanaAnimationController } from "./avatar/controllers/CortanaAnimationController";
 export {
@@ -14,6 +22,13 @@ export {
   cortanaAnimationManifest,
   cortanaMotionStateMap,
 } from "./avatar/manifests/cortanaAnimationManifest";
+export {
+  ZIMA_AVATAR_ID,
+  ZIMA_DEFAULT_ACTION_ID,
+  ZIMA_RIG_ID,
+  zimaAnimationManifest,
+  zimaMotionStateMap,
+} from "./avatar/manifests/zimaAnimationManifest";
 export {
   AvatarAnimationError,
   type AvatarActionDescriptor,
@@ -40,6 +55,7 @@ export {
   normalizeAvatarError,
   type AvatarErrorCode,
   type AvatarLoadState,
+  type AvatarModelId,
   type AvatarPerformanceSnapshot,
   type AvatarPose,
   type AvatarQuality,

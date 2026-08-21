@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -15,13 +15,53 @@ async function request(baseUrl, path, { token, ...options } = {}) {
   return { response, body: await response.json() };
 }
 
-async function openSession(baseUrl, bootstrap, client = "fixture-agent") {
+async function openSession(baseUrl, bootstrap, client = "fixture-agent", workspacePath) {
   const created = await request(baseUrl, "/api/mcp/gateway/bridge/sessions", {
-    method: "POST", token: bootstrap, body: JSON.stringify({ client: { name: client, version: "1" }, transport: "stdio" }),
+    method: "POST", token: bootstrap, body: JSON.stringify({ client: { name: client, version: "1" }, transport: "stdio", ...(workspacePath ? { workspacePath } : {}) }),
   });
   assert.equal(created.response.status, 200);
   return created.body.session;
 }
+
+test("Harness MCP vision tool analyzes only its approved workspace and reuses the durable observation", async (t) => {
+  const dataDir = await mkdtemp(join(tmpdir(), "preacherman-agent-vision-"));
+  const image = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
+  await writeFile(join(dataDir, "error.png"), image);
+  const providerCalls = [];
+  const service = createPreachermanServer({
+    env: {
+      PREACHERMAN_DATA_DIR: dataDir,
+      PREACHERMAN_LOCAL_AGENT_ROOTS: dataDir,
+      DASHSCOPE_API_KEY: "dashscope-test-key",
+      DASHSCOPE_WORKSPACE_ID: "workspace-test",
+    },
+    fetchImpl: async (url, init) => {
+      providerCalls.push({ url: String(url), body: JSON.parse(init.body) });
+      return new Response(JSON.stringify({
+        model: "qwen3-vl-plus",
+        choices: [{ message: { content: "The screenshot shows a TypeError in App.tsx." } }],
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    },
+  });
+  const address = await service.listen(0);
+  const baseUrl = `http://127.0.0.1:${address.port}`;
+  t.after(async () => { await service.close(); await rm(dataDir, { recursive: true, force: true }); });
+
+  const bootstrap = (await readFile(join(dataDir, "mcp-gateway.bootstrap"), "utf8")).trim();
+  const session = await openSession(baseUrl, bootstrap, "harness-vision-agent", dataDir);
+  const first = await call(baseUrl, session, "preacherman.vision.analyze", { filePath: "error.png", question: "Read the error" });
+  const second = await call(baseUrl, session, "preacherman.vision.analyze", { filePath: "error.png", question: "Read the error" });
+  assert.equal(first.response.status, 200);
+  assert.equal(first.body.structuredContent.description, "The screenshot shows a TypeError in App.tsx.");
+  assert.equal(first.body.structuredContent.cacheHit, false);
+  assert.equal(second.body.structuredContent.cacheHit, true);
+  assert.equal(providerCalls.length, 1);
+  assert.match(providerCalls[0].url, /^https:\/\/workspace-test\.cn-beijing\.maas\.aliyuncs\.com\/compatible-mode\/v1\/chat\/completions$/);
+
+  const store = await readFile(join(dataDir, "vision-observations.v1.json"), "utf8");
+  assert.match(store, /TypeError in App\.tsx/);
+  assert.doesNotMatch(store, /data:image|iVBOR|dashscope-test-key/);
+});
 
 async function call(baseUrl, session, name, args) {
   return request(baseUrl, `/api/mcp/gateway/bridge/sessions/${encodeURIComponent(session.id)}/calls`, {

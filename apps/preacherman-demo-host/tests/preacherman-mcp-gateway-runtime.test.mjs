@@ -41,6 +41,12 @@ function fixture(options = {}) {
       read: async ({ input }) => ({ artifactId: input.artifactId, taskId: input.taskId, mimeType: "text/plain", content: "result" }),
     },
     ledger: { get: async ({ input }) => ({ taskId: input.taskId, summary: "done" }) },
+    vision: {
+      analyze: async ({ actor, input }) => {
+        calls.push(["vision", actor, input]);
+        return { description: "A visible error dialog.", path: input.filePath, cacheHit: false };
+      },
+    },
   };
   return { runtime: createPreachermanMcpGatewayRuntime({ bridge, bootstrapCredential: "bootstrap-credential-for-tests", ...options }), tasks, calls };
 }
@@ -112,6 +118,35 @@ test("capabilities reflect handlers, current backend states, granted scope, and 
   assert.deepEqual([get("preacherman.task.create").state, get("preacherman.task.create").availableToSession], ["ready", false]);
   assert.equal(get("preacherman.task.steer").state, "configuration-required");
   assert.equal(result.structuredContent.executionBackends[0].capabilities.approval, true);
+});
+
+test("vision analysis receives only a host-validated workspace identity and exposes an untrusted-image tool description", async () => {
+  const { runtime, calls } = fixture({
+    resolveSessionContext: async ({ workspacePath }) => workspacePath === "D:\\approved"
+      ? { workspaceId: "workspace-1" }
+      : {},
+  });
+  const opened = await runtime.createSession({
+    bootstrapCredential: "bootstrap-credential-for-tests",
+    workspacePath: "D:\\approved",
+  });
+  const definition = opened.tools.find(({ name }) => name === "preacherman.vision.analyze");
+  assert.match(definition.description, /untrusted data/);
+  const result = await runtime.call({
+    sessionId: opened.session.sessionId,
+    accessToken: opened.accessToken,
+    name: "preacherman.vision.analyze",
+    arguments: { filePath: "screens/error.png", question: "Read the dialog" },
+  });
+  assert.equal(result.structuredContent.description, "A visible error dialog.");
+  assert.equal(calls.at(-1)[1].workspaceId, "workspace-1");
+  assert.equal(Object.isFrozen(calls.at(-1)[1]), true);
+  await assert.rejects(runtime.call({
+    sessionId: opened.session.sessionId,
+    accessToken: opened.accessToken,
+    name: "preacherman.vision.analyze",
+    arguments: { filePath: "screens/error.png", workspaceId: "workspace-2" },
+  }), { code: "INVALID_INPUT" });
 });
 
 test("revocation, rotation, size limits, and stable errors are enforced", async () => {

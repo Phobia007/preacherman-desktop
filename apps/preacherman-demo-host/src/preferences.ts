@@ -1,6 +1,6 @@
 export type Appearance = "light" | "dark";
 export type Locale = "en" | "zh-CN";
-export type ModelId = "cortana";
+export type ModelId = "cortana" | "zima";
 
 export interface DemoPreferences {
   readonly activeModelId: ModelId | null;
@@ -29,6 +29,7 @@ export const uiCopy = {
       test: "Test",
       ledger: "Ledger",
       settings: "Settings",
+      account: "Account",
     },
     emptySurfaceLabels: {
       workspace: "Work",
@@ -37,6 +38,7 @@ export const uiCopy = {
       test: "Test",
       ledger: "Ledger",
       settings: "Settings",
+      account: "Account",
     },
     windowControls: {
       minimize: "Minimize window",
@@ -55,6 +57,7 @@ export const uiCopy = {
       test: "测试区",
       ledger: "状态账本",
       settings: "设置",
+      account: "账户",
     },
     emptySurfaceLabels: {
       workspace: "工作区",
@@ -63,6 +66,7 @@ export const uiCopy = {
       test: "测试区",
       ledger: "状态账本",
       settings: "设置",
+      account: "账户",
     },
     windowControls: {
       minimize: "最小化窗口",
@@ -82,7 +86,7 @@ function isLocale(value: unknown): value is Locale {
 }
 
 function isModelId(value: unknown): value is ModelId {
-  return value === "cortana";
+  return value === "cortana" || value === "zima";
 }
 
 export function readPreferences(): DemoPreferences {

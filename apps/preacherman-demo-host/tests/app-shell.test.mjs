@@ -39,13 +39,65 @@ test("Demo Host owns one persistent shell outside the changing screen content", 
   assert.match(shell, /preacherman-mark-light\.png/);
   assert.match(shell, /preacherman-mark-dark\.png/);
   assert.match(shell, /<WindowControls\b/);
-  assert.match(shell, /<BottomNavigation\b/);
+  assert.doesNotMatch(shell, /<BottomNavigation\b/);
   assert.match(shell, /demo-app-shell__screen-content/);
   assert.match(shell, /demo\.window\.start-dragging/);
   assert.match(shell, /<WindowResizeHandles\b/);
   assert.match(app, /showStartupIntro\s*\?\s*\(\s*<IntroSplash[\s\S]*:\s*\(\s*<AppShell\b/);
   assert.match(app, /key=\{contentKey\}/);
   assert.doesNotMatch(shell, /key=\{contentKey\}/, "the shell itself must not remount on navigation");
+});
+
+test("Preacherman mark opens a six-item Clash Display navigation menu", async () => {
+  const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
+  const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
+  const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
+  const fontPath = join(sourceRoot, "assets", "fonts", "ClashDisplay-Light.ttf");
+
+  assert.equal(await exists(fontPath), true, "the supplied Clash Display font must be bundled locally");
+  assert.match(shell, /aria-expanded=\{brandNavigationOpen\}/);
+  assert.match(shell, /aria-controls="preacherman-brand-navigation"/);
+  assert.match(shell, /navigationCommand\(surfaceType\)/);
+  assert.match(shell, /document\.addEventListener\("pointerdown", closeOnOutsidePress\)/);
+  assert.match(shell, /event\.key !== "Escape"/);
+  assert.match(shell, /onMouseEnter=\{openBrandNavigation\}/);
+  assert.match(shell, /onMouseLeave=\{scheduleBrandNavigationClose\}/);
+  assert.match(shell, /window\.setTimeout\([\s\S]*220\)/);
+  assert.match(shell, /aria-pressed=\{brandNavigationPinned\}/);
+  assert.match(shell, /onClick=\{toggleBrandNavigationPinned\}/);
+  assert.match(shell, /setBrandNavigationPinned\(false\);[\s\S]*setBrandNavigationOpen\(false\);[\s\S]*onNavigate\(surfaceType\);[\s\S]*dispatch\(navigationCommand\(surfaceType\)\)/);
+  assert.match(app, /handleSurfaceNavigate[\s\S]*setRoute\(surfaceType === "home"[\s\S]*kind: "surface", surfaceType/);
+  assert.match(app, /<AppShell[\s\S]*onNavigate=\{handleSurfaceNavigate\}/);
+  for (const [label, surfaceType] of [
+    ["Home", "home"],
+    ["Task", "workspace"],
+    ["Gallery", "market"],
+    ["Ledger", "ledger"],
+    ["Settings", "settings"],
+    ["Account", "account"],
+  ]) {
+    assert.match(shell, new RegExp(`label: "${label}", surfaceType: "${surfaceType}"`));
+  }
+  assert.match(styles, /@font-face[\s\S]*ClashDisplay-Light\.ttf/);
+  assert.match(styles, /font-family:\s*"Clash Display", sans-serif/);
+  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[\s\S]*width:\s*108px;[\s\S]*height:\s*108px/);
+  assert.match(styles, /\.demo-app-shell__brand-menu\s*\{[\s\S]*gap:\s*68px/);
+  assert.match(styles, /\.demo-app-shell__brand-menu-item\s*\{[\s\S]*font-size:\s*32px/);
+  assert.match(styles, /\.demo-app-shell__brand-navigation\[data-open="true"\] \.demo-app-shell__brand-menu-item\[aria-current="page"\]/);
+  assert.match(shell, /className="demo-app-shell__brand-menu-charge-ring"/);
+  assert.match(shell, /pathLength=\{100\}/);
+  assert.match(styles, /\.demo-app-shell__brand-navigation\[data-open="true"\] \.demo-app-shell__brand-menu-item:hover[\s\S]*transform:\s*translate3d\(10px, 0, 0\) scale\(1\)/);
+  assert.match(styles, /\.demo-app-shell__brand-menu-charge-outline\s*\{[\s\S]*stroke-dasharray:\s*243/);
+  assert.match(styles, /@keyframes brand-menu-charge-outline[\s\S]*stroke-dashoffset:\s*243[\s\S]*stroke-dashoffset:\s*0/);
+  assert.match(styles, /@keyframes brand-menu-charge-tracer/);
+  assert.match(styles, /@keyframes brand-menu-word-charge/);
+  assert.doesNotMatch(styles, /@keyframes brand-navigation-wave-in/);
+  assert.match(styles, /nth-child\(5\)[\s\S]*transition-delay:\s*280ms/);
+  assert.match(styles, /nth-child\(6\)[\s\S]*transition-delay:\s*350ms/);
+  assert.match(styles, /\.demo-app-shell__brand-menu\s*\{[\s\S]*background:\s*transparent/);
+  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[\s\S]*border:\s*0;[\s\S]*background:\s*transparent/);
+  assert.match(styles, /--demo-theme-brand-menu-text:\s*rgb\(255 255 255 \/ 68%\)/);
+  assert.match(styles, /\.demo-app-shell\[data-appearance="dark"\][\s\S]*--demo-theme-brand-menu-text:\s*rgb\(255 255 255 \/ 68%\)/);
 });
 
 test("window controls use the supplied local 80 by 80 SVG paths and bridge commands", async () => {
@@ -74,6 +126,13 @@ test("window controls use the supplied local 80 by 80 SVG paths and bridge comma
   }
   assert.match(controls, /dispatch\(windowCommand\(control\.action\)\)/);
   assert.doesNotMatch(controls, /@tauri-apps|[🔴🟡🟢]|>\s*[×−□]\s*</u);
+
+  const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
+  assert.match(styles, /\.demo-window-controls__button\s*\{[\s\S]*?border:\s*0;[\s\S]*?background:\s*transparent;/);
+  assert.match(styles, /\.demo-window-controls__button img\s*\{[\s\S]*?width:\s*30px;[\s\S]*?height:\s*30px;[\s\S]*?transform-origin:\s*center;/);
+  assert.match(styles, /\.demo-window-controls__button:hover img,[\s\S]*?transform:\s*rotate\(180deg\);/);
+  assert.match(styles, /transform 400ms cubic-bezier\(0\.4, 0, 0\.2, 1\)/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.demo-window-controls__button:hover img,[\s\S]*?transform:\s*none;/);
 });
 
 test("tauriClient is the only native API boundary and browser preview does not fake success", async () => {
@@ -101,7 +160,7 @@ test("tauriClient is the only native API boundary and browser preview does not f
   }
 });
 
-test("all seven stable navigation keys have local routes without adding a router", async () => {
+test("all eight stable navigation keys have local routes without adding a router", async () => {
   const route = await readFile(join(sourceRoot, "demo", "screenRoute.ts"), "utf8");
   const bridge = await readFile(join(sourceRoot, "demoHostBridge.ts"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
@@ -109,13 +168,14 @@ test("all seven stable navigation keys have local routes without adding a router
   assert.match(route, /localSurfacePath\s*=\s*["']\/__surfaces["']/);
   assert.match(route, /openLocalSurface/);
   assert.match(bridge, /demo\.navigation\.select/);
-  for (const key of ["home", "workspace", "lab", "market", "test", "ledger", "settings"]) {
+  for (const key of ["home", "workspace", "lab", "market", "test", "ledger", "settings", "account"]) {
     assert.match(app + route, new RegExp(`(?:["']${key}["']|\\b${key}:)`));
   }
   assert.doesNotMatch(app + route, /react-router|createBrowserRouter/);
 });
 
-test("non-Gallery destinations share the persistent scene while Settings keeps controls", async () => {
+test("Home, Task, Gallery, and Settings share one unchanged persistent scene", async () => {
+  const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
   const hostRule = styles.match(/\.demo-host\s*\{[^}]*\}/s)?.[0] ?? "";
@@ -124,12 +184,15 @@ test("non-Gallery destinations share the persistent scene while Settings keeps c
 
   assert.match(app, /activeSurfaceType\s*===\s*["']home["']/);
   assert.match(app, /activeSurfaceType\s*===\s*["']settings["']/);
-  assert.match(app, /<SettingsScreen\b/);
-  assert.match(app, /demo-host--empty/);
+  assert.match(app, /activeSurfaceType === "settings" \|\| activeSurfaceType === "market"[\s\S]*className="demo-host"/);
+  assert.doesNotMatch(app, /<SettingsScreen|<TaskLookbackExperience|<CortanaGallery/);
   assert.match(hostRule, /background:\s*transparent/);
   assert.equal(emptyRule, "");
-  assert.match(sceneRule, /background:\s*#010409/);
-  assert.match(app, /sceneHidden=\{activeSurfaceType === "market"\}/);
+  assert.match(sceneRule, /background:\s*var\(--demo-theme-home-canvas\)/);
+  assert.match(app, /const sceneModelId = activeModelId;/);
+  assert.doesNotMatch(app, /sceneHidden=/);
+  assert.doesNotMatch(shell, /Math\.max\(window\.innerWidth\s*\/\s*1800/);
+  assert.match(shell, /Math\.min\(window\.innerWidth\s*\/\s*1800,\s*window\.innerHeight\s*\/\s*1000\)/);
   assert.doesNotMatch(app, /workspace:\s*\{\s*surfaceType:\s*["']workspace["']/);
 });
 

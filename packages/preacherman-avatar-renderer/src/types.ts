@@ -1,4 +1,5 @@
 import type { AvatarActionDescriptor } from "./avatar/types/avatarAnimation";
+import type { AvatarMotionRigBinding, AvatarMotionStreamSource } from "./avatar/contracts/AvatarMotionStream";
 
 export type AvatarLoadState =
   | "loading"
@@ -9,6 +10,7 @@ export type AvatarLoadState =
 export type AvatarQuality = "low" | "balanced" | "high";
 export type AvatarPose = "rest" | "standby";
 export type AvatarSceneEnvironment = "transparent" | "cinematic";
+export type AvatarModelId = "cortana" | "zima";
 
 export type AvatarErrorCode =
   | "WEBGL_UNAVAILABLE"
@@ -40,6 +42,7 @@ export interface AvatarViewportProps {
 }
 
 export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
+  readonly modelId?: AvatarModelId;
   readonly actionId?: string;
   readonly actionRequestKey?: number;
   readonly onActionsReady?: (actions: readonly AvatarActionDescriptor[]) => void;
@@ -48,6 +51,12 @@ export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   /** Procedural mouth opening driven by actual output audio (0 through 1). */
   readonly jawOpen?: number;
   readonly environment?: AvatarSceneEnvironment;
+  /** Holds the cinematic platform ring at its active light level. */
+  readonly awakened?: boolean;
+  readonly motionSource?: AvatarMotionStreamSource;
+  readonly motionRigBinding?: AvatarMotionRigBinding;
+  /** Keeps the prepared WebGL scene mounted while pausing continuous rendering. */
+  readonly renderActive?: boolean;
 }
 
 export class AvatarError extends Error {

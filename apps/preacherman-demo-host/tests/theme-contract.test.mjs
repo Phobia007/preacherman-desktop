@@ -23,6 +23,7 @@ test("the persistent shell exposes semantic theme tokens and themed window contr
 
   for (const token of [
     "canvas",
+    "home-canvas",
     "surface",
     "surface-elevated",
     "text",
@@ -36,6 +37,7 @@ test("the persistent shell exposes semantic theme tokens and themed window contr
     "loading",
     "error",
     "icon-filter",
+    "window-control-icon-filter",
     "avatar-ground-contact",
     "avatar-ground-plane",
   ]) {
@@ -54,16 +56,27 @@ test("the persistent shell exposes semantic theme tokens and themed window contr
   );
   assert.match(
     styles,
-    /\.demo-window-controls__button img\s*\{[\s\S]*filter:\s*var\(--demo-theme-icon-filter\)/,
+    /\.demo-window-controls__button img\s*\{[\s\S]*filter:\s*var\(--demo-theme-window-control-icon-filter\)/,
   );
+  assert.match(styles, /\.demo-intro-splash\s*\{[\s\S]*--demo-theme-window-control-icon-filter:\s*brightness\(0\)/);
+  assert.match(styles, /\.demo-intro-splash\[data-appearance="dark"\]\s*\{[\s\S]*--demo-theme-window-control-icon-filter:\s*brightness\(0\) invert\(1\)/);
+  assert.match(styles, /\.demo-app-shell\s*\{[\s\S]*--demo-theme-window-control-icon-filter:\s*brightness\(0\) invert\(1\)/);
+  assert.match(styles, /\.demo-app-shell\[data-appearance="dark"\]\s*\{[\s\S]*--demo-theme-window-control-icon-filter:\s*brightness\(0\) invert\(1\)/);
   assert.match(
     styles,
     /\.demo-app-shell__screen-content\s*\{[\s\S]*background:\s*transparent/,
   );
-  assert.match(styles, /\.demo-window-controls__button\s*\{[\s\S]*background:\s*color-mix\(in srgb, var\(--demo-theme-surface-elevated\)/);
+  assert.match(styles, /\.demo-window-controls__button\s*\{[\s\S]*?border:\s*0;[\s\S]*?background:\s*transparent/);
+  assert.match(styles, /\.demo-app-shell\[data-active-surface="workspace"\] \.demo-window-controls__button\s*\{[\s\S]*?background:\s*transparent/);
+  assert.match(styles, /\.demo-app-shell\[data-active-surface="settings"\] \.demo-window-controls__button\s*\{[\s\S]*?background:\s*transparent/);
+  assert.equal((styles.match(/--demo-theme-home-canvas:\s*#010409/g) ?? []).length, 2);
+  assert.match(
+    styles,
+    /\.demo-app-shell__scene\s*\{[\s\S]*background:\s*var\(--demo-theme-home-canvas\)/,
+  );
 });
 
-test("Gallery and model detail chrome inherit the active appearance without recoloring the model", async () => {
+test("Gallery shares the Home canvas while embedded content and model rendering remain theme-neutral", async () => {
   const galleryStyles = await readFile(
     join(hostRoot, "src", "gallery", "cortana-gallery.css"),
     "utf8",
@@ -74,18 +87,6 @@ test("Gallery and model detail chrome inherit the active appearance without reco
   );
   const modelStage = await readFile(
     join(hostRoot, "src", "gallery", "CortanaModelStage.tsx"),
-    "utf8",
-  );
-  const homeVisualStyles = await readFile(
-    join(
-      workspaceRoot,
-      "packages",
-      "preacherman-surface-skin",
-      "src",
-      "surfaces",
-      "homeVisual",
-      "homeVisualScene.css",
-    ),
     "utf8",
   );
   const viewport = await readFile(
@@ -121,18 +122,15 @@ test("Gallery and model detail chrome inherit the active appearance without reco
 
   assert.match(
     galleryStyles,
-    /\.cortana-gallery,\s*\.cortana-detail\s*\{[\s\S]*color:\s*var\(--demo-theme-text\)[\s\S]*background:\s*var\(--demo-theme-canvas\)/,
+    /\.cortana-gallery\s*\{[\s\S]*background:\s*transparent/,
   );
-  assert.match(
-    galleryStyles,
-    /\.cortana-detail__back img\s*\{[\s\S]*filter:\s*var\(--demo-theme-icon-filter\)/,
-  );
-  assert.doesNotMatch(galleryStyles, /\.cortana-detail\s*\{[^}]*background:\s*#0d0e0e/s);
-  assert.match(galleryStyles, /\.cortana-gallery__header\s*\{[\s\S]*margin:\s*0 0 76px 92px/);
-  assert.doesNotMatch(galleryStyles, /\.cortana-detail::before/);
-  assert.match(gallery, /<HomeVisualScene\s*\/>[\s\S]*<CortanaModelStage\b/);
+  assert.match(gallery, /aria-label="Gallery"[\s\S]*className="cortana-gallery"/);
+  assert.match(gallery, /<JesperPortfolioExperience[\s\S]*active=\{active\}[\s\S]*activeModelId=\{activeModelId\}[\s\S]*appearance=\{appearance\}/);
+  assert.doesNotMatch(gallery, /cortana-gallery__transition-toggle/);
+  assert.doesNotMatch(gallery, /<h1|HomeVisualScene/);
+  assert.match(gallery, /detailModelPrepared \? \([\s\S]*<CortanaModelStage/);
+  assert.match(galleryStyles, /\.cortana-gallery__detail-model\s*\{[\s\S]*var\(--demo-theme-gallery-detail-surface\)/);
   assert.match(modelStage, /className="cortana-model-stage__ground"/);
-  assert.match(homeVisualStyles, /\.home-visual-scene\s*\{[\s\S]*inset:\s*0[\s\S]*z-index:\s*0/s);
   assert.match(galleryStyles, /\.cortana-model-stage\s*\{[\s\S]*z-index:\s*2/s);
   assert.match(
     galleryStyles,
@@ -143,7 +141,7 @@ test("Gallery and model detail chrome inherit the active appearance without reco
   assert.doesNotMatch(modelStage, /appearance=|theme=|material=/);
   assert.match(viewport, /alpha:\s*environment !== "cinematic"/);
   assert.match(viewport, /setClearColor\(0x010409,\s*environment === "cinematic" \? 1 : 0\)/);
-  assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment \/>/);
+  assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment awakened=\{awakened\} \/>/);
   assert.match(galleryStyles, /var\(--demo-theme-loading\)/);
   assert.match(galleryStyles, /var\(--demo-theme-error\)/);
   assert.match(
@@ -165,4 +163,6 @@ test("live speech and task controls inherit semantic colors in light and dark ap
   assert.match(voiceStyles, /\.preacherman-live__cancel:focus-visible[^\{]*\{[\s\S]*var\(--demo-theme-focus\)/);
   assert.match(taskStyles, /\.ab-task-console__button:focus-visible\s*\{[\s\S]*var\(--demo-theme-focus\)/);
   assert.match(taskStyles, /\.ab-task-console__button--quiet\s*\{[\s\S]*var\(--demo-theme-activate-rest-text\)[\s\S]*var\(--demo-theme-activate-rest-bg\)/);
+  assert.match(styles, /\.cortana-model-stage__wake-button\s*\{[\s\S]*pointer-events:\s*auto/);
+  assert.match(styles, /\.cortana-model-stage__wake-button:focus-visible\s*\{[\s\S]*var\(--demo-theme-focus\)/);
 });

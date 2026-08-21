@@ -95,7 +95,7 @@ test("Tauri APIs are confined to the Tauri client boundary", async () => {
   }
 });
 
-test("network access stays on approved local Agent and voice boundaries and never contains credentials", async () => {
+test("network access stays on approved local Agent, voice, and avatar-stream boundaries and never contains credentials", async () => {
   assert.equal(await exists(sourceRoot), true, "host source directory must exist");
   for (const file of await sourceFiles(sourceRoot)) {
     const source = await readFile(file, "utf8");
@@ -104,8 +104,10 @@ test("network access stays on approved local Agent and voice boundaries and neve
         join(sourceRoot, "ab", "ABTaskConsole.tsx"),
         join(sourceRoot, "preacherman", "capabilityClient.ts"),
         join(sourceRoot, "conversationLedger.ts"),
+        join(sourceRoot, "motion", "SpeechMotionRuntime.ts"),
         join(sourceRoot, "settings", "SettingsScreen.tsx"),
         join(sourceRoot, "realtime", "VoiceSessionControl.tsx"),
+        join(sourceRoot, "telemetry", "cortanaVoiceTiming.ts"),
       ].includes(file), file);
     }
     assert.doesNotMatch(source, /OPENAI_API_KEY|CODEX_API_KEY/, file);
@@ -163,37 +165,35 @@ test("Demo Screen Index lists every registry entry and links only implemented sc
   assert.doesNotMatch(indexSource + routeSource, /react-router|createBrowserRouter/);
 });
 
-test("startup intro hands off from the animated logo to the main surface once", async () => {
+test("startup welcome holds the main surface for a three-second centered logo sequence", async () => {
   const appPath = join(sourceRoot, "App.tsx");
   const introPath = join(sourceRoot, "introSequence.ts");
   const logoPath = join(sourceRoot, "assets", "preacherman-mark.png");
   const stylesPath = join(sourceRoot, "styles.css");
   const splashPath = join(sourceRoot, "intro", "IntroSplash.tsx");
-  const animatedLogoPath = join(sourceRoot, "intro", "AnimatedPreachermanLogo.tsx");
   const animatedLogoStylesPath = join(sourceRoot, "intro", "animated-preacherman-logo.css");
   const app = await readFile(appPath, "utf8");
   const intro = await readFile(introPath, "utf8");
   const styles = await readFile(stylesPath, "utf8");
   const splash = await readFile(splashPath, "utf8");
-  const animatedLogo = await readFile(animatedLogoPath, "utf8");
   const animatedLogoStyles = await readFile(animatedLogoStylesPath, "utf8");
 
   assert.equal(await exists(logoPath), true, "the shared localized brand asset must remain available");
   assert.match(app, /claimStartupIntro\(\)/);
   assert.match(app, /<IntroSplash[\s\S]*onComplete=\{handleIntroComplete\}/);
-  assert.match(intro, /whiteHoldMs:\s*800/);
-  assert.match(intro, /logoDrawMs:\s*LOGO_ANIMATION_TOTAL_MS/);
-  assert.match(intro, /logoVisibleMs:\s*1000/);
-  assert.match(intro, /logoFadeOutMs:\s*600/);
+  assert.match(intro, /signalLockMs:\s*2000/);
+  assert.match(intro, /totalDurationMs:\s*3000/);
   assert.match(intro, /mainFadeInMs:\s*700/);
-  assert.match(splash, /size=\{600\}/);
-  assert.match(splash, /appearance\s*===\s*["']dark["']\s*\?\s*["']#f7f5f1["']\s*:\s*["']#111111["']/);
-  assert.match(splash, /ink=\{introInk\}/);
-  assert.match(animatedLogoStyles, /\.demo-intro-splash__logo\s*\{[^}]*width:\s*600px[^}]*height:\s*600px/s);
-  assert.match(animatedLogoStyles, /width:\s*var\(--demo-animated-logo-size\)/);
-  assert.doesNotMatch(animatedLogo, /preacherman-mark\.png/);
+  assert.match(splash, /preacherman-mark-light\.png/);
+  assert.match(splash, /preacherman-mark-dark\.png/);
+  assert.match(splash, /setTimeout\(onComplete, STARTUP_INTRO_TIMING\.totalDurationMs\)/);
+  assert.doesNotMatch(splash, />\s*(?:Login|Register|Visitor)\s*</);
+  assert.doesNotMatch(splash, /<button\b|<nav\b|preacherman:auth-requested/);
+  assert.match(animatedLogoStyles, /\.demo-intro-splash__logo\s*\{[^}]*width:\s*860px[^}]*height:\s*450px/s);
+  assert.match(animatedLogoStyles, /\.demo-intro-splash__logo\s*\{[^}]*top:\s*50%/s);
+  assert.match(animatedLogoStyles, /@keyframes demo-signal-lock/);
   assert.doesNotMatch(
-    app + intro + styles + splash + animatedLogo + animatedLogoStyles,
+    app + intro + styles + splash + animatedLogoStyles,
     /https?:\/\/|codex\/attachments|AppData\/Local\/Temp/i,
   );
 });
@@ -210,7 +210,28 @@ test("Tauri window configuration matches the 1800 by 1000 borderless baseline", 
   assert.equal(window.decorations, false);
   assert.equal(window.center, true);
   assert.equal(window.resizable, true);
-  assert.equal(window.backgroundColor, "#FFFFFF");
+  assert.equal(window.visible, true);
+  assert.equal(window.backgroundColor, "#F7F5F1");
+});
+
+test("the native window stays visible while the intro waits for its visual to be ready", async () => {
+  const splash = await readFile(join(sourceRoot, "intro", "IntroSplash.tsx"), "utf8");
+  const tauriClient = await readFile(join(sourceRoot, "tauriClient.ts"), "utf8");
+
+  assert.match(splash, /data-ready=\{visualReady\}/);
+  assert.doesNotMatch(splash, /onReady|useLayoutEffect/);
+  assert.doesNotMatch(tauriClient, /revealCurrentWindow|getCurrentWindow\(\)\.show\(\)/);
+});
+
+test("the lightweight startup renders before the main application bundle is imported", async () => {
+  const main = await readFile(join(sourceRoot, "main.tsx"), "utf8");
+  const bootstrap = await readFile(join(sourceRoot, "StartupBootstrap.tsx"), "utf8");
+
+  assert.match(main, /<StartupBootstrap\s*\/>/);
+  assert.doesNotMatch(main, /import \{ App \} from "\.\/App"/);
+  assert.match(bootstrap, /requestAnimationFrame\([\s\S]*import\("\.\/App"\)/);
+  assert.match(bootstrap, /introComplete && DeferredApp/);
+  assert.match(bootstrap, /<DeferredApp enteringOnMount=\{bootstrapOwnsStartupIntro\}/);
 });
 
 test("Tauri capability grants window actions and the packaged Windows service sidecar", async () => {

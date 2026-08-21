@@ -34,7 +34,7 @@ test("Vite deduplicates React, Three, and React Three Fiber", async () => {
   }
 });
 
-test("Demo avatar slot uses BASE_URL local assets and records renderer diagnostics", async () => {
+test("Demo avatar slot resolves model-scoped local assets and records renderer diagnostics", async () => {
   const assets = await readFile(
     join(packageRoot, "src", "avatar", "avatarAssets.ts"),
     "utf8",
@@ -45,7 +45,7 @@ test("Demo avatar slot uses BASE_URL local assets and records renderer diagnosti
   );
 
   assert.match(assets, /import\.meta\.env\.BASE_URL/);
-  assert.match(assets, /assets\/avatars\/cortana\//);
+  assert.match(assets, /assets\/avatars\/\$\{modelId\}\//);
   assert.doesNotMatch(`${assets}\n${slot}`, /E:\\\\|E:\//);
   assert.match(slot, /AvatarViewport/);
   assert.match(slot, /__PREACHERMAN_AVATAR_DIAGNOSTICS__/);

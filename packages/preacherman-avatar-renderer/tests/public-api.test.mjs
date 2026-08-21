@@ -39,9 +39,23 @@ test("built package exposes the required public API", async () => {
     "AvatarError",
     "normalizeAvatarError",
     "disposeAvatarSceneResources",
+    "createAvatarAssetUrls",
   ]) {
     assert.equal(typeof entry[name], "function", `${name} must be a runtime export`);
   }
+  assert.equal(entry.ZIMA_AVATAR_ID, "zima");
+  assert.equal(entry.ZIMA_DEFAULT_ACTION_ID, "idle.zima");
+  assert.deepEqual(entry.createAvatarAssetUrls("/assets/avatars/zima/", "zima"), {
+    model: "/assets/avatars/zima/zima-runtime.glb",
+    textures: [
+      "/assets/avatars/zima/shader/storm_cortana_scanlines_diff.png",
+      "/assets/avatars/zima/shader/storm_cortana_default_eye_iris_normal.png",
+      "/assets/avatars/zima/shader/storm_cortana_default_body_control.png",
+      "/assets/avatars/zima/shader/storm_cortana_default_head_control.png",
+      "/assets/avatars/zima/shader/storm_cortana_default_hair_control.png",
+      "/assets/avatars/zima/shader/storm_cortana_default_eye_control.png",
+    ],
+  });
 });
 
 test("renderer source is independent from Tauri, Surface Skin, Demo Host, backend, and network clients", async () => {

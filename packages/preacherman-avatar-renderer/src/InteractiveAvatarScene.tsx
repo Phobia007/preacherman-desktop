@@ -5,12 +5,13 @@ import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { AvatarModel } from "./AvatarModel";
 import { CinematicEnvironment } from "./CinematicEnvironment";
 import { CinematicHologramLights, HologramLights } from "./HologramLights";
-import { AvatarError, type AvatarPerformanceSnapshot, type AvatarPose, type AvatarSceneEnvironment } from "./types";
+import { AvatarError, type AvatarModelId, type AvatarPerformanceSnapshot, type AvatarPose, type AvatarSceneEnvironment } from "./types";
 import type {
   AvatarActionDescriptor,
   AvatarAnimationDebugSnapshot,
   AvatarAnimationError,
 } from "./avatar/types/avatarAnimation";
+import type { AvatarMotionRigBinding, AvatarMotionStreamSource } from "./avatar/contracts/AvatarMotionStream";
 
 interface InteractiveAvatarSceneProps {
   readonly actionId?: string;
@@ -27,6 +28,10 @@ interface InteractiveAvatarSceneProps {
   readonly resetKey: number;
   readonly jawOpen: number;
   readonly environment: AvatarSceneEnvironment;
+  readonly awakened: boolean;
+  readonly motionSource?: AvatarMotionStreamSource;
+  readonly motionRigBinding?: AvatarMotionRigBinding;
+  readonly modelId: AvatarModelId;
 }
 
 function CameraRig({
@@ -97,10 +102,14 @@ export function InteractiveAvatarScene({
   resetKey,
   jawOpen,
   environment,
+  awakened,
+  motionSource,
+  motionRigBinding,
+  modelId,
 }: InteractiveAvatarSceneProps) {
   return (
     <>
-      {environment === "cinematic" ? <CinematicEnvironment /> : null}
+      {environment === "cinematic" ? <CinematicEnvironment awakened={awakened} /> : null}
       {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
       <AvatarModel
         actionId={actionId}
@@ -112,6 +121,9 @@ export function InteractiveAvatarScene({
         onFirstFrame={onFirstFrame}
         pose={pose}
         jawOpen={jawOpen}
+        motionSource={motionSource}
+        motionRigBinding={motionRigBinding}
+        modelId={modelId}
       />
       <CameraRig environment={environment} resetKey={resetKey} />
       <ContextLossListener onContextLost={onContextLost} />

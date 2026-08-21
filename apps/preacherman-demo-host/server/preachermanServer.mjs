@@ -4,7 +4,6 @@ import { createServer } from "node:http";
 import { homedir } from "node:os";
 import { mkdir, readFile, rename, writeFile, chmod } from "node:fs/promises";
 import { delimiter, dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import { Readable } from "node:stream";
 import { WebSocket, WebSocketServer } from "ws";
 import {
@@ -29,6 +28,7 @@ import { createPreachermanMemoryPersonaRuntime, MEMORY_PLUGIN_SCOPES } from "./p
 import { createPreachermanObservabilityRuntime } from "./preachermanObservabilityRuntime.mjs";
 import { createPreachermanConnectionRuntime } from "./preachermanConnectionRuntime.mjs";
 import { createPreachermanComputerVisionRuntime } from "./preachermanComputerVisionRuntime.mjs";
+import { createPreachermanVisionEnhancementRuntime } from "./preachermanVisionEnhancementRuntime.mjs";
 import { createPreachermanDomObservationRuntime } from "./preachermanDomObservationRuntime.mjs";
 import { createPreachermanEcosystemBindingFacade } from "./preachermanEcosystemBindingFacade.mjs";
 import { createExecutionRouter } from "./execution/executionRouter.mjs";
@@ -46,6 +46,8 @@ import { createPreachermanExecutionLedgerProjector } from "./preacherman-executi
 import { migratePreachermanBrandData } from "./preachermanBrandMigration.mjs";
 import { createLocalAgentRegistry, createCodexCliAdapter, createDeepSeekHarnessAdapter, deepSeekHarnessPinnedVersion } from "./local-agent/index.mjs";
 import { createPreachermanAgentAccessRuntime } from "./preachermanAgentAccessRuntime.mjs";
+import { binaryServiceHealth, createBinaryWebSocketProxy } from "./speechMotionProxy.mjs";
+import { createCortanaVoiceTelemetry } from "./cortanaVoiceTelemetry.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const DEFAULT_PORT = 8787;
@@ -85,6 +87,8 @@ function readJson(request) {
 export function createPreachermanServer(options = {}) {
   const env = options.env ?? process.env;
   const fetchImpl = options.fetchImpl ?? fetch;
+  const cortanaVoiceTelemetry = createCortanaVoiceTelemetry({ env, fetchImpl });
+  const packageRoot = resolve(env.PREACHERMAN_PACKAGE_ROOT || process.cwd());
   const dataDirectory = env.PREACHERMAN_DATA_DIR || join(homedir(), ".preacherman-demo");
   const pluginDirectory = join(dataDirectory, "plugins");
   const developmentPluginFixtures = join(process.cwd(), "tests", "fixtures", "preacherman-plugin");
@@ -134,8 +138,8 @@ export function createPreachermanServer(options = {}) {
     : [resolve(process.cwd(), "../..")];
   let localServicePort = null;
   const gatewayCredentialFile = join(dataDirectory, "mcp-gateway.bootstrap");
-  const gatewayScript = fileURLToPath(new URL("../scripts/preacherman-mcp-gateway.mjs", import.meta.url));
-  const harnessCompositionTemplate = fileURLToPath(new URL("../../../config/deepseek-harness/preacherman-native/acp-overlay-template.json", import.meta.url));
+  const gatewayScript = resolve(packageRoot, "scripts", "preacherman-mcp-gateway.mjs");
+  const harnessCompositionTemplate = resolve(packageRoot, "..", "..", "config", "deepseek-harness", "preacherman-native", "acp-overlay-template.json");
   const localAgentRegistry = options.localAgentRegistry ?? createLocalAgentRegistry({
     adapters: [
       createDeepSeekHarnessAdapter({
@@ -520,6 +524,10 @@ export function createPreachermanServer(options = {}) {
       asr: createDashscopeVoiceProtocol("asr"),
       tts: createDashscopeVoiceProtocol("tts"),
     }),
+  });
+  const preachermanVisionEnhancementRuntime = createPreachermanVisionEnhancementRuntime({
+    file: join(dataDirectory, "vision-observations.v1.json"),
+    providerRuntime: preachermanProviderRuntime,
   });
   const preachermanMemoryPersonaRuntime = createPreachermanMemoryPersonaRuntime({
     file: memoryPersonaFile(),
@@ -1296,6 +1304,7 @@ export function createPreachermanServer(options = {}) {
     gatewayCredentialFile,
     gatewayScript,
     artifactRoots: [join(dataDirectory, "artifacts")],
+    visionEnhancementRuntime: preachermanVisionEnhancementRuntime,
     gatewayAuthenticate: options.gatewayAuthenticate,
     startApprovedTask: startApprovedGatewayTask,
     commandTask: commandAgentTask,
@@ -1335,6 +1344,15 @@ export function createPreachermanServer(options = {}) {
     return match[1];
   }
 
+  const motionProxy = createBinaryWebSocketProxy({
+    endpoint: env.PREACHERMAN_SPEECH_MOTION_WS_URL,
+    serviceName: "Speech2Motion",
+  });
+  const faceProxy = createBinaryWebSocketProxy({
+    endpoint: env.PREACHERMAN_AUDIO2FACE_WS_URL
+      ?? "ws://127.0.0.1:18083/api/v1/streaming_audio2face/ws",
+    serviceName: "Audio2Face",
+  });
   const server = createServer(async (request, response) => {
     const origin = requestOrigin(request);
     if (!origin) {
@@ -1360,6 +1378,20 @@ export function createPreachermanServer(options = {}) {
           ok: true,
           ...status,
         }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/telemetry/cortana-voice") {
+        json(response, 202, cortanaVoiceTelemetry.capture(await readJson(request)), origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/motion/health") {
+        json(response, 200, await binaryServiceHealth(env.PREACHERMAN_SPEECH_MOTION_HEALTH_URL), origin);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/face/health") {
+        json(response, 200, await binaryServiceHealth(
+          env.PREACHERMAN_AUDIO2FACE_HEALTH_URL ?? "http://127.0.0.1:18083/health",
+        ), origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/mcp/gateway") {
@@ -1400,6 +1432,7 @@ export function createPreachermanServer(options = {}) {
           bootstrapCredential: bearerCredential(request),
           client: body.client,
           transport: body.transport,
+          workspacePath: body.workspacePath,
         });
         json(response, 200, {
           server: { name: "preacherman", version: "1.0" },
@@ -2352,8 +2385,20 @@ export function createPreachermanServer(options = {}) {
   server.on("upgrade", (request, socket, head) => {
     const origin = requestOrigin(request);
     const path = new URL(request.url || "/", "http://127.0.0.1").pathname;
+    if (!origin) {
+      socket.destroy();
+      return;
+    }
+    if (path === "/api/motion/speech2motion") {
+      motionProxy.handleUpgrade(request, socket, head);
+      return;
+    }
+    if (path === "/api/face/audio2face") {
+      faceProxy.handleUpgrade(request, socket, head);
+      return;
+    }
     const kind = path === "/api/voice/asr" ? "asr" : path === "/api/voice/tts" ? "tts" : null;
-    if (!origin || !kind) {
+    if (!kind) {
       socket.destroy();
       return;
     }
@@ -2386,6 +2431,8 @@ export function createPreachermanServer(options = {}) {
     async close() {
       preachermanExecutionReconciler.stop();
       for (const client of voiceProxy.clients) client.close();
+      motionProxy.close();
+      faceProxy.close();
       await preachermanPluginRuntime.close();
       await agentAccessRuntime.close();
       ecosystemFacade.close();

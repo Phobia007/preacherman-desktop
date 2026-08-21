@@ -34,6 +34,7 @@ async function gatewaySession() {
     clientName: client?.name || "unknown-mcp-client",
     clientVersion: client?.version || "unknown",
     transport: "stdio",
+    workspacePath: process.cwd(),
   });
 }
 

@@ -229,7 +229,7 @@ export function TaskWorkspaceProvider({ children, locale }: { readonly children:
     setBusy(true); setError(null); setInput("");
     setMessages((current) => [...current, { role: "user", text }]);
     try {
-      const response = await request<{ displayText: string; proposal: TaskProposal | null; diagnostics: TurnDiagnostics }>("/api/agent/turn", {
+      const response = await request<{ displayText: string; speechText?: string; proposal: TaskProposal | null; diagnostics: TurnDiagnostics }>("/api/agent/turn", {
         method: "POST",
         body: JSON.stringify({ input: text, locale, history: [...messages, { role: "user", text }].slice(-10) }),
       });
@@ -237,7 +237,7 @@ export function TaskWorkspaceProvider({ children, locale }: { readonly children:
       setMessages((current) => [...current, { role: "assistant", text: response.displayText }]);
       setDiagnostics(response.diagnostics);
       setProposalState(response.proposal);
-      coordinator.requestSpeech(response.displayText.slice(0, 160), locale);
+      coordinator.requestSpeech((response.speechText || response.displayText).slice(0, 160), locale);
     } catch (reason) {
       if (coordinator.isConversationEpochCurrent(conversationEpoch)) setError(reason instanceof Error ? reason.message : "Unable to reach the companion service.");
     } finally {

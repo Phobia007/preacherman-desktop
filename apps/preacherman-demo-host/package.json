@@ -11,6 +11,7 @@
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "node --test --test-isolation=none tests/*.test.mjs",
+    "test:cortana-voice-telemetry": "node --test --test-isolation=none tests/cortana-voice-timing.test.mjs tests/cortana-voice-telemetry-runtime.test.mjs",
     "check": "npm run typecheck && npm run build && npm test",
     "configure:preacherman-execution": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/configure-preacherman-execution-profile.ps1",
     "verify:preacherman-execution": "node scripts/verify-preacherman-execution-fusion.mjs",

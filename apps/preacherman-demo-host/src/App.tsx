@@ -6,13 +6,9 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
-import { ABTaskConsole, TaskWorkspaceProvider } from "./ab/ABTaskConsole";
-import { PreachermanAgentWorkspace } from "./ab/PreachermanAgentWorkspace";
 import { PreachermanFeaturePanel } from "./preacherman/PreachermanFeaturePanel";
 import { PreachermanEcosystemDiagnostics } from "./preacherman/PreachermanEcosystemDiagnostics";
-import { PreachermanComputerVisionPanel } from "./preacherman/PreachermanComputerVisionPanel";
 import { PreachermanDomObservationBridge } from "./preacherman/PreachermanDomObservationBridge";
-import { PreachermanGameletPanel } from "./preacherman/PreachermanGameletPanel";
 import { PreachermanObservabilityPanel } from "./preacherman/PreachermanObservabilityPanel";
 import { PreachermanWidgetGallery } from "./preacherman/PreachermanWidgetGallery";
 import { preachermanServiceRequest } from "./preacherman/capabilityClient";
@@ -31,7 +27,6 @@ import {
   type LocalSurfaceType,
 } from "./demo/screenRoute";
 import { createDemoHostBridge } from "./demoHostBridge";
-import { CortanaGallery } from "./gallery/CortanaGallery";
 import { CortanaModelStage } from "./gallery/CortanaModelStage";
 import { IntroSplash } from "./intro/IntroSplash";
 import { claimStartupIntro } from "./introSequence";
@@ -41,11 +36,8 @@ import {
   readPreferences,
   savePreferences,
   uiCopy,
-  type Appearance,
-  type Locale,
 } from "./preferences";
 import { VoiceSessionControl } from "./realtime/VoiceSessionControl";
-import { SettingsScreen } from "./settings/SettingsScreen";
 import { ConversationLedgerScreen } from "./conversation/ConversationLedgerScreen";
 import { PreachermanExecutionFusionPanel } from "./preacherman-execution/PreachermanExecutionFusionPanel";
 
@@ -71,6 +63,10 @@ const adapter = createSurfaceSkinAdapter({
   host: createDemoHostBridge(actionLog),
 });
 const startupIntroEnabled = claimStartupIntro();
+
+interface AppProps {
+  readonly enteringOnMount?: boolean;
+}
 
 function currentRoute() {
   return readDemoScreenRoute();
@@ -100,6 +96,10 @@ const surfaceCopy = {
   settings: {
     title: { en: "Settings", "zh-CN": "设置" },
     description: { en: "Configure the local runtime, providers, tools, and connections.", "zh-CN": "配置本地运行时、模型服务、工具与外部连接。" },
+  },
+  account: {
+    title: { en: "Account", "zh-CN": "账户" },
+    description: { en: "Account controls will appear here when account services are connected.", "zh-CN": "账户服务接入后，相关控制将在这里显示。" },
   },
   test: {
     title: { en: "Test", "zh-CN": "测试" },
@@ -133,21 +133,29 @@ const tabs = {
   ],
 } satisfies Partial<Record<LocalSurfaceType, readonly SurfaceToolbarTab[]>>;
 
-export function App() {
+export function App({ enteringOnMount = false }: AppProps = {}) {
   const [route, setRoute] = useState(currentRoute);
   const activeSurfaceType = route.kind === "surface" && route.surfaceType
     ? route.surfaceType
     : "home";
   const [preferences, setPreferences] = useState(readPreferences);
   const [showStartupIntro, setShowStartupIntro] = useState(startupIntroEnabled);
-  const [animateMainEntrance] = useState(showStartupIntro);
+  const [animateMainEntrance] = useState(showStartupIntro || enteringOnMount);
   const [homeView, setHomeView] = useState("companion");
-  const [workView, setWorkView] = useState("agent");
+  const [workView, setWorkView] = useState("task");
   const [labView, setLabView] = useState("voice");
   const [galleryView, setGalleryView] = useState("characters");
   const [testView, setTestView] = useState("diagnostics");
   const [requestedControl, setRequestedControl] = useState<string | null>(null);
-  const handleIntroComplete = useCallback(() => setShowStartupIntro(false), []);
+  const handleSurfaceNavigate = useCallback((surfaceType: LocalSurfaceType) => {
+    setRoute(surfaceType === "home"
+      ? { kind: "screen", screenId: acceptedScreenId }
+      : { kind: "surface", surfaceType });
+  }, []);
+  const handleIntroComplete = useCallback(() => {
+    openLocalSurface("home");
+    setShowStartupIntro(false);
+  }, []);
   const handlePreachermanFeatureActivate = useCallback((featureId: string): boolean => {
     const focusControl = (controlId: string): boolean => {
       const target = Array.from(document.querySelectorAll<HTMLElement>("[data-preacherman-control]"))
@@ -245,25 +253,26 @@ export function App() {
       ? `surface-${activeSurfaceType}`
       : `screen-${route.screenId ?? acceptedScreenId}`;
   const HomeSurface = adapter.resolve(manifest).component;
-  const isCortanaActive = preferences.activeModelId === "cortana";
+  const activeModelId = preferences.activeModelId;
+  const isCompanionActive = activeModelId !== null;
+  const sceneModelId = activeModelId;
   const preachermanPanelSurface: LocalSurfaceType | null = route.kind === "surface"
     ? activeSurfaceType
     : route.kind === "screen" && (screen?.manifest?.surfaceId ?? manifest.surfaceId) === manifest.surfaceId
       ? "home"
       : null;
+  const visiblePanelSurface =
+    preachermanPanelSurface === "home" || preachermanPanelSurface === "market"
+      ? null
+      : preachermanPanelSurface;
   const homeContent = (
     <main
+      aria-label={`${surfaceCopy.home.title[preferences.locale]} screen`}
       className="demo-host demo-host--home"
-      data-model-active={isCortanaActive}
+      data-model-active={isCompanionActive}
       data-view={homeView}
     >
-      {homeView === "companion" && isCortanaActive ? (
-        <>
-          <VoiceSessionControl locale={preferences.locale} />
-          <ABTaskConsole locale={preferences.locale} mode="home" />
-        </>
-      ) : null}
-      {homeView === "widgets" ? <div className="demo-surface-module"><PreachermanWidgetGallery placement="home" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
+      {isCompanionActive ? <VoiceSessionControl headless locale={preferences.locale} /> : null}
     </main>
   );
   const workspaceContent = (
@@ -272,24 +281,6 @@ export function App() {
       data-preacherman-features={featuresForSurface("workspace").join(" ")}
       data-view={workView}
     >
-      {workView === "agent" ? <PreachermanAgentWorkspace
-        locale={preferences.locale}
-        onOpenSettings={() => {
-          setRequestedControl("agent-access.native");
-          openLocalSurface("settings");
-        }}
-        onOpenTask={() => setWorkView("task")}
-        onOpenArtifact={() => openLocalSurface("ledger")}
-        serviceRequest={preachermanServiceRequest}
-      /> : null}
-      {workView === "task" ? <>
-        {isCortanaActive ? <VoiceSessionControl locale={preferences.locale} /> : null}
-        <ABTaskConsole locale={preferences.locale} mode="work" />
-      </> : null}
-      {workView !== "task" && workView !== "agent" ? <div className="demo-preacherman-work-runtime" data-view={workView}>
-        {workView === "tools" ? <div data-preacherman-control="plugin.widgets agent.mcp-tools agent.plugin-tools agent.kits-api agent.bindings-api"><PreachermanWidgetGallery placement="work" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
-        {workView === "vision" ? <div data-preacherman-control="computer-use.session computer-use.dom computer-use.transcript vision.screen vision.camera"><PreachermanComputerVisionPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
-      </div> : null}
     </main>
   );
   const labContent = (
@@ -297,7 +288,7 @@ export function App() {
       className="demo-host demo-host--lab"
       data-preacherman-features={featuresForSurface("lab").join(" ")}
     >
-      {labView === "voice" && isCortanaActive ? <>
+      {labView === "voice" && isCompanionActive ? <>
         <VoiceSessionControl locale={preferences.locale} />
       </> : null}
       {labView === "widgets" ? <div className="demo-surface-module"><PreachermanWidgetGallery placement="lab" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /></div> : null}
@@ -327,33 +318,11 @@ export function App() {
           ? workspaceContent
           : activeSurfaceType === "lab"
             ? labContent
-        : activeSurfaceType === "settings"
-          ? <SettingsScreen
-              appearance={preferences.appearance}
-              locale={preferences.locale}
-              onAppearanceChange={(appearance: Appearance) => {
-                setPreferences((current) => ({ ...current, appearance }));
-              }}
-              onLocaleChange={(locale: Locale) => {
-                setPreferences((current) => ({ ...current, locale }));
-              }}
-              requestedControl={requestedControl}
-              widgets={<PreachermanWidgetGallery placement="settings" locale={preferences.locale} serviceRequest={preachermanServiceRequest} />}
+        : activeSurfaceType === "settings" || activeSurfaceType === "market"
+          ? <main
+              aria-label={`${uiCopy[preferences.locale].emptySurfaceLabels[activeSurfaceType]} screen`}
+              className="demo-host"
             />
-          : activeSurfaceType === "market"
-            ? galleryView === "characters"
-              ? <CortanaGallery
-                  activeModelId={preferences.activeModelId}
-                  onActiveModelChange={(activeModelId) => {
-                    setPreferences((current) => ({ ...current, activeModelId }));
-                  }}
-                />
-              : <main className="demo-host demo-host--gallery-runtime">
-                <div className="demo-surface-module">
-                  {galleryView === "widgets" ? <PreachermanWidgetGallery placement="gallery" locale={preferences.locale} serviceRequest={preachermanServiceRequest} /> : null}
-                  {galleryView === "games" ? <PreachermanGameletPanel locale={preferences.locale} serviceRequest={preachermanServiceRequest} /> : null}
-                </div>
-              </main>
           : activeSurfaceType === "ledger"
             ? <ConversationLedgerScreen
                 locale={preferences.locale}
@@ -407,6 +376,7 @@ export function App() {
   const app = showStartupIntro ? (
     <IntroSplash
       appearance={preferences.appearance}
+      dispatch={adapter.dispatch}
       locale={preferences.locale}
       onComplete={handleIntroComplete}
     />
@@ -417,39 +387,44 @@ export function App() {
       dispatch={adapter.dispatch}
       entering={animateMainEntrance}
       locale={preferences.locale}
-      scene={isCortanaActive ? (
+      onNavigate={handleSurfaceNavigate}
+      scene={sceneModelId ? (
         <CortanaModelStage
-          ariaLabel="Persistent Cortana companion scene"
+          ariaLabel={`Persistent ${sceneModelId === "cortana" ? "Cortana" : "Zima"} companion scene`}
           environment="cinematic"
+          modelId={sceneModelId}
           variant="persistent"
+          wakeEnabled={activeSurfaceType === "home"}
+          renderActive
         />
       ) : null}
-      sceneHidden={activeSurfaceType === "market"}
     >
-      <PreachermanDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={preachermanServiceRequest} />
+      {activeSurfaceType !== "account" ? (
+        <PreachermanDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={preachermanServiceRequest} />
+      ) : null}
       <div className="demo-app-shell__screen-page" key={contentKey}>
         {mainContent}
-        {preachermanPanelSurface ? (
+        {visiblePanelSurface && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
           <SurfaceToolbar
             activeTab={activeSurfaceTab}
-            description={surfaceCopy[preachermanPanelSurface].description}
+            description={surfaceCopy[visiblePanelSurface].description}
             locale={preferences.locale}
             onTabChange={changeSurfaceTab}
-            surface={preachermanPanelSurface}
+            surface={visiblePanelSurface}
             tabs={surfaceTabs}
-            title={surfaceCopy[preachermanPanelSurface].title}
+            title={surfaceCopy[visiblePanelSurface].title}
           />
         ) : null}
-        {preachermanPanelSurface ? (
+        {visiblePanelSurface && visiblePanelSurface !== "account" && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
           <PreachermanFeaturePanel
             locale={preferences.locale}
             onActivate={handlePreachermanFeatureActivate}
-            surface={preachermanPanelSurface}
+            surface={visiblePanelSurface}
           />
         ) : null}
       </div>
     </AppShell>
   );
 
-  return <LiveCoordinatorProvider><TaskWorkspaceProvider locale={preferences.locale}>{app}</TaskWorkspaceProvider></LiveCoordinatorProvider>;
+  return <LiveCoordinatorProvider>{app}</LiveCoordinatorProvider>;
 }

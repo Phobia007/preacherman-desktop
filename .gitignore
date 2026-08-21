@@ -4,6 +4,9 @@ packages/preacherman-avatar-renderer/dist/
 apps/*/dist/
 apps/*/node_modules/
 apps/*/src-tauri/target/
+apps/*/src-tauri/target-*/
+apps/*/src-tauri/binaries/
+apps/*/.windows-service-build/
 apps/preacherman-demo-host/public/local-avatar/
 .playwright-cli/
 .runtime-tmp/
@@ -11,5 +14,7 @@ output/
 apps/*/output/
 /.codex-worktrees/
 *.log
+__pycache__/
+*.pyc
 .DS_Store
 Thumbs.db

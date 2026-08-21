@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "libraryId": "preacherman.digital-humans",
+  "name": "Preacherman Digital Human Asset Library",
+  "assets": [
+    {
+      "assetId": "cortana",
+      "version": "v1",
+      "manifest": "assets/cortana/v1/asset.json"
+    },
+    {
+      "assetId": "zima",
+      "version": "v1",
+      "manifest": "assets/zima/v1/asset.json"
+    },
+    {
+      "assetId": "classified-actions",
+      "version": "v1",
+      "manifest": "assets/classified-actions/v1/asset.json"
+    },
+    {
+      "assetId": "realtime-performance",
+      "version": "v1",
+      "manifest": "assets/realtime-performance/v1/asset.json"
+    }
+  ],
+  "policy": {
+    "assetsArePeers": true,
+    "modelAssetsReferenceActionAssets": true,
+    "classificationMetadataIsImmutable": true,
+    "legacy412MotionLibraryIncluded": false
+  }
+}

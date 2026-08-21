@@ -239,6 +239,21 @@ test("body shader preserves the source diffuse and control-map material chain", 
   assert.doesNotMatch(source, /bodyZone|bodyVerticalEnergy|sourceEnergy/);
 });
 
+test("Zima receives a model-scoped visibility gain without changing Cortana", async () => {
+  const material = await readFile(
+    join(packageRoot, "src", "hologramMaterial.ts"),
+    "utf8",
+  );
+  const avatar = await readFile(
+    join(packageRoot, "src", "AvatarModel.tsx"),
+    "utf8",
+  );
+
+  assert.match(material, /uHoloAvatarGain/);
+  assert.match(material, /1\.189207115 \* uHoloAvatarGain/);
+  assert.match(avatar, /modelId === "zima" \? 2\.25 : 1/);
+});
+
 test("face uses the body color pipeline with skin-energy gain and no global tint", async () => {
   const source = await readFile(
     join(packageRoot, "src", "hologramMaterial.ts"),
@@ -289,13 +304,16 @@ test("runtime animation replaces component-local standby bone posing", async () 
   assert.doesNotMatch(source, /aimBoneAt|pose\.bones|new Vector3/);
 });
 
-test("avatar source forward axis is aligned with the front camera", async () => {
+test("each avatar is framed and aligned to the front camera", async () => {
   const source = await readFile(
     join(packageRoot, "src", "AvatarModel.tsx"),
     "utf8",
   );
 
-  assert.match(source, /<group rotation=\{\[0, -Math\.PI \/ 2, 0\]\}>/);
+  assert.match(source, /rotationY: -Math\.PI \/ 2,[\s\S]*?scale: 1/);
+  assert.match(source, /zima:[\s\S]*?rotationY: 0,[\s\S]*?scale: 0\.9/);
+  assert.match(source, /rotation=\{\[0, profile\.transform\.rotationY, 0\]\}/);
+  assert.match(source, /scale=\{profile\.transform\.scale\}/);
   assert.match(source, /<group[\s\S]*?<primitive object=\{root\}/);
 });
 

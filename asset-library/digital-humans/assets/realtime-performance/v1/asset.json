@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "assetId": "realtime-performance",
+  "displayName": "Realtime Performance Profile",
+  "version": "v1",
+  "kind": "performance-runtime-profile",
+  "status": "body-connected-face-awaits-morph-targets",
+  "timeline": {
+    "frameRate": 30,
+    "cancellationKey": "interactionEpoch"
+  },
+  "body": {
+    "protocol": "StreamingSpeech2MotionV3",
+    "restPoseId": "KQ-default",
+    "restPose": "rigs/KQ-default.json"
+  },
+  "face": {
+    "protocol": "StreamingAudio2FaceV1",
+    "audioFormat": "pcm16-mono-16000",
+    "channelFormat": "blendshape-float32",
+    "fallback": "audio-jaw"
+  },
+  "bindings": [
+    {
+      "modelAssetId": "cortana",
+      "body": "available",
+      "face": "jaw-fallback"
+    },
+    {
+      "modelAssetId": "zima",
+      "body": "available",
+      "face": "awaiting-face-rig"
+    }
+  ]
+}

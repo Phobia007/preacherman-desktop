@@ -102,6 +102,7 @@ test("official MCP SDK client discovers and calls tools through the real stdio g
     assert.deepEqual(result.structuredContent, { status: "ready", dynamic: true });
     assert.equal(host.calls[0].body.transport, "stdio");
     assert.deepEqual(host.calls[0].body.client, { name: "fixture-agent", version: "1.2.3" });
+    assert.equal(host.calls[0].body.workspacePath, process.cwd());
     assert.deepEqual(host.calls[1].body, { name: "preacherman.capabilities", arguments: {} });
   } finally {
     await client.close().catch(() => {});

@@ -16,36 +16,30 @@ async function exists(path) {
   }
 }
 
-test("Settings owns persisted appearance and language controls", async () => {
-  const settingsPath = join(sourceRoot, "settings", "SettingsScreen.tsx");
+test("the desktop shell keeps persisted appearance and language preferences", async () => {
   const preferencesPath = join(sourceRoot, "preferences.ts");
-  assert.equal(await exists(settingsPath), true, "SettingsScreen must exist");
   assert.equal(await exists(preferencesPath), true, "preferences module must exist");
 
-  const settings = await readFile(settingsPath, "utf8");
   const preferences = await readFile(preferencesPath, "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
+  const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
 
-  assert.match(settings, /Appearance/);
-  assert.match(settings, /Language/);
-  assert.match(settings, /\u5916\u89c2/);
-  assert.match(settings, /\u8bed\u8a00/);
-  assert.match(settings, /onAppearanceChange/);
-  assert.match(settings, /onLocaleChange/);
   assert.match(preferences, /preacherman\.preferences/);
   assert.match(preferences, /localStorage\.getItem/);
   assert.match(preferences, /localStorage\.setItem/);
-  assert.match(app, /<SettingsScreen\b/);
+  assert.match(preferences, /document\.documentElement\.dataset\.appearance = preferences\.appearance/);
+  assert.match(shell, /data-appearance=\{appearance\}/);
+  assert.match(shell, /data-locale=\{locale\}/);
+  assert.doesNotMatch(app, /<SettingsScreen\b/);
   assert.match(app, /readPreferences/);
+  assert.match(app, /applyPreferences\(preferences\)/);
   assert.match(app, /savePreferences/);
 });
 
 test("Settings exposes the real MCP configuration and execution console in both themes", async () => {
-  const settings = await readFile(join(sourceRoot, "settings", "SettingsScreen.tsx"), "utf8");
   const mcp = await readFile(join(sourceRoot, "settings", "McpSettings.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
 
-  assert.match(settings, /<McpSettings\b/);
   assert.match(mcp, /\/api\/mcp\/config/);
   assert.match(mcp, /\/api\/mcp\/tools\/call/);
   assert.match(mcp, /data-preacherman-control="mcp\.servers runtime\.mcp-test"/);
@@ -56,12 +50,10 @@ test("Settings exposes the real MCP configuration and execution console in both 
 });
 
 test("Settings exposes the PREACHERMAN plugin lifecycle and tool console in both themes", async () => {
-  const settings = await readFile(join(sourceRoot, "settings", "SettingsScreen.tsx"), "utf8");
   const plugins = await readFile(join(sourceRoot, "settings", "PluginSettings.tsx"), "utf8");
   const runtime = await readFile(join(hostRoot, "server", "preachermanPluginRuntime.mjs"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
 
-  assert.match(settings, /<PluginSettings\b/);
   assert.match(plugins, /\/api\/plugins\/tools\/call/);
   assert.match(plugins, /approved: true/);
   assert.match(plugins, /Approve & execute once/);
@@ -78,7 +70,23 @@ test("Settings exposes the PREACHERMAN plugin lifecycle and tool console in both
   assert.match(styles, /var\(--demo-theme-focus\)/);
 });
 
-test("the persistent shell localizes navigation and maps supplied marks to each theme", async () => {
+test("Settings starts as a blank themed layer while preserving desktop chrome", async () => {
+  const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
+  const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
+  const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
+
+  assert.match(app, /activeSurfaceType === "settings" \|\| activeSurfaceType === "market"[\s\S]*?<main[\s\S]*?className="demo-host"[\s\S]*?\/>/);
+  assert.doesNotMatch(app, /<SettingsScreen\b/);
+  assert.equal((app.match(/visiblePanelSurface !== "settings"/g) ?? []).length, 2, "Settings must omit both host overlay panels");
+  assert.match(styles, /--demo-theme-canvas:/);
+  assert.match(styles, /--demo-theme-surface:/);
+  assert.match(styles, /--demo-theme-text:/);
+  assert.match(shell, /className="demo-app-shell__brand-mark"/);
+  assert.match(shell, /<WindowControls\b/);
+  assert.match(shell, /data-appearance=\{appearance\}/);
+});
+
+test("the persistent shell hides navigation while preserving its localized component", async () => {
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const controls = await readFile(join(sourceRoot, "app-shell", "WindowControls.tsx"), "utf8");
   const preferences = await readFile(join(sourceRoot, "preferences.ts"), "utf8");
@@ -90,24 +98,25 @@ test("the persistent shell localizes navigation and maps supplied marks to each 
   assert.match(shell, /preacherman-mark-light\.png/);
   assert.match(shell, /preacherman-mark-dark\.png/);
   assert.match(shell, /data-appearance=\{appearance\}/);
-  assert.match(shell, /navigationLabels/);
+  assert.doesNotMatch(shell, /<BottomNavigation\b|navigationLabels/);
   assert.match(shell, /locale/);
   assert.match(controls, /locale/);
   assert.match(controls, /windowControls/);
   assert.match(preferences, /\u6700\u5c0f\u5316\u7a97\u53e3/);
+  assert.match(preferences, /navigationLabels/);
   assert.match(navigation, /labels\?/);
   assert.match(navigation, /ariaLabel\?/);
 });
 
-test("startup splash follows the stored theme without changing the SVG masks", async () => {
+test("startup welcome follows the stored theme and preserves window chrome", async () => {
   const splash = await readFile(join(sourceRoot, "intro", "IntroSplash.tsx"), "utf8");
-  const animatedLogo = await readFile(join(sourceRoot, "intro", "AnimatedPreachermanLogo.tsx"), "utf8");
+  const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
 
   assert.match(splash, /appearance/);
-  assert.match(splash, /appearance\s*===\s*["']dark["']/);
-  assert.match(splash, /ink=\{introInk\}/);
+  assert.match(splash, /appearance\s*===\s*["']dark["']\s*\?\s*preachermanMarkDark\s*:\s*preachermanMarkLight/);
   assert.match(splash, /data-appearance=\{appearance\}/);
-  assert.match(animatedLogo, /stroke="white"/);
+  assert.match(styles, /\.demo-intro-splash\[data-appearance="dark"\]/);
+  assert.match(splash, /<WindowControls\b/);
 });
 
 test("drag and all eight resize directions stay behind the Demo Host bridge", async () => {

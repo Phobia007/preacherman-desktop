@@ -55,17 +55,15 @@ test("a microphone-free transcript fixture drives the complete avatar response l
   assert.deepEqual(states, ["listening", "thinking", "speaking", "idle"]);
 });
 
-test("the shell owns one persistent avatar while Home and Lab mount conversation controls", async () => {
-  const [app, styles] = await Promise.all([
-    readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
-    readFile(join(packageRoot, "src", "styles.css"), "utf8"),
-  ]);
+test("the shell owns one persistent avatar while Task leaves its old conversation UI unmounted", async () => {
+  const app = await readFile(join(packageRoot, "src", "App.tsx"), "utf8");
 
-  assert.match(app, /scene=\{isCortanaActive \? \([\s\S]*<CortanaModelStage[\s\S]*environment="cinematic"[\s\S]*variant="persistent"/);
-  assert.match(app, /const homeContent[\s\S]*?<VoiceSessionControl[\s\S]*?<ABTaskConsole/);
+  assert.match(app, /scene=\{sceneModelId \? \([\s\S]*<CortanaModelStage[\s\S]*environment="cinematic"[\s\S]*variant="persistent"/);
+  assert.doesNotMatch(app, /<ABTaskConsole/);
+  assert.match(app, /const workspaceContent = \(\s*<main[\s\S]*?className="demo-host demo-host--workspace"[\s\S]*?>\s*<\/main>\s*\);/);
+  assert.match(app, /<VoiceSessionControl headless locale=\{preferences\.locale\} \/>/);
   assert.match(app, /const labContent[\s\S]*?<VoiceSessionControl/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
-  assert.match(styles, /\.demo-host--home > \.ab-task-console\s*\{[\s\S]*right:\s*auto;[\s\S]*left:\s*72px;/);
 });
 
 test("voice and model components share explicit four-state avatar control without task cancellation", async () => {
@@ -81,7 +79,8 @@ test("voice and model components share explicit four-state avatar control withou
   assert.match(voice, /setAvatarState\("speaking"\)/);
   assert.match(voice, /setAvatarState\("idle"\)/);
   assert.match(model, /interactionState === "thinking"/);
-  assert.match(model, /: \["idle\.catwalk"\]/);
+  assert.match(model, /const idleActionId = modelId === "zima" \? "idle\.zima" : "idle\.catwalk"/);
+  assert.match(model, /variant === "persistent"\s*\? \[idleActionId\]/);
   assert.match(model, /data-avatar-state=\{interactionState\}/);
   assert.match(voice, /coordinator\.stopSpeech\(\)/);
   assert.doesNotMatch(voice, /cancelTask/);
@@ -89,4 +88,15 @@ test("voice and model components share explicit four-state avatar control withou
   assert.match(voice, /activeAsrEpoch/);
   assert.match(voice, /activeSpeechEpoch/);
   assert.match(voice, /coordinator\.deliverFinalTranscript\(finalText, conversationEpoch\)/);
+  assert.match(voice, /preacherman:voice-wake-request/);
+  assert.match(voice, /captureModeRef\.current = "handsFree"/);
+  assert.match(voice, /reportWakeState\(true\)/);
+  const voiceErrorStart = voice.indexOf("const setVoiceError");
+  const voiceErrorEnd = voice.indexOf("useEffect", voiceErrorStart);
+  assert.notEqual(voiceErrorStart, -1);
+  assert.notEqual(voiceErrorEnd, -1);
+  assert.doesNotMatch(voice.slice(voiceErrorStart, voiceErrorEnd), /reportWakeState\(false\)/);
+  assert.match(voice, /if \(headless\) return null/);
+  assert.match(model, /preacherman:voice-wake-state/);
+  assert.match(model, /awakened=\{awakened\}/);
 });

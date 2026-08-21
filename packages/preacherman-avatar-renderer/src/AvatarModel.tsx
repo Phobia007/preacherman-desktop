@@ -16,6 +16,8 @@ import {
   Vector2,
 } from "three";
 import { ThreeAvatarAnimationAdapter } from "./avatar/adapters/ThreeAvatarAnimationAdapter";
+import { ThreeAvatarMotionStreamPlayer } from "./avatar/adapters/ThreeAvatarMotionStreamPlayer";
+import type { AvatarMotionRigBinding, AvatarMotionStreamSource } from "./avatar/contracts/AvatarMotionStream";
 import { CortanaAnimationController } from "./avatar/controllers/CortanaAnimationController";
 import {
   CORTANA_AVATAR_ID,
@@ -24,6 +26,13 @@ import {
   cortanaAnimationManifest,
   cortanaMotionStateMap,
 } from "./avatar/manifests/cortanaAnimationManifest";
+import {
+  ZIMA_AVATAR_ID,
+  ZIMA_DEFAULT_ACTION_ID,
+  ZIMA_RIG_ID,
+  zimaAnimationManifest,
+  zimaMotionStateMap,
+} from "./avatar/manifests/zimaAnimationManifest";
 import type {
   AvatarActionDescriptor,
   AvatarAnimationDebugSnapshot,
@@ -33,10 +42,9 @@ import {
   createHologramMaterial,
   updateHologramResolution,
 } from "./hologramMaterial";
-import type { AvatarPerformanceSnapshot } from "./types";
+import type { AvatarModelId, AvatarPerformanceSnapshot } from "./types";
 import type { AvatarPose } from "./types";
 
-const MODEL_FILE = "cortana-runtime.glb";
 const SHADER_FILES = [
   "storm_cortana_scanlines_diff.png",
   "storm_cortana_default_eye_iris_normal.png",
@@ -46,9 +54,42 @@ const SHADER_FILES = [
   "storm_cortana_default_eye_control.png",
 ] as const;
 
+const AVATAR_PROFILES = {
+  cortana: {
+    avatarId: CORTANA_AVATAR_ID,
+    defaultActionId: CORTANA_DEFAULT_ACTION_ID,
+    actions: cortanaAnimationManifest,
+    jawBone: "b_jaw",
+    modelFile: "cortana-runtime.glb",
+    rigId: CORTANA_RIG_ID,
+    stateMap: cortanaMotionStateMap,
+    transform: {
+      rotationY: -Math.PI / 2,
+      scale: 1,
+      verticalOffset: 0,
+    },
+    usesMotionLibrary: true,
+  },
+  zima: {
+    avatarId: ZIMA_AVATAR_ID,
+    defaultActionId: ZIMA_DEFAULT_ACTION_ID,
+    actions: zimaAnimationManifest,
+    jawBone: null,
+    modelFile: "zima-runtime.glb",
+    rigId: ZIMA_RIG_ID,
+    stateMap: zimaMotionStateMap,
+    transform: {
+      rotationY: 0,
+      scale: 0.9,
+      verticalOffset: 0,
+    },
+    usesMotionLibrary: false,
+  },
+} as const;
+
 interface AvatarAssetUrls {
   readonly model: string;
-  readonly motionLibrary: {
+  readonly motionLibrary?: {
     readonly manifestUrl: string;
     readonly indexUrl: string;
     readonly packsBaseUrl: string;
@@ -75,6 +116,9 @@ interface AvatarModelProps {
   readonly onFirstFrame: (snapshot: AvatarPerformanceSnapshot) => void;
   readonly pose?: AvatarPose;
   readonly jawOpen?: number;
+  readonly motionSource?: AvatarMotionStreamSource;
+  readonly motionRigBinding?: AvatarMotionRigBinding;
+  readonly modelId: AvatarModelId;
 }
 
 interface MaterialBindings {
@@ -87,17 +131,21 @@ function withTrailingSlash(value: string): string {
   return value.endsWith("/") ? value : `${value}/`;
 }
 
-export function createAvatarAssetUrls(assetBaseUrl: string): AvatarAssetUrls {
+export function createAvatarAssetUrls(
+  assetBaseUrl: string,
+  modelId: AvatarModelId = "cortana",
+): AvatarAssetUrls {
   const base = withTrailingSlash(assetBaseUrl);
+  const profile = AVATAR_PROFILES[modelId];
   const shaderUrl = (file: (typeof SHADER_FILES)[number]) =>
     `${base}shader/${file}`;
   return {
-    model: `${base}${MODEL_FILE}`,
-    motionLibrary: {
+    model: `${base}${profile.modelFile}`,
+    ...(profile.usesMotionLibrary ? { motionLibrary: {
       manifestUrl: `${base}motion-library/motions.json`,
       indexUrl: `${base}motion-library/index.json`,
       packsBaseUrl: `${base}motion-library/packs/`,
-    },
+    } } : {}),
     textures: [
       shaderUrl(SHADER_FILES[0]),
       shaderUrl(SHADER_FILES[1]),
@@ -114,6 +162,7 @@ function buildMaterialBindings(
   scanlineMap: Texture,
   irisNormalMap: Texture,
   controlMaps: Readonly<Record<string, Texture>>,
+  avatarGain: number,
 ): MaterialBindings {
   const originals = new Map<Mesh, Material | Material[]>();
   const holograms = new Map<Mesh, Material | Material[]>();
@@ -134,6 +183,7 @@ function buildMaterialBindings(
           scanlineMap,
           irisNormalMap,
           controlMaps[material.name],
+          avatarGain,
         );
         cloneBySource.set(material, clone);
         clonedMaterials.add(clone);
@@ -155,8 +205,15 @@ export function AvatarModel({
   onAnimationError,
   onFirstFrame,
   jawOpen = 0,
+  motionSource,
+  motionRigBinding,
+  modelId,
 }: AvatarModelProps) {
-  const urls = useMemo(() => createAvatarAssetUrls(assetBaseUrl), [assetBaseUrl]);
+  const profile = AVATAR_PROFILES[modelId];
+  const urls = useMemo(
+    () => createAvatarAssetUrls(assetBaseUrl, modelId),
+    [assetBaseUrl, modelId],
+  );
   const [
     scanlineMap,
     irisNormalMap,
@@ -167,22 +224,28 @@ export function AvatarModel({
   ] = useTexture([...urls.textures]);
   const adapter = useMemo(
     () => new ThreeAvatarAnimationAdapter({
-      avatarId: CORTANA_AVATAR_ID,
-      rigId: CORTANA_RIG_ID,
+      avatarId: profile.avatarId,
+      rigId: profile.rigId,
       modelUrl: urls.model,
-      actions: cortanaAnimationManifest,
-      defaultActionId: CORTANA_DEFAULT_ACTION_ID,
-      stateMap: cortanaMotionStateMap,
+      actions: profile.actions,
+      defaultActionId: profile.defaultActionId,
+      stateMap: profile.stateMap,
       motionLibrary: urls.motionLibrary,
       onError: onAnimationError,
     }),
-    [onAnimationError, urls.model],
+    [onAnimationError, profile, urls.model, urls.motionLibrary],
   );
   const controller = useMemo(
     () => new CortanaAnimationController(adapter),
     [adapter],
   );
   const [root, setRoot] = useState<Group | null>(null);
+  const motionPlayer = useMemo(
+    () => root && motionRigBinding
+      ? new ThreeAvatarMotionStreamPlayer(root, motionRigBinding)
+      : null,
+    [motionRigBinding, root],
+  );
   const { gl, invalidate, size } = useThree();
   const drawingBufferSize = useRef(new Vector2());
   const reported = useRef(false);
@@ -199,9 +262,15 @@ export function AvatarModel({
   );
   const bindings = useMemo(
     () => root
-      ? buildMaterialBindings(root, scanlineMap, irisNormalMap, controlMaps)
+      ? buildMaterialBindings(
+        root,
+        scanlineMap,
+        irisNormalMap,
+        controlMaps,
+        modelId === "zima" ? 2.25 : 1,
+      )
       : null,
-    [controlMaps, irisNormalMap, root, scanlineMap],
+    [controlMaps, irisNormalMap, modelId, root, scanlineMap],
   );
 
   useEffect(() => {
@@ -234,10 +303,18 @@ export function AvatarModel({
 
   useFrame((_, deltaSeconds) => {
     adapter.update(deltaSeconds);
+    motionPlayer?.update(deltaSeconds);
     if (!root || jawOpen <= 0) return;
-    const jaw = root.getObjectByName("b_jaw");
+    const jaw = profile.jawBone ? root.getObjectByName(profile.jawBone) : null;
     if (jaw) jaw.rotation.x += Math.min(1, jawOpen) * 0.22;
   });
+
+  useEffect(() => {
+    if (!motionSource || !motionPlayer) return;
+    return motionSource.subscribe((event) => motionPlayer.receive(event));
+  }, [motionPlayer, motionSource]);
+
+  useEffect(() => () => motionPlayer?.dispose(), [motionPlayer]);
 
   useEffect(() => {
     scanlineMap.wrapS = RepeatWrapping;
@@ -366,7 +443,11 @@ export function AvatarModel({
   }, [controller]);
 
   return root ? (
-    <group rotation={[0, -Math.PI / 2, 0]}>
+    <group
+      position={[0, profile.transform.verticalOffset, 0]}
+      rotation={[0, profile.transform.rotationY, 0]}
+      scale={profile.transform.scale}
+    >
       <primitive object={root} dispose={null} />
     </group>
   ) : null;

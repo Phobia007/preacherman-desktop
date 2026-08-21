@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceRig": "Cortana_Mixamo_Armature",
+  "targetRig": "cortana",
+  "method": "identity-name-rest-pose-global-rotation-delta",
+  "mappingMode": "identity",
+  "root": {
+    "source": "b_pelvis",
+    "target": "b_pelvis",
+    "copyTranslation": true
+  }
+}

@@ -19,6 +19,7 @@ const localSurfaceTypes = new Set<LocalSurfaceType>([
   "test",
   "ledger",
   "settings",
+  "account",
 ]);
 
 export function createDemoHostBridge(actionLog: DemoActionLog): SurfaceHostBridge {

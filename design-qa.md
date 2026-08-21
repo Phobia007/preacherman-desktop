@@ -72,6 +72,119 @@
 
 final result: passed
 
+# Settings top-region clearing — Design QA
+
+## Comparison target
+
+- Source visual truth: `D:\Temp\Administrator\codex-clipboard-077f6568-f946-4216-913b-63d4ccd54866.png` (1788 × 239 px).
+- Rendered implementation: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-cleared-top-final.png` (1800 × 240 px).
+- Full implementation view: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-cleared-full.png`.
+- Dark-mode verification: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-cleared-top-dark.png`.
+- CSS viewport: 1800 × 1000 at device scale factor 1 in Microsoft Edge.
+- State: Settings route, page scroll position 0, reference Grid view.
+
+## Full-view and focused comparison evidence
+
+- The source and implementation top-band images were inspected together in one comparison input.
+- The unwanted Gil header, Settings summary card, and Capabilities trigger are absent throughout the requested top band.
+- The Preacherman logo remains at its prior upper-left position and all three persistent window controls remain at their prior upper-right position.
+- A separate focused crop was unnecessary because the complete requested region is only 240 px tall and both preserved control groups are clearly legible at 1:1 density.
+
+## Required fidelity surfaces
+
+- Fonts and typography: no remaining text exists in the cleared region; typography below the region and inside the reference site is unchanged.
+- Spacing and layout rhythm: the reference header uses `visibility: hidden`, so its DOM geometry is retained. The first project remains at y=500 before and after the change.
+- Colors and visual tokens: the region is pure black in both light and dark appearance modes. The embedded scrollbar keeps its 15 px layout width but is visually black, avoiding horizontal reflow.
+- Image quality and asset fidelity: the real Preacherman logo asset and native window-control assets remain unchanged; no asset was redrawn.
+- Copy and content: only the explicitly requested Gil header and two host overlays were removed from view. All lower-page project content and copy remain present.
+
+## Findings
+
+- No actionable P0, P1, or P2 findings remain.
+- The browser console still reports three pre-existing errors from the always-mounted Task Lookback and Gallery runtimes. No error originates from Settings or `settings-template`.
+
+## Comparison history
+
+1. Initial state
+   - The top band contained the Gil header, Settings summary toolbar, Capabilities trigger, Preacherman logo, and window controls.
+2. First clearing pass
+   - Removed the two Settings host overlays from the Settings route.
+   - Hid the reference site's `.js-sh` header without removing its layout node.
+   - [P2] The native iframe scrollbar remained white in the otherwise black band.
+3. Final clearing pass
+   - Kept the scrollbar's 15 px geometry but made its track and thumb visually black/transparent.
+   - Post-fix evidence confirms a continuous black field with only the logo and three window controls visible.
+
+## Primary interactions tested
+
+- Mouse wheel moved the embedded page from scrollY 0 to 1124.
+- All 84 project entries remain mounted.
+- Scroll was restored to 0 after verification.
+- The lower content remains 5487 px tall and the first project remains at y=500.
+- Light and dark appearance modes both preserve the same pure-black top band.
+
+## Verification
+
+- Settings regression tests: passed, 7/7.
+- TypeScript: passed.
+- Production build: passed.
+
+final result: passed
+
+# Settings full-site transplant — Design QA
+
+## Comparison target
+
+- Source visual truth: `C:\Users\Administrator\AppData\Roaming\Open Design\namespaces\release-stable-win\data\projects\e8475b30-0948-4d03-9747-87d724ce1764\RECON\screenshots\clone-1440.png`.
+- Rendered implementation: pending browser-rendered capture of `http://127.0.0.1:1420/__surfaces/settings`.
+- Intended viewport: 1440 CSS pixels wide at device scale factor 1, matching the source capture width.
+- State: initial portfolio index inside the desktop Settings surface; persistent Preacherman logo and window controls above the embedded page.
+
+## Evidence available
+
+- The complete local reference bundle was copied into `apps/preacherman-demo-host/public/settings-template`: 385 files, 58.72 MB.
+- SHA-256 verification found 376 byte-identical files and nine text files changed only for the nested `/settings-template/` base path and local texture, sound, Basis, and route asset paths.
+- Production build contains the same 385 reference files.
+- Direct HTTP checks pass for the root document, Nuxt runtime, favicon, and each nested route document.
+- The reference is hosted in an unsandboxed same-origin iframe so its authored JavaScript, WebGL, scrolling, hover states, buttons, media, and route transitions remain available.
+
+## Required fidelity surfaces
+
+- Fonts and typography: the original Lay Grotesk files and authored CSS are copied unchanged; visual confirmation is pending.
+- Spacing and layout rhythm: the original HTML and CSS are copied unchanged into a full-surface iframe; same-viewport visual confirmation is pending.
+- Colors and visual tokens: the original pure-black canvas and white foreground are unchanged. The surrounding Settings surface deliberately resolves to pure black in both light and dark appearance modes.
+- Image quality and asset fidelity: every copied image, video, texture, sound, Basis transcoder asset, and Nuxt chunk is present; no visible asset was recreated or substituted.
+- Copy and content: original page copy is unchanged apart from invisible local path prefixes.
+
+## Findings
+
+- [P1] Browser-rendered visual and interaction evidence is not yet available.
+  - Location: Settings iframe and its route/hover/scroll states.
+  - Evidence: build, file-integrity, and HTTP checks pass, but a real browser screenshot and console capture have not yet been taken.
+  - Impact: exact visual fidelity and runtime interaction parity cannot be signed off from files alone.
+  - Fix: after user approval, capture the source and implementation at the same viewport in Edge, combine them for comparison, exercise scroll/hover/navigation, and check console errors.
+
+## Comparison history
+
+1. Initial transplant
+   - Removed the attempted Settings-specific category redesign.
+   - Replaced the Settings body with the complete reference site in a full-size same-origin iframe.
+   - Preserved the persistent desktop logo and controls and hid the unrelated 3D scene.
+2. Static verification
+   - TypeScript passed.
+   - Targeted Settings regression tests passed, 7/7.
+   - Production build passed.
+   - Full repository tests still contain unrelated pre-existing failures; no new failure appeared in the targeted Settings suite.
+
+## Implementation checklist
+
+- Capture the reference and embedded implementation at the same viewport.
+- Compare full view and typography/media-focused regions in one combined image.
+- Test wheel scrolling, hover responses, primary page navigation, and route return behavior.
+- Check network failures and browser console errors.
+
+final result: blocked
+
 # Cortana standby hand-layering correction — Design QA
 
 ## Scope and visual truth
@@ -130,5 +243,173 @@ final result: passed
 - Demo Host typecheck/build/tests: passed, 40/40 tests.
 - Tauri Release build and isolated WebView smoke test: passed; model load state reached `ready`, the ground resolved to `display: block`, and zero console errors were captured.
 - Theme regression coverage now requires both ground tokens and the enabled Gallery ground layer.
+
+final result: passed
+
+# Settings top-region clearing — Design QA (latest)
+
+## Comparison target
+
+- Source visual truth: `D:\Temp\Administrator\codex-clipboard-077f6568-f946-4216-913b-63d4ccd54866.png` (1788 × 239 px).
+- Rendered implementation: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-cleared-top-final.png` (1800 × 240 px).
+- Full implementation view: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-cleared-full.png`.
+- Dark-mode verification: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-cleared-top-dark.png`.
+- CSS viewport: 1800 × 1000 at device scale factor 1 in Microsoft Edge.
+- State: Settings route, page scroll position 0, reference Grid view.
+
+## Full-view and focused comparison evidence
+
+- The source and implementation top-band images were inspected together in one comparison input.
+- The unwanted Gil header, Settings summary card, and Capabilities trigger are absent throughout the requested top band.
+- The Preacherman logo remains at its prior upper-left position and all three persistent window controls remain at their prior upper-right position.
+- A separate focused crop was unnecessary because the complete requested region is only 240 px tall and both preserved control groups are clearly legible at 1:1 density.
+
+## Required fidelity surfaces
+
+- Fonts and typography: no remaining text exists in the cleared region; typography below the region and inside the reference site is unchanged.
+- Spacing and layout rhythm: the reference header uses `visibility: hidden`, so its DOM geometry is retained. The first project remains at y=500 before and after the change.
+- Colors and visual tokens: the region is pure black in both light and dark appearance modes. The embedded scrollbar keeps its 15 px layout width but is visually black, avoiding horizontal reflow.
+- Image quality and asset fidelity: the real Preacherman logo asset and native window-control assets remain unchanged; no asset was redrawn.
+- Copy and content: only the explicitly requested Gil header and two host overlays were removed from view. All lower-page project content and copy remain present.
+
+## Findings
+
+- No actionable P0, P1, or P2 findings remain.
+- The browser console still reports three pre-existing errors from the always-mounted Task Lookback and Gallery runtimes. No error originates from Settings or `settings-template`.
+
+## Comparison history
+
+1. Initial state
+   - The top band contained the Gil header, Settings summary toolbar, Capabilities trigger, Preacherman logo, and window controls.
+2. First clearing pass
+   - Removed the two Settings host overlays from the Settings route.
+   - Hid the reference site's `.js-sh` header without removing its layout node.
+   - [P2] The native iframe scrollbar remained white in the otherwise black band.
+3. Final clearing pass
+   - Kept the scrollbar's 15 px geometry but made its track and thumb visually black/transparent.
+   - Post-fix evidence confirms a continuous black field with only the logo and three window controls visible.
+
+## Primary interactions tested
+
+- Mouse wheel moved the embedded page from scrollY 0 to 1124.
+- All 84 project entries remain mounted.
+- Scroll was restored to 0 after verification.
+- The lower content remains 5487 px tall and the first project remains at y=500.
+- Light and dark appearance modes both preserve the same pure-black top band.
+
+## Verification
+
+- Settings regression tests: passed, 7/7.
+- TypeScript: passed.
+- Production build: passed.
+
+final result: passed
+
+# Settings direct-entry loading bypass — Design QA (latest)
+
+## Comparison target
+
+- Source visual truth: `D:\Temp\Administrator\codex-clipboard-9dabb4b6-db6b-4933-8eaa-26ea11bd9548.png` (1800 × 1000 px).
+- Rendered implementation: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-direct-entry-final.png` (1800 × 1000 px).
+- Dark-mode verification: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-direct-entry-dark.png` (1800 × 1000 px).
+- CSS viewport: 1800 × 1000 at device scale factor 1 in Microsoft Edge.
+- State: Settings route at scroll position 0, 800–1200 ms after route entry.
+
+## Full-view and focused comparison evidence
+
+- The source and implementation screenshots were opened together in one comparison input at identical pixel dimensions.
+- The source's blocking `10%` WebGL preload state is absent. The actual project grid is already visible in the implementation while the requested pure-black top region remains intact.
+- The source's FPS/GPU/CPU overlay is absent from the rendered Settings document.
+- A focused crop was unnecessary because the failure and its correction are clearly readable in the full 1800 × 1000 comparison.
+
+## Required fidelity surfaces
+
+- Fonts and typography: the reference site's original font, weights, sizing, labels, and numeric project indices render unchanged after direct entry.
+- Spacing and layout rhythm: the existing top clearance, project grid, first-row baseline, and 5487 px document height are preserved.
+- Colors and visual tokens: the top field remains pure black in both light and dark host appearances; the embedded content keeps its original black/white palette.
+- Image quality and asset fidelity: the original local project images render directly; no visible asset was replaced, redrawn, or approximated.
+- Copy and content: all 84 project entries remain mounted; only the loading/debug state was removed.
+
+## Findings
+
+- No actionable P0, P1, or P2 findings remain.
+- Three pre-existing console errors originate from the always-mounted Task Lookback and Gallery runtimes. No accepted-view error originates from Settings or `settings-template`.
+
+## Comparison history
+
+1. Initial state
+   - The desktop WebView enabled the reference site's `has-gl` path, showed `10%`, and never reached the project grid.
+2. Final state
+   - The copied reference entry points now opt out of `has-gl` before the Nuxt runtime starts.
+   - The iframe load handler removes the class again as a defensive fallback.
+   - Post-fix evidence shows the project grid immediately with no percent or performance labels.
+
+## Primary interactions tested
+
+- Mouse-wheel input moved the embedded page to scrollY 1125 of a 4487 px scroll range.
+- All 84 project entries remain mounted and the document height remains 5487 px.
+- The reference header remains hidden and the persistent Preacherman logo/window controls remain visible.
+- Light and dark host appearances both enter without a loader.
+
+## Verification
+
+- Settings regression tests: passed, 7/7.
+- Browser direct-entry checks: passed in Microsoft Edge.
+
+final result: passed
+
+# Settings native code reconstruction — Design QA (latest)
+
+## Comparison target
+
+- Source visual truth: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-direct-entry-final.png` (1800 × 1000 px), captured from the supplied Gil Huybrecht reference before its runtime copy was removed.
+- Rendered implementation: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-native-final-light.png` (1800 × 1000 px).
+- Dark-mode verification: `D:\preacherman\apps\preacherman-demo-host\output\playwright\settings-native-final-dark.png` (1800 × 1000 px).
+- CSS viewport: 1800 × 1000 at device scale factor 1 in Microsoft Edge.
+- State: Settings route, scroll position 0, 1500 ms after native route entry.
+
+## Full-view and focused comparison evidence
+
+- The source and final implementation screenshots were opened together in one comparison input at identical dimensions and density.
+- The first project begins at x=16.796875, y=500 with a 237.9375 px card width and the complete native document remains 5487 px tall, matching the measured reference values.
+- The project order, headings, indices, 14-column grid, image crops, pure-black top region, Preacherman logo, and persistent window controls align with the source.
+- The autoplay video cards can show different frames at capture time; this is expected motion-state variation, not asset drift.
+- The first visible two grid rows were legible at full resolution, so a separate crop was not needed.
+
+## Required fidelity surfaces
+
+- Fonts and typography: the original Lay Grotesk Medium font is bundled locally and used at the reference's responsive root scale, weight, line height, and antialiasing.
+- Spacing and layout rhythm: the 14-column desktop grid, 16.8 px gaps, 90 px row rhythm, 500 px first-content offset, card aspects, footer spacing, and 5487 px document height match the reference measurements.
+- Colors and visual tokens: Settings uses semantic `--demo-theme-settings-*` tokens; both light and dark host appearances intentionally resolve this authored page to pure black with white content.
+- Image quality and asset fidelity: all 76 images and 8 videos are the original local files. All 84 runtime asset references exist, and no visible image was redrawn or approximated.
+- Copy and content: all 84 entries, 19 project groups, numbering, footer links, newsletter copy, form fields, and legal note are present.
+- Interactions and accessibility: wheel scrolling, autoplay/loop/muted video, media fade-in, newsletter open/close, Escape dismissal, form submission, semantic dialog markup, reduced-motion support, and persistent desktop controls were verified.
+
+## Findings
+
+- No actionable P0, P1, or P2 visual findings remain.
+- The only capture variance is the exact frame shown by autoplaying videos.
+
+## Comparison history
+
+1. Previous implementation used a copied Nuxt site inside an iframe.
+2. Native reconstruction replaced it with React/TypeScript/CSS, local media, and generated typed content data.
+3. The old `public/settings-template` runtime and extraction helper were removed after asset and layout verification.
+4. Final same-viewport comparison found no P0/P1/P2 mismatch; no additional visual correction was required after the final capture.
+
+## Primary interactions tested
+
+- Mouse wheel moved the native Settings scroller from 0 to 1100 within a 4487 px scroll range.
+- 84 cards, 76 images, and 8 videos mounted; the page issued zero `settings-template` resource requests.
+- No percent loader or FPS/GPU/CPU text appeared.
+- Light and dark appearance modes both retained the black canvas, 84 cards, logo, and three window controls.
+- Newsletter trigger, modal, fields, submit state, backdrop close, and Escape close were exercised.
+- Browser console: zero errors in both final appearance checks.
+
+## Verification
+
+- Settings/theme regression tests: passed, 11/11.
+- TypeScript and production build: passed.
+- Native asset audit: 84/84 references present; old mirror absent.
 
 final result: passed

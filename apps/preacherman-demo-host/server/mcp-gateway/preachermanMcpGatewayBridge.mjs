@@ -137,12 +137,12 @@ export function createPreachermanMcpGatewayBridge({
   }
 
   return {
-    async openSession({ clientName = "unknown-mcp-client", clientVersion = "unknown", transport = "stdio" } = {}) {
+    async openSession({ clientName = "unknown-mcp-client", clientVersion = "unknown", transport = "stdio", workspacePath } = {}) {
       if (session) return session;
       const payload = await request("/api/mcp/gateway/bridge/sessions", {
         method: "POST",
         token: bootstrap,
-        body: { client: { name: clientName, version: clientVersion }, transport },
+        body: { client: { name: clientName, version: clientVersion }, transport, ...(workspacePath ? { workspacePath } : {}) },
       });
       if (!payload.session?.id || !payload.session?.accessToken || !Array.isArray(payload.tools)) {
         throw new McpGatewayBridgeError("Gateway session response is incomplete.", { code: "invalid_session_response" });
