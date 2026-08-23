@@ -26,6 +26,21 @@ body {
   color: var(--task-embed-text);
 }
 
+.js-logo {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+nav[aria-label="Main navigation"].site-menu {
+  grid-column: 1 / -1 !important;
+  justify-self: center;
+  width: max-content;
+}
+
+nav[aria-label="Main navigation"].site-menu a[href$="/about"] {
+  display: none !important;
+}
+
 .about .bg-black {
   background-color: transparent !important;
 }

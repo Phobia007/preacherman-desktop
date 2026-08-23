@@ -106,6 +106,9 @@ test("copied Lookback runtime is namespaced, direct-to-Timeline, and silent", as
   assert.match(bootstrap, /history\.pushState = function taskLookbackReplacePush/);
   assert.match(embedCss, /html,[\s\S]*body,[\s\S]*#__nuxt[\s\S]*background:\s*transparent !important/);
   assert.match(embedCss, /button\[aria-label\^="Play "\]/);
+  assert.match(embedCss, /\.js-logo[\s\S]*visibility:\s*hidden !important/);
+  assert.match(embedCss, /nav\[aria-label="Main navigation"\]\.site-menu[\s\S]*justify-self:\s*center/);
+  assert.match(embedCss, /nav\[aria-label="Main navigation"\]\.site-menu a\[href\$="\/about"\][\s\S]*display:\s*none !important/);
   assert.match(embedCss, /html\[data-preacherman-appearance="light"\]/);
   assert.match(embedCss, /html\[data-preacherman-appearance="dark"\]/);
 });
