@@ -33,6 +33,7 @@ body {
 
 nav[aria-label="Main navigation"].site-menu {
   grid-column: 1 / -1 !important;
+  column-gap: 24px;
   justify-self: center;
   width: max-content;
 }

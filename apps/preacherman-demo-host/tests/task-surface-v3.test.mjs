@@ -87,10 +87,11 @@ test("isolated preview uses the real shared shell and Cortana without altering t
 });
 
 test("copied Lookback runtime is namespaced, direct-to-Timeline, and silent", async () => {
-  const [html, bootstrap, embedCss] = await Promise.all([
+  const [html, bootstrap, embedCss, navigationBundle] = await Promise.all([
     readFile(join(runtimeRoot, "index.html"), "utf8"),
     readFile(join(runtimeRoot, "task-v3-bootstrap.js"), "utf8"),
     readFile(join(runtimeRoot, "task-v3-embed.css"), "utf8"),
+    readFile(join(runtimeRoot, "_nuxt", "BSuY0ud1.js"), "utf8"),
   ]);
 
   assert.match(html, /baseURL:"\/task-lookback-v3\/"/);
@@ -108,7 +109,12 @@ test("copied Lookback runtime is namespaced, direct-to-Timeline, and silent", as
   assert.match(embedCss, /button\[aria-label\^="Play "\]/);
   assert.match(embedCss, /\.js-logo[\s\S]*visibility:\s*hidden !important/);
   assert.match(embedCss, /nav\[aria-label="Main navigation"\]\.site-menu[\s\S]*justify-self:\s*center/);
+  assert.match(embedCss, /nav\[aria-label="Main navigation"\]\.site-menu[\s\S]*column-gap:\s*24px/);
   assert.match(embedCss, /nav\[aria-label="Main navigation"\]\.site-menu a\[href\$="\/about"\][\s\S]*display:\s*none !important/);
+  assert.doesNotMatch(navigationBundle, /" (?:Timeline|Surf|Index), "/);
+  assert.match(navigationBundle, /" Timeline "/);
+  assert.match(navigationBundle, /" Surf "/);
+  assert.match(navigationBundle, /" Index "/);
   assert.match(embedCss, /html\[data-preacherman-appearance="light"\]/);
   assert.match(embedCss, /html\[data-preacherman-appearance="dark"\]/);
 });
