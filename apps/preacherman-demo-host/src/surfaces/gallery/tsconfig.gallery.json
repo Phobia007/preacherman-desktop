@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../../../../..",
+    "paths": {
+      "@preacherman/avatar-renderer": ["packages/preacherman-avatar-renderer/src/index.ts"],
+      "@preacherman/presentation-runtime": ["packages/preacherman-presentation-runtime/src/index.ts"],
+      "@preacherman/surface-skin": ["packages/preacherman-surface-skin/src/index.ts"]
+    }
+  },
+  "include": ["GallerySurface.tsx"]
+}

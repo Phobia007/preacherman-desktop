@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "projects/dogelon-mars/index.html",
+  "entry": "projects/dogelon-mars/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-15T20:59:34.528Z",
+  "updatedAt": "2026-08-15T20:59:34.528Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "projects/the-lookback/index.html",
+  "entry": "projects/the-lookback/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-15T20:59:33.605Z",
+  "updatedAt": "2026-08-15T20:59:33.605Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

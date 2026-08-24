@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "projects/discoveryland/index.html",
+  "entry": "projects/discoveryland/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-15T20:59:35.025Z",
+  "updatedAt": "2026-08-15T20:59:35.025Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

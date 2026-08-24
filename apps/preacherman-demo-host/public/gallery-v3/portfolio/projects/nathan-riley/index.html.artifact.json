@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "projects/nathan-riley/index.html",
+  "entry": "projects/nathan-riley/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-15T20:59:34.070Z",
+  "updatedAt": "2026-08-15T20:59:34.070Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}
