@@ -55,12 +55,12 @@ test("a microphone-free transcript fixture drives the complete avatar response l
   assert.deepEqual(states, ["listening", "thinking", "speaking", "idle"]);
 });
 
-test("the shell owns one persistent avatar while Task leaves its old conversation UI unmounted", async () => {
+test("the shell owns one persistent avatar while Task mounts the Lookback surface", async () => {
   const app = await readFile(join(packageRoot, "src", "App.tsx"), "utf8");
 
   assert.match(app, /scene=\{sceneModelId \? \([\s\S]*<CortanaModelStage[\s\S]*environment="cinematic"[\s\S]*variant="persistent"/);
   assert.doesNotMatch(app, /<ABTaskConsole/);
-  assert.match(app, /const workspaceContent = \(\s*<main[\s\S]*?className="demo-host demo-host--workspace"[\s\S]*?>\s*<\/main>\s*\);/);
+  assert.match(app, /const workspaceContent = <TaskSurface \/>/);
   assert.match(app, /<VoiceSessionControl headless locale=\{preferences\.locale\} \/>/);
   assert.match(app, /const labContent[\s\S]*?<VoiceSessionControl/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);

@@ -31,6 +31,9 @@ import { CortanaModelStage } from "./gallery/CortanaModelStage";
 import { IntroSplash } from "./intro/IntroSplash";
 import { claimStartupIntro } from "./introSequence";
 import { LiveCoordinatorProvider } from "./live/LiveCoordinatorContext";
+import { SettingsScreen } from "./settings/SettingsScreen";
+import { GallerySurface } from "./surfaces/gallery/GallerySurface";
+import { TaskSurface } from "./task/TaskSurface";
 import {
   applyPreferences,
   readPreferences,
@@ -275,14 +278,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       {isCompanionActive ? <VoiceSessionControl headless locale={preferences.locale} /> : null}
     </main>
   );
-  const workspaceContent = (
-    <main
-      className="demo-host demo-host--workspace"
-      data-preacherman-features={featuresForSurface("workspace").join(" ")}
-      data-view={workView}
-    >
-    </main>
-  );
+  const workspaceContent = <TaskSurface />;
   const labContent = (
     <main
       className="demo-host demo-host--lab"
@@ -318,10 +314,15 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           ? workspaceContent
           : activeSurfaceType === "lab"
             ? labContent
-        : activeSurfaceType === "settings" || activeSurfaceType === "market"
-          ? <main
-              aria-label={`${uiCopy[preferences.locale].emptySurfaceLabels[activeSurfaceType]} screen`}
-              className="demo-host"
+        : activeSurfaceType === "market"
+          ? <GallerySurface />
+        : activeSurfaceType === "settings"
+          ? <SettingsScreen
+              appearance={preferences.appearance}
+              locale={preferences.locale}
+              onAppearanceChange={(appearance) => setPreferences((current) => ({ ...current, appearance }))}
+              onLocaleChange={(locale) => setPreferences((current) => ({ ...current, locale }))}
+              requestedControl={requestedControl}
             />
           : activeSurfaceType === "ledger"
             ? <ConversationLedgerScreen

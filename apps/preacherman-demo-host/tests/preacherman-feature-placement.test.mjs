@@ -130,7 +130,7 @@ test("mounted PREACHERMAN buttons focus controls and every button checks its bac
   assert.match(task, /data-preacherman-control="task\.create"/);
   assert.match(task, /data-preacherman-control="task\.confirm"/);
   assert.match(model, /data-preacherman-control="avatar\.status"/);
-  assert.doesNotMatch(app, /<SettingsScreen\b/);
+  assert.match(app, /<SettingsScreen\b/);
   assert.equal((app.match(/visiblePanelSurface !== "settings"/g) ?? []).length, 2);
   assert.match(ledger, /data-preacherman-control="conversation\.history"/);
 });

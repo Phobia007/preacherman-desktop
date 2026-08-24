@@ -44,7 +44,8 @@ test("Task v3 remains an isolated same-origin Timeline surface", async () => {
   assert.match(surface, /aria-busy=/);
   assert.match(surface, /role="alert"/);
   assert.match(surface, /Retry loading The Lookback Timeline/);
-  assert.doesNotMatch(app, /TaskSurface|task-lookback-v3/);
+  assert.match(app, /import \{ TaskSurface \} from "\.\/task\/TaskSurface"/);
+  assert.match(app, /const workspaceContent = <TaskSurface \/>/);
   assert.doesNotMatch(shell, /TaskSurface|task-lookback-v3/);
 });
 

@@ -184,12 +184,14 @@ test("Home, Task, Gallery, and Settings share one unchanged persistent scene", a
 
   assert.match(app, /activeSurfaceType\s*===\s*["']home["']/);
   assert.match(app, /activeSurfaceType\s*===\s*["']settings["']/);
-  assert.match(app, /activeSurfaceType === "settings" \|\| activeSurfaceType === "market"[\s\S]*className="demo-host"/);
-  assert.doesNotMatch(app, /<SettingsScreen|<TaskLookbackExperience|<CortanaGallery/);
+  assert.match(app, /const workspaceContent = <TaskSurface \/>/);
+  assert.match(app, /activeSurfaceType === "market"[\s\S]*<GallerySurface \/>/);
+  assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(hostRule, /background:\s*transparent/);
   assert.equal(emptyRule, "");
   assert.match(sceneRule, /background:\s*var\(--demo-theme-home-canvas\)/);
   assert.match(app, /const sceneModelId = activeModelId;/);
+  assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.doesNotMatch(app, /sceneHidden=/);
   assert.doesNotMatch(shell, /Math\.max\(window\.innerWidth\s*\/\s*1800/);
   assert.match(shell, /Math\.min\(window\.innerWidth\s*\/\s*1800,\s*window\.innerHeight\s*\/\s*1000\)/);

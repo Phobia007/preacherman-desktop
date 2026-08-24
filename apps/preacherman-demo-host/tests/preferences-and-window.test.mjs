@@ -30,7 +30,9 @@ test("the desktop shell keeps persisted appearance and language preferences", as
   assert.match(preferences, /document\.documentElement\.dataset\.appearance = preferences\.appearance/);
   assert.match(shell, /data-appearance=\{appearance\}/);
   assert.match(shell, /data-locale=\{locale\}/);
-  assert.doesNotMatch(app, /<SettingsScreen\b/);
+  assert.match(app, /<SettingsScreen\b/);
+  assert.match(app, /onAppearanceChange=\{\(appearance\) => setPreferences/);
+  assert.match(app, /onLocaleChange=\{\(locale\) => setPreferences/);
   assert.match(app, /readPreferences/);
   assert.match(app, /applyPreferences\(preferences\)/);
   assert.match(app, /savePreferences/);
@@ -70,13 +72,12 @@ test("Settings exposes the PREACHERMAN plugin lifecycle and tool console in both
   assert.match(styles, /var\(--demo-theme-focus\)/);
 });
 
-test("Settings starts as a blank themed layer while preserving desktop chrome", async () => {
+test("Settings mounts its themed surface while preserving desktop chrome", async () => {
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
 
-  assert.match(app, /activeSurfaceType === "settings" \|\| activeSurfaceType === "market"[\s\S]*?<main[\s\S]*?className="demo-host"[\s\S]*?\/>/);
-  assert.doesNotMatch(app, /<SettingsScreen\b/);
+  assert.match(app, /activeSurfaceType === "settings"[\s\S]*?<SettingsScreen\b/);
   assert.equal((app.match(/visiblePanelSurface !== "settings"/g) ?? []).length, 2, "Settings must omit both host overlay panels");
   assert.match(styles, /--demo-theme-canvas:/);
   assert.match(styles, /--demo-theme-surface:/);

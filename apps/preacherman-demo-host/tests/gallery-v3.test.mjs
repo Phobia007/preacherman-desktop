@@ -82,6 +82,13 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
     /globalProperties\?\.\$router/,
   );
   assert.match(index, /router\.push\(route\)/);
+  assert.match(index, /nuxtData\.dataset\.ssr="false"/);
+  assert.match(index, /payload\[8\]=false/);
+  assert.match(index, /preserveHostChrome/);
+  assert.match(index, /brand-home[^\n]+\?\.remove\(\)/);
+  assert.match(index, /preMountObserver\.disconnect\(\)/);
+  assert.match(index, /nuxtRoot\?\.__vue_app__/);
+  assert.match(index, /setTimeout\(ready,50\)/);
   assert.match(index, /classList\.contains\("preview-ready"\)/);
   assert.match(index, /signalSourceReady/);
 });
