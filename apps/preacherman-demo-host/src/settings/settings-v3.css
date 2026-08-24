@@ -1,0 +1,104 @@
+.demo-host.demo-settings.settings-v3 {
+  --settings-v3-text: var(--demo-theme-settings-text);
+  --settings-v3-focus: var(--demo-theme-settings-focus);
+  --settings-v3-reference-opacity: 1;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  color: var(--settings-v3-text);
+  background: transparent;
+  outline: 0;
+  pointer-events: auto;
+}
+
+.demo-app-shell[data-active-surface="settings"] .demo-host.demo-settings.settings-v3 {
+  background: transparent;
+}
+
+.settings-v3:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--settings-v3-focus);
+}
+
+.settings-v3__reveal-mask {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(50% 0 50% 0);
+  opacity: 0;
+  animation: settings-v3-unfold 1180ms cubic-bezier(.7, 0, .2, 1) forwards;
+}
+
+.settings-v3__reference {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 0;
+  color-scheme: dark;
+  background: transparent;
+  mix-blend-mode: normal;
+  opacity: var(--settings-v3-reference-opacity);
+}
+
+.settings-v3__reveal-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 12;
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--settings-v3-text);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--settings-v3-text) 78%, transparent);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: settings-v3-line-sweep 1180ms cubic-bezier(.2, 1, .3, 1) forwards;
+  pointer-events: none;
+}
+
+.demo-app-shell[data-appearance="light"] .settings-v3 {
+  --settings-v3-reference-opacity: 1;
+}
+
+.demo-app-shell[data-appearance="dark"] .settings-v3 {
+  --settings-v3-reference-opacity: 1;
+}
+
+@keyframes settings-v3-line-sweep {
+  0% { opacity: 0; transform: scaleX(0); }
+  6% { opacity: 1; transform: scaleX(.018); }
+  34% { opacity: 1; transform: scaleX(1); }
+  52% { opacity: .62; transform: scaleX(1); }
+  61% { opacity: 1; transform: scaleX(1); }
+  70% { opacity: .36; transform: scaleX(1); }
+  79% { opacity: .92; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1); }
+}
+
+@keyframes settings-v3-unfold {
+  0%, 33% { clip-path: inset(50% 0 50% 0); opacity: 0; }
+  34% { clip-path: inset(49.9% 0 49.9% 0); opacity: 1; }
+  56% { clip-path: inset(42% 0 42% 0); opacity: 1; }
+  64% { clip-path: inset(40% 0 40% 0); opacity: .82; }
+  71% { clip-path: inset(41.5% 0 41.5% 0); opacity: 1; }
+  78% { clip-path: inset(37% 0 37% 0); opacity: .92; }
+  82%, 100% { clip-path: inset(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-v3__reveal-mask {
+    clip-path: inset(0);
+    opacity: 1;
+    animation: none;
+  }
+
+  .settings-v3__reveal-line {
+    display: none;
+    animation: none;
+  }
+}

@@ -1,0 +1,1 @@
+import{_ as n}from"./DlAUqK2U.js";import{aD as t,ah as o,aL as r}from"./D5R78ZMm.js";const s={},a={class:"inline-flex items-center h-25 px-6 pt-[.075em] text-17 leading-none font-medium rounded-5 border border-white/20"};function c(e,_){return t(),o("span",a,[r(e.$slots,"default")])}const m=n(s,[["render",c]]);export{m as _};

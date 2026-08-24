@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "profile/index-original.html",
+  "entry": "profile/index-original.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-16T22:18:10.604Z",
+  "updatedAt": "2026-08-16T22:18:10.604Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

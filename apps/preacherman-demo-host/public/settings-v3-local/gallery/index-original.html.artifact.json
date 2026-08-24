@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "gallery/index-original.html",
+  "entry": "gallery/index-original.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-16T22:18:13.135Z",
+  "updatedAt": "2026-08-16T22:18:13.135Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}
