@@ -158,6 +158,34 @@
       (candidate) => candidate.textContent?.trim() === "Loaded",
     );
 
+  const timelineCardVisible = () =>
+    Array.from(document.querySelectorAll(".js-flip-target")).some((card) => {
+      const bounds = card.getBoundingClientRect();
+      const styles = getComputedStyle(card);
+      return (
+        bounds.width > 1 &&
+        bounds.height > 1 &&
+        bounds.right > 0 &&
+        bounds.bottom > 0 &&
+        bounds.left < window.innerWidth &&
+        bounds.top < window.innerHeight &&
+        styles.visibility !== "hidden" &&
+        Number.parseFloat(styles.opacity || "1") > 0.01
+      );
+    });
+
+  const startSilentTimeline = async (button) => {
+    const deadline = performance.now() + 5000;
+
+    while (performance.now() < deadline) {
+      button.click();
+      await new Promise((resolve) => setTimeout(resolve, 120));
+      if (timelineCardVisible()) return true;
+    }
+
+    return false;
+  };
+
   const observer = new MutationObserver((records) => {
     records.forEach((record) => record.addedNodes.forEach(silenceAudio));
   });
@@ -193,10 +221,13 @@
           ),
           new Promise((resolve) => setTimeout(resolve, 1600)),
         ]);
+        if (!(await startSilentTimeline(silentEntryButton))) {
+          postToHost(errorMessage, "Timeline cards did not become visible in time.");
+          return;
+        }
         await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         document.documentElement.dataset.taskLookbackReady = "true";
         postToHost(readyMessage, { route: "timeline", audio: false });
-        requestAnimationFrame(() => silentEntryButton.click());
         return;
       }
 

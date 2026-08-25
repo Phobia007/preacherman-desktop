@@ -105,8 +105,11 @@ test("copied Lookback runtime is namespaced, direct-to-Timeline, and silent", as
   assert.match(bootstrap, /textContent\?\.trim\(\) === "\.\.\.or without"/);
   assert.match(bootstrap, /textContent\?\.trim\(\) === "Loaded"/);
   assert.match(bootstrap, /const introReady =/);
+  assert.match(bootstrap, /const timelineCardVisible =/);
+  assert.match(bootstrap, /const startSilentTimeline = async/);
+  assert.match(bootstrap, /button\.click\(\);[\s\S]*timelineCardVisible\(\)/);
+  assert.match(bootstrap, /Timeline cards did not become visible in time\./);
   assert.match(bootstrap, /postToHost\(readyMessage/);
-  assert.match(bootstrap, /requestAnimationFrame\(\(\) => silentEntryButton\.click\(\)\)/);
   assert.doesNotMatch(bootstrap, /if \(!choseSilentEntry\) chooseSilentEntry\(\)/);
   assert.match(bootstrap, /window\.Audio = SilentAudio/);
   assert.match(bootstrap, /this instanceof HTMLAudioElement/);
