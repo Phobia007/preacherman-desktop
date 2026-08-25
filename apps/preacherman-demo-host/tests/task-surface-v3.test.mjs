@@ -44,6 +44,8 @@ test("Task v3 remains an isolated same-origin Timeline surface", async () => {
   assert.match(surface, /aria-busy=/);
   assert.match(surface, /role="alert"/);
   assert.match(surface, /Retry loading The Lookback Timeline/);
+  assert.doesNotMatch(surface, /Opening The Lookback Timeline/);
+  assert.doesNotMatch(surface, /task-surface__loading-mark/);
   assert.match(app, /import \{ TaskSurface \} from "\.\/task\/TaskSurface"/);
   assert.match(app, /const workspaceContent = <TaskSurface \/>/);
   assert.doesNotMatch(shell, /TaskSurface|task-lookback-v3/);
@@ -63,9 +65,9 @@ test("Task v3 owns the requested white-line and pulsed vertical aperture motion"
   assert.match(css, /clip-path:\s*inset\(0\)/);
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)/);
   assert.match(css, /var\(--demo-theme-task-text\)/);
-  assert.match(css, /var\(--demo-theme-loading\)/);
   assert.match(css, /var\(--demo-theme-error\)/);
   assert.match(css, /var\(--demo-theme-focus\)/);
+  assert.doesNotMatch(css, /task-surface__loading-mark|task-surface-loading/);
   assert.doesNotMatch(css, /\.demo-app-shell__chrome|\.demo-window-controls/);
 });
 
@@ -101,6 +103,11 @@ test("copied Lookback runtime is namespaced, direct-to-Timeline, and silent", as
   assert.match(html, /task-v3-embed\.css/);
   assert.doesNotMatch(html, /(?:src|href)="\/(?:_nuxt|assets)\//);
   assert.match(bootstrap, /textContent\?\.trim\(\) === "\.\.\.or without"/);
+  assert.match(bootstrap, /textContent\?\.trim\(\) === "Loaded"/);
+  assert.match(bootstrap, /const introReady =/);
+  assert.match(bootstrap, /postToHost\(readyMessage/);
+  assert.match(bootstrap, /requestAnimationFrame\(\(\) => silentEntryButton\.click\(\)\)/);
+  assert.doesNotMatch(bootstrap, /if \(!choseSilentEntry\) chooseSilentEntry\(\)/);
   assert.match(bootstrap, /window\.Audio = SilentAudio/);
   assert.match(bootstrap, /this instanceof HTMLAudioElement/);
   assert.match(bootstrap, /return nativeMediaPlay\.call\(this\)/);

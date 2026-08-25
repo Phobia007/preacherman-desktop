@@ -148,20 +148,18 @@
     // No same-origin parent is available in the standalone reference.
   }
 
-  let choseSilentEntry = false;
-  const chooseSilentEntry = () => {
-    const button = Array.from(document.querySelectorAll("button")).find(
+  const findSilentEntryButton = () =>
+    Array.from(document.querySelectorAll("button")).find(
       (candidate) => candidate.textContent?.trim() === "...or without",
     );
-    if (!button) return false;
-    choseSilentEntry = true;
-    button.click();
-    return true;
-  };
+
+  const introReady = () =>
+    Array.from(document.querySelectorAll(".intro .js-text")).some(
+      (candidate) => candidate.textContent?.trim() === "Loaded",
+    );
 
   const observer = new MutationObserver((records) => {
     records.forEach((record) => record.addedNodes.forEach(silenceAudio));
-    if (!choseSilentEntry) chooseSilentEntry();
   });
   observer.observe(document.documentElement, { childList: true, subtree: true });
 
@@ -169,17 +167,15 @@
     const deadline = performance.now() + 12000;
 
     while (performance.now() < deadline) {
-      chooseSilentEntry();
       silenceAudio(document);
 
       const timelineLink = Array.from(document.querySelectorAll("a")).find((link) =>
         link.textContent?.trim().startsWith("Timeline"),
       );
       const timeline = document.querySelector(".carousel, .js-slides");
-      const intro = document.querySelector(".intro");
-      const introInactive = !intro || getComputedStyle(intro).pointerEvents === "none";
+      const silentEntryButton = findSilentEntryButton();
 
-      if (timelineLink && timeline && introInactive) {
+      if (timelineLink && timeline && silentEntryButton && introReady()) {
         await document.fonts?.ready?.catch(() => undefined);
         const visibleImages = Array.from(document.querySelectorAll("img"))
           .filter((image) => image.getBoundingClientRect().width > 0)
@@ -200,6 +196,7 @@
         await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         document.documentElement.dataset.taskLookbackReady = "true";
         postToHost(readyMessage, { route: "timeline", audio: false });
+        requestAnimationFrame(() => silentEntryButton.click());
         return;
       }
 

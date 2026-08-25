@@ -77,15 +77,6 @@
   font: 500 13px/1.55 "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 }
 
-.task-surface__loading-mark {
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--demo-theme-border);
-  border-top-color: var(--demo-theme-loading);
-  border-radius: 50%;
-  animation: task-surface-loading 720ms linear infinite;
-}
-
 .task-surface__status--error {
   color: var(--demo-theme-error);
 }
@@ -166,12 +157,6 @@
   }
 }
 
-@keyframes task-surface-loading {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .task-surface__aperture[data-state="ready"] {
     animation: none;
@@ -183,7 +168,6 @@
     animation: none;
   }
 
-  .task-surface__loading-mark,
   .task-surface__status button {
     animation: none;
     transition: none;

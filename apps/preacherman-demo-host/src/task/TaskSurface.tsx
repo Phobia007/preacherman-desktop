@@ -94,13 +94,6 @@ export function TaskSurface() {
         <div aria-hidden="true" className="task-surface__scan-line" key={`scan-${attempt}`} />
       ) : null}
 
-      {loadState === "loading" ? (
-        <div className="task-surface__status" role="status">
-          <span aria-hidden="true" className="task-surface__loading-mark" />
-          <p>Opening The Lookback Timeline…</p>
-        </div>
-      ) : null}
-
       {loadState === "error" ? (
         <div className="task-surface__status task-surface__status--error" role="alert">
           <p>{errorMessage}</p>
