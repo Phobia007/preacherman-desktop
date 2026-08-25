@@ -36,3 +36,16 @@ Every completed change to the Preacherman Demo Host must also be delivered to th
 - Do not change the default startup route: the shortcut must open the normal Home flow, and the user chooses Gallery from the application navigation unless explicitly requested otherwise.
 - Before handoff, resolve the shortcut again, verify the deployed executable's timestamp and SHA-256 against the newly built artifact, launch through the shortcut itself, and smoke-test the changed flow.
 - A source-only or browser-preview-only result is not complete when the task changes the Demo Host.
+
+## Mandatory Lightweight Desktop Update Contract
+
+All Demo Host updates must follow [docs/desktop-lightweight-update-contract.md](docs/desktop-lightweight-update-contract.md). In this project, "lightweight" means reusing verified build caches and rebuilding only the components affected by the source change. It never means moving packaged UI content behind a runtime local HTTP dependency.
+
+- Keep the production Demo Host self-contained. Home models, Task, Gallery, Settings, fonts, media, and authored UI assets must remain available through the packaged Tauri application on the first cold launch.
+- Do not reintroduce the reverted external-asset architecture from commit `a339a92`. In particular, do not serve packaged UI through `127.0.0.1:8788`, `/ui/`, `PREACHERMAN_UI_ROOT`, `runtimeAssetUrl`, a reduced `tauri-dist` shell, or a `preacherman-ui` resource directory owned by the sidecar.
+- Achieve fast updates with incremental Cargo/Tauri output, preserved `target` caches, focused tests, and change-scoped builds. Do not run `cargo clean`, delete the release cache, rebuild the Windows sidecar when its source did not change, or build an installer when only the canonical release executable is required.
+- Complete source checks before starting the single intended production build. Do not launch overlapping Cargo, Rust, Vite, or Tauri builds for the same target directory.
+- Preserve a recoverable copy of both the deployed executable and sidecar before replacement. If either member of the pair changes, record both hashes and deploy a verified matching pair.
+- A release is not verified by HTTP status or process existence alone. Cold-launch the desktop shortcut and visually verify Home, Task, Gallery, and Settings, including the Home model, Task cards and authored motion, Gallery content and interaction, both appearance modes, console errors, responsiveness, and abnormal sustained CPU usage.
+- Missing content, a first-entry timeout, a white screen, a local-model error, loss of interaction, or sustained abnormal CPU use is an immediate release failure. Stop deployment, restore the last verified executable and sidecar together, and record the rollback in `desktop-build-manifest.json` and Git.
+- Never hand off a build that depends on retrying, reloading, switching tabs, or waiting for a late sidecar in order to reveal its first usable content.
