@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { runtimeAssetUrl } from "../../runtimeAssets";
 
 import "./gallery-surface.css";
 
@@ -18,7 +19,8 @@ type GalleryThemeMessage = {
   compositeKey: string;
 };
 
-const gallerySourcePath = "/gallery-v3/portfolio/index.html";
+const gallerySourcePath = runtimeAssetUrl("/gallery-v3/portfolio/index.html");
+const gallerySourceOrigin = new URL(gallerySourcePath, window.location.href).origin;
 type GalleryRevealState =
   | "loading"
   | "scanning"
@@ -61,9 +63,7 @@ export function GallerySurface() {
         .getPropertyValue("--demo-theme-gallery-composite-key")
         .trim(),
     };
-    const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
-
-    frameWindow.postMessage(message, targetOrigin);
+    frameWindow.postMessage(message, gallerySourceOrigin);
   }, []);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export function GallerySurface() {
         return;
       }
 
-      if (window.location.origin !== "null" && event.origin !== window.location.origin) {
+      if (event.origin !== gallerySourceOrigin) {
         return;
       }
 

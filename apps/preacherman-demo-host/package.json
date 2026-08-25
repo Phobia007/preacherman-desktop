@@ -9,6 +9,7 @@
     "dev:ui": "vite --host 127.0.0.1 --port 1420 --strictPort",
     "dev:service": "node --env-file-if-exists=.env.local server/index.mjs",
     "build": "tsc --noEmit && vite build",
+    "build:tauri-frontend": "npm run build && node scripts/prepare-tauri-frontend.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --test --test-isolation=none tests/*.test.mjs",
     "test:cortana-voice-telemetry": "node --test --test-isolation=none tests/cortana-voice-timing.test.mjs tests/cortana-voice-telemetry-runtime.test.mjs",

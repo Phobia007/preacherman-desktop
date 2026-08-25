@@ -1,16 +1,20 @@
 import { createPreachermanServer } from "./preachermanServer.mjs";
+import { createStaticUiServer } from "./staticUiServer.mjs";
 
 const service = createPreachermanServer();
-service.listen().then((address) => {
-  const port = typeof address === "object" && address ? address.port : 8787;
-  console.log(`Preacherman local service listening on http://127.0.0.1:${port}`);
+const uiService = createStaticUiServer();
+Promise.all([uiService.listen(), service.listen()]).then(([uiAddress, serviceAddress]) => {
+  const uiPort = typeof uiAddress === "object" && uiAddress ? uiAddress.port : 8788;
+  const servicePort = typeof serviceAddress === "object" && serviceAddress ? serviceAddress.port : 8787;
+  console.log(`Preacherman UI assets listening on http://127.0.0.1:${uiPort}`);
+  console.log(`Preacherman local service listening on http://127.0.0.1:${servicePort}`);
 }).catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
 
 async function shutdown() {
-  await service.close();
+  await Promise.all([uiService.close(), service.close()]);
 }
 
 process.on("SIGINT", shutdown);
