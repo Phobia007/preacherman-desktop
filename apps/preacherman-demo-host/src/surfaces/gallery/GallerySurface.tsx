@@ -15,6 +15,7 @@ type GalleryThemeMessage = {
   appearance: GalleryAppearance;
   text: string;
   focus: string;
+  compositeKey: string;
 };
 
 const gallerySourcePath = "/gallery-v3/portfolio/index.html";
@@ -47,12 +48,18 @@ export function GallerySurface() {
     }
 
     const root = document.documentElement;
-    const rootStyles = getComputedStyle(root);
+    const themeSource = document.querySelector<HTMLElement>(".demo-app-shell") ?? root;
+    const rootStyles = getComputedStyle(themeSource);
     const message: GalleryThemeMessage = {
       type: "gallery-theme",
       appearance: getAppearance(),
-      text: rootStyles.getPropertyValue("--demo-theme-text").trim(),
+      text: rootStyles
+        .getPropertyValue("--demo-theme-gallery-control-hover")
+        .trim(),
       focus: rootStyles.getPropertyValue("--demo-theme-focus").trim(),
+      compositeKey: rootStyles
+        .getPropertyValue("--demo-theme-gallery-composite-key")
+        .trim(),
     };
     const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
 
@@ -133,7 +140,7 @@ export function GallerySurface() {
     [],
   );
 
-  const handleRevealEnd = useCallback((event: AnimationEvent<HTMLDivElement>) => {
+  const handleRevealEnd = useCallback((event: AnimationEvent<HTMLIFrameElement>) => {
     if (
       event.currentTarget === event.target &&
       event.animationName === "gallery-surface-open"
@@ -159,9 +166,10 @@ export function GallerySurface() {
       className="gallery-surface"
       data-reveal-state={revealState}
     >
-      <div className="gallery-surface__mask" onAnimationEnd={handleRevealEnd}>
+      <div className="gallery-surface__mask">
         <iframe
           className="gallery-surface__frame"
+          onAnimationEnd={handleRevealEnd}
           onLoad={sendThemeToFrame}
           ref={frameRef}
           src={gallerySourcePath}

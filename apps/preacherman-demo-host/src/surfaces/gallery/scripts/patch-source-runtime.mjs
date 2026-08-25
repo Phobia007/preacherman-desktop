@@ -112,8 +112,9 @@ if (scopedTextureCount > 0 || relativeTextureCount > 0) {
 fs.writeFileSync(manifestPath, manifest);
 
 const sourceOverrides = `<style id="gallery-host-overrides">
-html,body{background:transparent!important}
-body:before{background:transparent!important}
+html,body,#__nuxt,#__nuxt>.bg-black{background:var(--gallery-host-composite-key,#000)!important}
+body:before{display:none!important}
+[data-od-id="error-state"]{display:none!important}
 @font-face{font-family:"Gallery Brother Signature";src:url("/gallery-v3/portfolio/assets/fonts/BrotherSignature-7BWnK.otf") format("opentype");font-style:normal;font-weight:400;font-display:swap}
 [data-od-id="brand-home"]{display:none!important}
 [data-od-id="profile-toggle"]{left:50%!important;right:auto!important;transform:translateX(-50%)!important}
@@ -128,7 +129,7 @@ body:before{background:transparent!important}
 
 const sourceBridge = `<script id="gallery-host-bridge">(()=>{
 const base="/gallery-v3/portfolio/";
-const applyTheme=data=>{if(!data||data.type!=="gallery-theme")return;const root=document.documentElement;root.dataset.galleryAppearance=data.appearance||"dark";if(data.text)root.style.setProperty("--gallery-host-text",data.text);if(data.focus)root.style.setProperty("--gallery-host-focus",data.focus)};
+const applyTheme=data=>{if(!data||data.type!=="gallery-theme")return;const root=document.documentElement;root.dataset.galleryAppearance=data.appearance||"dark";if(data.text)root.style.setProperty("--gallery-host-text",data.text);if(data.focus)root.style.setProperty("--gallery-host-focus",data.focus);if(data.compositeKey)root.style.setProperty("--gallery-host-composite-key",data.compositeKey)};
 addEventListener("message",event=>applyTheme(event.data));
 const normalizeLinks=()=>{for(const anchor of document.querySelectorAll("a[href]")){const raw=anchor.getAttribute("href");if(!raw||raw.startsWith("#")||raw.startsWith("mailto:")||raw.startsWith("tel:"))continue;let url;try{url=new URL(raw,location.href)}catch{continue}if(url.origin!==location.origin)continue;const odId=anchor.dataset.odId;const relative=url.pathname.startsWith(base)?url.pathname.slice(base.length):url.pathname.slice(1);const parts=relative.split("/").filter(Boolean);if(odId==="brand-home"||odId==="view-featured"||url.pathname==="/"){url.pathname=base}else if(odId==="view-full"||parts[0]==="full"){url.pathname=base+"full/index.html"}else if(parts[0]==="projects"&&parts[1]){url.pathname=base+"projects/"+parts[1]+"/index.html"}else continue;anchor.href=url.href}};
 const routeFor=target=>{const card=target.closest?.('[data-od-id^="project-card-"]');const slug=card?.dataset?.id;if(slug)return"/projects/"+encodeURIComponent(slug);const anchor=target.closest?.("a[href]");if(!anchor)return null;const odId=anchor.dataset.odId;if(odId==="brand-home"||odId==="view-featured")return"/";if(odId==="view-full")return"/full";let url;try{url=new URL(anchor.href,location.href)}catch{return null}if(url.origin!==location.origin)return null;const relative=url.pathname.startsWith(base)?url.pathname.slice(base.length):url.pathname.slice(1);const parts=relative.split("/").filter(Boolean);if(relative===""||relative==="index.html")return"/";if(parts[0]==="full")return"/full";if(parts[0]==="projects"&&parts[1])return"/projects/"+parts[1];return null};
@@ -141,7 +142,7 @@ const normalizeProfileCopy=()=>{const paragraphs=[...document.querySelectorAll("
 const syncInterface=()=>{normalizeLinks();normalizeProfileLabel();normalizeProfileCopy()};
 let sourceReadySent=false;
 const signalSourceReady=()=>{if(sourceReadySent)return;sourceReadySent=true;requestAnimationFrame(()=>requestAnimationFrame(()=>parent.postMessage({type:"gallery-source-ready",path:location.pathname},"*")))};
-const ready=()=>{syncInterface();if(document.body.classList.contains("preview-ready")){signalSourceReady();return}const observer=new MutationObserver(()=>{if(!document.body.classList.contains("preview-ready"))return;observer.disconnect();signalSourceReady()});observer.observe(document.body,{attributes:true,attributeFilter:["class"]});setTimeout(signalSourceReady,10000)};
+const ready=()=>{syncInterface();if(document.body.classList.contains("preview-ready")){signalSourceReady();return}const observer=new MutationObserver(()=>{if(!document.body.classList.contains("preview-ready"))return;observer.disconnect();signalSourceReady()});observer.observe(document.body,{attributes:true,attributeFilter:["class"]})};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",ready,{once:true});else ready();
 new MutationObserver(syncInterface).observe(document.documentElement,{subtree:true,childList:true});
 })()</script>`;

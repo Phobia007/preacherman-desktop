@@ -28,6 +28,7 @@ test("Gallery v3 embeds the copied local portfolio without replacement imagery",
 });
 
 test("Gallery v3 reveal uses semantic theme variables and reduced motion", () => {
+  const component = read(galleryRoot, "GallerySurface.tsx");
   const styles = read(galleryRoot, "gallery-surface.css");
   const tauriConfig = JSON.parse(read(appRoot, "src-tauri", "tauri.conf.json"));
   assert.match(styles, /--demo-theme-/);
@@ -47,6 +48,12 @@ test("Gallery v3 reveal uses semantic theme variables and reduced motion", () =>
   );
   assert.match(tauriConfig.app.security.csp, /worker-src[^;]*blob:/);
   assert.match(tauriConfig.app.security.devCsp, /worker-src[^;]*blob:/);
+  assert.match(tauriConfig.app.security.csp, /script-src[^;]*'unsafe-eval'/);
+  assert.match(tauriConfig.app.security.devCsp, /script-src[^;]*'unsafe-eval'/);
+  assert.doesNotMatch(styles, /mix-blend-mode|isolation:\s*isolate/);
+  assert.match(component, /onAnimationEnd=\{handleRevealEnd\}/);
+  assert.match(component, /--demo-theme-gallery-control-hover/);
+  assert.match(component, /querySelector<HTMLElement>\("\.demo-app-shell"\)/);
   assert.doesNotMatch(styles, /1480ms|clip-path|inset\(39%|inset\(42%/);
   assert.doesNotMatch(styles, /#[0-9a-f]{3,8}\b/i);
 });
@@ -100,6 +107,9 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
   );
   assert.match(index, /classList\.contains\("preview-ready"\)/);
   assert.match(index, /signalSourceReady/);
+  assert.doesNotMatch(index, /setTimeout\(signalSourceReady,10000\)/);
+  assert.match(index, /\[data-od-id="error-state"\]\{display:none!important\}/);
+  assert.match(index, /--gallery-host-composite-key/);
 });
 
 test("copied portfolio keeps original media and scopes runtime paths", () => {

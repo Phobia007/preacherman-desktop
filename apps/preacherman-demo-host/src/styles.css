@@ -295,6 +295,7 @@ html[data-appearance="dark"] #root {
   --demo-theme-gallery-control: rgb(229 239 243 / 64%);
   --demo-theme-gallery-control-hover: rgb(245 250 252 / 96%);
   --demo-theme-gallery-scan: rgb(218 237 244 / 88%);
+  --demo-theme-gallery-composite-key: #000000;
   --demo-theme-gallery-detail-surface: #ffffff;
   --demo-theme-gallery-detail-action-rest-bg: #ffffff;
   --demo-theme-gallery-detail-action-rest-border: #111111;
@@ -373,6 +374,7 @@ html[data-appearance="dark"] #root {
   --demo-theme-gallery-control: rgb(229 239 243 / 64%);
   --demo-theme-gallery-control-hover: rgb(245 250 252 / 96%);
   --demo-theme-gallery-scan: rgb(218 237 244 / 88%);
+  --demo-theme-gallery-composite-key: #000000;
   --demo-theme-gallery-detail-surface: #ffffff;
   --demo-theme-gallery-detail-action-rest-bg: #ffffff;
   --demo-theme-gallery-detail-action-rest-border: #111111;

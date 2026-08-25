@@ -10,7 +10,6 @@
   overflow: hidden;
   color: var(--demo-theme-text);
   background: transparent;
-  isolation: isolate;
 }
 
 .gallery-surface__mask {
