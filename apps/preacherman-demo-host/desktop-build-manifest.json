@@ -2,20 +2,20 @@
   "schemaVersion": 1,
   "buildId": "gallery-fast-interactive-overlay-20260825T210629+0800",
   "productVersion": "0.1.0",
-  "sourceTask": "gallery-fast-interactive-overlay",
+  "sourceTask": "restore-embedded-desktop-assets",
   "sourceThread": "01a01e57-8912-7d31-8853-13e23af6f1d1",
-  "sourceState": "Gallery now loads its local WebGL portfolio in about 3.2 seconds, never reveals its internal loading or error pages, preserves the authored reveal motion, composites the cards over the persistent Cortana model, and restores production card hit areas and project navigation.",
+  "sourceState": "Restored the last verified embedded-resource desktop release after the external-asset cold-start regression; the authored Home, Task, Gallery, and Settings UI remains unchanged.",
   "shortcutPath": "C:\\Users\\Administrator\\Desktop\\Preacherman Desktop Demo.lnk",
   "executablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
   "builtAt": "2026-08-25T21:06:29.9237045+08:00",
-  "deployedAt": "2026-08-25T21:10:53.1677026+08:00",
+  "deployedAt": "2026-08-26T03:31:44+08:00",
   "sizeBytes": 438206976,
   "sha256": "404A1CD4BFF9E59E46B73612D157FB1709178C940523B8551BD6A05178F521A0",
   "sidecarPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-service.exe",
   "sidecarSizeBytes": 93144064,
   "sidecarSha256": "B6926C24249046C92665E423748B6CAEE07EEE4656785B87BC8818D32EE1554C",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\backups\\preacherman-demo-host-20260825-210749.exe",
-  "backupSha256": "F3F75A9A33BB072F1740A7B48FB05A76E58456480F83A03989356F8F7FC1E131",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\backups\\preacherman-demo-host-20260826-0330-broken-external-assets.exe",
+  "backupSha256": "3F855C71AF6D7489FB4B9030641EF12B503F37B929EF51F6D3DF376730903475",
   "verification": {
     "taskIntegrated": "passed",
     "taskFirstEntryCards": "passed",
@@ -45,7 +45,7 @@
     "shortcutTargetHash": "passed",
     "shortcutLaunch": "passed",
     "nativeWindowResponding": "passed",
-    "nativeProcessId": 53488,
-    "nativeServiceProcessId": null
+    "nativeProcessId": 46792,
+    "nativeServiceProcessId": 52836
   }
 }
