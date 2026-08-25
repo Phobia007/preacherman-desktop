@@ -174,16 +174,34 @@
       );
     });
 
-  const startSilentTimeline = async (button) => {
-    const deadline = performance.now() + 5000;
+  const waitFor = async (predicate, timeout = 4000) => {
+    const deadline = performance.now() + timeout;
 
     while (performance.now() < deadline) {
-      button.click();
-      await new Promise((resolve) => setTimeout(resolve, 120));
-      if (timelineCardVisible()) return true;
+      if (predicate()) return true;
+      await new Promise((resolve) => setTimeout(resolve, 80));
     }
 
     return false;
+  };
+
+  const findNavigationLink = (label) =>
+    Array.from(document.querySelectorAll("a")).find(
+      (link) => link.textContent?.trim() === label,
+    );
+
+  const initializeTimelineRoute = async (silentEntryButton) => {
+    silentEntryButton.click();
+
+    const surfLink = findNavigationLink("Surf");
+    if (!surfLink) return false;
+    surfLink.click();
+    if (!(await waitFor(() => document.querySelector(".surf-carousel")))) return false;
+
+    const timelineLink = findNavigationLink("Timeline");
+    if (!timelineLink) return false;
+    timelineLink.click();
+    return waitFor(timelineCardVisible);
   };
 
   const observer = new MutationObserver((records) => {
@@ -221,8 +239,8 @@
           ),
           new Promise((resolve) => setTimeout(resolve, 1600)),
         ]);
-        if (!(await startSilentTimeline(silentEntryButton))) {
-          postToHost(errorMessage, "Timeline cards did not become visible in time.");
+        if (!(await initializeTimelineRoute(silentEntryButton))) {
+          postToHost(errorMessage, "Timeline did not initialize in time.");
           return;
         }
         await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
