@@ -4,7 +4,7 @@ Preacherman Demo Host 是一个本地优先的桌面数字伙伴原型，包含�
 
 PREACHERMAN 兼容层的运行入口、能力矩阵、插件开发契约、完整演示脚本、外部依赖和交付检查见 [PREACHERMAN × Preacherman ecosystem demo](./PREACHERMAN-ECOSYSTEM-DEMO.md)。
 
-桌面端的构建、增量更新、原生验收和失败回滚必须遵循[桌面轻量更新契约](../../docs/desktop-lightweight-update-contract.md)。该契约明确禁止重新引入运行时外置 UI 资源服务。
+桌面端的构建、增量更新、原生验收和失败回滚必须遵循[桌面轻量更新契约](../../docs/desktop-lightweight-update-contract.md)。该契约明确禁止重新引入运行时外置 UI 资源服务，并自动适用于 Home、Task、Gallery、Market、Ledger、Settings、Account 及以后新增的所有页面。
 
 ## 当前能力
 

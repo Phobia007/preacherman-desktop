@@ -2,6 +2,8 @@
 
 Status: mandatory for every change that can affect the runnable Preacherman Desktop Demo.
 
+Scope: every current and future user-facing page, surface, dialog, overlay, and navigation route. The named examples in this document are minimum checks, not a closed list. Home, Task, Gallery, Market, Ledger, Settings, Account, and any later page all inherit this contract automatically.
+
 ## Purpose
 
 Desktop updates must be fast to produce without weakening cold-start reliability or changing the authored frontend. Build speed comes from incremental compilation, cache reuse, focused verification, and rebuilding only what changed. The production application must continue to open as one self-contained desktop experience from `C:\Users\Administrator\Desktop\Preacherman Desktop Demo.lnk`.
@@ -44,11 +46,14 @@ Do not recreate any equivalent design, including:
 
 Verify the production executable through the desktop shortcut after a true cold start. Do not reuse a preview server or a previously running sidecar.
 
+Always verify the surface changed by the current task and every newly introduced surface. In addition, smoke-test the core navigation paths below so a new page cannot silently damage an existing page. If Market and Gallery are separate destinations in the current product state, verify both independently; if they intentionally share a route, verify the user-visible destination and its navigation label.
+
 - Home opens through the normal startup flow.
 - The local companion model reaches `ready` and no local-model error is visible.
 - Task reaches `ready` on first entry, shows its cards through the authored animation, and does not require Surf/Timeline toggling, retrying, or reloading.
 - Gallery reaches its complete state, shows authored content over the persistent model, remains interactive, and never exposes a white screen, loading-timeout page, or internal error page.
 - Settings opens immediately and remains usable.
+- Market, Ledger, Account, and every changed or newly added page open on first entry, display their complete authored content, and remain interactive without retrying, reloading, or visiting another page first.
 - Persistent minimize, maximize, and close controls work on every surface.
 - Light and dark modes remain deliberate and readable.
 - The browser console contains no new errors.
@@ -59,7 +64,7 @@ Process existence, a listening port, or an HTTP success response is only support
 
 ## Failure and rollback rule
 
-Any missing model or surface, first-entry timeout, blank or white screen, lost interaction, unexpected loading/error UI, shortcut mismatch, or sustained abnormal CPU usage blocks delivery.
+Any missing model, page, or surface, first-entry timeout, blank or white screen, lost interaction, unexpected loading/error UI, shortcut mismatch, or sustained abnormal CPU usage blocks delivery. This rule applies equally to named core pages and pages added in the future.
 
 When this happens:
 
