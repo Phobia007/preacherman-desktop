@@ -54,6 +54,7 @@ test("Gallery v3 reveal uses semantic theme variables and reduced motion", () =>
   assert.match(component, /onAnimationEnd=\{handleRevealEnd\}/);
   assert.match(component, /--demo-theme-gallery-control-hover/);
   assert.match(component, /querySelector<HTMLElement>\("\.demo-app-shell"\)/);
+  assert.match(styles, /opacity:\s*var\(--demo-theme-gallery-overlay-opacity\)/);
   assert.doesNotMatch(styles, /1480ms|clip-path|inset\(39%|inset\(42%/);
   assert.doesNotMatch(styles, /#[0-9a-f]{3,8}\b/i);
 });

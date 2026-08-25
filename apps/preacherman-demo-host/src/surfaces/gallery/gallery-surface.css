@@ -39,7 +39,7 @@
 
 .gallery-surface[data-reveal-state="opening"] .gallery-surface__frame,
 .gallery-surface[data-reveal-state="complete"] .gallery-surface__frame {
-  opacity: 1;
+  opacity: var(--demo-theme-gallery-overlay-opacity);
 }
 
 .gallery-surface__frame:focus-visible {
