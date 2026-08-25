@@ -42,7 +42,7 @@ test("welcome removes all account choices and advances directly to Home", async 
   assert.doesNotMatch(styles, /demo-intro-splash__(?:actions|account-actions|nav-item|account-notice)/);
   assert.match(splash, /setTimeout\(onComplete, STARTUP_INTRO_TIMING\.totalDurationMs\)/);
   assert.match(app, /handleIntroComplete[\s\S]*openLocalSurface\("home"\)[\s\S]*setShowStartupIntro\(false\)/);
-  assert.match(app, /showStartupIntro\s*\?\s*\(\s*<IntroSplash[\s\S]*onComplete=\{handleIntroComplete\}/);
+  assert.match(app, /\{appShell\}[\s\S]*showStartupIntro\s*\?\s*\(\s*<IntroSplash[\s\S]*onComplete=\{handleIntroComplete\}/);
   assert.match(app, /dispatch=\{adapter\.dispatch\}/);
   assert.match(bootstrap, /handleIntroComplete[\s\S]*openLocalSurface\("home"\)[\s\S]*setIntroComplete\(true\)/);
   assert.match(bootstrap, /introComplete && DeferredApp/);

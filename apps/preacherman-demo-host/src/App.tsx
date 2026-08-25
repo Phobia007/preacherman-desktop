@@ -278,7 +278,6 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       {isCompanionActive ? <VoiceSessionControl headless locale={preferences.locale} /> : null}
     </main>
   );
-  const workspaceContent = <TaskSurface />;
   const labContent = (
     <main
       className="demo-host demo-host--lab"
@@ -311,11 +310,11 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       ? activeSurfaceType === "home"
         ? homeContent
         : activeSurfaceType === "workspace"
-          ? workspaceContent
+          ? null
           : activeSurfaceType === "lab"
             ? labContent
         : activeSurfaceType === "market"
-          ? <GallerySurface />
+          ? null
         : activeSurfaceType === "settings"
           ? <SettingsScreen
               appearance={preferences.appearance}
@@ -374,19 +373,12 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
     ? tabs[preachermanPanelSurface as keyof typeof tabs]
     : [];
 
-  const app = showStartupIntro ? (
-    <IntroSplash
-      appearance={preferences.appearance}
-      dispatch={adapter.dispatch}
-      locale={preferences.locale}
-      onComplete={handleIntroComplete}
-    />
-  ) : (
+  const appShell = (
     <AppShell
       activeSurfaceType={activeSurfaceType}
       appearance={preferences.appearance}
       dispatch={adapter.dispatch}
-      entering={animateMainEntrance}
+      entering={animateMainEntrance && !showStartupIntro}
       locale={preferences.locale}
       onNavigate={handleSurfaceNavigate}
       scene={sceneModelId ? (
@@ -403,6 +395,22 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       {activeSurfaceType !== "account" ? (
         <PreachermanDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={preachermanServiceRequest} />
       ) : null}
+      <div
+        aria-hidden={activeSurfaceType !== "workspace"}
+        className="demo-app-shell__prewarmed-surface"
+        data-active={activeSurfaceType === "workspace"}
+        data-surface="workspace"
+      >
+        <TaskSurface />
+      </div>
+      <div
+        aria-hidden={activeSurfaceType !== "market"}
+        className="demo-app-shell__prewarmed-surface"
+        data-active={activeSurfaceType === "market"}
+        data-surface="market"
+      >
+        <GallerySurface />
+      </div>
       <div className="demo-app-shell__screen-page" key={contentKey}>
         {mainContent}
         {visiblePanelSurface && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
@@ -425,6 +433,19 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         ) : null}
       </div>
     </AppShell>
+  );
+  const app = (
+    <>
+      {appShell}
+      {showStartupIntro ? (
+        <IntroSplash
+          appearance={preferences.appearance}
+          dispatch={adapter.dispatch}
+          locale={preferences.locale}
+          onComplete={handleIntroComplete}
+        />
+      ) : null}
+    </>
   );
 
   return <LiveCoordinatorProvider>{app}</LiveCoordinatorProvider>;

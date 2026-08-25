@@ -43,8 +43,13 @@ test("Demo Host owns one persistent shell outside the changing screen content", 
   assert.match(shell, /demo-app-shell__screen-content/);
   assert.match(shell, /demo\.window\.start-dragging/);
   assert.match(shell, /<WindowResizeHandles\b/);
-  assert.match(app, /showStartupIntro\s*\?\s*\(\s*<IntroSplash[\s\S]*:\s*\(\s*<AppShell\b/);
+  assert.match(app, /const appShell\s*=\s*\(\s*<AppShell\b/);
+  assert.match(app, /\{appShell\}[\s\S]*\{showStartupIntro\s*\?\s*\(\s*<IntroSplash/);
   assert.match(app, /key=\{contentKey\}/);
+  assert.match(app, /className="demo-app-shell__prewarmed-surface"[\s\S]*<TaskSurface\s*\/>/);
+  assert.match(app, /className="demo-app-shell__prewarmed-surface"[\s\S]*<GallerySurface\s*\/>/);
+  assert.equal((app.match(/<TaskSurface\s*\/>/g) ?? []).length, 1);
+  assert.equal((app.match(/<GallerySurface\s*\/>/g) ?? []).length, 1);
   assert.doesNotMatch(shell, /key=\{contentKey\}/, "the shell itself must not remount on navigation");
 });
 
@@ -184,8 +189,8 @@ test("Home, Task, Gallery, and Settings share one unchanged persistent scene", a
 
   assert.match(app, /activeSurfaceType\s*===\s*["']home["']/);
   assert.match(app, /activeSurfaceType\s*===\s*["']settings["']/);
-  assert.match(app, /const workspaceContent = <TaskSurface \/>/);
-  assert.match(app, /activeSurfaceType === "market"[\s\S]*<GallerySurface \/>/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<TaskSurface \/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(hostRule, /background:\s*transparent/);
   assert.equal(emptyRule, "");
