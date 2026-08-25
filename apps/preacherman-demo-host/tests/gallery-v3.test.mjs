@@ -29,6 +29,7 @@ test("Gallery v3 embeds the copied local portfolio without replacement imagery",
 
 test("Gallery v3 reveal uses semantic theme variables and reduced motion", () => {
   const styles = read(galleryRoot, "gallery-surface.css");
+  const tauriConfig = JSON.parse(read(appRoot, "src-tauri", "tauri.conf.json"));
   assert.match(styles, /--demo-theme-/);
   assert.match(styles, /--gallery-surface-scan-duration:\s*340ms/);
   assert.match(styles, /--gallery-surface-open-duration:\s*420ms/);
@@ -39,7 +40,13 @@ test("Gallery v3 reveal uses semantic theme variables and reduced motion", () =>
   assert.match(styles, /transform:\s*scaleY\(1\)/);
   assert.match(styles, /data-reveal-state="opening"/);
   assert.match(styles, /gallery-surface-dismiss-line/);
-  assert.match(styles, /gallery-surface__frame[\s\S]*opacity:\s*0/);
+  assert.match(styles, /gallery-surface__frame[\s\S]*opacity:\s*0\.001/);
+  assert.match(
+    styles,
+    /data-reveal-state="opening"[^}]*gallery-surface__frame/,
+  );
+  assert.match(tauriConfig.app.security.csp, /worker-src[^;]*blob:/);
+  assert.match(tauriConfig.app.security.devCsp, /worker-src[^;]*blob:/);
   assert.doesNotMatch(styles, /1480ms|clip-path|inset\(39%|inset\(42%/);
   assert.doesNotMatch(styles, /#[0-9a-f]{3,8}\b/i);
 });
