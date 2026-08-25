@@ -2,7 +2,6 @@ node_modules/
 packages/preacherman-surface-skin/dist/
 packages/preacherman-avatar-renderer/dist/
 apps/*/dist/
-apps/*/tauri-dist/
 apps/*/node_modules/
 apps/*/src-tauri/target/
 apps/*/src-tauri/target-*/

@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { runtimeAssetUrl } from "../runtimeAssets";
 import "./task-surface.css";
 
-const TASK_RUNTIME_URL = runtimeAssetUrl("/task-lookback-v3/index.html");
-const TASK_RUNTIME_ORIGIN = new URL(TASK_RUNTIME_URL, window.location.href).origin;
+const TASK_RUNTIME_URL = "/task-lookback-v3/index.html";
 const TASK_READY_MESSAGE = "task-lookback-v3-ready";
 const TASK_ERROR_MESSAGE = "task-lookback-v3-error";
 const TASK_READY_TIMEOUT_MS = 15_000;
@@ -37,7 +35,7 @@ export function TaskSurface() {
 
   useEffect(() => {
     const handleRuntimeMessage = (event: MessageEvent<unknown>) => {
-      if (event.origin !== TASK_RUNTIME_ORIGIN) return;
+      if (event.origin !== window.location.origin) return;
       if (event.source !== iframeRef.current?.contentWindow) return;
 
       const type = messageType(event.data);

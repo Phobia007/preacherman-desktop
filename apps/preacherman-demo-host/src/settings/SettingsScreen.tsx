@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Appearance, Locale } from "../preferences";
-import { runtimeAssetUrl } from "../runtimeAssets";
 import "./settings-v3.css";
 
-const localPortfolioUrl = runtimeAssetUrl("/settings-v3-local/index.html");
-const localPortfolioBaseUrl = runtimeAssetUrl("/settings-v3-local/");
+const localPortfolioUrl = "/settings-v3-local/index.html";
+const localPortfolioBaseUrl = "/settings-v3-local/";
 const portfolioRootFontPixels = 12;
 
 interface SettingsDirectoryEntry {
