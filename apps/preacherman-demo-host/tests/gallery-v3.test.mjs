@@ -110,6 +110,8 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
   assert.doesNotMatch(index, /setTimeout\(signalSourceReady,10000\)/);
   assert.match(index, /\[data-od-id="error-state"\]\{display:none!important\}/);
   assert.match(index, /--gallery-host-composite-key/);
+  assert.match(index, /\[data-id="nathan-riley"\]\{aspect-ratio:2048\/1172\}/);
+  assert.match(index, /\[data-id="casa-di-solare"\]\{aspect-ratio:2048\/1204\}/);
 });
 
 test("copied portfolio keeps original media and scopes runtime paths", () => {
