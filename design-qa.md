@@ -413,3 +413,23 @@ final result: passed
 - Native asset audit: 84/84 references present; old mirror absent.
 
 final result: passed
+
+# Task first-entry Timeline cards — Design QA (latest)
+
+## Visual truth
+
+- Reported empty first-entry state: `D:\Temp\Administrator\codex-clipboard-1c12a949-37ef-4d3f-a74b-013f2a07a563.png`.
+- Prohibited loading state: `D:\Temp\Administrator\codex-clipboard-96662fe8-736d-435c-82dc-87b98fc9f03b.png`.
+- Verified implementation: `apps/preacherman-demo-host/output/task-first-entry/17-final-task-8000ms.png`.
+- Side-by-side comparison: `apps/preacherman-demo-host/output/task-first-entry/comparison-before-after.png`.
+
+## Checks
+
+- The visible `Opening The Lookback Timeline…` spinner and copy never appear.
+- A fresh shortcut launch reaches Timeline cards without any user Surf interaction.
+- The embedded Surf warm-up remains clipped inside the unopened Task aperture and is not exposed to the user.
+- Timeline returns through its original route transition, preserving the authored card motion and animated media.
+- The persistent Cortana scene, Task navigation, desktop controls, spacing, and source card assets remain unchanged.
+- The full 413-test suite covers the light/dark semantic theme contract and passes.
+
+final result: passed
