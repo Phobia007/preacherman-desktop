@@ -32,9 +32,11 @@ async function sourceFiles(root) {
 test("Demo Host owns one persistent shell outside the changing screen content", async () => {
   const shellPath = join(sourceRoot, "app-shell", "AppShell.tsx");
   const appPath = join(sourceRoot, "App.tsx");
+  const stylesPath = join(sourceRoot, "styles.css");
   assert.equal(await exists(shellPath), true, "AppShell must exist in Demo Host");
   const shell = await readFile(shellPath, "utf8");
   const app = await readFile(appPath, "utf8");
+  const styles = await readFile(stylesPath, "utf8");
 
   assert.match(shell, /preacherman-mark-light\.png/);
   assert.match(shell, /preacherman-mark-dark\.png/);
@@ -48,6 +50,7 @@ test("Demo Host owns one persistent shell outside the changing screen content", 
   assert.match(app, /key=\{contentKey\}/);
   assert.match(app, /className="demo-app-shell__prewarmed-surface"[\s\S]*<TaskSurface\s*\/>/);
   assert.match(app, /className="demo-app-shell__prewarmed-surface"[\s\S]*<GallerySurface\s*\/>/);
+  assert.match(styles, /\.demo-app-shell__prewarmed-surface\[data-active="false"\] \*\s*\{\s*pointer-events:\s*none !important;/);
   assert.equal((app.match(/<TaskSurface\s*\/>/g) ?? []).length, 1);
   assert.equal((app.match(/<GallerySurface\s*\/>/g) ?? []).length, 1);
   assert.doesNotMatch(shell, /key=\{contentKey\}/, "the shell itself must not remount on navigation");

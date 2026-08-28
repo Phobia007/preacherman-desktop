@@ -53,6 +53,40 @@ test("Settings v3 keeps the supplied card artwork and adds capability copy benea
   assert.match(localPage, /<video /);
 });
 
+test("Settings v3 restores the original grid to detail to back interaction for every mapped card", async () => {
+  const [component, styles] = await Promise.all([
+    readFile(join(hostRoot, "src", "settings", "SettingsScreen.tsx"), "utf8"),
+    readFile(join(hostRoot, "src", "settings", "settings-v3.css"), "utf8"),
+  ]);
+
+  assert.match(component, /card\.addEventListener\("click", openDetail\)/);
+  assert.match(component, /event\.key !== "Enter" && event\.key !== " "/);
+  assert.match(component, /aria-haspopup", "dialog"/);
+  assert.match(component, /role="dialog"/);
+  assert.match(component, /aria-modal="true"/);
+  assert.match(component, /data-settings-control-slot/);
+  assert.match(component, /className="settings-v3__back"/);
+  assert.match(component, /event\.key === "Escape"/);
+  assert.match(styles, /\.settings-v3__detail\s*\{/);
+  assert.match(styles, /grid-template-columns:\s*minmax\(320px, 36\.5%\) minmax\(0, 1fr\)/);
+  assert.match(styles, /var\(--demo-theme-settings-canvas\)/);
+  assert.match(styles, /var\(--demo-theme-settings-text\)/);
+  assert.match(styles, /var\(--demo-theme-settings-focus\)/);
+});
+
+test("Settings v3 restores group hover emphasis and group-relative sequence labels", async () => {
+  const component = await readFile(join(hostRoot, "src", "settings", "SettingsScreen.tsx"), "utf8");
+
+  assert.match(component, /data-settings-grid-active/);
+  assert.match(component, /data-settings-group-active/);
+  assert.match(component, /card\.addEventListener\("pointerenter", \(\) => setActiveGroup\(item\.group\.id\)\)/);
+  assert.match(component, /item\.entryIndex === 0 \? item\.group\.label\[locale\] : ""/);
+  assert.match(component, /className = "settings-v3-card-heading__number"/);
+  assert.match(component, /number\.textContent = String\(item\.number\)/);
+  assert.match(component, /number: entryIndex \+ 1/);
+  assert.match(component, /:not\(\[data-settings-group-active\]\)[^{]*\{\s*opacity: \.18/s);
+});
+
 test("Settings v3 keeps Gil layout positions while clearing only the header and percentage loader", async () => {
   const [component, localPage] = await Promise.all([
     readFile(join(hostRoot, "src", "settings", "SettingsScreen.tsx"), "utf8"),

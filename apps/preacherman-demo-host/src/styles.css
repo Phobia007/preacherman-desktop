@@ -787,6 +787,10 @@ html[data-appearance="dark"] #root {
   pointer-events: none;
 }
 
+.demo-app-shell__prewarmed-surface[data-active="false"] * {
+  pointer-events: none !important;
+}
+
 .demo-app-shell__prewarmed-surface[data-active="true"] {
   opacity: 1;
   pointer-events: auto;
