@@ -21,8 +21,6 @@ interface SettingsDirectoryGroup {
 interface SettingsSelection {
   readonly entryIndex: number;
   readonly groupId: string;
-  readonly imageAlt: string;
-  readonly imageSrc: string | null;
   readonly opener: HTMLElement;
 }
 
@@ -300,12 +298,9 @@ function mountLocalPortfolio(
     }
 
     const openDetail = () => {
-      const image = card.querySelector<HTMLImageElement>("img");
       onSelect({
         entryIndex: item.entryIndex,
         groupId: item.group.id,
-        imageAlt: image?.alt || item.entry.label[locale],
-        imageSrc: image?.currentSrc || image?.src || null,
         opener: card,
       });
     };
@@ -422,28 +417,8 @@ export function SettingsScreen({ appearance, locale }: SettingsScreenProps) {
           data-settings-group={selectedGroup.id}
           role="dialog"
         >
-          <aside className="settings-v3__detail-summary">
-            <header>
-              <h1>{selectedEntry.label[locale]}</h1>
-              <span>{selectedEntry.state[locale]}</span>
-            </header>
-            <p>{selectedGroup.description[locale]}</p>
-            <dl>
-              <div><dt>1</dt><dd><span>{locale === "zh-CN" ? "分类" : "Category"}</span><strong>{selectedGroup.label[locale]}</strong></dd></div>
-              <div><dt>2</dt><dd><span>{locale === "zh-CN" ? "项目" : "Control"}</span><strong>{selectedEntry.label[locale]}</strong></dd></div>
-              <div><dt>3</dt><dd><span>{locale === "zh-CN" ? "状态" : "Status"}</span><strong>{selectedEntry.state[locale]}</strong></dd></div>
-              <div><dt>4</dt><dd><span>{locale === "zh-CN" ? "范围" : "Scope"}</span><strong>{locale === "zh-CN" ? "本机" : "Local device"}</strong></dd></div>
-            </dl>
-            <button className="settings-v3__back" onClick={closeDetail} type="button">
-              {locale === "zh-CN" ? "返回" : "Back"}
-            </button>
-          </aside>
+          <div aria-hidden="true" className="settings-v3__detail-blank" />
           <div className="settings-v3__detail-content" data-settings-control-slot={selectedEntry.label.en}>
-            {selection.imageSrc ? (
-              <figure>
-                <img alt={selection.imageAlt} src={selection.imageSrc} />
-              </figure>
-            ) : null}
             <section>
               <span>{selectedGroup.label[locale]}</span>
               <h2>{selectedEntry.label[locale]}</h2>

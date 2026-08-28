@@ -59,7 +59,7 @@ test("Settings v3 keeps the supplied card artwork and adds capability copy benea
   assert.match(localPage, /<video /);
 });
 
-test("Settings v3 restores the original grid to detail to back interaction for every mapped card", async () => {
+test("Settings v3 opens every mapped card into the shared description-only detail", async () => {
   const [component, styles] = await Promise.all([
     readFile(join(hostRoot, "src", "settings", "SettingsScreen.tsx"), "utf8"),
     readFile(join(hostRoot, "src", "settings", "settings-v3.css"), "utf8"),
@@ -71,10 +71,16 @@ test("Settings v3 restores the original grid to detail to back interaction for e
   assert.match(component, /role="dialog"/);
   assert.match(component, /aria-modal="true"/);
   assert.match(component, /data-settings-control-slot/);
-  assert.match(component, /className="settings-v3__back"/);
+  assert.match(component, /className="settings-v3__detail-blank"/);
+  assert.doesNotMatch(component, /settings-v3__detail-summary/);
+  assert.doesNotMatch(component, /className="settings-v3__back"/);
+  assert.doesNotMatch(component, /selection\.imageSrc|selection\.imageAlt/);
   assert.match(component, /event\.key === "Escape"/);
   assert.match(styles, /\.settings-v3__detail\s*\{/);
   assert.match(styles, /grid-template-columns:\s*minmax\(320px, 36\.5%\) minmax\(0, 1fr\)/);
+  assert.match(styles, /margin-top:\s*clamp\(360px, 62vh, 720px\)/);
+  assert.doesNotMatch(styles, /\.settings-v3__back/);
+  assert.doesNotMatch(styles, /\.settings-v3__detail-content > figure/);
   assert.match(styles, /var\(--demo-theme-settings-canvas\)/);
   assert.match(styles, /var\(--demo-theme-settings-text\)/);
   assert.match(styles, /var\(--demo-theme-settings-focus\)/);
