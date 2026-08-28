@@ -206,11 +206,17 @@ function mountLocalPortfolio(
       }
       .settings-v3-card-heading {
         display: flex !important;
-        min-height: 16px;
+        min-height: 46px;
         margin-bottom: 6px !important;
         color: var(--preacherman-settings-text);
         font-size: 14px;
         line-height: 1.08;
+      }
+      .settings-v3-card-heading__group {
+        font-size: 42px;
+        letter-spacing: -.03em;
+        line-height: 1.08;
+        white-space: nowrap;
       }
       .settings-v3-card-heading__number { margin-left: auto; font-variant-numeric: tabular-nums; }
       .settings-v3-card-copy {
@@ -231,7 +237,8 @@ function mountLocalPortfolio(
       }
       @media (max-width: 649px) {
         .settings-v3-card-copy { gap: 2px 8px; margin-top: 6px; }
-        .settings-v3-card-heading { font-size: 12px; }
+        .settings-v3-card-heading { min-height: 39px; font-size: 12px; }
+        .settings-v3-card-heading__group { font-size: 36px; }
         .settings-v3-card-copy__label { font-size: 12px; }
         .settings-v3-card-copy__state { font-size: 10px; }
       }

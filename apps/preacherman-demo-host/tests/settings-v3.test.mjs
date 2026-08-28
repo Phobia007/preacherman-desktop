@@ -82,6 +82,7 @@ test("Settings v3 restores group hover emphasis and group-relative sequence labe
   assert.match(component, /card\.addEventListener\("pointerenter", \(\) => setActiveGroup\(item\.group\.id\)\)/);
   assert.match(component, /item\.entryIndex === 0 \? item\.group\.label\[locale\] : ""/);
   assert.match(component, /className = "settings-v3-card-heading__number"/);
+  assert.match(component, /\.settings-v3-card-heading__group\s*\{[\s\S]*font-size:\s*42px/);
   assert.match(component, /number\.textContent = String\(item\.number\)/);
   assert.match(component, /number: entryIndex \+ 1/);
   assert.match(component, /:not\(\[data-settings-group-active\]\)[^{]*\{\s*opacity: \.18/s);
