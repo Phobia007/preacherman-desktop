@@ -32,10 +32,10 @@ const settingsDirectory: readonly SettingsDirectoryGroup[] = [
     label: { en: "AI & Models", "zh-CN": "AI 与模型" },
     description: { en: "Review model providers, capability routing, and connection readiness.", "zh-CN": "查看模型服务商、能力路由与连接状态。" },
     entries: [
-      { label: { en: "Provider overview", "zh-CN": "服务商总览" }, state: { en: "2 connected", "zh-CN": "2 项已连接" } },
-      { label: { en: "DeepSeek Chat", "zh-CN": "DeepSeek 对话" }, state: { en: "Ready", "zh-CN": "可用" } },
-      { label: { en: "DashScope Vision", "zh-CN": "百炼视觉" }, state: { en: "Needs setup", "zh-CN": "需要配置" } },
-      { label: { en: "Models & connection tests", "zh-CN": "模型与连接测试" }, state: { en: "Local service", "zh-CN": "本地服务" } },
+      { label: { en: "AI Providers", "zh-CN": "AI 服务商" }, state: { en: "2 connected", "zh-CN": "2 项已连接" } },
+      { label: { en: "Default Language Model", "zh-CN": "默认语言模型" }, state: { en: "DeepSeek · Ready", "zh-CN": "DeepSeek · 可用" } },
+      { label: { en: "Vision Model", "zh-CN": "视觉模型" }, state: { en: "DashScope · Setup required", "zh-CN": "百炼 · 需要配置" } },
+      { label: { en: "Routing & Diagnostics", "zh-CN": "路由与诊断" }, state: { en: "Local service", "zh-CN": "本地服务" } },
     ],
   },
   {
@@ -43,11 +43,11 @@ const settingsDirectory: readonly SettingsDirectoryGroup[] = [
     label: { en: "Voice & Audio", "zh-CN": "语音与音频" },
     description: { en: "Manage recognition, synthesis, voice defaults, and audio input behavior.", "zh-CN": "管理语音识别、语音合成、默认声音与音频输入行为。" },
     entries: [
-      { label: { en: "Voice overview", "zh-CN": "语音总览" }, state: { en: "2 channels", "zh-CN": "2 条通道" } },
-      { label: { en: "DashScope ASR", "zh-CN": "百炼语音识别" }, state: { en: "Needs setup", "zh-CN": "需要配置" } },
-      { label: { en: "DashScope TTS", "zh-CN": "百炼语音合成" }, state: { en: "Needs setup", "zh-CN": "需要配置" } },
-      { label: { en: "Default voice", "zh-CN": "默认声音" }, state: { en: "Client setting", "zh-CN": "客户端设置" } },
-      { label: { en: "Audio input & VAD", "zh-CN": "音频输入与 VAD" }, state: { en: "Client setting", "zh-CN": "客户端设置" } },
+      { label: { en: "Speech Providers", "zh-CN": "语音服务商" }, state: { en: "2 channels", "zh-CN": "2 条通道" } },
+      { label: { en: "Speech Recognition", "zh-CN": "语音识别" }, state: { en: "DashScope · Setup required", "zh-CN": "百炼 · 需要配置" } },
+      { label: { en: "Speech Synthesis", "zh-CN": "语音合成" }, state: { en: "DashScope · Setup required", "zh-CN": "百炼 · 需要配置" } },
+      { label: { en: "Voice Profile", "zh-CN": "声音配置" }, state: { en: "Client setting", "zh-CN": "客户端设置" } },
+      { label: { en: "Audio Input & Voice Activity", "zh-CN": "音频输入与语音检测" }, state: { en: "Client setting", "zh-CN": "客户端设置" } },
     ],
   },
   {
@@ -55,10 +55,10 @@ const settingsDirectory: readonly SettingsDirectoryGroup[] = [
     label: { en: "Native Agent", "zh-CN": "本地 Agent" },
     description: { en: "Inspect the local Agent runtime, model defaults, health, and permission policy.", "zh-CN": "查看本地 Agent 运行时、模型默认项、健康状态与权限策略。" },
     entries: [
-      { label: { en: "Native overview", "zh-CN": "Native 总览" }, state: { en: "Local runtime", "zh-CN": "本地运行时" } },
-      { label: { en: "Installation & health", "zh-CN": "安装与健康状态" }, state: { en: "Status", "zh-CN": "状态" } },
-      { label: { en: "Provider & model", "zh-CN": "服务商与模型" }, state: { en: "Defaults", "zh-CN": "默认项" } },
-      { label: { en: "Permission policy", "zh-CN": "权限策略" }, state: { en: "Auto · Ask · Strict", "zh-CN": "自动 · 询问 · 严格" } },
+      { label: { en: "Agent Runtime", "zh-CN": "Agent 运行时" }, state: { en: "Local runtime", "zh-CN": "本地运行时" } },
+      { label: { en: "Runtime Health", "zh-CN": "运行时健康检查" }, state: { en: "Status", "zh-CN": "状态" } },
+      { label: { en: "Model Defaults", "zh-CN": "默认模型" }, state: { en: "Configured defaults", "zh-CN": "已配置默认项" } },
+      { label: { en: "Sandbox & Approvals", "zh-CN": "沙箱与审批" }, state: { en: "Auto · Ask · Strict", "zh-CN": "自动 · 询问 · 严格" } },
     ],
   },
   {
@@ -66,10 +66,10 @@ const settingsDirectory: readonly SettingsDirectoryGroup[] = [
     label: { en: "Agent Access", "zh-CN": "Agent 接入" },
     description: { en: "Connect external Agent clients and manage their local gateway sessions.", "zh-CN": "连接外部 Agent 客户端并管理本地网关会话。" },
     entries: [
-      { label: { en: "Access overview", "zh-CN": "接入总览" }, state: { en: "MCP Gateway", "zh-CN": "MCP 网关" } },
-      { label: { en: "MCP client setup", "zh-CN": "MCP 客户端配置" }, state: { en: "4 clients", "zh-CN": "4 种客户端" } },
-      { label: { en: "Connected sessions", "zh-CN": "已连接会话" }, state: { en: "Session control", "zh-CN": "会话控制" } },
-      { label: { en: "Local Agents", "zh-CN": "本地 Agents" }, state: { en: "Native · Codex CLI", "zh-CN": "Native · Codex CLI" } },
+      { label: { en: "Agent Gateway", "zh-CN": "Agent 网关" }, state: { en: "MCP · Local", "zh-CN": "MCP · 本地" } },
+      { label: { en: "Client Configuration", "zh-CN": "客户端配置" }, state: { en: "4 clients", "zh-CN": "4 种客户端" } },
+      { label: { en: "Session Management", "zh-CN": "会话管理" }, state: { en: "Connected sessions", "zh-CN": "已连接会话" } },
+      { label: { en: "Local Agent Runtimes", "zh-CN": "本地 Agent 运行时" }, state: { en: "Native · Codex CLI", "zh-CN": "Native · Codex CLI" } },
     ],
   },
   {
@@ -77,11 +77,11 @@ const settingsDirectory: readonly SettingsDirectoryGroup[] = [
     label: { en: "MCP", "zh-CN": "MCP" },
     description: { en: "Configure MCP servers, inspect runtime processes, and test exposed tools.", "zh-CN": "配置 MCP 服务、查看运行进程并测试已开放的工具。" },
     entries: [
-      { label: { en: "MCP overview", "zh-CN": "MCP 总览" }, state: { en: "Local service", "zh-CN": "本地服务" } },
-      { label: { en: "Server configuration", "zh-CN": "服务器配置" }, state: { en: "mcp.json", "zh-CN": "mcp.json" } },
-      { label: { en: "Save & restart", "zh-CN": "保存并重启" }, state: { en: "Runtime action", "zh-CN": "运行时操作" } },
-      { label: { en: "Runtime status", "zh-CN": "运行状态" }, state: { en: "Servers & processes", "zh-CN": "服务与进程" } },
-      { label: { en: "Tools & test", "zh-CN": "工具与测试" }, state: { en: "Inspect · Invoke", "zh-CN": "查看 · 调用" } },
+      { label: { en: "MCP Servers", "zh-CN": "MCP 服务器" }, state: { en: "Local service", "zh-CN": "本地服务" } },
+      { label: { en: "Server Configuration", "zh-CN": "服务器配置" }, state: { en: "mcp.json", "zh-CN": "mcp.json" } },
+      { label: { en: "Lifecycle Controls", "zh-CN": "生命周期控制" }, state: { en: "Save · Restart", "zh-CN": "保存 · 重启" } },
+      { label: { en: "Runtime & Logs", "zh-CN": "运行状态与日志" }, state: { en: "Servers · Processes", "zh-CN": "服务 · 进程" } },
+      { label: { en: "Tool Inspector", "zh-CN": "工具检查器" }, state: { en: "Inspect · Invoke", "zh-CN": "查看 · 调用" } },
     ],
   },
   {
@@ -89,10 +89,10 @@ const settingsDirectory: readonly SettingsDirectoryGroup[] = [
     label: { en: "Plugins", "zh-CN": "插件" },
     description: { en: "Install, inspect, and manage trusted local extensions and their permissions.", "zh-CN": "安装、查看并管理可信本地扩展及其权限。" },
     entries: [
-      { label: { en: "Plugin overview", "zh-CN": "插件总览" }, state: { en: "Local extensions", "zh-CN": "本地扩展" } },
-      { label: { en: "Install & manage", "zh-CN": "安装与管理" }, state: { en: "Trusted directories", "zh-CN": "可信目录" } },
-      { label: { en: "Lifecycle & hot reload", "zh-CN": "生命周期与热重载" }, state: { en: "Enable · Reload", "zh-CN": "启用 · 重载" } },
-      { label: { en: "Permissions, Kits & tools", "zh-CN": "权限、Kits 与工具" }, state: { en: "Approval required", "zh-CN": "需要审批" } },
+      { label: { en: "Plugin Manager", "zh-CN": "插件管理" }, state: { en: "Local extensions", "zh-CN": "本地扩展" } },
+      { label: { en: "Sources & Installation", "zh-CN": "来源与安装" }, state: { en: "Trusted directories", "zh-CN": "可信目录" } },
+      { label: { en: "Lifecycle Controls", "zh-CN": "生命周期控制" }, state: { en: "Enable · Reload", "zh-CN": "启用 · 重载" } },
+      { label: { en: "Permissions & Capabilities", "zh-CN": "权限与能力" }, state: { en: "Approval required", "zh-CN": "需要审批" } },
     ],
   },
   {
@@ -100,7 +100,7 @@ const settingsDirectory: readonly SettingsDirectoryGroup[] = [
     label: { en: "Connections", "zh-CN": "外部连接" },
     description: { en: "Review service adapters and the state of each external connection.", "zh-CN": "查看服务适配器与每一项外部连接的状态。" },
     entries: [
-      { label: { en: "Connection overview", "zh-CN": "连接总览" }, state: { en: "5 services", "zh-CN": "5 项服务" } },
+      { label: { en: "Integration Manager", "zh-CN": "集成管理" }, state: { en: "5 services", "zh-CN": "5 项服务" } },
       { label: { en: "Discord", "zh-CN": "Discord" }, state: { en: "Adapter required", "zh-CN": "需要适配器" } },
       { label: { en: "Telegram", "zh-CN": "Telegram" }, state: { en: "Adapter required", "zh-CN": "需要适配器" } },
       { label: { en: "YouTube Live Chat", "zh-CN": "YouTube 直播聊天" }, state: { en: "Adapter required", "zh-CN": "需要适配器" } },
@@ -113,10 +113,10 @@ const settingsDirectory: readonly SettingsDirectoryGroup[] = [
     label: { en: "Preferences", "zh-CN": "偏好设置" },
     description: { en: "Control the local appearance, language, and companion defaults.", "zh-CN": "控制本机外观、语言与伙伴默认项。" },
     entries: [
-      { label: { en: "Preferences overview", "zh-CN": "偏好设置总览" }, state: { en: "Saved locally", "zh-CN": "保存在本地" } },
+      { label: { en: "General Preferences", "zh-CN": "通用设置" }, state: { en: "Saved locally", "zh-CN": "保存在本地" } },
       { label: { en: "Appearance", "zh-CN": "外观" }, state: { en: "Light · Dark", "zh-CN": "浅色 · 深色" } },
-      { label: { en: "Language", "zh-CN": "语言" }, state: { en: "English · 中文", "zh-CN": "English · 中文" } },
-      { label: { en: "Companion model", "zh-CN": "伙伴模型" }, state: { en: "Cortana · Zima", "zh-CN": "Cortana · Zima" } },
+      { label: { en: "Language & Region", "zh-CN": "语言与地区" }, state: { en: "English · 中文", "zh-CN": "English · 中文" } },
+      { label: { en: "Companion", "zh-CN": "虚拟伙伴" }, state: { en: "Cortana · Zima", "zh-CN": "Cortana · Zima" } },
     ],
   },
 ] as const;
