@@ -401,7 +401,10 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         data-active={activeSurfaceType === "workspace"}
         data-surface="workspace"
       >
-        <TaskSurface />
+        <span aria-hidden="true" className="demo-app-shell__surface-reveal-line" />
+        <div className="demo-app-shell__surface-reveal-mask">
+          <TaskSurface />
+        </div>
       </div>
       <div
         aria-hidden={activeSurfaceType !== "market"}
@@ -409,7 +412,10 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         data-active={activeSurfaceType === "market"}
         data-surface="market"
       >
-        <GallerySurface />
+        <span aria-hidden="true" className="demo-app-shell__surface-reveal-line" />
+        <div className="demo-app-shell__surface-reveal-mask">
+          <GallerySurface />
+        </div>
       </div>
       <div className="demo-app-shell__screen-page" key={contentKey}>
         {mainContent}

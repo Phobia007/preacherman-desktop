@@ -56,6 +56,27 @@ test("Demo Host owns one persistent shell outside the changing screen content", 
   assert.doesNotMatch(shell, /key=\{contentKey\}/, "the shell itself must not remount on navigation");
 });
 
+test("Task and Gallery replay the Settings entry motion when their prewarmed surface activates", async () => {
+  const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
+  const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
+
+  for (const surface of ["workspace", "market"]) {
+    assert.match(
+      app,
+      new RegExp(`data-surface="${surface}"[\\s\\S]*demo-app-shell__surface-reveal-line[\\s\\S]*demo-app-shell__surface-reveal-mask`),
+    );
+  }
+  assert.equal((app.match(/demo-app-shell__surface-reveal-line/g) ?? []).length, 2);
+  assert.equal((app.match(/demo-app-shell__surface-reveal-mask/g) ?? []).length, 2);
+  assert.match(styles, /data-active="true"[^}]*surface-reveal-mask[^}]*\{\s*animation:\s*demo-surface-unfold 1180ms cubic-bezier\(\.7, 0, \.2, 1\) forwards/);
+  assert.match(styles, /data-active="true"[^}]*surface-reveal-line[^}]*\{\s*animation:\s*demo-surface-line-sweep 1180ms cubic-bezier\(\.2, 1, \.3, 1\) forwards/);
+  assert.match(styles, /@keyframes demo-surface-line-sweep\s*\{[\s\S]*34% \{ opacity: 1; transform: scaleX\(1\); \}[\s\S]*100% \{ opacity: 0; transform: scaleX\(1\); \}/);
+  assert.match(styles, /@keyframes demo-surface-unfold\s*\{[\s\S]*0%, 33% \{ clip-path: inset\(50% 0 50% 0\); opacity: 0; \}[\s\S]*82%, 100% \{ clip-path: inset\(0\); opacity: 1; \}/);
+  assert.match(styles, /data-surface="workspace"[^}]*--demo-surface-reveal-line:\s*var\(--demo-theme-task-text\)/);
+  assert.match(styles, /data-surface="market"[^}]*--demo-surface-reveal-line:\s*var\(--demo-theme-gallery-scan, var\(--demo-theme-text\)\)/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*surface-reveal-mask[\s\S]*animation:\s*none[\s\S]*surface-reveal-line[\s\S]*display:\s*none/);
+});
+
 test("Preacherman mark opens a six-item Clash Display navigation menu", async () => {
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");

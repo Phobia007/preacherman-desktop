@@ -796,6 +796,78 @@ html[data-appearance="dark"] #root {
   pointer-events: auto;
 }
 
+.demo-app-shell__prewarmed-surface[data-surface="workspace"] {
+  --demo-surface-reveal-line: var(--demo-theme-task-text);
+}
+
+.demo-app-shell__prewarmed-surface[data-surface="market"] {
+  --demo-surface-reveal-line: var(--demo-theme-gallery-scan, var(--demo-theme-text));
+}
+
+.demo-app-shell__surface-reveal-mask {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.demo-app-shell__prewarmed-surface[data-active="true"] .demo-app-shell__surface-reveal-mask {
+  animation: demo-surface-unfold 1180ms cubic-bezier(.7, 0, .2, 1) forwards;
+}
+
+.demo-app-shell__surface-reveal-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 12;
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--demo-surface-reveal-line);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--demo-surface-reveal-line) 78%, transparent);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.demo-app-shell__prewarmed-surface[data-active="true"] .demo-app-shell__surface-reveal-line {
+  animation: demo-surface-line-sweep 1180ms cubic-bezier(.2, 1, .3, 1) forwards;
+}
+
+@keyframes demo-surface-line-sweep {
+  0% { opacity: 0; transform: scaleX(0); }
+  6% { opacity: 1; transform: scaleX(.018); }
+  34% { opacity: 1; transform: scaleX(1); }
+  52% { opacity: .62; transform: scaleX(1); }
+  61% { opacity: 1; transform: scaleX(1); }
+  70% { opacity: .36; transform: scaleX(1); }
+  79% { opacity: .92; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1); }
+}
+
+@keyframes demo-surface-unfold {
+  0%, 33% { clip-path: inset(50% 0 50% 0); opacity: 0; }
+  34% { clip-path: inset(49.9% 0 49.9% 0); opacity: 1; }
+  56% { clip-path: inset(42% 0 42% 0); opacity: 1; }
+  64% { clip-path: inset(40% 0 40% 0); opacity: .82; }
+  71% { clip-path: inset(41.5% 0 41.5% 0); opacity: 1; }
+  78% { clip-path: inset(37% 0 37% 0); opacity: .92; }
+  82%, 100% { clip-path: inset(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-app-shell__prewarmed-surface[data-active="true"] .demo-app-shell__surface-reveal-mask {
+    clip-path: inset(0);
+    opacity: 1;
+    animation: none;
+  }
+
+  .demo-app-shell__surface-reveal-line {
+    display: none;
+    animation: none;
+  }
+}
+
 .demo-app-shell[data-active-surface="workspace"] {
   color: var(--demo-theme-task-text);
   background: var(--demo-theme-task-canvas);
