@@ -8,10 +8,10 @@ const hostRoot = join(import.meta.dirname, "..");
 test("the unified desktop mounts Task, Gallery, and Settings in the shared shell", async () => {
   const app = await readFile(join(hostRoot, "src", "App.tsx"), "utf8");
 
-  assert.match(app, /import \{ TaskSurface \} from "\.\/task\/TaskSurface"/);
+  assert.doesNotMatch(app, /import \{ TaskSurface \}/);
   assert.match(app, /import \{ GallerySurface \} from "\.\/surfaces\/gallery\/GallerySurface"/);
   assert.match(app, /import \{ SettingsScreen \} from "\.\/settings\/SettingsScreen"/);
-  assert.match(app, /const workspaceContent = <TaskSurface \/>/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /activeSurfaceType === "market"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(app, /appearance=\{preferences\.appearance\}/);

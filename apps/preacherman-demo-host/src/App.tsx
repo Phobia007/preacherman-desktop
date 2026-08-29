@@ -33,7 +33,6 @@ import { claimStartupIntro } from "./introSequence";
 import { LiveCoordinatorProvider } from "./live/LiveCoordinatorContext";
 import { SettingsScreen } from "./settings/SettingsScreen";
 import { GallerySurface } from "./surfaces/gallery/GallerySurface";
-import { TaskSurface } from "./task/TaskSurface";
 import {
   applyPreferences,
   readPreferences,
@@ -403,7 +402,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       >
         <span aria-hidden="true" className="demo-app-shell__surface-reveal-line" />
         <div className="demo-app-shell__surface-reveal-mask">
-          <TaskSurface />
+          <GallerySurface />
         </div>
       </div>
       <div

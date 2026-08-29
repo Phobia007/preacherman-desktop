@@ -26,7 +26,7 @@ async function filesBelow(root) {
   return files;
 }
 
-test("Task v3 remains an isolated same-origin Timeline surface", async () => {
+test("the former Task v3 runtime stays isolated and is no longer mounted", async () => {
   const [surface, app, shell] = await Promise.all([
     readFile(join(taskRoot, "TaskSurface.tsx"), "utf8"),
     readFile(join(packageRoot, "src", "App.tsx"), "utf8"),
@@ -47,8 +47,8 @@ test("Task v3 remains an isolated same-origin Timeline surface", async () => {
   assert.match(surface, /Retry loading The Lookback Timeline/);
   assert.doesNotMatch(surface, /Opening The Lookback Timeline/);
   assert.doesNotMatch(surface, /task-surface__loading-mark/);
-  assert.match(app, /import \{ TaskSurface \} from "\.\/task\/TaskSurface"/);
-  assert.match(app, /data-surface="workspace"[\s\S]*<TaskSurface \/>/);
+  assert.doesNotMatch(app, /import \{ TaskSurface \} from "\.\/task\/TaskSurface"/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
   assert.doesNotMatch(shell, /TaskSurface|task-lookback-v3/);
 });
 
