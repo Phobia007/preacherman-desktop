@@ -34,7 +34,8 @@ test("Task v3 remains an isolated same-origin Timeline surface", async () => {
   ]);
 
   assert.match(surface, /src=\{TASK_RUNTIME_URL\}/);
-  assert.match(surface, /TASK_RUNTIME_URL = "\/task-lookback-v3\/index\.html"/);
+  assert.match(surface, /TASK_RUNTIME_REVISION = "20260829-article-details"/);
+  assert.match(surface, /TASK_RUNTIME_URL = `\/task-lookback-v3\/index\.html\?revision=\$\{TASK_RUNTIME_REVISION\}`/);
   assert.match(surface, /event\.origin !== window\.location\.origin/);
   assert.match(surface, /event\.source !== iframeRef\.current\?\.contentWindow/);
   assert.match(surface, /task-lookback-v3-ready/);
@@ -47,7 +48,7 @@ test("Task v3 remains an isolated same-origin Timeline surface", async () => {
   assert.doesNotMatch(surface, /Opening The Lookback Timeline/);
   assert.doesNotMatch(surface, /task-surface__loading-mark/);
   assert.match(app, /import \{ TaskSurface \} from "\.\/task\/TaskSurface"/);
-  assert.match(app, /const workspaceContent = <TaskSurface \/>/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<TaskSurface \/>/);
   assert.doesNotMatch(shell, /TaskSurface|task-lookback-v3/);
 });
 

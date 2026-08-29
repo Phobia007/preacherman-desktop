@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "./task-surface.css";
 
-const TASK_RUNTIME_URL = "/task-lookback-v3/index.html";
+const TASK_RUNTIME_REVISION = "20260829-article-details";
+const TASK_RUNTIME_URL = `/task-lookback-v3/index.html?revision=${TASK_RUNTIME_REVISION}`;
 const TASK_READY_MESSAGE = "task-lookback-v3-ready";
 const TASK_ERROR_MESSAGE = "task-lookback-v3-error";
 const TASK_READY_TIMEOUT_MS = 15_000;
