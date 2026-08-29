@@ -285,7 +285,7 @@ test("State Flow uses the Figma Current Focus node and copy", async () => {
 test("exported persistent navigation exposes exactly seven semantic buttons", async () => {
   const markup = await bottomNavigationMarkup();
   assert.equal((markup.match(/<button\b[^>]*data-navigation-item=/g) ?? []).length, 7);
-  for (const label of ["Home", "Work", "Lab", "Gallery", "Test", "Ledger", "Settings"]) {
+  for (const label of ["Home", "Work", "Lab", "Gallery", "Test", "Market", "Settings"]) {
     assert.match(markup, new RegExp(`>${label}<\\/span>`));
   }
   assert.equal((markup.match(/pm-workspace__nav-indicator-line/g) ?? []).length, 0);

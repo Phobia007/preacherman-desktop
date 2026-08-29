@@ -22,7 +22,7 @@ const brandNavigationItems = [
   { label: "Home", surfaceType: "home" },
   { label: "Task", surfaceType: "workspace" },
   { label: "Gallery", surfaceType: "market" },
-  { label: "Ledger", surfaceType: "ledger" },
+  { label: "Market", surfaceType: "ledger" },
   { label: "Settings", surfaceType: "settings" },
   { label: "Account", surfaceType: "account" },
 ] as const;

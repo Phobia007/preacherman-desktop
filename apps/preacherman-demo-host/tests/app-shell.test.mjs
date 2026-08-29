@@ -101,7 +101,7 @@ test("Preacherman mark opens a six-item Clash Display navigation menu", async ()
     ["Home", "home"],
     ["Task", "workspace"],
     ["Gallery", "market"],
-    ["Ledger", "ledger"],
+    ["Market", "ledger"],
     ["Settings", "settings"],
     ["Account", "account"],
   ]) {
@@ -213,6 +213,9 @@ test("Home, Task, Gallery, and Settings share one unchanged persistent scene", a
 
   assert.match(app, /activeSurfaceType\s*===\s*["']home["']/);
   assert.match(app, /activeSurfaceType\s*===\s*["']settings["']/);
+  assert.doesNotMatch(app, /ConversationLedgerScreen/);
+  assert.match(app, /activeSurfaceType === "ledger"\s*\? null/);
+  assert.match(app, /activeSurfaceType !== "ledger" \? \(/);
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /data-surface="market"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);

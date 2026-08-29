@@ -14,7 +14,7 @@ const navigationItems = [
   { label: "Work", surfaceType: "workspace", className: "pm-workspace__nav-item--workspace" },
   { label: "Gallery", surfaceType: "market", className: "pm-workspace__nav-item--gallery" },
   { label: "Lab", surfaceType: "lab", className: "pm-workspace__nav-item--lab" },
-  { label: "Ledger", surfaceType: "ledger", className: "pm-workspace__nav-item--ledger" },
+  { label: "Market", surfaceType: "ledger", className: "pm-workspace__nav-item--ledger" },
   { label: "Settings", surfaceType: "settings", className: "pm-workspace__nav-item--settings" },
   { label: "Test", surfaceType: "test", className: "pm-workspace__nav-item--test" },
 ] as const;

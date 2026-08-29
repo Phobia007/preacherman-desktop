@@ -9,7 +9,7 @@ const sourceRoot = join(packageRoot, "src");
 
 test("bottom navigation keeps stable keys while exposing the requested short labels", async () => {
   const source = await readFile(join(sourceRoot, "surfaces", "workspace", "BottomNavigation.tsx"), "utf8");
-  for (const label of ["Home", "Work", "Lab", "Gallery", "Test", "Ledger", "Settings"]) {
+  for (const label of ["Home", "Work", "Lab", "Gallery", "Test", "Market", "Settings"]) {
     assert.match(source, new RegExp(`label:\\s*["']${label}["']`));
   }
   for (const key of ["home", "workspace", "lab", "market", "test", "ledger", "settings"]) {

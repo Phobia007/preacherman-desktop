@@ -38,5 +38,5 @@ test("Ledger, Settings, and Test keep artifact, configuration, acceptance, and t
 test("primary navigation never exposes Preacherman Execution implementation concepts", async () => {
   const navigation = await readFile(join(packageRoot, "..", "..", "packages", "preacherman-surface-skin", "src", "surfaces", "workspace", "BottomNavigation.tsx"), "utf8");
   for (const forbidden of ["Preacherman Execution", "Runs", "DAG", "Workers", "Agents"]) assert.doesNotMatch(navigation, new RegExp(`label: [\"']${forbidden}[\"']`, "i"));
-  for (const expected of ["Home", "Work", "Gallery", "Lab", "Ledger", "Settings", "Test"]) assert.match(navigation, new RegExp(`label: [\"']${expected}[\"']`));
+  for (const expected of ["Home", "Work", "Gallery", "Lab", "Market", "Settings", "Test"]) assert.match(navigation, new RegExp(`label: [\"']${expected}[\"']`));
 });

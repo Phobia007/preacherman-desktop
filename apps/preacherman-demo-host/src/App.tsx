@@ -40,7 +40,6 @@ import {
   uiCopy,
 } from "./preferences";
 import { VoiceSessionControl } from "./realtime/VoiceSessionControl";
-import { ConversationLedgerScreen } from "./conversation/ConversationLedgerScreen";
 import { PreachermanExecutionFusionPanel } from "./preacherman-execution/PreachermanExecutionFusionPanel";
 
 const manifest: SurfaceManifest = {
@@ -92,8 +91,8 @@ const surfaceCopy = {
     description: { en: "Choose identities, widgets, and playable experiences.", "zh-CN": "选择角色身份、组件和可玩的体验。" },
   },
   ledger: {
-    title: { en: "Ledger", "zh-CN": "记录" },
-    description: { en: "Review conversations, task runs, artifacts, and memory.", "zh-CN": "查看对话、任务执行、产物与记忆。" },
+    title: { en: "Market", "zh-CN": "市场" },
+    description: { en: "Market", "zh-CN": "市场" },
   },
   settings: {
     title: { en: "Settings", "zh-CN": "设置" },
@@ -264,7 +263,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       ? "home"
       : null;
   const visiblePanelSurface =
-    preachermanPanelSurface === "home" || preachermanPanelSurface === "market"
+    preachermanPanelSurface === "home" || preachermanPanelSurface === "market" || preachermanPanelSurface === "ledger"
       ? null
       : preachermanPanelSurface;
   const homeContent = (
@@ -323,12 +322,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
               requestedControl={requestedControl}
             />
           : activeSurfaceType === "ledger"
-            ? <ConversationLedgerScreen
-                locale={preferences.locale}
-                requestedControl={requestedControl}
-                serviceRequest={preachermanServiceRequest}
-                widgets={<PreachermanWidgetGallery placement="ledger" locale={preferences.locale} serviceRequest={preachermanServiceRequest} />}
-              />
+            ? null
           : activeSurfaceType === "test"
             ? testContent
           : (
@@ -416,27 +410,29 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           <GallerySurface />
         </div>
       </div>
-      <div className="demo-app-shell__screen-page" key={contentKey}>
-        {mainContent}
-        {visiblePanelSurface && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
-          <SurfaceToolbar
-            activeTab={activeSurfaceTab}
-            description={surfaceCopy[visiblePanelSurface].description}
-            locale={preferences.locale}
-            onTabChange={changeSurfaceTab}
-            surface={visiblePanelSurface}
-            tabs={surfaceTabs}
-            title={surfaceCopy[visiblePanelSurface].title}
-          />
-        ) : null}
-        {visiblePanelSurface && visiblePanelSurface !== "account" && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
-          <PreachermanFeaturePanel
-            locale={preferences.locale}
-            onActivate={handlePreachermanFeatureActivate}
-            surface={visiblePanelSurface}
-          />
-        ) : null}
-      </div>
+      {activeSurfaceType !== "ledger" ? (
+        <div className="demo-app-shell__screen-page" key={contentKey}>
+          {mainContent}
+          {visiblePanelSurface && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
+            <SurfaceToolbar
+              activeTab={activeSurfaceTab}
+              description={surfaceCopy[visiblePanelSurface].description}
+              locale={preferences.locale}
+              onTabChange={changeSurfaceTab}
+              surface={visiblePanelSurface}
+              tabs={surfaceTabs}
+              title={surfaceCopy[visiblePanelSurface].title}
+            />
+          ) : null}
+          {visiblePanelSurface && visiblePanelSurface !== "account" && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
+            <PreachermanFeaturePanel
+              locale={preferences.locale}
+              onActivate={handlePreachermanFeatureActivate}
+              surface={visiblePanelSurface}
+            />
+          ) : null}
+        </div>
+      ) : null}
     </AppShell>
   );
   const app = (
