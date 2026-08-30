@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "actionAssetId": "classified-actions",
+  "actionAssetVersion": "v1",
+  "modelAssetId": "cortana",
+  "modelAssetVersion": "v1",
+  "required": true,
+  "sourceRig": "Cortana_Mixamo_Armature",
+  "targetRig": "cortanaskele_skeleton",
+  "status": "sample-verified-full-build-pending",
+  "classificationSource": "../../metadata/actions.json",
+  "classificationPolicy": "preserve-verbatim",
+  "boneMap": "bone-map.json",
+  "runtimeIndex": "runtime/index.json",
+  "compatibility": {
+    "sourceBoneCount": 111,
+    "targetBoneCount": 111,
+    "mappedBoneCount": 111,
+    "mapping": "identity-by-name with rest-pose and translation-scale compensation",
+    "verifiedSamples": [
+      "loc_idle_002"
+    ]
+  },
+  "runtimeMotions": [
+    "runtime/packs/loc_idle_002-first-1.glb"
+  ],
+  "failures": []
+}

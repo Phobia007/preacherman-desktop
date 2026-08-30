@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0.0",
+  "actionAssetId": "classified-actions",
+  "actionAssetVersion": "v1",
+  "mode": "zima",
+  "classificationPolicy": "preserve-verbatim",
+  "batchCount": 1,
+  "actionCount": 1,
+  "packs": [
+    {
+      "batchId": "loc_run_002",
+      "manifest": "packs/loc_run_002-first-1.json",
+      "glb": "packs/loc_run_002-first-1.glb",
+      "actionCount": 1,
+      "sha256": "21c3b702dc90d6214e4160837d58d395c118a819eed2894f5742338d58c5cbd2"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# The asset library is local-first. Keep large binary sources out of ordinary Git history.
+**/*.blend
+**/*.blend1
+**/*.fbx
+**/*.glb
+**/*.gltf
+**/*.zip
+**/*.png

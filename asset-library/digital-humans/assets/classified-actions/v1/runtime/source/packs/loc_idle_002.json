@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "1.0.0",
+  "actionAssetId": "classified-actions",
+  "actionAssetVersion": "v1",
+  "batchId": "loc_idle_002",
+  "category": "Locomotion",
+  "subcategory": "Idle",
+  "categoryPath": "Locomotion/Idle",
+  "sourceRig": "Cortana_Mixamo_Armature",
+  "sourceBoneCount": 111,
+  "actionCount": 7,
+  "classificationPolicy": "preserve-verbatim",
+  "catalogSha256": "1463e22d2f6f36490a635b8fe19e294edbfc6ec2b16f8c36255ed4bad2bfa61e",
+  "glb": {
+    "file": "loc_idle_002.glb",
+    "bytes": 1025884,
+    "sha256": "c75ff422b6e35ce90759c6a932b7c92ebb41ac0e381f0238baa2c9f23e2874b5"
+  },
+  "actions": [
+    {
+      "record_id": "bdf2eb406b65850fd79b8228",
+      "action_name": "CT_LOC_IDLE_idle_bdf2eb406b65850fd79b",
+      "category": "Locomotion",
+      "subcategory": "Idle",
+      "category_path": "Locomotion/Idle",
+      "tags": [
+        "category:locomotion/idle",
+        "loop_candidate",
+        "motion:idle",
+        "source:50"
+      ],
+      "classification_rule": "idle_keyword",
+      "needs_review": false
+    },
+    {
+      "record_id": "5f6087eb3eac6f67a7a45392",
+      "action_name": "CT_LOC_IDLE_standing_disarm_over_shoulder_5f6087eb3eac6f67a7a4",
+      "category": "Locomotion",
+      "subcategory": "Idle",
+      "category_path": "Locomotion/Idle",
+      "tags": [
+        "category:locomotion/idle",
+        "loop_candidate",
+        "source:50",
+        "stance:standing"
+      ],
+      "classification_rule": "idle_keyword",
+      "needs_review": false
+    },
+    {
+      "record_id": "4ae421f4eaf117234b60e176",
+      "action_name": "CT_LOC_IDLE_standing_dive_forward_4ae421f4eaf117234b60",
+      "category": "Locomotion",
+      "subcategory": "Idle",
+      "category_path": "Locomotion/Idle",
+      "tags": [
+        "category:locomotion/idle",
+        "direction:forward",
+        "loop_candidate",
+        "source:50",
+        "stance:standing"
+      ],
+      "classification_rule": "idle_keyword",
+      "needs_review": false
+    },
+    {
+      "record_id": "3ad17d06e0d83c358530d698",
+      "action_name": "CT_LOC_IDLE_standing_torch_light_torch_fro_3ad17d06e0d83c358530",
+      "category": "Locomotion",
+      "subcategory": "Idle",
+      "category_path": "Locomotion/Idle",
+      "tags": [
+        "category:locomotion/idle",
+        "loop_candidate",
+        "source:52",
+        "stance:standing"
+      ],
+      "classification_rule": "idle_keyword",
+      "needs_review": false
+    },
+    {
+      "record_id": "ce9b790da2c6882af00efb06",
+      "action_name": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
+      "category": "Locomotion",
+      "subcategory": "Idle",
+      "category_path": "Locomotion/Idle",
+      "tags": [
+        "category:locomotion/idle",
+        "gender:female",
+        "loop_candidate",
+        "motion:idle",
+        "source:female_locomotion_pack"
+      ],
+      "classification_rule": "idle_keyword",
+      "needs_review": false
+    },
+    {
+      "record_id": "ba2d2fb7a9db5fed5ab9232c",
+      "action_name": "CT_LOC_IDLE_idle_ba2d2fb7a9db5fed5ab9",
+      "category": "Locomotion",
+      "subcategory": "Idle",
+      "category_path": "Locomotion/Idle",
+      "tags": [
+        "category:locomotion/idle",
+        "loop_candidate",
+        "motion:idle",
+        "source:free_test_pack"
+      ],
+      "classification_rule": "idle_keyword",
+      "needs_review": false
+    },
+    {
+      "record_id": "8393ae5781b8e64d1906e56b",
+      "action_name": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
+      "category": "Locomotion",
+      "subcategory": "Idle",
+      "category_path": "Locomotion/Idle",
+      "tags": [
+        "category:locomotion/idle",
+        "gender:male",
+        "loop_candidate",
+        "motion:idle",
+        "source:male_locomotion_pack"
+      ],
+      "classification_rule": "idle_keyword",
+      "needs_review": false
+    }
+  ],
+  "animationStats": [
+    {
+      "action_name": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
+      "frame_range": [
+        1.0,
+        251.0
+      ],
+      "fcurves": 215
+    },
+    {
+      "action_name": "CT_LOC_IDLE_idle_ba2d2fb7a9db5fed5ab9",
+      "frame_range": [
+        1.0,
+        251.0
+      ],
+      "fcurves": 215
+    },
+    {
+      "action_name": "CT_LOC_IDLE_idle_bdf2eb406b65850fd79b",
+      "frame_range": [
+        1.0,
+        64.0
+      ],
+      "fcurves": 215
+    },
+    {
+      "action_name": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
+      "frame_range": [
+        1.0,
+        251.0
+      ],
+      "fcurves": 215
+    },
+    {
+      "action_name": "CT_LOC_IDLE_standing_disarm_over_shoulder_5f6087eb3eac6f67a7a4",
+      "frame_range": [
+        1.0,
+        51.0
+      ],
+      "fcurves": 215
+    },
+    {
+      "action_name": "CT_LOC_IDLE_standing_dive_forward_4ae421f4eaf117234b60",
+      "frame_range": [
+        1.0,
+        50.0
+      ],
+      "fcurves": 215
+    },
+    {
+      "action_name": "CT_LOC_IDLE_standing_torch_light_torch_fro_3ad17d06e0d83c358530",
+      "frame_range": [
+        1.0,
+        134.0
+      ],
+      "fcurves": 215
+    }
+  ]
+}

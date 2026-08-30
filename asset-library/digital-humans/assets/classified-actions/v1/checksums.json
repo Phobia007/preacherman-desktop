@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "files": [
+    {
+      "path": "source/Cortana_Action_Library.zip",
+      "bytes": 946105866,
+      "sha256": "8E951877E23F2983F5FFCEE6801A039E406B70F47341EC3E4F0F73B421640BB3"
+    },
+    {
+      "path": "metadata/actions.csv",
+      "bytes": 1457347,
+      "sha256": "996A50EC7B26E42EF474147478010AF4FE0FC1E57977963CA229B7BB26D85BC1"
+    },
+    {
+      "path": "metadata/actions.json",
+      "bytes": 2636353,
+      "sha256": "1463E22D2F6F36490A635B8FE19E294EDBFC6EC2B16F8C36255ED4BAD2BFA61E"
+    },
+    {
+      "path": "metadata/batches.json",
+      "bytes": 115033,
+      "sha256": "4DC59CE869E8E93FF2687885E876CE66EC8B19DA70C9F7C7FC9255203DDB48B4"
+    },
+    {
+      "path": "metadata/demo-manifest.json",
+      "bytes": 2027,
+      "sha256": "7FD84269379B29A95414AAE791936A8D8A97A4F276006F9432BE06EE28373B23"
+    },
+    {
+      "path": "metadata/summary.json",
+      "bytes": 3783,
+      "sha256": "2D253916D4169C5DDB4B54D679382EFB31571F13283758C04BB960E1D6520C9B"
+    }
+  ]
+}

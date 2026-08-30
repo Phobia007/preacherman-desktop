@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "assetId": "classified-actions",
+  "displayName": "Classified Action Library",
+  "version": "v1",
+  "kind": "action-library",
+  "status": "runtime-pipeline-sample-verified",
+  "source": {
+    "archive": "source/Cortana_Action_Library.zip",
+    "assetBlendCount": 40
+  },
+  "catalog": {
+    "actions": "metadata/actions.json",
+    "actionsCsv": "metadata/actions.csv",
+    "batches": "metadata/batches.json",
+    "demoManifest": "metadata/demo-manifest.json",
+    "summary": "metadata/summary.json",
+    "recordCount": 2858,
+    "categoryCount": 22,
+    "classificationPolicy": "preserve-verbatim",
+    "selectionFields": [
+      "record_id",
+      "action_name",
+      "category",
+      "subcategory",
+      "category_path",
+      "tags",
+      "classification_rule",
+      "needs_review"
+    ]
+  },
+  "bindings": [
+    {
+      "modelAssetId": "cortana",
+      "required": true,
+      "path": "bindings/cortana/binding.json"
+    },
+    {
+      "modelAssetId": "zima",
+      "required": true,
+      "path": "bindings/zima/binding.json"
+    }
+  ],
+  "runtime": {
+    "sourcePackIndex": "runtime/source/index.json",
+    "sourcePackFormat": "skeleton-only-glb",
+    "batchBuilder": "../../../../../tools/assets/build_classified_action_packs.py",
+    "verifiedBatch": "loc_idle_002",
+    "fullBuildPending": true
+  },
+  "excludes": [
+    "legacy-412-motion-library"
+  ]
+}

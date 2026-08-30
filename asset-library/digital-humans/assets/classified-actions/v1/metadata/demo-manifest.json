@@ -1,0 +1,77 @@
+{
+  "status": "ok",
+  "blender": "5.1.2",
+  "output_blend": "D:\\cortanaAnimationAssetLibrary\\Library\\Cortana_Action_Library\\demo\\Cortana_Action_Library_Demo.blend",
+  "objects": [
+    [
+      "Cortana_Action_Library_Preview_Camera",
+      "CAMERA"
+    ],
+    [
+      "Cortana_Mixamo_Armature",
+      "ARMATURE"
+    ],
+    [
+      "Cortana_Mixamo_Body",
+      "MESH"
+    ],
+    [
+      "Cortana_Mixamo_Eyelashes",
+      "MESH"
+    ],
+    [
+      "Cortana_Mixamo_Eyes",
+      "MESH"
+    ],
+    [
+      "Cortana_Mixamo_Hair",
+      "MESH"
+    ],
+    [
+      "Cortana_Preview_Fill",
+      "LIGHT"
+    ],
+    [
+      "Cortana_Preview_Key",
+      "LIGHT"
+    ],
+    [
+      "Cortana_Preview_Rim",
+      "LIGHT"
+    ]
+  ],
+  "actions": [
+    {
+      "label": "idle",
+      "action": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
+      "frame": 150,
+      "preview": "D:\\cortanaAnimationAssetLibrary\\Library\\Cortana_Action_Library\\demo\\previews\\Cortana_idle.png",
+      "asset": true,
+      "root_motion_mode": "in_place_endpoints"
+    },
+    {
+      "label": "walk",
+      "action": "CT_LOC_WALK_walking_915c02899c296ad1ffc0",
+      "frame": 61,
+      "preview": "D:\\cortanaAnimationAssetLibrary\\Library\\Cortana_Action_Library\\demo\\previews\\Cortana_walk.png",
+      "asset": true,
+      "root_motion_mode": "root_motion_3d"
+    },
+    {
+      "label": "run",
+      "action": "CT_LOC_RUN_running_e5be4cf59eb0534c8ab2",
+      "frame": 11,
+      "preview": "D:\\cortanaAnimationAssetLibrary\\Library\\Cortana_Action_Library\\demo\\previews\\Cortana_run.png",
+      "asset": true,
+      "root_motion_mode": "root_motion_3d"
+    },
+    {
+      "label": "jump",
+      "action": "CT_LOC_JUMP_jumping_4a639264a775c90a590c",
+      "frame": 36,
+      "preview": "D:\\cortanaAnimationAssetLibrary\\Library\\Cortana_Action_Library\\demo\\previews\\Cortana_jump.png",
+      "asset": true,
+      "root_motion_mode": "in_place_endpoints"
+    }
+  ]
+}

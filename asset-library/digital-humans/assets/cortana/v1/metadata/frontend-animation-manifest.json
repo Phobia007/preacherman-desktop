@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "avatarId": "cortana",
+  "rigId": "cortanaskele_skeleton",
+  "model": "cortana-runtime.glb",
+  "defaultAction": "idle.catwalk",
+  "actions": [
+    {
+      "id": "idle.catwalk",
+      "clipName": "cortana.idle.catwalk.v1",
+      "category": "idle",
+      "loop": "repeat",
+      "fadeIn": 0.35,
+      "fadeOut": 0.35,
+      "timeScale": 1,
+      "priority": 10,
+      "interruptible": true
+    }
+  ],
+  "stateMap": {
+    "idle": "idle.catwalk"
+  },
+  "reservedStates": [
+    "listening",
+    "thinking",
+    "speaking",
+    "success",
+    "error",
+    "sleeping",
+    "wakeup"
+  ]
+}

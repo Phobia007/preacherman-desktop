@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "actionAssetId": "classified-actions",
+  "actionAssetVersion": "v1",
+  "modelAssetId": "zima",
+  "modelAssetVersion": "v1",
+  "batchId": "loc_run_002",
+  "actionCount": 1,
+  "classificationPolicy": "preserve-verbatim",
+  "catalogSha256": "1463e22d2f6f36490a635b8fe19e294edbfc6ec2b16f8c36255ed4bad2bfa61e",
+  "boneMapSha256": "3266d05754f42ce97d5472d16da20bd26ea377c89faea92168277fc20d4c28d0",
+  "sourceBoneCount": 111,
+  "targetBoneCount": 68,
+  "mappedBoneCount": 52,
+  "translationScale": 0.03132665905854817,
+  "glb": {
+    "file": "loc_run_002-first.glb",
+    "bytes": 3470840,
+    "sha256": "89818d05e57f1872f15235278ee1cf5fbeb644bb9541b47f4bb5da159fe54215"
+  },
+  "actions": [
+    {
+      "record_id": "f39a608b2e1532d74b660a48",
+      "action_name": "CT_LOC_RUN_drunk_run_forward_f39a608b2e1532d74b66",
+      "category": "Locomotion",
+      "subcategory": "Run",
+      "category_path": "Locomotion/Run",
+      "tags": [
+        "category:locomotion/run",
+        "direction:forward",
+        "loop_candidate",
+        "motion:run",
+        "source:41"
+      ],
+      "classification_rule": "run_or_jog_keyword",
+      "needs_review": false
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "actionAssetId": "classified-actions",
+  "actionAssetVersion": "v1",
+  "modelAssetId": "cortana",
+  "modelAssetVersion": "v1",
+  "batchId": "loc_idle_002",
+  "actionCount": 1,
+  "classificationPolicy": "preserve-verbatim",
+  "catalogSha256": "1463e22d2f6f36490a635b8fe19e294edbfc6ec2b16f8c36255ed4bad2bfa61e",
+  "boneMapSha256": "dbd16acfeb857d97c7929c070b7c55c007ce36d4710e79ed7112b7b2a16f8afc",
+  "sourceBoneCount": 111,
+  "targetBoneCount": 111,
+  "mappedBoneCount": 111,
+  "translationScale": 0.03133181658028282,
+  "glb": {
+    "file": "loc_idle_002-first.glb",
+    "bytes": 4869000,
+    "sha256": "688650b3a3f7836289a6db69693fac8cb9bf9e6cae1ba5a4c264d36c8e2dfbe3"
+  },
+  "actions": [
+    {
+      "record_id": "bdf2eb406b65850fd79b8228",
+      "action_name": "CT_LOC_IDLE_idle_bdf2eb406b65850fd79b",
+      "category": "Locomotion",
+      "subcategory": "Idle",
+      "category_path": "Locomotion/Idle",
+      "tags": [
+        "category:locomotion/idle",
+        "loop_candidate",
+        "motion:idle",
+        "source:50"
+      ],
+      "classification_rule": "idle_keyword",
+      "needs_review": false
+    }
+  ]
+}

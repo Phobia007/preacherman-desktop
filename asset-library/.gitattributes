@@ -1,0 +1,2 @@
+digital-humans/assets/classified-actions/v1/metadata/*.csv -text whitespace=cr-at-eol
+digital-humans/assets/classified-actions/v1/metadata/*.json -text whitespace=cr-at-eol

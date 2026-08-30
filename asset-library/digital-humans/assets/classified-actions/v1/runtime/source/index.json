@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0.0",
+  "actionAssetId": "classified-actions",
+  "actionAssetVersion": "v1",
+  "mode": "source",
+  "classificationPolicy": "preserve-verbatim",
+  "batchCount": 1,
+  "actionCount": 7,
+  "packs": [
+    {
+      "batchId": "loc_idle_002",
+      "manifest": "packs/loc_idle_002.json",
+      "glb": "packs/loc_idle_002.glb",
+      "actionCount": 7,
+      "sha256": "c75ff422b6e35ce90759c6a932b7c92ebb41ac0e381f0238baa2c9f23e2874b5"
+    }
+  ]
+}

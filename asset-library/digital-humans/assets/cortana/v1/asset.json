@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "assetId": "cortana",
+  "displayName": "Cortana",
+  "version": "v1",
+  "kind": "digital-human",
+  "status": "requires-motion-rig-validation",
+  "model": {
+    "runtime": "runtime/model/cortana-runtime.glb",
+    "runtimeRigId": "cortanaskele_skeleton",
+    "runtimeJointCount": 111
+  },
+  "actionBindings": [
+    {
+      "actionAssetId": "classified-actions",
+      "version": "v1",
+      "binding": "../../classified-actions/v1/bindings/cortana/binding.json",
+      "required": true,
+      "status": "sample-verified-full-build-pending"
+    }
+  ],
+  "runtime": {
+    "textures": "runtime/textures",
+    "frontendManifest": "metadata/frontend-animation-manifest.json"
+  },
+  "excludes": [
+    "legacy-412-motion-library"
+  ]
+}

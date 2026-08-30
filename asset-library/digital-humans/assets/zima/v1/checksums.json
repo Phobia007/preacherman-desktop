@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "files": [
+    {
+      "path": "source/model/zima.fbx",
+      "bytes": 5590924,
+      "sha256": "83B06DB5697A670D1D1EDB89A70E77BE4311709A2D7BF085C515571218114258"
+    },
+    {
+      "path": "runtime/model/zima-runtime.glb",
+      "bytes": 4483600,
+      "sha256": "0EC7B5319B021D709EE8D4D0138A2AAFE173232AD38665DB530300FE85705C0F"
+    }
+  ]
+}

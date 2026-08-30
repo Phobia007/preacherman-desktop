@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0.0",
+  "actionAssetId": "classified-actions",
+  "actionAssetVersion": "v1",
+  "modelAssetId": "zima",
+  "modelAssetVersion": "v1",
+  "required": true,
+  "sourceRig": "Cortana_Mixamo_Armature",
+  "targetRig": "zima-custom-rig",
+  "targetRigEvidence": [
+    "root.x",
+    "spine_01.x",
+    "spine_02.x",
+    "spine_03.x",
+    "hand.l",
+    "hand.r"
+  ],
+  "status": "sample-verified-full-build-pending",
+  "classificationSource": "../../metadata/actions.json",
+  "classificationPolicy": "preserve-verbatim",
+  "boneMap": "bone-map.json",
+  "runtimeIndex": "runtime/index.json",
+  "compatibility": {
+    "sourceBoneCount": 111,
+    "targetBoneCount": 68,
+    "mappedBoneCount": 52,
+    "mapping": "rest-pose global rotation delta with scaled root translation",
+    "verifiedSamples": [
+      "loc_idle_002",
+      "loc_run_002"
+    ]
+  },
+  "runtimeMotions": [
+    "runtime/packs/loc_run_002-first-1.glb"
+  ],
+  "failures": []
+}

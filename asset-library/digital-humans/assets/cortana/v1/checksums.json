@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "files": [
+    {
+      "path": "runtime/model/cortana-runtime.glb",
+      "bytes": 7181576,
+      "sha256": "AB36D62398DD2D3FD11CD168671DD735266ABB0976981DC908B8D9DDA8A7933C"
+    },
+    {
+      "path": "runtime/textures/storm_cortana_default_body_control.png",
+      "bytes": 2027272,
+      "sha256": "56B1CD36F41A12B58E607604F5E10FE1AB06DD7FBD5BA0E948F1AAE2548DF981"
+    },
+    {
+      "path": "runtime/textures/storm_cortana_default_eye_control.png",
+      "bytes": 192208,
+      "sha256": "BC3C552989D1866674895D633CDE6112D68A1F3F94EEE1073F55DD463CA25786"
+    },
+    {
+      "path": "runtime/textures/storm_cortana_default_eye_iris_normal.png",
+      "bytes": 18959,
+      "sha256": "8EDFE2426F5A8E5BD50E110AECC6A2CBEEEC78E6C750CE8D8A08D80B68358873"
+    },
+    {
+      "path": "runtime/textures/storm_cortana_default_hair_control.png",
+      "bytes": 73045,
+      "sha256": "74E66BCC95080A26113B2DE554869A49595085F1A087B006CBB3C29A1AE6B32C"
+    },
+    {
+      "path": "runtime/textures/storm_cortana_default_head_control.png",
+      "bytes": 766375,
+      "sha256": "9F8F80D9B9D38769B5EB34A10ED9A35EB9F8620ADC8A05D14E1166732DF51C66"
+    },
+    {
+      "path": "runtime/textures/storm_cortana_scanlines_diff.png",
+      "bytes": 432,
+      "sha256": "4AAAA0DAE9C2E9AD4CAFB646A3AC9AFFB5F52427EBD5092751C839C74A7C9B25"
+    }
+  ]
+}

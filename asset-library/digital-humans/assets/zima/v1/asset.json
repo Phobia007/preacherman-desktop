@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "assetId": "zima",
+  "displayName": "Zima",
+  "version": "v1",
+  "kind": "digital-human",
+  "status": "runtime-ready",
+  "model": {
+    "source": "source/model/zima.fbx",
+    "detectedRigNaming": [
+      "root.x",
+      "spine_01.x",
+      "spine_02.x",
+      "spine_03.x",
+      "hand.l",
+      "hand.r"
+    ]
+  },
+  "actionBindings": [
+    {
+      "actionAssetId": "classified-actions",
+      "version": "v1",
+      "binding": "../../classified-actions/v1/bindings/zima/binding.json",
+      "required": true,
+      "status": "sample-verified-full-build-pending"
+    }
+  ],
+  "runtime": {
+    "model": "runtime/model/zima-runtime.glb",
+    "motions": [
+      "zima.idle.v1"
+    ]
+  },
+  "relationship": "Zima is a peer model asset beside Cortana. It consumes the shared classified action asset through a model-specific binding."
+}
