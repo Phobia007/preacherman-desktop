@@ -184,6 +184,7 @@ test("Gallery uses the original Active Theory runtime with a fixed Cortana above
     "app.1780406240914.js",
   );
   const entry = read(activeTheoryRoot, "gallery", "work.html");
+  const interactionBridge = read(activeTheoryRoot, "gallery", "interaction-bridge.js");
 
   assert.match(app, /activeSurfaceType !== "market"/);
   assert.match(app, /<ActiveTheoryGallerySurface\s*\/>/);
@@ -192,7 +193,19 @@ test("Gallery uses the original Active Theory runtime with a fixed Cortana above
   assert.match(component, /<CortanaModelStage/);
   assert.match(component, /cameraFraming="portrait"/);
   assert.match(component, /environment="cinematic"/);
-  assert.match(component, /renderActive=\{false\}/);
+  assert.match(component, /idleActionOnly/);
+  assert.doesNotMatch(component, /interactionSignal/);
+  assert.doesNotMatch(component, /rotationOffsetY=/);
+  assert.match(component, /renderActive/);
+  assert.match(entry, /gallery\/interaction-bridge\.js/);
+  assert.match(interactionBridge, /Interaction3D\.find\(camera\)/);
+  assert.match(interactionBridge, /typeof Stage === "undefined"/);
+  assert.match(interactionBridge, /document\.querySelector\("canvas"\)/);
+  assert.match(interactionBridge, /__hoverCallback/);
+  assert.match(interactionBridge, /__clickCallback/);
+  assert.match(interactionBridge, /Mouse\.input, Interaction\.MOVE/);
+  assert.match(interactionBridge, /Mouse\.input, Interaction\.CLICK/);
+  assert.doesNotMatch(interactionBridge, /preacherman-active-gallery-interaction/);
   assert.match(runtime, /__PREACHERMAN_SPINE_REMOVED__/);
   assert.doesNotMatch(runtime, /cortana-runtime\.glb/);
   assert.doesNotMatch(runtime, /node\.shader=_this\.shader/);

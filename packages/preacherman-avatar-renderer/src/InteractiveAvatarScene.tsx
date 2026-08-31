@@ -33,6 +33,7 @@ interface InteractiveAvatarSceneProps {
   readonly motionRigBinding?: AvatarMotionRigBinding;
   readonly modelId: AvatarModelId;
   readonly cameraFraming: AvatarCameraFraming;
+  readonly rotationOffsetY: number;
 }
 
 const FULL_BODY_CAMERA = { x: 0, y: 0.94, z: 4.35 } as const;
@@ -154,6 +155,7 @@ export function InteractiveAvatarScene({
   motionRigBinding,
   modelId,
   cameraFraming,
+  rotationOffsetY,
 }: InteractiveAvatarSceneProps) {
   return (
     <>
@@ -172,6 +174,7 @@ export function InteractiveAvatarScene({
         motionSource={motionSource}
         motionRigBinding={motionRigBinding}
         modelId={modelId}
+        rotationOffsetY={rotationOffsetY}
       />
       <CameraRig cameraFraming={cameraFraming} environment={environment} resetKey={resetKey} />
       <ContextLossListener onContextLost={onContextLost} />

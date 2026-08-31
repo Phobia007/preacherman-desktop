@@ -119,6 +119,7 @@ interface AvatarModelProps {
   readonly motionSource?: AvatarMotionStreamSource;
   readonly motionRigBinding?: AvatarMotionRigBinding;
   readonly modelId: AvatarModelId;
+  readonly rotationOffsetY?: number;
 }
 
 interface MaterialBindings {
@@ -208,6 +209,7 @@ export function AvatarModel({
   motionSource,
   motionRigBinding,
   modelId,
+  rotationOffsetY = 0,
 }: AvatarModelProps) {
   const profile = AVATAR_PROFILES[modelId];
   const urls = useMemo(
@@ -445,7 +447,7 @@ export function AvatarModel({
   return root ? (
     <group
       position={[0, profile.transform.verticalOffset, 0]}
-      rotation={[0, profile.transform.rotationY, 0]}
+      rotation={[0, profile.transform.rotationY + rotationOffsetY, 0]}
       scale={profile.transform.scale}
     >
       <primitive object={root} dispose={null} />

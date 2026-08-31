@@ -45,6 +45,8 @@ export interface AvatarViewportProps {
 export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   readonly modelId?: AvatarModelId;
   readonly cameraFraming?: AvatarCameraFraming;
+  /** Adds a scene-local yaw correction without changing the avatar profile. */
+  readonly rotationOffsetY?: number;
   readonly actionId?: string;
   readonly actionRequestKey?: number;
   readonly onActionsReady?: (actions: readonly AvatarActionDescriptor[]) => void;

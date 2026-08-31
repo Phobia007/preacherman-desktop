@@ -17,23 +17,27 @@ import { speechMotionRuntime } from "../motion/SpeechMotionRuntime";
 interface CortanaModelStageProps {
   readonly ariaLabel: string;
   readonly environment?: AvatarSceneEnvironment;
+  readonly idleActionOnly?: boolean;
   readonly showControls?: boolean;
   readonly variant?: "embedded" | "persistent";
   readonly wakeEnabled?: boolean;
   readonly renderActive?: boolean;
   readonly modelId?: ModelId;
   readonly cameraFraming?: AvatarCameraFraming;
+  readonly rotationOffsetY?: number;
 }
 
 export function CortanaModelStage({
   ariaLabel,
   environment = "transparent",
+  idleActionOnly = false,
   showControls = false,
   variant = "embedded",
   wakeEnabled = false,
   renderActive = true,
   modelId = "cortana",
   cameraFraming = "full-body",
+  rotationOffsetY = 0,
 }: CortanaModelStageProps) {
   const modelName = modelId === "cortana" ? "Cortana" : "Zima";
   const interactionState = useAvatarInteractionState();
@@ -74,7 +78,7 @@ export function CortanaModelStage({
   useEffect(() => {
     if (actionsModelId !== modelId) return;
     const idleActionId = modelId === "zima" ? "idle.zima" : "idle.catwalk";
-    const preferred = variant === "persistent"
+    const preferred = idleActionOnly || variant === "persistent"
       ? [idleActionId]
       : interactionState === "speaking"
       ? ["conversation_loop", "chatting"]
@@ -91,7 +95,7 @@ export function CortanaModelStage({
     if (!action) return;
     setPlayingActionId(action.id);
     setActionRequestKey((current) => current + 1);
-  }, [actions, actionsModelId, interactionState, modelId, variant]);
+  }, [actions, actionsModelId, idleActionOnly, interactionState, modelId, variant]);
 
   useEffect(() => {
     setActions([]);
@@ -133,6 +137,7 @@ export function CortanaModelStage({
       data-preacherman-control="avatar.status"
       data-avatar-state={interactionState}
       data-awake={awakened ? "true" : "false"}
+      data-motion-action={playingActionId || ""}
       data-scene-environment={environment}
       tabIndex={-1}
     >
@@ -154,6 +159,7 @@ export function CortanaModelStage({
         modelId={modelId}
         cameraFraming={cameraFraming}
         renderActive={renderActive}
+        rotationOffsetY={rotationOffsetY}
         key={modelId}
       />
       {wakeEnabled ? (

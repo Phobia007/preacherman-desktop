@@ -26,7 +26,8 @@ export function ActiveTheoryGallerySurface() {
           ariaLabel="Fixed Cortana gallery anchor"
           cameraFraming="portrait"
           environment="cinematic"
-          renderActive={false}
+          idleActionOnly
+          renderActive
         />
       </div>
       {!loaded ? (

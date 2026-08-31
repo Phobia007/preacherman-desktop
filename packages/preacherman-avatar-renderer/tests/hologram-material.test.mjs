@@ -312,7 +312,8 @@ test("each avatar is framed and aligned to the front camera", async () => {
 
   assert.match(source, /rotationY: -Math\.PI \/ 2,[\s\S]*?scale: 1/);
   assert.match(source, /zima:[\s\S]*?rotationY: 0,[\s\S]*?scale: 0\.9/);
-  assert.match(source, /rotation=\{\[0, profile\.transform\.rotationY, 0\]\}/);
+  assert.match(source, /rotationOffsetY = 0/);
+  assert.match(source, /rotation=\{\[0, profile\.transform\.rotationY \+ rotationOffsetY, 0\]\}/);
   assert.match(source, /scale=\{profile\.transform\.scale\}/);
   assert.match(source, /<group[\s\S]*?<primitive object=\{root\}/);
 });

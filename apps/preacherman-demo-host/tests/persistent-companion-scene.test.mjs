@@ -29,11 +29,16 @@ test("Home, Task, and Settings share the companion scene while Gallery owns its 
   assert.match(stage, /className="cortana-model-stage__wake-button"/);
   assert.match(stage, /preacherman:voice-wake-request/);
   assert.match(stage, /aria-pressed=\{awakened\}/);
+  assert.doesNotMatch(stage, /interactionSignal/);
+  assert.doesNotMatch(stage, /cortana-model-stage__interaction-target/);
+  assert.match(stage, /data-motion-action=\{playingActionId \|\| ""\}/);
+  assert.match(stage, /"conversation_loop"/);
+  assert.match(stage, /"looking_around"/);
   assert.match(styles, /\.cortana-model-stage__wake-button\s*\{[\s\S]*bottom:\s*34px;[\s\S]*width:\s*500px;[\s\S]*height:\s*94px;[\s\S]*clip-path:\s*ellipse\(50% 50% at 50% 50%\)[\s\S]*transform:\s*translateX\(-50%\)/);
 });
 
 test("Gallery keeps the accepted close portrait Cortana fixed above the original runtime", async () => {
-  const [app, styles, gallerySurface, galleryStyles, runtime] = await Promise.all([
+  const [app, styles, gallerySurface, galleryStyles, runtime, interactionBridge] = await Promise.all([
     readFile(join(hostRoot, "src", "App.tsx"), "utf8"),
     readFile(join(hostRoot, "src", "styles.css"), "utf8"),
     readFile(
@@ -56,6 +61,16 @@ test("Gallery keeps the accepted close portrait Cortana fixed above the original
       ),
       "utf8",
     ),
+    readFile(
+      join(
+        hostRoot,
+        "public",
+        "active-theory-gallery",
+        "gallery",
+        "interaction-bridge.js",
+      ),
+      "utf8",
+    ),
   ]);
 
   assert.doesNotMatch(styles, /\.demo-app-shell\[data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*scale\(1\.9\)/);
@@ -63,8 +78,14 @@ test("Gallery keeps the accepted close portrait Cortana fixed above the original
   assert.match(app, /sceneModelId && activeSurfaceType !== "market"/);
   assert.match(gallerySurface, /cameraFraming="portrait"/);
   assert.match(gallerySurface, /environment="cinematic"/);
-  assert.match(gallerySurface, /renderActive=\{false\}/);
+  assert.match(gallerySurface, /idleActionOnly/);
+  assert.doesNotMatch(gallerySurface, /interactionSignal/);
+  assert.doesNotMatch(gallerySurface, /rotationOffsetY=/);
+  assert.match(gallerySurface, /renderActive/);
   assert.match(galleryStyles, /mix-blend-mode:\s*screen/);
+  assert.doesNotMatch(galleryStyles, /cortana-model-stage__interaction-target/);
+  assert.match(interactionBridge, /__hoverCallback/);
+  assert.match(interactionBridge, /__clickCallback/);
   assert.match(runtime, /__PREACHERMAN_SPINE_REMOVED__=!0/);
   assert.doesNotMatch(runtime, /cortana-runtime\.glb/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.demo-app-shell__scene,[\s\S]*transition:\s*none/);
