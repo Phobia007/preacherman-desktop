@@ -42,19 +42,22 @@ const firstPassReplacement = "let cortanaRoot=new Group;try{let loader=new GLTFL
 const previousCortanaReplacement = "let cortanaRoot=new Group;try{let loader=new GLTFLoader,cortanaNodes=await loader.parse(\"/assets/avatars/cortana/cortana-runtime.glb\");for(let i=0;i<cortanaNodes.length;i++)cortanaRoot.add(cortanaNodes[i]);cortanaRoot.position.set(0,-4.82,0),cortanaRoot.rotation.y=-Math.PI/2,cortanaRoot.scale.set(1.06,1.06,1.06),cortanaRoot.traverse?.((node=>{node.frustumCulled=!1,node.shader&&(node.shader=_this.shader)})),_this.group.add(cortanaRoot),window.__PREACHERMAN_CORTANA_ROOT__=cortanaRoot,window.__PREACHERMAN_CORTANA_READY__=!0,parent.postMessage({type:\"preacherman-active-gallery-ready\"},\"*\")}catch(error){console.error(\"[Preacherman Gallery] Cortana could not replace the spine.\",error),parent.postMessage({type:\"preacherman-active-gallery-error\",message:String(error)},\"*\")}_this.mesh.visible=!1,_this.startRender((_=>{_this.group.position.copy(_this.mesh.position)}));";
 const sideCortanaReplacement = "let cortanaRoot=new Group,cortanaShaderBound=!1;try{let loader=new GLTFLoader,cortanaNodes=await loader.parse(\"/assets/avatars/cortana/cortana-runtime.glb\");for(let i=0;i<cortanaNodes.length;i++)cortanaRoot.add(cortanaNodes[i]);cortanaRoot.position.set(0,-5.296,0),cortanaRoot.rotation.y=-Math.PI/2,cortanaRoot.scale.set(2.55,2.55,2.55),_this.group.add(cortanaRoot),window.__PREACHERMAN_CORTANA_ROOT__=cortanaRoot,window.__PREACHERMAN_CORTANA_READY__=!0,parent.postMessage({type:\"preacherman-active-gallery-ready\"},\"*\")}catch(error){console.error(\"[Preacherman Gallery] Cortana could not replace the spine.\",error),parent.postMessage({type:\"preacherman-active-gallery-error\",message:String(error)},\"*\")}_this.mesh.visible=!1,_this.startRender((_=>{_this.group.position.copy(_this.mesh.position),cortanaShaderBound||(()=>{let cortanaMeshes=0;cortanaRoot.traverse?.((node=>{node.frustumCulled=!1,node.shader&&(node.shader=_this.shader,node.renderOrder=_this.mesh.renderOrder,cortanaMeshes++)})),cortanaShaderBound=cortanaMeshes>0})()}));";
 const cortanaReplacement = "let cortanaRoot=new Group,cortanaShaderBound=!1;try{let loader=new GLTFLoader,cortanaNodes=await loader.parse(\"/assets/avatars/cortana/cortana-runtime.glb\");for(let i=0;i<cortanaNodes.length;i++)cortanaRoot.add(cortanaNodes[i]);cortanaRoot.position.set(0,-5.296,0),cortanaRoot.rotation.y=0,cortanaRoot.scale.set(2.55,2.55,2.55),_this.group.add(cortanaRoot),window.__PREACHERMAN_CORTANA_ROOT__=cortanaRoot,window.__PREACHERMAN_CORTANA_READY__=!0,parent.postMessage({type:\"preacherman-active-gallery-ready\"},\"*\")}catch(error){console.error(\"[Preacherman Gallery] Cortana could not replace the spine.\",error),parent.postMessage({type:\"preacherman-active-gallery-error\",message:String(error)},\"*\")}_this.mesh.visible=!1,_this.startRender((_=>{_this.group.position.copy(_this.mesh.position),cortanaShaderBound||(()=>{let cortanaMeshes=0;cortanaRoot.traverse?.((node=>{node.frustumCulled=!1,node.shader&&(node.shader=_this.shader,node.renderOrder=_this.mesh.renderOrder,cortanaMeshes++)})),cortanaShaderBound=cortanaMeshes>0})()}));";
+const hiddenSpineReplacement = "_this.mesh.visible=!1,window.__PREACHERMAN_SPINE_REMOVED__=!0,parent.postMessage({type:\"preacherman-active-gallery-ready\"},\"*\"),_this.startRender((_=>{_this.group.position.copy(_this.mesh.position)}));";
 
-if (scene.includes(sideCortanaReplacement)) {
-  scene = scene.replace(sideCortanaReplacement, cortanaReplacement);
+if (scene.includes(cortanaReplacement)) {
+  scene = scene.replace(cortanaReplacement, hiddenSpineReplacement);
+} else if (scene.includes(sideCortanaReplacement)) {
+  scene = scene.replace(sideCortanaReplacement, hiddenSpineReplacement);
 } else if (scene.includes(previousCortanaReplacement)) {
-  scene = scene.replace(previousCortanaReplacement, cortanaReplacement);
+  scene = scene.replace(previousCortanaReplacement, hiddenSpineReplacement);
 } else if (scene.includes(firstPassReplacement)) {
-  scene = scene.replace(firstPassReplacement, cortanaReplacement);
+  scene = scene.replace(firstPassReplacement, hiddenSpineReplacement);
 } else {
   scene = replaceOnce(
     scene,
     originalSpine,
-    cortanaReplacement,
-    "replace SpineInstancer with portrait Cortana",
+    hiddenSpineReplacement,
+    "hide SpineInstancer for the fixed portrait Cortana layer",
   );
 }
 
@@ -105,9 +108,5 @@ console.log(JSON.stringify({
   runtimeRoot,
   entry: path.relative(process.cwd(), entryPath),
   scene: path.relative(process.cwd(), scenePath),
-  framing: {
-    position: [0, -5.296, 0],
-    rotationY: 0,
-    scale: 2.55,
-  },
+  framing: "fixed portrait Cortana layer",
 }, null, 2));
