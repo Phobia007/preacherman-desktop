@@ -62,6 +62,17 @@ Always verify the surface changed by the current task and every newly introduced
 
 Process existence, a listening port, or an HTTP success response is only supporting evidence. Visual and interactive verification of the native window is required.
 
+## Browser automation and process cleanup
+
+Local verification is complete only after the resources created by that verification have been released.
+
+- Reuse an existing healthy preview or development server instead of starting a duplicate for the same project and port.
+- Run Playwright and other browser automation sequentially with one worker by default. Every run must have bounded timeouts.
+- Create browsers and contexts inside a lifecycle guarded by `try/finally`; close the browser in `finally` so failures, timeouts, assertions, and early returns cannot strand `chrome-headless-shell` processes.
+- After verification, inspect the task's process tree and confirm its browser, Node, preview, watcher, Rust, linker, and temporary test children have exited.
+- A completed browser run that leaves sustained CPU/GPU use or orphan processes is a failed verification and must be cleaned before another build or test starts.
+- Identify ownership using command line, project path, parent PID, port, and start time. Never use a process-name-wide kill against shared Edge, Chrome, WebView2, Node, Python, or Codex processes.
+
 ## Failure and rollback rule
 
 Any missing model, page, or surface, first-entry timeout, blank or white screen, lost interaction, unexpected loading/error UI, shortcut mismatch, or sustained abnormal CPU usage blocks delivery. This rule applies equally to named core pages and pages added in the future.

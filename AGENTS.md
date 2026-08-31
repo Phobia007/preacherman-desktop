@@ -50,3 +50,14 @@ All Demo Host updates must follow [docs/desktop-lightweight-update-contract.md](
 - A release is not verified by HTTP status or process existence alone. Cold-launch the desktop shortcut and visually verify every changed or newly added surface plus the core Home, Task, Gallery, Market, Ledger, and Settings navigation paths. Verification includes authored content and motion, interaction, both appearance modes, console errors, responsiveness, and abnormal sustained CPU usage.
 - Missing content, a first-entry timeout, a white screen, a local-model error, loss of interaction, or sustained abnormal CPU use is an immediate release failure. Stop deployment, restore the last verified executable and sidecar together, and record the rollback in `desktop-build-manifest.json` and Git.
 - Never hand off a build that depends on retrying, reloading, switching tabs, or waiting for a late sidecar in order to reveal its first usable content.
+
+## Mandatory Background Process and Resource Management Contract
+
+- Before starting a development server, preview, browser automation run, test watcher, or build, check whether an equivalent instance for this project is already running and reuse it when safe.
+- Never start overlapping development servers or build/watch processes for the same project and port. Browser-based verification runs sequentially by default; Playwright uses one worker unless broader concurrency is explicitly required.
+- Every browser automation script must use bounded navigation and assertion timeouts and must close every page, browser context, and browser it created from a `finally` block. Error, timeout, assertion, and early-return paths must perform the same cleanup as success paths.
+- At the end of every verification or failed task, confirm that the task's Playwright `chrome-headless-shell`, Node, Python, preview server, watcher, Rust, linker, and other temporary children have exited. Do not leave an automated browser waiting indefinitely for a page state.
+- Long-lived services must document their purpose, port, owner process, and stop method. Do not start a duplicate when a healthy matching service already exists.
+- Never terminate Edge, Chrome, WebView2, Node, Python, Codex, or another shared process by name. Confirm ownership using the full command line, project path, parent-child chain, listening port, and start time, then stop only the exact project PID. Prefer the originating terminal or graceful stop; force termination is a last resort.
+- During heavy builds or 3D/browser checks, limit concurrency and sample CPU, GPU, video memory, and RAM. Sustained abnormal utilization after the operation completes is a failed cleanup condition and blocks handoff.
+- If process ownership is uncertain, preserve the process and report it instead of guessing.
