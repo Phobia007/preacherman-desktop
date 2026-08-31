@@ -6,7 +6,7 @@ import test from "node:test";
 const hostRoot = join(import.meta.dirname, "..");
 const workspaceRoot = join(hostRoot, "..", "..");
 
-test("Home, Task, Gallery, and Settings share one cinematic companion scene below blank overlays", async () => {
+test("Home, Task, and Settings share the companion scene while Gallery owns its WebGL scene", async () => {
   const [app, shell, styles, stage] = await Promise.all([
     readFile(join(hostRoot, "src", "App.tsx"), "utf8"),
     readFile(join(hostRoot, "src", "app-shell", "AppShell.tsx"), "utf8"),
@@ -19,6 +19,8 @@ test("Home, Task, Gallery, and Settings share one cinematic companion scene belo
   assert.match(app, /variant="persistent"/);
   assert.match(app, /wakeEnabled=\{activeSurfaceType === "home"\}/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
+  assert.match(app, /sceneModelId && activeSurfaceType !== "market"/);
+  assert.match(app, /<ActiveTheoryGallerySurface \/>/);
   assert.match(shell, /className="demo-app-shell__scene"/);
   assert.match(shell, /data-active-surface=\{activeSurfaceType\}/);
   assert.match(styles, /\.demo-app-shell__scene\s*\{[\s\S]*z-index:\s*0/);
@@ -30,24 +32,30 @@ test("Home, Task, Gallery, and Settings share one cinematic companion scene belo
   assert.match(styles, /\.cortana-model-stage__wake-button\s*\{[\s\S]*bottom:\s*34px;[\s\S]*width:\s*500px;[\s\S]*height:\s*94px;[\s\S]*clip-path:\s*ellipse\(50% 50% at 50% 50%\)[\s\S]*transform:\s*translateX\(-50%\)/);
 });
 
-test("Gallery smoothly pushes the persistent model into the close portrait framing", async () => {
-  const rendererRoot = join(workspaceRoot, "packages", "preacherman-avatar-renderer", "src");
-  const [app, styles, stage, viewport, scene] = await Promise.all([
+test("Gallery keeps the accepted close portrait framing inside the original runtime", async () => {
+  const [app, styles, runtime] = await Promise.all([
     readFile(join(hostRoot, "src", "App.tsx"), "utf8"),
     readFile(join(hostRoot, "src", "styles.css"), "utf8"),
-    readFile(join(hostRoot, "src", "gallery", "CortanaModelStage.tsx"), "utf8"),
-    readFile(join(rendererRoot, "InteractiveAvatarViewport.tsx"), "utf8"),
-    readFile(join(rendererRoot, "InteractiveAvatarScene.tsx"), "utf8"),
+    readFile(
+      join(
+        hostRoot,
+        "public",
+        "active-theory-gallery",
+        "gallery",
+        "assets",
+        "js",
+        "app.1780406240914.js",
+      ),
+      "utf8",
+    ),
   ]);
 
   assert.doesNotMatch(styles, /\.demo-app-shell\[data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*scale\(1\.9\)/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
-  assert.match(stage, /cameraFraming=\{cameraFraming\}/);
-  assert.match(viewport, /cameraFraming=\{cameraFraming\}/);
-  assert.match(scene, /const PORTRAIT_CAMERA = \{ x: 0, y: 1\.29, z: 2\.21 \}/);
-  assert.match(scene, /useFrame\(\(_, delta\) =>/);
-  assert.match(scene, /portrait \? 6 : 8\.5/);
-  assert.match(scene, /prefers-reduced-motion: reduce/);
+  assert.match(app, /cameraFraming="full-body"/);
+  assert.match(app, /sceneModelId && activeSurfaceType !== "market"/);
+  assert.match(runtime, /cortanaRoot\.position\.set\(0,-5\.296,0\)/);
+  assert.match(runtime, /cortanaRoot\.rotation\.y=0/);
+  assert.match(runtime, /cortanaRoot\.scale\.set\(2\.55,2\.55,2\.55\)/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.demo-app-shell__scene,[\s\S]*transition:\s*none/);
 });
 

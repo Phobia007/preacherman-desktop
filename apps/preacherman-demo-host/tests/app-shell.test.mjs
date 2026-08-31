@@ -49,19 +49,19 @@ test("Demo Host owns one persistent shell outside the changing screen content", 
   assert.match(app, /\{appShell\}[\s\S]*\{showStartupIntro\s*\?\s*\(\s*<IntroSplash/);
   assert.match(app, /key=\{contentKey\}/);
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface\s*\/>/);
-  assert.match(app, /data-surface="market"\s*\/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s*\/>/);
   assert.match(styles, /\.demo-app-shell__prewarmed-surface\[data-active="false"\] \*\s*\{\s*pointer-events:\s*none !important;/);
   assert.doesNotMatch(app, /TaskSurface/);
   assert.equal((app.match(/<GallerySurface(?:\s+hideProjectCards)?\s*\/>/g) ?? []).length, 1);
   assert.doesNotMatch(shell, /key=\{contentKey\}/, "the shell itself must not remount on navigation");
 });
 
-test("Task replays the Settings entry motion while Gallery remains an empty scene", async () => {
+test("Task keeps its entry motion while Gallery mounts the original runtime", async () => {
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
 
   assert.match(app, /data-surface="workspace"[\s\S]*demo-app-shell__surface-reveal-line[\s\S]*demo-app-shell__surface-reveal-mask/);
-  assert.match(app, /data-surface="market"\s*\/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s*\/>/);
   assert.equal((app.match(/demo-app-shell__surface-reveal-line/g) ?? []).length, 1);
   assert.equal((app.match(/demo-app-shell__surface-reveal-mask/g) ?? []).length, 1);
   assert.match(styles, /data-active="true"[^}]*surface-reveal-mask[^}]*\{\s*animation:\s*demo-surface-unfold 1180ms cubic-bezier\(\.7, 0, \.2, 1\) forwards/);
@@ -199,7 +199,7 @@ test("all eight stable navigation keys have local routes without adding a router
   assert.doesNotMatch(app + route, /react-router|createBrowserRouter/);
 });
 
-test("Home, Task, Gallery, and Settings share one unchanged persistent scene", async () => {
+test("Home, Task, and Settings share the persistent scene while Gallery owns its WebGL scene", async () => {
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
@@ -213,12 +213,13 @@ test("Home, Task, Gallery, and Settings share one unchanged persistent scene", a
   assert.match(app, /activeSurfaceType === "ledger"\s*\? null/);
   assert.match(app, /activeSurfaceType !== "ledger" \? \(/);
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
-  assert.match(app, /data-surface="market"\s*\/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s*\/>/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(hostRule, /background:\s*transparent/);
   assert.equal(emptyRule, "");
   assert.match(sceneRule, /background:\s*var\(--demo-theme-home-canvas\)/);
   assert.match(app, /const sceneModelId = activeModelId;/);
+  assert.match(app, /scene=\{sceneModelId && activeSurfaceType !== "market" \? \(/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.doesNotMatch(app, /sceneHidden=/);
   assert.doesNotMatch(shell, /Math\.max\(window\.innerWidth\s*\/\s*1800/);

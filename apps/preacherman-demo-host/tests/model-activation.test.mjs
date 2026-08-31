@@ -7,7 +7,7 @@ import test from "node:test";
 const hostRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = join(hostRoot, "src");
 
-test("the saved model remains in the persistent scene while primary content layers change", async () => {
+test("the saved model remains persistent except while Gallery owns the scene", async () => {
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const preferences = await readFile(join(sourceRoot, "preferences.ts"), "utf8");
   const stage = await readFile(
@@ -22,14 +22,14 @@ test("the saved model remains in the persistent scene while primary content laye
   assert.match(app, /const activeModelId = preferences\.activeModelId/);
   assert.match(app, /const isCompanionActive = activeModelId !== null/);
   assert.match(app, /data-model-active=\{isCompanionActive\}/);
-  assert.match(app, /scene=\{sceneModelId \? \([\s\S]*<CortanaModelStage[\s\S]*modelId=\{sceneModelId\}[\s\S]*variant="persistent"/);
+  assert.match(app, /scene=\{sceneModelId && activeSurfaceType !== "market" \? \([\s\S]*<CortanaModelStage[\s\S]*modelId=\{sceneModelId\}[\s\S]*variant="persistent"/);
   assert.match(app, /selectedManifest\.surfaceId === manifest\.surfaceId[\s\S]*return homeContent/);
   assert.match(app, /<SettingsScreen/);
   assert.match(app, /<GallerySurface \/>/);
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /preachermanPanelSurface === "home" \|\| preachermanPanelSurface === "market"/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
-  assert.match(app, /data-surface="market"\s*\/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface \/>/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.match(stage, /pose="standby"/);
   assert.match(stage, /quality="high"/);

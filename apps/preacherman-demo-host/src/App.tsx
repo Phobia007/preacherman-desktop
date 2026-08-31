@@ -32,6 +32,7 @@ import { IntroSplash } from "./intro/IntroSplash";
 import { claimStartupIntro } from "./introSequence";
 import { LiveCoordinatorProvider } from "./live/LiveCoordinatorContext";
 import { SettingsScreen } from "./settings/SettingsScreen";
+import { ActiveTheoryGallerySurface } from "./surfaces/gallery/ActiveTheoryGallerySurface";
 import { GallerySurface } from "./surfaces/gallery/GallerySurface";
 import {
   applyPreferences,
@@ -374,11 +375,11 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       entering={animateMainEntrance && !showStartupIntro}
       locale={preferences.locale}
       onNavigate={handleSurfaceNavigate}
-      scene={sceneModelId ? (
+      scene={sceneModelId && activeSurfaceType !== "market" ? (
         <CortanaModelStage
           ariaLabel={`Persistent ${sceneModelId === "cortana" ? "Cortana" : "Zima"} companion scene`}
           environment="cinematic"
-          cameraFraming={activeSurfaceType === "market" ? "portrait" : "full-body"}
+          cameraFraming="full-body"
           modelId={sceneModelId}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}
@@ -405,7 +406,9 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         className="demo-app-shell__prewarmed-surface"
         data-active={activeSurfaceType === "market"}
         data-surface="market"
-      />
+      >
+        <ActiveTheoryGallerySurface />
+      </div>
       {activeSurfaceType !== "ledger" ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}

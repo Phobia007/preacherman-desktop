@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "gallery/work.html",
+  "entry": "gallery/work.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-29T05:38:12.122Z",
+  "updatedAt": "2026-08-29T05:38:12.122Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

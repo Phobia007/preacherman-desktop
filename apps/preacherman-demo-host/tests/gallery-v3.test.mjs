@@ -170,3 +170,41 @@ test("copied portfolio keeps original media and scopes runtime paths", () => {
     ),
   );
 });
+
+test("Gallery uses the original Active Theory runtime with Cortana replacing only SpineInstancer", () => {
+  const app = read(appRoot, "src", "App.tsx");
+  const component = read(galleryRoot, "ActiveTheoryGallerySurface.tsx");
+  const patcher = read(galleryRoot, "scripts", "patch-active-theory-runtime.mjs");
+  const activeTheoryRoot = path.join(appRoot, "public", "active-theory-gallery");
+  const runtime = read(
+    activeTheoryRoot,
+    "gallery",
+    "assets",
+    "js",
+    "app.1780406240914.js",
+  );
+  const entry = read(activeTheoryRoot, "gallery", "work.html");
+
+  assert.match(app, /activeSurfaceType !== "market"/);
+  assert.match(app, /<ActiveTheoryGallerySurface\s*\/>/);
+  assert.match(component, /active-theory-gallery\/gallery\/work\.html/);
+  assert.match(entry, /<base href="\/active-theory-gallery\/">/);
+  assert.match(runtime, /__PREACHERMAN_CORTANA_READY__/);
+  assert.match(runtime, /__PREACHERMAN_CORTANA_ROOT__/);
+  assert.match(runtime, /cortana-runtime\.glb/);
+  assert.match(runtime, /cortanaRoot\.position\.set\(0,-5\.296,0\)/);
+  assert.match(runtime, /cortanaRoot\.rotation\.y=0/);
+  assert.match(runtime, /cortanaRoot\.scale\.set\(2\.55,2\.55,2\.55\)/);
+  assert.match(runtime, /node\.shader=_this\.shader/);
+  assert.match(runtime, /const geo=\{location:\{countryCode:"US"\}\}/);
+  assert.match(runtime, /server:"",roomKey:_this\.key,playerClass:"ScrollPlayer",maxInRoom:-1/);
+  assert.match(runtime, /!_video\.destroy\|\|!_this\.texture/);
+  assert.match(runtime, /_this\.initSync&&\(await _this\.initSync/);
+  assert.match(runtime, /capture\.rt\.upload\(\),_this\.initSync&&/);
+  assert.doesNotMatch(runtime, /us-central1-at-services\.cloudfunctions\.net\/geo/);
+  assert.doesNotMatch(runtime, /wss:\/\/s\.dreamwave\.network\/ws/);
+  assert.doesNotMatch(runtime, /for\(let i=0;i<40;i\+\+\)/);
+  assert.match(patcher, /replace SpineInstancer with portrait Cortana/);
+  assert.ok(fs.existsSync(path.join(activeTheoryRoot, "assets", "geometry", "spine", "spine.bin")));
+  assert.ok(fs.existsSync(path.join(activeTheoryRoot, "gallery", "external")));
+});

@@ -1,0 +1,42 @@
+{
+  "url": "https://activetheory.net/",
+  "capturedVia": "browser-network+recon",
+  "total": 4,
+  "ok": 4,
+  "error": 0,
+  "fontsCss": "fonts/fonts.css",
+  "assets": [
+    {
+      "url": "https://activetheory.net/assets/images/unsupported-bg.jpg",
+      "kind": "image",
+      "via": "network",
+      "status": "ok",
+      "bytes": 196572,
+      "localPath": "images/activetheory.net/unsupported-bg-3c6bbb8706.jpg"
+    },
+    {
+      "url": "https://activetheory.net/assets/fonts/NBArchitektStd-Regular-export/NBArchitektStd-Regular.woff2",
+      "kind": "font",
+      "via": "network",
+      "status": "ok",
+      "bytes": 19428,
+      "localPath": "fonts/activetheory.net/NBArchitektStd-Regular-197a55013d.woff2"
+    },
+    {
+      "url": "https://activetheory.net/assets/fonts/NBArchitektStd-Regular-export/NBArchitektStd-Regular.woff",
+      "kind": "font",
+      "via": "recon",
+      "status": "ok",
+      "bytes": 72928,
+      "localPath": "fonts/activetheory.net/NBArchitektStd-Regular-f1a09f9c60.woff"
+    },
+    {
+      "url": "https://activetheory.net/assets/fonts/NBArchitektStd-Regular-export/NBArchitektStd-Regular.otf",
+      "kind": "font",
+      "via": "recon",
+      "status": "ok",
+      "bytes": 63376,
+      "localPath": "fonts/activetheory.net/NBArchitektStd-Regular-d6f1a9fc7c.otf"
+    }
+  ]
+}
