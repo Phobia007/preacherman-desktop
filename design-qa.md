@@ -72,6 +72,59 @@
 
 final result: passed
 
+# Gallery model camera push — Design QA (latest)
+
+## Comparison target
+
+- Source visual truth: `D:\Temp\Administrator\codex-clipboard-14196f97-c0ea-4c9e-a517-451c185963cf.png` (680 × 534 px).
+- Rendered implementation: `apps/preacherman-demo-host/output/playwright/gallery-camera-push-headroom.png` (1800 × 1000 px).
+- CSS viewport: 1800 × 1000 at device scale factor 1 in Microsoft Edge.
+- State: Gallery route, dark scene, navigation closed, persistent Cortana standby model.
+- Density normalization: the source is a cropped composition reference rather than a full desktop frame. Comparison therefore uses normalized headroom, center alignment, portrait scale, and lower-body crop instead of a literal whole-frame pixel diff.
+
+## Full-view and focused comparison evidence
+
+- The source reference and final implementation were opened together in one comparison input.
+- Both views center the same real Cortana model against an uninterrupted black field and crop the lower body around the thighs.
+- The final implementation deliberately adds more headroom than the initial reference, following the user's latest direction so the face and complete silhouette read as the focal point instead of pressing against the top edge.
+- A separate focused crop was unnecessary because the model is the only page content and its head, shoulders, torso, hands, and lower crop are all clearly legible in the full-resolution comparison.
+
+## Required fidelity surfaces
+
+- Fonts and typography: Gallery contains no page typography; the persistent Preacherman mark and native window controls remain unchanged.
+- Spacing and layout rhythm: the model remains centered. Its final head begins roughly 14% below the viewport top, with the enlarged portrait continuing beyond the lower edge near the thighs.
+- Colors and visual tokens: the authored near-black stage and existing blue hologram grade remain unchanged in both appearance settings.
+- Image quality and asset fidelity: the real animated GLB/WebGL model is retained. No raster substitute, placeholder, redrawn asset, or extra overlay was introduced.
+- Copy and content: Gallery remains intentionally empty apart from the shared model and persistent desktop chrome.
+
+## Findings
+
+- No actionable P0, P1, or P2 visual findings remain.
+- [P3] The supplied reference omits the full desktop chrome and uses a smaller crop, so its absolute horizontal proportions are not a valid whole-window measurement. The implementation preserves the required desktop logo and window controls and matches the requested model-focused portrait relationship.
+
+## Comparison history
+
+1. Initial push-in
+   - Applied a 1.9× scene scale with a 760 ms exponential ease-out and 20% downward framing offset.
+   - [P2] The head sat too close to the top edge and excess lower leg remained visible.
+2. Reference alignment
+   - Increased the downward offset to 27%, aligning the top margin to the supplied crop.
+   - The user requested still more headroom to concentrate attention on the virtual person.
+3. Final headroom correction
+   - Increased the downward offset to 31% without changing scale or motion timing.
+   - Post-fix evidence: `apps/preacherman-demo-host/output/playwright/gallery-camera-push-headroom.png`.
+   - Repeated Home → Gallery → Home → Gallery navigation confirmed that the transform reverses and replays without remounting the model.
+
+## Primary interactions and verification
+
+- Entering Gallery pushes the shared model from the full-body view into the close portrait over 760 ms.
+- Leaving Gallery returns to the original full-body framing over 520 ms.
+- Re-entering Gallery replays the push-in and preserves the empty Gallery surface.
+- `prefers-reduced-motion` keeps the final framing while removing transition time.
+- Gallery-focused regression tests passed; the production browser preview introduced no new Gallery console error. The one captured hydration error belongs to the unchanged, always-prewarmed Task portfolio iframe.
+
+final result: passed
+
 # Settings top-region clearing — Design QA
 
 ## Comparison target

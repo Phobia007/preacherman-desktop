@@ -30,6 +30,14 @@ test("Home, Task, Gallery, and Settings share one cinematic companion scene belo
   assert.match(styles, /\.cortana-model-stage__wake-button\s*\{[\s\S]*bottom:\s*34px;[\s\S]*width:\s*500px;[\s\S]*height:\s*94px;[\s\S]*clip-path:\s*ellipse\(50% 50% at 50% 50%\)[\s\S]*transform:\s*translateX\(-50%\)/);
 });
 
+test("Gallery smoothly pushes the persistent model into the close portrait framing", async () => {
+  const styles = await readFile(join(hostRoot, "src", "styles.css"), "utf8");
+
+  assert.match(styles, /\.demo-app-shell__scene\s*\{[\s\S]*transform:\s*scale\(1\);[\s\S]*transform-origin:\s*center center;[\s\S]*transform 520ms cubic-bezier\(0\.16, 1, 0\.3, 1\)/);
+  assert.match(styles, /\.demo-app-shell\[data-active-surface="market"\] \.demo-app-shell__scene\s*\{[\s\S]*transform:\s*translate3d\(0, 31%, 0\) scale\(1\.9\);[\s\S]*transition-duration:\s*260ms, 760ms, 0s;/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.demo-app-shell__scene,[\s\S]*transition:\s*none/);
+});
+
 test("cinematic scene uses real 3D depth, directional lights, and a full-size Canvas", async () => {
   const rendererRoot = join(
     workspaceRoot,

@@ -914,11 +914,17 @@ html[data-appearance="dark"] #root {
   background: var(--demo-theme-home-canvas);
   opacity: 1;
   transform: scale(1);
+  transform-origin: center center;
   visibility: visible;
   transition:
     opacity 260ms ease,
-    transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
     visibility 0s linear 0s;
+}
+
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__scene {
+  transform: translate3d(0, 31%, 0) scale(1.9);
+  transition-duration: 260ms, 760ms, 0s;
 }
 
 .demo-app-shell__scene::after {
