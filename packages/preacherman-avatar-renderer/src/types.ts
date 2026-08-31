@@ -10,6 +10,7 @@ export type AvatarLoadState =
 export type AvatarQuality = "low" | "balanced" | "high";
 export type AvatarPose = "rest" | "standby";
 export type AvatarSceneEnvironment = "transparent" | "cinematic";
+export type AvatarCameraFraming = "full-body" | "portrait";
 export type AvatarModelId = "cortana" | "zima";
 
 export type AvatarErrorCode =
@@ -43,6 +44,7 @@ export interface AvatarViewportProps {
 
 export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   readonly modelId?: AvatarModelId;
+  readonly cameraFraming?: AvatarCameraFraming;
   readonly actionId?: string;
   readonly actionRequestKey?: number;
   readonly onActionsReady?: (actions: readonly AvatarActionDescriptor[]) => void;

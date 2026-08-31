@@ -1,6 +1,7 @@
 import {
   InteractiveAvatarViewport,
   type AvatarActionDescriptor,
+  type AvatarCameraFraming,
   type AvatarSceneEnvironment,
 } from "@preacherman/avatar-renderer";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -21,6 +22,7 @@ interface CortanaModelStageProps {
   readonly wakeEnabled?: boolean;
   readonly renderActive?: boolean;
   readonly modelId?: ModelId;
+  readonly cameraFraming?: AvatarCameraFraming;
 }
 
 export function CortanaModelStage({
@@ -31,6 +33,7 @@ export function CortanaModelStage({
   wakeEnabled = false,
   renderActive = true,
   modelId = "cortana",
+  cameraFraming = "full-body",
 }: CortanaModelStageProps) {
   const modelName = modelId === "cortana" ? "Cortana" : "Zima";
   const interactionState = useAvatarInteractionState();
@@ -149,6 +152,7 @@ export function CortanaModelStage({
         motionSource={speechMotionRuntime}
         motionRigBinding={modelId === "cortana" ? cortanaSpeechMotionBinding : zimaSpeechMotionBinding}
         modelId={modelId}
+        cameraFraming={cameraFraming}
         renderActive={renderActive}
         key={modelId}
       />

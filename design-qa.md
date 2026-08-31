@@ -77,7 +77,7 @@ final result: passed
 ## Comparison target
 
 - Source visual truth: `D:\Temp\Administrator\codex-clipboard-14196f97-c0ea-4c9e-a517-451c185963cf.png` (680 × 534 px).
-- Rendered implementation: `apps/preacherman-demo-host/output/playwright/gallery-camera-push-headroom.png` (1800 × 1000 px).
+- Rendered implementation: verified at device-pixel scale in Microsoft Edge after the native-camera correction (1800 × 1000 application viewport).
 - CSS viewport: 1800 × 1000 at device scale factor 1 in Microsoft Edge.
 - State: Gallery route, dark scene, navigation closed, persistent Cortana standby model.
 - Density normalization: the source is a cropped composition reference rather than a full desktop frame. Comparison therefore uses normalized headroom, center alignment, portrait scale, and lower-body crop instead of a literal whole-frame pixel diff.
@@ -87,6 +87,7 @@ final result: passed
 - The source reference and final implementation were opened together in one comparison input.
 - Both views center the same real Cortana model against an uninterrupted black field and crop the lower body around the thighs.
 - The final implementation deliberately adds more headroom than the initial reference, following the user's latest direction so the face and complete silhouette read as the focal point instead of pressing against the top edge.
+- The close view is now rasterized directly by WebGL from the nearer camera position. Facial contours, scanlines, torso edges, and circuitry no longer inherit interpolation blur from enlarging an already-rendered canvas.
 - A separate focused crop was unnecessary because the model is the only page content and its head, shoulders, torso, hands, and lower crop are all clearly legible in the full-resolution comparison.
 
 ## Required fidelity surfaces
@@ -94,7 +95,7 @@ final result: passed
 - Fonts and typography: Gallery contains no page typography; the persistent Preacherman mark and native window controls remain unchanged.
 - Spacing and layout rhythm: the model remains centered. Its final head begins roughly 14% below the viewport top, with the enlarged portrait continuing beyond the lower edge near the thighs.
 - Colors and visual tokens: the authored near-black stage and existing blue hologram grade remain unchanged in both appearance settings.
-- Image quality and asset fidelity: the real animated GLB/WebGL model is retained. No raster substitute, placeholder, redrawn asset, or extra overlay was introduced.
+- Image quality and asset fidelity: the real animated GLB/WebGL model is retained at the existing high-quality DPR cap and antialiasing settings. The canvas remains at native scale; no raster substitute, placeholder, redrawn asset, or extra overlay was introduced.
 - Copy and content: Gallery remains intentionally empty apart from the shared model and persistent desktop chrome.
 
 ## Findings
@@ -114,6 +115,10 @@ final result: passed
    - Increased the downward offset to 31% without changing scale or motion timing.
    - Post-fix evidence: `apps/preacherman-demo-host/output/playwright/gallery-camera-push-headroom.png`.
    - Repeated Home → Gallery → Home → Gallery navigation confirmed that the transform reverses and replays without remounting the model.
+4. Native-camera sharpness correction
+   - Removed the 1.9× CSS canvas transform that enlarged the completed raster image.
+   - Recreated the approved composition with a true camera move from `(0, 0.94, 4.35)` to `(0, 1.29, 2.21)`, preserving approximately 14% headroom and the established 760/520 ms perceived timing.
+   - Device-pixel inspection confirmed a sharper close view with no new camera or WebGL console errors. Reduced-motion users receive the same final framing without the transition.
 
 ## Primary interactions and verification
 

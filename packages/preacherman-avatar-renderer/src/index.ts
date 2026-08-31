@@ -54,6 +54,7 @@ export {
   AvatarError,
   normalizeAvatarError,
   type AvatarErrorCode,
+  type AvatarCameraFraming,
   type AvatarLoadState,
   type AvatarModelId,
   type AvatarPerformanceSnapshot,

@@ -31,10 +31,23 @@ test("Home, Task, Gallery, and Settings share one cinematic companion scene belo
 });
 
 test("Gallery smoothly pushes the persistent model into the close portrait framing", async () => {
-  const styles = await readFile(join(hostRoot, "src", "styles.css"), "utf8");
+  const rendererRoot = join(workspaceRoot, "packages", "preacherman-avatar-renderer", "src");
+  const [app, styles, stage, viewport, scene] = await Promise.all([
+    readFile(join(hostRoot, "src", "App.tsx"), "utf8"),
+    readFile(join(hostRoot, "src", "styles.css"), "utf8"),
+    readFile(join(hostRoot, "src", "gallery", "CortanaModelStage.tsx"), "utf8"),
+    readFile(join(rendererRoot, "InteractiveAvatarViewport.tsx"), "utf8"),
+    readFile(join(rendererRoot, "InteractiveAvatarScene.tsx"), "utf8"),
+  ]);
 
-  assert.match(styles, /\.demo-app-shell__scene\s*\{[\s\S]*transform:\s*scale\(1\);[\s\S]*transform-origin:\s*center center;[\s\S]*transform 520ms cubic-bezier\(0\.16, 1, 0\.3, 1\)/);
-  assert.match(styles, /\.demo-app-shell\[data-active-surface="market"\] \.demo-app-shell__scene\s*\{[\s\S]*transform:\s*translate3d\(0, 31%, 0\) scale\(1\.9\);[\s\S]*transition-duration:\s*260ms, 760ms, 0s;/);
+  assert.doesNotMatch(styles, /\.demo-app-shell\[data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*scale\(1\.9\)/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
+  assert.match(stage, /cameraFraming=\{cameraFraming\}/);
+  assert.match(viewport, /cameraFraming=\{cameraFraming\}/);
+  assert.match(scene, /const PORTRAIT_CAMERA = \{ x: 0, y: 1\.29, z: 2\.21 \}/);
+  assert.match(scene, /useFrame\(\(_, delta\) =>/);
+  assert.match(scene, /portrait \? 6 : 8\.5/);
+  assert.match(scene, /prefers-reduced-motion: reduce/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.demo-app-shell__scene,[\s\S]*transition:\s*none/);
 });
 
@@ -78,9 +91,9 @@ test("cinematic scene uses real 3D depth, directional lights, and a full-size Ca
   assert.match(lights, /color="#d7f1ff"[\s\S]*intensity=\{11\.5\}/);
   assert.match(lights, /color="#1676df"[\s\S]*intensity=\{7\.4\}/);
   assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment awakened=\{awakened\} \/>/);
-  assert.doesNotMatch(scene, /AwakeningRig|AWAKENED_STAGE_LIFT|position\.y/);
+  assert.doesNotMatch(scene, /AwakeningRig|AWAKENED_STAGE_LIFT/);
   assert.match(scene, /<AvatarModel\b/);
-  assert.match(scene, /environment === "cinematic"\) camera\.position\.set\(0, 0\.94, 4\.35\)/);
+  assert.match(scene, /const FULL_BODY_CAMERA = \{ x: 0, y: 0\.94, z: 4\.35 \}/);
   assert.match(rendererStyles, /width:\s*100% !important/);
   assert.match(rendererStyles, /height:\s*100% !important/);
 });

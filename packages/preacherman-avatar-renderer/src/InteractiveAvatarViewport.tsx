@@ -45,6 +45,7 @@ export function InteractiveAvatarViewport({
   motionRigBinding,
   renderActive = true,
   modelId = "cortana",
+  cameraFraming = "full-body",
 }: InteractiveAvatarViewportProps) {
   const [loadState, setLoadState] = useState<AvatarLoadState>("loading");
   const [animationDebug, setAnimationDebug] =
@@ -131,6 +132,7 @@ export function InteractiveAvatarViewport({
               motionSource={motionSource}
               motionRigBinding={motionRigBinding}
               modelId={modelId}
+              cameraFraming={cameraFraming}
             />
           </Suspense>
         </Canvas>
