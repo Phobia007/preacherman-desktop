@@ -16,7 +16,12 @@ type GalleryThemeMessage = {
   text: string;
   focus: string;
   compositeKey: string;
+  hideProjectCards: boolean;
 };
+
+interface GallerySurfaceProps {
+  hideProjectCards?: boolean;
+}
 
 const gallerySourcePath = "/gallery-v3/portfolio/index.html";
 type GalleryRevealState =
@@ -30,7 +35,7 @@ function getAppearance(): GalleryAppearance {
   return document.documentElement.dataset.appearance === "dark" ? "dark" : "light";
 }
 
-export function GallerySurface() {
+export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const revealFrameRef = useRef<number | null>(null);
   const reduceMotionRef = useRef(
@@ -60,11 +65,12 @@ export function GallerySurface() {
       compositeKey: rootStyles
         .getPropertyValue("--demo-theme-gallery-composite-key")
         .trim(),
+      hideProjectCards,
     };
     const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
 
     frameWindow.postMessage(message, targetOrigin);
-  }, []);
+  }, [hideProjectCards]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent<unknown>) => {

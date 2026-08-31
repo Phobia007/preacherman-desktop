@@ -17,6 +17,7 @@ test("Gallery v3 embeds the copied local portfolio without replacement imagery",
   assert.doesNotMatch(component, /\.(?:png|jpe?g|webp|avif)["']/i);
   assert.match(component, /gallery-source-ready/);
   assert.match(component, /gallery-theme/);
+  assert.match(component, /hideProjectCards/);
   assert.match(component, /data-reveal-state=\{revealState\}/);
   assert.match(component, /requestAnimationFrame/);
   assert.match(component, /setRevealState\("scanning"\)/);
@@ -110,6 +111,23 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
   assert.match(index, /signalSourceReady/);
   assert.doesNotMatch(index, /setTimeout\(signalSourceReady,10000\)/);
   assert.match(index, /\[data-od-id="error-state"\]\{display:none!important\}/);
+  assert.match(
+    index,
+    /\[data-gallery-hide-project-cards="true"\] \[data-od-id\^="project-card-"\]\{display:none!important\}/,
+  );
+  assert.match(
+    index,
+    /html\[data-gallery-hide-project-cards="true"\][\s\S]*background:transparent!important/,
+  );
+  assert.match(
+    index,
+    /\[data-gallery-hide-project-cards="true"\] \[data-od-id="profile-toggle"\][\s\S]*-webkit-text-fill-color:currentColor!important/,
+  );
+  assert.match(
+    index,
+    /\[data-gallery-hide-project-cards="true"\] nav\[aria-label="项目视图"\]/,
+  );
+  assert.match(index, /dataset\.galleryHideProjectCards/);
   assert.match(index, /--gallery-host-composite-key/);
   assert.match(index, /\[data-id="nathan-riley"\]\{aspect-ratio:2048\/1172\}/);
   assert.match(index, /\[data-id="casa-di-solare"\]\{aspect-ratio:2048\/1204\}/);

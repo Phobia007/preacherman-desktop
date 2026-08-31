@@ -407,7 +407,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       >
         <span aria-hidden="true" className="demo-app-shell__surface-reveal-line" />
         <div className="demo-app-shell__surface-reveal-mask">
-          <GallerySurface />
+          <GallerySurface hideProjectCards />
         </div>
       </div>
       {activeSurfaceType !== "ledger" ? (

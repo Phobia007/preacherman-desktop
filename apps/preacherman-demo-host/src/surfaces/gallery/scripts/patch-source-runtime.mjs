@@ -131,13 +131,16 @@ body:before{display:none!important}
 [data-gallery-profile-line]{display:block;white-space:nowrap}
 [data-gallery-profile-honors]{display:none!important}
 @media(max-width:649px){[data-gallery-profile-line]{white-space:normal}}
+html[data-gallery-hide-project-cards="true"],html[data-gallery-hide-project-cards="true"] body,html[data-gallery-hide-project-cards="true"] #__nuxt,html[data-gallery-hide-project-cards="true"] #__nuxt>.bg-black{background:transparent!important}
+[data-gallery-hide-project-cards="true"] [data-od-id^="project-card-"]{display:none!important}
+[data-gallery-hide-project-cards="true"] [data-od-id="profile-toggle"],[data-gallery-hide-project-cards="true"] nav[aria-label="项目视图"]{-webkit-text-fill-color:currentColor!important}
 [data-od-id="interface-chrome"]{color:var(--gallery-host-text,#fff)}
 :focus-visible{outline:2px solid var(--gallery-host-focus,#fff)!important;outline-offset:4px}
 </style>`;
 
 const sourceBridge = `<script id="gallery-host-bridge">(()=>{
 const base="/gallery-v3/portfolio/";
-const applyTheme=data=>{if(!data||data.type!=="gallery-theme")return;const root=document.documentElement;root.dataset.galleryAppearance=data.appearance||"dark";if(data.text)root.style.setProperty("--gallery-host-text",data.text);if(data.focus)root.style.setProperty("--gallery-host-focus",data.focus);if(data.compositeKey)root.style.setProperty("--gallery-host-composite-key",data.compositeKey)};
+const applyTheme=data=>{if(!data||data.type!=="gallery-theme")return;const root=document.documentElement;root.dataset.galleryAppearance=data.appearance||"dark";root.dataset.galleryHideProjectCards=String(Boolean(data.hideProjectCards));if(data.text)root.style.setProperty("--gallery-host-text",data.text);if(data.focus)root.style.setProperty("--gallery-host-focus",data.focus);if(data.compositeKey)root.style.setProperty("--gallery-host-composite-key",data.compositeKey)};
 addEventListener("message",event=>applyTheme(event.data));
 const normalizeLinks=()=>{for(const anchor of document.querySelectorAll("a[href]")){const raw=anchor.getAttribute("href");if(!raw||raw.startsWith("#")||raw.startsWith("mailto:")||raw.startsWith("tel:"))continue;let url;try{url=new URL(raw,location.href)}catch{continue}if(url.origin!==location.origin)continue;const odId=anchor.dataset.odId;const relative=url.pathname.startsWith(base)?url.pathname.slice(base.length):url.pathname.slice(1);const parts=relative.split("/").filter(Boolean);if(odId==="brand-home"||odId==="view-featured"||url.pathname==="/"){url.pathname=base}else if(odId==="view-full"||parts[0]==="full"){url.pathname=base+"full/index.html"}else if(parts[0]==="projects"&&parts[1]){url.pathname=base+"projects/"+parts[1]+"/index.html"}else continue;anchor.href=url.href}};
 const routeFor=target=>{const card=target.closest?.('[data-od-id^="project-card-"]');const slug=card?.dataset?.id;if(slug)return"/projects/"+encodeURIComponent(slug);const anchor=target.closest?.("a[href]");if(!anchor)return null;const odId=anchor.dataset.odId;if(odId==="brand-home"||odId==="view-featured")return"/";if(odId==="view-full")return"/full";let url;try{url=new URL(anchor.href,location.href)}catch{return null}if(url.origin!==location.origin)return null;const relative=url.pathname.startsWith(base)?url.pathname.slice(base.length):url.pathname.slice(1);const parts=relative.split("/").filter(Boolean);if(relative===""||relative==="index.html")return"/";if(parts[0]==="full")return"/full";if(parts[0]==="projects"&&parts[1])return"/projects/"+parts[1];return null};

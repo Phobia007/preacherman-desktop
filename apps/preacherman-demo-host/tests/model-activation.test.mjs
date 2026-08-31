@@ -26,10 +26,10 @@ test("the saved model remains in the persistent scene while primary content laye
   assert.match(app, /selectedManifest\.surfaceId === manifest\.surfaceId[\s\S]*return homeContent/);
   assert.match(app, /<SettingsScreen/);
   assert.match(app, /<GallerySurface \/>/);
-  assert.match(app, /const workspaceContent = <TaskSurface \/>/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /preachermanPanelSurface === "home" \|\| preachermanPanelSurface === "market"/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
-  assert.match(app, /activeSurfaceType === "market"[\s\S]*<GallerySurface \/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<GallerySurface hideProjectCards \/>/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.match(stage, /pose="standby"/);
   assert.match(stage, /quality="high"/);

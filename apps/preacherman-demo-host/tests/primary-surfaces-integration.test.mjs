@@ -12,7 +12,7 @@ test("the unified desktop mounts Task, Gallery, and Settings in the shared shell
   assert.match(app, /import \{ GallerySurface \} from "\.\/surfaces\/gallery\/GallerySurface"/);
   assert.match(app, /import \{ SettingsScreen \} from "\.\/settings\/SettingsScreen"/);
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
-  assert.match(app, /activeSurfaceType === "market"[\s\S]*<GallerySurface \/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<GallerySurface hideProjectCards \/>/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(app, /appearance=\{preferences\.appearance\}/);
   assert.match(app, /locale=\{preferences\.locale\}/);
