@@ -42,6 +42,115 @@
   opacity: var(--demo-theme-gallery-overlay-opacity);
 }
 
+.gallery-surface[data-featured-empty="true"] .gallery-surface__frame {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@font-face {
+  font-family: "Gallery Brother Signature";
+  src: url("/gallery-v3/portfolio/assets/fonts/BrotherSignature-7BWnK.otf") format("opentype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.gallery-surface__empty-chrome {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  color: var(--demo-theme-gallery-control-hover);
+  pointer-events: none;
+}
+
+.gallery-surface__profile-toggle,
+.gallery-surface__full-link,
+.gallery-surface__profile a {
+  color: inherit;
+  pointer-events: auto;
+}
+
+.gallery-surface__profile-toggle,
+.gallery-surface__full-link {
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.gallery-surface__profile-toggle {
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  min-height: 44px;
+  padding: 0 1.5rem;
+  font-family: "Gallery Brother Signature", "Segoe Script", "Brush Script MT", cursive;
+  font-size: clamp(28px, 2.2vw, 38px);
+  line-height: 1;
+  transform: translateX(-50%);
+}
+
+.gallery-surface__full-link {
+  position: absolute;
+  bottom: 3rem;
+  left: 8rem;
+  min-height: 44px;
+  padding: 0 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.gallery-surface__profile {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(60rem, calc(100% - 12rem));
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.gallery-surface__profile p span {
+  display: block;
+  white-space: nowrap;
+}
+
+.gallery-surface__profile ul {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 3rem;
+  list-style: none;
+}
+
+.gallery-surface__profile a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.gallery-surface__profile-toggle:focus-visible,
+.gallery-surface__full-link:focus-visible,
+.gallery-surface__profile a:focus-visible {
+  outline: 2px solid var(--demo-theme-gallery-scan);
+  outline-offset: 4px;
+}
+
+@media (max-width: 649px) {
+  .gallery-surface__profile p span {
+    white-space: normal;
+  }
+
+  .gallery-surface__full-link {
+    bottom: 1.5rem;
+    left: 1.5rem;
+  }
+}
+
 .gallery-surface__frame:focus-visible {
   outline: 2px solid var(--demo-theme-focus);
   outline-offset: -2px;

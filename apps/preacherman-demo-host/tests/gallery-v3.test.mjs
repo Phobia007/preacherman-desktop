@@ -18,6 +18,7 @@ test("Gallery v3 embeds the copied local portfolio without replacement imagery",
   assert.match(component, /gallery-source-ready/);
   assert.match(component, /gallery-theme/);
   assert.match(component, /hideProjectCards/);
+  assert.match(component, /hideFeaturedControl/);
   assert.match(component, /data-reveal-state=\{revealState\}/);
   assert.match(component, /requestAnimationFrame/);
   assert.match(component, /setRevealState\("scanning"\)/);
@@ -115,22 +116,32 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
     index,
     /\[data-gallery-hide-project-cards="true"\] \[data-od-id\^="project-card-"\]\{display:none!important\}/,
   );
+  assert.doesNotMatch(index, /data-gallery-hide-project-cards="true"[^}]*background:transparent/);
   assert.match(
     index,
-    /html\[data-gallery-hide-project-cards="true"\][\s\S]*background:transparent!important/,
+    /\[data-gallery-hide-featured-control="true"\] \[data-od-id="profile-toggle"\][\s\S]*-webkit-text-fill-color:currentColor!important/,
   );
   assert.match(
     index,
-    /\[data-gallery-hide-project-cards="true"\] \[data-od-id="profile-toggle"\][\s\S]*-webkit-text-fill-color:currentColor!important/,
-  );
-  assert.match(
-    index,
-    /\[data-gallery-hide-project-cards="true"\] nav\[aria-label="项目视图"\]/,
+    /\[data-gallery-hide-featured-control="true"\] \[data-od-id="view-featured"\][\s\S]*display:none!important/,
   );
   assert.match(index, /dataset\.galleryHideProjectCards/);
+  assert.match(index, /dataset\.galleryHideFeaturedControl/);
   assert.match(index, /--gallery-host-composite-key/);
   assert.match(index, /\[data-id="nathan-riley"\]\{aspect-ratio:2048\/1172\}/);
   assert.match(index, /\[data-id="casa-di-solare"\]\{aspect-ratio:2048\/1204\}/);
+});
+
+test("card-free Gallery leaves the Home scene untouched and exposes only the retained controls", () => {
+  const component = read(galleryRoot, "GallerySurface.tsx");
+  const styles = read(galleryRoot, "gallery-surface.css");
+
+  assert.match(component, /data-featured-empty=\{showEmptyFeatured \? "true" : "false"\}/);
+  assert.match(component, />\s*Preacherman\s*<\/button>/);
+  assert.match(component, />\s*全部\s*<\/button>/);
+  assert.match(component, /galleryView === "full"/);
+  assert.match(styles, /data-featured-empty="true"[\s\S]*opacity:\s*0/);
+  assert.doesNotMatch(styles, /mix-blend-mode:\s*screen/);
 });
 
 test("copied portfolio keeps original media and scopes runtime paths", () => {
