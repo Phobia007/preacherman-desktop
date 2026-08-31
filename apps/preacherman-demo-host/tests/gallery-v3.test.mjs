@@ -190,6 +190,9 @@ test("Gallery uses the original Active Theory runtime with a fixed Cortana above
   assert.match(app, /<ActiveTheoryGallerySurface\s*\/>/);
   assert.match(component, /active-theory-gallery\/gallery\/work\.html/);
   assert.match(entry, /<base href="\/active-theory-gallery\/">/);
+  assert.match(entry, /id="preacherman-gallery-scrollbar"/);
+  assert.match(entry, /scrollbar-width:none/);
+  assert.match(entry, /::-webkit-scrollbar\{display:none;width:0;height:0\}/);
   assert.match(component, /<CortanaModelStage/);
   assert.match(component, /cameraFraming="portrait"/);
   assert.match(component, /environment="cinematic"/);
