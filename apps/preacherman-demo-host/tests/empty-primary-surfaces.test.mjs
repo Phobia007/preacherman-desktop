@@ -13,7 +13,8 @@ test("Task, Gallery, and Settings mount their content over the unchanged Home sc
   ]);
 
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
-  assert.match(app, /data-surface="market"[\s\S]*<GallerySurface hideProjectCards \/>/);
+  assert.match(app, /data-surface="market"\s*\/>/);
+  assert.equal((app.match(/<GallerySurface\b/g) ?? []).length, 1);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.doesNotMatch(app, /<PreachermanGameletPanel/);
   assert.match(app, /const sceneModelId = activeModelId;/);

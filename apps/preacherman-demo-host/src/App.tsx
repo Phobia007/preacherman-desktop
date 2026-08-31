@@ -404,12 +404,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         className="demo-app-shell__prewarmed-surface"
         data-active={activeSurfaceType === "market"}
         data-surface="market"
-      >
-        <span aria-hidden="true" className="demo-app-shell__surface-reveal-line" />
-        <div className="demo-app-shell__surface-reveal-mask">
-          <GallerySurface hideProjectCards />
-        </div>
-      </div>
+      />
       {activeSurfaceType !== "ledger" ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}
