@@ -430,6 +430,10 @@ html[data-appearance="dark"] #root {
   width: calc(50% - 192px);
 }
 
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__drag-region--right {
+  pointer-events: none;
+}
+
 .demo-app-shell__brand-navigation {
   position: absolute;
   top: 17px;

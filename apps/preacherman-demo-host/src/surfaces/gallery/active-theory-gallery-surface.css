@@ -23,17 +23,15 @@
   z-index: 2;
   overflow: hidden;
   mix-blend-mode: screen;
-  pointer-events: none;
+  pointer-events: none !important;
+}
+
+.active-theory-gallery-surface__cortana * {
+  pointer-events: none !important;
 }
 
 .active-theory-gallery-surface__cortana .cortana-model-stage {
   inset: 0;
-  pointer-events: none;
-}
-
-.active-theory-gallery-surface__cortana .preacherman-avatar-viewport,
-.active-theory-gallery-surface__cortana canvas {
-  pointer-events: none;
 }
 
 .active-theory-gallery-surface__cortana .cortana-model-stage__ground,

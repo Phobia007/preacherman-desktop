@@ -83,6 +83,8 @@ test("Gallery keeps the accepted close portrait Cortana fixed above the original
   assert.doesNotMatch(gallerySurface, /rotationOffsetY=/);
   assert.match(gallerySurface, /renderActive/);
   assert.match(galleryStyles, /mix-blend-mode:\s*screen/);
+  assert.match(galleryStyles, /active-theory-gallery-surface__cortana \*[\s\S]*pointer-events:\s*none !important/);
+  assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__drag-region--right[\s\S]*pointer-events:\s*none/);
   assert.doesNotMatch(galleryStyles, /cortana-model-stage__interaction-target/);
   assert.match(interactionBridge, /__hoverCallback/);
   assert.match(interactionBridge, /__clickCallback/);
