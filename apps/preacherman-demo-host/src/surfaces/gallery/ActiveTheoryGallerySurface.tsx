@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { CortanaModelStage } from "../../gallery/CortanaModelStage";
 
 import "./active-theory-gallery-surface.css";
 
@@ -21,15 +20,6 @@ export function ActiveTheoryGallerySurface() {
         src={gallerySource}
         title="Preacherman Gallery"
       />
-      <div aria-hidden="true" className="active-theory-gallery-surface__cortana">
-        <CortanaModelStage
-          ariaLabel="Fixed Cortana gallery anchor"
-          cameraFraming="portrait"
-          environment="cinematic"
-          idleActionOnly
-          renderActive
-        />
-      </div>
       {!loaded ? (
         <p aria-live="polite" className="active-theory-gallery-surface__status" role="status">
           Loading gallery

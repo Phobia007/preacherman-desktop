@@ -22,7 +22,7 @@ test("the unified desktop mounts Task, Gallery, and Settings in the shared shell
 
 test("the companion scene remains outside the keyed page content", async () => {
   const app = await readFile(join(hostRoot, "src", "App.tsx"), "utf8");
-  const sceneIndex = app.indexOf('scene={sceneModelId && activeSurfaceType !== "market" ? (');
+  const sceneIndex = app.indexOf("scene={sceneModelId ? (");
   const pageIndex = app.indexOf('<div className="demo-app-shell__screen-page" key={contentKey}>');
 
   assert.ok(sceneIndex >= 0);

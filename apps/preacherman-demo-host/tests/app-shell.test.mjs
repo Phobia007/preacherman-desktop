@@ -199,7 +199,7 @@ test("all eight stable navigation keys have local routes without adding a router
   assert.doesNotMatch(app + route, /react-router|createBrowserRouter/);
 });
 
-test("Home, Task, and Settings share the persistent scene while Gallery owns its WebGL scene", async () => {
+test("Home, Task, Settings, and Gallery share the persistent scene", async () => {
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
@@ -219,7 +219,8 @@ test("Home, Task, and Settings share the persistent scene while Gallery owns its
   assert.equal(emptyRule, "");
   assert.match(sceneRule, /background:\s*var\(--demo-theme-home-canvas\)/);
   assert.match(app, /const sceneModelId = activeModelId;/);
-  assert.match(app, /scene=\{sceneModelId && activeSurfaceType !== "market" \? \(/);
+  assert.match(app, /scene=\{sceneModelId \? \(/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.doesNotMatch(app, /sceneHidden=/);
   assert.doesNotMatch(shell, /Math\.max\(window\.innerWidth\s*\/\s*1800/);

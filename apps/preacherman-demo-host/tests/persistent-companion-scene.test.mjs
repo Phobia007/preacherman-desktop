@@ -6,7 +6,7 @@ import test from "node:test";
 const hostRoot = join(import.meta.dirname, "..");
 const workspaceRoot = join(hostRoot, "..", "..");
 
-test("Home, Task, and Settings share the companion scene while Gallery owns its WebGL scene", async () => {
+test("Home, Task, Settings, and Gallery share one persistent companion scene", async () => {
   const [app, shell, styles, stage] = await Promise.all([
     readFile(join(hostRoot, "src", "App.tsx"), "utf8"),
     readFile(join(hostRoot, "src", "app-shell", "AppShell.tsx"), "utf8"),
@@ -19,7 +19,9 @@ test("Home, Task, and Settings share the companion scene while Gallery owns its 
   assert.match(app, /variant="persistent"/);
   assert.match(app, /wakeEnabled=\{activeSurfaceType === "home"\}/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
-  assert.match(app, /sceneModelId && activeSurfaceType !== "market"/);
+  assert.match(app, /sceneModelId \? \(/);
+  assert.doesNotMatch(app, /sceneModelId && activeSurfaceType !== "market"/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
   assert.match(app, /<ActiveTheoryGallerySurface \/>/);
   assert.match(shell, /className="demo-app-shell__scene"/);
   assert.match(shell, /data-active-surface=\{activeSurfaceType\}/);
@@ -37,7 +39,7 @@ test("Home, Task, and Settings share the companion scene while Gallery owns its 
   assert.match(styles, /\.cortana-model-stage__wake-button\s*\{[\s\S]*bottom:\s*34px;[\s\S]*width:\s*500px;[\s\S]*height:\s*94px;[\s\S]*clip-path:\s*ellipse\(50% 50% at 50% 50%\)[\s\S]*transform:\s*translateX\(-50%\)/);
 });
 
-test("Gallery keeps the accepted close portrait Cortana fixed above the original runtime", async () => {
+test("Gallery moves the shared Cortana into the accepted close portrait above the original runtime", async () => {
   const [app, styles, gallerySurface, galleryStyles, runtime, interactionBridge] = await Promise.all([
     readFile(join(hostRoot, "src", "App.tsx"), "utf8"),
     readFile(join(hostRoot, "src", "styles.css"), "utf8"),
@@ -74,16 +76,14 @@ test("Gallery keeps the accepted close portrait Cortana fixed above the original
   ]);
 
   assert.doesNotMatch(styles, /\.demo-app-shell\[data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*scale\(1\.9\)/);
-  assert.match(app, /cameraFraming="full-body"/);
-  assert.match(app, /sceneModelId && activeSurfaceType !== "market"/);
-  assert.match(gallerySurface, /cameraFraming="portrait"/);
-  assert.match(gallerySurface, /environment="cinematic"/);
-  assert.match(gallerySurface, /idleActionOnly/);
-  assert.doesNotMatch(gallerySurface, /interactionSignal/);
-  assert.doesNotMatch(gallerySurface, /rotationOffsetY=/);
-  assert.match(gallerySurface, /renderActive/);
-  assert.match(galleryStyles, /mix-blend-mode:\s*screen/);
-  assert.match(galleryStyles, /active-theory-gallery-surface__cortana \*[\s\S]*pointer-events:\s*none !important/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
+  assert.match(app, /sceneModelId \? \(/);
+  assert.doesNotMatch(gallerySurface, /CortanaModelStage/);
+  assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*mix-blend-mode:\s*screen/);
+  assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__scene \*[\s\S]*pointer-events:\s*none !important/);
+  assert.match(galleryStyles, /active-theory-gallery-arrive 760ms cubic-bezier\(\.16, 1, \.3, 1\) 140ms both/);
+  assert.match(galleryStyles, /@keyframes active-theory-gallery-arrive[\s\S]*translate3d\(12%, 0, 0\)[\s\S]*clip-path:\s*inset\(0\)/);
+  assert.match(galleryStyles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*animation:\s*none/);
   assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__drag-region--right[\s\S]*pointer-events:\s*none/);
   assert.doesNotMatch(galleryStyles, /cortana-model-stage__interaction-target/);
   assert.match(interactionBridge, /__hoverCallback/);

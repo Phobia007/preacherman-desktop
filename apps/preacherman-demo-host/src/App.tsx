@@ -375,11 +375,11 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       entering={animateMainEntrance && !showStartupIntro}
       locale={preferences.locale}
       onNavigate={handleSurfaceNavigate}
-      scene={sceneModelId && activeSurfaceType !== "market" ? (
+      scene={sceneModelId ? (
         <CortanaModelStage
           ariaLabel={`Persistent ${sceneModelId === "cortana" ? "Cortana" : "Zima"} companion scene`}
           environment="cinematic"
-          cameraFraming="full-body"
+          cameraFraming={activeSurfaceType === "market" ? "portrait" : "full-body"}
           modelId={sceneModelId}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}

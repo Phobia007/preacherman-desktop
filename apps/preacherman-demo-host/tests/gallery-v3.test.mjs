@@ -186,20 +186,14 @@ test("Gallery uses the original Active Theory runtime with a fixed Cortana above
   const entry = read(activeTheoryRoot, "gallery", "work.html");
   const interactionBridge = read(activeTheoryRoot, "gallery", "interaction-bridge.js");
 
-  assert.match(app, /activeSurfaceType !== "market"/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
   assert.match(app, /<ActiveTheoryGallerySurface\s*\/>/);
   assert.match(component, /active-theory-gallery\/gallery\/work\.html/);
   assert.match(entry, /<base href="\/active-theory-gallery\/">/);
   assert.match(entry, /id="preacherman-gallery-scrollbar"/);
   assert.match(entry, /scrollbar-width:none/);
   assert.match(entry, /::-webkit-scrollbar\{display:none;width:0;height:0\}/);
-  assert.match(component, /<CortanaModelStage/);
-  assert.match(component, /cameraFraming="portrait"/);
-  assert.match(component, /environment="cinematic"/);
-  assert.match(component, /idleActionOnly/);
-  assert.doesNotMatch(component, /interactionSignal/);
-  assert.doesNotMatch(component, /rotationOffsetY=/);
-  assert.match(component, /renderActive/);
+  assert.doesNotMatch(component, /CortanaModelStage/);
   assert.match(entry, /gallery\/interaction-bridge\.js/);
   assert.match(interactionBridge, /Interaction3D\.find\(camera\)/);
   assert.match(interactionBridge, /typeof Stage === "undefined"/);

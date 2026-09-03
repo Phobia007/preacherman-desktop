@@ -15,29 +15,27 @@
   border: 0;
   color: var(--demo-theme-text);
   background: var(--demo-theme-canvas);
+  transform: translate3d(0, 0, 0);
+  transform-origin: center;
 }
 
-.active-theory-gallery-surface__cortana {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  overflow: hidden;
-  mix-blend-mode: screen;
-  pointer-events: none !important;
+.demo-app-shell__prewarmed-surface[data-surface="market"][data-active="true"]
+  .active-theory-gallery-surface__frame {
+  animation: active-theory-gallery-arrive 760ms cubic-bezier(.16, 1, .3, 1) 140ms both;
 }
 
-.active-theory-gallery-surface__cortana * {
-  pointer-events: none !important;
-}
+@keyframes active-theory-gallery-arrive {
+  0%, 10% {
+    clip-path: inset(0 0 0 18%);
+    opacity: 0;
+    transform: translate3d(12%, 0, 0) scale(.985);
+  }
 
-.active-theory-gallery-surface__cortana .cortana-model-stage {
-  inset: 0;
-}
-
-.active-theory-gallery-surface__cortana .cortana-model-stage__ground,
-.active-theory-gallery-surface__cortana .cortana-model-stage__loading,
-.active-theory-gallery-surface__cortana .cortana-model-stage__error {
-  display: none;
+  100% {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 }
 
 .active-theory-gallery-surface__frame:focus-visible {
@@ -55,4 +53,11 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-app-shell__prewarmed-surface[data-surface="market"][data-active="true"]
+    .active-theory-gallery-surface__frame {
+    animation: none;
+  }
 }

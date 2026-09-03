@@ -981,6 +981,25 @@ html[data-appearance="dark"] #root {
   display: none;
 }
 
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__scene {
+  z-index: 3;
+  background: transparent;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__scene::after,
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__scene .cortana-model-stage__ground,
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__scene .cortana-model-stage__loading,
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__scene .cortana-model-stage__error {
+  display: none;
+}
+
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__scene,
+.demo-app-shell[data-active-surface="market"] .demo-app-shell__scene * {
+  pointer-events: none !important;
+}
+
 .demo-settings {
   display: block;
   box-sizing: border-box;
