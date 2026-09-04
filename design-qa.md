@@ -86,9 +86,13 @@ final result: passed
 
 - Dark appearance: `apps/preacherman-demo-host/output/ai-providers-minimal-dark-final.png` (1800 × 1000 px).
 - Light contract check: `apps/preacherman-demo-host/output/ai-providers-minimal-light-final.png` (1800 × 1000 px); the authored Settings canvas intentionally remains black.
+- Packaged desktop view: `apps/preacherman-demo-host/output/ai-providers-native-minimal-release.png` confirms the minimal Providers surface through the canonical shortcut.
+- Packaged Keys interaction: `apps/preacherman-demo-host/output/ai-providers-native-minimal-keys-release.png` confirms tab switching and the credential form.
+- Packaged return flow: `apps/preacherman-demo-host/output/ai-providers-native-back-minimal-release.png` confirms `Back to Settings` returns to the unchanged overview.
 - Impeccable static detector: zero findings.
 - Settings and AI Providers regression tests: passed, 9/9.
 - TypeScript and Vite production build: passed.
+- Full Tauri Release, canonical executable hash, shortcut launch, native window response, and process cleanup: passed.
 
 final result: passed
 
