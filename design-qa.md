@@ -558,5 +558,8 @@ final result: passed
 - TypeScript and Vite production build: passed.
 - Local-service health, provider catalog, and provider-settings reads: passed; two providers returned and zero secret-like fields were exposed.
 - Dark and light appearance entry states rendered with readable controls and the same deliberate black Settings canvas.
+- Packaged Tauri Release: `apps/preacherman-demo-host/output/ai-providers-native-detail-v2.png` confirms the General page and live DashScope model list through the canonical desktop shortcut.
+- Native Authentication interaction: `apps/preacherman-demo-host/output/ai-providers-native-authentication.png` confirms the tab click, provider selector, password visibility control, workspace field, and save action render in the packaged app.
+- Native `Back to Settings` returned to the existing overview. The new Demo/WebView2 process tree was then closed normally; all eight WebView2 descendants exited and port 1420 remained free.
 
 final result: passed
