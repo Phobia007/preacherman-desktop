@@ -45,6 +45,7 @@ function SettingsPreview() {
             locale={locale}
             onAppearanceChange={() => undefined}
             onLocaleChange={() => undefined}
+            requestedControl={previewQuery.get("control")}
           />
         </div>
       </AppShell>

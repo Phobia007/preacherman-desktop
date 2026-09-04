@@ -316,6 +316,9 @@ html[data-appearance="dark"] #root {
   --demo-theme-settings-focus: #ffffff;
   --demo-theme-settings-loading: #b7e8f7;
   --demo-theme-settings-error: #ffb3b3;
+  --demo-theme-settings-accent: #0969ed;
+  --demo-theme-settings-accent-text: #ffffff;
+  --demo-theme-settings-success: #75d5a4;
   position: relative;
   width: var(--demo-app-width);
   height: var(--demo-app-height);
@@ -396,6 +399,9 @@ html[data-appearance="dark"] #root {
   --demo-theme-settings-focus: #ffffff;
   --demo-theme-settings-loading: #9ddcf0;
   --demo-theme-settings-error: #ffaaaa;
+  --demo-theme-settings-accent: #0969ed;
+  --demo-theme-settings-accent-text: #ffffff;
+  --demo-theme-settings-success: #75d5a4;
   color: var(--demo-theme-text);
   background: var(--demo-theme-canvas);
 }

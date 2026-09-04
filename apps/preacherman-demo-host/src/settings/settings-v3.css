@@ -129,6 +129,11 @@
   border-top: 1px solid var(--demo-theme-settings-border);
 }
 
+.settings-v3__detail--ai-providers .settings-v3__detail-content > .ai-provider-settings {
+  margin: 0;
+  border-top: 0;
+}
+
 .settings-v3__detail-content h2 {
   max-width: 760px;
   margin-top: 10px;

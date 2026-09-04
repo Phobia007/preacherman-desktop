@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Appearance, Locale } from "../preferences";
+import { AIProvidersSettings } from "./AIProvidersSettings";
 import "./settings-v3.css";
 
 const localPortfolioUrl = "/settings-v3-local/index.html";
@@ -350,7 +351,7 @@ interface SettingsScreenProps {
   readonly widgets?: ReactNode;
 }
 
-export function SettingsScreen({ appearance, locale }: SettingsScreenProps) {
+export function SettingsScreen({ appearance, locale, requestedControl }: SettingsScreenProps) {
   const referenceRef = useRef<HTMLDivElement>(null);
   const [portfolioSource, setPortfolioSource] = useState<string | null>(null);
   const [selection, setSelection] = useState<SettingsSelection | null>(null);
@@ -360,6 +361,15 @@ export function SettingsScreen({ appearance, locale }: SettingsScreenProps) {
     setSelection(null);
     if (opener) requestAnimationFrame(() => opener.focus());
   }, [selection]);
+
+  useEffect(() => {
+    if (!requestedControl?.startsWith("provider.")) return;
+    setSelection((current) => current ?? {
+      entryIndex: 0,
+      groupId: "ai-models",
+      opener: referenceRef.current ?? document.body,
+    });
+  }, [requestedControl]);
 
   useEffect(() => {
     if (!selection) return;
@@ -392,6 +402,7 @@ export function SettingsScreen({ appearance, locale }: SettingsScreenProps) {
 
   const selectedGroup = selection ? settingsDirectory.find((group) => group.id === selection.groupId) : null;
   const selectedEntry = selectedGroup && selection ? selectedGroup.entries[selection.entryIndex] : null;
+  const aiProvidersSelected = selection?.groupId === "ai-models" && selection.entryIndex === 0;
 
   return (
     <main
@@ -412,7 +423,7 @@ export function SettingsScreen({ appearance, locale }: SettingsScreenProps) {
         <section
           aria-label={`${selectedGroup.label[locale]} — ${selectedEntry.label[locale]}`}
           aria-modal="true"
-          className="settings-v3__detail"
+          className={`settings-v3__detail${aiProvidersSelected ? " settings-v3__detail--ai-providers" : ""}`}
           data-settings-entry={selectedEntry.label.en}
           data-settings-group={selectedGroup.id}
           role="dialog"
@@ -428,7 +439,7 @@ export function SettingsScreen({ appearance, locale }: SettingsScreenProps) {
             </button>
           </div>
           <div className="settings-v3__detail-content" data-settings-control-slot={selectedEntry.label.en}>
-            <section>
+            {aiProvidersSelected ? <AIProvidersSettings locale={locale} /> : <section>
               <span>{selectedGroup.label[locale]}</span>
               <h2>{selectedEntry.label[locale]}</h2>
               <p>
@@ -436,7 +447,7 @@ export function SettingsScreen({ appearance, locale }: SettingsScreenProps) {
                   ? `这里用于查看并配置“${selectedEntry.label[locale]}”。后续操作按钮会按照这一项的功能部署在此内容区。`
                   : `Review and configure ${selectedEntry.label[locale]} here. Its actions will be placed in this content area.`}
               </p>
-            </section>
+            </section>}
           </div>
         </section>
       ) : null}

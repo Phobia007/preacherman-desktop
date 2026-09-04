@@ -519,3 +519,44 @@ final result: passed
 - The full 413-test suite covers the light/dark semantic theme contract and passes.
 
 final result: passed
+
+# AI Providers CC Switch settings adaptation — Design QA (latest)
+
+## Comparison target
+
+- Source visual truth: `apps/preacherman-demo-host/output/settings-reference-audit/cc-switch-settings.png` (914 × 639 px).
+- Rendered implementation, dark: `apps/preacherman-demo-host/output/ai-providers-dark-v2.png` (1800 × 1000 px).
+- Rendered implementation, light contract check: `apps/preacherman-demo-host/output/ai-providers-light-v3.png` (1800 × 1000 px).
+- Same-density focused comparison: `apps/preacherman-demo-host/output/ai-providers-comparison.png`; the implementation's 914 × 639 right-side content crop is placed beside the 914 × 639 CC Switch source.
+- State: Settings → AI Providers → General, with the live local service returning two registered, unconfigured providers.
+
+## Design translation
+
+- Preserved the CC Switch information hierarchy: compact page heading, six-part segmented navigation, clear section headings, grouped controls, bordered configuration surfaces, and a single blue active state.
+- Adapted the source's application-level preferences into Preacherman's actual provider workflow instead of copying irrelevant language, theme, and home-app choices into AI Providers.
+- Preserved the existing Preacherman detail split, top-left mark, native window controls, and bottom-left `Back to Settings` behavior.
+- The authored Settings canvas intentionally remains black in both stored appearance modes; all new chrome uses the semantic `--demo-theme-settings-*` tokens required by the application theme contract.
+
+## Functional surfaces
+
+- `General` reads the real provider catalog and status, switches between DeepSeek and DashScope, refreshes state, and exposes provider testing only when the selected provider is ready.
+- `Routing` reflects the live first-party Chat, ASR, TTS, and Vision provider assignments.
+- `Authentication` writes new credentials to the existing local service without ever reading a secret value back into the interface.
+- `Advanced` validates and switches the local-service port only after a successful health check.
+- `Usage` honestly reports only connection checks performed in the current session; it does not fabricate token or cost statistics.
+- `About` explains the existing local-first runtime and restricted credential storage.
+
+## Findings
+
+- No actionable P0, P1, or P2 visual or interaction findings remain.
+- [P3] The source is a standalone 914 px settings window, while the implementation occupies the right 63.5% of the existing 1800 px Preacherman detail layout. The focused comparison normalizes the content width; the blank left column is an intentional retained product surface, not a fidelity defect.
+- [P3] DeepSeek and DashScope are currently unconfigured, so the accepted General state shows `0 connected · 2 registered` and disables the provider test button until credentials are supplied.
+
+## Verification
+
+- Settings and AI Providers regression tests: passed, 9/9.
+- TypeScript and Vite production build: passed.
+- Local-service health, provider catalog, and provider-settings reads: passed; two providers returned and zero secret-like fields were exposed.
+- Dark and light appearance entry states rendered with readable controls and the same deliberate black Settings canvas.
+
+final result: passed
