@@ -417,7 +417,16 @@ export function SettingsScreen({ appearance, locale }: SettingsScreenProps) {
           data-settings-group={selectedGroup.id}
           role="dialog"
         >
-          <div aria-hidden="true" className="settings-v3__detail-blank" />
+          <div className="settings-v3__detail-blank">
+            <button
+              aria-label={locale === "zh-CN" ? "返回设置总览" : "Back to Settings overview"}
+              className="settings-v3__back"
+              onClick={closeDetail}
+              type="button"
+            >
+              {locale === "zh-CN" ? "返回设置" : "Back to Settings"}
+            </button>
+          </div>
           <div className="settings-v3__detail-content" data-settings-control-slot={selectedEntry.label.en}>
             <section>
               <span>{selectedGroup.label[locale]}</span>

@@ -72,6 +72,34 @@
 
 final result: passed
 
+# Settings detail return control — Design QA (latest)
+
+## Visual truth
+
+- Requested detail state: `D:\Temp\Administrator\codex-clipboard-a800e69b-0008-422b-b3f1-c8ceb54648e0.png` (1800 × 1000 px).
+- Verified dark implementation: `apps/preacherman-demo-host/output/playwright/settings-back-detail-dark.png` (1800 × 1000 px).
+- Verified light implementation: `apps/preacherman-demo-host/output/playwright/settings-back-detail-light.png` (1800 × 1000 px).
+- Verified packaged Tauri Release: `apps/preacherman-demo-host/output/playwright/settings-back-native.png` (1800 × 1000 px).
+- State: AI Providers detail opened from the first Settings card.
+
+## Findings and correction
+
+- Added one compact `Back to Settings` control at the bottom-left of the existing empty column.
+- The source and implementation were inspected together at the same viewport. The original split layout, title, description, logo, desktop controls, spacing, and black canvas remain unchanged.
+- The control uses the existing semantic Settings border, text, canvas, and focus tokens. Hover, active, keyboard-focus, and reduced-motion states are deliberate.
+- Clicking the control closes the detail and restores focus to the card that opened it. The existing Escape-key return remains available.
+- Both stored `dark` and `light` appearances were rendered and verified; the authored Settings canvas intentionally remains black in both modes.
+- Microsoft Edge reported the existing hydration-mismatch diagnostic during each app bootstrap; the return flow itself produced no page error or interaction failure.
+
+## Verification
+
+- Settings regression tests: passed, 6/6.
+- TypeScript: passed.
+- Microsoft Edge interaction check: detail opened as `AI Providers`, button box measured 138 × 44 px at x=64/y=900, detail closed on click, and opener focus was restored.
+- Packaged Tauri WebView check: passed with zero captured console errors; the same detail-close and focus-restoration flow passed through the canonical desktop shortcut.
+
+final result: passed
+
 # Gallery model camera push — Design QA (latest)
 
 ## Comparison target
