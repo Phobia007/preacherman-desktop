@@ -72,6 +72,26 @@
 
 final result: passed
 
+# AI Providers minimalist distillation — Design QA (latest)
+
+## Result
+
+- Reduced the page from six explanatory sections to four working entries: `Providers`, `Keys`, `Routing`, and `Local`.
+- Removed overview prose, endpoint and adapter exposition, nested provider cards, usage reporting, and the about panel.
+- Kept the real provider catalog, credential write, provider test, routing status, health check, and local port controls unchanged.
+- Replaced segmented panels with a quiet text navigation, hairline dividers, compact statuses, and one primary action; the selected provider uses only a one-pixel marker.
+- Preserved the existing Settings split layout, Preacherman mark, native window controls, and `Back to Settings` interaction.
+
+## Evidence
+
+- Dark appearance: `apps/preacherman-demo-host/output/ai-providers-minimal-dark-final.png` (1800 × 1000 px).
+- Light contract check: `apps/preacherman-demo-host/output/ai-providers-minimal-light-final.png` (1800 × 1000 px); the authored Settings canvas intentionally remains black.
+- Impeccable static detector: zero findings.
+- Settings and AI Providers regression tests: passed, 9/9.
+- TypeScript and Vite production build: passed.
+
+final result: passed
+
 # Settings detail return control — Design QA (latest)
 
 ## Visual truth

@@ -5,11 +5,14 @@ import test from "node:test";
 
 const hostRoot = join(import.meta.dirname, "..");
 
-test("AI Providers follows the CC Switch settings hierarchy and keeps every primary control interactive", async () => {
+test("AI Providers distills the configuration surface to four necessary entry points", async () => {
   const component = await readFile(join(hostRoot, "src", "settings", "AIProvidersSettings.tsx"), "utf8");
-  for (const tab of ["general", "routing", "authentication", "advanced", "usage", "about"]) {
+  for (const tab of ["providers", "credentials", "routing", "local"]) {
     assert.match(component, new RegExp(`${tab}:`));
   }
+  assert.doesNotMatch(component, /tab === "usage"|tab === "about"/);
+  assert.doesNotMatch(component, /ai-provider-settings__provider-card/);
+  assert.doesNotMatch(component, /Provider overview|Service endpoint|Adapter package|Configuration tips/);
   assert.match(component, /role="tablist"/);
   assert.match(component, /aria-selected=\{tab === id\}/);
   assert.match(component, /aria-pressed=\{selectedId === id\}/);
