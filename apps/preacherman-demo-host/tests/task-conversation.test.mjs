@@ -99,7 +99,7 @@ test("divider and chat are Nathan-only; semantic tokens exist in both appearance
   assert.ok(runtime.includes("isTaskTemplate(n(e))?X(TaskConversation"));
   assert.ok(runtime.includes("enabled:P(()=>!isTaskTemplate(e.value))"), "the image-loop scroller must not reposition the conversation");
   assert.ok(css.includes("prefers-reduced-motion"));
-  assert.ok(css.includes(".task-chat .task-chat__input:focus { outline: none; }"), "the textarea must not show an inner focus rectangle");
+  assert.ok(css.includes(".task-chat .task-chat__input:focus { outline: none !important; }"), "the textarea must override the host's important focus rectangle");
   assert.ok(css.includes(".task-chat :focus-visible { outline: 2px solid var(--demo-theme-chat-focus)"), "retain keyboard focus on toolbar controls");
   for (const key of ["composer","text","muted","border","message","hover","send","send-text","disabled","focus","error"]) {
     assert.equal(tokens.split("--demo-theme-chat-"+key+":").length-1,2,key);
