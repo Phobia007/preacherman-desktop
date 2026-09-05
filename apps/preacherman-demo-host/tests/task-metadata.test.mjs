@@ -100,7 +100,7 @@ test("new conversation cards persist as blank task projects and relate to their 
   const created = f.context.createTaskProject();
   assert.equal(created.title,"new one");
   assert.equal(created.parentId,"nathan-riley");
-  assert.equal(f.storage.get(`preacherman.task.${created.id}.title`),"new one");
+  assert.equal(f.context.taskDisplayTitle({slug:created.id,preachermanTask:true,title:created.title}),"new one");
   const augmented = f.context.augmentTaskProjects([{slug:"nathan-riley",title:"Nathan Riley"},{slug:"casa",title:"Casa"}]);
   assert.deepEqual(Array.from(augmented, project => project.slug),["nathan-riley",created.id,"casa"]);
   assert.equal(augmented[1].src.endsWith("task-empty-card.svg"),true);
@@ -142,7 +142,75 @@ test("task creation reuses the authored profile lens and owns dismiss/focus clea
   assert.ok(dialog.includes('event.key === "Tab"'));
   assert.ok(dialog.includes('event.stopImmediatePropagation()'));
   assert.ok(dialog.includes('stopWatching()'));
-  assert.doesNotMatch(dialog, /localStorage|createTaskProject|location\.href/);
+  assert.doesNotMatch(dialog, /localStorage|location\.href/);
+  assert.ok(dialog.includes("folio.prepareTaskCreation"));
+  assert.ok(dialog.includes("if (busy) return"));
+});
+
+test("creation persists all three fields atomically, normalizes limits and restores detail", () => {
+  const f = fixture();
+  const project = f.context.createTaskProject({title:"  测试   任务  ",summary:"  第一行\n第二行  ",group:"  项目 A  "});
+  assert.equal(project.title, "测试 任务");
+  assert.equal(project.summary, "第一行\n第二行");
+  assert.equal(project.group, "项目 A");
+  assert.equal(f.storage.size, 2); // last-active marker plus one atomic project-list write
+  assert.equal(f.session.size, 0); // no delayed route reload or old pending-focus
+  f.context.location.search = "?task=" + project.id;
+  const detail = f.context.TaskMetadata.setup({slug:"nathan-riley"})();
+  assert.equal(detail.children[0].children[0].props.value, project.title);
+  assert.equal(detail.children[1].children[0].children, project.summary);
+  assert.equal(detail.children[1].children[1].children, project.group);
+  assert.equal(f.context.createTaskProject({title:"t".repeat(150),summary:"s".repeat(2100),group:"g".repeat(90)}).group.length,80);
+});
+
+test("live augmentation adds later tasks exactly once without disturbing authored order", () => {
+  const f = fixture();
+  const base = [{slug:"nathan-riley"},{slug:"griflan"}];
+  const first = f.context.createTaskProject({title:"first"});
+  const one = f.context.augmentTaskProjects(base);
+  f.context.crypto.randomUUID = () => "second";
+  const second = f.context.createTaskProject({title:"second"});
+  const two = f.context.augmentTaskProjects(one);
+  assert.deepEqual(Array.from(two, item => item.slug),["nathan-riley",first.id,second.id,"griflan"]);
+  assert.equal(f.context.augmentTaskProjects(two).length,4);
+  assert.equal(two[2].video,null);
+});
+
+test("failed storage cannot leave partial title or pending navigation records", () => {
+  const f = fixture();
+  const initial = [...f.storage.entries()];
+  f.context.localStorage.setItem = () => {throw new Error("quota");};
+  assert.throws(() => f.context.createTaskProject({title:"保留草稿"}),/quota/);
+  assert.deepEqual([...f.storage.entries()],initial);
+  assert.equal(f.session.size,0);
+});
+
+test("live creation preserves rail and shaders, uses smooth existing centering and cancels arrival on disposal", () => {
+  const rail = fs.readFileSync(new URL("task-create-rail.js",root),"utf8");
+  const cards = fs.readFileSync(new URL("_nuxt/DxOxRmZ4.js",root),"utf8");
+  const scroll = fs.readFileSync(new URL("_nuxt/CUxRtAWE.js",root),"utf8");
+  assert.ok(rail.includes("folio.scan(root.value, projects.value)"));
+  assert.ok(rail.includes("center(anchorIndex, false, offset)"));
+  assert.ok(rail.includes("centerX(index, animate); centerY(index, animate)"));
+  assert.ok(rail.includes("arrival?.kill()"));
+  assert.ok(cards.includes("animate?s.t=s.a+M.utils.wrap"));
+  assert.ok(scroll.includes("animate?e.t=e.c+"));
+  assert.doesNotMatch(rail,/location\.|router\.|showHome\(/);
+  assert.doesNotMatch(rail,/folio\.returning\s*=/);
+  const css = fs.readFileSync(new URL("task-metadata.css",root),"utf8");
+  assert.ok(css.includes("task-create-charge-outline 680ms"));
+  assert.ok(css.includes("--demo-theme-brand-menu-focus"));
+  assert.ok(css.includes("prefers-reduced-motion"));
+});
+
+test("task creation fields stay transparent curved outlines in either theme", () => {
+  const css = fs.readFileSync(new URL("task-metadata.css",root),"utf8");
+  const start = css.indexOf('.task-create-dialog__field input,');
+  const field = css.slice(start,css.indexOf('}',start));
+  assert.ok(field.includes('background: transparent'));
+  assert.ok(field.includes('border-radius: 999px'));
+  assert.ok(field.includes('--demo-theme-brand-menu-text-hover'));
+  assert.ok(css.includes('height: 10rem; padding: 2rem 3rem; border-radius: 5rem'));
 });
 
 test("create control enters the browser top layer and cleans up on unmount", () => {

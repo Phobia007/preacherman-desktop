@@ -13,7 +13,7 @@ if (!runtimeRoot.endsWith(path.join("public", "gallery-v3", "portfolio"))) {
 function replaceExact(source, before, after, expectedCount, label) {
   const actualCount = source.split(before).length - 1;
   const patchedCount = source.split(after).length - 1;
-  if (actualCount === 0 && patchedCount >= expectedCount) return source;
+  if (patchedCount >= expectedCount) return source;
   if (actualCount !== expectedCount) {
     throw new Error(`${label}: expected ${expectedCount} occurrence(s), found ${actualCount}`);
   }
@@ -120,6 +120,37 @@ scene = replaceExact(
   "synchronize task DOM with authored card transitions",
 );
 fs.writeFileSync(scenePath, scene);
+
+// Append only the new caption, without replaying every existing title.
+scene = replaceExact(scene, 'async showTitles(e){', 'async showTitles(e,titlesOnly=!1){const titleStart=this.texts.length;', 1, "incremental task captions");
+scene = replaceExact(scene, 'this.slideIn(this.texts)}measureTitle', 'this.slideIn(titlesOnly?this.texts.slice(titleStart):this.texts)}measureTitle', 1, "reveal only appended task caption");
+scene = scene.replaceAll('taskDialog?.dispose(),taskDialog?.dispose(),', 'taskDialog?.dispose(),');
+fs.writeFileSync(scenePath, scene);
+
+const cardsPath = path.join(runtimeRoot, "_nuxt", "DxOxRmZ4.js");
+let cards = fs.readFileSync(cardsPath, "utf8");
+const railImport = 'import{installTaskCreateRail}from"../task-create-rail.js";';
+if (!cards.includes(railImport)) cards = railImport + "\n" + cards;
+cards = replaceExact(cards,
+  'b=t=>{if(!_(w))return;const a=c?.[t];a&&(s.t=s.a=(a.start+i.ww+a.end)/2-i.ww/2,o=t,p=i.ww,x(c,f,s.a,!0))}',
+  'b=(t,animate=!1,offset=0)=>{if(!_(w))return;const a=c?.[t];if(!a)return;const target=(a.start+i.ww+a.end)/2-i.ww/2-offset;animate?s.t=s.a+M.utils.wrap(-f/2,f/2,target-s.a):s.t=s.a=target;o=t,p=i.ww,x(c,f,s.a,!0)}',
+  1, "smooth horizontal task arrival");
+cards = replaceExact(cards,
+  'K({axis:z(()=>u.small?"y":"x")});const $=',
+  'K({axis:z(()=>u.small?"y":"x")});const disposeTaskRail=installTaskCreateRail({folio:e,projects:o,root:c,track:f,resize:u,nextTick:N,measureX:p,measureY:x,centerX:v,centerY:b,motion:M});L(disposeTaskRail);const $=',
+  1, "connect live task creation to mounted rail");
+fs.writeFileSync(cardsPath, cards);
+const scrollPath = path.join(runtimeRoot, "_nuxt", "CUxRtAWE.js");
+let scroll = fs.readFileSync(scrollPath, "utf8");
+scroll = replaceExact(scroll,
+  'A=a=>{if(!c(g))return;',
+  'A=(a,animate=!1,offset=0)=>{if(!c(g))return;',
+  1, "vertical task arrival options");
+scroll = replaceExact(scroll,
+  'M=a,k=u.height,e.t=e.c=L,m(!0)',
+  'L-=offset,M=a,k=u.height,animate?e.t=e.c+(c(w)?L-e.c:q.utils.wrap(-i/2,i/2,L-e.c)):e.t=e.c=L,m(!0)',
+  1, "smooth vertical task arrival");
+fs.writeFileSync(scrollPath, scroll);
 
 const rainPath = path.join(runtimeRoot, "_nuxt", "BNIAOxM5.js");
 let rain = fs.readFileSync(rainPath, "utf8");

@@ -198,10 +198,91 @@
 .task-create-dialog__body {
   position: relative;
   width: 100%;
-  height: min(40rem, 65vh);
+  height: min(48rem, 72vh);
   margin: 0;
   pointer-events: auto;
+  color: var(--demo-theme-chat-text);
+  -webkit-text-fill-color: currentColor;
+  cursor: default;
 }
+
+.task-create-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: min(40rem, 78%);
+  max-height: 100%;
+  margin: 0 auto;
+  padding: 2rem 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--demo-theme-chat-muted) transparent;
+}
+
+.task-create-dialog__field { display: flex; flex-direction: column; gap: 0.9rem; font-size: 1.3rem; line-height: 1.4; color: var(--demo-theme-brand-menu-text); }
+.task-create-dialog__field > span { padding-left: 2.5rem; font-size: 1.1rem; letter-spacing: .08em; }
+.task-create-dialog__field input,
+.task-create-dialog__field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 1.5rem 2.5rem;
+  border: 1px solid color-mix(in srgb, var(--demo-theme-brand-menu-focus) 32%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--demo-theme-brand-menu-text-hover);
+  caret-color: currentColor;
+  font: inherit;
+  line-height: 1.5;
+  cursor: text;
+  transition: border-color 220ms ease;
+}
+.task-create-dialog__field textarea { resize: none; height: 10rem; padding: 2rem 3rem; border-radius: 5rem; }
+.task-create-dialog__field :is(input, textarea)::placeholder { color: var(--demo-theme-brand-menu-text); font-size: 1.2rem; }
+.task-create-dialog__field :is(input, textarea):hover { border-color: color-mix(in srgb, var(--demo-theme-brand-menu-focus) 58%, transparent); }
+.task-create-dialog__field :is(input, textarea)::selection { background: var(--demo-theme-chat-text); color: var(--demo-theme-chat-composer); }
+.task-create-dialog__field :is(input, textarea):focus-visible { outline: none !important; border-color: var(--demo-theme-brand-menu-focus); }
+.task-create-dialog__field [aria-invalid="true"] { border-color: var(--demo-theme-chat-error); }
+.task-create-dialog__error { margin: 0; color: var(--demo-theme-chat-error); font-size: 1.2rem; line-height: 1.4; }
+.task-create-dialog__error:empty { display: none; }
+.task-metadata__summary { white-space: pre-wrap; }
+.task-metadata__group { margin: 1rem 0 0; font-size: 1.2rem; color: var(--demo-theme-chat-muted); overflow-wrap: anywhere; }
+
+/* Same capsule, 10px hover travel and 680ms charge trace as the main directory. */
+@font-face { font-family: "Task Directory"; src: url("./assets/fonts/ClashDisplay-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap; }
+.task-create-dialog__submit {
+  position: relative;
+  align-self: center;
+  min-width: 15rem;
+  min-height: 4.8rem;
+  margin-top: 0.8rem;
+  padding: 0.6rem 2.6rem;
+  border: 1px solid var(--demo-theme-gallery-detail-action-rest-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--demo-theme-brand-menu-text-hover);
+  font: inherit;
+  font-size: 2rem;
+  font-family: "Task Directory", sans-serif;
+  font-weight: 300;
+  cursor: pointer;
+  transition: color 220ms ease, transform 520ms cubic-bezier(.16,1,.3,1);
+}
+.task-create-dialog__submit:not(:disabled):is(:hover, :focus-visible) { transform: translate3d(10px,0,0); }
+.task-create-dialog__submit:disabled { color: var(--demo-theme-chat-muted); cursor: wait; }
+.task-create-dialog__submit-label { position: relative; z-index: 1; }
+.task-create-dialog__submit svg { position: absolute; inset: -3px 0; width: 100%; height: calc(100% + 6px); overflow: visible; pointer-events: none; }
+.task-create-dialog__submit path { fill: none; stroke: var(--demo-theme-brand-menu-focus); stroke-linecap: round; stroke-linejoin: round; opacity: 0; stroke-dashoffset: 243; }
+.task-create-dialog__charge-outline { stroke-width: 1.25; stroke-dasharray: 243; }
+.task-create-dialog__submit .task-create-dialog__charge-outline { stroke-dashoffset: 0; opacity: .32; }
+.task-create-dialog__charge-tracer { stroke-width: 2.5; stroke-dasharray: 24 219; filter: drop-shadow(2px 0 4px var(--demo-theme-brand-menu-focus)); }
+.task-create-dialog__submit:not(:disabled):is(:hover, :focus-visible) .task-create-dialog__charge-outline { animation: task-create-charge-outline 680ms cubic-bezier(.65,0,.15,1) forwards; }
+.task-create-dialog__submit:not(:disabled):is(:hover, :focus-visible) .task-create-dialog__charge-tracer { animation: task-create-charge-tracer 680ms cubic-bezier(.65,0,.15,1) forwards; }
+.task-create-dialog__submit:not(:disabled):is(:hover, :focus-visible) .task-create-dialog__submit-label { animation: task-create-word-charge 680ms cubic-bezier(.65,0,.15,1) forwards; }
+@keyframes task-create-charge-outline { from { stroke-dashoffset: 243; opacity: .18; } to { stroke-dashoffset: 0; opacity: .72; } }
+@keyframes task-create-charge-tracer { 0% { stroke-dashoffset: 243; opacity: 0; } 12%,76% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes task-create-word-charge { 0% { opacity: .72; } 54% { opacity: 1; text-shadow: 2px 0 14px var(--demo-theme-brand-menu-focus); } 100% { opacity: 1; text-shadow: 1px 0 5px color-mix(in srgb, var(--demo-theme-brand-menu-focus) 26%, transparent); } }
 
 .task-create-dialog__body:not([hidden]) { animation: task-create-controls 300ms 200ms both; }
 @keyframes task-create-controls { from { opacity: 0; } to { opacity: 1; } }
@@ -212,10 +293,10 @@
   right: 3rem;
   width: 4.5rem;
   height: 4.5rem;
-  border: 1px solid var(--demo-theme-chat-border);
+  border: 1px solid color-mix(in srgb, var(--demo-theme-brand-menu-focus) 32%, transparent);
   border-radius: 50%;
-  background: var(--demo-theme-chat-composer);
-  color: var(--demo-theme-chat-text);
+  background: transparent;
+  color: var(--demo-theme-brand-menu-text-hover);
   cursor: pointer;
 }
 
@@ -230,7 +311,7 @@
 }
 
 .task-create-dialog__close span + span { transform: rotate(-45deg); }
-.task-create-dialog__close:hover { background: var(--demo-theme-chat-hover); }
+.task-create-dialog__close:hover { border-color: var(--demo-theme-brand-menu-focus); }
 .task-create-dialog__close:focus-visible {
   outline: 2px solid var(--demo-theme-chat-focus);
   outline-offset: 4px;
@@ -243,6 +324,8 @@
 }
 
 @media (max-width: 649px) {
+  .task-create-dialog__form { width: 76%; gap: 1.4rem; }
+  .task-create-dialog__close { right: 0; }
   .task-metadata { padding-right: 0.6rem; }
   .task-metadata__relations { margin-top: 3rem; }
   .task-create { right: 1.2rem; }
@@ -250,6 +333,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .task-create-dialog__submit, .task-create-dialog__submit * { transition: none !important; animation: none !important; }
+  .task-create-dialog__submit:focus-visible .task-create-dialog__charge-outline { stroke-dashoffset: 0; opacity: .72; }
   .task-create__button { transition: none; }
   .task-create-dialog__body:not([hidden]) { animation: none; }
 }

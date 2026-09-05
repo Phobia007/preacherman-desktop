@@ -45,17 +45,17 @@ function readLastTaskId() {
   }
 }
 
-export function createTaskProject() {
+export function createTaskProject(values = {}) {
   const project = {
     id: taskId(),
-    title: "new one",
+    title: normalizeTitle(values.title ?? "") || "new one",
+    summary: String(values.summary ?? "").trim().slice(0, 2000),
+    group: normalizeTitle(values.group ?? "").slice(0, 80),
     parentId: readLastTaskId(),
     createdAt: new Date().toISOString(),
   };
   const projects = [...readTaskProjects(), project];
   writeTaskProjects(projects);
-  localStorage.setItem(titleStorageKey(project.id), project.title);
-  sessionStorage.setItem(PENDING_TASK_KEY, project.id);
   return project;
 }
 
@@ -67,13 +67,13 @@ function updateTaskProjectTitle(id, title) {
   writeTaskProjects(projects);
 }
 
-function projectRecord(project) {
+export function projectRecord(project) {
   return {
     id: project.id,
     slug: project.id,
     featured: true,
     title: project.title,
-    description: "",
+    description: project.summary ?? "",
     awards: null,
     link: null,
     outlined: false,
@@ -92,10 +92,11 @@ function projectRecord(project) {
 
 export function augmentTaskProjects(projects) {
   const dynamic = readTaskProjects().map(projectRecord);
-  if (!dynamic.length || projects.some(project => project?.preachermanTask)) return projects;
-  const rootIndex = projects.findIndex(project => project?.slug === ROOT_TASK_ID);
-  if (rootIndex < 0) return [...projects, ...dynamic];
-  return [...projects.slice(0, rootIndex + 1), ...dynamic, ...projects.slice(rootIndex + 1)];
+  if (!dynamic.length) return projects;
+  const authored = projects.filter(project => !project?.preachermanTask);
+  const rootIndex = authored.findIndex(project => project?.slug === ROOT_TASK_ID);
+  if (rootIndex < 0) return [...authored, ...dynamic];
+  return [...authored.slice(0, rootIndex + 1), ...dynamic, ...authored.slice(rootIndex + 1)];
 }
 
 export function taskProjectRoute(project) {
@@ -160,7 +161,8 @@ document.head.append(conversationStyle);
 function syncTheme() {
   const source = parent.document.querySelector(".demo-app-shell") ?? parent.document.documentElement;
   const styles = getComputedStyle(source);
-  for (const name of ["--demo-theme-gallery-detail-action-rest-text", "--demo-theme-gallery-detail-action-rest-bg", "--demo-theme-gallery-detail-action-focus",
+  for (const name of ["--demo-theme-gallery-detail-action-rest-text", "--demo-theme-gallery-detail-action-rest-bg", "--demo-theme-gallery-detail-action-rest-border", "--demo-theme-gallery-detail-action-focus",
+    ...["text", "text-hover", "focus"].map(key => "--demo-theme-brand-menu-" + key),
     ...["composer", "text", "muted", "border", "message", "hover", "send", "send-text", "disabled", "focus", "error"].map(key => "--demo-theme-chat-" + key)]) {
     document.documentElement.style.setProperty(name, styles.getPropertyValue(name));
   }
@@ -222,9 +224,10 @@ export const TaskMetadata = {
   props: { slug: { type: String, required: true } },
   setup(props) {
     const task = resolveTaskId(props.slug);
+    const project = readTaskProjects().find(project => project.id === task);
     const fallback = task === ROOT_TASK_ID ? "未命名任务" : "new one";
     let saved = fallback;
-    try { saved = normalizeTitle(localStorage.getItem(titleStorageKey(task)) ?? "") || fallback; } catch {}
+    try { saved = normalizeTitle(localStorage.getItem(titleStorageKey(task)) ?? project?.title ?? "") || fallback; } catch {}
     const title = ref(saved);
     const error = ref("");
     const commit = () => {
@@ -257,7 +260,10 @@ export const TaskMetadata = {
             },
           }),
         ]),
-        element("p", { class: "task-metadata__summary", "aria-label": "任务摘要" }, "暂无任务摘要。"),
+        element("div", { class: "task-metadata__description" }, [
+          element("p", { class: "task-metadata__summary", "aria-label": "任务摘要" }, project?.summary || "暂无任务摘要。"),
+          project?.group ? element("p", {class:"task-metadata__group", "aria-label":"任务分组"}, project.group) : null,
+        ]),
         element("section", {class:"task-metadata__relations", "aria-labelledby":`task-relations-${task}`}, [
           element("h2", {id:`task-relations-${task}`, class:"task-metadata__relations-title"}, "关联任务"),
           related.length
