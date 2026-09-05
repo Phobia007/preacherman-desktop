@@ -8,12 +8,19 @@ const source = fs.readFileSync(new URL("task-conversation.js", root), "utf8");
 function fixture(initial = null, slug = "nathan-riley") {
   const storage = new Map(initial === null ? [] : [[`preacherman.task.${slug}.messages`, initial]]);
   const handlers = {};
+  const windowHandlers = {};
+  const posted = [];
   const context = {
     ref: value => ({value}), element: (tag, props, children) => ({tag, props:props ?? {}, children}),
-    nextTick: callback => callback(), document:{addEventListener:(name, callback) => {handlers[name] = callback;}},
+    nextTick: callback => callback(), onMounted: callback => callback(), onUnmounted() {},
+    resolveTaskId: value => value,
+    document:{addEventListener:(name, callback) => {handlers[name] = [...(handlers[name] ?? []), callback];}, removeEventListener() {}},
     localStorage:{getItem:key => storage.get(key), setItem:(key,value) => storage.set(key,value)},
+    parent:{postMessage:(message, origin) => posted.push({message, origin})},
+    location:{origin:"app://localhost"},
+    addEventListener:(name, callback) => {windowHandlers[name] = callback;}, removeEventListener() {},
   };
-  vm.runInNewContext(source.replace(/^import .*;$/m, "").replaceAll("export ", "") + "\nglobalThis.component = TaskConversation;", context);
+  vm.runInNewContext(source.replace(/^import .*;$/gm, "").replaceAll("export ", "") + "\nglobalThis.component = TaskConversation;", context);
   const render = context.component.setup({slug});
   const find = (predicate, node = render()) => {
     if (!node || typeof node !== "object") return null;
@@ -24,7 +31,7 @@ function fixture(initial = null, slug = "nathan-riley") {
   const input = () => find(n => n.tag === "textarea").props;
   const submit = () => find(n => n.tag === "form").props.onSubmit({preventDefault() {}});
   const sendButton = () => find(n => n.props["aria-label"] === "发送消息").props;
-  return {storage, context, render, find, input, submit, sendButton, handlers};
+  return {storage, context, render, find, input, submit, sendButton, handlers, windowHandlers, posted};
 }
 
 test("local send renders one user card, clears draft, reopens and isolates task keys", () => {
@@ -52,7 +59,23 @@ test("Enter sends; Shift+Enter and IME do not; unavailable runtime controls are 
   f.input().onKeydown(key({keyCode:229})); assert.equal(f.storage.size,0);
   f.input().onKeydown(key({})); assert.equal(f.storage.size,1);
   assert.equal(f.find(n => n.props.title === "执行权限尚未接入").props.disabled,true);
-  assert.equal(f.find(n => n.props.title === "尚未连接模型；消息仅保存在本机").props.disabled,true);
+  assert.equal(f.find(n => n.props["aria-haspopup"] === "listbox").props.disabled,true);
+  assert.equal(f.posted[0].message.type,"gallery-provider-request");
+});
+
+test("provider catalog enables grouped model selection and persists it per task", () => {
+  const f = fixture();
+  f.windowHandlers.message({source:f.context.parent, origin:"app://localhost", data:{type:"gallery-provider-catalog", providers:[{
+    id:"deepseek", label:"DeepSeek", models:[{id:"deepseek-chat", label:"DeepSeek Chat"}],
+  }]}});
+  const trigger = f.find(n => n.props["aria-haspopup"] === "listbox").props;
+  assert.equal(trigger.disabled,false);
+  trigger.onClick();
+  const option = f.find(n => n.props.role === "option");
+  assert.equal(option.children,"DeepSeek Chat");
+  option.props.onClick();
+  assert.equal(f.storage.get("preacherman.task.nathan-riley.model"),"deepseek::deepseek-chat");
+  assert.equal(f.find(n => n.props["aria-haspopup"] === "listbox").children[0].children,"DeepSeek Chat");
 });
 
 test("failed persistence preserves draft and prior history; corrupted history is never overwritten", () => {
@@ -80,14 +103,15 @@ test("attachment selection stores names only and supports removal", () => {
   assert.match(f.find(n => n.props.role === "status").children,/未读取或上传/);
 });
 
-test("interaction shield is confined to the conversation; no network or raw HTML rendering", () => {
+test("interaction shield is confined to the conversation; provider discovery stays in the parent bridge", () => {
   const f = fixture(); let stopped = 0;
-  for(const handler of Object.values(f.handlers)) {
+  for(const handler of Object.values(f.handlers).flat()) {
     handler({target:{closest:() => null}, stopPropagation:() => stopped++});
     handler({target:{closest:() => ({})}, stopPropagation:() => stopped++});
   }
   assert.equal(stopped,3);
   assert.doesNotMatch(source,/fetch\(|XMLHttpRequest|innerHTML|v-html|new WebSocket/);
+  assert.match(source,/gallery-provider-request/);
 });
 
 test("divider and chat are Nathan-only; semantic tokens exist in both appearances", () => {
@@ -96,6 +120,8 @@ test("divider and chat are Nathan-only; semantic tokens exist in both appearance
   const tokens = fs.readFileSync(new URL("../src/styles.css",import.meta.url),"utf8");
   assert.ok(css.includes('[data-gl="sheet"][data-id="nathan-riley"]::after'));
   assert.ok(css.includes("left: 50%"));
+  assert.ok(css.includes("overflow: hidden"));
+  assert.ok(css.includes("overscroll-behavior: contain"));
   assert.ok(runtime.includes("isTaskTemplate(n(e))?X(TaskConversation"));
   assert.ok(runtime.includes("enabled:P(()=>!isTaskTemplate(e.value))"), "the image-loop scroller must not reposition the conversation");
   assert.ok(css.includes("prefers-reduced-motion"));

@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 
+import { preachermanServiceRequest } from "../../preacherman/capabilityClient";
 import "./gallery-surface.css";
 
 type GalleryAppearance = "light" | "dark";
@@ -18,6 +19,17 @@ type GalleryThemeMessage = {
   compositeKey: string;
   hideProjectCards: boolean;
   hideFeaturedControl: boolean;
+};
+
+type GalleryProviderModel = {
+  id: string;
+  label: string;
+};
+
+type GalleryProvider = {
+  id: string;
+  label: string;
+  models: GalleryProviderModel[];
 };
 
 interface GallerySurfaceProps {
@@ -35,6 +47,48 @@ type GalleryRevealState =
 
 function getAppearance(): GalleryAppearance {
   return document.documentElement.dataset.appearance === "dark" ? "dark" : "light";
+}
+
+function record(value: unknown): Record<string, unknown> | null {
+  return typeof value === "object" && value !== null
+    ? value as Record<string, unknown>
+    : null;
+}
+
+async function requestJson(path: string): Promise<Record<string, unknown>> {
+  const payload = record(await preachermanServiceRequest<unknown>(path));
+  if (!payload) throw new Error("Local service returned an invalid response.");
+  return payload;
+}
+
+async function loadChatProviders(): Promise<GalleryProvider[]> {
+  const catalog = await requestJson("/api/providers/catalog");
+  const providers = Array.isArray(catalog.providers) ? catalog.providers : [];
+  const readyProviders = providers.flatMap((value) => {
+    const provider = record(value);
+    const capabilities = record(provider?.capabilities);
+    const chat = record(capabilities?.chat);
+    return provider && typeof provider.id === "string" && typeof provider.label === "string" && chat?.state === "ready"
+      ? [{ id: provider.id, label: provider.label }]
+      : [];
+  });
+
+  const results = await Promise.all(readyProviders.map(async (provider) => {
+    try {
+      const payload = await requestJson(`/api/providers/${encodeURIComponent(provider.id)}/models`);
+      const models = Array.isArray(payload.models) ? payload.models.flatMap((value) => {
+        const model = record(value);
+        return model && typeof model.id === "string" && typeof model.label === "string" && model.capability === "chat"
+          ? [{ id: model.id, label: model.label }]
+          : [];
+      }) : [];
+      return models.length ? { ...provider, models } : null;
+    } catch {
+      return null;
+    }
+  }));
+
+  return results.filter((provider): provider is GalleryProvider => provider !== null);
 }
 
 export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps) {
@@ -78,6 +132,22 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
     frameWindow.postMessage(message, targetOrigin);
   }, [hideProjectCards, showEmptyFeatured]);
 
+  const sendProviderCatalogToFrame = useCallback(async () => {
+    const requestedFrame = frameRef.current?.contentWindow;
+    if (!requestedFrame) return;
+    const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
+    try {
+      const providers = await loadChatProviders();
+      if (frameRef.current?.contentWindow === requestedFrame) {
+        requestedFrame.postMessage({ type: "gallery-provider-catalog", providers }, targetOrigin);
+      }
+    } catch {
+      if (frameRef.current?.contentWindow === requestedFrame) {
+        requestedFrame.postMessage({ type: "gallery-provider-catalog", providers: [], error: true }, targetOrigin);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const handleMessage = (event: MessageEvent<unknown>) => {
       if (event.source !== frameRef.current?.contentWindow) {
@@ -96,12 +166,19 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
       ) {
         setSourceReady(true);
         sendThemeToFrame();
+      } else if (
+        typeof event.data === "object" &&
+        event.data !== null &&
+        "type" in event.data &&
+        event.data.type === "gallery-provider-request"
+      ) {
+        void sendProviderCatalogToFrame();
       }
     };
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [sendThemeToFrame]);
+  }, [sendProviderCatalogToFrame, sendThemeToFrame]);
 
   useEffect(() => {
     if (reduceMotionRef.current) {

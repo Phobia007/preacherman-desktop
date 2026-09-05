@@ -17,6 +17,10 @@ test("Gallery v3 embeds the copied local portfolio without replacement imagery",
   assert.doesNotMatch(component, /\.(?:png|jpe?g|webp|avif)["']/i);
   assert.match(component, /gallery-source-ready/);
   assert.match(component, /gallery-theme/);
+  assert.match(component, /gallery-provider-request/);
+  assert.match(component, /gallery-provider-catalog/);
+  assert.match(component, /\/api\/providers\/catalog/);
+  assert.match(component, /model\.capability === "chat"/);
   assert.match(component, /hideProjectCards/);
   assert.match(component, /hideFeaturedControl/);
   assert.match(component, /data-reveal-state=\{revealState\}/);
@@ -127,6 +131,8 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
   );
   assert.match(index, /dataset\.galleryHideProjectCards/);
   assert.match(index, /dataset\.galleryHideFeaturedControl/);
+  assert.match(index, /slug\.startsWith\("task-"\)/);
+  assert.match(index, /\/projects\/nathan-riley\?task=/);
   assert.match(index, /--gallery-host-composite-key/);
   assert.match(index, /\[data-id="nathan-riley"\]\{aspect-ratio:2048\/1172\}/);
   assert.match(index, /\[data-id="casa-di-solare"\]\{aspect-ratio:2048\/1204\}/);

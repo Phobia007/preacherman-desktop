@@ -1,15 +1,16 @@
-// Local extension of the Nathan Riley sheet, not an embedded Codex session.
-// THESIS: keep task identity left; compose and read messages right.
-// FORM: user-pinned centered divider and screenshot-matched bottom composer.
-// FINISH: review both appearances, keyboard send, persistence and sheet isolation.
-import { ad as ref, a8 as element, a4 as nextTick } from "./_nuxt/D9b8F35K.js";
+// Local task conversation. Model selection is connected to the host provider
+// catalog, while message sending remains local until execution is authorized.
+import { ad as ref, a8 as element, a4 as nextTick, a3 as onMounted, a6 as onUnmounted } from "./_nuxt/D9b8F35K.js";
+import { resolveTaskId } from "./task-metadata.js";
 
 export const conversationStorageKey = (slug) => `preacherman.task.${slug}.messages`;
+export const modelStorageKey = (slug) => `preacherman.task.${slug}.model`;
+
 export function readMessages(slug) {
   const raw = localStorage.getItem(conversationStorageKey(slug));
   if (!raw) return [];
   const value = JSON.parse(raw);
-  if (!Array.isArray(value) || value.some(m => typeof m?.text !== "string" || !Array.isArray(m.files) || m.files.some(f => typeof f !== "string"))) {
+  if (!Array.isArray(value) || value.some(message => typeof message?.text !== "string" || !Array.isArray(message.files) || message.files.some(file => typeof file !== "string"))) {
     throw new Error("Invalid local conversation");
   }
   return value;
@@ -24,14 +25,29 @@ const paths = {
   file: ["M14 2H6v20h12V6l-4-4ZM14 2v5h4"],
   close: ["m6 6 12 12M6 18 18 6"],
 };
+
 function icon(name) {
   return element("svg", {viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", "stroke-width":1.5, "stroke-linecap":"round", "stroke-linejoin":"round", "aria-hidden":"true"},
-    paths[name].map(d => element("path", {d})));
+    paths[name].map(path => element("path", {d:path})));
+}
+
+function validProviders(value) {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap(provider => {
+    if (!provider || typeof provider.id !== "string" || typeof provider.label !== "string" || !Array.isArray(provider.models)) return [];
+    const models = provider.models.filter(model => model && typeof model.id === "string" && typeof model.label === "string");
+    return models.length ? [{id:provider.id, label:provider.label, models}] : [];
+  });
+}
+
+function selectionKey(providerId, modelId) {
+  return `${providerId}::${modelId}`;
 }
 
 export const TaskConversation = {
   props: {slug:{type:String, required:true}},
   setup(props) {
+    const task = resolveTaskId(props.slug);
     const messages = ref([]);
     const draft = ref("");
     const files = ref([]);
@@ -40,8 +56,18 @@ export const TaskConversation = {
     const list = ref(null);
     const input = ref(null);
     const picker = ref(null);
-    try { messages.value = readMessages(props.slug); }
-    catch { readFailed.value = true; error.value = "本机记录无法读取，暂不能发送，以免覆盖原记录。"; }
+    const providers = ref([]);
+    const providerState = ref("loading");
+    const modelOpen = ref(false);
+    const selected = ref("");
+    try {
+      messages.value = readMessages(task);
+      selected.value = localStorage.getItem(modelStorageKey(task)) ?? "";
+    } catch {
+      readFailed.value = true;
+      error.value = "本机记录无法读取，暂不能发送，以免覆盖原记录。";
+    }
+
     const resize = () => {
       if (!input.value) return;
       input.value.style.height = "auto";
@@ -55,7 +81,7 @@ export const TaskConversation = {
       if (readFailed.value || (!draft.value.trim() && !files.value.length)) return;
       const entry = {text:draft.value.trim(), files:[...files.value]};
       const updated = [...messages.value, entry];
-      try { localStorage.setItem(conversationStorageKey(props.slug), JSON.stringify(updated)); }
+      try { localStorage.setItem(conversationStorageKey(task), JSON.stringify(updated)); }
       catch { error.value = "消息未能保存，内容仍在输入框中，请重试。"; return; }
       messages.value = updated;
       draft.value = "";
@@ -67,18 +93,99 @@ export const TaskConversation = {
     const unavailable = (label, name, explanation, className = "") => element("button", {
       type:"button", class:"task-chat__tool " + className, disabled:true, title:explanation, "aria-label":label + "，" + explanation,
     }, [name ? icon(name) : null, label ? element("span", null, label) : null]);
-    return () => element("section", {class:"task-chat", "aria-label":"任务对话", "data-task-id":props.slug}, [
+
+    const requestProviders = () => {
+      providerState.value = providers.value.length ? "ready" : "loading";
+      const targetOrigin = location.origin === "null" ? "*" : location.origin;
+      parent.postMessage({type:"gallery-provider-request"}, targetOrigin);
+    };
+    const receiveProviders = event => {
+      if (event.source !== parent || (location.origin !== "null" && event.origin !== location.origin) || event.data?.type !== "gallery-provider-catalog") return;
+      if (event.data.error) {
+        providerState.value = "error";
+        providers.value = [];
+        modelOpen.value = false;
+        return;
+      }
+      providers.value = validProviders(event.data.providers);
+      providerState.value = "ready";
+      if (selected.value && !providers.value.some(provider => provider.models.some(model => selectionKey(provider.id, model.id) === selected.value))) selected.value = "";
+    };
+    const closeOutside = event => {
+      if (!event.target.closest?.(".task-chat__model-select")) modelOpen.value = false;
+    };
+    onMounted(() => {
+      addEventListener("message", receiveProviders);
+      document.addEventListener("pointerdown", closeOutside);
+      requestProviders();
+    });
+    onUnmounted(() => {
+      removeEventListener("message", receiveProviders);
+      document.removeEventListener("pointerdown", closeOutside);
+    });
+
+    const chooseModel = (provider, model) => {
+      const value = selectionKey(provider.id, model.id);
+      try {
+        localStorage.setItem(modelStorageKey(task), value);
+        selected.value = value;
+        error.value = "";
+        modelOpen.value = false;
+      } catch {
+        error.value = "模型选择未能保存，请重试。";
+      }
+    };
+    const selectedLabel = () => {
+      for (const provider of providers.value) {
+        const model = provider.models.find(candidate => selectionKey(provider.id, candidate.id) === selected.value);
+        if (model) return model.label;
+      }
+      if (providerState.value === "loading") return "正在识别模型";
+      if (providerState.value === "error") return "模型服务不可用";
+      return providers.value.length ? "选择模型" : "未连接模型";
+    };
+    const modelSelector = () => {
+      const available = providers.value.length > 0;
+      return element("div", {class:"task-chat__model-select", onKeydown:event => {
+        if (event.key === "Escape") { event.preventDefault(); modelOpen.value = false; }
+      }}, [
+        element("button", {
+          type:"button", class:"task-chat__tool task-chat__model", disabled:!available,
+          title:available ? "选择当前任务使用的模型" : selectedLabel(),
+          "aria-haspopup":"listbox", "aria-expanded":modelOpen.value,
+          onClick:() => { requestProviders(); modelOpen.value = !modelOpen.value; },
+        }, [element("span", null, selectedLabel()), icon("chevron")]),
+        modelOpen.value ? element("div", {class:"task-chat__model-menu", role:"listbox", "aria-label":"可用模型"}, providers.value.map(provider =>
+          element("section", {key:provider.id, class:"task-chat__model-group", "aria-label":provider.label}, [
+            element("h3", {class:"task-chat__model-provider"}, provider.label),
+            ...provider.models.map(model => {
+              const value = selectionKey(provider.id, model.id);
+              return element("button", {key:value, type:"button", role:"option", class:"task-chat__model-option",
+                "aria-selected":selected.value === value, onClick:() => chooseModel(provider, model)}, model.label);
+            }),
+          ]))) : null,
+      ]);
+    };
+
+    return () => element("section", {class:"task-chat", "aria-label":"任务对话", "data-task-id":task,
+      onWheel:event => {
+        event.stopPropagation();
+        if (!event.ctrlKey && !event.target.closest?.(".task-chat__messages") && list.value) {
+          event.preventDefault();
+          list.value.scrollTop += event.deltaY;
+        }
+      }}, [
       element("div", {ref:list, class:"task-chat__messages", role:"log", "aria-label":"本机消息记录", "aria-live":"polite", tabindex:0,
         onVnodeMounted:scrollToLatest}, messages.value.map((message, index) => element("article", {
           key:index, class:"task-chat__message", "aria-label":"你的消息",
         }, [
           message.text ? element("p", null, message.text) : null,
-          ...message.files.map((name, i) => element("span", {key:i, class:"task-chat__file"}, [icon("file"), name])),
+          ...message.files.map((name, index) => element("span", {key:index, class:"task-chat__file"}, [icon("file"), name])),
         ]))),
       element("form", {class:"task-chat__composer", onSubmit:event => {event.preventDefault(); send();}}, [
         files.value.length ? element("div", {class:"task-chat__attachments"}, files.value.map((name, index) => element("button", {
           key:index, type:"button", class:"task-chat__attachment", title:"移除 " + name,
-          "aria-label":"移除附件 " + name, onClick:() => { files.value = files.value.filter((_, i) => i !== index); },
+          "aria-label":"移除附件 " + name, onClick:() => { files.value = files.value.filter((_, candidate) => candidate !== index); },
         }, [icon("file"), element("span", null, name), icon("close")]))) : null,
         element("textarea", {
           ref:input, class:"task-chat__input", rows:2, maxlength:20000, placeholder:"发送消息…",
@@ -100,21 +207,19 @@ export const TaskConversation = {
           element("button", {type:"button", class:"task-chat__tool task-chat__icon", title:"添加附件（此版本仅记录文件名，不读取或上传）", "aria-label":"添加附件", onClick:() => picker.value?.click()}, [icon("plus")]),
           unavailable("帮我批准", "approval", "执行权限尚未接入"),
           element("span", {class:"task-chat__spacer"}),
-          element("button", {type:"button", class:"task-chat__tool task-chat__model", disabled:true, title:"尚未连接模型；消息仅保存在本机"}, [element("span", null, "未连接模型"), icon("chevron")]),
+          modelSelector(),
           unavailable("", "mic", "语音尚未接入", "task-chat__icon"),
           element("button", {type:"submit", class:"task-chat__send", "aria-label":"发送消息", title:"发送到本机消息记录", disabled:readFailed.value || (!draft.value.trim() && !files.value.length)}, [icon("up")]),
         ]),
       ]),
-      element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (files.value.length || messages.value.some(m => m.files.length) ? "仅保存在本机 · 附件仅记录文件名，未读取或上传" : "仅保存在本机 · 尚未发送至模型")),
+      element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (files.value.length || messages.value.some(message => message.files.length) ? "仅保存在本机 · 附件仅记录文件名，未读取或上传" : "仅保存在本机 · 尚未发送至模型")),
     ]);
   },
 };
 
-// Protect editing, text selection and independent history scrolling from the
-// authored sheet's global swipe/scroll handlers, without affecting other cards.
+// Protect editing, selection and right-pane scrolling from global sheet handlers.
 for (const type of ["pointerdown", "wheel", "touchstart"]) {
   document.addEventListener(type, event => {
     if (event.target.closest?.(".task-chat")) event.stopPropagation();
   });
 }
-
