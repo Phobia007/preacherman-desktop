@@ -63,6 +63,7 @@ export function createLocalAgentRegistry({ adapters = [] } = {}) {
           kind: adapter.kind,
           installed: detection.installed === true,
           version: typeof detection.version === "string" ? detection.version : null,
+          detection: { state: detection.installed ? "detected" : detection.error ? "error" : "not-found" },
           auth: { state: auth.status ?? "unknown", ...(auth.reason ? { reason: auth.reason } : {}) },
           capabilities: adapter.capabilities(),
         };

@@ -194,9 +194,12 @@ export function createExecutionConnections({ file, request = connectionRequest, 
       });
       return { active: next.active };
     },
-    async activateLocal(agentId, workspaceId) {
-      const local = { mode: "cli", agentId, workspaceId, model: "default" };
+    async activateLocal(agentId, workspaceId, label = agentId) {
+      const local = { mode: "cli", agentId, label, workspaceId, model: "default" };
       await mutate(state => ({ ...state, local, active: local }));
+    },
+    async disconnectLocal() {
+      await mutate(state => ({ ...state, local: null, active: state.active?.mode === "cli" ? null : state.active }));
     },
     async chat({ connectionId, model, messages }) {
       if (!Array.isArray(messages) || !messages.length || messages.length > 40 ||

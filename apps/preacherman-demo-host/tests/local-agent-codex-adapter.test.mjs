@@ -67,7 +67,7 @@ test("Windows discovery falls back from an inaccessible app alias to the officia
   const adapter = createCodexCliAdapter({
     allowedWorkspaceRoots: [root],
     platform: "win32",
-    envSource: { ...process.env, APPDATA: root },
+    envSource: { ...process.env, APPDATA: root, LOCALAPPDATA: "" },
     whichImpl: async () => "C:\\Program Files\\WindowsApps\\OpenAI.Codex\\codex.exe",
     spawnImpl(command, args, options) {
       calls.push({ command, args, options });
@@ -84,6 +84,19 @@ test("Windows discovery falls back from an inaccessible app alias to the officia
   assert.equal(detected.installed, true);
   assert.equal(detected.executable, executable);
   assert.ok(calls.every((call) => call.options.shell === false));
+});
+
+test("Windows discovery checks installed native locations when PATH lookup is empty or fails", async (t) => {
+  const root = await mkdtemp(path.join(tmpdir(), "preacherman-codex-local-"));
+  t.after(() => rm(root, {recursive:true,force:true}));
+  const executable = path.join(root, "OpenAI", "CodexCLI", "codex.exe");
+  await mkdir(path.dirname(executable), {recursive:true});
+  await import("node:fs/promises").then(({writeFile})=>writeFile(executable, "fixture"));
+  for (const whichImpl of [async()=>null, async()=>{throw new Error("PATH unavailable");}]) {
+    const adapter=createCodexCliAdapter({platform:"win32",envSource:{...process.env,APPDATA:"",LOCALAPPDATA:root},whichImpl,
+      spawnImpl:(_command,args,options)=>spawn(process.execPath,[fixture,...args],options)});
+    try { assert.equal((await adapter.detect()).executable,executable); } finally {await adapter.close();}
+  }
 });
 
 test("Codex adapter uses a non-shell argv array, stdin objective, validated workspace, workspace-write, and env allowlist", async (t) => {

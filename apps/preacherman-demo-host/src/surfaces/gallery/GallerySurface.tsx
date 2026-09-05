@@ -148,7 +148,7 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
       });
       const active = record(execution.active);
       const local = record(execution.local);
-      if (typeof local?.agentId === "string") providers.push({ id: local.agentId, label: "Local CLI · approval required", models: [{ id: "default", label: "Codex CLI · default" }] });
+      if (typeof local?.agentId === "string") providers.push({ id: local.agentId, label: "Local CLI · approval required", models: [{ id: "default", label: String(local.label || local.agentId) + " · default" }] });
       const legacy = await loadChatProviders().catch(() => []);
       providers.push(...legacy.filter(item => item.id !== "deepseek" || !providers.some(candidate => candidate.id === "legacy-deepseek")));
       if (frameRef.current?.contentWindow === requestedFrame) {
@@ -175,12 +175,11 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
         if (data.action === "chat") {
           const selection = record(data.selection);
           const messages = Array.isArray(data.messages) ? data.messages : [];
-          if (selection?.providerId === "codex-cli") {
-            const settings = await call("/api/settings/execution");
-            const active = record(settings.local);
-            if (!active?.workspaceId) throw new Error("Select a local workspace in Execution Mode first.");
+          const settings = await call("/api/settings/execution");
+          const active = record(settings.local);
+          if (active && selection?.providerId === active.agentId) {
             const last = record(messages[messages.length - 1]);
-            result = await call("/api/execution/local-turn", { agentId: "codex-cli", workspaceId: active.workspaceId, objective: last?.content });
+            result = await call("/api/execution/local-turn", { agentId: active.agentId, workspaceId: active.workspaceId, objective: last?.content });
           } else {
             result = await call("/api/execution/chat", { connectionId: selection?.providerId === "deepseek" ? "legacy-deepseek" : selection?.providerId, model: selection?.modelId, messages });
           }

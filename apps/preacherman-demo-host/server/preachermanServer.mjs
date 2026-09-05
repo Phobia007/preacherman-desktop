@@ -46,6 +46,7 @@ import { createPreachermanExecutionDiagnosticsAdapter } from "./preacherman-exec
 import { createPreachermanExecutionLedgerProjector } from "./preacherman-execution/preachermanExecutionLedgerProjector.mjs";
 import { migratePreachermanBrandData } from "./preachermanBrandMigration.mjs";
 import { createLocalAgentRegistry, createCodexCliAdapter, createDeepSeekHarnessAdapter, deepSeekHarnessPinnedVersion } from "./local-agent/index.mjs";
+import { discoverLocalAgents } from "./local-agent/localAgentDiscovery.mjs";
 import { createPreachermanAgentAccessRuntime } from "./preachermanAgentAccessRuntime.mjs";
 import { binaryServiceHealth, createBinaryWebSocketProxy } from "./speechMotionProxy.mjs";
 import { createCortanaVoiceTelemetry } from "./cortanaVoiceTelemetry.mjs";
@@ -1390,9 +1391,14 @@ export function createPreachermanServer(options = {}) {
       if (url.pathname === "/api/settings/execution/local" && request.method === "POST") {
         const body = await readJson(request);
         const agent = (await agentAccessRuntime.listLocalAgents()).find(item => item.id === body.agentId);
-        if (agent?.id !== "codex-cli" || !agent.installed || agent.auth?.state !== "ready") throw Object.assign(new Error("A ready Codex CLI is required."), { statusCode: 409 });
+        if (!agent || agent.id === "preacherman-native" || !agent.capabilities?.workspaceWrite || !agent.installed || agent.auth?.state !== "ready") throw Object.assign(new Error("A ready, adapted local Agent is required."), { statusCode: 409 });
         if (!agentAccessRuntime.listWorkspaces().some(item => item.id === body.workspaceId)) throw Object.assign(new Error("Choose an approved workspace."), { statusCode: 400 });
-        await executionConnections.activateLocal(body.agentId, body.workspaceId);
+        await executionConnections.activateLocal(body.agentId, body.workspaceId, agent.label);
+        json(response, 200, await executionConnections.status(), origin);
+        return;
+      }
+      if (url.pathname === "/api/settings/execution/local" && request.method === "DELETE") {
+        await executionConnections.disconnectLocal();
         json(response, 200, await executionConnections.status(), origin);
         return;
       }
@@ -1404,7 +1410,9 @@ export function createPreachermanServer(options = {}) {
         const body = await readJson(request);
         if (typeof body.objective !== "string" || !body.objective.trim() || body.objective.length > 2000) throw Object.assign(new Error("Task description must contain 1–2000 characters."), { statusCode: 400 });
         const agent = (await agentAccessRuntime.listLocalAgents()).find(item => item.id === body.agentId);
-        if (agent?.id !== "codex-cli" || !agent.installed || agent.auth?.state !== "ready") throw Object.assign(new Error("Codex CLI is not ready. Check Execution Mode."), { statusCode: 409 });
+        const local = (await executionConnections.status()).local;
+        if (!local || local.agentId !== body.agentId || local.workspaceId !== body.workspaceId) throw Object.assign(new Error("Reconnect this local Agent and workspace in Execution Mode."), { statusCode: 409 });
+        if (!agent || agent.id === "preacherman-native" || !agent.capabilities?.workspaceWrite || !agent.installed || agent.auth?.state !== "ready") throw Object.assign(new Error("Local Agent is not ready. Check Execution Mode."), { statusCode: 409 });
         const task = await agentAccessRuntime.createAgentWorkspaceTask({
           objective: body.objective, agentId: agent.id, providerId: agent.id, modelId: "default",
           workspaceId: body.workspaceId, policy: "ask", adapterVersion: agent.version, capabilities: agent.capabilities,
@@ -1498,7 +1506,13 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/execution/local-agents") {
-        json(response, 200, { agents: await agentAccessRuntime.listLocalAgents() }, origin);
+        const agents = await agentAccessRuntime.listLocalAgents();
+        const discovered = options.localAgentRegistry ? [] : await discoverLocalAgents();
+        json(response, 200, { scannedAt: new Date().toISOString(), agents: [...agents.map(agent => ({ ...agent, execution: {
+          supported: agent.id !== "preacherman-native" && agent.capabilities?.workspaceWrite === true,
+          models: [{ id: "default", label: "Default · CLI configuration" }],
+          workspaceRequired: true, reasoningManagedByAgent: true,
+        } })), ...discovered.filter(agent => !agents.some(registered => registered.id === agent.id))] }, origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/agent-workspace/catalog") {

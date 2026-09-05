@@ -105,6 +105,10 @@ test("saving an API default retains independently configured local CLI access", 
   assert.equal(state.active.mode, "api");
   assert.equal(state.local.agentId, "codex-cli");
   assert.equal(state.local.workspaceId, "workspace-1");
+  await runtime.disconnectLocal();
+  const disconnected=await runtime.status();
+  assert.equal(disconnected.local,null);
+  assert.deepEqual(disconnected.active,state.active);
 });
 test("input and gateway validation reject unsafe URLs and private network destinations", async t => {
   const { runtime } = await setup(t);
@@ -144,6 +148,10 @@ test("local CLI activation and task creation never bypass the approval gate", as
     const rejected = await call("/api/tasks/" + proposed.data.task.taskId + "/commands", { type: "reject", approvalId: proposed.data.task.pendingApproval.approvalId });
     assert.equal(rejected.status, 200);
     assert.equal(starts, 0);
+    const disconnected=await fetch("http://127.0.0.1:"+address.port+"/api/settings/execution/local",{method:"DELETE",headers:{Origin:"http://127.0.0.1:1420"},signal:AbortSignal.timeout(10000)});
+    assert.equal(disconnected.status,200);
+    assert.equal((await disconnected.json()).local,null);
+    assert.equal((await call("/api/execution/local-turn",{agentId:"codex-cli",workspaceId:"workspace-1",objective:"Must remain blocked"})).status,409);
   } finally { await service.close(); }
 });
 test("corrupt storage is not silently reset", async t => {

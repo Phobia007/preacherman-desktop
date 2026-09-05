@@ -431,7 +431,7 @@ export function createPreachermanAgentAccessRuntime({
     return taskService.requestApproval(created.taskId, {
       approvalId: `start_${created.taskId}`,
       proposalHash: hash,
-      title: agentId === "codex-cli" ? "Start Codex CLI task" : "Start Preacherman Native task",
+      title: agentId === "preacherman-native" ? "Start Preacherman Native task" : "Start local Agent task",
       description: "Approve the selected Agent, provider, model, workspace and permission policy before execution starts.",
       nodeId: "host-start",
     });

@@ -122,17 +122,19 @@ function selectDiscoveredExecutable(output, platform) {
     ?? null;
 }
 
-async function npmCodexExecutable(envSource, platform) {
-  if (platform !== "win32") return null;
+async function windowsCodexExecutables(envSource, platform) {
+  if (platform !== "win32") return [];
   const appData = envSource?.APPDATA;
-  if (typeof appData !== "string" || !appData.trim()) return null;
-  const candidate = path.join(appData, "npm", "node_modules", "@openai", "codex", "node_modules", "@openai", "codex-win32-x64", "vendor", "x86_64-pc-windows-msvc", "bin", "codex.exe");
-  try {
-    await fsAccess(candidate);
-    return candidate;
-  } catch {
-    return null;
+  const localData = envSource?.LOCALAPPDATA;
+  const candidates = [
+    typeof localData === "string" && localData.trim() ? path.join(localData, "OpenAI", "CodexCLI", "codex.exe") : null,
+    typeof appData === "string" && appData.trim() ? path.join(appData, "npm", "node_modules", "@openai", "codex", "node_modules", "@openai", "codex-win32-x64", "vendor", "x86_64-pc-windows-msvc", "bin", "codex.exe") : null,
+  ];
+  const found = [];
+  for (const candidate of candidates) if (candidate) {
+    try { await fsAccess(candidate); found.push(candidate); } catch { /* Try the next installation location. */ }
   }
+  return found;
 }
 
 function safeWorkspacePath(candidate, workspace, platform) {
@@ -213,12 +215,12 @@ export function createCodexCliAdapter({
     try {
       executable = await whichImpl("codex");
     } catch (error) {
-      return { installed: false, version: null, executable: null, error: redact(errorMessage(error)) };
+      executable = null;
     }
-    if (typeof executable !== "string" || !executable.trim()) return { installed: false, version: null, executable: null };
-    const candidates = [executable];
-    const npmExecutable = await npmCodexExecutable(envSource, platform);
-    if (npmExecutable && !candidates.some((candidate) => candidate?.toLowerCase() === npmExecutable.toLowerCase())) candidates.push(npmExecutable);
+    const candidates = typeof executable === "string" && executable.trim() ? [executable] : [];
+    for (const candidate of await windowsCodexExecutables(envSource, platform)) {
+      if (!candidates.some(value => value.toLowerCase() === candidate.toLowerCase())) candidates.push(candidate);
+    }
     let lastError;
     for (const candidate of candidates) try {
       const result = await collectProcess(spawnImpl(candidate, ["--version"], {

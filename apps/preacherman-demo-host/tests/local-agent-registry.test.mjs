@@ -27,6 +27,7 @@ test("local agent registry enforces the unified adapter contract and delegates w
     kind: "local-subscription-agent",
     installed: true,
     version: "1.0.0",
+    detection: { state: "detected" },
     auth: { state: "ready", reason: "fixture" },
     capabilities: { progress: true, cancel: true },
   });

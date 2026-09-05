@@ -21,6 +21,18 @@ information architecture, not the artwork or stylesheet.
   and reasoning remain CLI-owned. A host-approved workspace is mandatory.
   Selecting CLI does not execute anything. Task submission creates a proposal;
   explicit approval starts execution under the existing workspace-write policy.
+- Local Agents now use persisted, keyboard-accessible selection controls.
+  Selecting a ready registered adapter connects it using the host-approved
+  workspace; deselecting disconnects it without cancelling existing tasks.
+  Adapter metadata owns the displayed model/workspace controls. Workspace edits
+  require Save & Use Agent and never rewrite running task snapshots.
+- Real discovery scans PATH and common user install locations for Codex CLI,
+  Claude Code, Gemini CLI and OpenCode. Native version probes are bounded and
+  shell-free. Wrapper files are discovered but not executed. Codex also checks
+  LOCALAPPDATA/OpenAI/CodexCLI and the npm native binary when PATH is stale.
+  Missing products are not reported as installed. Discovered products without
+  execution adapters are labelled accordingly and cannot be connected; their
+  login state remains unverified. Codex login uses its public status command.
 - Existing Preacherman Native/DeepSeek Harness paths and voice/vision providers
   are not replaced. API chat does not pretend to be the full Native tool loop.
 

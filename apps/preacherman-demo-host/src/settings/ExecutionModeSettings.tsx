@@ -8,10 +8,15 @@ interface Connection {
   maxTokens: number | null; reasoning: string; keySaved?: boolean; tested?: boolean;
 }
 interface Draft extends Omit<Connection, "maxTokens"> { apiKey: string; maxTokens: string }
-interface Agent { id: string; label: string; installed: boolean; version: string | null; auth: { state: string } }
+interface Agent {
+  id: string; label: string; installed: boolean; version: string | null; auth: { state: string };
+  detection?: { state: string };
+  execution?: { supported: boolean; models: { id: string; label: string }[]; workspaceRequired: boolean; reasoningManagedByAgent: boolean };
+}
 interface Snapshot {
   connections: Connection[];
   active: { mode: Mode; connectionId?: string; agentId?: string; workspaceId?: string; model: string } | null;
+  local: { agentId: string; workspaceId: string; model: string } | null;
   presets: { id: string; label: string; protocol: string; baseUrl: string; model: string }[];
 }
 const blank: Draft = { id: "", name: "", protocol: "openai", baseUrl: "", model: "", apiKey: "", maxTokens: "", reasoning: "" };
@@ -25,6 +30,8 @@ export function ExecutionModeSettings() {
   const [draft, setDraft] = useState<Draft>(blank);
   const [models, setModels] = useState<{ id: string; label: string }[]>([]);
   const [agents, setAgents] = useState<Agent[]>([]);
+  const [agentId, setAgentId] = useState("");
+  const [scanned, setScanned] = useState(false);
   const [workspaces, setWorkspaces] = useState<{ id: string; label: string; path: string }[]>([]);
   const [workspace, setWorkspace] = useState("");
   const [showKey, setShowKey] = useState(false);
@@ -53,9 +60,11 @@ export function ExecutionModeSettings() {
     setSnapshot(state);
     if (initial) {
       setMode(state.active?.mode || "api");
-      setWorkspace(state.active?.workspaceId || "");
+      setWorkspace(state.local?.workspaceId || "");
+      setAgentId(state.local?.agentId || "");
       const selected = state.connections.find(item => item.id === state.active?.connectionId) || state.connections[0];
       setDraft(selected ? toDraft(selected) : { ...blank, name: "DeepSeek", baseUrl: "https://api.deepseek.com", model: "deepseek-v4-flash" });
+      if (state.active?.mode === "cli") await readLocal(state.local?.workspaceId);
     }
   });
   useEffect(() => {
@@ -65,24 +74,37 @@ export function ExecutionModeSettings() {
   }, []);
   const update = (value: Partial<Draft>) => { setDraft(current => ({ ...current, ...value })); setVerification(null); setNotice(""); setError(""); };
   const select = (connection: Connection) => { setDraft(toDraft(connection)); setVerification(null); setModels([]); setShowKey(false); setNotice(""); setError(""); };
-  const scan = () => run("scan", async () => {
+  const readLocal = async (preferredWorkspace?: string) => {
     const [local, roots] = await Promise.all([
       request<{ agents: Agent[] }>("/api/execution/local-agents"),
       request<{ workspaces: { id: string; label: string; path: string }[] }>("/api/execution/workspaces"),
     ]);
     if (!mounted.current) return;
-    setAgents(local.agents); setWorkspaces(roots.workspaces);
-    setWorkspace(current => roots.workspaces.some(item => item.id === current) ? current : roots.workspaces[0]?.id || "");
-  });
+    setAgents(local.agents); setWorkspaces(roots.workspaces); setScanned(true);
+    setWorkspace(current => roots.workspaces.some(item => item.id === (preferredWorkspace || current)) ? preferredWorkspace || current : roots.workspaces[0]?.id || "");
+  };
+  const scan = () => run("scan", () => readLocal());
   const changeMode = (next: Mode) => {
     if (busy) return;
     setMode(next); setNotice(""); setError("");
-    if (next === "cli" && !agents.length) void scan();
+    if (next === "cli" && !scanned) void scan();
   };
   const post = <T,>(action: string) => request<T>("/api/settings/execution/" + action, { method: "POST", body: JSON.stringify(draft) });
   const complete = Boolean(draft.name.trim() && draft.baseUrl.trim() && draft.model.trim() && (draft.apiKey.trim() || draft.keySaved));
-  const codex = agents.find(agent => agent.id === "codex-cli");
-  const cliReady = codex?.installed && codex.auth.state === "ready";
+  const selectedAgent = agents.find(agent => agent.id === agentId);
+  const canConnect = (agent: Agent) => agent.execution?.supported && agent.installed && agent.auth.state === "ready";
+  const connect = (agent: Agent) => {
+    setAgentId(agent.id);
+    if (!workspace) { setError("Choose an approved workspace before connecting this Agent."); return; }
+    void run("local", async () => {
+      const state = await request<Snapshot>("/api/settings/execution/local", { method: "POST", body: JSON.stringify({ agentId: agent.id, workspaceId: workspace }) });
+      if (mounted.current) { setSnapshot(state); setNotice(agent.label + " connected. Starting a task still requires approval."); window.dispatchEvent(new Event("preacherman-execution-changed")); }
+    });
+  };
+  const disconnect = () => void run("local", async () => {
+    const state = await request<Snapshot>("/api/settings/execution/local", { method: "DELETE" });
+    if (mounted.current) { setSnapshot(state); setNotice("Agent disconnected. Existing tasks are not cancelled."); window.dispatchEvent(new Event("preacherman-execution-changed")); }
+  });
   return <section className="execution-mode" aria-label="Execution Mode configuration" aria-busy={Boolean(busy)} lang="en">
     <div className="execution-mode__tabs" role="tablist" aria-label="Connection method">
       {(["api", "cli"] as const).map(value => <button key={value} id={"execution-tab-" + value} role="tab" aria-selected={mode === value}
@@ -143,19 +165,30 @@ export function ExecutionModeSettings() {
     </form> : null}
     {mode === "cli" ? <div id="execution-panel-cli" role="tabpanel" aria-labelledby="execution-tab-cli">
       <div className="execution-mode__row"><h3>Local agents</h3><button type="button" disabled={Boolean(busy)} onClick={() => void scan()}>{busy === "scan" ? "Scanning…" : "Rescan"}</button></div>
-      <div className="execution-mode__agent">
-        <h3>Codex CLI</h3><p>{codex ? codex.installed ? codex.version || "Version unavailable" : "Not installed" : "Rescan to check installation"}</p>
-        <p>{cliReady ? "Signed in · Ready" : codex?.installed ? "Complete login in the official CLI, then rescan." : "Install and sign in using the official CLI. No account password is collected here."}</p>
-        <label>Model<input value="Default · CLI configuration" readOnly /></label>
-        <label>Approved workspace<select aria-label="Approved workspace" value={workspace} disabled={Boolean(busy)} onChange={event => setWorkspace(event.target.value)}><option value="">Choose a workspace</option>{workspaces.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-        <p className="execution-mode__hint">{workspaces.find(item => item.id === workspace)?.path}</p>
-        <p className="execution-mode__hint">Each task asks for approval before starting. CLI model and reasoning settings remain owned by the CLI.</p>
-        <div className="execution-mode__actions"><button type="button" disabled={Boolean(busy) || !cliReady || !workspace} onClick={() => void run("local", async () => {
-          const state = await request<Snapshot>("/api/settings/execution/local", { method: "POST", body: JSON.stringify({ agentId: "codex-cli", workspaceId: workspace }) });
-          if (mounted.current) { setSnapshot(state); setNotice("Codex CLI selected. New tasks will request approval before execution."); window.dispatchEvent(new Event("preacherman-execution-changed")); }
-        })}>{busy === "local" ? "Saving…" : "Use Codex CLI"}</button></div>
+      <p className="execution-mode__hint">Select an adapted Agent to connect. One local Agent is active at a time; selecting it never starts a task.</p>
+      {scanned && !agents.length ? <p role="status">No local Agents detected. Install a supported CLI, then rescan.</p> : null}
+      <div className="execution-mode__agent-list">
+        {agents.filter(agent => agent.id !== "preacherman-native").map(agent => {
+          const connected = snapshot?.local?.agentId === agent.id;
+          const status = agent.detection?.state === "error" ? "Detection failed · Rescan" : !agent.installed ? "Not found · Install, then rescan" : !agent.execution?.supported ? "Detected · Execution adapter required" : agent.auth.state !== "ready" ? "Sign in to this CLI, then rescan" : connected ? "Connected" : "Signed in · Ready to connect";
+          return <button key={agent.id} type="button" role="checkbox" aria-checked={connected} aria-label={"Connect " + agent.label}
+            className="execution-mode__agent-choice" disabled={Boolean(busy) || (!connected && !canConnect(agent))}
+            onClick={() => connected ? disconnect() : connect(agent)}>
+            <span className="execution-mode__agent-check" aria-hidden="true">{connected ? <svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-8" stroke="currentColor" strokeWidth="1.5" /></svg> : null}</span>
+            <span><span className="execution-mode__agent-name">{agent.label}</span><small>{agent.version ? agent.version + " · " : ""}{status}</small></span>
+          </button>;
+        })}
       </div>
-      <p className="execution-mode__hint">Preacherman Native remains available through its existing execution flow. Other CLIs are not yet connected.</p>
+      {selectedAgent?.execution?.supported ? <div className="execution-mode__agent" aria-label={selectedAgent.label + " configuration"}>
+        <h3>{selectedAgent.label} settings</h3>
+        <label>Model<select aria-label="Local Agent model" value="default" disabled><option value="default">{selectedAgent.execution.models.find(model => model.id === "default")?.label || "Managed by this Agent"}</option></select></label>
+        {selectedAgent.execution.reasoningManagedByAgent ? <p className="execution-mode__hint">Model and reasoning follow this Agent's own configuration.</p> : null}
+        {selectedAgent.execution.workspaceRequired ? <label>Approved workspace<select aria-label="Approved workspace" value={workspace} disabled={Boolean(busy)} onChange={event => setWorkspace(event.target.value)}><option value="">Choose a workspace</option>{workspaces.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label> : null}
+        <p className="execution-mode__hint">{workspaces.find(item => item.id === workspace)?.path}</p>
+        <p className="execution-mode__hint">Workspace changes apply only after saving. Existing task snapshots stay unchanged. Each new task requires approval.</p>
+        <div className="execution-mode__actions"><button type="button" disabled={Boolean(busy) || !canConnect(selectedAgent) || !workspace || (snapshot?.local?.agentId === agentId && snapshot.local.workspaceId === workspace && snapshot.active?.mode === "cli")} onClick={() => connect(selectedAgent)}>{busy === "local" ? "Saving…" : snapshot?.local?.agentId === agentId ? "Save & Use Agent" : "Connect Agent"}</button></div>
+      </div> : <p className="execution-mode__hint">Agent-specific model and workspace settings appear after selection.</p>}
+      <p className="execution-mode__hint">Preacherman Native keeps its existing flow. Additional CLIs require a registered execution adapter.</p>
     </div> : null}
     {error ? <p className="execution-mode__error" role="alert">{error}</p> : null}
     {notice ? <p className="execution-mode__notice" role="status">{notice}</p> : null}

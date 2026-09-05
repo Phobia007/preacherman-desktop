@@ -10,6 +10,15 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 const hostRoot = join(import.meta.dirname, "..");
 const componentPath = join(hostRoot, "src", "settings", "SettingsScreen.tsx");
+test("local Agent selection is persisted, capability-bound and truthful about discovery", async () => {
+  const source = await readFile(join(hostRoot,"src","settings","ExecutionModeSettings.tsx"),"utf8");
+  assert.match(source,/role="checkbox" aria-checked=\{connected\}/);
+  assert.match(source,/selectedAgent\?\.execution\?\.supported/);
+  assert.match(source,/selectedAgent.execution.models/);
+  assert.match(source,/method: "DELETE"/);
+  assert.match(source,/state.local\?\.agentId/);
+  assert.match(source,/Detection failed · Rescan/);
+});
 
 test("Execution Mode details occupy the companion's left side without changing the authored style", async () => {
   const css = await readFile(join(hostRoot, "src", "settings", "execution-mode.css"), "utf8");

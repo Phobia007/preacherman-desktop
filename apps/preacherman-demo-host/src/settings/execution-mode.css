@@ -64,6 +64,12 @@
 .execution-mode__error { color: var(--demo-theme-settings-error); font-size: 20px; }
 .execution-mode__row { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 32px; }
 .execution-mode__agent { display: grid; gap: 18px; }
+.execution-mode__agent-list { display: grid; gap: 18px; margin: 24px 0 32px; }
+.execution-mode .execution-mode__agent-choice { display: flex; align-items: center; gap: 18px; width: 100%; padding: 20px 24px; text-align: left; }
+.execution-mode__agent-choice[aria-checked="true"] { border-color: var(--demo-theme-settings-text); background: var(--demo-theme-settings-surface); }
+.execution-mode__agent-check { width: 28px; height: 28px; flex: 0 0 28px; border: 1px solid currentColor; border-radius: 50%; }
+.execution-mode__agent-check svg { width: 100%; height: 100%; }
+.execution-mode__agent-name { display: block; font-size: 26px; margin-bottom: 6px; overflow-wrap: anywhere; }
 @keyframes execution-mode-arrive { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
   .execution-mode { animation: none; }
