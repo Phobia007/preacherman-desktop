@@ -54,6 +54,33 @@ test("IME Enter does not prematurely save, and storage failure is visible", () =
   assert.equal(f.input().value, "仍可编辑");
 });
 
+test("saved names synchronize the authored card and index copy without changing other projects", () => {
+  const f = fixture("preacherman");
+  const selected = {slug:"nathan-riley", title:"Nathan Riley"};
+  const other = {slug:"casa-di-solare", title:"Casa Di Solare"};
+  assert.equal(f.context.taskDisplayTitle(selected), "preacherman");
+  assert.equal(f.context.taskDisplayTitle(other), "Casa Di Solare");
+  f.input().onInput({target:{value:"  新的任务  "}}); f.input().onBlur();
+  assert.equal(f.context.taskDisplayTitle(selected), "新的任务");
+  f.context.localStorage.setItem = () => {throw new Error("blocked");};
+  f.input().onInput({target:{value:"未保存"}}); f.input().onBlur();
+  assert.equal(f.context.taskDisplayTitle(selected), "新的任务");
+  f.context.localStorage.getItem = () => {throw new Error("blocked");};
+  assert.equal(f.context.taskDisplayTitle(selected), "Nathan Riley");
+  assert.equal(fixture().context.taskDisplayTitle(selected), "Nathan Riley");
+});
+
+test("card and full index keep original text nodes and typography with synchronized titles", () => {
+  const cards = fs.readFileSync(new URL("_nuxt/DxOxRmZ4.js", root), "utf8");
+  const index = fs.readFileSync(new URL("_nuxt/CCsiJzJJ.js", root), "utf8");
+  assert.ok(cards.includes('E("span",te,F(taskDisplayTitle(l)),1)'));
+  assert.ok(cards.includes('whitespace-nowrap text-16 s:text-18 tracking-[-0.05em]'));
+  assert.equal(index.match(/k\(taskDisplayTitle\(a\)\)/g)?.length, 3);
+  assert.ok(index.includes('text-18 s:text-30 leading-none tracking-[-0.05em]'));
+  assert.ok(cards.includes('e.showTitles('));
+  assert.ok(index.includes('t.text(e,{reveal:!1})'));
+});
+
 test("only selected detail skips rasterized copy, media, marks and progress; original sheet/close remain", () => {
   const runtime = fs.readFileSync(new URL("_nuxt/Dr-ZLxUY.js", root), "utf8");
   const css = fs.readFileSync(new URL("task-metadata.css", root), "utf8");

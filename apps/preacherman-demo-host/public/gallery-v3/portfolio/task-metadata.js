@@ -6,6 +6,19 @@ export const isTaskTemplate = (project) => project?.slug === "nathan-riley";
 export const titleStorageKey = (slug) => `preacherman.task.${slug}.title`;
 export const normalizeTitle = (value) => String(value).replace(/\s+/g, " ").trim().slice(0, 120);
 
+const titleRevision = ref(0);
+// Keep the authored labels and their WebGL font rasterization; change only copy.
+export const taskDisplayTitle = (project) => {
+  void titleRevision.value;
+  if (isTaskTemplate(project)) {
+    try {
+      const saved = normalizeTitle(localStorage.getItem(titleStorageKey(project.slug)) ?? "");
+      if (saved) return saved;
+    } catch {}
+  }
+  return project?.title ?? "";
+};
+
 const stylesheet = document.createElement("link");
 stylesheet.rel = "stylesheet";
 stylesheet.href = new URL("./task-metadata.css", import.meta.url).href;
@@ -42,6 +55,7 @@ export const TaskMetadata = {
         localStorage.setItem(titleStorageKey(props.slug), title.value);
         saved = title.value;
         error.value = "";
+        titleRevision.value++;
       } catch { error.value = "名称未能保存，请重新编辑后重试。"; }
     };
     onUnmounted(commit);
