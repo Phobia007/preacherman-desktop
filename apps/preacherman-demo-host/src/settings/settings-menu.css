@@ -5,22 +5,35 @@
 
 .settings-menu__list {
   position: absolute;
-  top: 148px;
+  top: 140px;
+  bottom: 100px;
   left: 1200px;
-  width: 390px;
+  width: 460px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 18px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  pointer-events: auto;
   color: var(--demo-theme-brand-menu-text);
-  font-family: "Clash Display", "Microsoft YaHei UI", sans-serif;
-  font-size: 28px;
+  font-family: "Clash Display", sans-serif;
+  font-size: 32px;
   font-weight: 300;
   line-height: 1.15;
   letter-spacing: 0.018em;
 }
 
 .settings-menu__row {
+  flex: 0 0 auto;
   max-width: 100%;
+}
+
+.settings-menu__list::-webkit-scrollbar {
+  display: none;
 }
 
 .settings-menu[data-settings-state="framing"] .settings-menu__row {
@@ -34,7 +47,7 @@
 
 .settings-menu__item {
   display: block;
-  min-height: 44px;
+  min-height: 56px;
   max-width: 100%;
   padding: 6px 16px;
   border: 0;

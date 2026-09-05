@@ -14,9 +14,9 @@ interface SettingsScreenProps {
 // Extend the existing directory language: portrait first, then one descending
 // wave of text to the model's right. Selection is local; detail views come later.
 export const settingsMenuItems = [
-  "执行模式", "指令 / 规则", "记忆", "媒体生成提供商", "外部 MCP", "连接器",
-  "MCP 服务器", "界面语言", "外观", "设计评审团", "通知", "宠物",
-  "设计系统", "项目位置", "隐私", "关于",
+  "Execution Mode", "Instructions / Rules", "Memory", "Media Providers", "External MCP", "Connectors",
+  "MCP Servers", "Language", "Appearance", "Design Council", "Notifications", "Pets",
+  "Design System", "Project Location", "Privacy", "About",
 ] as const;
 
 export function SettingsScreen({ locale }: SettingsScreenProps) {
@@ -35,7 +35,7 @@ export function SettingsScreen({ locale }: SettingsScreenProps) {
       className="demo-host settings-menu"
       data-settings-state={ready ? "ready" : "framing"}
     >
-      <nav aria-label="设置首选项" className="settings-menu__list" lang="zh-CN">
+      <nav aria-label="Settings preferences" className="settings-menu__list" lang="en">
         {settingsMenuItems.map((label, index) => (
           <div className="settings-menu__row" key={label} style={{ "--settings-order": index } as CSSProperties}>
             <button

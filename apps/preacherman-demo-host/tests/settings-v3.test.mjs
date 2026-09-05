@@ -24,7 +24,7 @@ test("Settings renders the sixteen requested names in order without changing con
       assert.ok(html.includes('data-settings-state="framing"'));
       assert.equal((html.match(/<button/g) ?? []).length, 16);
       assert.equal((html.match(/disabled=""/g) ?? []).length, 16);
-      const names = ["执行模式", "指令 / 规则", "记忆", "媒体生成提供商", "外部 MCP", "连接器", "MCP 服务器", "界面语言", "外观", "设计评审团", "通知", "宠物", "设计系统", "项目位置", "隐私", "关于"];
+      const names = ["Execution Mode", "Instructions / Rules", "Memory", "Media Providers", "External MCP", "Connectors", "MCP Servers", "Language", "Appearance", "Design Council", "Notifications", "Pets", "Design System", "Project Location", "Privacy", "About"];
       let previous = -1;
       for (const name of names) {
         const at = html.indexOf(name);
@@ -57,6 +57,10 @@ test("Settings reuses Gallery portrait and starts a bounded top-to-bottom wave a
   assert.match(css, /font-family: "Clash Display"/);
   assert.match(css, /var\(--demo-theme-brand-menu-text\)/);
   assert.match(css, /:focus-visible/);
+  assert.match(css, /gap: 18px/);
+  assert.match(css, /overflow-y: auto/);
+  assert.match(css, /scrollbar-width: none/);
+  assert.match(css, /::-webkit-scrollbar/);
 });
 
 test("configuration components and reference artwork remain recoverable for the redesign", async () => {
