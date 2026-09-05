@@ -220,7 +220,7 @@ test("Home, Task, Settings, and Gallery share the persistent scene", async () =>
   assert.match(sceneRule, /background:\s*var\(--demo-theme-home-canvas\)/);
   assert.match(app, /const sceneModelId = activeModelId;/);
   assert.match(app, /scene=\{sceneModelId \? \(/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.doesNotMatch(app, /sceneHidden=/);
   assert.doesNotMatch(shell, /Math\.max\(window\.innerWidth\s*\/\s*1800/);

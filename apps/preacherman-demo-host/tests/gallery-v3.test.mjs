@@ -192,7 +192,7 @@ test("Gallery uses the original Active Theory runtime with a fixed Cortana above
   const entry = read(activeTheoryRoot, "gallery", "work.html");
   const interactionBridge = read(activeTheoryRoot, "gallery", "interaction-bridge.js");
 
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.match(app, /<ActiveTheoryGallerySurface\s*\/>/);
   assert.match(component, /active-theory-gallery\/gallery\/work\.html/);
   assert.match(entry, /<base href="\/active-theory-gallery\/">/);

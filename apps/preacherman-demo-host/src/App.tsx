@@ -379,7 +379,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         <CortanaModelStage
           ariaLabel={`Persistent ${sceneModelId === "cortana" ? "Cortana" : "Zima"} companion scene`}
           environment="cinematic"
-          cameraFraming={activeSurfaceType === "market" ? "portrait" : "full-body"}
+          cameraFraming={activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
           modelId={sceneModelId}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}

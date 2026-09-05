@@ -21,7 +21,7 @@ test("Home, Task, Settings, and Gallery share one persistent companion scene", a
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.match(app, /sceneModelId \? \(/);
   assert.doesNotMatch(app, /sceneModelId && activeSurfaceType !== "market"/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.match(app, /<ActiveTheoryGallerySurface \/>/);
   assert.match(shell, /className="demo-app-shell__scene"/);
   assert.match(shell, /data-active-surface=\{activeSurfaceType\}/);
@@ -76,7 +76,7 @@ test("Gallery moves the shared Cortana into the accepted close portrait above th
   ]);
 
   assert.doesNotMatch(styles, /\.demo-app-shell\[data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*scale\(1\.9\)/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.match(app, /sceneModelId \? \(/);
   assert.doesNotMatch(gallerySurface, /CortanaModelStage/);
   assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*mix-blend-mode:\s*screen/);

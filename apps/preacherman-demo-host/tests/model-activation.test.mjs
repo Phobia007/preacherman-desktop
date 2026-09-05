@@ -23,7 +23,7 @@ test("the saved model remains persistent while Gallery changes its camera framin
   assert.match(app, /const isCompanionActive = activeModelId !== null/);
   assert.match(app, /data-model-active=\{isCompanionActive\}/);
   assert.match(app, /scene=\{sceneModelId \? \([\s\S]*<CortanaModelStage[\s\S]*modelId=\{sceneModelId\}[\s\S]*variant="persistent"/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \? "portrait" : "full-body"\}/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.match(app, /selectedManifest\.surfaceId === manifest\.surfaceId[\s\S]*return homeContent/);
   assert.match(app, /<SettingsScreen/);
   assert.match(app, /<GallerySurface \/>/);
