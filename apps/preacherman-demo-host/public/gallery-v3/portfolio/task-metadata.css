@@ -206,14 +206,6 @@
   text-align: right;
 }
 
-[data-gl="card"][data-id^="task-"] {
-  background: rgb(0 0 0);
-}
-
-[data-gl="card"][data-id^="task-"] [data-title] {
-  -webkit-text-fill-color: var(--gallery-host-text, currentColor);
-}
-
 @media (min-width: 650px) {
   .task-metadata__title { font-size: 4.5rem; }
   .task-metadata__summary,

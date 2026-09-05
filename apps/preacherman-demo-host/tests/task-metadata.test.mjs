@@ -101,9 +101,20 @@ test("new conversation cards persist as blank task projects and relate to their 
   const augmented = f.context.augmentTaskProjects([{slug:"nathan-riley",title:"Nathan Riley"},{slug:"casa",title:"Casa"}]);
   assert.deepEqual(Array.from(augmented, project => project.slug),["nathan-riley",created.id,"casa"]);
   assert.equal(augmented[1].src.endsWith("task-empty-card.svg"),true);
+  assert.equal(augmented[1].video, null);
+  assert.equal(augmented[1].images.length, 0);
   const relations = f.render().children[2];
   assert.equal(relations.children[1].tag,"ul");
   assert.equal(relations.children[1].children[0].children[0].children[0].children,"new one");
+});
+
+test("blank tasks retain the authored card material, caption and arrow instead of CSS wash overrides", () => {
+  const css = fs.readFileSync(new URL("task-metadata.css", root), "utf8");
+  const runtime = fs.readFileSync(new URL("_nuxt/DxOxRmZ4.js", root), "utf8");
+  assert.doesNotMatch(css, /\[data-gl="card"\]\[data-id\^="task-"\]/);
+  assert.ok(runtime.includes('F(taskDisplayTitle(l)),1),G(a)'));
+  assert.ok(runtime.includes('arrowRight:!0,strip:!0'));
+  assert.ok(runtime.includes('e.showHome(c.value,o.value)'));
 });
 
 test("floating create control saves then returns to the task rail", () => {
