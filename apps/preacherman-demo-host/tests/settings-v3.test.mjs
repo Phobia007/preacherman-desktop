@@ -11,6 +11,18 @@ import { renderToStaticMarkup } from "react-dom/server";
 const hostRoot = join(import.meta.dirname, "..");
 const componentPath = join(hostRoot, "src", "settings", "SettingsScreen.tsx");
 
+test("Execution Mode details occupy the companion's left side without changing the authored style", async () => {
+  const css = await readFile(join(hostRoot, "src", "settings", "execution-mode.css"), "utf8");
+  const panel = css.match(/\.execution-mode \{([^}]+)\}/)[1];
+  assert.match(panel, /left: 90px/);
+  assert.doesNotMatch(panel, /right:/);
+  assert.match(panel, /width: 780px/);
+  assert.match(panel, /font-family: "Clash Display"/);
+  assert.match(panel, /overflow-y: auto/);
+  assert.match(panel, /scrollbar-width: none/);
+  assert.match(panel, /var\(--demo-theme-settings-text\)/);
+});
+
 test("Settings renders the sixteen requested names in order without changing configuration", async () => {
   const source = await readFile(componentPath, "utf8");
   const { code } = await transform(source, { loader: "tsx", format: "cjs", jsx: "automatic" });
