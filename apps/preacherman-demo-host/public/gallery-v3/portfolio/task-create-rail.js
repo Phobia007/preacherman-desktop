@@ -25,6 +25,11 @@ export function installTaskCreateRail({folio, projects, root, track, resize, nex
     const anchorIndex = projects.value.findIndex(item => item.slug === anchor?.dataset.id);
     if (anchorIndex >= 0) center(anchorIndex, false, offset);
     folio.cards = folio.scan(root.value, projects.value).filter(card => card.el.dataset.gl === "card");
+    // scan creates the authored material at alpha 0; the normal Home entrance reveals it.
+    // Live insertion skips that page entrance, so initialize only the added card.
+    const added = folio.cards.find(card => card.slug === project.id);
+    added.ox = added.oz = 0;
+    added.mesh.material.uniforms.u_alpha.value = 1;
     const card = [...track.value.children].find(card => card.dataset.id === project.id);
     await folio.showTitles([{card, el:card.querySelector("[data-title]"), slug:project.id}], true);
     return () => {
