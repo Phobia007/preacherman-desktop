@@ -22,6 +22,36 @@ function replaceExact(source, before, after, expectedCount, label) {
 
 const scenePath = path.join(runtimeRoot, "_nuxt", "D9b8F35K.js");
 let scene = fs.readFileSync(scenePath, "utf8");
+const taskDialogImport = 'import{installTaskCreateDialog}from"../task-create-dialog.js";';
+if (!scene.includes(taskDialogImport)) scene = taskDialogImport + "\n" + scene;
+scene = replaceExact(
+  scene,
+  'this.llamaRain?.tick(e,this.hole.p)',
+  'this.llamaRain?.tick(e,this.taskCreateDialogOpen?0:this.hole.p)',
+  1,
+  "keep new task lens empty without changing profile decoration",
+);
+scene = replaceExact(
+  scene,
+  'Fi(r,_=>{e.openHole(_),f(_)});const{close:p}',
+  'let taskDialog;Fi(r,_=>{e.openHole(_),taskDialog?.opened||f(_)});const{close:p}',
+  1,
+  "reuse the profile lens without profile copy for task creation",
+);
+scene = replaceExact(
+  scene,
+  'l.push(u),window.addEventListener("click",m)',
+  'l.push(u),taskDialog=installTaskCreateDialog({folio:e,profileOpen:r,disc:t.value,textGroups:l,watch:Fi}),window.addEventListener("click",m)',
+  1,
+  "install the empty task dialog in the authored profile",
+);
+scene = replaceExact(
+  scene,
+  'e.bindHole(null),window.removeEventListener("click",m)',
+  'taskDialog?.dispose(),e.bindHole(null),window.removeEventListener("click",m)',
+  1,
+  "dispose task dialog listeners with the profile",
+);
 scene = replaceExact(
   scene,
   "this.renderer.setClearColor(0,1),this.renderer.setPixelRatio",
@@ -203,6 +233,12 @@ for (const htmlPath of htmlFiles) {
   }
   if (htmlPath === path.join(runtimeRoot, "index.html")) {
     html = html.replace('<div class="task-create">', '<div class="task-create" popover="manual">');
+    if (!html.includes('aria-controls="task-create-dialog"')) {
+      html = html.replace(
+        'class="task-create__button" title="创建新对话" aria-label="创建新对话"',
+        'class="task-create__button" title="创建新对话" aria-label="创建新对话" aria-haspopup="dialog" aria-controls="task-create-dialog" aria-expanded="false"',
+      );
+    }
   }
   if (!hasOverrides) {
     html = html.replace("</head>", `${sourceOverrides}</head>`);

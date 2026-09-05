@@ -210,18 +210,10 @@ export const TaskCreateControl = {
     const overlay = ref(null);
     onMounted(() => overlay.value?.showPopover());
     onUnmounted(() => overlay.value?.hidePopover());
-    const error = ref("");
-    const create = () => {
-      try {
-        createTaskProject();
-        location.href = "/gallery-v3/portfolio/index.html";
-      } catch {
-        error.value = "新任务未能保存，请重试。";
-      }
-    };
+    const open = () => window.dispatchEvent(new Event("preacherman:task-create-open"));
     return () => element("div", {ref:overlay, class:"task-create", popover:"manual"}, [
-      element("button", {type:"button", class:"task-create__button", title:"创建新对话", "aria-label":"创建新对话", onClick:create}, [plusIcon()]),
-      error.value ? element("p", {class:"task-create__error", role:"alert"}, error.value) : null,
+      element("button", {type:"button", class:"task-create__button", title:"创建新对话", "aria-label":"创建新对话", "aria-haspopup":"dialog", "aria-controls":"task-create-dialog", "aria-expanded":"false", onClick:open}, [plusIcon()]),
+      null,
     ]);
   },
 };

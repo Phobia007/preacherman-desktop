@@ -8,6 +8,7 @@ const source = fs.readFileSync(new URL("task-metadata.js", root), "utf8");
 function fixture(initial) {
   const storage = new Map(initial ? [["preacherman.task.nathan-riley.title", initial]] : []);
   const session = new Map();
+  const events = [];
   let cleanup;
   let mount;
   const context = {
@@ -18,6 +19,8 @@ function fixture(initial) {
     localStorage: {getItem: (key) => storage.get(key), setItem: (key, value) => storage.set(key, value)},
     sessionStorage: {getItem:key => session.get(key), setItem:(key,value) => session.set(key,value), removeItem:key => session.delete(key)},
     crypto: {randomUUID: () => "00000000-0000-4000-8000-000000000001"},
+    Event,
+    window: {dispatchEvent: event => events.push(event.type)},
     location: {origin:"app://localhost", search:"", href:""},
     URLSearchParams,
     document: {createElement: () => ({}), head: {append() {}}, documentElement: {style: {setProperty() {}}}, addEventListener() {}},
@@ -27,7 +30,7 @@ function fixture(initial) {
   vm.runInNewContext(source.replace(/^import .*;$/m, "").replaceAll("export const ", "globalThis.").replaceAll("export function ", "function ").replaceAll("import.meta.url", JSON.stringify(new URL("task-metadata.js", root).href)), context);
   const render = context.TaskMetadata.setup({slug: "nathan-riley"});
   const input = () => render().children[0].children[0].props;
-  return {context, storage, session, render, input, mount: () => mount(), unmount: () => cleanup()};
+  return {context, storage, session, events, render, input, mount: () => mount(), unmount: () => cleanup()};
 }
 
 test("only the selected Nathan Riley entry gets the task metadata template", () => {
@@ -117,13 +120,29 @@ test("blank tasks retain the authored card material, caption and arrow instead o
   assert.ok(runtime.includes('e.showHome(c.value,o.value)'));
 });
 
-test("floating create control saves then returns to the task rail", () => {
+test("floating plus requests only the empty dialog without creating or navigating", () => {
   const f = fixture();
   const render = f.context.TaskCreateControl.setup();
   render().children[0].props.onClick();
-  assert.equal(f.context.location.href,"/gallery-v3/portfolio/index.html");
-  assert.equal(JSON.parse(f.storage.get("preacherman.task.projects")).length,1);
-  assert.equal(f.session.get("preacherman.task.pending-focus"),"task-00000000-0000-4000-8000-000000000001");
+  assert.equal(f.context.location.href,"");
+  assert.equal(f.storage.get("preacherman.task.projects"),undefined);
+  assert.equal(f.session.get("preacherman.task.pending-focus"),undefined);
+  assert.deepEqual(f.events,["preacherman:task-create-open"]);
+  assert.equal(render().children[0].props["aria-haspopup"],"dialog");
+});
+
+test("task creation reuses the authored profile lens and owns dismiss/focus cleanup", () => {
+  const runtime = fs.readFileSync(new URL("_nuxt/D9b8F35K.js", root), "utf8");
+  const dialog = fs.readFileSync(new URL("task-create-dialog.js", root), "utf8");
+  assert.ok(runtime.includes('e.openHole(_),taskDialog?.opened||f(_)'));
+  assert.ok(runtime.includes('taskDialog?.dispose()'));
+  assert.ok(runtime.includes('this.taskCreateDialogOpen?0:this.hole.p'));
+  assert.ok(dialog.includes('profileOpen.value = true'));
+  assert.ok(dialog.includes('event.key === "Escape"'));
+  assert.ok(dialog.includes('event.key === "Tab"'));
+  assert.ok(dialog.includes('event.stopImmediatePropagation()'));
+  assert.ok(dialog.includes('stopWatching()'));
+  assert.doesNotMatch(dialog, /localStorage|createTaskProject|location\.href/);
 });
 
 test("create control enters the browser top layer and cleans up on unmount", () => {

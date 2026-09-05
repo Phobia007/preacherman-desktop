@@ -195,15 +195,45 @@
   height: 2.4rem;
 }
 
-.task-create__error {
-  position: absolute;
-  top: calc(100% + 1rem);
-  right: 0;
-  width: 18rem;
+.task-create-dialog__body {
+  position: relative;
+  width: 100%;
+  height: min(40rem, 65vh);
   margin: 0;
-  color: var(--demo-theme-chat-error);
-  font-size: 1.2rem;
-  text-align: right;
+  pointer-events: auto;
+}
+
+.task-create-dialog__body:not([hidden]) { animation: task-create-controls 300ms 200ms both; }
+@keyframes task-create-controls { from { opacity: 0; } to { opacity: 1; } }
+
+.task-create-dialog__close {
+  position: absolute;
+  top: 0;
+  right: 3rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 1px solid var(--demo-theme-chat-border);
+  border-radius: 50%;
+  background: var(--demo-theme-chat-composer);
+  color: var(--demo-theme-chat-text);
+  cursor: pointer;
+}
+
+.task-create-dialog__close span {
+  position: absolute;
+  top: calc(50% - 0.5px);
+  left: 30%;
+  width: 40%;
+  height: 1px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+
+.task-create-dialog__close span + span { transform: rotate(-45deg); }
+.task-create-dialog__close:hover { background: var(--demo-theme-chat-hover); }
+.task-create-dialog__close:focus-visible {
+  outline: 2px solid var(--demo-theme-chat-focus);
+  outline-offset: 4px;
 }
 
 @media (min-width: 650px) {
@@ -221,4 +251,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .task-create__button { transition: none; }
+  .task-create-dialog__body:not([hidden]) { animation: none; }
 }
