@@ -22,7 +22,7 @@ test("Settings renders the sixteen requested names in order without changing con
       const html = renderToStaticMarkup(createElement(context.module.exports.SettingsScreen, { appearance, locale }));
       assert.ok(html.includes(locale === "zh-CN" ? 'aria-label="设置"' : 'aria-label="Settings"'));
       assert.ok(html.includes('data-settings-state="framing"'));
-      assert.equal((html.match(/<button/g) ?? []).length, 16);
+      assert.equal((html.match(/class="settings-menu__item"/g) ?? []).length, 16);
       assert.equal((html.match(/disabled=""/g) ?? []).length, 16);
       const names = ["Execution Mode", "Instructions / Rules", "Memory", "Media Providers", "External MCP", "Connectors", "MCP Servers", "Language", "Appearance", "Design Council", "Notifications", "Pets", "Design System", "Project Location", "Privacy", "About"];
       let previous = -1;
@@ -40,7 +40,7 @@ test("Settings only selects locally; no legacy artwork, details or saved configu
   assert.doesNotMatch(source, /fetch\(|attachShadow|mountLocalPortfolio|settings-v3-local|settings-v3\.css/);
   assert.doesNotMatch(source, /<img|<video|<iframe|<AIProvidersSettings|<canvas/);
   assert.doesNotMatch(source, /localStorage|sessionStorage|setPreferences|serviceRequest/);
-  assert.match(source, /onClick=\{\(\) => setSelected\(label\)\}/);
+  assert.match(source, /focusItem\(label, event.currentTarget\)/);
   assert.match(source, /window.clearTimeout\(timer\)/);
   const app = await readFile(join(hostRoot, "src", "App.tsx"), "utf8");
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
@@ -57,10 +57,23 @@ test("Settings reuses Gallery portrait and starts a bounded top-to-bottom wave a
   assert.match(css, /font-family: "Clash Display"/);
   assert.match(css, /var\(--demo-theme-brand-menu-text\)/);
   assert.match(css, /:focus-visible/);
-  assert.match(css, /gap: 18px/);
+  assert.match(css, /gap: 30px/);
   assert.match(css, /overflow-y: auto/);
   assert.match(css, /scrollbar-width: none/);
   assert.match(css, /::-webkit-scrollbar/);
+});
+
+test("selected preference doubles above a frosted body without changing shared chrome", async () => {
+  const source = await readFile(componentPath, "utf8");
+  const css = await readFile(join(hostRoot, "src", "settings", "settings-menu.css"), "utf8");
+  assert.match(css, /to \{ transform: scale\(2\); \}/);
+  assert.match(css, /translateX\(20px\)/);
+  assert.match(css, /filter: blur\(12px\)/);
+  assert.match(css, /:has\(.settings-menu\[data-settings-focused="true"\]\) .demo-app-shell__scene/);
+  assert.match(source, /event.key === "Escape"/);
+  assert.match(source, /removeEventListener\("keydown", onEscape\)/);
+  assert.match(source, /surface.offsetWidth - width \* 2 - 40/);
+  assert.doesNotMatch(css, /__chrome[^}]*filter/);
 });
 
 test("configuration components and reference artwork remain recoverable for the redesign", async () => {

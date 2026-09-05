@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Appearance, Locale } from "../preferences";
 import "./settings-menu.css";
 
@@ -21,7 +21,31 @@ export const settingsMenuItems = [
 
 export function SettingsScreen({ locale }: SettingsScreenProps) {
   const [ready, setReady] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<{ label: string; x: number; y: number; width: number; height: number } | null>(null);
+  const surfaceRef = useRef<HTMLElement>(null);
+  const focusedButtonRef = useRef<HTMLButtonElement>(null);
+  const returnButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const closeFocus = () => {
+    setSelected(null);
+  };
+
+  const focusItem = (label: string, button: HTMLButtonElement) => {
+    const surface = surfaceRef.current!;
+    const frame = surface.getBoundingClientRect();
+    const scale = frame.width / surface.offsetWidth;
+    const rect = button.getBoundingClientRect();
+    const width = button.offsetWidth;
+    const height = button.offsetHeight;
+    returnButtonRef.current = button;
+    setSelected({
+      label,
+      x: Math.max(40, Math.min((rect.left - frame.left) / scale, surface.offsetWidth - width * 2 - 40)),
+      y: Math.max(120, Math.min((rect.top - frame.top) / scale, surface.offsetHeight - height * 2 - 40)),
+      width,
+      height,
+    });
+  };
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -29,20 +53,39 @@ export function SettingsScreen({ locale }: SettingsScreenProps) {
     return () => window.clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!selected) {
+      returnButtonRef.current?.focus({ preventScroll: true });
+      return;
+    }
+    focusedButtonRef.current?.focus({ preventScroll: true });
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeFocus();
+      }
+    };
+    window.addEventListener("keydown", onEscape);
+    return () => window.removeEventListener("keydown", onEscape);
+  }, [selected]);
+
   return (
     <main
       aria-label={locale === "zh-CN" ? "设置" : "Settings"}
       className="demo-host settings-menu"
       data-settings-state={ready ? "ready" : "framing"}
+      data-settings-focused={Boolean(selected)}
+      ref={surfaceRef}
     >
-      <nav aria-label="Settings preferences" className="settings-menu__list" lang="en">
+      <nav aria-hidden={Boolean(selected)} aria-label="Settings preferences" className="settings-menu__list" lang="en">
         {settingsMenuItems.map((label, index) => (
-          <div className="settings-menu__row" key={label} style={{ "--settings-order": index } as CSSProperties}>
+          <div className="settings-menu__row" data-focused={selected?.label === label} key={label} style={{ "--settings-order": index } as CSSProperties}>
             <button
-              aria-pressed={selected === label}
+              aria-pressed={selected?.label === label}
               className="settings-menu__item"
               disabled={!ready}
-              onClick={() => setSelected(label)}
+              onClick={(event) => focusItem(label, event.currentTarget)}
+              tabIndex={selected ? -1 : 0}
               type="button"
             >
               {label}
@@ -50,6 +93,26 @@ export function SettingsScreen({ locale }: SettingsScreenProps) {
           </div>
         ))}
       </nav>
+      <button
+        aria-hidden="true"
+        className="settings-menu__frost"
+        onClick={closeFocus}
+        tabIndex={-1}
+        type="button"
+      />
+      {selected ? (
+        <button
+          aria-pressed="true"
+          className="settings-menu__item settings-menu__focused-item"
+          onClick={closeFocus}
+          ref={focusedButtonRef}
+          style={{ left: selected.x, top: selected.y, width: selected.width, height: selected.height }}
+          title="Back to settings · Esc"
+          type="button"
+        >
+          {selected.label}
+        </button>
+      ) : null}
     </main>
   );
 }

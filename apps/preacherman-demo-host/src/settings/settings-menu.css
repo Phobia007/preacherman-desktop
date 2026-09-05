@@ -1,5 +1,7 @@
 /* The desktop shell scales its authored 1800 × 1000 stage as one composition. */
 .settings-menu {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
 }
 
@@ -13,12 +15,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 18px;
+  gap: 30px;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
   pointer-events: auto;
+  transition: filter 260ms ease;
   color: var(--demo-theme-brand-menu-text);
   font-family: "Clash Display", sans-serif;
   font-size: 32px;
@@ -66,7 +69,7 @@
 .settings-menu__item:focus-visible,
 .settings-menu__item[aria-pressed="true"] {
   color: var(--demo-theme-brand-menu-text-hover);
-  transform: translateX(10px);
+  transform: translateX(20px);
 }
 
 .settings-menu__item:focus-visible {
@@ -81,7 +84,71 @@
 }
 
 .settings-menu__item:active {
-  transform: translateX(10px) scale(0.98);
+  transform: translateX(20px) scale(0.98);
+}
+
+/* Frost is below the selected text and the shared desktop chrome. */
+.settings-menu__frost {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  padding: 0;
+  border: 0;
+  background: color-mix(in srgb, var(--demo-theme-home-canvas) 12%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 260ms ease, visibility 0s linear 260ms;
+}
+
+.settings-menu[data-settings-focused="true"] .settings-menu__frost {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.settings-menu[data-settings-focused="true"] .settings-menu__list {
+  overflow-y: hidden;
+  pointer-events: none;
+  filter: blur(12px);
+}
+
+.demo-app-shell[data-active-surface="settings"] .demo-app-shell__scene {
+  transition: opacity 260ms ease, visibility 0s linear 0s, filter 260ms ease;
+}
+
+.demo-app-shell:has(.settings-menu[data-settings-focused="true"]) .demo-app-shell__scene {
+  filter: blur(12px);
+}
+
+.settings-menu[data-settings-focused="true"] .settings-menu__row[data-focused="true"] {
+  visibility: hidden;
+}
+
+.settings-menu[data-settings-focused="true"] .settings-menu__list button {
+  pointer-events: none;
+}
+
+.settings-menu__focused-item[aria-pressed="true"] {
+  position: absolute;
+  z-index: 5;
+  max-width: none;
+  color: var(--demo-theme-brand-menu-text-hover);
+  font-family: "Clash Display", sans-serif;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: 0.018em;
+  white-space: nowrap;
+  text-decoration: none;
+  transform-origin: top left;
+  animation: settings-menu-focus 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes settings-menu-focus {
+  from { transform: scale(1); }
+  to { transform: scale(2); }
 }
 
 @keyframes settings-menu-arrive {
@@ -94,7 +161,15 @@
     animation: none;
   }
 
-  .settings-menu__item {
+  .settings-menu__item,
+  .settings-menu__frost,
+  .settings-menu__list,
+  .demo-app-shell[data-active-surface="settings"] .demo-app-shell__scene {
     transition: none;
+  }
+
+  .settings-menu .settings-menu__focused-item {
+    animation: none;
+    transform: scale(2);
   }
 }
