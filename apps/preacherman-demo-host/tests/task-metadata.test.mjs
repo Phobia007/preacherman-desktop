@@ -9,10 +9,12 @@ function fixture(initial) {
   const storage = new Map(initial ? [["preacherman.task.nathan-riley.title", initial]] : []);
   const session = new Map();
   let cleanup;
+  let mount;
   const context = {
     ref: (value) => ({value}),
     element: (tag, props, children) => ({tag, props, children}),
     onUnmounted: (callback) => {cleanup = callback;},
+    onMounted: (callback) => {mount = callback;},
     localStorage: {getItem: (key) => storage.get(key), setItem: (key, value) => storage.set(key, value)},
     sessionStorage: {getItem:key => session.get(key), setItem:(key,value) => session.set(key,value), removeItem:key => session.delete(key)},
     crypto: {randomUUID: () => "00000000-0000-4000-8000-000000000001"},
@@ -25,7 +27,7 @@ function fixture(initial) {
   vm.runInNewContext(source.replace(/^import .*;$/m, "").replaceAll("export const ", "globalThis.").replaceAll("export function ", "function ").replaceAll("import.meta.url", JSON.stringify(new URL("task-metadata.js", root).href)), context);
   const render = context.TaskMetadata.setup({slug: "nathan-riley"});
   const input = () => render().children[0].children[0].props;
-  return {context, storage, session, render, input, unmount: () => cleanup()};
+  return {context, storage, session, render, input, mount: () => mount(), unmount: () => cleanup()};
 }
 
 test("only the selected Nathan Riley entry gets the task metadata template", () => {
@@ -111,6 +113,30 @@ test("floating create control saves then returns to the task rail", () => {
   assert.equal(f.context.location.href,"/gallery-v3/portfolio/index.html");
   assert.equal(JSON.parse(f.storage.get("preacherman.task.projects")).length,1);
   assert.equal(f.session.get("preacherman.task.pending-focus"),"task-00000000-0000-4000-8000-000000000001");
+});
+
+test("create control enters the browser top layer and cleans up on unmount", () => {
+  const f = fixture();
+  const control = f.context.TaskCreateControl.setup()();
+  assert.equal(control.props.popover, "manual");
+  let shown = false;
+  control.props.ref.value = {showPopover() {shown = true;}, hidePopover() {shown = false;}};
+  f.mount();
+  assert.equal(shown, true);
+  f.unmount();
+  assert.equal(shown, false);
+});
+
+test("editable content follows the authored enter and leave timeline without delayed remnants", () => {
+  const runtime = fs.readFileSync(new URL("_nuxt/D9b8F35K.js", root), "utf8");
+  assert.ok(runtime.includes('duration:n.c.title.dur,ease:"power2.out",overwrite:!0},x0.page.at)'));
+  assert.ok(runtime.includes('e.inert=!0,ve.to(e,{"--task-content-opacity":0,duration:Ff'));
+  assert.ok(runtime.includes('e.querySelector(".task-create")?.hidePopover()'));
+  for (const file of ["task-metadata.css", "task-conversation.css"]) {
+    const css = fs.readFileSync(new URL(file, root), "utf8");
+    assert.ok(css.includes("opacity: var(--task-content-opacity, 0)"));
+    assert.ok(css.includes("cursor: default"));
+  }
 });
 
 test("only selected detail skips rasterized copy, media, marks and progress; original sheet/close remain", () => {

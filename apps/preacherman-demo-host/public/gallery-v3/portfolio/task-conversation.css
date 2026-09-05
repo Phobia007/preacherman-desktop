@@ -1,4 +1,5 @@
 /* Only the selected detail sheet owns this divider and conversation panel. */
+[data-gl="sheet"][data-id="nathan-riley"] { cursor: default; }
 [data-gl="sheet"][data-id="nathan-riley"]::after {
   content: "";
   position: absolute;
@@ -8,11 +9,12 @@
   width: 1px;
   background: color-mix(in srgb, var(--demo-theme-gallery-detail-action-rest-text) 22%, transparent);
   pointer-events: none;
+  opacity: var(--task-content-opacity, 0);
 }
 [data-gl="sheet"][data-id="nathan-riley"] > div:first-child {
   flex: none;
   width: calc(50% - 4rem);
-  height: 100%;
+  height: calc(100% - 3rem);
   min-height: 0;
   align-self: stretch;
   overflow: hidden;
@@ -40,6 +42,8 @@
   pointer-events: auto;
   -webkit-text-fill-color: currentColor;
   touch-action: pan-y;
+  cursor: default;
+  opacity: var(--task-content-opacity, 0);
 }
 .task-chat svg {
   width: 1.6rem;
@@ -81,6 +85,7 @@
 .task-chat__input {
   display: block;
   resize: none;
+  cursor: text;
   width: 100%;
   min-height: 4.2rem;
   max-height: 20rem;

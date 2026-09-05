@@ -81,6 +81,14 @@ scene = replaceExact(
   1,
   "scope basis transcoder",
 );
+// Editable Task DOM shares the authored card/text timeline, including route leave.
+scene = replaceExact(
+  scene,
+  '$o.to({},{duration:1},0),n.use($o)},onLeave(e,t){Ua?.(),Ua=t,Yc=e}',
+  '$o.to({},{duration:1},0),e.querySelector(".task-metadata")&&$o.fromTo(e,{"--task-content-opacity":0},{"--task-content-opacity":1,duration:n.c.title.dur,ease:"power2.out",overwrite:!0},x0.page.at),n.use($o)},onLeave(e,t){e.querySelector(".task-create")?.hidePopover(),e.querySelector(".task-metadata")&&(e.inert=!0,ve.to(e,{"--task-content-opacity":0,duration:Ff,ease:"power1.out",overwrite:!0})),Ua?.(),Ua=t,Yc=e}',
+  1,
+  "synchronize task DOM with authored card transitions",
+);
 fs.writeFileSync(scenePath, scene);
 
 const rainPath = path.join(runtimeRoot, "_nuxt", "BNIAOxM5.js");
@@ -192,6 +200,9 @@ for (const htmlPath of htmlFiles) {
       1,
       "task create server markup",
     );
+  }
+  if (htmlPath === path.join(runtimeRoot, "index.html")) {
+    html = html.replace('<div class="task-create">', '<div class="task-create" popover="manual">');
   }
   if (!hasOverrides) {
     html = html.replace("</head>", `${sourceOverrides}</head>`);

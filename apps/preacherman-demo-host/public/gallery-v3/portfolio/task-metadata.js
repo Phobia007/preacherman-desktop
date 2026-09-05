@@ -1,6 +1,6 @@
 // Task detail extension. Keep the authored sheet, columns, card rail and close motion.
 // Editable DOM text must not enter the portfolio's WebGL text rasterizer.
-import { ad as ref, a8 as element, a6 as onUnmounted } from "./_nuxt/D9b8F35K.js";
+import { ad as ref, a8 as element, a3 as onMounted, a6 as onUnmounted } from "./_nuxt/D9b8F35K.js";
 
 const ROOT_TASK_ID = "nathan-riley";
 const TASK_PROJECTS_KEY = "preacherman.task.projects";
@@ -207,6 +207,9 @@ function plusIcon() {
 
 export const TaskCreateControl = {
   setup() {
+    const overlay = ref(null);
+    onMounted(() => overlay.value?.showPopover());
+    onUnmounted(() => overlay.value?.hidePopover());
     const error = ref("");
     const create = () => {
       try {
@@ -216,7 +219,7 @@ export const TaskCreateControl = {
         error.value = "新任务未能保存，请重试。";
       }
     };
-    return () => element("div", {class:"task-create"}, [
+    return () => element("div", {ref:overlay, class:"task-create", popover:"manual"}, [
       element("button", {type:"button", class:"task-create__button", title:"创建新对话", "aria-label":"创建新对话", onClick:create}, [plusIcon()]),
       error.value ? element("p", {class:"task-create__error", role:"alert"}, error.value) : null,
     ]);
