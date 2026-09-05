@@ -291,6 +291,35 @@ test("full index shares created names, task routes, framed empty previews and de
   assert.ok(runtime.includes("t.rail.pick(e)"));
 });
 
+test("batch deletion writes once, preserves all records and excludes every selection from both lists", () => {
+  const f=fixture();
+  const first=f.context.createTaskProject({title:"first"});
+  f.context.crypto.randomUUID=()=>"second";
+  const second=f.context.createTaskProject({title:"second"});
+  const stored=f.storage.get("preacherman.task.projects");
+  let writes=0;
+  f.context.localStorage.setItem=(key,value)=>{writes++;f.storage.set(key,value);};
+  f.context.deleteTaskProjects([first.id,second.id,"griflan"]);
+  assert.equal(writes,1);
+  assert.equal(f.context.readTaskProjects().length,0);
+  assert.equal(f.storage.get("preacherman.task.projects"),stored);
+  const authored=[{slug:"nathan-riley"},{slug:"griflan"}];
+  assert.deepEqual(Array.from(f.context.augmentTaskProjects(authored),p=>p.slug),["nathan-riley"]);
+  assert.deepEqual(Array.from(f.context.taskIndexProjects(authored),p=>p.slug),["nathan-riley"]);
+});
+
+test("failed batch deletion retains every selected task without partial deletion", () => {
+  const f=fixture();
+  const first=f.context.createTaskProject();
+  f.context.crypto.randomUUID=()=>"second";
+  const second=f.context.createTaskProject();
+  const before=[...f.storage.entries()];
+  f.context.localStorage.setItem=()=>{throw new Error("quota");};
+  assert.throws(()=>f.context.deleteTaskProjects([first.id,second.id]),/quota/);
+  assert.deepEqual([...f.storage.entries()],before);
+  assert.equal(f.context.readTaskProjects().length,2);
+});
+
 test("delete controls inherit semantic colors, mirrored placement, modal semantics and reduced motion", () => {
   const css = fs.readFileSync(new URL("task-delete-control.css",root),"utf8");
   const control = fs.readFileSync(new URL("task-delete-control.js",root),"utf8");

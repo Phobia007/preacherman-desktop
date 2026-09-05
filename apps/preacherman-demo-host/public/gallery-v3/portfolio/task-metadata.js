@@ -41,8 +41,12 @@ export function readTaskProjects() {
 // A single durable write removes a card everywhere without destroying source media
 // or cascading into related tasks. Retained local records remain recoverable.
 export function deleteTaskProject(id) {
+  deleteTaskProjects([id]);
+}
+
+export function deleteTaskProjects(ids) {
   const deleted = deletedTaskIds();
-  deleted.add(id);
+  for (const id of ids) deleted.add(id);
   localStorage.setItem(DELETED_TASKS_KEY, JSON.stringify([...deleted]));
 }
 

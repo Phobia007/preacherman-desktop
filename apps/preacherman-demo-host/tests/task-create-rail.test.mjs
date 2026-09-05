@@ -49,7 +49,7 @@ test("live removal persists before retiring only selected card resources and kee
   const source = fs.readFileSync(new URL("../public/gallery-v3/portfolio/task-create-rail.js", import.meta.url), "utf8");
   const operations=[];
   let fail=false;
-  const context={deleteTaskProject:id=>{if(fail)throw new Error("quota");operations.push("save:"+id);},augmentTaskProjects:()=>[]};
+  const context={deleteTaskProjects:ids=>{if(fail)throw new Error("quota");operations.push("save:"+ids.join(","));},augmentTaskProjects:()=>[]};
   vm.runInNewContext(source.replace(/^import .*;\n/m,"").replace("export function ","function "),context);
   const target={slug:"task-last",el:{contains:el=>el===pillElement}};
   const pillElement={};
@@ -64,4 +64,24 @@ test("live removal persists before retiring only selected card resources and kee
   assert.deepEqual(operations,["save:task-last","title","pill","card"]);
   assert.equal(projects.value.length,0);assert.equal(folio.cards.length,0);assert.equal(folio.pills.length,1);assert.equal(folio.texts[0],unrelatedTitle);
   dispose();assert.equal(folio.removeTaskCard,undefined);
+  assert.equal(folio.removeTaskCards,undefined);
+});
+
+test("batch removal validates every id, persists once and rescans once without touching survivors", async () => {
+  const source=fs.readFileSync(new URL("../public/gallery-v3/portfolio/task-create-rail.js",import.meta.url),"utf8");
+  const operations=[];
+  const context={deleteTaskProjects:ids=>operations.push("save:"+ids.join(",")),augmentTaskProjects:projects=>projects.filter(p=>p.slug==="keep")};
+  vm.runInNewContext(source.replace(/^import .*;\n/m,"").replace("export function ","function "),context);
+  const cards=["a","keep","b"].map(slug=>({slug,el:{contains:()=>false}}));
+  const folio={cards,texts:[],pills:[],reg:{retire:card=>operations.push("retire:"+card.slug)},scan:()=>{operations.push("scan");return[cards[1]];}};
+  cards[1].el.dataset={gl:"card"};
+  const projects={value:cards.map(({slug})=>({slug}))};
+  context.installTaskCreateRail({folio,projects,root:{value:{isConnected:true}},nextTick:async()=>{},measureX(){},measureY(){},centerX:index=>operations.push("center:"+index),centerY(){},motion:{killTweensOf(){}}});
+  await folio.removeTaskCards([]);
+  await assert.rejects(folio.removeTaskCards(["a","missing"]));
+  assert.deepEqual(operations,[]);
+  await folio.removeTaskCards(["a","b","a"]);
+  assert.deepEqual(operations,["save:a,b","retire:a","retire:b","scan","center:0"]);
+  assert.equal(folio.cards[0],cards[1]);
+  assert.equal(projects.value.length,1);
 });

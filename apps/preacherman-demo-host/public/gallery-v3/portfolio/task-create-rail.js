@@ -1,4 +1,4 @@
-import {createTaskProject, deleteTaskProject, augmentTaskProjects, projectRecord} from "./task-metadata.js";
+import {createTaskProject, deleteTaskProjects, augmentTaskProjects, projectRecord} from "./task-metadata.js";
 
 // Extend the mounted rail; never reload the route or replay its entrance.
 export function installTaskCreateRail({folio, projects, root, track, resize, nextTick, measureX, measureY, centerX, centerY, motion}) {
@@ -43,26 +43,29 @@ export function installTaskCreateRail({folio, projects, root, track, resize, nex
       });
     };
   };
-  const remove = async (id) => {
+  const remove = async (ids) => {
     if (disposed || !root.value?.isConnected) throw new Error("任务页面已关闭。");
-    const index = projects.value.findIndex(project => project.slug === id);
-    if (index < 0) throw new Error("这张卡片已不存在，请重新选择。");
+    const selected = new Set(ids);
+    if (!selected.size) return;
+    const indices = [...selected].map(id => projects.value.findIndex(project => project.slug === id));
+    if (indices.some(index => index < 0)) throw new Error("所选卡片已不存在，请重新选择。");
+    const index = Math.min(...indices);
     // Persist first: a failed write must leave every visible card intact.
-    deleteTaskProject(id);
+    deleteTaskProjects([...selected]);
     arrival?.kill();
-    const removed = folio.cards.find(card => card.slug === id);
-    for (const title of folio.texts.filter(title => title.slug === id)) {
+    const removed = folio.cards.filter(card => selected.has(card.slug));
+    for (const title of folio.texts.filter(title => selected.has(title.slug))) {
       motion.killTweensOf([title, ...Object.values(title.material.uniforms)]);
       title.dispose();
     }
-    folio.texts = folio.texts.filter(title => title.slug !== id);
+    folio.texts = folio.texts.filter(title => !selected.has(title.slug));
     folio.pills = folio.pills.filter(pill => {
-      if (!removed?.el.contains(pill.el)) return true;
+      if (!removed.some(card => card.el.contains(pill.el))) return true;
       motion.killTweensOf(pill);
       folio.disposeMesh(pill.mesh);
       return false;
     });
-    if (removed) { motion.killTweensOf(removed); folio.reg.retire(removed); }
+    for (const card of removed) { motion.killTweensOf(card); folio.reg.retire(card); }
     projects.value = augmentTaskProjects(projects.value);
     await nextTick();
     if (disposed) return;
@@ -71,12 +74,15 @@ export function installTaskCreateRail({folio, projects, root, track, resize, nex
     const next = Math.min(index, projects.value.length - 1);
     if (next >= 0) { centerX(next, false); centerY(next, false); }
   };
+  const removeOne = id => remove([id]);
   folio.prepareTaskCreation = prepare;
-  folio.removeTaskCard = remove;
+  folio.removeTaskCards = remove;
+  folio.removeTaskCard = removeOne;
   return () => {
     disposed = true;
     arrival?.kill();
     if (folio.prepareTaskCreation === prepare) delete folio.prepareTaskCreation;
-    if (folio.removeTaskCard === remove) delete folio.removeTaskCard;
+    if (folio.removeTaskCards === remove) delete folio.removeTaskCards;
+    if (folio.removeTaskCard === removeOne) delete folio.removeTaskCard;
   };
 }

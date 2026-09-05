@@ -1,4 +1,4 @@
-// Extend the existing rail: mirrored circle, single-card selection, protected confirmation.
+// Extend the existing rail: mirrored circle, multi-card selection, protected confirmation.
 // The authored cards and their material stay untouched; only a small selection marker is added.
 import { ad as ref, a8 as element, a3 as onMounted, a4 as nextTick, a6 as onUnmounted } from "./_nuxt/D9b8F35K.js";
 
@@ -9,14 +9,16 @@ const icon = (check = false) => element("svg", {viewBox:"0 0 24 24", fill:"none"
 export const TaskDeleteControl = {
   props: {folio: {type:Object, required:true}},
   setup(props) {
-    const overlay = ref(null), button = ref(null), dialog = ref(null), marker = ref(null);
+    const overlay = ref(null), button = ref(null), dialog = ref(null);
+    const markers = new Map();
     const mounted = ref(false);
-    const selecting = ref(false), selected = ref(null), busy = ref(false), error = ref(""), notice = ref("");
+    const selecting = ref(false), selected = ref([]), busy = ref(false), error = ref(""), notice = ref("");
     const originalAttributes = new Map();
     let frame = 0, disposed = false, pointerStart = null, createOverlay = null;
     const clearSelection = () => {
       selecting.value = false;
-      selected.value = null;
+      selected.value = [];
+      markers.clear();
       cancelAnimationFrame(frame);
       for (const [card, attrs] of originalAttributes) {
         for (const [key, value] of Object.entries(attrs)) value === null ? card.removeAttribute(key) : card.setAttribute(key, value);
@@ -36,16 +38,17 @@ export const TaskDeleteControl = {
     };
     const positionMarker = () => {
       if (!selecting.value || disposed) return;
-      const card = selected.value?.el;
-      if (card && marker.value) {
+      for (const {id, el:card} of selected.value) {
+        const marker = markers.get(id);
+        if (!marker) continue;
         const rect = card._vrect ?? card.getBoundingClientRect();
-        marker.value.style.transform = `translate3d(${rect.left + rect.width / 2}px,${rect.top + 24}px,0)`;
+        marker.style.transform = `translate3d(${rect.left + rect.width / 2}px,${rect.top + 24}px,0)`;
       }
       frame = requestAnimationFrame(positionMarker);
     };
     const start = () => {
       notice.value = "";
-      if (selected.value) {
+      if (selected.value.length) {
         error.value = "";
         dialog.value.showModal();
         dialog.value.querySelector('[data-cancel]').focus();
@@ -65,8 +68,12 @@ export const TaskDeleteControl = {
       frame = requestAnimationFrame(positionMarker);
     };
     const choose = (card) => {
-      for (const el of originalAttributes.keys()) el.setAttribute("aria-pressed", String(el === card));
-      selected.value = {id:card.dataset.id, title:card.querySelector("[data-title]").textContent, el:card};
+      const id = card.dataset.id;
+      const wasSelected = selected.value.some(item => item.id === id);
+      selected.value = wasSelected
+        ? selected.value.filter(item => item.id !== id)
+        : [...selected.value, {id, title:card.querySelector("[data-title]").textContent, el:card}];
+      card.setAttribute("aria-pressed", String(!wasSelected));
     };
     const guard = (event) => {
       if (!selecting.value) return;
@@ -91,14 +98,15 @@ export const TaskDeleteControl = {
       }
     };
     const confirm = async () => {
-      if (busy.value || !selected.value) return;
+      if (busy.value || !selected.value.length) return;
       busy.value = true; error.value = "";
+      const count = selected.value.length;
       try {
-        await props.folio.removeTaskCard(selected.value.id);
+        await props.folio.removeTaskCards(selected.value.map(card => card.id));
         if (disposed) return;
         dialog.value.close();
         clearSelection();
-        notice.value = "卡片已删除";
+        notice.value = `已删除 ${count} 张卡片`;
         button.value.focus({preventScroll:true});
       } catch {
         if (!disposed) error.value = "未能完成删除，请重试或取消。";
@@ -122,17 +130,17 @@ export const TaskDeleteControl = {
     });
     const shield = event => event.stopPropagation();
     return () => mounted.value ? element("div", {ref:overlay, class:"task-delete", popover:"manual", onPointerdown:shield, onWheel:shield, onTouchstart:shield}, [
-      element("button", {ref:button, type:"button", class:"task-create__button task-delete__button", "aria-label":selected.value ? "确定删除所选卡片" : selecting.value ? "退出删除选择" : "删除卡片", "aria-pressed":selecting.value, onClick:start}, selected.value ? "确定" : [icon()]),
+      element("button", {ref:button, type:"button", class:"task-create__button task-delete__button", "aria-label":selected.value.length ? "确定删除所选卡片" : selecting.value ? "退出删除选择" : "删除卡片", "aria-pressed":selecting.value, onClick:start}, selected.value.length ? "确定" : [icon()]),
       element("div", {class:"task-delete__status", role:"status"}, selecting.value ? [
-        element("p", {}, selected.value ? `已选择：${selected.value.title}` : "请选择要删除的卡片"),
+        element("p", {}, selected.value.length ? `已选择 ${selected.value.length} 张卡片，再次点击可取消选中` : "请选择要删除的卡片，可多选"),
         element("button", {type:"button", class:"task-delete__cancel-selection", onClick:reset}, "取消选择"),
       ] : notice.value),
-      selecting.value && selected.value ? element("div", {ref:marker, class:"task-delete__marker", "aria-hidden":"true"}, [icon(true), element("span", {}, "已选中")]) : null,
+      ...selected.value.map(card => element("div", {key:card.id, ref:el=>{el ? markers.set(card.id,el) : markers.delete(card.id);}, class:"task-delete__marker", "aria-hidden":"true"}, [icon(true), element("span", {}, "已选中")])),
       element("dialog", {ref:dialog, class:"task-delete-dialog", "aria-labelledby":"task-delete-title", "aria-describedby":"task-delete-description", onCancel:event=>{event.preventDefault();cancelDialog();}, onClick:event=>{if(event.target===dialog.value)cancelDialog();}}, [
         element("div", {class:"task-delete-dialog__content", "aria-busy":busy.value}, [
-          element("h2", {id:"task-delete-title"}, "确定删除？"),
-          element("p", {class:"task-delete-dialog__name"}, selected.value?.title ?? ""),
-          element("p", {id:"task-delete-description"}, "此卡片将从列表移除，不影响其他任务和原始图片。"),
+          element("h2", {id:"task-delete-title"}, `确定删除 ${selected.value.length} 张卡片？`),
+          element("p", {class:"task-delete-dialog__name"}, selected.value.map(card => card.title).join("、")),
+          element("p", {id:"task-delete-description"}, "所选卡片将从列表移除，不影响其他任务和原始图片。"),
           error.value ? element("p", {class:"task-delete-dialog__error", role:"alert"}, error.value) : null,
           element("div", {class:"task-delete-dialog__actions"}, [
             element("button", {type:"button", "data-cancel":"", disabled:busy.value, onClick:cancelDialog}, "取消"),
