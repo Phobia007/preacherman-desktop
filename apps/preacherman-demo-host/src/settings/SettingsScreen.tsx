@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Appearance, Locale } from "../preferences";
 import "./settings-menu.css";
+import { ExecutionModeSettings } from "./ExecutionModeSettings";
 
 interface SettingsScreenProps {
   readonly appearance: Appearance;
@@ -113,6 +114,7 @@ export function SettingsScreen({ locale }: SettingsScreenProps) {
           {selected.label}
         </button>
       ) : null}
+      {selected?.label === "Execution Mode" ? <ExecutionModeSettings /> : null}
     </main>
   );
 }

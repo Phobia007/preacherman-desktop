@@ -1,7 +1,7 @@
-// Local task conversation. Model selection is connected to the host provider
-// catalog, while message sending remains local until execution is authorized.
+// Host-owned model requests; secrets never enter the authored Gallery frame.
 import { ad as ref, a8 as element, a4 as nextTick, a3 as onMounted, a6 as onUnmounted } from "./_nuxt/D9b8F35K.js";
 import { resolveTaskId } from "./task-metadata.js";
+import { boundedChatContext } from "./task-chat-context.js";
 
 export const conversationStorageKey = (slug) => `preacherman.task.${slug}.messages`;
 export const modelStorageKey = (slug) => `preacherman.task.${slug}.model`;
@@ -60,6 +60,20 @@ export const TaskConversation = {
     const providerState = ref("loading");
     const modelOpen = ref(false);
     const selected = ref("");
+    const busy = ref(false);
+    const contextTrimmed = ref(false);
+    const selectionAvailable = () => providers.value.some(provider => provider.models.some(model => selectionKey(provider.id, model.id) === selected.value));
+    const pending = new Map();
+    const callHost = payload => new Promise((resolve, reject) => {
+      const requestId = crypto.randomUUID();
+      const timer = setTimeout(() => { pending.delete(requestId); reject(new Error("请求超时，请检查连接后重试。")); }, 75000);
+      pending.set(requestId, { resolve, reject, timer });
+      parent.postMessage({ type: "gallery-execution-request", requestId, ...payload }, location.origin === "null" ? "*" : location.origin);
+    });
+    const persist = updated => {
+      localStorage.setItem(conversationStorageKey(task), JSON.stringify(updated));
+      messages.value = updated;
+    };
     try {
       messages.value = readMessages(task);
       selected.value = localStorage.getItem(modelStorageKey(task)) ?? "";
@@ -77,18 +91,43 @@ export const TaskConversation = {
       if (list.value) list.value.scrollTop = list.value.scrollHeight;
       resize();
     });
-    const send = () => {
-      if (readFailed.value || (!draft.value.trim() && !files.value.length)) return;
-      const entry = {text:draft.value.trim(), files:[...files.value]};
+    const send = async () => {
+      if (busy.value || readFailed.value || !draft.value.trim()) return;
+      if (!selected.value) { error.value = "请先在 Execution Mode 接入模型，并选择当前任务的模型。"; return; }
+      if (!selectionAvailable()) { error.value = "已选模型当前不可用，请明确选择其他模型后再发送。"; return; }
+      if (files.value.length) { error.value = "附件目前只记录文件名，尚不支持上传。请先移除附件再发送文本。"; return; }
+      const [providerId, modelId] = selected.value.split("::");
+      const text = draft.value.trim();
+      if (providerId === "codex-cli" && text.length > 2000) { error.value = "本机任务描述请控制在 2000 字符以内。"; return; }
+      const entry = {text, files:[], role:"user"};
       const updated = [...messages.value, entry];
-      try { localStorage.setItem(conversationStorageKey(task), JSON.stringify(updated)); }
+      try { localStorage.setItem(modelStorageKey(task), selected.value); persist(updated); }
       catch { error.value = "消息未能保存，内容仍在输入框中，请重试。"; return; }
-      messages.value = updated;
       draft.value = "";
       files.value = [];
       error.value = "";
+      busy.value = true;
       scrollToLatest();
-      input.value?.focus();
+      try {
+        const context = boundedChatContext(updated);
+        contextTrimmed.value = context.trimmed;
+        const result = await callHost({ action: "chat", selection: {providerId, modelId}, messages: context.messages });
+        const reply = {role:"assistant", text:result.task ? "本机任务已准备。确认工作区和权限后，再批准执行。" : result.text, files:[], ...(result.task ? {task:result.task} : {})};
+        try { persist([...messages.value, reply]); }
+        catch { messages.value = [...messages.value, reply]; error.value = "回复已收到，但本机保存失败，请复制保留。"; }
+      } catch (reason) { error.value = reason.message + " 消息已保留，不会自动重发。"; }
+      finally { busy.value = false; scrollToLatest(); input.value?.focus(); }
+    };
+    const taskAction = async (index, action) => {
+      if (busy.value) return;
+      busy.value = true; error.value = "";
+      const current = messages.value[index].task;
+      try {
+        const result = await callHost({ action, taskId:current.taskId, approvalId:current.pendingApproval?.approvalId });
+        const updated = messages.value.map((message, at) => at === index ? {...message, task:result.task, text:result.task.localAgentSummary || result.task.error?.message || "本机任务 · " + result.task.status} : message);
+        try { persist(updated); } catch { messages.value = updated; error.value = "任务状态已更新，但本机记录未能保存。"; }
+      } catch (reason) { error.value = reason.message; }
+      finally { busy.value = false; scrollToLatest(); }
     };
     const unavailable = (label, name, explanation, className = "") => element("button", {
       type:"button", class:"task-chat__tool " + className, disabled:true, title:explanation, "aria-label":label + "，" + explanation,
@@ -100,7 +139,13 @@ export const TaskConversation = {
       parent.postMessage({type:"gallery-provider-request"}, targetOrigin);
     };
     const receiveProviders = event => {
-      if (event.source !== parent || (location.origin !== "null" && event.origin !== location.origin) || event.data?.type !== "gallery-provider-catalog") return;
+      if (event.source !== parent || (location.origin !== "null" && event.origin !== location.origin)) return;
+      if (event.data?.type === "gallery-execution-result") {
+        const operation = pending.get(event.data.requestId);
+        if (operation) { clearTimeout(operation.timer); pending.delete(event.data.requestId); event.data.error ? operation.reject(new Error(event.data.error)) : operation.resolve(event.data.result); }
+        return;
+      }
+      if (event.data?.type !== "gallery-provider-catalog") return;
       if (event.data.error) {
         providerState.value = "error";
         providers.value = [];
@@ -109,7 +154,9 @@ export const TaskConversation = {
       }
       providers.value = validProviders(event.data.providers);
       providerState.value = "ready";
-      if (selected.value && !providers.value.some(provider => provider.models.some(model => selectionKey(provider.id, model.id) === selected.value))) selected.value = "";
+      const active = event.data.active;
+      const defaultKey = active ? selectionKey(active.mode === "cli" ? active.agentId : active.connectionId, active.model) : "";
+      if (!selected.value && providers.value.some(provider => provider.models.some(model => selectionKey(provider.id, model.id) === defaultKey))) selected.value = defaultKey;
     };
     const closeOutside = event => {
       if (!event.target.closest?.(".task-chat__model-select")) modelOpen.value = false;
@@ -122,6 +169,8 @@ export const TaskConversation = {
     onUnmounted(() => {
       removeEventListener("message", receiveProviders);
       document.removeEventListener("pointerdown", closeOutside);
+      for (const operation of pending.values()) { clearTimeout(operation.timer); operation.reject(new Error("对话已关闭。")); }
+      pending.clear();
     });
 
     const chooseModel = (provider, model) => {
@@ -142,6 +191,7 @@ export const TaskConversation = {
       }
       if (providerState.value === "loading") return "正在识别模型";
       if (providerState.value === "error") return "模型服务不可用";
+      if (selected.value) return "已选模型不可用 · 重新选择";
       return providers.value.length ? "选择模型" : "未连接模型";
     };
     const modelSelector = () => {
@@ -150,7 +200,7 @@ export const TaskConversation = {
         if (event.key === "Escape") { event.preventDefault(); modelOpen.value = false; }
       }}, [
         element("button", {
-          type:"button", class:"task-chat__tool task-chat__model", disabled:!available,
+          type:"button", class:"task-chat__tool task-chat__model", disabled:!available || busy.value,
           title:available ? "选择当前任务使用的模型" : selectedLabel(),
           "aria-haspopup":"listbox", "aria-expanded":modelOpen.value,
           onClick:() => { requestProviders(); modelOpen.value = !modelOpen.value; },
@@ -177,9 +227,20 @@ export const TaskConversation = {
       }}, [
       element("div", {ref:list, class:"task-chat__messages", role:"log", "aria-label":"本机消息记录", "aria-live":"polite", tabindex:0,
         onVnodeMounted:scrollToLatest}, messages.value.map((message, index) => element("article", {
-          key:index, class:"task-chat__message", "aria-label":"你的消息",
+          key:index, class:"task-chat__message", "aria-label":message.role === "assistant" ? "模型回复" : "你的消息",
         }, [
+          element("small", {class:"task-chat__author"}, message.role === "assistant" ? "Preacherman" : "You"),
           message.text ? element("p", null, message.text) : null,
+          message.task ? element("div", {class:"task-chat__execution"}, [
+            element("p", null, "状态：" + message.task.status),
+            element("p", null, "执行器：" + (message.task.executionSnapshot?.agentId || "Codex CLI") + " · 工作区：" + (message.task.executionSnapshot?.workspaceId || "") + " · workspace-write"),
+            ...(message.task.pendingApproval ? [
+              element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "approve")}, "批准执行"),
+              element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "reject")}, "拒绝"),
+            ] : []),
+            element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "status")}, "刷新状态"),
+            ...(["running", "queued", "submitting"].includes(message.task.status) ? [element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "cancel")}, "取消任务")] : []),
+          ]) : null,
           ...message.files.map((name, index) => element("span", {key:index, class:"task-chat__file"}, [icon("file"), name])),
         ]))),
       element("form", {class:"task-chat__composer", onSubmit:event => {event.preventDefault(); send();}}, [
@@ -209,10 +270,10 @@ export const TaskConversation = {
           element("span", {class:"task-chat__spacer"}),
           modelSelector(),
           unavailable("", "mic", "语音尚未接入", "task-chat__icon"),
-          element("button", {type:"submit", class:"task-chat__send", "aria-label":"发送消息", title:"发送到本机消息记录", disabled:readFailed.value || (!draft.value.trim() && !files.value.length)}, [icon("up")]),
+          element("button", {type:"submit", class:"task-chat__send", "aria-label":"发送消息", title:"发送到所选模型；本机执行仍需审批", disabled:busy.value || readFailed.value || !draft.value.trim()}, [icon("up")]),
         ]),
       ]),
-      element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (files.value.length || messages.value.some(message => message.files.length) ? "仅保存在本机 · 附件仅记录文件名，未读取或上传" : "仅保存在本机 · 尚未发送至模型")),
+      element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (busy.value ? "正在请求，请稍候…" : contextTrimmed.value ? "本次仅发送限额内的近期上下文；完整记录仍保留在本机。" : "发送时文本将交给所选服务商 · 附件未上传 · 本机执行需审批")),
     ]);
   },
 };

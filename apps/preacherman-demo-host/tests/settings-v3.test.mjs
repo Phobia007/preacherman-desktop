@@ -15,7 +15,7 @@ test("Settings renders the sixteen requested names in order without changing con
   const source = await readFile(componentPath, "utf8");
   const { code } = await transform(source, { loader: "tsx", format: "cjs", jsx: "automatic" });
   const nativeRequire = createRequire(import.meta.url);
-  const context = { exports: {}, module: { exports: {} }, require: (id) => id.endsWith(".css") ? {} : nativeRequire(id) };
+  const context = { exports: {}, module: { exports: {} }, require: (id) => id.endsWith(".css") ? {} : id === "./ExecutionModeSettings" ? { ExecutionModeSettings: () => null } : nativeRequire(id) };
   vm.runInNewContext(code, context);
   for (const appearance of ["light", "dark"]) {
     for (const locale of ["en", "zh-CN"]) {
@@ -35,12 +35,13 @@ test("Settings renders the sixteen requested names in order without changing con
   }
 });
 
-test("Settings only selects locally; no legacy artwork, details or saved configuration writes", async () => {
+test("Settings delegates Execution Mode without restoring legacy artwork or mutating unrelated preferences", async () => {
   const source = await readFile(componentPath, "utf8");
   assert.doesNotMatch(source, /fetch\(|attachShadow|mountLocalPortfolio|settings-v3-local|settings-v3\.css/);
   assert.doesNotMatch(source, /<img|<video|<iframe|<AIProvidersSettings|<canvas/);
   assert.doesNotMatch(source, /localStorage|sessionStorage|setPreferences|serviceRequest/);
   assert.match(source, /focusItem\(label, event.currentTarget\)/);
+  assert.match(source, /selected\?\.label === "Execution Mode" \? <ExecutionModeSettings/);
   assert.match(source, /window.clearTimeout\(timer\)/);
   const app = await readFile(join(hostRoot, "src", "App.tsx"), "utf8");
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);

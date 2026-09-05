@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import { createExecutionConnections } from "./executionConnections.mjs";
 import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
@@ -1353,6 +1354,11 @@ export function createPreachermanServer(options = {}) {
       ?? "ws://127.0.0.1:18083/api/v1/streaming_audio2face/ws",
     serviceName: "Audio2Face",
   });
+  const executionConnections = createExecutionConnections({
+    file: join(dataDirectory, "execution-connections.v1.json"),
+    legacyKey: async () => (await runtimeEnv()).DEEPSEEK_API_KEY || "",
+    ...(options.executionConnectionRequest ? { request: options.executionConnectionRequest } : {}),
+  });
   const server = createServer(async (request, response) => {
     const origin = requestOrigin(request);
     if (!origin) {
@@ -1372,6 +1378,40 @@ export function createPreachermanServer(options = {}) {
 
     try {
       const url = new URL(request.url, "http://127.0.0.1");
+      if (url.pathname === "/api/settings/execution" && request.method === "GET") {
+        json(response, 200, await executionConnections.status(), origin);
+        return;
+      }
+      const connectionAction = url.pathname.match(/^\/api\/settings\/execution\/(models|test|save)$/);
+      if (connectionAction && request.method === "POST") {
+        json(response, 200, await executionConnections[connectionAction[1]](await readJson(request)), origin);
+        return;
+      }
+      if (url.pathname === "/api/settings/execution/local" && request.method === "POST") {
+        const body = await readJson(request);
+        const agent = (await agentAccessRuntime.listLocalAgents()).find(item => item.id === body.agentId);
+        if (agent?.id !== "codex-cli" || !agent.installed || agent.auth?.state !== "ready") throw Object.assign(new Error("A ready Codex CLI is required."), { statusCode: 409 });
+        if (!agentAccessRuntime.listWorkspaces().some(item => item.id === body.workspaceId)) throw Object.assign(new Error("Choose an approved workspace."), { statusCode: 400 });
+        await executionConnections.activateLocal(body.agentId, body.workspaceId);
+        json(response, 200, await executionConnections.status(), origin);
+        return;
+      }
+      if (url.pathname === "/api/execution/chat" && request.method === "POST") {
+        json(response, 200, await executionConnections.chat(await readJson(request)), origin);
+        return;
+      }
+      if (url.pathname === "/api/execution/local-turn" && request.method === "POST") {
+        const body = await readJson(request);
+        if (typeof body.objective !== "string" || !body.objective.trim() || body.objective.length > 2000) throw Object.assign(new Error("Task description must contain 1–2000 characters."), { statusCode: 400 });
+        const agent = (await agentAccessRuntime.listLocalAgents()).find(item => item.id === body.agentId);
+        if (agent?.id !== "codex-cli" || !agent.installed || agent.auth?.state !== "ready") throw Object.assign(new Error("Codex CLI is not ready. Check Execution Mode."), { statusCode: 409 });
+        const task = await agentAccessRuntime.createAgentWorkspaceTask({
+          objective: body.objective, agentId: agent.id, providerId: agent.id, modelId: "default",
+          workspaceId: body.workspaceId, policy: "ask", adapterVersion: agent.version, capabilities: agent.capabilities,
+        });
+        json(response, 200, { task }, origin);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/health") {
         const status = await providerStatus();
         json(response, 200, {

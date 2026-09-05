@@ -1,0 +1,71 @@
+/* Inherit the authored Settings stage; the companion remains visible through
+   the focused form. Pills follow the existing directory controls. */
+.execution-mode {
+  position: absolute;
+  z-index: 6;
+  top: 278px;
+  right: 90px;
+  bottom: 68px;
+  width: 780px;
+  box-sizing: border-box;
+  padding: 8px 28px 32px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  pointer-events: auto;
+  color: var(--demo-theme-settings-text);
+  font-family: "Clash Display", sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.45;
+  animation: execution-mode-arrive 480ms 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.execution-mode::-webkit-scrollbar { display: none; }
+.execution-mode * { box-sizing: border-box; }
+.execution-mode ::selection { background: var(--demo-theme-settings-border); }
+.execution-mode fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.execution-mode button, .execution-mode input, .execution-mode select {
+  min-height: 48px;
+  padding: 10px 22px;
+  border: 1px solid var(--demo-theme-settings-border);
+  border-radius: 30px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  transition: background 180ms ease, border-color 180ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.execution-mode button { cursor: pointer; }
+.execution-mode button:hover:not(:disabled), .execution-mode button[aria-pressed="true"] { background: var(--demo-theme-settings-surface); border-color: var(--demo-theme-settings-text); }
+.execution-mode button:active:not(:disabled) { transform: scale(0.98); }
+.execution-mode :is(button, input, select, summary):focus-visible { outline: 1px solid var(--demo-theme-settings-focus); outline-offset: 4px; }
+.execution-mode :disabled { opacity: 0.4; cursor: not-allowed; }
+.execution-mode input, .execution-mode select { width: 100%; min-width: 0; caret-color: var(--demo-theme-settings-text); }
+.execution-mode input::placeholder { color: var(--demo-theme-settings-muted); opacity: 1; }
+.execution-mode option { color: var(--demo-theme-settings-text); background: var(--demo-theme-settings-canvas); }
+.execution-mode label { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.execution-mode p { margin: 12px 0; overflow-wrap: anywhere; }
+.execution-mode h3 { margin: 0; font-size: 26px; font-weight: 400; }
+.execution-mode__tabs { display: flex; padding: 4px; border: 1px solid var(--demo-theme-settings-border); border-radius: 40px; }
+.execution-mode__tabs button { flex: 1; border-color: transparent; font-size: 25px; }
+.execution-mode__tabs button[aria-selected="true"] { background: var(--demo-theme-settings-surface); border-color: var(--demo-theme-settings-border); }
+.execution-mode .execution-mode__intro { margin: 22px 0 32px; color: var(--demo-theme-settings-muted); }
+.execution-mode__connections, .execution-mode__presets { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.execution-mode__connections button, .execution-mode__presets button { font-size: 18px; min-height: 42px; padding: 8px 18px; max-width: 100%; overflow-wrap: anywhere; }
+.execution-mode__fields { display: grid; gap: 26px; }
+.execution-mode__key { display: flex; gap: 12px; }
+.execution-mode__key button { white-space: nowrap; font-size: 18px; }
+.execution-mode__advanced { margin: 30px 0; }
+.execution-mode__advanced summary { cursor: pointer; color: var(--demo-theme-settings-muted); width: fit-content; padding: 8px 0; }
+.execution-mode__advanced .execution-mode__fields { margin-top: 18px; }
+.execution-mode small, .execution-mode__hint, .execution-mode__notice { display: block; color: var(--demo-theme-settings-muted); font-size: 18px; line-height: 1.5; }
+.execution-mode__actions { display: flex; gap: 16px; justify-content: center; padding: 24px 0 8px; }
+.execution-mode__actions button { min-height: 56px; padding-inline: 28px; }
+.execution-mode__result { color: var(--demo-theme-settings-text); }
+.execution-mode__error { color: var(--demo-theme-settings-error); font-size: 20px; }
+.execution-mode__row { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 32px; }
+.execution-mode__agent { display: grid; gap: 18px; }
+@keyframes execution-mode-arrive { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .execution-mode { animation: none; }
+  .execution-mode button, .execution-mode input, .execution-mode select { transition: none; }
+}

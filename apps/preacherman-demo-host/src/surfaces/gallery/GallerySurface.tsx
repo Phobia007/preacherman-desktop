@@ -56,7 +56,7 @@ function record(value: unknown): Record<string, unknown> | null {
 }
 
 async function requestJson(path: string): Promise<Record<string, unknown>> {
-  const payload = record(await preachermanServiceRequest<unknown>(path));
+  const payload = record(await preachermanServiceRequest<unknown>(path, { signal: AbortSignal.timeout(15000) }));
   if (!payload) throw new Error("Local service returned an invalid response.");
   return payload;
 }
@@ -76,7 +76,8 @@ async function loadChatProviders(): Promise<GalleryProvider[]> {
   const results = await Promise.all(readyProviders.map(async (provider) => {
     try {
       const payload = await requestJson(`/api/providers/${encodeURIComponent(provider.id)}/models`);
-      const models = Array.isArray(payload.models) ? payload.models.flatMap((value) => {
+      const result = record(payload.result) ?? payload;
+      const models = Array.isArray(result.models) ? result.models.flatMap((value) => {
         const model = record(value);
         return model && typeof model.id === "string" && typeof model.label === "string" && model.capability === "chat"
           ? [{ id: model.id, label: model.label }]
@@ -137,9 +138,21 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
     if (!requestedFrame) return;
     const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
     try {
-      const providers = await loadChatProviders();
+      const execution = await requestJson("/api/settings/execution");
+      const connections = Array.isArray(execution.connections) ? execution.connections : [];
+      const providers: GalleryProvider[] = connections.flatMap(value => {
+        const connection = record(value);
+        return connection && typeof connection.id === "string" && typeof connection.name === "string" && typeof connection.model === "string" && connection.keySaved
+          ? [{ id: connection.id, label: connection.name, models: Array.isArray(connection.models) && connection.models.length
+            ? connection.models as GalleryProviderModel[] : [{ id: connection.model, label: connection.model }] }] : [];
+      });
+      const active = record(execution.active);
+      const local = record(execution.local);
+      if (typeof local?.agentId === "string") providers.push({ id: local.agentId, label: "Local CLI · approval required", models: [{ id: "default", label: "Codex CLI · default" }] });
+      const legacy = await loadChatProviders().catch(() => []);
+      providers.push(...legacy.filter(item => item.id !== "deepseek" || !providers.some(candidate => candidate.id === "legacy-deepseek")));
       if (frameRef.current?.contentWindow === requestedFrame) {
-        requestedFrame.postMessage({ type: "gallery-provider-catalog", providers }, targetOrigin);
+        requestedFrame.postMessage({ type: "gallery-provider-catalog", providers, active }, targetOrigin);
       }
     } catch {
       if (frameRef.current?.contentWindow === requestedFrame) {
@@ -149,6 +162,37 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const dispatch = async (data: Record<string, unknown>, target: Window) => {
+      const requestId = data.requestId;
+      if (typeof requestId !== "string" || requestId.length > 100) return;
+      const call = (path: string, body?: unknown) => preachermanServiceRequest<Record<string, unknown>>(path, {
+        ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }),
+        signal: AbortSignal.any([controller.signal, AbortSignal.timeout(70000)]),
+      });
+      try {
+        let result;
+        if (data.action === "chat") {
+          const selection = record(data.selection);
+          const messages = Array.isArray(data.messages) ? data.messages : [];
+          if (selection?.providerId === "codex-cli") {
+            const settings = await call("/api/settings/execution");
+            const active = record(settings.local);
+            if (!active?.workspaceId) throw new Error("Select a local workspace in Execution Mode first.");
+            const last = record(messages[messages.length - 1]);
+            result = await call("/api/execution/local-turn", { agentId: "codex-cli", workspaceId: active.workspaceId, objective: last?.content });
+          } else {
+            result = await call("/api/execution/chat", { connectionId: selection?.providerId === "deepseek" ? "legacy-deepseek" : selection?.providerId, model: selection?.modelId, messages });
+          }
+        } else if (["status", "approve", "reject", "cancel"].includes(String(data.action)) && typeof data.taskId === "string" && /^[A-Za-z0-9_-]{1,120}$/.test(data.taskId)) {
+          result = await call("/api/tasks/" + encodeURIComponent(data.taskId) + (data.action === "status" ? "" : "/commands"),
+            data.action === "status" ? undefined : { type: data.action, approvalId: data.approvalId });
+        } else throw new Error("Unsupported task operation.");
+        if (!controller.signal.aborted) target.postMessage({ type: "gallery-execution-result", requestId, result }, window.location.origin === "null" ? "*" : window.location.origin);
+      } catch (error) {
+        if (!controller.signal.aborted) target.postMessage({ type: "gallery-execution-result", requestId, error: error instanceof Error ? error.message : "Request failed." }, window.location.origin === "null" ? "*" : window.location.origin);
+      }
+    };
     const handleMessage = (event: MessageEvent<unknown>) => {
       if (event.source !== frameRef.current?.contentWindow) {
         return;
@@ -173,11 +217,13 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
         event.data.type === "gallery-provider-request"
       ) {
         void sendProviderCatalogToFrame();
+      } else if (record(event.data)?.type === "gallery-execution-request") {
+        void dispatch(event.data as Record<string, unknown>, frameRef.current!.contentWindow!);
       }
     };
 
     window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+    return () => { window.removeEventListener("message", handleMessage); controller.abort(); };
   }, [sendProviderCatalogToFrame, sendThemeToFrame]);
 
   useEffect(() => {
