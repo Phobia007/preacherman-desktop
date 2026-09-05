@@ -128,6 +128,7 @@
 .task-chat__send:not(:disabled):hover { background: color-mix(in srgb, var(--demo-theme-chat-send) 85%, var(--demo-theme-chat-composer)); }
 .task-chat__send svg { width: 1.9rem; height: 1.9rem; }
 .task-chat :focus-visible { outline: 2px solid var(--demo-theme-chat-focus); outline-offset: 3px; }
+.task-chat .task-chat__input:focus { outline: none; }
 .task-chat__messages:focus-visible { outline-color: var(--demo-theme-gallery-detail-action-rest-text); outline-offset: -2px; }
 .task-chat ::selection { background: var(--demo-theme-chat-send); color: var(--demo-theme-chat-send-text); }
 .task-chat__status {
@@ -154,4 +155,3 @@
   .task-chat__toolbar { flex-wrap: wrap; gap: 0.2rem; }
   .task-chat__tool { font-size: 1.1rem; }
 }
-
