@@ -1,430 +1,265 @@
-import { useCallback, useEffect, useId, useState } from "react";
+// Reference-led CC Switch preset -> inline form workflow.
+// Preserve original Settings split, blank left column, divider and Back.
+// Existing providers only; semantic dark canvas; one primary save/test action.
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { Locale } from "../preferences";
 import { localServiceUrlForPort, readServicePort, saveServicePort } from "../serviceConfig";
+import ApiKeyInput from "./cc-switch/ApiKeyInput";
+import { ProviderPresetSelector } from "./cc-switch/ProviderPresetSelector";
 import "./ai-providers-settings.css";
 
-type ProviderTab = "providers" | "credentials" | "routing" | "local";
-type ProviderState = "ready" | "configuration-required" | "adapter-required" | "error";
 type ProviderId = "deepseek" | "dashscope";
-
-interface ProviderCapabilityStatus {
-  readonly state: ProviderState;
-}
-
+type ProviderState = "ready" | "configuration-required" | "adapter-required" | "error";
 interface ProviderSnapshot {
   readonly id: string;
-  readonly label: string;
-  readonly adapter: { readonly pluginId: string } | null;
-  readonly capabilities: Readonly<Record<string, ProviderCapabilityStatus>>;
+  readonly capabilities: Readonly<Record<string, { readonly state: ProviderState }>>;
   readonly models?: readonly { readonly id: string; readonly label: string; readonly capability: string }[];
 }
-
 interface ProviderSettingsStatus {
   readonly deepseekConfigured: boolean;
   readonly dashscopeWorkspaceConfigured: boolean;
   readonly asrConfigured: boolean;
   readonly ttsConfigured: boolean;
 }
-
-interface ProviderTestResponse {
-  readonly result?: { readonly state?: string; readonly ok?: boolean; readonly message?: string };
-}
-
-interface Feedback {
-  readonly state: "idle" | "busy" | "success" | "error";
-  readonly message: string;
-}
-
-const providerCapabilities: Record<ProviderId, readonly string[]> = {
-  deepseek: ["Chat"],
-  dashscope: ["Speech", "Vision"],
-};
+interface Feedback { state: "idle" | "busy" | "success" | "error"; message: string }
+interface ProviderTestResponse { result?: { state?: string; ok?: boolean; message?: string } }
 
 const copy = {
   en: {
-    title: "AI Providers",
-    tabs: { providers: "Providers", credentials: "Credentials", routing: "Routing", local: "Advanced" },
-    connected: "connected",
-    description: "Your models, connected.",
-    providerHeading: "Model providers",
-    providerHint: "Choose a provider to connect or manage.",
-    configure: "Configure",
-    manage: "Manage",
-    connection: "Connection",
-    credentialsHint: "Add your API key, then save and test the connection.",
-    modelsHeading: "Available models",
-    routingHeading: "Capability routing",
-    routingHint: "The providers used for each capability.",
-    localHeading: "Local connection",
-    localHint: "Connect to the Preacherman service on this device.",
-    currentPort: "Active port",
-    configuredPlaceholder: "Saved · leave blank to keep",
-    workspaceHint: "Beijing region",
-    selected: "Selected",
+    title: "AI Providers", description: "Choose a provider. Paste your API key.",
+    presets: "Provider preset", chat: "Chat", voice: "Voice & vision",
+    connection: "Connection", key: "API Key", keyPlaceholder: "Paste your API key",
+    savedPlaceholder: "Key saved · leave blank to keep",
+    keyHelp: { deepseek: "Create an API key in the DeepSeek platform, then paste it here.", dashscope: "Use an API key from Alibaba Cloud Model Studio (Beijing)." },
+    workspace: "Workspace ID", optional: "Required for speech recognition",
+    workspacePlaceholder: "Needed for speech recognition; optional for speech synthesis",
+    savedWorkspace: "Workspace saved · leave blank to keep",
+    saveTest: "Save & test", saveOnly: "Save only", test: "Test connection",
+    saving: "Saving…", testing: "Testing connection…", saved: "Key saved. Connection not tested.",
+    tested: "Connection successful.", testFailed: "Connection test failed.",
+    savedTestFailed: "Saved, but the connection test failed.",
+    checkFailed: "Check the key and try again.", enterKey: "Paste an API key to continue.",
+    unchanged: "No changes to save.", configured: "Key saved", unconfigured: "Not configured",
+    advanced: "Advanced settings", advancedHint: "Models, routing and local service",
+    models: "Available models", noModels: "No models returned by the service.",
+    routing: "Capability routing", port: "Local service port", connect: "Connect",
+    portInvalid: "Use a port from 1024 to 65535.", connected: "Local service connected.",
+    checking: "Checking…", refresh: "Refresh status", offline: "Local service unavailable. Check that Preacherman is running, then retry.",
+    retry: "Retry", show: "Show API key", hide: "Hide API key", requestFailed: "Request failed. Check the connection and retry.",
+    states: { ready: "Configured", "configuration-required": "Needs configuration", "adapter-required": "Not connected", error: "Unavailable" },
     capabilities: { chat: "Chat", asr: "Speech recognition", tts: "Speech synthesis", vision: "Vision" },
-    serviceUnknown: "Unavailable",
-    loadingState: "Checking",
-    refresh: "Refresh",
-
-    retry: "Retry",
-    refreshing: "Refreshing…",
-    noModels: "No models",
-    test: "Test",
-    testing: "Testing…",
-    deepseekKey: "DeepSeek API key",
-    dashscopeKey: "DashScope API key",
-    workspaceId: "Workspace ID",
-    configured: "Configured",
-    newKey: "API key",
-    newWorkspace: "Workspace ID",
-    show: "Show",
-    hide: "Hide",
-    save: "Save",
-    saving: "Saving…",
-    enterCredential: "Enter a credential.",
-    saved: "Saved",
-    port: "Port",
-    savePort: "Connect",
-    checkingPort: "Checking…",
-    portSaved: "Connected",
-    invalidPort: "Use 1024–65535.",
-    unavailable: "Service unavailable.",
-    empty: "No providers",
-    states: { ready: "Ready", "configuration-required": "Setup", "adapter-required": "Adapter", error: "Offline" },
   },
   "zh-CN": {
-    title: "AI 服务商",
-    tabs: { providers: "服务商", credentials: "认证", routing: "路由", local: "高级" },
-    connected: "已连接",
-    description: "连接你的模型。",
-    providerHeading: "模型服务商",
-    providerHint: "选择服务商，配置连接。",
-    configure: "配置",
-    manage: "管理",
-    connection: "连接配置",
-    credentialsHint: "填写 API 密钥，保存后测试连接。",
-    modelsHeading: "可用模型",
-    routingHeading: "能力路由",
-    routingHint: "查看各项能力当前使用的服务商。",
-    localHeading: "本地连接",
-    localHint: "连接此设备上的 Preacherman 服务。",
-    currentPort: "当前端口",
-    configuredPlaceholder: "已保存 · 留空保留",
-    workspaceHint: "北京地域",
-    selected: "已选择",
+    title: "AI 服务商", description: "选择服务商，粘贴 API 密钥。",
+    presets: "服务商预设", chat: "对话", voice: "语音与视觉",
+    connection: "连接配置", key: "API 密钥", keyPlaceholder: "粘贴你的 API 密钥",
+    savedPlaceholder: "密钥已保存 · 留空保留",
+    keyHelp: { deepseek: "在 DeepSeek 开放平台创建 API 密钥，然后粘贴到这里。", dashscope: "使用阿里云百炼北京地域的 API 密钥。" },
+    workspace: "工作空间 ID", optional: "语音识别需要填写",
+    workspacePlaceholder: "语音识别必填；仅使用语音合成可留空",
+    savedWorkspace: "工作空间已保存 · 留空保留",
+    saveTest: "保存并测试", saveOnly: "仅保存", test: "测试连接",
+    saving: "正在保存…", testing: "正在测试连接…", saved: "密钥已保存，尚未测试连接。",
+    tested: "连接成功。", testFailed: "连接测试失败。",
+    savedTestFailed: "配置已保存，但连接测试失败。",
+    checkFailed: "请检查密钥后重试。", enterKey: "请粘贴 API 密钥后继续。",
+    unchanged: "没有需要保存的修改。", configured: "密钥已保存", unconfigured: "未配置",
+    advanced: "高级设置", advancedHint: "模型、路由与本地服务",
+    models: "可用模型", noModels: "服务尚未返回模型。",
+    routing: "能力路由", port: "本地服务端口", connect: "连接",
+    portInvalid: "端口范围为 1024–65535。", connected: "本地服务已连接。",
+    checking: "检查中…", refresh: "刷新状态", offline: "本地服务不可用，请确认 Preacherman 正在运行后重试。",
+    retry: "重试", show: "显示 API 密钥", hide: "隐藏 API 密钥", requestFailed: "请求失败，请检查连接后重试。",
+    states: { ready: "已配置", "configuration-required": "待配置", "adapter-required": "待接入", error: "不可用" },
     capabilities: { chat: "对话", asr: "语音识别", tts: "语音合成", vision: "视觉" },
-    serviceUnknown: "不可用",
-    loadingState: "检查中",
-    refresh: "刷新",
-
-    retry: "重试",
-    refreshing: "正在刷新…",
-    noModels: "暂无模型",
-    test: "测试",
-    testing: "正在测试…",
-    deepseekKey: "DeepSeek API 密钥",
-    dashscopeKey: "DashScope API 密钥",
-    workspaceId: "工作空间 ID",
-    configured: "已配置",
-    newKey: "API 密钥",
-    newWorkspace: "工作空间 ID",
-    show: "显示",
-    hide: "隐藏",
-    save: "保存",
-    saving: "正在保存…",
-    enterCredential: "请输入凭据。",
-    saved: "已保存",
-    port: "端口",
-    savePort: "连接",
-    checkingPort: "正在检查…",
-    portSaved: "已连接",
-    invalidPort: "端口范围为 1024–65535。",
-    unavailable: "服务不可用。",
-    empty: "暂无服务商",
-    states: { ready: "就绪", "configuration-required": "待配置", "adapter-required": "待接入", error: "离线" },
   },
 } as const;
 
 async function serviceRequest<T>(port: number, path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(localServiceUrlForPort(port, path), {
-    headers: { "Content-Type": "application/json" },
-    ...init,
+    headers: { "Content-Type": "application/json" }, signal: AbortSignal.timeout(15000), ...init,
   });
-  const payload = await response.json().catch(() => ({})) as T & { readonly error?: string };
-  if (!response.ok) throw new Error(payload.error || `Local service returned HTTP ${response.status}.`);
+  const payload = await response.json().catch(() => ({})) as T & { error?: string };
+  if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
   return payload;
-}
-
-function providerState(provider: ProviderSnapshot | undefined): ProviderState {
-  if (!provider) return "error";
-  const states = Object.values(provider.capabilities).map((capability) => capability.state);
-  if (states.length > 0 && states.every((state) => state === "ready")) return "ready";
-  if (states.includes("configuration-required")) return "configuration-required";
-  if (states.includes("adapter-required")) return "adapter-required";
-  return "error";
 }
 
 export function AIProvidersSettings({ locale }: { readonly locale: Locale }) {
   const text = copy[locale];
   const instanceId = useId();
-  const [tab, setTab] = useState<ProviderTab>("providers");
   const [selectedId, setSelectedId] = useState<ProviderId>("deepseek");
   const [providers, setProviders] = useState<readonly ProviderSnapshot[]>([]);
-  const [settings, setSettings] = useState<ProviderSettingsStatus>({ deepseekConfigured: false, dashscopeWorkspaceConfigured: false, asrConfigured: false, ttsConfigured: false });
+  const [settings, setSettings] = useState<ProviderSettingsStatus>({
+    deepseekConfigured: false, dashscopeWorkspaceConfigured: false, asrConfigured: false, ttsConfigured: false,
+  });
   const [port, setPort] = useState(readServicePort);
   const [draftPort, setDraftPort] = useState(() => String(readServicePort()));
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState("");
+  const [loadError, setLoadError] = useState(false);
   const [deepseekKey, setDeepseekKey] = useState("");
   const [dashscopeKey, setDashscopeKey] = useState("");
   const [workspaceId, setWorkspaceId] = useState("");
-  const [revealSecret, setRevealSecret] = useState(false);
+  const [secretRevision, setSecretRevision] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>({ state: "idle", message: "" });
+  const operation = useRef(false);
+  const busy = feedback.state === "busy";
+  const configured = selectedId === "deepseek" ? settings.deepseekConfigured : settings.ttsConfigured;
+  const keyValue = selectedId === "deepseek" ? deepseekKey : dashscopeKey;
+  const dirty = Boolean(keyValue.trim() || (selectedId === "dashscope" && workspaceId.trim()));
+  const selectedProvider = providers.find(provider => provider.id === selectedId);
 
   const load = useCallback(async (nextPort = readServicePort()) => {
     setLoading(true);
-    setLoadError("");
     try {
       const [catalog, status] = await Promise.all([
-        serviceRequest<{ readonly providers?: readonly ProviderSnapshot[] }>(nextPort, "/api/providers/catalog"),
+        serviceRequest<{ providers?: readonly ProviderSnapshot[] }>(nextPort, "/api/providers/catalog"),
         serviceRequest<ProviderSettingsStatus>(nextPort, "/api/settings/providers"),
       ]);
       setProviders(Array.isArray(catalog.providers) ? catalog.providers : []);
       setSettings(status);
-    } catch (reason) {
-      setLoadError(reason instanceof Error ? reason.message : text.unavailable);
-    } finally {
-      setLoading(false);
-    }
-  }, [text.unavailable]);
-
+      setLoadError(false);
+    } catch { setLoadError(true); }
+    finally { setLoading(false); }
+  }, []);
   useEffect(() => { void load(); }, [load]);
 
-  const selectedProvider = providers.find((provider) => provider.id === selectedId);
-  const connectedCount = providers.filter((provider) => providerState(provider) === "ready").length;
-  const selectedState = providerState(selectedProvider);
-  const tabEntries = Object.entries(text.tabs) as [ProviderTab, string][];
-  const routeEntries = [
-    ["chat", "DeepSeek", "deepseek"],
-    ["asr", "DashScope", "dashscope"],
-    ["tts", "DashScope", "dashscope"],
-    ["vision", "DashScope", "dashscope"],
-  ] as const;
-  const busy = feedback.state === "busy";
-
-  const changeTab = (next: ProviderTab) => {
-    setTab(next);
-    setFeedback({ state: "idle", message: "" });
-    setRevealSecret(false);
-  };
-
   const selectProvider = (id: ProviderId) => {
+    if (operation.current) return;
     setSelectedId(id);
-    setRevealSecret(false);
     setFeedback({ state: "idle", message: "" });
+    setSecretRevision(value => value + 1);
   };
 
-  const stateLabel = (state: ProviderState) => loading ? text.loadingState : loadError ? text.serviceUnknown : text.states[state];
-
+  // Do not surface arbitrary server error text: it may echo submitted secrets.
   const testSelectedProvider = async () => {
-    if (!selectedProvider || selectedState !== "ready") return;
-    const capability = selectedId === "deepseek" ? "chat" : "tts";
     setFeedback({ state: "busy", message: text.testing });
-    try {
-      const response = await serviceRequest<ProviderTestResponse>(port, `/api/providers/${encodeURIComponent(selectedId)}/test`, {
-        method: "POST",
-        body: JSON.stringify({ capability }),
-      });
-      if (response.result?.state !== "ready" || response.result.ok !== true) throw new Error(response.result?.message || text.unavailable);
-      const next = { state: "success", message: response.result.message || text.states.ready } as const;
-      setFeedback(next);
-      await load(port);
-    } catch (reason) {
-      const next = { state: "error", message: reason instanceof Error ? reason.message : text.unavailable } as const;
-      setFeedback(next);
-    }
+    const response = await serviceRequest<ProviderTestResponse>(port, `/api/providers/${encodeURIComponent(selectedId)}/test`, {
+      method: "POST", body: JSON.stringify({ capability: selectedId === "deepseek" ? "chat" : "tts" }),
+    });
+    if (response.result?.state !== "ready" || response.result.ok !== true) throw new Error("test-failed");
   };
 
-  const saveCredentials = async () => {
-    const payload = selectedId === "deepseek"
-      ? (deepseekKey.trim() ? { deepseekApiKey: deepseekKey.trim() } : {})
-      : {
-          ...(dashscopeKey.trim() ? { dashscopeApiKey: dashscopeKey.trim() } : {}),
-          ...(workspaceId.trim() ? { dashscopeWorkspaceId: workspaceId.trim() } : {}),
-        };
-    if (Object.keys(payload).length === 0) {
-      setFeedback({ state: "error", message: text.enterCredential });
+  const saveCredentials = async (testAfterSave: boolean) => {
+    if (operation.current || loading || loadError) return;
+    if (!keyValue.trim() && !configured) {
+      setFeedback({ state: "error", message: text.enterKey });
+      document.getElementById(`${instanceId}-key`)?.focus();
       return;
     }
-    setFeedback({ state: "busy", message: text.saving });
-    try {
-      await serviceRequest<ProviderSettingsStatus>(port, "/api/settings/providers", { method: "PUT", body: JSON.stringify(payload) });
-      setDeepseekKey("");
-      setDashscopeKey("");
-      setWorkspaceId("");
-      setRevealSecret(false);
-      await load(port);
-      setFeedback({ state: "success", message: text.saved });
-    } catch (reason) {
-      setFeedback({ state: "error", message: reason instanceof Error ? reason.message : text.unavailable });
+    if (!dirty && !testAfterSave) {
+      setFeedback({ state: "idle", message: text.unchanged });
+      return;
     }
+    operation.current = true;
+    let saved = false;
+    let testing = false;
+    try {
+      if (dirty) {
+        setFeedback({ state: "busy", message: text.saving });
+        const payload = selectedId === "deepseek"
+          ? { deepseekApiKey: deepseekKey.trim() }
+          : { ...(dashscopeKey.trim() ? { dashscopeApiKey: dashscopeKey.trim() } : {}),
+              ...(workspaceId.trim() ? { dashscopeWorkspaceId: workspaceId.trim() } : {}) };
+        const status = await serviceRequest<ProviderSettingsStatus>(port, "/api/settings/providers", {
+          method: "PUT", body: JSON.stringify(payload),
+        });
+        setSettings(status);
+        saved = true;
+        if (selectedId === "deepseek") setDeepseekKey("");
+        else { setDashscopeKey(""); setWorkspaceId(""); }
+        setSecretRevision(value => value + 1);
+      }
+      if (testAfterSave) { testing = true; await testSelectedProvider(); }
+      setFeedback({ state: "success", message: testAfterSave ? text.tested : text.saved });
+      await load(port);
+    } catch {
+      setFeedback({ state: "error", message: testing
+        ? `${saved ? text.savedTestFailed : text.testFailed} ${text.checkFailed}` : text.requestFailed });
+    } finally { operation.current = false; }
   };
 
   const verifyPort = async () => {
+    if (operation.current) return;
     const nextPort = Number(draftPort);
     if (!Number.isInteger(nextPort) || nextPort < 1024 || nextPort > 65535) {
-      setFeedback({ state: "error", message: text.invalidPort });
-      return;
+      setFeedback({ state: "error", message: text.portInvalid }); return;
     }
-    setFeedback({ state: "busy", message: text.checkingPort });
+    operation.current = true;
+    setFeedback({ state: "busy", message: text.checking });
     try {
-      await serviceRequest<unknown>(nextPort, "/api/health");
+      await serviceRequest(nextPort, "/api/health");
       saveServicePort(nextPort);
       setPort(nextPort);
       await load(nextPort);
-      setFeedback({ state: "success", message: text.portSaved });
-    } catch (reason) {
-      setFeedback({ state: "error", message: reason instanceof Error ? reason.message : text.unavailable });
-    }
+      setFeedback({ state: "success", message: text.connected });
+    } catch { setFeedback({ state: "error", message: text.offline }); }
+    finally { operation.current = false; }
   };
-
-  const configured = selectedId === "deepseek" ? settings.deepseekConfigured : settings.ttsConfigured;
-
 
   return (
     <section aria-label={text.title} className="ai-provider-settings" data-preacherman-control="provider.credentials">
       <header className="ai-provider-settings__header">
-        <div>
-          <h2>{text.title}</h2>
-          <p>{text.description}</p>
-        </div>
-        <span className="ai-provider-settings__summary">
-          <span className="ai-provider-settings__dot" data-state={connectedCount ? "ready" : "idle"} />
-          {loading ? text.loadingState : loadError ? text.serviceUnknown : `${connectedCount} / ${providers.length} ${text.connected}`}
-        </span>
+        <div><h2>{text.title}</h2><p>{text.description}</p></div>
+        <button className="ai-provider-settings__quiet" type="button" disabled={loading || busy} onClick={() => void load(port)}>{text.refresh}</button>
       </header>
-
-      <nav aria-label={text.title} className="ai-provider-settings__tabs" role="tablist">
-        {tabEntries.map(([id, label], index) => (
-          <button
-            aria-selected={tab === id}
-            aria-controls={`${instanceId}-panel`}
-            id={`${instanceId}-tab-${id}`}
-            key={id}
-            disabled={busy}
-            tabIndex={tab === id ? 0 : -1}
-            onClick={() => changeTab(id)}
-            onKeyDown={(event) => {
-              const offset = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
-              if (!offset && event.key !== "Home" && event.key !== "End") return;
-              event.preventDefault();
-              const next = event.key === "Home" ? 0 : event.key === "End" ? tabEntries.length - 1 : (index + offset + tabEntries.length) % tabEntries.length;
-              changeTab(tabEntries[next][0]);
-              document.getElementById(`${instanceId}-tab-${tabEntries[next][0]}`)?.focus();
-            }}
-            role="tab"
-            type="button"
-          >{label}</button>
-        ))}
-      </nav>
-
-      <div aria-busy={loading} aria-labelledby={`${instanceId}-tab-${tab}`} id={`${instanceId}-panel`} className="ai-provider-settings__body" role="tabpanel">
-        {loadError ? <div className="ai-provider-settings__error" role="alert">
-          <span>{text.unavailable}</span>
-          <button disabled={loading || busy} onClick={() => void load(port)} type="button">{text.retry}</button>
-        </div> : null}
-
-        {tab === "providers" ? <>
-          <div className="ai-provider-settings__section-heading">
-            <div><h3>{text.providerHeading}</h3><p>{text.providerHint}</p></div>
-            <button className="ai-provider-settings__quiet" disabled={loading || busy} onClick={() => void load(port)} type="button">{text.refresh}</button>
+      <div className="ai-provider-settings__body" aria-busy={busy || loading}>
+        {loadError && <div className="ai-provider-settings__error" role="alert">
+          <span>{text.offline}</span><button disabled={loading || busy} onClick={() => void load(port)} type="button">{text.retry}</button>
+        </div>}
+        <ProviderPresetSelector label={text.presets} disabled={busy}
+          selectedPresetId={selectedId} onPresetChange={selectProvider}
+          presetEntries={[{ id: "deepseek", name: "DeepSeek", description: text.chat },
+            { id: "dashscope", name: "DashScope", description: text.voice }]} />
+        <div className="ai-provider-settings__connection-heading">
+          <h3>{text.connection}</h3>
+          <span className="ai-provider-settings__status">{loading ? text.checking : loadError ? text.states.error : configured ? text.configured : text.unconfigured}</span>
+        </div>
+        <form className="ai-provider-settings__credential-form" onSubmit={event => { event.preventDefault(); void saveCredentials(true); }}>
+          <ApiKeyInput key={`${selectedId}-${secretRevision}`} id={`${instanceId}-key`}
+            value={keyValue} onChange={value => {
+              if (selectedId === "deepseek") setDeepseekKey(value); else setDashscopeKey(value);
+              setFeedback({ state: "idle", message: "" });
+            }} label={`${selectedId === "deepseek" ? "DeepSeek" : "DashScope"} ${text.key}`}
+            placeholder={configured ? text.savedPlaceholder : text.keyPlaceholder}
+            showLabel={text.show} hideLabel={text.hide} disabled={busy} />
+          <p className="ai-provider-settings__field-hint">{text.keyHelp[selectedId]}</p>
+          {selectedId === "dashscope" && <div className="ai-provider-settings__field">
+            <label htmlFor={`${instanceId}-workspace`}>{text.workspace}<span>{text.optional}</span></label>
+            <input id={`${instanceId}-workspace`} autoComplete="off" disabled={busy} value={workspaceId}
+              placeholder={settings.dashscopeWorkspaceConfigured ? text.savedWorkspace : text.workspacePlaceholder}
+              onChange={event => { setWorkspaceId(event.target.value); setFeedback({ state: "idle", message: "" }); }} />
+          </div>}
+          <div className="ai-provider-settings__actions">
+            <button className="ai-provider-settings__primary" type="submit" disabled={busy || loading || loadError}>
+              {busy ? feedback.message : configured && !dirty ? text.test : text.saveTest}
+            </button>
+            <button type="button" disabled={busy || loading || loadError || !dirty} onClick={() => void saveCredentials(false)}>{text.saveOnly}</button>
           </div>
-          <div className="ai-provider-settings__provider-list">
-            {(["deepseek", "dashscope"] as const).map((id) => {
-              const provider = providers.find((candidate) => candidate.id === id);
-              const state = providerState(provider);
-              return <div className="ai-provider-settings__provider-row" key={id}>
-                <span className="ai-provider-settings__provider-mark" aria-hidden="true">{id === "deepseek" ? "D" : "Q"}</span>
-                <div className="ai-provider-settings__provider-name">
-                  <strong>{provider?.label || (id === "deepseek" ? "DeepSeek" : "DashScope")}</strong>
-                  <span>{providerCapabilities[id].join(" · ")}</span>
-                </div>
-                <span className="ai-provider-settings__status" data-state={loading || loadError ? "idle" : state}>
-                  <span className="ai-provider-settings__dot" data-state={loading || loadError ? "idle" : state} />
-                  {stateLabel(state)}
-                </span>
-                <button onClick={() => { selectProvider(id); changeTab("credentials"); }} type="button">{state === "ready" ? text.manage : text.configure}<span aria-hidden="true"> →</span></button>
-              </div>;
-            })}
-          </div>
-        </> : null}
-
-        {tab === "credentials" ? <>
-          <div className="ai-provider-settings__section-heading">
-            <div><h3>{text.connection}</h3><p>{text.credentialsHint}</p></div>
-          </div>
-          <div className="ai-provider-settings__provider-switch" role="group" aria-label={text.providerHeading}>
-            {(["deepseek", "dashscope"] as const).map((id) => (
-              <button aria-pressed={selectedId === id} disabled={busy} key={id} onClick={() => selectProvider(id)} type="button">
-                {id === "deepseek" ? "DeepSeek" : "DashScope"}
-              </button>
-            ))}
-          </div>
-          <form className="ai-provider-settings__credential-form" onSubmit={(event) => { event.preventDefault(); void saveCredentials(); }}>
-            <div className="ai-provider-settings__field">
-              <label htmlFor={`${instanceId}-key`}>{selectedId === "deepseek" ? text.deepseekKey : text.dashscopeKey}</label>
-              <div className="ai-provider-settings__secret">
-                <input id={`${instanceId}-key`} autoComplete="new-password" autoCapitalize="none" spellCheck={false} data-secret="true" disabled={busy}
-                  onChange={(event) => selectedId === "deepseek" ? setDeepseekKey(event.target.value) : setDashscopeKey(event.target.value)}
-                  placeholder={configured ? text.configuredPlaceholder : text.newKey}
-                  type={revealSecret ? "text" : "password"} value={selectedId === "deepseek" ? deepseekKey : dashscopeKey} />
-                <button aria-pressed={revealSecret} onClick={() => setRevealSecret((current) => !current)} type="button">{revealSecret ? text.hide : text.show}</button>
-              </div>
+        </form>
+        {feedback.message && <p className="ai-provider-settings__feedback" data-state={feedback.state} role={feedback.state === "error" ? "alert" : "status"}>{feedback.message}</p>}
+        <details className="ai-provider-settings__advanced">
+          <summary>{text.advanced}<span>{text.advancedHint}</span></summary>
+          <section className="ai-provider-settings__models">
+            <h3>{text.models}</h3>
+            <div>{selectedProvider?.models?.length ? selectedProvider.models.map(model => <span key={`${model.capability}:${model.id}`}>{model.label}</span>) : <p>{text.noModels}</p>}</div>
+          </section>
+          <section className="ai-provider-settings__routes">
+            <h3>{text.routing}</h3>
+            <div className="ai-provider-settings__route-list">
+              {(["chat", "asr", "tts", "vision"] as const).map(capability => {
+                const id = capability === "chat" ? "deepseek" : "dashscope";
+                const state = providers.find(provider => provider.id === id)?.capabilities[capability]?.state || "error";
+                return <div key={capability}><span>{text.capabilities[capability]}</span><strong>{id === "deepseek" ? "DeepSeek" : "DashScope"}</strong><span>{loading ? text.checking : loadError ? text.states.error : text.states[state]}</span></div>;
+              })}
             </div>
-            {selectedId === "dashscope" ? <div className="ai-provider-settings__field">
-              <label htmlFor={`${instanceId}-workspace`}>{text.workspaceId}<span>{text.workspaceHint}</span></label>
-              <input id={`${instanceId}-workspace`} autoComplete="off" disabled={busy} onChange={(event) => setWorkspaceId(event.target.value)}
-                placeholder={settings.dashscopeWorkspaceConfigured ? text.configuredPlaceholder : text.newWorkspace} type="text" value={workspaceId} />
-            </div> : null}
-            <div className="ai-provider-settings__actions">
-              <button className="ai-provider-settings__primary" disabled={busy || loading || !!loadError} type="submit">{busy && feedback.message === text.saving ? text.saving : text.save}</button>
-              <button disabled={selectedState !== "ready" || busy || loading || !!loadError} onClick={() => void testSelectedProvider()} type="button">{busy && feedback.message === text.testing ? text.testing : text.test}</button>
-              <span className="ai-provider-settings__status" data-state={loading || loadError ? "idle" : selectedState}>{stateLabel(selectedState)}</span>
-            </div>
-          </form>
-          {!!selectedProvider?.models?.length && <section className="ai-provider-settings__models" aria-label={text.modelsHeading}>
-            <h3>{text.modelsHeading}</h3>
-            <div>{selectedProvider.models.map((model) => <span key={`${model.capability}:${model.id}`}>{model.label}</span>)}</div>
-          </section>}
-        </> : null}
-
-        {tab === "routing" ? <>
-          <div className="ai-provider-settings__section-heading"><div><h3>{text.routingHeading}</h3><p>{text.routingHint}</p></div></div>
-          <div className="ai-provider-settings__route-list">
-            {routeEntries.map(([capability, providerName, providerId]) => {
-              const provider = providers.find((candidate) => candidate.id === providerId);
-              const state = provider?.capabilities[capability]?.state || "error";
-              return <div key={capability}>
-                <span>{text.capabilities[capability]}</span>
-                <strong>{providerName}</strong>
-                <span className="ai-provider-settings__status" data-state={loading || loadError ? "idle" : state}><span className="ai-provider-settings__dot" data-state={loading || loadError ? "idle" : state} />{stateLabel(state)}</span>
-              </div>;
-            })}
-          </div>
-        </> : null}
-
-        {tab === "local" ? <>
-          <div className="ai-provider-settings__section-heading"><div><h3>{text.localHeading}</h3><p>{text.localHint}</p></div></div>
-          <form className="ai-provider-settings__port-form" onSubmit={(event) => { event.preventDefault(); void verifyPort(); }}>
+          </section>
+          <form className="ai-provider-settings__port-form" onSubmit={event => { event.preventDefault(); void verifyPort(); }}>
             <div className="ai-provider-settings__field"><label htmlFor={`${instanceId}-port`}>{text.port}</label>
-              <input id={`${instanceId}-port`} disabled={busy} inputMode="numeric" max="65535" min="1024" onChange={(event) => setDraftPort(event.target.value)} type="number" value={draftPort} />
+              <input id={`${instanceId}-port`} type="number" min="1024" max="65535" disabled={busy} value={draftPort} onChange={event => setDraftPort(event.target.value)} />
             </div>
-            <button className="ai-provider-settings__primary" disabled={busy} type="submit">{busy ? text.checkingPort : text.savePort}</button>
+            <button type="submit" disabled={busy || loading}>{text.connect}</button>
           </form>
-          <p className="ai-provider-settings__port-status">{text.currentPort}<code>127.0.0.1:{port}</code></p>
-        </> : null}
-
-        {feedback.message ? <p className="ai-provider-settings__feedback" data-state={feedback.state} role={feedback.state === "error" ? "alert" : "status"}>{feedback.message}</p> : null}
+        </details>
       </div>
     </section>
   );

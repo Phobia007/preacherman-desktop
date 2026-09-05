@@ -598,3 +598,15 @@ final result: passed
 - Browser checks covered both stored appearances, Configure, empty credential validation, reveal/remask, four routing capabilities, Advanced, keyboard navigation, narrow viewport, and Back. Final screenshots: `apps/preacherman-demo-host/output/playwright/providers-refresh-dark.png` and `dashscope-refresh-dark.png` (light counterparts alongside). Both keep the deliberately black authored Settings canvas.
 - No live credential write or billable provider test was performed; credentials remain user-supplied.
 - Native delivery verification is recorded in `apps/preacherman-demo-host/desktop-build-manifest.json`.
+
+# AI Providers inline CC Switch flow — 2026-09-05
+
+- User correction: configuration must be immediately understandable, with provider selection and credentials in one place. The original Settings outer split, x657 divider, left blank, Back, and other pages remain untouched.
+- Adapted CC Switch's MIT ApiKeyInput and ProviderPresetSelector components. Removed upstream app-specific dependencies and unsupported presets; kept controlled masked input and preset-to-inline-form interaction. Bundled attribution: `apps/preacherman-demo-host/public/licenses/cc-switch.txt`.
+- The first viewport presents DeepSeek / DashScope presets, the selected provider's credential fields, Save & test, and Save only. Existing models, routing and local-service port are preserved under Advanced settings.
+- Real API contract unchanged. Save & test awaits successful credential persistence before testing. A failed save retains the draft and never starts a test. A test failure after saving explicitly says the configuration was saved. Existing saved keys are never read back or overwritten by a blank field.
+- DashScope workspace-only submission without any new or previously configured key is blocked. Workspace requirement for speech recognition is explained at the field; synthesis does not require it.
+- TypeScript and focused source regression: 10/10 passed. Mechanical design detector: no findings.
+- Batched browser screenshots: `output/playwright/inline-deepseek-dark.png`, `inline-dashscope-dark.png`, light counterparts and `inline-mobile.png`. Both appearance preferences retain the intentional authored black settings canvas.
+- Browser fixture tests passed: save failure, PUT-before-POST, explicit saved/test-failed state, test saved credentials without rewriting them, Save only without testing, workspace validation, secret remasking, Advanced and Back. All test writes were intercepted synthetic fixtures; no user credentials were written and no billable provider call was made.
+- Native delivery evidence and hashes are recorded in the desktop build manifest.
