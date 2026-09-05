@@ -4,9 +4,11 @@ import { ad as ref, a8 as element, a3 as onMounted, a6 as onUnmounted } from "./
 
 const ROOT_TASK_ID = "nathan-riley";
 const TASK_PROJECTS_KEY = "preacherman.task.projects";
+const DELETED_TASKS_KEY = "preacherman.task.deleted-projects";
 const LAST_TASK_KEY = "preacherman.task.last-active";
 const PENDING_TASK_KEY = "preacherman.task.pending-focus";
 const EMPTY_CARD_URL = new URL("./task-empty-card.svg", import.meta.url).href;
+const EMPTY_PREVIEW_URL = new URL("./task-empty-preview.svg", import.meta.url).href;
 
 export const titleStorageKey = (slug) => `preacherman.task.${slug}.title`;
 export const normalizeTitle = (value) => String(value).replace(/\s+/g, " ").trim().slice(0, 120);
@@ -16,13 +18,32 @@ function validTaskProject(value) {
     typeof value.title === "string" && typeof value.parentId === "string";
 }
 
-export function readTaskProjects() {
+function readStoredTaskProjects() {
   try {
     const parsed = JSON.parse(localStorage.getItem(TASK_PROJECTS_KEY) ?? "[]");
     return Array.isArray(parsed) ? parsed.filter(validTaskProject) : [];
   } catch {
     return [];
   }
+}
+
+export function deletedTaskIds() {
+  const value = JSON.parse(localStorage.getItem(DELETED_TASKS_KEY) ?? "[]");
+  if (!Array.isArray(value) || value.some(id => typeof id !== "string")) throw new Error("Invalid deleted task list");
+  return new Set(value);
+}
+
+export function readTaskProjects() {
+  const deleted = deletedTaskIds();
+  return readStoredTaskProjects().filter(project => !deleted.has(project.id));
+}
+
+// A single durable write removes a card everywhere without destroying source media
+// or cascading into related tasks. Retained local records remain recoverable.
+export function deleteTaskProject(id) {
+  const deleted = deletedTaskIds();
+  deleted.add(id);
+  localStorage.setItem(DELETED_TASKS_KEY, JSON.stringify([...deleted]));
 }
 
 function writeTaskProjects(projects) {
@@ -37,9 +58,9 @@ function taskId() {
 function readLastTaskId() {
   try {
     const candidate = localStorage.getItem(LAST_TASK_KEY);
-    return candidate === ROOT_TASK_ID || readTaskProjects().some(project => project.id === candidate)
+    return (candidate === ROOT_TASK_ID || readTaskProjects().some(project => project.id === candidate)) && !deletedTaskIds().has(candidate)
       ? candidate
-      : ROOT_TASK_ID;
+      : deletedTaskIds().has(ROOT_TASK_ID) ? "" : ROOT_TASK_ID;
   } catch {
     return ROOT_TASK_ID;
   }
@@ -54,13 +75,13 @@ export function createTaskProject(values = {}) {
     parentId: readLastTaskId(),
     createdAt: new Date().toISOString(),
   };
-  const projects = [...readTaskProjects(), project];
+  const projects = [...readStoredTaskProjects(), project];
   writeTaskProjects(projects);
   return project;
 }
 
 function updateTaskProjectTitle(id, title) {
-  const projects = readTaskProjects();
+  const projects = readStoredTaskProjects();
   const index = projects.findIndex(project => project.id === id);
   if (index < 0) return;
   projects[index] = {...projects[index], title};
@@ -92,8 +113,8 @@ export function projectRecord(project) {
 
 export function augmentTaskProjects(projects) {
   const dynamic = readTaskProjects().map(projectRecord);
-  if (!dynamic.length) return projects;
-  const authored = projects.filter(project => !project?.preachermanTask);
+  const deleted = deletedTaskIds();
+  const authored = projects.filter(project => !project?.preachermanTask && !deleted.has(project.slug));
   const rootIndex = authored.findIndex(project => project?.slug === ROOT_TASK_ID);
   if (rootIndex < 0) return [...authored, ...dynamic];
   return [...authored.slice(0, rootIndex + 1), ...dynamic, ...authored.slice(rootIndex + 1)];
@@ -104,15 +125,23 @@ export function taskProjectRoute(project) {
   return `/projects/${ROOT_TASK_ID}?task=${encodeURIComponent(project.slug)}`;
 }
 
+// The full index keeps its original floating preview shader and mouse response.
+// A framed black texture makes an empty task visible against the black stage.
+export function taskIndexProjects(projects) {
+  return augmentTaskProjects(projects).map(project => project.preachermanTask
+    ? {...project, src:EMPTY_PREVIEW_URL, thumb:EMPTY_PREVIEW_URL}
+    : project);
+}
+
 export function preferredTaskSlug(returning) {
   try {
     const pending = sessionStorage.getItem(PENDING_TASK_KEY);
-    if (pending) {
+    if (pending && !deletedTaskIds().has(pending)) {
       sessionStorage.removeItem(PENDING_TASK_KEY);
       return pending;
     }
   } catch {}
-  return returning;
+  return deletedTaskIds().has(returning) ? null : returning;
 }
 
 export function resolveTaskId(slug = ROOT_TASK_ID) {
@@ -157,6 +186,10 @@ const conversationStyle = document.createElement("link");
 conversationStyle.rel = "stylesheet";
 conversationStyle.href = new URL("./task-conversation.css", import.meta.url).href;
 document.head.append(conversationStyle);
+const deleteStyle = document.createElement("link");
+deleteStyle.rel = "stylesheet";
+deleteStyle.href = new URL("./task-delete-control.css", import.meta.url).href;
+document.head.append(deleteStyle);
 
 function syncTheme() {
   const source = parent.document.querySelector(".demo-app-shell") ?? parent.document.documentElement;
@@ -176,7 +209,7 @@ function relatedTaskProjects(currentId) {
   const projects = readTaskProjects();
   const current = projects.find(project => project.id === currentId);
   const relations = [];
-  if (current?.parentId) {
+  if (current?.parentId && !deletedTaskIds().has(current.parentId)) {
     const parentProject = projects.find(project => project.id === current.parentId);
     relations.push({
       id: current.parentId,

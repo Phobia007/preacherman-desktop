@@ -44,3 +44,24 @@ test("new card is fully visible before arrival without revealing or resetting ex
   dispose();assert.equal(arrival,null);
   assert.equal(folio.prepareTaskCreation,undefined);
 });
+
+test("live removal persists before retiring only selected card resources and keeps last-card removal empty", async () => {
+  const source = fs.readFileSync(new URL("../public/gallery-v3/portfolio/task-create-rail.js", import.meta.url), "utf8");
+  const operations=[];
+  let fail=false;
+  const context={deleteTaskProject:id=>{if(fail)throw new Error("quota");operations.push("save:"+id);},augmentTaskProjects:()=>[]};
+  vm.runInNewContext(source.replace(/^import .*;\n/m,"").replace("export function ","function "),context);
+  const target={slug:"task-last",el:{contains:el=>el===pillElement}};
+  const pillElement={};
+  const title={slug:"task-last",material:{uniforms:{}},dispose:()=>operations.push("title")};
+  const unrelatedTitle={slug:"other"};
+  const folio={cards:[target],texts:[title,unrelatedTitle],pills:[{el:pillElement,mesh:{}},{el:{}}],reg:{retire:()=>operations.push("card")},disposeMesh:()=>operations.push("pill"),scan:()=>[]};
+  const projects={value:[{slug:"task-last"}]};
+  const dispose=context.installTaskCreateRail({folio,projects,root:{value:{isConnected:true}},nextTick:async()=>{},measureX(){},measureY(){},centerX(){assert.fail("empty rail cannot center");},centerY(){assert.fail("empty rail cannot center");},motion:{killTweensOf(){}}});
+  fail=true;await assert.rejects(folio.removeTaskCard("task-last"),/quota/);
+  assert.deepEqual(operations,[]);assert.equal(projects.value.length,1);assert.equal(folio.texts.length,2);
+  fail=false;await folio.removeTaskCard("task-last");
+  assert.deepEqual(operations,["save:task-last","title","pill","card"]);
+  assert.equal(projects.value.length,0);assert.equal(folio.cards.length,0);assert.equal(folio.pills.length,1);assert.equal(folio.texts[0],unrelatedTitle);
+  dispose();assert.equal(folio.removeTaskCard,undefined);
+});

@@ -225,6 +225,86 @@ test("create control enters the browser top layer and cleans up on unmount", () 
   assert.equal(shown, false);
 });
 
+test("deleting a task removes it from every list without cascading or destroying recoverable data", () => {
+  const f = fixture();
+  const first = f.context.createTaskProject({title:"first"});
+  f.storage.set("preacherman.task.last-active", first.id);
+  f.context.crypto.randomUUID = () => "child";
+  const child = f.context.createTaskProject({title:"child"});
+  const stored = f.storage.get("preacherman.task.projects");
+  f.storage.set(`preacherman.task.${first.id}.messages`, '[{"text":"keep"}]');
+  f.context.deleteTaskProject(first.id);
+  assert.deepEqual(Array.from(f.context.readTaskProjects(), p=>p.id), [child.id]);
+  assert.equal(f.storage.get("preacherman.task.projects"), stored);
+  assert.equal(f.storage.get(`preacherman.task.${first.id}.messages`), '[{"text":"keep"}]');
+  const cards = f.context.augmentTaskProjects([{slug:"nathan-riley"},{slug:first.id,preachermanTask:true}]);
+  assert.deepEqual(Array.from(cards, p=>p.slug), ["nathan-riley", child.id]);
+  f.context.location.search = "?task=" + child.id;
+  const detail = f.context.TaskMetadata.setup({slug:"nathan-riley"})();
+  assert.equal(detail.children[2].children[1].tag,"p"); // no dead parent link
+});
+
+test("last dynamic card and authored cards stay deleted after repeated augmentation", () => {
+  const f = fixture();
+  const project = f.context.createTaskProject();
+  const original = [{slug:"nathan-riley"},{slug:"griflan"}];
+  const populated = f.context.augmentTaskProjects(original);
+  f.context.deleteTaskProject(project.id);
+  f.context.deleteTaskProject("griflan");
+  assert.deepEqual(Array.from(f.context.augmentTaskProjects(populated), p=>p.slug), ["nathan-riley"]);
+  f.context.deleteTaskProject("nathan-riley");
+  assert.equal(f.context.augmentTaskProjects(populated).length,0);
+  assert.equal(f.context.preferredTaskSlug("griflan"),null);
+  const newTask = f.context.createTaskProject({title:"after empty"});
+  assert.equal(newTask.parentId,"");
+});
+
+test("failed deletion is atomic and preserves the visible task list", () => {
+  const f = fixture();
+  const project = f.context.createTaskProject();
+  const before = [...f.storage.entries()];
+  f.context.localStorage.setItem = () => {throw new Error("quota");};
+  assert.throws(()=>f.context.deleteTaskProject(project.id),/quota/);
+  assert.deepEqual([...f.storage.entries()],before);
+  assert.equal(f.context.readTaskProjects()[0].id,project.id);
+});
+
+test("full index shares created names, task routes, framed empty previews and deletion filtering", () => {
+  const f = fixture();
+  const authored={slug:"nathan-riley",src:"original.jpg"};
+  const created=f.context.createTaskProject({title:"新增名称"});
+  const index=f.context.taskIndexProjects([authored]);
+  assert.equal(index[0],authored);
+  assert.equal(index[1].slug,created.id);
+  assert.equal(f.context.taskDisplayTitle(index[1]),"新增名称");
+  assert.equal(index[1].src.endsWith("task-empty-preview.svg"),true);
+  assert.equal(f.context.projectRecord(created).src.endsWith("task-empty-card.svg"),true);
+  assert.equal(f.context.taskProjectRoute(index[1]),"/projects/nathan-riley?task="+created.id);
+  f.storage.set(f.context.titleStorageKey(created.id),"改名后");
+  assert.equal(f.context.taskDisplayTitle(index[1]),"改名后");
+  f.context.deleteTaskProject(created.id);
+  assert.equal(f.context.taskIndexProjects(index).length,1);
+  const runtime=fs.readFileSync(new URL("_nuxt/CCsiJzJJ.js",root),"utf8");
+  assert.ok(runtime.includes("v.value=taskIndexProjects(v.value||[])"));
+  assert.ok(runtime.includes("t.texture(e.src)"));
+  assert.ok(runtime.includes("t.rail.bind(j.value,_.value)"));
+  assert.ok(runtime.includes("t.rail.pick(e)"));
+});
+
+test("delete controls inherit semantic colors, mirrored placement, modal semantics and reduced motion", () => {
+  const css = fs.readFileSync(new URL("task-delete-control.css",root),"utf8");
+  const control = fs.readFileSync(new URL("task-delete-control.js",root),"utf8");
+  assert.ok(css.includes("clamp(2rem, 4vw, 6rem)"));
+  assert.ok(css.includes("border-radius: 4rem"));
+  assert.ok(css.includes("prefers-reduced-motion: reduce"));
+  assert.doesNotMatch(css,/#[\da-f]{3,8}\b/i);
+  for (const token of ["composer","text","muted","border","hover","focus","disabled","error"]) assert.ok(css.includes(`--demo-theme-chat-${token}`));
+  assert.ok(control.includes("showModal()"));
+  assert.ok(control.includes('event.key === "Escape"'));
+  assert.ok(control.includes("cancelAnimationFrame(frame)"));
+  assert.ok(control.includes("window.removeEventListener(type, guard, true)"));
+});
+
 test("editable content follows the authored enter and leave timeline without delayed remnants", () => {
   const runtime = fs.readFileSync(new URL("_nuxt/D9b8F35K.js", root), "utf8");
   assert.ok(runtime.includes('duration:n.c.title.dur,ease:"power2.out",overwrite:!0},x0.page.at)'));

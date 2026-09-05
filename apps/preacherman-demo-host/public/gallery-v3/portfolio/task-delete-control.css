@@ -1,0 +1,54 @@
+.task-delete {
+  position: fixed;
+  inset: calc(50% - 2.8rem) auto auto clamp(2rem, 4vw, 6rem);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  background: transparent;
+  color: var(--demo-theme-chat-text);
+  -webkit-text-fill-color: currentColor;
+  pointer-events: auto;
+}
+.task-delete::backdrop { background: transparent; pointer-events: none; }
+.task-delete__button { font: inherit; font-size: 1.2rem; }
+.task-delete__button[aria-pressed="true"] { border-color: var(--demo-theme-chat-focus); }
+.task-delete__status { position: absolute; top: calc(100% + 1.4rem); left: 0; width: 18rem; font-size: 1.2rem; line-height: 1.5; overflow-wrap: anywhere; }
+.task-delete__status:not(:empty) { padding: 1.2rem 1.6rem; border-radius: 2rem; background: var(--demo-theme-chat-composer); }
+.task-delete__status p { margin: 0 0 .8rem; }
+.task-delete__cancel-selection { padding: .6rem 0; border: 0; background: transparent; color: var(--demo-theme-chat-muted); font: inherit; text-decoration: underline; text-underline-offset: .3em; cursor: pointer; }
+.task-delete__cancel-selection:hover { color: var(--demo-theme-chat-text); }
+.task-delete__marker { position: fixed; top: 0; left: 0; display: flex; align-items: center; gap: .6rem; padding: .7rem 1.2rem; margin-left: -4rem; border: 1px solid var(--demo-theme-chat-focus); border-radius: 999px; background: var(--demo-theme-chat-composer); color: var(--demo-theme-chat-text); font-size: 1.2rem; pointer-events: none; }
+.task-delete__marker svg { width: 1.6rem; height: 1.6rem; }
+.task-delete-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(38rem, calc(100vw - 4rem));
+  max-height: calc(100dvh - 4rem);
+  margin: auto;
+  padding: 3.2rem;
+  border: 1px solid color-mix(in srgb, var(--demo-theme-chat-focus) 45%, transparent);
+  border-radius: 4rem;
+  overflow: auto;
+  background: var(--demo-theme-chat-composer);
+  color: var(--demo-theme-chat-text);
+  font: inherit;
+  cursor: default;
+  -webkit-text-fill-color: currentColor;
+}
+.task-delete-dialog[open] { animation: task-delete-confirm-in 220ms cubic-bezier(.16,1,.3,1); }
+.task-delete-dialog::backdrop { background: color-mix(in srgb, var(--demo-theme-chat-composer) 55%, transparent); }
+.task-delete-dialog h2 { margin: 0; font: inherit; font-size: 2.2rem; letter-spacing: -.02em; }
+.task-delete-dialog p { font-size: 1.3rem; line-height: 1.6; color: var(--demo-theme-chat-muted); overflow-wrap: anywhere; }
+.task-delete-dialog .task-delete-dialog__name { margin: 1.6rem 0 .8rem; color: var(--demo-theme-chat-text); font-size: 1.6rem; }
+.task-delete-dialog .task-delete-dialog__error { color: var(--demo-theme-chat-error); }
+.task-delete-dialog__actions { display: flex; justify-content: center; gap: 1.2rem; margin-top: 2.4rem; }
+.task-delete-dialog__actions button { flex: 1; min-height: 4.4rem; padding: .8rem 1.8rem; border: 1px solid var(--demo-theme-chat-border); border-radius: 999px; background: transparent; color: var(--demo-theme-chat-text); font: inherit; font-size: 1.4rem; cursor: pointer; transition: background-color 180ms ease, transform 180ms cubic-bezier(.16,1,.3,1); }
+.task-delete-dialog__actions button:last-child { border-color: var(--demo-theme-chat-focus); }
+.task-delete-dialog__actions button:not(:disabled):hover { background: var(--demo-theme-chat-hover); transform: translateY(-2px); }
+.task-delete-dialog__actions button:disabled { color: var(--demo-theme-chat-disabled); cursor: wait; }
+.task-delete :is(button, dialog):focus-visible { outline: 2px solid var(--demo-theme-chat-focus) !important; outline-offset: 4px; }
+.task-delete-dialog ::selection { background: var(--demo-theme-chat-text); color: var(--demo-theme-chat-composer); }
+@keyframes task-delete-confirm-in { from { opacity: .65; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+@media (max-width: 649px) { .task-delete { left: 1.2rem; top: calc(50% - 2.4rem); } .task-delete__status { width: 13rem; } .task-delete-dialog { padding: 2.4rem; } }
+@media (prefers-reduced-motion: reduce) { .task-delete-dialog[open] { animation: none; } .task-delete-dialog__actions button { transition: none; } }
