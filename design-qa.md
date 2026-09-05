@@ -610,3 +610,12 @@ final result: passed
 - Batched browser screenshots: `output/playwright/inline-deepseek-dark.png`, `inline-dashscope-dark.png`, light counterparts and `inline-mobile.png`. Both appearance preferences retain the intentional authored black settings canvas.
 - Browser fixture tests passed: save failure, PUT-before-POST, explicit saved/test-failed state, test saved credentials without rewriting them, Save only without testing, workspace validation, secret remasking, Advanced and Back. All test writes were intercepted synthetic fixtures; no user credentials were written and no billable provider call was made.
 - Native delivery evidence and hashes are recorded in the desktop build manifest.
+
+# Task metadata first template — 2026-09-05
+
+- User confirmed only Nathan Riley, not Casa Di Solare. Impeccable's scoped-extension guidance preserves the authored sheet, two-column geometry, close interaction, shared companion, and other cards.
+- The former creator heading is now an inline editable task name. Enter/blur saves locally by stable card slug, Escape cancels, blank edits preserve the previous name, and Chinese IME composition does not accidentally commit. Storage failures are visible.
+- The biography is replaced by the honest empty task summary. No generated summary, conversation input, Codex execution, or fabricated task state is added in this step.
+- The selected detail does not instantiate the original image stack, external-link pill, year/tags, awards, or scroll progress indicator. Original card artwork and other details remain unchanged.
+- TypeScript and 10 focused Task metadata / Gallery regression tests passed. Mechanical detector returned no findings. Independent review identified focus contrast on the authored light sheet; the focus outline now uses the semantic dark text color in either preference.
+- Browser screenshots confirmed the first entry and edited title. End-to-end browser runs encountered existing preview cold-load timing and retained-route selectors; final packaged native verification and its exact results are recorded in the desktop build manifest, not inferred from those partial browser runs.
