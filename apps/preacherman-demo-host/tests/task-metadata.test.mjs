@@ -17,7 +17,7 @@ function fixture(initial) {
     parent: {document: {querySelector: () => ({}), documentElement: {}}},
     getComputedStyle: () => ({getPropertyValue: () => ""}), addEventListener() {}, URL,
   };
-  vm.runInNewContext(source.replace(/^import .*;$/m, "").replaceAll("export const ", "globalThis.").replace("import.meta.url", JSON.stringify(new URL("task-metadata.js", root).href)), context);
+  vm.runInNewContext(source.replace(/^import .*;$/m, "").replaceAll("export const ", "globalThis.").replaceAll("import.meta.url", JSON.stringify(new URL("task-metadata.js", root).href)), context);
   const render = context.TaskMetadata.setup({slug: "nathan-riley"});
   const input = () => render().children[0].children[0].props;
   return {context, storage, render, input, unmount: () => cleanup()};

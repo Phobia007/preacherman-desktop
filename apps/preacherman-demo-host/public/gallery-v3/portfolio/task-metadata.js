@@ -10,11 +10,16 @@ const stylesheet = document.createElement("link");
 stylesheet.rel = "stylesheet";
 stylesheet.href = new URL("./task-metadata.css", import.meta.url).href;
 document.head.append(stylesheet);
+const conversationStyle = document.createElement("link");
+conversationStyle.rel = "stylesheet";
+conversationStyle.href = new URL("./task-conversation.css", import.meta.url).href;
+document.head.append(conversationStyle);
 
 function syncTheme() {
   const source = parent.document.querySelector(".demo-app-shell") ?? parent.document.documentElement;
   const styles = getComputedStyle(source);
-  for (const name of ["--demo-theme-gallery-detail-action-rest-text", "--demo-theme-gallery-detail-action-rest-bg", "--demo-theme-gallery-detail-action-focus"]) {
+  for (const name of ["--demo-theme-gallery-detail-action-rest-text", "--demo-theme-gallery-detail-action-rest-bg", "--demo-theme-gallery-detail-action-focus",
+    ...["composer", "text", "muted", "border", "message", "hover", "send", "send-text", "disabled", "focus", "error"].map(key => "--demo-theme-chat-" + key)]) {
     document.documentElement.style.setProperty(name, styles.getPropertyValue(name));
   }
 }
