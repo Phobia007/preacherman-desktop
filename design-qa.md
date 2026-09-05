@@ -544,7 +544,7 @@ final result: passed
 
 final result: passed
 
-# AI Providers CC Switch settings adaptation — Design QA (latest)
+# AI Providers CC Switch settings adaptation — Design QA (historical)
 
 ## Comparison target
 
@@ -587,3 +587,14 @@ final result: passed
 - Native `Back to Settings` returned to the existing overview. The new Demo/WebView2 process tree was then closed normally; all eight WebView2 descendants exited and port 1420 remained free.
 
 final result: passed
+
+# AI Providers right-panel refinement — 2026-09-05
+
+- Scope: refine existing controls only. Original 36.5% / 63.5% split, one-pixel divider, blank left column, bottom-left return, and right content origin remain unchanged. At 1800px the right column starts at x657.
+- Impeccable guided a bounded, reference-led refinement; independent final visual review passed. CC Switch reference informed grouped tabs and clear configuration actions, not the outer layout.
+- Existing four areas remain Providers, Credentials, Routing, and Advanced. No new backend capabilities or fabricated usage statistics were added.
+- Readable labels, shorter copy, grouped masked credential fields, keyboard tab navigation, and distinct Save/Test busy states preserve the existing service APIs.
+- TypeScript and focused Settings / AI Providers tests: passed (9/9).
+- Browser checks covered both stored appearances, Configure, empty credential validation, reveal/remask, four routing capabilities, Advanced, keyboard navigation, narrow viewport, and Back. Final screenshots: `apps/preacherman-demo-host/output/playwright/providers-refresh-dark.png` and `dashscope-refresh-dark.png` (light counterparts alongside). Both keep the deliberately black authored Settings canvas.
+- No live credential write or billable provider test was performed; credentials remain user-supplied.
+- Native delivery verification is recorded in `apps/preacherman-demo-host/desktop-build-manifest.json`.
