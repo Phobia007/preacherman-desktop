@@ -1,16 +1,23 @@
 .market-surface {
   position: absolute;
-  inset: 116px 0 0;
+  inset: 0;
   background: transparent;
   color: var(--demo-theme-market-text);
 }
 
 .market-surface__frame {
+  position: absolute;
+  top: 112px;
   display: block;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 112px);
   border: 0;
   background: transparent;
+}
+
+.market-surface[data-page="configurator"] .market-surface__frame {
+  top: 116px;
+  height: calc(100% - 116px);
 }
 
 .market-surface__status {

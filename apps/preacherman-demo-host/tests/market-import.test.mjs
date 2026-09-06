@@ -15,7 +15,8 @@ test("embedded document synchronizes the actual host color scheme before paintin
   let synchronize;
   const script = await text(join(imported, "market-embed.js"));
   runInNewContext(script, {
-    parent:{document:{documentElement:parentRoot,querySelector:()=>shell},getComputedStyle:node=>node===parentRoot?{colorScheme:node.scheme}:{getPropertyValue:()=>"#fff"}},
+    parent:{postMessage(){},document:{documentElement:parentRoot,querySelector:()=>shell},getComputedStyle:node=>node===parentRoot?{colorScheme:node.scheme}:{getPropertyValue:()=>"#fff"}},
+    location:{pathname:"/market-love/cartier-love.html",origin:"http://local.test"},
     document:{documentElement:root,addEventListener(){}},
     window:{addEventListener(){}},
     MutationObserver:class {constructor(callback){synchronize=callback;}observe(){}disconnect(){}},
@@ -40,11 +41,11 @@ test("Market mounts only at its route without replacing the shared scene", async
 
 test("the long page, fonts, header, dialogs and remaining Start Designing links remain", async () => {
   const html = await text(join(imported, "cartier-love.html"));
-  for (const section of ["hero", "style", "material", "diamonds", "finish", "closure"]) {
+  for (const section of ["style", "material", "diamonds", "finish", "closure"]) {
     assert.match(html, new RegExp(`data-od-id="love-${section}"`));
   }
-  for (const id of ["site-header", "search-dialog", "saved-dialog", "bag-dialog"]) assert.ok(html.includes(`data-od-id="${id}"`));
-  assert.equal((html.match(/href="love-configurator.html"/g) || []).length, 7);
+  for (const id of ["site-header", "search-dialog"]) assert.ok(html.includes(`data-od-id="${id}"`));
+  assert.equal((html.match(/href="love-configurator.html"/g) || []).length, 5);
   assert.match(html, /assets\/fonts\/fonts.css/);
   for (const font of ["BrilliantCutPro-Regular.woff2", "BrilliantCutPro-Medium.woff2", "FancyCutPro-Regular.woff2"]) assert.ok((await stat(join(imported, "assets/fonts", font))).size > 0);
 });
@@ -53,19 +54,17 @@ test("the requested footer is removed from the document, not merely hidden", asy
   const html = await text(join(imported, "cartier-love.html"));
   assert.doesNotMatch(html, /<footer\b|site-footer|footer-logo|Customer Care|Our Company|Explore LOVE<|United States · English|© Cartier 2026/);
   assert.match(html, /<\/main>\s*<dialog id="search-dialog"/);
-  assert.match(html, /class="brand-logo"/);
 });
 
 test("the opening film, poster, playback controls and reserved media block are removed", async () => {
   const html = await text(join(imported, "cartier-love.html"));
   assert.doesNotMatch(html, /<video\b|love-film|film-toggle|hero__aspect-ratio|hero__media|hero-video|video-toggle|assets\/media\/Cartier_|assets\/images\/(?:Mobile-)?Hero\.png/);
-  assert.match(html, /data-od-id="hero-heading">Design your love bracelet/);
-  assert.match(html, /data-od-id="hero-start">START DESIGNING/);
+  assert.doesNotMatch(html, /love-hero|hero-heading|hero-start|Design your love bracelet|Select every detail of the LOVE bracelet/);
 });
 
 test("intro controls initialize without a film element or playback controller", async () => {
   const script = await text(join(imported, "assets/love-intro.js"));
-  assert.doesNotMatch(script, /love-film|film-toggle|syncVideo|video\.play|video\.pause/);
+  assert.doesNotMatch(script, /love-film|film-toggle|syncVideo|video\.play|video\.pause|menu-toggle|bag-toggle|saved-toggle/);
   const registered = [];
   const node = selector => ({addEventListener: event => registered.push([selector,event])});
   runInNewContext(script, {
@@ -75,9 +74,43 @@ test("intro controls initialize without a film element or playback controller", 
       querySelectorAll: () => [],
     },
   });
-  for (const [id,event] of [[".menu-toggle","click"],["search-toggle","click"],["search-form","submit"],["bag-toggle","click"],["saved-toggle","click"]]) {
+  for (const [id,event] of [["search-toggle","click"],["search-form","submit"]]) {
     assert.ok(registered.some(([selector,type]) => selector===id && type===event), id);
   }
+});
+
+test("requested utilities are absent while all eight category links and search remain", async () => {
+  const html = await text(join(imported, "cartier-love.html"));
+  assert.doesNotMatch(html, /header-top|utility-links|utility-icons|class="brand-logo"|United States|Contact Us|>Services<|saved-toggle|bag-toggle|account-link|boutique-link|saved-dialog|bag-dialog/);
+  for (const label of ["High Jewelry", "Jewelry", "Watches", "Bags and accessories", "Fragrances", "Home &amp; Stationery", "News", "La Maison"]) assert.ok(html.includes(`>${label}</a>`));
+  assert.match(html, /id="search-toggle"/);
+});
+
+test("Market uses Task's exact profile copy, destinations and packaged signature font", async () => {
+  const profile = await text(join(root, "src/surfaces/market/MarketProfile.tsx"));
+  const task = await text(join(root, "src/surfaces/gallery/GallerySurface.tsx"));
+  const css = await text(join(root, "src/surfaces/market/market-profile.css"));
+  for (const match of profile.matchAll(/<span>(.*?)<\/span>|href="([^"]+)"/g)) assert.ok(task.includes(match[1] || match[2]), match[0]);
+  assert.equal([...profile.matchAll(/<span>/g)].length, 4);
+  assert.equal([...profile.matchAll(/href=/g)].length, 3);
+  assert.match(css, /BrotherSignature-7BWnK.otf/);
+  assert.match(css, /top: 48px/);
+  assert.match(css, /left: 50%/);
+  assert.match(profile, /aria-expanded=\{open\}/);
+  assert.match(profile, /event.key === "Escape"/);
+  assert.match(profile, /removeEventListener\("keydown"/);
+  assert.match(css, /prefers-reduced-motion/);
+});
+
+test("logo and categories have fixed host offsets; scrollbar hiding retains native scrolling", async () => {
+  const css = await text(join(root, "src/surfaces/market/market-surface.css"));
+  const embed = await text(join(imported, "market-embed.css"));
+  assert.match(css, /top: 112px/);
+  assert.match(css, /data-page="configurator"[^}]+top: 116px/);
+  assert.match(embed, /\.love-header \{ position: sticky; top: 0; \}/);
+  assert.match(embed, /scrollbar-width: none/);
+  assert.match(embed, /html::-webkit-scrollbar \{ width: 0; height: 0; \}/);
+  assert.doesNotMatch(embed, /overflow(?:-y)?:\s*hidden/);
 });
 
 test("every imported asset is packaged and matches its recorded hash", async () => {

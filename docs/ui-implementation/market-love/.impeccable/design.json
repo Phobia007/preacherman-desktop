@@ -5,7 +5,7 @@
   "extensions": {
     "typographyMeta": {
       "title": { "displayName": "Brilliant Cut headings", "purpose": "Preserved donor headings; no host font replacement." },
-      "body": { "displayName": "Fancy Cut copy", "purpose": "Preserved serif introduction and descriptive copy." },
+      "body": { "displayName": "Fancy Cut copy", "purpose": "Preserved serif descriptive copy in the five retained image/text sections." },
       "navigation": { "displayName": "Donor desktop navigation", "purpose": "Uppercase header links with the donor's responsive changes." },
       "search": { "displayName": "Local search field", "purpose": "Brilliant Cut text inside the retained search dialog." }
     },
@@ -16,7 +16,7 @@
     "motion": [
       { "name": "navigation-underline", "value": "transform .25s", "purpose": "Existing donor hover underline from scaleX(0) to scaleX(1)." },
       { "name": "donor-button", "value": ".5s cubic-bezier(.4,.9,.3,1)", "purpose": "Existing donor opacity, color, border-color and background-color transitions." },
-      { "name": "long-page-reduced-motion", "value": ".01ms", "purpose": "Existing long-page reduced-motion animation and transition duration; smooth scrolling becomes auto and the hero film pauses." }
+      { "name": "long-page-reduced-motion", "value": ".01ms", "purpose": "Existing long-page reduced-motion animation and transition duration; smooth scrolling becomes auto. Host profile reveal also disables animation." }
     ],
     "breakpoints": [
       { "name": "donor-menu", "value": "1023px" },

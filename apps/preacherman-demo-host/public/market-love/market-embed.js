@@ -19,8 +19,9 @@
   if (shell) themeObserver.observe(shell, { attributes: true, attributeFilter: ["data-appearance"] });
 
   const notify = type => {
-    if (parent !== window) parent.postMessage({ type: `preacherman.market.${type}` }, location.origin);
+    if (parent !== window) parent.postMessage({ type: `preacherman.market.${type}`, page: location.pathname.endsWith("love-configurator.html") ? "configurator" : "intro" }, location.origin);
   };
+  notify("page");
   let assetsReady = false;
   let stylesReady = false;
   let timer;

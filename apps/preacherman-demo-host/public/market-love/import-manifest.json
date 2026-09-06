@@ -1,8 +1,8 @@
 {
   "sourceProject": "70f215b1-59d7-4c44-a675-0a48d1730917",
-  "importedAt": "2026-09-06T08:18:03.291Z",
+  "importedAt": "2026-09-06T08:39:52.467Z",
   "originalBundleSha256": "0cf59fbe58060315b957a45b35e7eb7e444eea3b90a9c3507a93fce85656cbb4",
-  "scope": "Local experience with the requested site footer and opening film block/controller removed; transparent paper, white text and isolated wishlist storage.",
+  "scope": "Local experience without the requested footer, film, introduction and utility header; Task profile and fixed categories are host-owned. Transparent paper, white text and isolated configurator storage.",
   "files": [
     {
       "path": "assets/configurator/app.js",
@@ -701,8 +701,8 @@
     },
     {
       "path": "assets/love-intro.js",
-      "bytes": 4088,
-      "sha256": "0866c022502241122a377934e13d3282d3a24c9e1fb9cc38a2bcca9856f04fb2"
+      "bytes": 1607,
+      "sha256": "b4c7879dade731cc14e0a2da49f1292ece7e337b4a05f6cf7fd065e92eaf94e8"
     },
     {
       "path": "assets/media/Cartier_16_9_HD.mp4",

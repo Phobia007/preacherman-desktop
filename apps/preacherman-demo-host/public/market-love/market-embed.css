@@ -1,4 +1,4 @@
-/* Only the paper and ink change. Donor typography, geometry and motion stay intact. */
+/* Preserve donor content styling; the requested header/removals are scoped below. */
 :root, :host {
   --bg: transparent;
   --surface: transparent;
@@ -80,7 +80,22 @@ svg [stroke="#0D0D0D"], svg [stroke="#0d0d0d"], svg [stroke="#000000"], svg [str
 }
 
 html {
-  scrollbar-color: var(--demo-theme-market-border, rgb(255 255 255 / 28%)) transparent;
+  scrollbar-width: none;
+  scroll-padding-top: 72px;
+}
+
+html::-webkit-scrollbar { width: 0; height: 0; }
+
+/* Host owns the fixed Task logo. This category row stays at the top of its frame. */
+.love-header { position: sticky; top: 0; }
+@media (max-width: 1023px) {
+  .love-header .brand-nav {
+    display: flex;
+    position: static;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    padding: 8px 24px;
+  }
 }
 
 input { caret-color: var(--demo-theme-market-text, #fff); }
