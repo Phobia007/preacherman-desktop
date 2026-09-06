@@ -14,6 +14,8 @@
       { "name": "header-icon", "value": "drop-shadow(0 1px 2px var(--demo-theme-market-ink-shadow, #000))", "purpose": "Filter on the donor header icons and white logo." }
     ],
     "motion": [
+      { "name": "task-spatial-lens", "value": "850ms open / 650ms close; original Task custom cubic curve", "purpose": "Refract the actual current Market viewport using Task's extracted shader and controls. Temporary DPR1 WebGL pass; fully disposed on close/unmount. Reduced motion settles directly without idle breath." },
+      { "name": "task-profile-lines", "value": "1100ms reveal; 200ms start, 75ms line stagger", "purpose": "Task profile copy enters inside the lens; reveal continues after the shorter lens-opening transition. Links dim to 0.6 opacity over 300ms on hover." },
       { "name": "navigation-underline", "value": "transform .25s", "purpose": "Existing donor hover underline from scaleX(0) to scaleX(1)." },
       { "name": "donor-button", "value": ".5s cubic-bezier(.4,.9,.3,1)", "purpose": "Existing donor opacity, color, border-color and background-color transitions." },
       { "name": "long-page-reduced-motion", "value": ".01ms", "purpose": "Existing long-page reduced-motion animation and transition duration; smooth scrolling becomes auto. Host profile reveal also disables animation." }

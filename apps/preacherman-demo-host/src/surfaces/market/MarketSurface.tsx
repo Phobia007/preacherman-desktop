@@ -8,11 +8,12 @@ export function MarketSurface() {
   const [attempt, setAttempt] = useState(0);
   const [page, setPage] = useState<"intro" | "configurator">("intro");
   const [profileOpen, setProfileOpen] = useState(false);
+  const [lensActive, setLensActive] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
-    frameRef.current?.toggleAttribute("inert", profileOpen);
-  }, [profileOpen, attempt]);
+    frameRef.current?.toggleAttribute("inert", profileOpen || lensActive);
+  }, [profileOpen, lensActive, attempt]);
 
   useEffect(() => {
     setStatus("loading");
@@ -22,6 +23,7 @@ export function MarketSurface() {
       if (event.data?.type === "preacherman.market.page") {
         setPage(event.data.page === "configurator" ? "configurator" : "intro");
         setProfileOpen(false);
+        setLensActive(false);
       }
       if (event.data?.type === "preacherman.market.ready") {
         window.clearTimeout(deadline);
@@ -40,8 +42,8 @@ export function MarketSurface() {
   }, [attempt]);
 
   return (
-    <section aria-label="Market" className="market-surface" data-status={status} data-page={page}>
-      {page === "intro" && <MarketProfile open={profileOpen} onOpenChange={setProfileOpen} />}
+    <section aria-label="Market" className="market-surface" data-status={status} data-page={page} data-lens-active={lensActive}>
+      {page === "intro" && <MarketProfile open={profileOpen} onOpenChange={setProfileOpen} frameRef={frameRef} onLensActiveChange={setLensActive} />}
       <iframe
         className="market-surface__frame"
         key={attempt}

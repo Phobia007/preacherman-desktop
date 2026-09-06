@@ -20,6 +20,9 @@
   height: calc(100% - 116px);
 }
 
+/* The lens supplies the current page pixels until its closing frame reaches zero. */
+.market-surface[data-lens-active="true"] .market-surface__frame { opacity: 0; }
+
 .market-surface__status {
   position: absolute;
   right: 36px;
