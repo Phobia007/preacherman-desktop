@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 
-import { preachermanServiceRequest } from "../../preacherman/capabilityClient";
+import { useExecutionFrameBridge } from "../../execution/useExecutionFrameBridge";
 import "./gallery-surface.css";
 
 type GalleryAppearance = "light" | "dark";
@@ -19,17 +19,6 @@ type GalleryThemeMessage = {
   compositeKey: string;
   hideProjectCards: boolean;
   hideFeaturedControl: boolean;
-};
-
-type GalleryProviderModel = {
-  id: string;
-  label: string;
-};
-
-type GalleryProvider = {
-  id: string;
-  label: string;
-  models: GalleryProviderModel[];
 };
 
 interface GallerySurfaceProps {
@@ -49,51 +38,9 @@ function getAppearance(): GalleryAppearance {
   return document.documentElement.dataset.appearance === "dark" ? "dark" : "light";
 }
 
-function record(value: unknown): Record<string, unknown> | null {
-  return typeof value === "object" && value !== null
-    ? value as Record<string, unknown>
-    : null;
-}
-
-async function requestJson(path: string): Promise<Record<string, unknown>> {
-  const payload = record(await preachermanServiceRequest<unknown>(path, { signal: AbortSignal.timeout(15000) }));
-  if (!payload) throw new Error("Local service returned an invalid response.");
-  return payload;
-}
-
-async function loadChatProviders(): Promise<GalleryProvider[]> {
-  const catalog = await requestJson("/api/providers/catalog");
-  const providers = Array.isArray(catalog.providers) ? catalog.providers : [];
-  const readyProviders = providers.flatMap((value) => {
-    const provider = record(value);
-    const capabilities = record(provider?.capabilities);
-    const chat = record(capabilities?.chat);
-    return provider && typeof provider.id === "string" && typeof provider.label === "string" && chat?.state === "ready"
-      ? [{ id: provider.id, label: provider.label }]
-      : [];
-  });
-
-  const results = await Promise.all(readyProviders.map(async (provider) => {
-    try {
-      const payload = await requestJson(`/api/providers/${encodeURIComponent(provider.id)}/models`);
-      const result = record(payload.result) ?? payload;
-      const models = Array.isArray(result.models) ? result.models.flatMap((value) => {
-        const model = record(value);
-        return model && typeof model.id === "string" && typeof model.label === "string" && model.capability === "chat"
-          ? [{ id: model.id, label: model.label }]
-          : [];
-      }) : [];
-      return models.length ? { ...provider, models } : null;
-    } catch {
-      return null;
-    }
-  }));
-
-  return results.filter((provider): provider is GalleryProvider => provider !== null);
-}
-
 export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps) {
   const frameRef = useRef<HTMLIFrameElement>(null);
+  useExecutionFrameBridge(frameRef);
   const revealFrameRef = useRef<number | null>(null);
   const reduceMotionRef = useRef(
     window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -133,97 +80,14 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
     frameWindow.postMessage(message, targetOrigin);
   }, [hideProjectCards, showEmptyFeatured]);
 
-  const sendProviderCatalogToFrame = useCallback(async () => {
-    const requestedFrame = frameRef.current?.contentWindow;
-    if (!requestedFrame) return;
-    const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
-    try {
-      const execution = await requestJson("/api/settings/execution");
-      const connections = Array.isArray(execution.connections) ? execution.connections : [];
-      const providers: GalleryProvider[] = connections.flatMap(value => {
-        const connection = record(value);
-        return connection && typeof connection.id === "string" && typeof connection.name === "string" && typeof connection.model === "string" && connection.keySaved
-          ? [{ id: connection.id, label: connection.name, models: Array.isArray(connection.models) && connection.models.length
-            ? connection.models as GalleryProviderModel[] : [{ id: connection.model, label: connection.model }] }] : [];
-      });
-      const active = record(execution.active);
-      const local = record(execution.local);
-      if (typeof local?.agentId === "string") providers.push({ id: local.agentId, label: "Local CLI · approval required", models: [{ id: "default", label: String(local.label || local.agentId) + " · default" }] });
-      const legacy = await loadChatProviders().catch(() => []);
-      providers.push(...legacy.filter(item => item.id !== "deepseek" || !providers.some(candidate => candidate.id === "legacy-deepseek")));
-      if (frameRef.current?.contentWindow === requestedFrame) {
-        requestedFrame.postMessage({ type: "gallery-provider-catalog", providers, active }, targetOrigin);
-      }
-    } catch {
-      if (frameRef.current?.contentWindow === requestedFrame) {
-        requestedFrame.postMessage({ type: "gallery-provider-catalog", providers: [], error: true }, targetOrigin);
-      }
-    }
-  }, []);
-
   useEffect(() => {
-    const controller = new AbortController();
-    const dispatch = async (data: Record<string, unknown>, target: Window) => {
-      const requestId = data.requestId;
-      if (typeof requestId !== "string" || requestId.length > 100) return;
-      const call = (path: string, body?: unknown) => preachermanServiceRequest<Record<string, unknown>>(path, {
-        ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }),
-        signal: AbortSignal.any([controller.signal, AbortSignal.timeout(70000)]),
-      });
-      try {
-        let result;
-        if (data.action === "chat") {
-          const selection = record(data.selection);
-          const messages = Array.isArray(data.messages) ? data.messages : [];
-          const settings = await call("/api/settings/execution");
-          const active = record(settings.local);
-          if (active && selection?.providerId === active.agentId) {
-            const last = record(messages[messages.length - 1]);
-            result = await call("/api/execution/local-turn", { agentId: active.agentId, workspaceId: active.workspaceId, objective: last?.content });
-          } else {
-            result = await call("/api/execution/chat", { connectionId: selection?.providerId === "deepseek" ? "legacy-deepseek" : selection?.providerId, model: selection?.modelId, messages });
-          }
-        } else if (["status", "approve", "reject", "cancel"].includes(String(data.action)) && typeof data.taskId === "string" && /^[A-Za-z0-9_-]{1,120}$/.test(data.taskId)) {
-          result = await call("/api/tasks/" + encodeURIComponent(data.taskId) + (data.action === "status" ? "" : "/commands"),
-            data.action === "status" ? undefined : { type: data.action, approvalId: data.approvalId });
-        } else throw new Error("Unsupported task operation.");
-        if (!controller.signal.aborted) target.postMessage({ type: "gallery-execution-result", requestId, result }, window.location.origin === "null" ? "*" : window.location.origin);
-      } catch (error) {
-        if (!controller.signal.aborted) target.postMessage({ type: "gallery-execution-result", requestId, error: error instanceof Error ? error.message : "Request failed." }, window.location.origin === "null" ? "*" : window.location.origin);
-      }
+    const handleMessage = (event: MessageEvent) => {
+      if (event.source !== frameRef.current?.contentWindow || (window.location.origin !== "null" && event.origin !== window.location.origin)) return;
+      if (event.data?.type === "gallery-source-ready") { setSourceReady(true); sendThemeToFrame(); }
     };
-    const handleMessage = (event: MessageEvent<unknown>) => {
-      if (event.source !== frameRef.current?.contentWindow) {
-        return;
-      }
-
-      if (window.location.origin !== "null" && event.origin !== window.location.origin) {
-        return;
-      }
-
-      if (
-        typeof event.data === "object" &&
-        event.data !== null &&
-        "type" in event.data &&
-        event.data.type === "gallery-source-ready"
-      ) {
-        setSourceReady(true);
-        sendThemeToFrame();
-      } else if (
-        typeof event.data === "object" &&
-        event.data !== null &&
-        "type" in event.data &&
-        event.data.type === "gallery-provider-request"
-      ) {
-        void sendProviderCatalogToFrame();
-      } else if (record(event.data)?.type === "gallery-execution-request") {
-        void dispatch(event.data as Record<string, unknown>, frameRef.current!.contentWindow!);
-      }
-    };
-
     window.addEventListener("message", handleMessage);
-    return () => { window.removeEventListener("message", handleMessage); controller.abort(); };
-  }, [sendProviderCatalogToFrame, sendThemeToFrame]);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [sendThemeToFrame]);
 
   useEffect(() => {
     if (reduceMotionRef.current) {

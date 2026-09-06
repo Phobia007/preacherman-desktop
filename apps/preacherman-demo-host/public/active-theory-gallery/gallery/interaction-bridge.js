@@ -35,6 +35,7 @@
   };
 
   const findCardHit = (x, y) => {
+    if (document.elementFromPoint(x, y)?.closest("[data-preacherman-chat]")) return null;
     if (
       typeof Interaction3D === "undefined"
       || typeof Mouse === "undefined"

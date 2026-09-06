@@ -17,10 +17,12 @@ test("Gallery v3 embeds the copied local portfolio without replacement imagery",
   assert.doesNotMatch(component, /\.(?:png|jpe?g|webp|avif)["']/i);
   assert.match(component, /gallery-source-ready/);
   assert.match(component, /gallery-theme/);
-  assert.match(component, /gallery-provider-request/);
-  assert.match(component, /gallery-provider-catalog/);
-  assert.match(component, /\/api\/providers\/catalog/);
-  assert.match(component, /model\.capability === "chat"/);
+  assert.match(component, /useExecutionFrameBridge\(frameRef\)/);
+  const bridge = read(appRoot, "src", "execution", "useExecutionFrameBridge.ts");
+  assert.match(bridge, /gallery-provider-request/);
+  assert.match(bridge, /gallery-provider-catalog/);
+  assert.match(bridge, /\/api\/settings\/execution/);
+  assert.doesNotMatch(bridge, /\/api\/providers\/catalog/);
   assert.match(component, /hideProjectCards/);
   assert.match(component, /hideFeaturedControl/);
   assert.match(component, /data-reveal-state=\{revealState\}/);

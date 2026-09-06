@@ -1,0 +1,33 @@
+[data-preacherman-chat] .preacherman-chat-controls {
+  display: flex; align-items: center; gap: 8px; flex: 0 0 auto;
+  max-width: 100%; margin-top: 10px; pointer-events: auto;
+  font: 12px/1.5 nbarchitekt, monospace;
+}
+[data-preacherman-chat] .preacherman-chat-controls select {
+  min-width: 0; flex: 1; max-width: 270px; text-overflow: ellipsis;
+}
+[data-preacherman-chat] .preacherman-chat-controls select,
+[data-preacherman-chat] button {
+  color: var(--demo-theme-settings-text); background: transparent;
+  border: 1px solid var(--demo-theme-settings-border); border-radius: 24px;
+  padding: 7px 10px; font: inherit; cursor: pointer;
+}
+[data-preacherman-chat] option { color: var(--demo-theme-settings-text); background: var(--demo-theme-settings-canvas); }
+[data-preacherman-chat] button:hover:not(:disabled) { background: var(--demo-theme-settings-hover); }
+[data-preacherman-chat] :is(select, button, textarea):focus-visible { outline: 2px solid var(--demo-theme-settings-focus); outline-offset: 3px; }
+[data-preacherman-chat] :disabled { color: var(--demo-theme-settings-muted); cursor: default; opacity: .65; }
+[data-preacherman-chat] .preacherman-chat-status {
+  flex: 0 0 auto; color: var(--demo-theme-settings-muted); font: 11px/1.5 nbarchitekt, monospace;
+  margin: 8px 0 0 10px; max-width: 100%; overflow-wrap: anywhere;
+}
+[data-preacherman-chat] .preacherman-chat-status[data-error="true"] { color: var(--demo-theme-settings-error); }
+[data-preacherman-chat][aria-busy="true"] .preacherman-chat-status { color: var(--demo-theme-settings-loading); }
+[data-preacherman-chat] [data-preacherman-message] { white-space: pre-wrap; overflow-wrap: anywhere; pointer-events: auto; }
+[data-preacherman-chat] [role="log"] { overflow-y: auto !important; scrollbar-width: none; overscroll-behavior: contain; pointer-events: auto; }
+[data-preacherman-chat] .preacherman-chat-task { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+[data-preacherman-chat] .preacherman-chat-task > span { flex: 0 0 100%; color: var(--demo-theme-settings-muted); }
+[data-preacherman-chat] textarea { white-space: pre-wrap !important; color: var(--demo-theme-settings-text) !important; }
+[data-preacherman-chat] textarea::placeholder { color: var(--demo-theme-settings-muted); opacity: 1; }
+@media (max-width: 600px) {
+  [data-preacherman-chat] { max-width: calc(100vw - 32px) !important; padding-inline: 16px !important; }
+}

@@ -36,7 +36,7 @@ function validProviders(value) {
   return value.flatMap(provider => {
     if (!provider || typeof provider.id !== "string" || typeof provider.label !== "string" || !Array.isArray(provider.models)) return [];
     const models = provider.models.filter(model => model && typeof model.id === "string" && typeof model.label === "string");
-    return models.length ? [{id:provider.id, label:provider.label, models}] : [];
+    return models.length ? [{id:provider.id, label:provider.label, kind:provider.kind, models}] : [];
   });
 }
 
@@ -60,6 +60,7 @@ export const TaskConversation = {
     const providerState = ref("loading");
     const modelOpen = ref(false);
     const selected = ref("");
+    let selectionPinned = false;
     const busy = ref(false);
     const contextTrimmed = ref(false);
     const selectionAvailable = () => providers.value.some(provider => provider.models.some(model => selectionKey(provider.id, model.id) === selected.value));
@@ -77,6 +78,7 @@ export const TaskConversation = {
     try {
       messages.value = readMessages(task);
       selected.value = localStorage.getItem(modelStorageKey(task)) ?? "";
+      selectionPinned = Boolean(selected.value);
     } catch {
       readFailed.value = true;
       error.value = "本机记录无法读取，暂不能发送，以免覆盖原记录。";
@@ -98,11 +100,12 @@ export const TaskConversation = {
       if (files.value.length) { error.value = "附件目前只记录文件名，尚不支持上传。请先移除附件再发送文本。"; return; }
       const [providerId, modelId] = selected.value.split("::");
       const text = draft.value.trim();
-      if (providerId === "codex-cli" && text.length > 2000) { error.value = "本机任务描述请控制在 2000 字符以内。"; return; }
+      if (providers.value.find(provider => provider.id === providerId)?.kind === "cli" && text.length > 2000) { error.value = "本机任务描述请控制在 2000 字符以内。"; return; }
       const entry = {text, files:[], role:"user"};
       const updated = [...messages.value, entry];
       try { localStorage.setItem(modelStorageKey(task), selected.value); persist(updated); }
       catch { error.value = "消息未能保存，内容仍在输入框中，请重试。"; return; }
+      selectionPinned = true;
       draft.value = "";
       files.value = [];
       error.value = "";
@@ -156,7 +159,7 @@ export const TaskConversation = {
       providerState.value = "ready";
       const active = event.data.active;
       const defaultKey = active ? selectionKey(active.mode === "cli" ? active.agentId : active.connectionId, active.model) : "";
-      if (!selected.value && providers.value.some(provider => provider.models.some(model => selectionKey(provider.id, model.id) === defaultKey))) selected.value = defaultKey;
+      if (!selectionPinned) selected.value = providers.value.some(provider => provider.models.some(model => selectionKey(provider.id, model.id) === defaultKey)) ? defaultKey : "";
     };
     const closeOutside = event => {
       if (!event.target.closest?.(".task-chat__model-select")) modelOpen.value = false;
@@ -178,6 +181,7 @@ export const TaskConversation = {
       try {
         localStorage.setItem(modelStorageKey(task), value);
         selected.value = value;
+        selectionPinned = true;
         error.value = "";
         modelOpen.value = false;
       } catch {
