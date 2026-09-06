@@ -23,7 +23,7 @@
   pointer-events: auto;
   transition: filter 260ms ease;
   color: var(--demo-theme-brand-menu-text);
-  font-family: "Clash Display", sans-serif;
+  font-family: var(--demo-font-primary);
   font-size: 32px;
   font-weight: 300;
   line-height: 1.15;

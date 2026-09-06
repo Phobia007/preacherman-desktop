@@ -67,7 +67,7 @@ export const TaskConversation = {
     const pending = new Map();
     const callHost = payload => new Promise((resolve, reject) => {
       const requestId = crypto.randomUUID();
-      const timer = setTimeout(() => { pending.delete(requestId); reject(new Error("请求超时，请检查连接后重试。")); }, 75000);
+      const timer = setTimeout(() => { pending.delete(requestId); reject(new Error("请求超时，请检查连接后重试。")); }, 140000);
       pending.set(requestId, { resolve, reject, timer });
       parent.postMessage({ type: "gallery-execution-request", requestId, ...payload }, location.origin === "null" ? "*" : location.origin);
     });
@@ -100,7 +100,6 @@ export const TaskConversation = {
       if (files.value.length) { error.value = "附件目前只记录文件名，尚不支持上传。请先移除附件再发送文本。"; return; }
       const [providerId, modelId] = selected.value.split("::");
       const text = draft.value.trim();
-      if (providers.value.find(provider => provider.id === providerId)?.kind === "cli" && text.length > 2000) { error.value = "本机任务描述请控制在 2000 字符以内。"; return; }
       const entry = {text, files:[], role:"user"};
       const updated = [...messages.value, entry];
       try { localStorage.setItem(modelStorageKey(task), selected.value); persist(updated); }
@@ -115,7 +114,8 @@ export const TaskConversation = {
         const context = boundedChatContext(updated);
         contextTrimmed.value = context.trimmed;
         const result = await callHost({ action: "chat", selection: {providerId, modelId}, messages: context.messages });
-        const reply = {role:"assistant", text:result.task ? "本机任务已准备。确认工作区和权限后，再批准执行。" : result.text, files:[], ...(result.task ? {task:result.task} : {})};
+        if (typeof result?.text !== "string" || !result.text.trim()) throw new Error("模型未返回有效文本。");
+        const reply = {role:"assistant", text:result.text, files:[]};
         try { persist([...messages.value, reply]); }
         catch { messages.value = [...messages.value, reply]; error.value = "回复已收到，但本机保存失败，请复制保留。"; }
       } catch (reason) { error.value = reason.message + " 消息已保留，不会自动重发。"; }
@@ -270,14 +270,13 @@ export const TaskConversation = {
               event.target.value = "";
             }}),
           element("button", {type:"button", class:"task-chat__tool task-chat__icon", title:"添加附件（此版本仅记录文件名，不读取或上传）", "aria-label":"添加附件", onClick:() => picker.value?.click()}, [icon("plus")]),
-          unavailable("帮我批准", "approval", "执行权限尚未接入"),
           element("span", {class:"task-chat__spacer"}),
           modelSelector(),
           unavailable("", "mic", "语音尚未接入", "task-chat__icon"),
-          element("button", {type:"submit", class:"task-chat__send", "aria-label":"发送消息", title:"发送到所选模型；本机执行仍需审批", disabled:busy.value || readFailed.value || !draft.value.trim()}, [icon("up")]),
+          element("button", {type:"submit", class:"task-chat__send", "aria-label":"发送消息", title:"发送到所选模型", disabled:busy.value || readFailed.value || !draft.value.trim()}, [icon("up")]),
         ]),
       ]),
-      element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (busy.value ? "正在请求，请稍候…" : contextTrimmed.value ? "本次仅发送限额内的近期上下文；完整记录仍保留在本机。" : "发送时文本将交给所选服务商 · 附件未上传 · 本机执行需审批")),
+      element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (busy.value ? "正在请求，请稍候…" : contextTrimmed.value ? "本次仅发送限额内的近期上下文；完整记录仍保留在本机。" : "文本对话与规划 · 发送给所选模型 · 不执行本机任务")),
     ]);
   },
 };

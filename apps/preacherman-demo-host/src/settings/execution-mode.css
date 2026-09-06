@@ -14,7 +14,7 @@
   scrollbar-width: none;
   pointer-events: auto;
   color: var(--demo-theme-settings-text);
-  font-family: "Clash Display", sans-serif;
+  font-family: var(--demo-font-primary);
   font-size: 22px;
   font-weight: 300;
   line-height: 1.45;

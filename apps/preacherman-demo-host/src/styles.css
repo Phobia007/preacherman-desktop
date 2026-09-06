@@ -15,6 +15,8 @@
 }
 
 :root {
+  --demo-font-primary: "Clash Display", sans-serif;
+  --demo-font-secondary: nbarchitekt, monospace;
   --demo-app-width: 1800px;
   --demo-app-height: 1000px;
   --demo-main-fade-in: 700ms;
@@ -545,7 +547,7 @@ html[data-appearance="dark"] #root {
   border-radius: 999px;
   color: var(--demo-theme-brand-menu-text);
   background: transparent;
-  font-family: "Clash Display", sans-serif;
+  font-family: var(--demo-font-primary);
   font-size: 32px;
   font-weight: 300;
   line-height: 1.15;

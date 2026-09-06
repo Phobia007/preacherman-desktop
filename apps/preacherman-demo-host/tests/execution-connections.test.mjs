@@ -119,10 +119,11 @@ test("input and gateway validation reject unsafe URLs and private network destin
   await assert.rejects(runtime.test({ ...draft, protocol: "unknown" }), /protocol/);
   await assert.rejects(runtime.chat({ messages: [{ role: "system", content: "no" }] }), /message limit/);
 });
-test("local CLI activation and task creation never bypass the approval gate", async t => {
+test("Codex chat connects without a workspace and never starts a local execution task", async t => {
   const { directory } = await setup(t);
   let starts = 0;
   const service = createPreachermanServer({
+    codexConversation: { chat: async ({ messages }) => ({ text: messages.at(-1).content, source: "fixture-codex" }), close() {} },
     env: { PREACHERMAN_DATA_DIR: directory, PREACHERMAN_LOCAL_AGENT_ROOTS: directory },
     localAgentRegistry: {
       list: async () => [{ id: "codex-cli", label: "Codex CLI", installed: true, version: "fixture", auth: { state: "ready" }, capabilities: { workspaceWrite: true } }],
@@ -138,19 +139,22 @@ test("local CLI activation and task creation never bypass the approval gate", as
       const response = await fetch("http://127.0.0.1:" + address.port + path, { method: "POST", headers: { Origin: "http://127.0.0.1:1420", "Content-Type": "application/json" }, body: JSON.stringify(body), signal: AbortSignal.timeout(10000) });
       return { status: response.status, data: await response.json() };
     };
-    assert.equal((await call("/api/settings/execution/local", { agentId: "codex-cli", workspaceId: "wrong" })).status, 400);
-    assert.equal((await call("/api/settings/execution/local", { agentId: "codex-cli", workspaceId: "workspace-1" })).status, 200);
+    assert.equal((await call("/api/execution/codex-chat", { messages: [{role:"user",content:"Hi"}] })).status, 409);
+    const connection = await call("/api/settings/execution/local", { agentId: "codex-cli" });
+    assert.equal(connection.status, 200);
+    assert.equal(connection.data.local.workspaceId, undefined);
     assert.equal(starts, 0);
     const proposed = await call("/api/execution/local-turn", { agentId: "codex-cli", workspaceId: "workspace-1", objective: "Fixture only" });
-    assert.equal(proposed.status, 200);
-    assert.ok(proposed.data.task.pendingApproval);
+    assert.equal(proposed.status, 409);
     assert.equal(starts, 0);
-    const rejected = await call("/api/tasks/" + proposed.data.task.taskId + "/commands", { type: "reject", approvalId: proposed.data.task.pendingApproval.approvalId });
-    assert.equal(rejected.status, 200);
+    const reply = await call("/api/execution/codex-chat", { messages: [{ role:"user", content:"规划".repeat(10000) }], model:"default" });
+    assert.equal(reply.status,200);
+    assert.equal(reply.data.text,"规划".repeat(10000));
     assert.equal(starts, 0);
     const disconnected=await fetch("http://127.0.0.1:"+address.port+"/api/settings/execution/local",{method:"DELETE",headers:{Origin:"http://127.0.0.1:1420"},signal:AbortSignal.timeout(10000)});
     assert.equal(disconnected.status,200);
     assert.equal((await disconnected.json()).local,null);
+    assert.equal((await call("/api/execution/codex-chat", { messages:[{role:"user",content:"Disconnected"}] })).status,409);
     assert.equal((await call("/api/execution/local-turn",{agentId:"codex-cli",workspaceId:"workspace-1",objective:"Must remain blocked"})).status,409);
   } finally { await service.close(); }
 });

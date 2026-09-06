@@ -82,6 +82,13 @@ function required(value, name, max = 200) {
 const fingerprint = value => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const exposed = ({ apiKey, ...profile }) => ({ ...profile, keySaved: Boolean(apiKey) });
 
+export function validateChatMessages(messages) {
+  if (!Array.isArray(messages) || !messages.length || messages.length > 40 ||
+    messages.some(item => !["user", "assistant"].includes(item?.role) || typeof item.content !== "string" || !item.content.trim() || item.content.length > 20000) ||
+    messages.reduce((sum, item) => sum + item.content.length, 0) > 80000) throw fail("Conversation exceeds the supported message limit.");
+  return messages.map(({ role, content }) => ({ role, content }));
+}
+
 export function createExecutionConnections({ file, request = connectionRequest, legacyKey = async () => "" }) {
   let queue = Promise.resolve();
   const tested = new Map();
@@ -202,9 +209,7 @@ export function createExecutionConnections({ file, request = connectionRequest, 
       await mutate(state => ({ ...state, local: null, active: state.active?.mode === "cli" ? null : state.active }));
     },
     async chat({ connectionId, model, messages }) {
-      if (!Array.isArray(messages) || !messages.length || messages.length > 40 ||
-        messages.some(item => !["user", "assistant"].includes(item?.role) || typeof item.content !== "string" || !item.content.trim() || item.content.length > 20000) ||
-        messages.reduce((sum, item) => sum + item.content.length, 0) > 80000) throw fail("Conversation exceeds the supported message limit.");
+      messages = validateChatMessages(messages);
       const state = await read();
       let profile = state.connections.find(item => item.id === connectionId);
       if (!profile && connectionId === "legacy-deepseek") profile = await resolveDraft({ id: connectionId, name: "DeepSeek", protocol: "openai", baseUrl: "https://api.deepseek.com", model });

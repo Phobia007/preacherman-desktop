@@ -104,7 +104,8 @@ test("Preacherman mark opens a six-item Clash Display navigation menu", async ()
     assert.match(shell, new RegExp(`label: "${label}", surfaceType: "${surfaceType}"`));
   }
   assert.match(styles, /@font-face[\s\S]*ClashDisplay-Light\.ttf/);
-  assert.match(styles, /font-family:\s*"Clash Display", sans-serif/);
+  assert.match(styles, /--demo-font-primary:\s*"Clash Display", sans-serif/);
+  assert.match(styles, /font-family:\s*var\(--demo-font-primary\)/);
   assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[\s\S]*width:\s*108px;[\s\S]*height:\s*108px/);
   assert.match(styles, /\.demo-app-shell__brand-menu\s*\{[\s\S]*gap:\s*68px/);
   assert.match(styles, /\.demo-app-shell__brand-menu-item\s*\{[\s\S]*font-size:\s*32px/);

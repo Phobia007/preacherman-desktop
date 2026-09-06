@@ -67,7 +67,7 @@ test("Enter sends; Shift+Enter and IME do not; unavailable runtime controls are 
   f.input().onKeydown(key({shiftKey:true})); assert.equal(f.storage.size,0);
   f.input().onKeydown(key({keyCode:229})); assert.equal(f.storage.size,0);
   f.input().onKeydown(key({})); assert.equal(f.storage.size,2);
-  assert.equal(f.find(n => n.props.title === "执行权限尚未接入").props.disabled,true);
+  assert.equal(f.find(n => n.props.title === "执行权限尚未接入"),null);
   assert.equal(f.find(n => n.props["aria-haspopup"] === "listbox").props.disabled,true);
   assert.equal(f.posted[0].message.type,"gallery-provider-request");
 });

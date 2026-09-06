@@ -14,7 +14,7 @@ export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>) 
       if (!lifetime.signal.aborted) frameRef.current?.contentWindow?.postMessage(message, location.origin === "null" ? "*" : location.origin);
     };
     const request = (path: string, body?: unknown) => preachermanServiceRequest<unknown>(path, {
-      signal: AbortSignal.any([lifetime.signal, AbortSignal.timeout(70000)]),
+      signal: AbortSignal.any([lifetime.signal, AbortSignal.timeout(135000)]),
       ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } }),
     });
     const sendTheme = () => {
@@ -51,15 +51,14 @@ export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>) 
       try {
         let result: unknown;
         if (data.action === "chat") {
-          const selection = record(data.selection);
-          if (typeof selection.providerId !== "string" || typeof selection.modelId !== "string") throw new Error("Choose a connected model.");
           const settings = record(await request("/api/settings/execution"));
           const local = record(settings.local);
+          const active = record(settings.active);
+          const selection = data.useActive === true ? { providerId: active.mode === "cli" ? active.agentId : active.connectionId, modelId: active.model } : record(data.selection);
+          if (typeof selection.providerId !== "string" || typeof selection.modelId !== "string") throw new Error("Connect a model in Settings → Execution Mode first.");
           if (selection.providerId === local.agentId) {
-            const messages = Array.isArray(data.messages) ? data.messages : [];
-            result = await request("/api/execution/local-turn", {
-              agentId: local.agentId, workspaceId: local.workspaceId, objective: record(messages.at(-1)).content,
-            });
+            if (local.agentId !== "codex-cli") throw new Error("This Agent does not support direct chat yet.");
+            result = await request("/api/execution/codex-chat", { model: selection.modelId, messages: data.messages });
           } else {
             result = await request("/api/execution/chat", {
               connectionId: selection.providerId === "deepseek" ? "legacy-deepseek" : selection.providerId,

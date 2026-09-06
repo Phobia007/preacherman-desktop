@@ -18,12 +18,9 @@ test("local Agent selection is persisted, capability-bound and truthful about di
   assert.match(source,/method: "DELETE"/);
   assert.match(source,/state.local\?\.agentId/);
   assert.match(source,/Detection failed · Rescan/);
-  assert.match(source,/\/api\/execution\/workspaces\/pick/);
-  assert.match(source,/\/api\/execution\/workspaces\/approve/);
-  assert.match(source,/approved: true/);
-  assert.match(source,/Cancel folder change/);
-  assert.match(source,/No workspace selected/);
-  assert.match(source,/setWorkspace\(event.target.value\); setPendingWorkspace\(null\); setNotice\(""\)/);
+  assert.doesNotMatch(source,/\/api\/execution\/workspaces/);
+  assert.match(source,/no workspace needed/);
+  assert.match(source,/Conversation only/);
 });
 
 test("Execution Mode details occupy the companion's left side without changing the authored style", async () => {
@@ -32,7 +29,7 @@ test("Execution Mode details occupy the companion's left side without changing t
   assert.match(panel, /left: 90px/);
   assert.doesNotMatch(panel, /right:/);
   assert.match(panel, /width: 780px/);
-  assert.match(panel, /font-family: "Clash Display"/);
+  assert.match(panel, /font-family: var\(--demo-font-primary\)/);
   assert.match(panel, /overflow-y: auto/);
   assert.match(panel, /scrollbar-width: none/);
   assert.match(panel, /var\(--demo-theme-settings-text\)/);
@@ -82,7 +79,7 @@ test("Settings reuses Gallery portrait and starts a bounded top-to-bottom wave a
   assert.match(source, /reducedMotion.matches \? 0 : 650/);
   assert.match(css, /var\(--settings-order\) \* 35ms/);
   assert.match(css, /prefers-reduced-motion: reduce/);
-  assert.match(css, /font-family: "Clash Display"/);
+  assert.match(css, /font-family: var\(--demo-font-primary\)/);
   assert.match(css, /var\(--demo-theme-brand-menu-text\)/);
   assert.match(css, /:focus-visible/);
   assert.match(css, /gap: 30px/);

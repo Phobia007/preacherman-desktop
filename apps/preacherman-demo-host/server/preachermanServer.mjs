@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { createExecutionConnections } from "./executionConnections.mjs";
+import { createCodexConversation } from "./codexConversation.mjs";
 import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
@@ -65,13 +66,13 @@ function json(response, status, body, origin) {
   response.end(JSON.stringify(body));
 }
 
-function readJson(request) {
+function readJson(request, maxBytes = MAX_BODY_BYTES) {
   return new Promise((resolveBody, reject) => {
     let body = "";
     request.setEncoding("utf8");
     request.on("data", (chunk) => {
       body += chunk;
-      if (Buffer.byteLength(body) > MAX_BODY_BYTES) {
+      if (Buffer.byteLength(body) > maxBytes) {
         reject(new Error("Request body is too large."));
         request.destroy();
       }
@@ -1361,6 +1362,7 @@ export function createPreachermanServer(options = {}) {
     legacyKey: async () => (await runtimeEnv()).DEEPSEEK_API_KEY || "",
     ...(options.executionConnectionRequest ? { request: options.executionConnectionRequest } : {}),
   });
+  const codexConversation = options.codexConversation ?? createCodexConversation({ directory: join(dataDirectory, "chat-session") });
   const workspaceSelection = createWorkspaceSelection({
     file: join(dataDirectory, "local-agent-workspaces.v1.json"),
     ...(options.workspacePicker ? { picker: options.workspacePicker } : {}),
@@ -1400,9 +1402,8 @@ export function createPreachermanServer(options = {}) {
       if (url.pathname === "/api/settings/execution/local" && request.method === "POST") {
         const body = await readJson(request);
         const agent = (await agentAccessRuntime.listLocalAgents()).find(item => item.id === body.agentId);
-        if (!agent || agent.id === "preacherman-native" || !agent.capabilities?.workspaceWrite || !agent.installed || agent.auth?.state !== "ready") throw Object.assign(new Error("A ready, adapted local Agent is required."), { statusCode: 409 });
-        if (!agentAccessRuntime.listWorkspaces().some(item => item.id === body.workspaceId)) throw Object.assign(new Error("Choose an approved workspace."), { statusCode: 400 });
-        await executionConnections.activateLocal(body.agentId, body.workspaceId, agent.label);
+        if (!agent || agent.id !== "codex-cli" || !agent.installed || agent.auth?.state !== "ready") throw Object.assign(new Error("A signed-in Codex CLI is required for local chat."), { statusCode: 409 });
+        await executionConnections.activateLocal(body.agentId, undefined, agent.label);
         json(response, 200, await executionConnections.status(), origin);
         return;
       }
@@ -1412,7 +1413,18 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (url.pathname === "/api/execution/chat" && request.method === "POST") {
-        json(response, 200, await executionConnections.chat(await readJson(request)), origin);
+        json(response, 200, await executionConnections.chat(await readJson(request, 512 * 1024)), origin);
+        return;
+      }
+      if (url.pathname === "/api/execution/codex-chat" && request.method === "POST") {
+        const body = await readJson(request, 512 * 1024);
+        const local = (await executionConnections.status()).local;
+        if (local?.agentId !== "codex-cli") throw Object.assign(new Error("Connect Codex CLI in Execution Mode first."), { statusCode: 409 });
+        const cancellation = new AbortController();
+        const disconnected = () => { if (!response.writableEnded) cancellation.abort(); };
+        response.once("close", disconnected);
+        try { json(response, 200, await codexConversation.chat({ messages: body.messages, model: body.model, signal: cancellation.signal }), origin); }
+        finally { response.removeListener("close", disconnected); }
         return;
       }
       if (url.pathname === "/api/execution/local-turn" && request.method === "POST") {
@@ -1518,9 +1530,9 @@ export function createPreachermanServer(options = {}) {
         const agents = await agentAccessRuntime.listLocalAgents();
         const discovered = options.localAgentRegistry ? [] : await discoverLocalAgents();
         json(response, 200, { scannedAt: new Date().toISOString(), agents: [...agents.map(agent => ({ ...agent, execution: {
-          supported: agent.id !== "preacherman-native" && agent.capabilities?.workspaceWrite === true,
+          supported: agent.id === "codex-cli",
           models: [{ id: "default", label: "Default · CLI configuration" }],
-          workspaceRequired: true, reasoningManagedByAgent: true,
+          workspaceRequired: false, reasoningManagedByAgent: true, conversation: agent.id === "codex-cli",
         } })), ...discovered.filter(agent => !agents.some(registered => registered.id === agent.id))] }, origin);
         return;
       }
@@ -2512,6 +2524,7 @@ export function createPreachermanServer(options = {}) {
       motionProxy.close();
       faceProxy.close();
       await preachermanPluginRuntime.close();
+      codexConversation.close();
       await agentAccessRuntime.close();
       ecosystemFacade.close();
       await Promise.all([

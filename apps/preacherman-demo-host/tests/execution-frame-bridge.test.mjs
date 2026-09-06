@@ -47,8 +47,15 @@ test("API messages and local task approvals route through their real service end
     assert.equal(f.calls.at(-1).path,"/api/execution/chat");
     assert.equal(JSON.parse(f.calls.at(-1).init.body).connectionId,"connection");
     f.receive({type:"gallery-execution-request",requestId:"cli",action:"chat",selection:{providerId:"codex-cli",modelId:"default"},messages:[{role:"user",content:"Local objective"}]});await settled();
-    assert.equal(f.calls.at(-1).path,"/api/execution/local-turn");
-    assert.equal(JSON.parse(f.calls.at(-1).init.body).workspaceId,"workspace");
+    assert.equal(f.calls.at(-1).path,"/api/execution/codex-chat");
+    assert.equal(JSON.parse(f.calls.at(-1).init.body).workspaceId,undefined);
+    assert.equal(JSON.parse(f.calls.at(-1).init.body).messages[0].content,"Local objective");
+    f.config.active={mode:"cli",agentId:"codex-cli",model:"default"};
+    f.receive({type:"gallery-execution-request",requestId:"gallery",action:"chat",useActive:true,messages:[{role:"user",content:"Gallery"}]});await settled();
+    assert.equal(f.calls.at(-1).path,"/api/execution/codex-chat");
+    f.config.active={mode:"api",connectionId:"connection",model:"model"};
+    f.receive({type:"gallery-execution-request",requestId:"gallery-api",action:"chat",useActive:true,messages:[{role:"user",content:"Next"}]});await settled();
+    assert.equal(f.calls.at(-1).path,"/api/execution/chat");
     assert.ok(!f.calls.some(c=>c.path.endsWith("/commands")));
     for(const action of ["status","approve","reject","cancel"]){
       f.receive({type:"gallery-execution-request",requestId:action,action,taskId:"local-task",approvalId:"approval"});await settled();

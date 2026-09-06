@@ -32,9 +32,6 @@ export function ExecutionModeSettings() {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [agentId, setAgentId] = useState("");
   const [scanned, setScanned] = useState(false);
-  const [workspaces, setWorkspaces] = useState<{ id: string; label: string; path: string }[]>([]);
-  const [workspace, setWorkspace] = useState("");
-  const [pendingWorkspace, setPendingWorkspace] = useState<{ token: string; path: string; label: string } | null>(null);
   const [showKey, setShowKey] = useState(false);
   const [busy, setBusy] = useState("load");
   const [error, setError] = useState("");
@@ -61,11 +58,10 @@ export function ExecutionModeSettings() {
     setSnapshot(state);
     if (initial) {
       setMode(state.active?.mode || "api");
-      setWorkspace(state.local?.workspaceId || "");
       setAgentId(state.local?.agentId || "");
       const selected = state.connections.find(item => item.id === state.active?.connectionId) || state.connections[0];
       setDraft(selected ? toDraft(selected) : { ...blank, name: "DeepSeek", baseUrl: "https://api.deepseek.com", model: "deepseek-v4-flash" });
-      if (state.active?.mode === "cli") await readLocal(state.local?.workspaceId);
+      if (state.active?.mode === "cli") await readLocal();
     }
   });
   useEffect(() => {
@@ -75,14 +71,10 @@ export function ExecutionModeSettings() {
   }, []);
   const update = (value: Partial<Draft>) => { setDraft(current => ({ ...current, ...value })); setVerification(null); setNotice(""); setError(""); };
   const select = (connection: Connection) => { setDraft(toDraft(connection)); setVerification(null); setModels([]); setShowKey(false); setNotice(""); setError(""); };
-  const readLocal = async (preferredWorkspace?: string) => {
-    const [local, roots] = await Promise.all([
-      request<{ agents: Agent[] }>("/api/execution/local-agents"),
-      request<{ workspaces: { id: string; label: string; path: string }[] }>("/api/execution/workspaces"),
-    ]);
+  const readLocal = async () => {
+    const local = await request<{ agents: Agent[] }>("/api/execution/local-agents");
     if (!mounted.current) return;
-    setAgents(local.agents); setWorkspaces(roots.workspaces); setScanned(true);
-    setWorkspace(current => roots.workspaces.some(item => item.id === (preferredWorkspace || current)) ? preferredWorkspace || current : roots.workspaces[0]?.id || "");
+    setAgents(local.agents); setScanned(true);
   };
   const scan = () => run("scan", () => readLocal());
   const changeMode = (next: Mode) => {
@@ -94,24 +86,13 @@ export function ExecutionModeSettings() {
   const complete = Boolean(draft.name.trim() && draft.baseUrl.trim() && draft.model.trim() && (draft.apiKey.trim() || draft.keySaved));
   const selectedAgent = agents.find(agent => agent.id === agentId);
   const canConnect = (agent: Agent) => agent.execution?.supported && agent.installed && agent.auth.state === "ready";
-  const workspaceUnchanged = !pendingWorkspace && snapshot?.local?.agentId === agentId && snapshot.local.workspaceId === workspace && snapshot.active?.mode === "cli";
-  const chooseFolder = () => void run("folder", async () => {
-    const result = await request<{ selection: { token: string; path: string; label: string } | null }>("/api/execution/workspaces/pick", { method: "POST", body: "{}" }, 190000);
-    if (mounted.current && result.selection) { setPendingWorkspace(result.selection); setNotice("Folder selected, not yet authorized. Review the path before saving."); }
-  });
+  const agentActive = snapshot?.local?.agentId === agentId && snapshot.active?.mode === "cli";
   const connect = (agent: Agent) => {
     setAgentId(agent.id);
     setNotice("");
-    if (!workspace && !pendingWorkspace) { setError("Choose a project folder before connecting this Agent."); return; }
     void run("local", async () => {
-      let workspaceId = workspace;
-      if (pendingWorkspace) {
-        const approved = await request<{ workspace: { id: string; path: string; label: string }; workspaces: { id: string; path: string; label: string }[] }>("/api/execution/workspaces/approve", { method: "POST", body: JSON.stringify({ token: pendingWorkspace.token, approved: true }) });
-        workspaceId = approved.workspace.id;
-        if (mounted.current) { setWorkspace(workspaceId); setWorkspaces(approved.workspaces); setPendingWorkspace(null); }
-      }
-      const state = await request<Snapshot>("/api/settings/execution/local", { method: "POST", body: JSON.stringify({ agentId: agent.id, workspaceId }) });
-      if (mounted.current) { setSnapshot(state); setNotice(agent.label + " connected. Starting a task still requires approval."); window.dispatchEvent(new Event("preacherman-execution-changed")); }
+      const state = await request<Snapshot>("/api/settings/execution/local", { method: "POST", body: JSON.stringify({ agentId: agent.id }) });
+      if (mounted.current) { setSnapshot(state); setNotice(agent.label + " connected. Chat in Task or Gallery — no workspace needed."); window.dispatchEvent(new Event("preacherman-execution-changed")); }
     });
   };
   const disconnect = () => void run("local", async () => {
@@ -123,7 +104,7 @@ export function ExecutionModeSettings() {
       {(["api", "cli"] as const).map(value => <button key={value} id={"execution-tab-" + value} role="tab" aria-selected={mode === value}
         aria-controls={"execution-panel-" + value} disabled={Boolean(busy)} onClick={() => changeMode(value)} type="button">{value === "api" ? "API / BYOK" : "Local CLI"}</button>)}
     </div>
-    <p className="execution-mode__intro">{mode === "api" ? "Your model. Your connection." : "Your installed agent. Your approved workspace."}</p>
+    <p className="execution-mode__intro">{mode === "api" ? "Your model. Your connection." : "Your installed agent. Ready for conversation."}</p>
     {!snapshot && busy ? <p role="status">Reading saved connections…</p> : null}
     {!snapshot && !busy ? <button onClick={() => void load(true)} type="button">Retry connection</button> : null}
     {mode === "api" && snapshot ? <form id="execution-panel-api" role="tabpanel" aria-labelledby="execution-tab-api" onSubmit={event => {
@@ -178,12 +159,12 @@ export function ExecutionModeSettings() {
     </form> : null}
     {mode === "cli" ? <div id="execution-panel-cli" role="tabpanel" aria-labelledby="execution-tab-cli">
       <div className="execution-mode__row"><h3>Local agents</h3><button type="button" disabled={Boolean(busy)} onClick={() => void scan()}>{busy === "scan" ? "Scanning…" : "Rescan"}</button></div>
-      <p className="execution-mode__hint">Select an adapted Agent to connect. One local Agent is active at a time; selecting it never starts a task.</p>
+      <p className="execution-mode__hint">Connect your signed-in Codex to chat and plan in Task or Gallery. No project folder or execution approval required.</p>
       {scanned && !agents.length ? <p role="status">No local Agents detected. Install a supported CLI, then rescan.</p> : null}
       <div className="execution-mode__agent-list">
         {agents.filter(agent => agent.id !== "preacherman-native").map(agent => {
           const connected = snapshot?.local?.agentId === agent.id;
-          const status = agent.detection?.state === "error" ? "Detection failed · Rescan" : !agent.installed ? "Not found · Install, then rescan" : !agent.execution?.supported ? "Detected · Execution adapter required" : agent.auth.state !== "ready" ? "Sign in to this CLI, then rescan" : connected ? "Connected" : "Signed in · Ready to connect";
+          const status = agent.detection?.state === "error" ? "Detection failed · Rescan" : !agent.installed ? "Not found · Install, then rescan" : !agent.execution?.supported ? "Detected · Chat adapter not available yet" : agent.auth.state !== "ready" ? "Sign in to this CLI, then rescan" : connected ? "Connected" : "Signed in · Ready to connect";
           return <button key={agent.id} type="button" role="checkbox" aria-checked={connected} aria-label={"Connect " + agent.label}
             className="execution-mode__agent-choice" disabled={Boolean(busy) || (!connected && !canConnect(agent))}
             onClick={() => connected ? disconnect() : connect(agent)}>
@@ -196,16 +177,10 @@ export function ExecutionModeSettings() {
         <h3>{selectedAgent.label} settings</h3>
         <label>Model<select aria-label="Local Agent model" value="default" disabled><option value="default">{selectedAgent.execution.models.find(model => model.id === "default")?.label || "Managed by this Agent"}</option></select></label>
         {selectedAgent.execution.reasoningManagedByAgent ? <p className="execution-mode__hint">Model and reasoning follow this Agent's own configuration.</p> : null}
-        {selectedAgent.execution.workspaceRequired ? <div className="execution-mode__workspace">
-          <label>Approved workspace<select aria-label="Approved workspace" value={pendingWorkspace ? "" : workspace} disabled={Boolean(busy)} onChange={event => { setWorkspace(event.target.value); setPendingWorkspace(null); setNotice(""); setError(""); }}><option value="" disabled>{pendingWorkspace ? "New folder · awaiting approval" : "No workspace selected"}</option>{workspaces.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-          <button type="button" disabled={Boolean(busy)} onClick={chooseFolder}>{busy === "folder" ? "Choosing folder…" : "Choose folder"}</button>
-          <p className="execution-mode__hint" aria-label="Selected workspace path">{pendingWorkspace?.path || workspaces.find(item => item.id === workspace)?.path || "Choose a project folder on this computer."}</p>
-          {pendingWorkspace ? <><p className="execution-mode__hint">Approve &amp; Use Agent authorizes this folder for local Agent tasks. Individual tasks still require approval; choosing a folder alone grants no access.</p><button type="button" disabled={Boolean(busy)} onClick={() => { setPendingWorkspace(null); setNotice(""); setError(""); }}>Cancel folder change</button></> : null}
-        </div> : null}
-        <p className="execution-mode__hint">{workspaceUnchanged ? "This Agent and workspace are already saved. Choose another folder to make a change." : "Workspace changes apply only after saving. Existing task snapshots stay unchanged. Each new task requires approval."}</p>
-        <div className="execution-mode__actions"><button type="button" disabled={Boolean(busy) || !canConnect(selectedAgent) || (!workspace && !pendingWorkspace) || workspaceUnchanged} onClick={() => connect(selectedAgent)}>{busy === "local" ? "Saving…" : pendingWorkspace ? "Approve & Use Agent" : workspaceUnchanged ? "Saved" : snapshot?.local?.agentId === agentId ? "Save & Use Agent" : "Connect Agent"}</button></div>
-      </div> : <p className="execution-mode__hint">Agent-specific model and workspace settings appear after selection.</p>}
-      <p className="execution-mode__hint">Preacherman Native keeps its existing flow. Additional CLIs require a registered execution adapter.</p>
+        <p className="execution-mode__hint">Conversation only. Messages do not create execution tasks or grant access to a project.</p>
+        <div className="execution-mode__actions"><button type="button" disabled={Boolean(busy) || !canConnect(selectedAgent) || agentActive} onClick={() => connect(selectedAgent)}>{busy === "local" ? "Saving…" : agentActive ? "Connected" : "Use Agent for Chat"}</button></div>
+      </div> : <p className="execution-mode__hint">Agent-specific settings appear after connection.</p>}
+      <p className="execution-mode__hint">Codex uses its existing CLI sign-in. API / BYOK connects other model providers directly.</p>
     </div> : null}
     {error ? <p className="execution-mode__error" role="alert">{error}</p> : null}
     {notice ? <p className="execution-mode__notice" role="status">{notice}</p> : null}
