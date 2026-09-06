@@ -2,7 +2,7 @@ import { cp, mkdir, readFile, writeFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { resolve, join, relative } from "node:path";
 
-// Reproducible vendor import: paper/ink, storage isolation and the requested footer removal.
+// Reproducible vendor import: paper/ink, storage isolation and requested content removals.
 const source = process.argv[2];
 if (!source) throw new Error("Usage: node scripts/import-market-love.mjs <local Cartier project>");
 const destination = resolve(import.meta.dirname, "../public/market-love");
@@ -17,7 +17,7 @@ function replaceOnce(text, needle, replacement) {
 const contract = `<!-- THESIS: Import the complete LOVE experience onto the existing Preacherman stage.
 OWN-WORLD: Original layout, fonts, assets and interaction; transparent paper, white ink.
 STORY: Read the full introduction, start designing, configure and return with a saved selection.
-FIRST VIEWPORT: The original header, film and introduction below the persistent desktop controls.
+FIRST VIEWPORT: The original header and introduction below the persistent desktop controls; no opening film.
 FORM: User-pinned complete document import; no composition redesign.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->`;
 for (const page of ["cartier-love.html", "love-configurator.html"]) {
@@ -26,6 +26,10 @@ for (const page of ["cartier-love.html", "love-configurator.html"]) {
     const footer = html.match(/<footer class="love-footer" data-od-id="site-footer">[\s\S]*?<\/footer>/g);
     if (footer?.length !== 1) throw new Error("Source changed: expected exactly one LOVE footer");
     html = replaceOnce(html, footer[0], "");
+    // Remove the film, fallback poster, playback button and their reserved media height.
+    const film = html.match(/    <div class="hero__aspect-ratio hero__aspect-ratio--slim ">[\s\S]*?(?=    <div class="\r?\n        hero__content-wrap)/g);
+    if (film?.length !== 1) throw new Error("Source changed: expected exactly one opening film block");
+    html = replaceOnce(html, film[0], "");
   }
   html = replaceOnce(html, "</head>", '<link rel="stylesheet" href="market-embed.css"><script src="market-embed.js"></script></head>');
   html = replaceOnce(html, "<body>", `<body>\n${contract}`);
@@ -56,7 +60,12 @@ bundle = replaceOnce(bundle, "depthWrite:!1,blending:Px", "depthWrite:!1,transpa
 await writeFile(bundlePath, bundle);
 for (const script of ["assets/love-intro.js", "assets/configurator/local-adapter.js"]) {
   const path = join(destination, script);
-  const text = await readFile(path, "utf8");
+  let text = await readFile(path, "utf8");
+  if (script === "assets/love-intro.js") {
+    const playback = text.match(/ const video=document\.getElementById\('love-film'\)[\s\S]*?(?= const menu=)/g);
+    if (playback?.length !== 1) throw new Error("Source changed: expected exactly one opening-film controller");
+    text = replaceOnce(text, playback[0], "");
+  }
   if (!text.includes("cartier-love-saved")) throw new Error(`Missing wishlist key in ${script}`);
   await writeFile(path, text.replaceAll("cartier-love-saved", "preacherman.market.love.saved"));
 }
@@ -75,7 +84,7 @@ await record(join(destination, "assets"));
 await writeFile(join(destination, "import-manifest.json"), JSON.stringify({
   sourceProject: "70f215b1-59d7-4c44-a675-0a48d1730917", importedAt: new Date().toISOString(),
   originalBundleSha256,
-  scope: "Local experience with the requested site footer removed; transparent paper, white text and isolated wishlist storage.",
+  scope: "Local experience with the requested site footer and opening film block/controller removed; transparent paper, white text and isolated wishlist storage.",
   files,
 }, null, 2) + "\n");
 console.log(`Imported ${files.length} assets into ${destination}`);

@@ -1,10 +1,4 @@
 (() => {
- const video=document.getElementById('love-film'),toggle=document.getElementById('film-toggle');
- const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
- function syncVideo(){toggle.classList.toggle('is-paused',video.paused);toggle.setAttribute('aria-pressed',String(video.paused));toggle.setAttribute('aria-label',video.paused?'Play video':'Pause video');toggle.querySelector('.sr-only').textContent=video.paused?'Play video':'Pause video'}
- video.muted=true;if(reduced)video.pause();else video.play().catch(()=>syncVideo());
- video.addEventListener('play',syncVideo);video.addEventListener('pause',syncVideo);
- toggle.addEventListener('click',()=>video.paused?video.play().catch(()=>syncVideo()):video.pause());
  const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('.brand-nav');menu.addEventListener('click',()=>{const open=nav.classList.toggle('is-open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation':'Open navigation')});
  for(const dialog of document.querySelectorAll('dialog')){dialog.querySelector('[data-close]').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const b=dialog.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)dialog.close()}})}
  document.getElementById('search-toggle').addEventListener('click',()=>{document.getElementById('search-dialog').showModal();document.getElementById('love-search').focus()});

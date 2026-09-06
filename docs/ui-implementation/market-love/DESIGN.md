@@ -54,7 +54,7 @@ components:
 
 Mode: **Experience**. This document applies only to the user-visible Market surface and its imported LOVE documents. It records the user's pinned migration, not a new Preacherman brand or a root design system.
 
-The local Cartier long page and START DESIGNING configurator retain their composition, fonts, navigation, hero films, photography and five-step interaction. At the user's request, the entire site footer is removed: its three link columns, footer logo, divider, locale and copyright. No replacement footer is introduced. White page and world backings become transparent; interface text and monochrome marks become white over the persistent Preacherman model and base. Pale pixels inside photographs, videos and authored jewelry assets remain intact.
+The local Cartier long page and START DESIGNING configurator retain their composition, fonts, navigation, photography and five-step interaction. The opening film block, its fallback poster and playback control are removed at the user's request; the introduction and START DESIGNING action remain. At the user's request, the entire site footer is removed: its three link columns, footer logo, divider, locale and copyright. No replacement footer is introduced. White page and world backings become transparent; interface text and monochrome marks become white over the persistent Preacherman model and base. Pale pixels inside photographs, videos and authored jewelry assets remain intact.
 
 **Key Characteristics:**
 
@@ -87,7 +87,7 @@ Preacherman's primary Clash Display and the Gallery secondary font remain outsid
 
 ## Layout
 
-The host provides a transparent, borderless iframe beginning below its persistent controls (top inset: 116px). The imported document owns its own scrolling and layout. The sequence is header, hero film and introduction, style, material, diamonds, finish, then closure. Removing the footer also removes its Find Your LOVE link; the seven other local links to `love-configurator.html` remain available across the page and dialogs.
+The host provides a transparent, borderless iframe beginning below its persistent controls (top inset: 116px). The imported document owns its own scrolling and layout. The sequence is header, introduction, style, material, diamonds, finish, then closure. Removing the footer also removes its Find Your LOVE link; the seven other local links to `love-configurator.html` remain available across the page and dialogs.
 
 The donor header is sticky within the document. Its full navigation remains at desktop widths, with the existing menu treatment below 1024px; further content changes occur below 768px. Header content retains its 1440px maximum and descriptive copy its 520px maximum. The 3D configurator retains its own layout and responsive rules.
 
@@ -97,15 +97,15 @@ The iframe mounts only while Market is active and unmounts on departure. The per
 
 Depth comes from the existing Preacherman scene, the donor's jewelry rendering and retained media. The import removes four screen-space shader backings and the solid white environment sphere, while retaining the jewelry, EXR lighting, animation uniforms and clocks. Floor shadow and gold-caustic planes use coverage alpha so their otherwise empty pixels remain transparent.
 
-White sticky-header text has a small dark text shadow, and header icons and the logo have matching drop shadows for readability as pale original media scrolls beneath them. The donor dialog backdrop keeps its dark scrim and blur. Existing donor button and film-control shadows remain; this migration adds no card or panel system.
+White sticky-header text has a small dark text shadow, and header icons and the logo have matching drop shadows for readability as pale original media scrolls beneath them. The donor dialog backdrop keeps its dark scrim and blur. Existing donor button shadows remain; this migration adds no card or panel system.
 
 ## Shapes
 
-Preserve the donor's shapes: square primary buttons, underlined text actions and fields, thin navigation underlines, outline icons, and a circular film control. Existing interactive target sizing remains, including 44px minimum targets for primary actions and utility controls. The embed adaptation introduces no new corner-radius scale.
+Preserve the donor's shapes: square primary buttons, underlined text actions and fields, thin navigation underlines, outline icons. Existing interactive target sizing remains, including 44px minimum targets for primary actions and utility controls. The embed adaptation introduces no new corner-radius scale.
 
 ## Components
 
-- **Long-page header:** retains Cartier navigation and external destinations, local search, wishlist and bag controls, sticky behavior and its logo. The mobile menu and film play/pause control retain their original interactions. The footer is absent from the document, including after a fresh vendor import.
+- **Long-page header:** retains Cartier navigation and external destinations, local search, wishlist and bag controls, sticky behavior and its logo. The mobile menu retains its original interaction; the opening-film controller is removed so initialization does not depend on a video element. The footer is absent from the document, including after a fresh vendor import.
 - **START DESIGNING:** opens the packaged configurator document in the same iframe. The original style, material, diamonds, finish and closure steps, bracelet manipulation, transitions and summary remain intact. Primary-button hover replaces the donor's opaque white fill with Market hover and its semantic border, retaining the original timing, font and shape so white text remains readable.
 - **Wishlist and return:** the local adapter saves the summary and configurator hash to `preacherman.market.love.saved`. Close returns to the long page; My Wishlist opens the saved summary and View my selection reopens its configuration. Storage failures retain the donor's honest failure message.
 - **Readiness and recovery:** the host displays Opening Market, with a bounded 30-second deadline and an error/retry state. It accepts messages only from its current iframe and origin. The configurator becomes ready after its own readiness event and the shadow-root embed stylesheet load; it remains hidden while that stylesheet is pending. Retry is recovery UI, not an acceptable substitute for a working first entry.
@@ -116,7 +116,7 @@ Verification checkpoint, 2026-09-06: the coordinating implementation task report
 
 ## Do's and Don'ts
 
-- Do preserve the donor page except its explicitly removed footer, plus the configurator, local assets, fonts, motion and interactions.
+- Do preserve the donor page except its explicitly removed footer and opening film block, plus the configurator, local assets, fonts, motion and interactions.
 - Do keep Market appearance properties semantic and synchronized with host preferences.
 - Do preserve the persistent Preacherman model and base behind transparent backing areas.
 - Do verify the changed flow in both appearances and complete the required native shortcut delivery before declaring the implementation delivered.

@@ -1,8 +1,8 @@
 {
   "sourceProject": "70f215b1-59d7-4c44-a675-0a48d1730917",
-  "importedAt": "2026-09-06T08:06:40.978Z",
+  "importedAt": "2026-09-06T08:18:03.291Z",
   "originalBundleSha256": "0cf59fbe58060315b957a45b35e7eb7e444eea3b90a9c3507a93fce85656cbb4",
-  "scope": "Local experience with the requested site footer removed; transparent paper, white text and isolated wishlist storage.",
+  "scope": "Local experience with the requested site footer and opening film block/controller removed; transparent paper, white text and isolated wishlist storage.",
   "files": [
     {
       "path": "assets/configurator/app.js",
@@ -701,8 +701,8 @@
     },
     {
       "path": "assets/love-intro.js",
-      "bytes": 4817,
-      "sha256": "eb3718678747d3a87709d8fc93fa202da369685d69b1e92bff94d43911065e24"
+      "bytes": 4088,
+      "sha256": "0866c022502241122a377934e13d3282d3a24c9e1fb9cc38a2bcca9856f04fb2"
     },
     {
       "path": "assets/media/Cartier_16_9_HD.mp4",

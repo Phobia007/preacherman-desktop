@@ -56,6 +56,30 @@ test("the requested footer is removed from the document, not merely hidden", asy
   assert.match(html, /class="brand-logo"/);
 });
 
+test("the opening film, poster, playback controls and reserved media block are removed", async () => {
+  const html = await text(join(imported, "cartier-love.html"));
+  assert.doesNotMatch(html, /<video\b|love-film|film-toggle|hero__aspect-ratio|hero__media|hero-video|video-toggle|assets\/media\/Cartier_|assets\/images\/(?:Mobile-)?Hero\.png/);
+  assert.match(html, /data-od-id="hero-heading">Design your love bracelet/);
+  assert.match(html, /data-od-id="hero-start">START DESIGNING/);
+});
+
+test("intro controls initialize without a film element or playback controller", async () => {
+  const script = await text(join(imported, "assets/love-intro.js"));
+  assert.doesNotMatch(script, /love-film|film-toggle|syncVideo|video\.play|video\.pause/);
+  const registered = [];
+  const node = selector => ({addEventListener: event => registered.push([selector,event])});
+  runInNewContext(script, {
+    document: {
+      getElementById: node,
+      querySelector: node,
+      querySelectorAll: () => [],
+    },
+  });
+  for (const [id,event] of [[".menu-toggle","click"],["search-toggle","click"],["search-form","submit"],["bag-toggle","click"],["saved-toggle","click"]]) {
+    assert.ok(registered.some(([selector,type]) => selector===id && type===event), id);
+  }
+});
+
 test("every imported asset is packaged and matches its recorded hash", async () => {
   const manifest = JSON.parse(await text(join(imported, "import-manifest.json")));
   assert.ok(manifest.files.length > 100);
