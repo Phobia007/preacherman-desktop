@@ -18,6 +18,12 @@ test("local Agent selection is persisted, capability-bound and truthful about di
   assert.match(source,/method: "DELETE"/);
   assert.match(source,/state.local\?\.agentId/);
   assert.match(source,/Detection failed · Rescan/);
+  assert.match(source,/\/api\/execution\/workspaces\/pick/);
+  assert.match(source,/\/api\/execution\/workspaces\/approve/);
+  assert.match(source,/approved: true/);
+  assert.match(source,/Cancel folder change/);
+  assert.match(source,/No workspace selected/);
+  assert.match(source,/setWorkspace\(event.target.value\); setPendingWorkspace\(null\); setNotice\(""\)/);
 });
 
 test("Execution Mode details occupy the companion's left side without changing the authored style", async () => {
@@ -80,6 +86,7 @@ test("Settings reuses Gallery portrait and starts a bounded top-to-bottom wave a
   assert.match(css, /var\(--demo-theme-brand-menu-text\)/);
   assert.match(css, /:focus-visible/);
   assert.match(css, /gap: 30px/);
+  assert.match(css, /left: 1260px/);
   assert.match(css, /overflow-y: auto/);
   assert.match(css, /scrollbar-width: none/);
   assert.match(css, /::-webkit-scrollbar/);

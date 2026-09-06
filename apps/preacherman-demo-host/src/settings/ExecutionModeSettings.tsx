@@ -34,6 +34,7 @@ export function ExecutionModeSettings() {
   const [scanned, setScanned] = useState(false);
   const [workspaces, setWorkspaces] = useState<{ id: string; label: string; path: string }[]>([]);
   const [workspace, setWorkspace] = useState("");
+  const [pendingWorkspace, setPendingWorkspace] = useState<{ token: string; path: string; label: string } | null>(null);
   const [showKey, setShowKey] = useState(false);
   const [busy, setBusy] = useState("load");
   const [error, setError] = useState("");
@@ -42,8 +43,8 @@ export function ExecutionModeSettings() {
   const controller = useRef<AbortController | null>(null);
   const operating = useRef(false);
   const mounted = useRef(true);
-  const request = <T,>(path: string, init?: RequestInit) => preachermanServiceRequest<T>(path, {
-    ...init, signal: AbortSignal.any([controller.current!.signal, AbortSignal.timeout(70000)]),
+  const request = <T,>(path: string, init?: RequestInit, timeout = 70000) => preachermanServiceRequest<T>(path, {
+    ...init, signal: AbortSignal.any([controller.current!.signal, AbortSignal.timeout(timeout)]),
   });
   const run = async (name: string, operation: () => Promise<void>) => {
     if (operating.current) return;
@@ -93,11 +94,23 @@ export function ExecutionModeSettings() {
   const complete = Boolean(draft.name.trim() && draft.baseUrl.trim() && draft.model.trim() && (draft.apiKey.trim() || draft.keySaved));
   const selectedAgent = agents.find(agent => agent.id === agentId);
   const canConnect = (agent: Agent) => agent.execution?.supported && agent.installed && agent.auth.state === "ready";
+  const workspaceUnchanged = !pendingWorkspace && snapshot?.local?.agentId === agentId && snapshot.local.workspaceId === workspace && snapshot.active?.mode === "cli";
+  const chooseFolder = () => void run("folder", async () => {
+    const result = await request<{ selection: { token: string; path: string; label: string } | null }>("/api/execution/workspaces/pick", { method: "POST", body: "{}" }, 190000);
+    if (mounted.current && result.selection) { setPendingWorkspace(result.selection); setNotice("Folder selected, not yet authorized. Review the path before saving."); }
+  });
   const connect = (agent: Agent) => {
     setAgentId(agent.id);
-    if (!workspace) { setError("Choose an approved workspace before connecting this Agent."); return; }
+    setNotice("");
+    if (!workspace && !pendingWorkspace) { setError("Choose a project folder before connecting this Agent."); return; }
     void run("local", async () => {
-      const state = await request<Snapshot>("/api/settings/execution/local", { method: "POST", body: JSON.stringify({ agentId: agent.id, workspaceId: workspace }) });
+      let workspaceId = workspace;
+      if (pendingWorkspace) {
+        const approved = await request<{ workspace: { id: string; path: string; label: string }; workspaces: { id: string; path: string; label: string }[] }>("/api/execution/workspaces/approve", { method: "POST", body: JSON.stringify({ token: pendingWorkspace.token, approved: true }) });
+        workspaceId = approved.workspace.id;
+        if (mounted.current) { setWorkspace(workspaceId); setWorkspaces(approved.workspaces); setPendingWorkspace(null); }
+      }
+      const state = await request<Snapshot>("/api/settings/execution/local", { method: "POST", body: JSON.stringify({ agentId: agent.id, workspaceId }) });
       if (mounted.current) { setSnapshot(state); setNotice(agent.label + " connected. Starting a task still requires approval."); window.dispatchEvent(new Event("preacherman-execution-changed")); }
     });
   };
@@ -183,10 +196,14 @@ export function ExecutionModeSettings() {
         <h3>{selectedAgent.label} settings</h3>
         <label>Model<select aria-label="Local Agent model" value="default" disabled><option value="default">{selectedAgent.execution.models.find(model => model.id === "default")?.label || "Managed by this Agent"}</option></select></label>
         {selectedAgent.execution.reasoningManagedByAgent ? <p className="execution-mode__hint">Model and reasoning follow this Agent's own configuration.</p> : null}
-        {selectedAgent.execution.workspaceRequired ? <label>Approved workspace<select aria-label="Approved workspace" value={workspace} disabled={Boolean(busy)} onChange={event => setWorkspace(event.target.value)}><option value="">Choose a workspace</option>{workspaces.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label> : null}
-        <p className="execution-mode__hint">{workspaces.find(item => item.id === workspace)?.path}</p>
-        <p className="execution-mode__hint">Workspace changes apply only after saving. Existing task snapshots stay unchanged. Each new task requires approval.</p>
-        <div className="execution-mode__actions"><button type="button" disabled={Boolean(busy) || !canConnect(selectedAgent) || !workspace || (snapshot?.local?.agentId === agentId && snapshot.local.workspaceId === workspace && snapshot.active?.mode === "cli")} onClick={() => connect(selectedAgent)}>{busy === "local" ? "Saving…" : snapshot?.local?.agentId === agentId ? "Save & Use Agent" : "Connect Agent"}</button></div>
+        {selectedAgent.execution.workspaceRequired ? <div className="execution-mode__workspace">
+          <label>Approved workspace<select aria-label="Approved workspace" value={pendingWorkspace ? "" : workspace} disabled={Boolean(busy)} onChange={event => { setWorkspace(event.target.value); setPendingWorkspace(null); setNotice(""); setError(""); }}><option value="" disabled>{pendingWorkspace ? "New folder · awaiting approval" : "No workspace selected"}</option>{workspaces.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+          <button type="button" disabled={Boolean(busy)} onClick={chooseFolder}>{busy === "folder" ? "Choosing folder…" : "Choose folder"}</button>
+          <p className="execution-mode__hint" aria-label="Selected workspace path">{pendingWorkspace?.path || workspaces.find(item => item.id === workspace)?.path || "Choose a project folder on this computer."}</p>
+          {pendingWorkspace ? <><p className="execution-mode__hint">Approve &amp; Use Agent authorizes this folder for local Agent tasks. Individual tasks still require approval; choosing a folder alone grants no access.</p><button type="button" disabled={Boolean(busy)} onClick={() => { setPendingWorkspace(null); setNotice(""); setError(""); }}>Cancel folder change</button></> : null}
+        </div> : null}
+        <p className="execution-mode__hint">{workspaceUnchanged ? "This Agent and workspace are already saved. Choose another folder to make a change." : "Workspace changes apply only after saving. Existing task snapshots stay unchanged. Each new task requires approval."}</p>
+        <div className="execution-mode__actions"><button type="button" disabled={Boolean(busy) || !canConnect(selectedAgent) || (!workspace && !pendingWorkspace) || workspaceUnchanged} onClick={() => connect(selectedAgent)}>{busy === "local" ? "Saving…" : pendingWorkspace ? "Approve & Use Agent" : workspaceUnchanged ? "Saved" : snapshot?.local?.agentId === agentId ? "Save & Use Agent" : "Connect Agent"}</button></div>
       </div> : <p className="execution-mode__hint">Agent-specific model and workspace settings appear after selection.</p>}
       <p className="execution-mode__hint">Preacherman Native keeps its existing flow. Additional CLIs require a registered execution adapter.</p>
     </div> : null}

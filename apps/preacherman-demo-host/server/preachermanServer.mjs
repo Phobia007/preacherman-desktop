@@ -47,6 +47,7 @@ import { createPreachermanExecutionLedgerProjector } from "./preacherman-executi
 import { migratePreachermanBrandData } from "./preachermanBrandMigration.mjs";
 import { createLocalAgentRegistry, createCodexCliAdapter, createDeepSeekHarnessAdapter, deepSeekHarnessPinnedVersion } from "./local-agent/index.mjs";
 import { discoverLocalAgents } from "./local-agent/localAgentDiscovery.mjs";
+import { createWorkspaceSelection } from "./local-agent/workspaceSelection.mjs";
 import { createPreachermanAgentAccessRuntime } from "./preachermanAgentAccessRuntime.mjs";
 import { binaryServiceHealth, createBinaryWebSocketProxy } from "./speechMotionProxy.mjs";
 import { createCortanaVoiceTelemetry } from "./cortanaVoiceTelemetry.mjs";
@@ -1360,6 +1361,14 @@ export function createPreachermanServer(options = {}) {
     legacyKey: async () => (await runtimeEnv()).DEEPSEEK_API_KEY || "",
     ...(options.executionConnectionRequest ? { request: options.executionConnectionRequest } : {}),
   });
+  const workspaceSelection = createWorkspaceSelection({
+    file: join(dataDirectory, "local-agent-workspaces.v1.json"),
+    ...(options.workspacePicker ? { picker: options.workspacePicker } : {}),
+    register(record) {
+      if (!configuredWorkspaceRoots.includes(record.path)) configuredWorkspaceRoots.push(record.path);
+      agentAccessRuntime.registerWorkspace(record);
+    },
+  });
   const server = createServer(async (request, response) => {
     const origin = requestOrigin(request);
     if (!origin) {
@@ -1369,7 +1378,7 @@ export function createPreachermanServer(options = {}) {
     if (request.method === "OPTIONS") {
       response.writeHead(204, {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
         "Access-Control-Allow-Origin": origin,
         Vary: "Origin",
       });
@@ -1579,6 +1588,20 @@ export function createPreachermanServer(options = {}) {
       }
       if (request.method === "GET" && url.pathname === "/api/execution/workspaces") {
         json(response, 200, { workspaces: agentAccessRuntime.listWorkspaces() }, origin);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/execution/workspaces/pick") {
+        await readJson(request);
+        const controller = new AbortController();
+        const cancel = () => { if (!response.writableEnded) controller.abort(); };
+        response.once("close", cancel);
+        try { json(response, 200, { selection: await workspaceSelection.pick({ signal: controller.signal }) }, origin); }
+        finally { response.off("close", cancel); }
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/execution/workspaces/approve") {
+        const workspace = await workspaceSelection.approve(await readJson(request));
+        json(response, 200, { workspace, workspaces: agentAccessRuntime.listWorkspaces() }, origin);
         return;
       }
       const localAgentTestMatch = url.pathname.match(/^\/api\/execution\/local-agents\/([^/]+)\/test$/);
@@ -2463,6 +2486,7 @@ export function createPreachermanServer(options = {}) {
     server,
     async listen(port = Number(env.PREACHERMAN_SERVICE_PORT) || DEFAULT_PORT) {
       await migratePreachermanBrandData(dataDirectory);
+      await workspaceSelection.initialize();
       await initializeEcosystemRuntimes();
       await Promise.all([preachermanMcpRuntime.initialize(), preachermanPluginRuntime.initialize()]);
       await preachermanObservabilityRuntime.syncPluginSessions(await preachermanPluginRuntime.listPlugins());

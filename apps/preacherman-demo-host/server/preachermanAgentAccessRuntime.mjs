@@ -526,6 +526,9 @@ export function createPreachermanAgentAccessRuntime({
     gatewayAudit: () => requireGateway().audit.list(),
     listLocalAgents: () => localAgentRegistry.list(),
     listWorkspaces: () => workspaceRecords.map(({ id, label, path }) => ({ id, label, path })),
+    registerWorkspace: (workspace) => {
+      if (!workspaceRecords.some(item => item.id === workspace.id)) workspaceRecords.push({ ...workspace, path: resolve(workspace.path) });
+    },
     createLocalTask,
     createAgentWorkspaceTask,
     startLocalTask,

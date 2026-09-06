@@ -64,6 +64,8 @@
 .execution-mode__error { color: var(--demo-theme-settings-error); font-size: 20px; }
 .execution-mode__row { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 32px; }
 .execution-mode__agent { display: grid; gap: 18px; }
+.execution-mode__workspace { display: grid; gap: 16px; min-width: 0; }
+.execution-mode__workspace > button { justify-self: start; }
 .execution-mode__agent-list { display: grid; gap: 18px; margin: 24px 0 32px; }
 .execution-mode .execution-mode__agent-choice { display: flex; align-items: center; gap: 18px; width: 100%; padding: 20px 24px; text-align: left; }
 .execution-mode__agent-choice[aria-checked="true"] { border-color: var(--demo-theme-settings-text); background: var(--demo-theme-settings-surface); }
