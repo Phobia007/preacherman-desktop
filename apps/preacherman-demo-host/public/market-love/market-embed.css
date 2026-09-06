@@ -40,6 +40,11 @@ input::placeholder {
   background: var(--demo-theme-market-hover, rgb(255 255 255 / 18%)) !important;
 }
 
+.button--primary:hover:not([disabled]):not(.disabled) {
+  background: var(--demo-theme-market-hover, rgb(255 255 255 / 18%)) !important;
+  border-color: var(--demo-theme-market-border, rgb(255 255 255 / 28%));
+}
+
 .brand-logo img, .footer-logo img {
   filter: brightness(0) invert(1);
 }

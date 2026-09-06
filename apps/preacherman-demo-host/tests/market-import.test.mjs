@@ -66,6 +66,7 @@ test("both appearances use white ink on transparent paper without restyling dono
     assert.equal((styles.match(new RegExp(`--demo-theme-market-${token}:`, "g")) || []).length, 2);
   }
   assert.match(css, /background: transparent !important/);
+  assert.match(css, /\.button--primary:hover[^}]+--demo-theme-market-hover/);
   assert.match(css, /color: var\(--demo-theme-market-text/);
   assert.doesNotMatch(css, /font-family|font-size|display:\s*none|transform:|object-fit|\.hero.*filter/);
   const adapter = await text(join(imported, "market-embed.js"));
