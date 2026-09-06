@@ -58,5 +58,19 @@
   },
   "verifiedAt": "2026-09-06T14:35:03.4317169+08:00",
   "deployedAt": "2026-09-06T14:28:30.0610790+08:00",
-  "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00"
+  "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
+  "releaseAttempts": [
+    {
+      "sourceCommit": "a4351bc4d261790341a18a233dc594c8c2fbc7a5",
+      "sha256": "43CF186EA2F8FBBB5E58935FA81D6D656E318E6C0D29E3915B24ACB1D9774D89",
+      "deployedAt": "2026-09-06T15:28:16.5169789+08:00",
+      "status": "rolled-back",
+      "reason": "Native WebView painted an opaque white iframe canvas because child and host color schemes differed. CSS transparency and functional checks alone were insufficient; visual verification rejected delivery.",
+      "restoredHostSha256": "F43E057DDB92124F42ADE63F814F0CF2A5B6EC313D57111EA86876A84B5AD8E7",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "failedArtifactPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\preacherman-demo-host-market-rejected-20260906-152809.exe",
+      "rollbackVerification": "Canonical shortcut cold launch restored Home, Task, Gallery and Settings; screenshots and runtime check passed, zero exceptions. Native isolated canvas probe confirmed syncing child colorScheme to host removes the white backing.",
+      "verifiedAt": "2026-09-06T15:32:16+08:00"
+    }
+  ]
 }

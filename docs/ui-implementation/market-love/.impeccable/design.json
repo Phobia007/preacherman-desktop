@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-06T07:23:32.789Z",
+  "title": "Design System: Preacherman Market — Cartier LOVE",
+  "extensions": {
+    "typographyMeta": {
+      "title": { "displayName": "Brilliant Cut headings", "purpose": "Preserved donor headings; no host font replacement." },
+      "body": { "displayName": "Fancy Cut copy", "purpose": "Preserved serif introduction and descriptive copy." },
+      "navigation": { "displayName": "Donor desktop navigation", "purpose": "Uppercase header links with the donor's responsive changes." },
+      "search": { "displayName": "Local search field", "purpose": "Brilliant Cut text inside the retained search dialog." }
+    },
+    "shadows": [
+      { "name": "header-ink", "value": "0 1px 2px var(--demo-theme-market-ink-shadow, #000), 0 2px 5px var(--demo-theme-market-ink-shadow, #000)", "purpose": "Text shadow that keeps the white sticky header legible over pale donor media." },
+      { "name": "header-icon", "value": "drop-shadow(0 1px 2px var(--demo-theme-market-ink-shadow, #000))", "purpose": "Filter on the donor header icons and white logo." }
+    ],
+    "motion": [
+      { "name": "navigation-underline", "value": "transform .25s", "purpose": "Existing donor hover underline from scaleX(0) to scaleX(1)." },
+      { "name": "donor-button", "value": ".5s cubic-bezier(.4,.9,.3,1)", "purpose": "Existing donor opacity, color, border-color and background-color transitions." },
+      { "name": "long-page-reduced-motion", "value": ".01ms", "purpose": "Existing long-page reduced-motion animation and transition duration; smooth scrolling becomes auto and the hero film pauses." }
+    ],
+    "breakpoints": [
+      { "name": "donor-menu", "value": "1023px" },
+      { "name": "donor-mobile-content", "value": "767px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Donor navigation link",
+      "kind": "nav",
+      "refersTo": "navigation-link",
+      "description": "Static sample of a retained desktop navigation link; the live document owns its destination and menu behavior.",
+      "html": "<nav class=\"ds-navigation\" aria-label=\"Navigation sample\"><a class=\"ds-navigation-link\" href=\"#jewelry\">Jewelry</a></nav>",
+      "css": ".ds-navigation{font:400 13px 'Brilliant Cut',sans-serif;letter-spacing:1.5px;text-transform:uppercase;text-shadow:0 1px 2px var(--demo-theme-market-ink-shadow,#000),0 2px 5px var(--demo-theme-market-ink-shadow,#000)}.ds-navigation-link{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:12px 0;background:transparent;color:var(--demo-theme-market-text,#fff);text-decoration:none;white-space:nowrap}.ds-navigation-link:after{content:'';position:absolute;left:0;bottom:7px;width:100%;height:1px;background:var(--demo-theme-market-text,#fff);transform:scaleX(0);transition:transform .25s}.ds-navigation-link:hover:after{transform:scaleX(1)}.ds-navigation-link:focus-visible{outline:2px solid var(--demo-theme-market-focus,#fff);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-navigation-link:after{transition-duration:.01ms}}"
+    },
+    {
+      "name": "Local search field",
+      "kind": "input",
+      "refersTo": "search-field",
+      "description": "The retained transparent underlined search field, shown without the live dialog or search handler.",
+      "html": "<input class=\"ds-search\" type=\"search\" aria-label=\"Search LOVE bracelets\" placeholder=\"Search styles, materials or finishes\" autocomplete=\"off\">",
+      "css": ".ds-search{min-width:0;border:0;border-bottom:1px solid var(--demo-theme-market-text,#fff);padding:12px;font:14px 'Brilliant Cut',sans-serif;background:transparent;color:var(--demo-theme-market-text,#fff);caret-color:var(--demo-theme-market-text,#fff)}.ds-search::placeholder{color:var(--demo-theme-market-muted,rgb(255 255 255 / 68%))}.ds-search:focus-visible{outline:2px solid var(--demo-theme-market-focus,#fff);outline-offset:5px}"
+    },
+    {
+      "name": "Host recovery button",
+      "kind": "button",
+      "refersTo": "recovery-button",
+      "description": "Static sample of the host error-state retry control; the live button remounts the iframe.",
+      "html": "<button class=\"ds-recovery\" type=\"button\">Try again</button>",
+      "css": ".ds-recovery{padding:10px 20px;border:1px solid var(--demo-theme-market-border,rgb(255 255 255 / 28%));background:var(--demo-theme-market-control,rgb(0 0 0 / 72%));color:var(--demo-theme-market-text,#fff);font:300 18px/1.4 var(--demo-font-primary,'Clash Display',sans-serif);cursor:pointer}.ds-recovery:hover{background:var(--demo-theme-market-hover,rgb(255 255 255 / 18%))}.ds-recovery:focus-visible{outline:2px solid var(--demo-theme-market-focus,#fff);outline-offset:4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Complete Cartier LOVE on the Preacherman stage",
+    "overview": "Mode: Experience. This document applies only to the user-visible Market surface and its imported LOVE documents. It records the user's pinned migration, not a new Preacherman brand or a root design system.\n\nThe complete local Cartier long page and START DESIGNING configurator retain their composition, content, fonts, navigation, hero films, photography, five-step interaction and footer. White page and world backings become transparent; interface text and monochrome marks become white over the persistent Preacherman model and base. Pale pixels inside photographs, videos and authored jewelry assets remain intact.",
+    "keyCharacteristics": [
+      "Complete donor experience, including its local search, wishlist and bag dialogs.",
+      "Original Brilliant Cut and Fancy Cut typography, geometry and motion.",
+      "Transparent document and 3D backings over the existing companion scene.",
+      "Packaged local assets and a Market-only iframe lifecycle."
+    ],
+    "rules": [
+      { "name": "The Backing Boundary Rule", "body": "Remove page and world backings; preserve colors baked into photos, videos, textures and jewelry materials.", "section": "colors" }
+    ],
+    "dos": [
+      "Do preserve the full donor page, configurator, local assets, fonts, motion and interactions.",
+      "Do keep Market appearance properties semantic and synchronized with host preferences.",
+      "Do preserve the persistent Preacherman model and base behind transparent backing areas.",
+      "Do verify the changed flow in both appearances and complete the required native shortcut delivery before declaring the implementation delivered."
+    ],
+    "donts": [
+      "Don't recolor pale pixels baked into photographs, videos or authored jewelry assets.",
+      "Don't replace this import with a shortened landing page or a newly designed configurator.",
+      "Don't apply this surface's fonts or palette to the root shell or Gallery.",
+      "Don't introduce a runtime local HTTP dependency for packaged UI assets."
+    ]
+  }
+}

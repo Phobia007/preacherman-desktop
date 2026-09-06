@@ -3,9 +3,28 @@ import { readFile, stat } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { join } from "node:path";
 import test from "node:test";
+import { runInNewContext } from "node:vm";
 const root = join(import.meta.dirname, "..");
 const imported = join(root, "public/market-love");
 const text = path => readFile(path, "utf8");
+
+test("embedded document synchronizes the actual host color scheme before painting", async () => {
+  const root = {dataset:{},style:{setProperty(){}}};
+  const shell = {dataset:{appearance:"dark"}};
+  const parentRoot = {scheme:"dark"};
+  let synchronize;
+  const script = await text(join(imported, "market-embed.js"));
+  runInNewContext(script, {
+    parent:{document:{documentElement:parentRoot,querySelector:()=>shell},getComputedStyle:node=>node===parentRoot?{colorScheme:node.scheme}:{getPropertyValue:()=>"#fff"}},
+    document:{documentElement:root,addEventListener(){}},
+    window:{addEventListener(){}},
+    MutationObserver:class {constructor(callback){synchronize=callback;}observe(){}disconnect(){}},
+  });
+  assert.equal(root.style.colorScheme,"dark");
+  parentRoot.scheme="light";shell.dataset.appearance="light";synchronize();
+  assert.equal(root.style.colorScheme,"light");
+  assert.equal(root.dataset.appearance,"light");
+});
 
 test("Market mounts only at its route without replacing the shared scene", async () => {
   const app = await text(join(root, "src/App.tsx"));
@@ -72,6 +91,7 @@ test("both appearances use white ink on transparent paper without restyling dono
   const adapter = await text(join(imported, "market-embed.js"));
   assert.match(adapter, /attributeFilter: \["data-appearance"\]/);
   assert.match(adapter, /loveconfiguratorready/);
+  assert.match(adapter, /style.colorScheme = parent.getComputedStyle\(parent.document.documentElement\).colorScheme/);
   assert.match(adapter, /pagehide/);
   assert.match(adapter, /themeObserver.disconnect/);
 });

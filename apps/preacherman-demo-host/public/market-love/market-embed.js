@@ -6,6 +6,9 @@
     if (!shell) return;
     const style = parent.getComputedStyle(shell);
     document.documentElement.dataset.appearance = shell.dataset.appearance;
+    // Chromium paints an opaque iframe canvas when its color scheme differs
+    // from the embedding document, even when both CSS backgrounds are clear.
+    document.documentElement.style.colorScheme = parent.getComputedStyle(parent.document.documentElement).colorScheme;
     for (const name of themeNames) {
       const property = `--demo-theme-market-${name}`;
       document.documentElement.style.setProperty(property, style.getPropertyValue(property));
