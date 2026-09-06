@@ -1,8 +1,8 @@
 {
   "sourceProject": "70f215b1-59d7-4c44-a675-0a48d1730917",
-  "importedAt": "2026-09-06T07:12:33.340Z",
+  "importedAt": "2026-09-06T08:06:40.978Z",
   "originalBundleSha256": "0cf59fbe58060315b957a45b35e7eb7e444eea3b90a9c3507a93fce85656cbb4",
-  "scope": "Complete local experience; only transparent paper, white text and isolated wishlist storage.",
+  "scope": "Local experience with the requested site footer removed; transparent paper, white text and isolated wishlist storage.",
   "files": [
     {
       "path": "assets/configurator/app.js",

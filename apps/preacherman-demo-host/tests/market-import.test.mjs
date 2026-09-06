@@ -38,15 +38,22 @@ test("Market mounts only at its route without replacing the shared scene", async
   assert.match(surface, /removeEventListener\("message", onMessage\)/);
 });
 
-test("the complete long page, fonts, header, footer and Start Designing links remain", async () => {
+test("the long page, fonts, header, dialogs and remaining Start Designing links remain", async () => {
   const html = await text(join(imported, "cartier-love.html"));
   for (const section of ["hero", "style", "material", "diamonds", "finish", "closure"]) {
     assert.match(html, new RegExp(`data-od-id="love-${section}"`));
   }
-  for (const id of ["site-header", "site-footer", "search-dialog", "saved-dialog", "bag-dialog"]) assert.ok(html.includes(`data-od-id="${id}"`));
-  assert.equal((html.match(/href="love-configurator.html"/g) || []).length, 8);
+  for (const id of ["site-header", "search-dialog", "saved-dialog", "bag-dialog"]) assert.ok(html.includes(`data-od-id="${id}"`));
+  assert.equal((html.match(/href="love-configurator.html"/g) || []).length, 7);
   assert.match(html, /assets\/fonts\/fonts.css/);
   for (const font of ["BrilliantCutPro-Regular.woff2", "BrilliantCutPro-Medium.woff2", "FancyCutPro-Regular.woff2"]) assert.ok((await stat(join(imported, "assets/fonts", font))).size > 0);
+});
+
+test("the requested footer is removed from the document, not merely hidden", async () => {
+  const html = await text(join(imported, "cartier-love.html"));
+  assert.doesNotMatch(html, /<footer\b|site-footer|footer-logo|Customer Care|Our Company|Explore LOVE<|United States · English|© Cartier 2026/);
+  assert.match(html, /<\/main>\s*<dialog id="search-dialog"/);
+  assert.match(html, /class="brand-logo"/);
 });
 
 test("every imported asset is packaged and matches its recorded hash", async () => {

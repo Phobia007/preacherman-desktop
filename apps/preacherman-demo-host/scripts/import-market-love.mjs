@@ -2,7 +2,7 @@ import { cp, mkdir, readFile, writeFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { resolve, join, relative } from "node:path";
 
-// Reproducible vendor import. Only paper/ink and storage isolation are adapted.
+// Reproducible vendor import: paper/ink, storage isolation and the requested footer removal.
 const source = process.argv[2];
 if (!source) throw new Error("Usage: node scripts/import-market-love.mjs <local Cartier project>");
 const destination = resolve(import.meta.dirname, "../public/market-love");
@@ -22,6 +22,11 @@ FORM: User-pinned complete document import; no composition redesign.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->`;
 for (const page of ["cartier-love.html", "love-configurator.html"]) {
   let html = await readFile(join(source, page), "utf8");
+  if (page === "cartier-love.html") {
+    const footer = html.match(/<footer class="love-footer" data-od-id="site-footer">[\s\S]*?<\/footer>/g);
+    if (footer?.length !== 1) throw new Error("Source changed: expected exactly one LOVE footer");
+    html = replaceOnce(html, footer[0], "");
+  }
   html = replaceOnce(html, "</head>", '<link rel="stylesheet" href="market-embed.css"><script src="market-embed.js"></script></head>');
   html = replaceOnce(html, "<body>", `<body>\n${contract}`);
   await writeFile(join(destination, page), html);
@@ -70,7 +75,7 @@ await record(join(destination, "assets"));
 await writeFile(join(destination, "import-manifest.json"), JSON.stringify({
   sourceProject: "70f215b1-59d7-4c44-a675-0a48d1730917", importedAt: new Date().toISOString(),
   originalBundleSha256,
-  scope: "Complete local experience; only transparent paper, white text and isolated wishlist storage.",
+  scope: "Local experience with the requested site footer removed; transparent paper, white text and isolated wishlist storage.",
   files,
 }, null, 2) + "\n");
 console.log(`Imported ${files.length} assets into ${destination}`);
