@@ -34,6 +34,7 @@ import { LiveCoordinatorProvider } from "./live/LiveCoordinatorContext";
 import { SettingsScreen } from "./settings/SettingsScreen";
 import { ActiveTheoryGallerySurface } from "./surfaces/gallery/ActiveTheoryGallerySurface";
 import { GallerySurface } from "./surfaces/gallery/GallerySurface";
+import { MarketSurface } from "./surfaces/market/MarketSurface";
 import {
   applyPreferences,
   readPreferences,
@@ -409,6 +410,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       >
         <ActiveTheoryGallerySurface />
       </div>
+      {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
       {activeSurfaceType !== "ledger" ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}

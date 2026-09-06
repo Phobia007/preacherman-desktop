@@ -1,0 +1,83 @@
+/* Only the paper and ink change. Donor typography, geometry and motion stay intact. */
+:root, :host {
+  --bg: transparent;
+  --surface: transparent;
+  --fg: var(--demo-theme-market-text, #fff);
+  --muted: var(--demo-theme-market-muted, rgb(255 255 255 / 68%));
+  --border: var(--demo-theme-market-border, rgb(255 255 255 / 28%));
+  --accent: var(--demo-theme-market-text, #fff);
+}
+
+html, body, .root, .love-header, .love-footer, .main,
+.hero, .hero__content-wrap, .descriptive-card, .love-dialog,
+.brand-nav.is-open, .bg--grey-1,
+[class~="bg-[#ededed]"], [class~="bg-[#EDEDED]"], .root .bg-white {
+  background: transparent !important;
+}
+
+body, .root, .hero, .descriptive-card,
+a, button, input, h1, h2, h3, p, label,
+.hero__description, .descriptive-card__description,
+[class*="text-black"], [class*="text-gray"], [class*="text-neutral"] {
+  color: var(--demo-theme-market-text, #fff) !important;
+}
+
+[class~="text-black/50"], [class~="text-black/60"],
+input::placeholder {
+  color: var(--demo-theme-market-muted, rgb(255 255 255 / 68%)) !important;
+}
+
+/* Selected options retain their original fill animation, without opaque white paper. */
+.root button > .bg-white {
+  background: var(--demo-theme-market-hover, rgb(255 255 255 / 18%)) !important;
+}
+
+.root [class~="bg-white/40"], .root [class~="bg-white/10"] {
+  background: var(--demo-theme-market-control, rgb(0 0 0 / 72%)) !important;
+}
+
+.root [class~="hover:bg-white/80"]:hover {
+  background: var(--demo-theme-market-hover, rgb(255 255 255 / 18%)) !important;
+}
+
+.brand-logo img, .footer-logo img {
+  filter: brightness(0) invert(1);
+}
+
+/* White navigation stays readable when the original pale media scrolls underneath. */
+.love-header {
+  text-shadow: 0 1px 2px var(--demo-theme-market-ink-shadow, #000), 0 2px 5px var(--demo-theme-market-ink-shadow, #000);
+}
+
+.love-header .icon-button svg {
+  filter: drop-shadow(0 1px 2px var(--demo-theme-market-ink-shadow, #000));
+}
+
+.love-header .brand-logo img {
+  filter: brightness(0) invert(1) drop-shadow(0 1px 2px var(--demo-theme-market-ink-shadow, #000));
+}
+
+svg [fill="#0D0D0D"], svg [fill="#0d0d0d"], svg [fill="#000000"], svg [fill="black"] {
+  fill: var(--demo-theme-market-text, #fff);
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline-color: var(--demo-theme-market-focus, #fff) !important;
+}
+
+svg [stroke="#0D0D0D"], svg [stroke="#0d0d0d"], svg [stroke="#000000"], svg [stroke="black"] {
+  stroke: var(--demo-theme-market-text, #fff);
+}
+
+::selection {
+  color: var(--demo-theme-market-text, #fff);
+  background: var(--demo-theme-market-hover, rgb(255 255 255 / 18%));
+}
+
+html {
+  scrollbar-color: var(--demo-theme-market-border, rgb(255 255 255 / 28%)) transparent;
+}
+
+input { caret-color: var(--demo-theme-market-text, #fff); }
+
+#configurator[data-market-styling="pending"] { visibility: hidden; }

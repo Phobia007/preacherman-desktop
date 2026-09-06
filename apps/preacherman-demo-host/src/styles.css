@@ -332,6 +332,15 @@ html[data-appearance="dark"] #root {
   --demo-theme-settings-accent: #0969ed;
   --demo-theme-settings-accent-text: #ffffff;
   --demo-theme-settings-success: #75d5a4;
+  --demo-theme-market-text: #ffffff;
+  --demo-theme-market-muted: rgb(255 255 255 / 68%);
+  --demo-theme-market-border: rgb(255 255 255 / 28%);
+  --demo-theme-market-control: rgb(0 0 0 / 72%);
+  --demo-theme-market-hover: rgb(255 255 255 / 18%);
+  --demo-theme-market-focus: #ffffff;
+  --demo-theme-market-loading: #d7e6ef;
+  --demo-theme-market-error: #ffb3b3;
+  --demo-theme-market-ink-shadow: rgb(0 0 0 / 95%);
   position: relative;
   width: var(--demo-app-width);
   height: var(--demo-app-height);
@@ -426,6 +435,15 @@ html[data-appearance="dark"] #root {
   --demo-theme-settings-accent: #0969ed;
   --demo-theme-settings-accent-text: #ffffff;
   --demo-theme-settings-success: #75d5a4;
+  --demo-theme-market-text: #ffffff;
+  --demo-theme-market-muted: rgb(255 255 255 / 68%);
+  --demo-theme-market-border: rgb(255 255 255 / 28%);
+  --demo-theme-market-control: rgb(0 0 0 / 72%);
+  --demo-theme-market-hover: rgb(255 255 255 / 18%);
+  --demo-theme-market-focus: #ffffff;
+  --demo-theme-market-loading: #d7e6ef;
+  --demo-theme-market-error: #ffb3b3;
+  --demo-theme-market-ink-shadow: rgb(0 0 0 / 95%);
   color: var(--demo-theme-text);
   background: var(--demo-theme-canvas);
 }

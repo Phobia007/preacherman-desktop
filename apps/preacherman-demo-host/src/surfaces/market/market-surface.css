@@ -1,0 +1,46 @@
+.market-surface {
+  position: absolute;
+  inset: 116px 0 0;
+  background: transparent;
+  color: var(--demo-theme-market-text);
+}
+
+.market-surface__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+}
+
+.market-surface__status {
+  position: absolute;
+  right: 36px;
+  bottom: 24px;
+  color: var(--demo-theme-market-loading);
+  font: 300 18px/1.4 var(--demo-font-primary);
+}
+
+.market-surface[data-status="error"] .market-surface__status {
+  padding: 20px;
+  background: var(--demo-theme-market-control);
+  color: var(--demo-theme-market-error);
+}
+
+.market-surface__status button {
+  padding: 10px 20px;
+  border: 1px solid var(--demo-theme-market-border);
+  background: var(--demo-theme-market-control);
+  color: var(--demo-theme-market-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.market-surface__status button:hover {
+  background: var(--demo-theme-market-hover);
+}
+
+.market-surface__status button:focus-visible {
+  outline: 2px solid var(--demo-theme-market-focus);
+  outline-offset: 4px;
+}
