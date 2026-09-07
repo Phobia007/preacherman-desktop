@@ -89,6 +89,14 @@ test('new controls are theme semantic and keyboard accessible in both appearance
   assert.match(read('src/App.tsx'),/isolateCompanion=\{activeSurfaceType === "market" && galleryDetailOpen\}/);
 });
 
+test('foreground isolation ends before exit paints, while the overlay still fades',()=>{
+  const surface=read('src/surfaces/gallery/ActiveTheoryGallerySurface.tsx');
+  assert.match(surface,/useLayoutEffect\(\(\) => \{[\s\S]*?onDetailChange\?\.\(active && detail\.phase === "open"\)/);
+  assert.doesNotMatch(surface,/onDetailChange\?\.\(active && detail\.phase !== "closed"\)/);
+  assert.match(surface,/portal && bridge && active && detail\.phase !== "closed"/);
+  assert.match(read('src/surfaces/gallery/active-theory-gallery-surface.css'),/data-phase="closing"[^}]*opacity: 0; transition: opacity 300ms ease/);
+});
+
 test('detail clears the R3F restored background and uses this workspace renderer',()=>{
   const scene=fs.readFileSync(new URL('../../../packages/preacherman-avatar-renderer/src/InteractiveAvatarScene.tsx',import.meta.url),'utf8');
   assert.match(scene,/if \(isolateCompanion\) scene\.background = null/);

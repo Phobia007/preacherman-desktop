@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { GalleryDetailOverlay, type GalleryDetailBridge, type GalleryDetailState } from "./GalleryDetailOverlay";
 import { useExecutionFrameBridge } from "../../execution/useExecutionFrameBridge";
 
@@ -25,8 +25,10 @@ export function ActiveTheoryGallerySurface({ active = true, onDetailChange }: {
     setPortal(frameRef.current?.closest(".demo-app-shell") ?? null);
     return api.subscribe(setDetail);
   }, [loaded]);
-  useEffect(() => {
-    onDetailChange?.(active && detail.phase !== "closed");
+  useLayoutEffect(() => {
+    // Restore rail compositing before the first exit frame, not after its tween.
+    // The overlay may keep fading while the companion is already back in the rail.
+    onDetailChange?.(active && detail.phase === "open");
   }, [active, detail.phase, onDetailChange]);
   const back = useCallback(() => { bridge?.back(); frameRef.current?.focus({ preventScroll: true }); }, [bridge]);
 

@@ -54,6 +54,16 @@ through the entire return transition, and uses preventScroll when restoring
 iframe focus. A regression test injects late scroll/route changes during entry
 and return, then confirms normal rail scrolling resumes afterward.
 
+### Exit-frame compositing correction
+
+The companion's foreground mode previously remained active during `closing`,
+until the 820ms cleanup timer ended. The rail was already visible during this
+interval, so the opaque companion briefly covered its cards. Only the `open`
+phase now requests foreground isolation. A layout effect publishes the change
+before the exit paints, independently of the overlay fade and rail-position
+lock. Frame-by-frame browser/native checks cover multiple cards, both appearance
+modes and exits with the foreground video either present or already closed.
+
 Source baseline: 183731ffef4482854426d3c537f54a03f73986a8.
 Before deployment, the verified executable, unchanged sidecar and manifest
 were copied to the canonical release directory's
