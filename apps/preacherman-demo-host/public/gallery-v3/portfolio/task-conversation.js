@@ -247,6 +247,7 @@ export const TaskConversation = {
           ]) : null,
           ...message.files.map((name, index) => element("span", {key:index, class:"task-chat__file"}, [icon("file"), name])),
         ]))),
+      error.value || busy.value || contextTrimmed.value ? element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (busy.value ? "正在请求，请稍候…" : "本次仅发送限额内的近期上下文；完整记录仍保留在本机。")) : null,
       element("form", {class:"task-chat__composer", onSubmit:event => {event.preventDefault(); send();}}, [
         files.value.length ? element("div", {class:"task-chat__attachments"}, files.value.map((name, index) => element("button", {
           key:index, type:"button", class:"task-chat__attachment", title:"移除 " + name,
@@ -276,7 +277,6 @@ export const TaskConversation = {
           element("button", {type:"submit", class:"task-chat__send", "aria-label":"发送消息", title:"发送到所选模型", disabled:busy.value || readFailed.value || !draft.value.trim()}, [icon("up")]),
         ]),
       ]),
-      element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (busy.value ? "正在请求，请稍候…" : contextTrimmed.value ? "本次仅发送限额内的近期上下文；完整记录仍保留在本机。" : "文本对话与规划 · 发送给所选模型 · 不执行本机任务")),
     ]);
   },
 };

@@ -151,9 +151,26 @@ test("divider and chat cover every task; semantic tokens exist in both appearanc
   assert.ok(runtime.includes("isTaskTemplate(n(e))?X(TaskConversation"));
   assert.ok(runtime.includes("enabled:P(()=>!isTaskTemplate(e.value))"), "the image-loop scroller must not reposition the conversation");
   assert.ok(css.includes("prefers-reduced-motion"));
-  assert.match(css, /task-chat__input:focus-visible.*--demo-theme-chat-focus/, "the textarea retains a visible keyboard focus");
+  assert.match(css, /\.task-chat \.task-chat__input:is\(:focus, :focus-visible\)\s*\{\s*outline: none !important;\s*box-shadow: none !important;/, "the input has no white focus frame; its caret remains visible");
+  assert.ok(css.includes('caret-color: var(--demo-theme-chat-text)'));
   assert.ok(css.includes(".task-chat :focus-visible { outline: 2px solid var(--demo-theme-chat-focus)"), "retain keyboard focus on toolbar controls");
   for (const key of ["composer","text","muted","border","message","hover","send","send-text","disabled","focus","error"]) {
     assert.equal(tokens.split("--demo-theme-chat-"+key+":").length-1,2,key);
   }
+});
+
+test("detail sheets ignore cover aspect ratios and keep the composer last", () => {
+  const css = fs.readFileSync(new URL("task-conversation.css", root), "utf8");
+  assert.match(css, /\[data-gl="sheet"\]:has\(\.task-metadata\)\s*\{\s*aspect-ratio: auto;/);
+  assert.ok(css.includes('inset: 9rem 3rem 4rem 50%'));
+  for (const slug of ['nathan-riley', 'dogelon-mars', 'discoveryland', 'task-example']) {
+    const f = fixture(null, slug);
+    assert.equal(f.find(n => n.props.class === 'task-chat__status'), null);
+    assert.equal(f.render().children.at(-1).props.class, 'task-chat__composer');
+    f.input().onInput({target:{value:'未连接时保留必要报错'}});
+    f.submit();
+    assert.ok(f.find(n => n.props.role === 'alert'));
+    assert.equal(f.render().children.at(-1).props.class, 'task-chat__composer');
+  }
+  assert.doesNotMatch(source, /文本对话与规划 · 发送给所选模型 · 不执行本机任务/);
 });
