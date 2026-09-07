@@ -115,6 +115,16 @@
       "task-console-baseline.json"
     ]
   },
+  "galleryCandidateRollback": {
+    "candidateSourceCommit": "14ed7a2",
+    "candidateSha256": "3BE77C9989ED68B3FFC128B19D0EB15563CBBC922989EDE99F35A74C3DBC0965",
+    "restoredAt": "2026-09-07T18:50:03.8660220+08:00",
+    "status": "restored-previous-verified-pair",
+    "reason": "Native dual video and compositing passed, but exact rail return-position assertion failed after wheel input. Candidate rejected before handoff; source revision is still in progress.",
+    "restoredSha256": "D4D3494575AC5241CDEFC7BE8FBDBD0C654D972B10B89CEB4EC7B1B5CB08B64C",
+    "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+    "verification": "Canonical shortcut cold start and Home, Task, Gallery, Market/legacy Ledger, Settings, Account passed; new runtime/console errors and HTTP failures zero. Candidate saved under deployment-backups/gallery-detail-rejected-20260907-1849.exe."
+  },
   "releaseAttempts": [
     {
       "sourceCommit": "a4351bc4d261790341a18a233dc594c8c2fbc7a5",
