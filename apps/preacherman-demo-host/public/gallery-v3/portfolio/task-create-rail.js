@@ -1,11 +1,21 @@
 import {createTaskProject, deleteTaskProjects, augmentTaskProjects, projectRecord} from "./task-metadata.js";
+import {saveTaskCover, discardTaskCover, taskCoverUrl} from "./task-covers.js";
 
 // Extend the mounted rail; never reload the route or replay its entrance.
 export function installTaskCreateRail({folio, projects, root, track, resize, nextTick, measureX, measureY, centerX, centerY, motion}) {
   let disposed = false;
   let arrival = null;
   const prepare = async (values) => {
-    await folio.texture(projectRecord({}).src);
+    let coverId;
+    try {
+      if (values.coverBlob) coverId = await saveTaskCover(values.coverBlob);
+      const texture = await folio.texture(coverId ? taskCoverUrl(coverId) : projectRecord({}).src);
+      if (coverId && !texture) throw new Error("封面加载失败，请重新选择图片。");
+      if (disposed || !root.value?.isConnected) throw new Error("任务页面已关闭，请重新打开后添加。");
+    } catch (error) {
+      if (coverId) await discardTaskCover(coverId);
+      throw error;
+    }
     if (disposed || !root.value?.isConnected) throw new Error("任务页面已关闭，请重新打开后添加。");
     const vertical = resize.small;
     const viewport = vertical ? resize.wh : resize.ww;
@@ -16,7 +26,12 @@ export function installTaskCreateRail({folio, projects, root, track, resize, nex
     const anchor = [...track.value.children].reduce((best, card) =>
       !best || Math.abs(midpoint(card) - viewport / 2) < Math.abs(midpoint(best) - viewport / 2) ? card : best, null);
     const offset = anchor ? midpoint(anchor) - viewport / 2 : 0;
-    const project = createTaskProject(values);
+    let project;
+    try { project = createTaskProject({...values, coverId}); }
+    catch (error) {
+      if (coverId) await discardTaskCover(coverId);
+      throw error;
+    }
     projects.value = augmentTaskProjects(projects.value);
     await nextTick();
     if (disposed) return () => {};

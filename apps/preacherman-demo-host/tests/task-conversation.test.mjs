@@ -140,11 +140,11 @@ test("interaction shield is confined to the conversation; provider discovery sta
   assert.match(source,/gallery-provider-request/);
 });
 
-test("divider and chat are Nathan-only; semantic tokens exist in both appearances", () => {
+test("divider and chat cover every task; semantic tokens exist in both appearances", () => {
   const css = fs.readFileSync(new URL("task-conversation.css", root),"utf8");
   const runtime = fs.readFileSync(new URL("_nuxt/Dr-ZLxUY.js",root),"utf8");
   const tokens = fs.readFileSync(new URL("../src/styles.css",import.meta.url),"utf8");
-  assert.ok(css.includes('[data-gl="sheet"][data-id="nathan-riley"]::after'));
+  assert.ok(css.includes('[data-gl="sheet"]:has(.task-metadata)::after'));
   assert.ok(css.includes("left: 50%"));
   assert.ok(css.includes("overflow: hidden"));
   assert.ok(css.includes("overscroll-behavior: contain"));

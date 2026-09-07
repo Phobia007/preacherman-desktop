@@ -1,4 +1,5 @@
-// A three-row task form inside the existing Profile lens, followed by rail arrival.
+// Task creation stays inside the original Profile lens, followed by rail arrival.
+import {prepareTaskCover} from "./task-covers.js";
 export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, watch}) {
   const body = document.createElement("section");
   body.id = "task-create-dialog";
@@ -7,13 +8,6 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   body.setAttribute("aria-modal", "true");
   body.setAttribute("aria-label", "创建新对话");
   body.hidden = true;
-  const closeButton = document.createElement("button");
-  closeButton.type = "button";
-  closeButton.className = "task-create-dialog__close";
-  closeButton.setAttribute("aria-label", "关闭新建对话");
-  // Two CSS strokes use the same control foreground as the existing UI.
-  closeButton.append(document.createElement("span"), document.createElement("span"));
-  body.append(closeButton);
   const form = document.createElement("form");
   form.className = "task-create-dialog__form";
   form.noValidate = true;
@@ -39,6 +33,42 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     form.append(row);
     fields[name] = input;
   }
+  const coverRow = document.createElement("div");
+  coverRow.className = "task-create-dialog__field";
+  const coverCaption = document.createElement("span");
+  coverCaption.textContent = "卡片封面 · 可选";
+  const coverControls = document.createElement("div");
+  coverControls.className = "task-create-dialog__cover-controls";
+  const coverPicker = document.createElement("input");
+  coverPicker.type = "file";
+  coverPicker.name = "cover";
+  coverPicker.accept = "image/jpeg,image/png,image/webp";
+  coverPicker.hidden = true;
+  const coverButton = document.createElement("button");
+  coverButton.type = "button";
+  coverButton.className = "task-create-dialog__cover";
+  coverButton.setAttribute("aria-label", "选择卡片封面");
+  const preview = document.createElement("img");
+  preview.className = "task-create-dialog__cover-preview";
+  preview.alt = "封面预览";
+  preview.hidden = true;
+  const coverCopy = document.createElement("span");
+  const coverName = document.createElement("span");
+  coverName.className = "task-create-dialog__cover-name";
+  coverName.textContent = "选择封面图片";
+  const coverHint = document.createElement("small");
+  coverHint.textContent = "JPG / PNG / WebP · 最大 12 MB";
+  coverCopy.append(coverName, coverHint);
+  coverButton.append(preview, coverCopy);
+  const removeCover = document.createElement("button");
+  removeCover.type = "button";
+  removeCover.className = "task-create-dialog__cover-remove";
+  removeCover.textContent = "移除";
+  removeCover.setAttribute("aria-label", "移除卡片封面");
+  removeCover.hidden = true;
+  coverControls.append(coverButton, removeCover, coverPicker);
+  coverRow.append(coverCaption, coverControls);
+  form.append(coverRow);
   const error = document.createElement("p");
   error.id = "task-create-dialog-error";
   error.className = "task-create-dialog__error";
@@ -73,16 +103,62 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   let copyAriaHidden = null;
   let busy = false;
   let disposed = false;
+  let coverBlob = null;
+  let coverPreviewUrl = null;
+  let coverRevision = 0;
+  let readingCover = false;
   const close = () => { if (!busy) profileOpen.value = false; };
+  const resetCover = () => {
+    coverRevision++;
+    coverBlob = null;
+    if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+    coverPreviewUrl = null;
+    preview.removeAttribute("src");
+    preview.hidden = removeCover.hidden = true;
+    coverName.textContent = "选择封面图片";
+    coverButton.setAttribute("aria-label", "选择卡片封面");
+    coverPicker.value = "";
+  };
   const clearError = () => {
     error.textContent = "";
     fields.title.removeAttribute("aria-invalid");
     fields.title.removeAttribute("aria-describedby");
   };
   form.addEventListener("input", clearError);
+  coverButton.addEventListener("click", () => { if (!busy) coverPicker.click(); });
+  removeCover.addEventListener("click", () => { if (!busy) { resetCover(); coverButton.focus(); } });
+  coverPicker.addEventListener("change", async () => {
+    const file = coverPicker.files?.[0];
+    if (!file || busy) return;
+    const revision = ++coverRevision;
+    readingCover = true;
+    submit.disabled = coverButton.disabled = removeCover.disabled = true;
+    clearError();
+    coverName.textContent = "正在处理图片…";
+    try {
+      const prepared = await prepareTaskCover(file);
+      if (disposed || revision !== coverRevision) return;
+      if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+      coverBlob = prepared;
+      coverPreviewUrl = URL.createObjectURL(prepared);
+      preview.src = coverPreviewUrl;
+      preview.hidden = removeCover.hidden = false;
+      coverName.textContent = "更换封面图片";
+      coverButton.setAttribute("aria-label", "更换卡片封面");
+    } catch (reason) {
+      if (!disposed && revision === coverRevision) {
+        error.textContent = reason.message;
+        coverName.textContent = coverBlob ? "更换封面图片" : "选择封面图片";
+      }
+    } finally {
+      readingCover = false;
+      submit.disabled = coverButton.disabled = removeCover.disabled = false;
+      coverPicker.value = "";
+    }
+  });
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (busy) return;
+    if (busy || readingCover) return;
     clearError();
     if (!fields.title.value.trim()) {
       error.textContent = "请填写任务名称。";
@@ -92,16 +168,18 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
       return;
     }
     busy = true;
-    submit.disabled = true;
+    submit.disabled = coverButton.disabled = removeCover.disabled = true;
     form.setAttribute("aria-busy", "true");
     label.textContent = "Adding…";
     try {
       if (!folio.prepareTaskCreation) throw new Error("任务页面尚未就绪，请稍后重试。");
-      const arrive = await folio.prepareTaskCreation(Object.fromEntries(
-        Object.entries(fields).map(([name, input]) => [name, input.value]),
-      ));
+      const arrive = await folio.prepareTaskCreation({
+        ...Object.fromEntries(Object.entries(fields).map(([name, input]) => [name, input.value])),
+        coverBlob,
+      });
       if (disposed) return;
       form.reset();
+      resetCover();
       busy = false;
       close();
       arrive();
@@ -109,7 +187,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
       if (!disposed) error.textContent = "任务未能添加，请保留填写内容后重试。";
     } finally {
       busy = false;
-      submit.disabled = false;
+      submit.disabled = coverButton.disabled = removeCover.disabled = false;
       form.removeAttribute("aria-busy");
       label.textContent = "Add task";
     }
@@ -118,6 +196,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     if (!opened) return;
     opened = false;
     body.hidden = true;
+    document.documentElement.removeAttribute("data-task-creating");
     profileCopy.inert = copyWasInert;
     if (copyAriaHidden === null) profileCopy.removeAttribute("aria-hidden");
     else profileCopy.setAttribute("aria-hidden", copyAriaHidden);
@@ -127,6 +206,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   const open = () => {
     if (opened) return;
     opened = true;
+    document.documentElement.setAttribute("data-task-creating", "");
     folio.taskCreateDialogOpen = true;
     previousFocus = document.activeElement;
     copyWasInert = profileCopy.inert;
@@ -140,7 +220,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     }
     body.hidden = false;
     document.querySelector(".task-create__button")?.setAttribute("aria-expanded", "true");
-    // The Profile watcher owns the original openHole lens and top Close control.
+    // Keep the Profile lens motion; only creation hides its redundant Close label.
     profileOpen.value = true;
     queueMicrotask(() => { if (opened) fields.title.focus({preventScroll:true}); });
   };
@@ -148,7 +228,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     if (!opened) return;
     if (event.type === "keydown") {
       if (event.key === "Tab") {
-        const stops = [closeButton, ...Object.values(fields), ...(!submit.disabled ? [submit] : [])];
+        const stops = [...Object.values(fields), ...[coverButton, removeCover, submit].filter(control => !control.hidden && !control.disabled)];
         const index = stops.indexOf(document.activeElement);
         event.preventDefault();
         stops[(index + (event.shiftKey ? -1 : 1) + stops.length) % stops.length].focus();
@@ -170,7 +250,6 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   for (const type of types) window.addEventListener(type, guard, {capture:true, passive:false});
   for (const type of ["pointerdown", "wheel", "touchstart"]) body.addEventListener(type, shield);
   window.addEventListener("preacherman:task-create-open", open);
-  closeButton.addEventListener("click", close);
   const stopWatching = watch(profileOpen, (value) => {
     if (!value) restore();
     // Keep the new-task closing lens empty; only normal Profile restores its decoration.
@@ -180,6 +259,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     get opened() { return opened; },
     dispose() {
       disposed = true;
+      resetCover();
       restore();
       folio.taskCreateDialogOpen = false;
       stopWatching();

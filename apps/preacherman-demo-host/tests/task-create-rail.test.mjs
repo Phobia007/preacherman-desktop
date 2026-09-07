@@ -11,7 +11,7 @@ test("new card is fully visible before arrival without revealing or resetting ex
     augmentTaskProjects: projects => [...projects,{slug:"task-new"}],
     matchMedia: () => ({matches:false}),
   };
-  vm.runInNewContext(source.replace(/^import .*;\n/m,"").replace("export function ","function "),context);
+  vm.runInNewContext(source.replace(/^import .*;\r?\n/gm,"").replace("export function ","function "),context);
   const element = id => ({dataset:{id,gl:"card"},getBoundingClientRect:()=>({left:0,top:0,width:600,height:400}),querySelector:()=>({}),focus(){}});
   const original = {slug:"original",el:element("original"),ox:12,oz:3,mesh:{material:{uniforms:{u_alpha:{value:0.8},u_white:{value:0},u_shade:{value:1}}}}};
   const added = {slug:"task-new",el:element("task-new"),mesh:{material:{uniforms:{u_alpha:{value:0},u_white:{value:0},u_shade:{value:1}}}}};
@@ -50,7 +50,7 @@ test("live removal persists before retiring only selected card resources and kee
   const operations=[];
   let fail=false;
   const context={deleteTaskProjects:ids=>{if(fail)throw new Error("quota");operations.push("save:"+ids.join(","));},augmentTaskProjects:()=>[]};
-  vm.runInNewContext(source.replace(/^import .*;\n/m,"").replace("export function ","function "),context);
+  vm.runInNewContext(source.replace(/^import .*;\r?\n/gm,"").replace("export function ","function "),context);
   const target={slug:"task-last",el:{contains:el=>el===pillElement}};
   const pillElement={};
   const title={slug:"task-last",material:{uniforms:{}},dispose:()=>operations.push("title")};
@@ -71,7 +71,7 @@ test("batch removal validates every id, persists once and rescans once without t
   const source=fs.readFileSync(new URL("../public/gallery-v3/portfolio/task-create-rail.js",import.meta.url),"utf8");
   const operations=[];
   const context={deleteTaskProjects:ids=>operations.push("save:"+ids.join(",")),augmentTaskProjects:projects=>projects.filter(p=>p.slug==="keep")};
-  vm.runInNewContext(source.replace(/^import .*;\n/m,"").replace("export function ","function "),context);
+  vm.runInNewContext(source.replace(/^import .*;\r?\n/gm,"").replace("export function ","function "),context);
   const cards=["a","keep","b"].map(slug=>({slug,el:{contains:()=>false}}));
   const folio={cards,texts:[],pills:[],reg:{retire:card=>operations.push("retire:"+card.slug)},scan:()=>{operations.push("scan");return[cards[1]];}};
   cards[1].el.dataset={gl:"card"};
@@ -84,4 +84,21 @@ test("batch removal validates every id, persists once and rescans once without t
   assert.deepEqual(operations,["save:a,b","retire:a","retire:b","scan","center:0"]);
   assert.equal(folio.cards[0],cards[1]);
   assert.equal(projects.value.length,1);
+});
+
+test("cover preparation must succeed before inserting a card, and failed metadata saves discard the uncommitted cover", async()=>{
+  const source=fs.readFileSync(new URL("../public/gallery-v3/portfolio/task-create-rail.js",import.meta.url),"utf8");
+  for(const failure of ["texture","metadata"]){
+    const events=[];
+    const context={
+      saveTaskCover:async()=>{events.push("save-cover");return "cover-id";},
+      taskCoverUrl:()=>"blob:cover",discardTaskCover:async id=>events.push("discard:"+id),
+      createTaskProject:()=>{events.push("save-task");throw new Error("quota");},
+    };
+    vm.runInNewContext(source.replace(/^import .*;\r?\n/gm,"").replace("export function ","function "),context);
+    const folio={texture:async url=>{assert.equal(url,"blob:cover");return failure==="texture"?null:{};}};
+    context.installTaskCreateRail({folio,root:{value:{isConnected:true}},track:{value:{children:[]}},resize:{small:false,ww:1800},projects:{value:[]}});
+    await assert.rejects(folio.prepareTaskCreation({coverBlob:{}}));
+    assert.deepEqual(events,failure==="texture"?["save-cover","discard:cover-id"]:["save-cover","save-task","discard:cover-id"]);
+  }
 });

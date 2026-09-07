@@ -13,6 +13,7 @@ function fixture(initial) {
   let mount;
   const context = {
     ref: (value) => ({value}),
+    taskCoverUrl: id => id === "cover-saved" ? "blob:local-cover" : null,
     element: (tag, props, children) => ({tag, props, children}),
     onUnmounted: (callback) => {cleanup = callback;},
     onMounted: (callback) => {mount = callback;},
@@ -27,16 +28,17 @@ function fixture(initial) {
     parent: {document: {querySelector: () => ({}), documentElement: {}}},
     getComputedStyle: () => ({getPropertyValue: () => ""}), addEventListener() {}, URL,
   };
-  vm.runInNewContext(source.replace(/^import .*;$/m, "").replaceAll("export const ", "globalThis.").replaceAll("export function ", "function ").replaceAll("import.meta.url", JSON.stringify(new URL("task-metadata.js", root).href)), context);
+  vm.runInNewContext(source.replace(/^import .*;$/gm, "").replaceAll("export const ", "globalThis.").replaceAll("export function ", "function ").replaceAll("import.meta.url", JSON.stringify(new URL("task-metadata.js", root).href)), context);
   const render = context.TaskMetadata.setup({slug: "nathan-riley"});
   const input = () => render().children[0].children[0].props;
   return {context, storage, session, events, render, input, mount: () => mount(), unmount: () => cleanup()};
 }
 
-test("only the selected Nathan Riley entry gets the task metadata template", () => {
+test("every authored card uses the same task metadata and conversation template", () => {
   const {context} = fixture();
   assert.equal(context.isTaskTemplate({slug:"nathan-riley"}), true);
-  assert.equal(context.isTaskTemplate({slug:"casa-di-solare"}), false);
+  assert.equal(context.isTaskTemplate({slug:"casa-di-solare"}), true);
+  assert.equal(context.isTaskTemplate({slug:"griflan"}), true);
   assert.equal(context.isTaskTemplate(null), false);
 });
 
@@ -144,7 +146,7 @@ test("task creation reuses the authored profile lens and owns dismiss/focus clea
   assert.ok(dialog.includes('stopWatching()'));
   assert.doesNotMatch(dialog, /localStorage|location\.href/);
   assert.ok(dialog.includes("folio.prepareTaskCreation"));
-  assert.ok(dialog.includes("if (busy) return"));
+  assert.ok(dialog.includes("if (busy || readingCover) return"));
 });
 
 test("creation persists all three fields atomically, normalizes limits and restores detail", () => {
@@ -346,7 +348,7 @@ test("editable content follows the authored enter and leave timeline without del
   }
 });
 
-test("only selected detail skips rasterized copy, media, marks and progress; original sheet/close remain", () => {
+test("all task details skip original portfolio copy and media; original sheet/close remain", () => {
   const runtime = fs.readFileSync(new URL("_nuxt/Dr-ZLxUY.js", root), "utf8");
   const css = fs.readFileSync(new URL("task-metadata.css", root), "utf8");
   assert.ok(runtime.includes('z=b(isTaskTemplate(e.value)?[]:'));
@@ -360,4 +362,43 @@ test("only selected detail skips rasterized copy, media, marks and progress; ori
   assert.ok(css.includes('.task-create__button'));
   assert.ok(css.includes(':focus-visible'));
   assert.doesNotMatch(css, /#[\da-f]{3,8}\b/i);
+});
+
+test("cover references persist without placing image bytes in task or chat storage", () => {
+  const f = fixture();
+  const created = f.context.createTaskProject({title:"图片封面",coverId:"cover-saved",coverBlob:"never serialize"});
+  assert.equal(created.coverId,"cover-saved");
+  assert.equal(f.context.projectRecord(created).src,"blob:local-cover");
+  assert.equal(f.context.taskIndexProjects([])[0].src,"blob:local-cover");
+  assert.doesNotMatch(f.storage.get("preacherman.task.projects"),/never serialize|blob:|base64/);
+});
+
+test("authored cards retain their own title, summary state and creation provenance", () => {
+  const f = fixture();
+  const authored = {slug:"griflan",title:"Griflan"};
+  f.context.augmentTaskProjects([authored]);
+  const detail = f.context.TaskMetadata.setup({slug:authored.slug,title:authored.title});
+  assert.equal(detail().children[0].children[0].props.value,"Griflan");
+  assert.equal(detail().children[1].children[0].children,"暂无任务摘要。");
+  detail().children[0].children[0].props.onInput({target:{value:"独立任务"}});
+  detail().children[0].children[0].props.onBlur();
+  assert.equal(f.context.taskDisplayTitle(authored),"独立任务");
+  assert.equal(f.context.taskDisplayTitle({slug:"nathan-riley",title:"Nathan Riley"}),"Nathan Riley");
+  const child = f.context.createTaskProject({title:"后续"});
+  assert.equal(child.parentId,"griflan");
+  f.context.location.search="?task="+child.id;
+  const childDetail=f.context.TaskMetadata.setup({slug:"nathan-riley"})();
+  assert.equal(childDetail.children[2].children[1].children[0].children[0].children[0].children,"独立任务");
+});
+
+test("creation removes redundant close controls only while creating and retains Escape/outside dismissal", () => {
+  const dialog=fs.readFileSync(new URL("task-create-dialog.js",root),"utf8");
+  const css=fs.readFileSync(new URL("task-metadata.css",root),"utf8");
+  assert.doesNotMatch(dialog,/closeButton|task-create-dialog__close/);
+  assert.ok(dialog.includes('event.key === "Escape"'));
+  assert.ok(dialog.includes('if (event.type === "click") close()'));
+  assert.ok(dialog.includes('removeAttribute("data-task-creating")'));
+  assert.ok(css.includes('html[data-task-creating] [data-od-id="profile-toggle"]'));
+  assert.ok(dialog.includes('coverPicker.accept = "image/jpeg,image/png,image/webp"'));
+  assert.ok(css.includes('task-create-dialog__cover:focus-visible'));
 });

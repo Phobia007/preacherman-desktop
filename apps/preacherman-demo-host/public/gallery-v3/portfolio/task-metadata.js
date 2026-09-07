@@ -1,6 +1,7 @@
 // Task detail extension. Keep the authored sheet, columns, card rail and close motion.
 // Editable DOM text must not enter the portfolio's WebGL text rasterizer.
 import { ad as ref, a8 as element, a3 as onMounted, a6 as onUnmounted } from "./_nuxt/D9b8F35K.js";
+import { taskCoverUrl } from "./task-covers.js";
 
 const ROOT_TASK_ID = "nathan-riley";
 const TASK_PROJECTS_KEY = "preacherman.task.projects";
@@ -9,6 +10,7 @@ const LAST_TASK_KEY = "preacherman.task.last-active";
 const PENDING_TASK_KEY = "preacherman.task.pending-focus";
 const EMPTY_CARD_URL = new URL("./task-empty-card.svg", import.meta.url).href;
 const EMPTY_PREVIEW_URL = new URL("./task-empty-preview.svg", import.meta.url).href;
+const authoredTasks = new Map();
 
 export const titleStorageKey = (slug) => `preacherman.task.${slug}.title`;
 export const normalizeTitle = (value) => String(value).replace(/\s+/g, " ").trim().slice(0, 120);
@@ -62,7 +64,7 @@ function taskId() {
 function readLastTaskId() {
   try {
     const candidate = localStorage.getItem(LAST_TASK_KEY);
-    return (candidate === ROOT_TASK_ID || readTaskProjects().some(project => project.id === candidate)) && !deletedTaskIds().has(candidate)
+    return (candidate === ROOT_TASK_ID || authoredTasks.has(candidate) || readTaskProjects().some(project => project.id === candidate)) && !deletedTaskIds().has(candidate)
       ? candidate
       : deletedTaskIds().has(ROOT_TASK_ID) ? "" : ROOT_TASK_ID;
   } catch {
@@ -78,6 +80,7 @@ export function createTaskProject(values = {}) {
     group: normalizeTitle(values.group ?? "").slice(0, 80),
     parentId: readLastTaskId(),
     createdAt: new Date().toISOString(),
+    ...(typeof values.coverId === "string" ? {coverId: values.coverId} : {}),
   };
   const projects = [...readStoredTaskProjects(), project];
   writeTaskProjects(projects);
@@ -93,6 +96,7 @@ function updateTaskProjectTitle(id, title) {
 }
 
 export function projectRecord(project) {
+  const cover = taskCoverUrl(project.coverId);
   return {
     id: project.id,
     slug: project.id,
@@ -103,9 +107,10 @@ export function projectRecord(project) {
     link: null,
     outlined: false,
     tags: [],
-    src: EMPTY_CARD_URL,
-    thumb: EMPTY_CARD_URL,
-    card: EMPTY_CARD_URL,
+    src: cover ?? EMPTY_CARD_URL,
+    thumb: cover ?? EMPTY_CARD_URL,
+    card: cover ?? EMPTY_CARD_URL,
+    coverId: project.coverId,
     width: 2048,
     height: 1172,
     alt: "",
@@ -116,6 +121,9 @@ export function projectRecord(project) {
 }
 
 export function augmentTaskProjects(projects) {
+  for (const project of projects) {
+    if (project?.slug && !project.preachermanTask) authoredTasks.set(project.slug, project);
+  }
   const dynamic = readTaskProjects().map(projectRecord);
   const deleted = deletedTaskIds();
   const authored = projects.filter(project => !project?.preachermanTask && !deleted.has(project.slug));
@@ -132,7 +140,7 @@ export function taskProjectRoute(project) {
 // The full index keeps its original floating preview shader and mouse response.
 // A framed black texture makes an empty task visible against the black stage.
 export function taskIndexProjects(projects) {
-  return augmentTaskProjects(projects).map(project => project.preachermanTask
+  return augmentTaskProjects(projects).map(project => project.preachermanTask && !taskCoverUrl(project.coverId)
     ? {...project, src:EMPTY_PREVIEW_URL, thumb:EMPTY_PREVIEW_URL}
     : project);
 }
@@ -160,7 +168,7 @@ export function resolveTaskId(slug = ROOT_TASK_ID) {
   return slug;
 }
 
-export const isTaskTemplate = (project) => project?.slug === ROOT_TASK_ID;
+export const isTaskTemplate = (project) => typeof project?.slug === "string" && Boolean(project.slug);
 
 const titleRevision = ref(0);
 // Keep the authored labels and their WebGL font rasterization; change only copy.
@@ -217,7 +225,7 @@ function relatedTaskProjects(currentId) {
     const parentProject = projects.find(project => project.id === current.parentId);
     relations.push({
       id: current.parentId,
-      title: parentProject?.title ?? (current.parentId === ROOT_TASK_ID ? taskDisplayTitle({slug: ROOT_TASK_ID, title: "Nathan Riley"}) : "未命名任务"),
+      title: taskDisplayTitle(parentProject ? {slug:parentProject.id, title:parentProject.title} : authoredTasks.get(current.parentId) ?? {slug:current.parentId, title:"未命名任务"}),
       relation: "来源任务",
     });
   }
@@ -258,11 +266,11 @@ export const TaskCreateControl = {
 };
 
 export const TaskMetadata = {
-  props: { slug: { type: String, required: true } },
+  props: { slug: { type: String, required: true }, title: {type:String, default:""} },
   setup(props) {
     const task = resolveTaskId(props.slug);
     const project = readTaskProjects().find(project => project.id === task);
-    const fallback = task === ROOT_TASK_ID ? "未命名任务" : "new one";
+    const fallback = normalizeTitle(props.title ?? "") || (task === ROOT_TASK_ID ? "未命名任务" : "new one");
     let saved = fallback;
     try { saved = normalizeTitle(localStorage.getItem(titleStorageKey(task)) ?? project?.title ?? "") || fallback; } catch {}
     const title = ref(saved);

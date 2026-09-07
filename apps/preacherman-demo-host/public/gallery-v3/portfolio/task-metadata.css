@@ -198,7 +198,7 @@
 .task-create-dialog__body {
   position: relative;
   width: 100%;
-  height: min(48rem, 72vh);
+  height: min(60rem, 78vh);
   margin: 0;
   pointer-events: auto;
   color: var(--demo-theme-chat-text);
@@ -209,16 +209,16 @@
 .task-create-dialog__form {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.6rem;
   width: min(40rem, 78%);
   max-height: 100%;
   margin: 0 auto;
   padding: 2rem 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: var(--demo-theme-chat-muted) transparent;
+  scrollbar-width: none;
 }
+.task-create-dialog__form::-webkit-scrollbar { display: none; }
 
 .task-create-dialog__field { display: flex; flex-direction: column; gap: 0.9rem; font-size: 1.3rem; line-height: 1.4; color: var(--demo-theme-brand-menu-text); }
 .task-create-dialog__field > span { padding-left: 2.5rem; font-size: 1.1rem; letter-spacing: .08em; }
@@ -239,6 +239,32 @@
   transition: border-color 220ms ease;
 }
 .task-create-dialog__field textarea { resize: none; height: 10rem; padding: 2rem 3rem; border-radius: 5rem; }
+.task-create-dialog__cover-controls { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.task-create-dialog__cover {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+  min-width: 0;
+  min-height: 6.6rem;
+  padding: 1rem 2.5rem;
+  border: 1px solid color-mix(in srgb, var(--demo-theme-brand-menu-focus) 32%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--demo-theme-brand-menu-text-hover);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 220ms ease;
+}
+.task-create-dialog__cover > span { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+.task-create-dialog__cover small { color: var(--demo-theme-brand-menu-text); font-size: 1rem; }
+.task-create-dialog__cover-preview { flex: none; width: 7rem; height: 4rem; border-radius: 1.2rem; object-fit: cover; }
+.task-create-dialog__cover-remove { flex: none; border: 0; padding: .8rem; background: transparent; color: var(--demo-theme-brand-menu-text); font: inherit; cursor: pointer; }
+.task-create-dialog__cover:hover { border-color: var(--demo-theme-brand-menu-focus); }
+.task-create-dialog__cover-remove:hover { color: var(--demo-theme-brand-menu-text-hover); }
+.task-create-dialog__cover:disabled, .task-create-dialog__cover-remove:disabled { color: var(--demo-theme-chat-muted); cursor: wait; }
+.task-create-dialog__cover:focus-visible, .task-create-dialog__cover-remove:focus-visible { outline: 2px solid var(--demo-theme-chat-focus); outline-offset: 3px; }
 .task-create-dialog__field :is(input, textarea)::placeholder { color: var(--demo-theme-brand-menu-text); font-size: 1.2rem; }
 .task-create-dialog__field :is(input, textarea):hover { border-color: color-mix(in srgb, var(--demo-theme-brand-menu-focus) 58%, transparent); }
 .task-create-dialog__field :is(input, textarea)::selection { background: var(--demo-theme-chat-text); color: var(--demo-theme-chat-composer); }
@@ -287,35 +313,8 @@
 .task-create-dialog__body:not([hidden]) { animation: task-create-controls 300ms 200ms both; }
 @keyframes task-create-controls { from { opacity: 0; } to { opacity: 1; } }
 
-.task-create-dialog__close {
-  position: absolute;
-  top: 0;
-  right: 3rem;
-  width: 4.5rem;
-  height: 4.5rem;
-  border: 1px solid color-mix(in srgb, var(--demo-theme-brand-menu-focus) 32%, transparent);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--demo-theme-brand-menu-text-hover);
-  cursor: pointer;
-}
-
-.task-create-dialog__close span {
-  position: absolute;
-  top: calc(50% - 0.5px);
-  left: 30%;
-  width: 40%;
-  height: 1px;
-  background: currentColor;
-  transform: rotate(45deg);
-}
-
-.task-create-dialog__close span + span { transform: rotate(-45deg); }
-.task-create-dialog__close:hover { border-color: var(--demo-theme-brand-menu-focus); }
-.task-create-dialog__close:focus-visible {
-  outline: 2px solid var(--demo-theme-chat-focus);
-  outline-offset: 4px;
-}
+/* The authored WebGL HUD also reads DOM opacity, so hide both copies together. */
+html[data-task-creating] [data-od-id="profile-toggle"] { opacity: 0 !important; visibility: hidden; pointer-events: none; }
 
 @media (min-width: 650px) {
   .task-metadata__title { font-size: 4.5rem; }
@@ -325,7 +324,6 @@
 
 @media (max-width: 649px) {
   .task-create-dialog__form { width: 76%; gap: 1.4rem; }
-  .task-create-dialog__close { right: 0; }
   .task-metadata { padding-right: 0.6rem; }
   .task-metadata__relations { margin-top: 3rem; }
   .task-create { right: 1.2rem; }

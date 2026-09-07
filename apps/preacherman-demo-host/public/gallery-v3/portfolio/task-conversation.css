@@ -1,4 +1,4 @@
-/* Only the selected detail sheet owns this divider and conversation panel. */
+/* Every task detail sheet shares this divider and conversation panel. */
 .task-chat__execution { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1rem; }
 .task-chat__execution p { flex-basis: 100%; overflow-wrap: anywhere; }
 .task-chat__execution button {
@@ -13,8 +13,8 @@
 .task-chat__execution button:disabled { opacity: 0.4; cursor: not-allowed; }
 .task-chat__execution button:focus-visible { outline: 1px solid var(--demo-theme-chat-text); outline-offset: 3px; }
 .task-chat__author { display: block; opacity: 0.7; font-size: 0.85em; margin-bottom: 0.3rem; }
-[data-gl="sheet"][data-id="nathan-riley"] { cursor: default; }
-[data-gl="sheet"][data-id="nathan-riley"]::after {
+[data-gl="sheet"]:has(.task-metadata) { cursor: default; }
+[data-gl="sheet"]:has(.task-metadata)::after {
   content: "";
   position: absolute;
   top: 3rem;
@@ -25,7 +25,7 @@
   pointer-events: none;
   opacity: var(--task-content-opacity, 0);
 }
-[data-gl="sheet"][data-id="nathan-riley"] > div:first-child {
+[data-gl="sheet"]:has(.task-metadata) > div:first-child {
   flex: none;
   width: calc(50% - 4rem);
   height: calc(100% - 3rem);
@@ -33,7 +33,7 @@
   align-self: stretch;
   overflow: hidden;
 }
-[data-gl="sheet"][data-id="nathan-riley"] > div:nth-child(2) {
+[data-gl="sheet"]:has(.task-metadata) > div:nth-child(2) {
   position: absolute;
   inset: 9rem 3rem 2rem 50%;
   width: auto;
@@ -224,8 +224,8 @@
   .task-chat__model svg { transition: none; }
 }
 @media (max-width: 649px) {
-  [data-gl="sheet"][data-id="nathan-riley"] > div:first-child { padding-left: 0.8rem; padding-right: 0.8rem; }
-  [data-gl="sheet"][data-id="nathan-riley"] > div:nth-child(2) { inset: 7rem 1rem 6rem 50%; padding-left: 1rem; }
+  [data-gl="sheet"]:has(.task-metadata) > div:first-child { padding-left: 0.8rem; padding-right: 0.8rem; }
+  [data-gl="sheet"]:has(.task-metadata) > div:nth-child(2) { inset: 7rem 1rem 6rem 50%; padding-left: 1rem; }
   .task-chat__toolbar { flex-wrap: wrap; gap: 0.2rem; }
   .task-chat__tool { font-size: 1.1rem; }
 }
