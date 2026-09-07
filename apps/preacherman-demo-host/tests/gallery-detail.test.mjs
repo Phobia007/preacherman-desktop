@@ -6,10 +6,11 @@ const read = path => fs.readFileSync(new URL('../'+path, import.meta.url), 'utf8
 const bridgeSource = read('public/active-theory-gallery/gallery/detail-bridge.js');
 
 function fixture() {
-  let observer, timer;
+  let observer, timer, render;
   const scroll = {scroll: 4217};
   const window = {addEventListener(){}};
   const work = {
+    startRender(callback) { render = callback; },
     bind(_key, callback) { observer = callback; },
     findParent() { return {scroll:{renderManager:{controller:scroll}}}; },
     set(key, value) { assert.equal(key,'Work/project'); observer(value); },
@@ -17,7 +18,7 @@ function fixture() {
   vm.runInNewContext(bridgeSource, {window,Set,Number,Math,setTimeout:fn=>(timer=fn,1),clearTimeout:()=>{timer=null;}});
   const api=window.PreachermanGalleryDetail;
   api.attach(work);
-  return {api,scroll,enter:project=>observer(project),finish:()=>timer?.()};
+  return {api,scroll,enter:project=>observer(project),finish:()=>timer?.(),tick:()=>render?.()};
 }
 
 test('small-window close preserves the project and only explicit back closes detail',()=>{
@@ -43,6 +44,14 @@ test('small-window close preserves the project and only explicit back closes det
 test('reentry cancels the old closing timer and reopens the small window',()=>{
   const f=fixture();f.enter({perma:'one',title:'One'});f.api.back();f.enter({perma:'two',title:'Two'});f.finish();
   assert.equal(f.api.snapshot.phase,'open');assert.equal(f.api.snapshot.project,'two');
+});
+
+test('late native scroll and route updates cannot move the rail during detail or return',()=>{
+  const f=fixture();f.enter({perma:'one',title:'One'});
+  f.scroll.scroll=4817;f.tick();assert.equal(f.scroll.scroll,4217);
+  f.api.back();f.scroll.scroll=5300;f.tick();assert.equal(f.scroll.scroll,4217);
+  f.scroll.scroll=5250;f.finish();assert.equal(f.scroll.scroll,4217);
+  f.scroll.scroll=4500;f.tick();assert.equal(f.scroll.scroll,4500,'normal rail scroll resumes');
 });
 
 test('runtime retains the reflection pass and rail, without scroll exit or old close text',()=>{

@@ -46,6 +46,14 @@ closing only the foreground window, leaving/reentering Gallery, both themes,
 keyboard controls and the existing scaled-stage behavior at smaller sizes.
 Native results and artifact hashes are recorded in desktop-build-manifest.json.
 
+The first native candidate was rejected after its exact return-position check
+failed following wheel input. The previous verified pair was restored and its
+core navigation rechecked before revision. The bridge now cancels room wheel
+default behavior (chat scrolling is excluded), pins the saved rail position
+through the entire return transition, and uses preventScroll when restoring
+iframe focus. A regression test injects late scroll/route changes during entry
+and return, then confirms normal rail scrolling resumes afterward.
+
 Source baseline: 183731ffef4482854426d3c537f54a03f73986a8.
 Before deployment, the verified executable, unchanged sidecar and manifest
 were copied to the canonical release directory's

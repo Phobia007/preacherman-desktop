@@ -28,7 +28,7 @@ export function ActiveTheoryGallerySurface({ active = true, onDetailChange }: {
   useEffect(() => {
     onDetailChange?.(active && detail.phase !== "closed");
   }, [active, detail.phase, onDetailChange]);
-  const back = useCallback(() => { bridge?.back(); frameRef.current?.focus(); }, [bridge]);
+  const back = useCallback(() => { bridge?.back(); frameRef.current?.focus({ preventScroll: true }); }, [bridge]);
 
   return (
     <section

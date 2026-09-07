@@ -6,6 +6,15 @@
   let state = { phase: "closed", project: "", title: "", smallWindow: true };
   const notify = () => listeners.forEach(listener => listener({ ...state }));
   const controller = () => work?.findParent("ViewController").scroll.renderManager.controller;
+  const restoreRail = () => {
+    if (Number.isFinite(savedScroll)) controller().scroll = savedScroll;
+  };
+  // WebView wheel gestures and route callbacks can outlive the input event.
+  // Keep the rail pinned for the entire authored return transition, not once.
+  const preventDetailWheel = event => {
+    if (state.phase !== "closed" && !event.target?.closest?.("[data-preacherman-chat]")) event.preventDefault();
+  };
+  window.addEventListener("wheel", preventDetailWheel, { capture: true, passive: false });
   const api = window.PreachermanGalleryDetail = {
     subscribe(listener) {
       listeners.add(listener);
@@ -55,6 +64,7 @@
     },
     attach(instance) {
       work = instance;
+      work.startRender(() => { if (state.phase !== "closed") restoreRail(); });
       work.bind("Work/project", data => {
         clearTimeout(exitTimer);
         if (data) {
@@ -65,8 +75,9 @@
           state.phase = "closing";
           notify();
           // Restore the rail before the existing camera return transition runs.
-          if (Number.isFinite(savedScroll)) controller().scroll = savedScroll;
+          restoreRail();
           exitTimer = setTimeout(() => {
+            restoreRail();
             state = { phase: "closed", project: "", title: "", smallWindow: true };
             notify();
           }, 820);
@@ -74,5 +85,9 @@
       });
     },
   };
-  window.addEventListener("pagehide", () => { clearTimeout(exitTimer); listeners.clear(); });
+  window.addEventListener("pagehide", () => {
+    clearTimeout(exitTimer);
+    window.removeEventListener("wheel", preventDetailWheel, true);
+    listeners.clear();
+  });
 })();
