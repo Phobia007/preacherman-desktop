@@ -11,6 +11,9 @@
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "paths": {
+      "@preacherman/avatar-renderer": ["../../packages/preacherman-avatar-renderer/src/index.ts"]
+    },
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,

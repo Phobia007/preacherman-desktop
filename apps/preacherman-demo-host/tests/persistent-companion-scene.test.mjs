@@ -22,7 +22,7 @@ test("Home, Task, Settings, and Gallery share one persistent companion scene", a
   assert.match(app, /sceneModelId \? \(/);
   assert.doesNotMatch(app, /sceneModelId && activeSurfaceType !== "market"/);
   assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
-  assert.match(app, /<ActiveTheoryGallerySurface \/>/);
+  assert.match(app, /<ActiveTheoryGallerySurface active=\{activeSurfaceType === "market"\} onDetailChange=\{setGalleryDetailOpen\} \/>/);
   assert.match(shell, /className="demo-app-shell__scene"/);
   assert.match(shell, /data-active-surface=\{activeSurfaceType\}/);
   assert.match(styles, /\.demo-app-shell__scene\s*\{[\s\S]*z-index:\s*0/);
@@ -132,7 +132,7 @@ test("cinematic scene uses real 3D depth, directional lights, and a full-size Ca
   assert.match(lights, /CinematicHologramLights/);
   assert.match(lights, /color="#d7f1ff"[\s\S]*intensity=\{11\.5\}/);
   assert.match(lights, /color="#1676df"[\s\S]*intensity=\{7\.4\}/);
-  assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment awakened=\{awakened\} \/>/);
+  assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment awakened=\{awakened\} isolateCompanion=\{isolateCompanion\} \/>/);
   assert.doesNotMatch(scene, /AwakeningRig|AWAKENED_STAGE_LIFT/);
   assert.match(scene, /<AvatarModel\b/);
   assert.match(scene, /const FULL_BODY_CAMERA = \{ x: 0, y: 0\.94, z: 4\.35 \}/);

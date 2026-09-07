@@ -1,0 +1,100 @@
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+
+export interface GalleryDetailState {
+  phase: "closed" | "open" | "closing";
+  project: string;
+  title: string;
+  smallWindow: boolean;
+}
+export interface GalleryDetailBridge {
+  video: HTMLVideoElement | null;
+  subscribe(listener: (state: GalleryDetailState) => void): () => void;
+  closeWindow(): void;
+  back(): void;
+  geometry(): { left: number; top: number; width: number; height: number; backBottom: number; backHeight: number } | null;
+}
+
+export function GalleryDetailOverlay({ bridge, detail, portal, onBack }: {
+  bridge: GalleryDetailBridge;
+  detail: GalleryDetailState;
+  portal: Element;
+  onBack: () => void;
+}) {
+  const windowRef = useRef<HTMLDivElement>(null);
+  const backRef = useRef<HTMLButtonElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [mediaState, setMediaState] = useState("loading");
+
+  useEffect(() => {
+    let frame = 0;
+    const position = () => {
+      const geometry = bridge.geometry();
+      if (geometry && windowRef.current) Object.assign(windowRef.current.style, {
+        left: `${geometry.left}px`, top: `${geometry.top}px`,
+        width: `${geometry.width}px`, height: `${geometry.height}px`,
+      });
+      if (geometry && backRef.current) Object.assign(backRef.current.style, {
+        bottom: `${geometry.backBottom}px`, height: `${Math.max(44, geometry.backHeight)}px`,
+      });
+      frame = requestAnimationFrame(position);
+    };
+    position();
+    return () => cancelAnimationFrame(frame);
+  }, [bridge]);
+
+  useEffect(() => {
+    if (!detail.smallWindow) return;
+    const video = bridge.video, canvas = canvasRef.current;
+    const context = canvas?.getContext("2d", { alpha: false });
+    if (!video || !canvas || !context) return;
+    let stopped = false, callback = 0, fallback = 0;
+    setMediaState("loading");
+    const draw = () => {
+      if (stopped) return;
+      if (video.readyState >= 2 && video.videoWidth > 0) {
+        const ratio = Math.max(canvas.width / video.videoWidth, canvas.height / video.videoHeight);
+        const width = canvas.width / ratio, height = canvas.height / ratio;
+        context.drawImage(video, (video.videoWidth - width) / 2, (video.videoHeight - height) / 2, width, height, 0, 0, canvas.width, canvas.height);
+        canvas.dataset.videoTime = String(video.currentTime);
+        setMediaState("ready");
+      }
+      if (typeof video.requestVideoFrameCallback === "function") callback = video.requestVideoFrameCallback(draw);
+      else fallback = window.setTimeout(draw, 1000 / 30);
+    };
+    const failed = () => setMediaState("error");
+    video.addEventListener("error", failed);
+    if (video.error) failed();
+    draw();
+    return () => {
+      stopped = true;
+      if (callback) video.cancelVideoFrameCallback(callback);
+      window.clearTimeout(fallback);
+      video.removeEventListener("error", failed);
+      // The room owns playback. Closing the mirror never pauses its shared source.
+    };
+  }, [bridge, detail]);
+
+  useEffect(() => {
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !document.querySelector('.demo-app-shell__brand-navigation[data-open="true"]')) onBack();
+    };
+    window.addEventListener("keydown", escape);
+    return () => window.removeEventListener("keydown", escape);
+  }, [onBack]);
+
+  return createPortal(
+    <div className="gallery-detail" data-phase={detail.phase} data-project={detail.project}>
+      {detail.smallWindow ? <div className="gallery-detail__window" ref={windowRef} key={detail.project}>
+        <canvas aria-label={`${detail.title} video preview`} className="gallery-detail__video" data-media-state={mediaState} height={576} ref={canvasRef} role="img" width={960} />
+        {mediaState !== "ready" ? <span className="gallery-detail__status" role="status">{mediaState === "error" ? "Video unavailable" : "Loading video"}</span> : null}
+        <button aria-label="Close video window" className="gallery-detail__control gallery-detail__close" disabled={detail.phase !== "open"} onClick={() => { bridge.closeWindow(); backRef.current?.focus(); }} type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </div> : null}
+      <button aria-label="Back to Gallery cards" className="gallery-detail__control gallery-detail__back" disabled={detail.phase !== "open"} onClick={onBack} ref={backRef} type="button">
+        <svg viewBox="0 0 32 24" aria-hidden="true"><path d="M27 12H5m8-8-8 8 8 8" /></svg>
+      </button>
+    </div>, portal,
+  );
+}

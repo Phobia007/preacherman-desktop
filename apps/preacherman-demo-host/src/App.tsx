@@ -148,6 +148,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const [workView, setWorkView] = useState("task");
   const [labView, setLabView] = useState("voice");
   const [galleryView, setGalleryView] = useState("characters");
+  const [galleryDetailOpen, setGalleryDetailOpen] = useState(false);
   const [testView, setTestView] = useState("diagnostics");
   const [requestedControl, setRequestedControl] = useState<string | null>(null);
   const handleSurfaceNavigate = useCallback((surfaceType: LocalSurfaceType) => {
@@ -371,6 +372,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const appShell = (
     <AppShell
       activeSurfaceType={activeSurfaceType}
+      galleryDetailOpen={activeSurfaceType === "market" && galleryDetailOpen}
       appearance={preferences.appearance}
       dispatch={adapter.dispatch}
       entering={animateMainEntrance && !showStartupIntro}
@@ -380,6 +382,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         <CortanaModelStage
           ariaLabel={`Persistent ${sceneModelId === "cortana" ? "Cortana" : "Zima"} companion scene`}
           environment="cinematic"
+          isolateCompanion={activeSurfaceType === "market" && galleryDetailOpen}
           cameraFraming={activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
           modelId={sceneModelId}
           variant="persistent"
@@ -408,7 +411,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         data-active={activeSurfaceType === "market"}
         data-surface="market"
       >
-        <ActiveTheoryGallerySurface />
+        <ActiveTheoryGallerySurface active={activeSurfaceType === "market"} onDetailChange={setGalleryDetailOpen} />
       </div>
       {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
       {activeSurfaceType !== "ledger" ? (

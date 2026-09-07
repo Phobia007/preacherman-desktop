@@ -17,6 +17,7 @@ import { speechMotionRuntime } from "../motion/SpeechMotionRuntime";
 interface CortanaModelStageProps {
   readonly ariaLabel: string;
   readonly environment?: AvatarSceneEnvironment;
+  readonly isolateCompanion?: boolean;
   readonly idleActionOnly?: boolean;
   readonly showControls?: boolean;
   readonly variant?: "embedded" | "persistent";
@@ -30,6 +31,7 @@ interface CortanaModelStageProps {
 export function CortanaModelStage({
   ariaLabel,
   environment = "transparent",
+  isolateCompanion = false,
   idleActionOnly = false,
   showControls = false,
   variant = "embedded",
@@ -153,6 +155,7 @@ export function CortanaModelStage({
         quality="high"
         jawOpen={jawOpen}
         environment={environment}
+        isolateCompanion={isolateCompanion}
         awakened={awakened}
         motionSource={speechMotionRuntime}
         motionRigBinding={modelId === "cortana" ? cortanaSpeechMotionBinding : zimaSpeechMotionBinding}

@@ -16,6 +16,7 @@ interface AppShellProps {
   readonly onNavigate: (surfaceType: typeof brandNavigationItems[number]["surfaceType"]) => void;
   readonly scene?: ReactNode;
   readonly sceneHidden?: boolean;
+  readonly galleryDetailOpen?: boolean;
 }
 
 const brandNavigationItems = [
@@ -37,6 +38,7 @@ export function AppShell({
   onNavigate,
   scene,
   sceneHidden = false,
+  galleryDetailOpen = false,
 }: AppShellProps) {
   const brandButtonRef = useRef<HTMLButtonElement>(null);
   const brandNavigationCloseTimerRef = useRef<number | null>(null);
@@ -138,6 +140,7 @@ export function AppShell({
       data-appearance={appearance}
       data-locale={locale}
       data-scene-hidden={sceneHidden ? "true" : "false"}
+      data-gallery-detail={galleryDetailOpen ? "true" : "false"}
       style={{ "--demo-app-scale": scale } as CSSProperties}
     >
       <header className="demo-app-shell__chrome">

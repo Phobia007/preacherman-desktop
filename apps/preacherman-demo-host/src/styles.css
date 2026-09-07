@@ -295,6 +295,10 @@ html[data-appearance="dark"] #root {
   --demo-theme-task-loading-canvas: #000000;
   --demo-theme-task-text: #ffffff;
   --demo-theme-gallery-control: rgb(229 239 243 / 64%);
+  --demo-theme-gallery-detail-control-bg: rgb(7 13 16 / 88%);
+  --demo-theme-gallery-detail-control-text: #e5eff3;
+  --demo-theme-gallery-detail-control-border: rgb(229 239 243 / 38%);
+  --demo-theme-gallery-detail-control-hover: #25343a;
   --demo-theme-gallery-control-hover: rgb(245 250 252 / 96%);
   --demo-theme-gallery-scan: rgb(218 237 244 / 88%);
   --demo-theme-gallery-composite-key: #000000;
@@ -398,6 +402,10 @@ html[data-appearance="dark"] #root {
   --demo-theme-task-loading-canvas: #000000;
   --demo-theme-task-text: #ffffff;
   --demo-theme-gallery-control: rgb(229 239 243 / 64%);
+  --demo-theme-gallery-detail-control-bg: rgb(7 13 16 / 88%);
+  --demo-theme-gallery-detail-control-text: #e5eff3;
+  --demo-theme-gallery-detail-control-border: rgb(229 239 243 / 38%);
+  --demo-theme-gallery-detail-control-hover: #25343a;
   --demo-theme-gallery-control-hover: rgb(245 250 252 / 96%);
   --demo-theme-gallery-scan: rgb(218 237 244 / 88%);
   --demo-theme-gallery-composite-key: #000000;
@@ -1034,6 +1042,10 @@ html[data-appearance="dark"] #root {
   background: transparent;
   mix-blend-mode: screen;
   pointer-events: none;
+}
+
+.demo-app-shell[data-active-surface="market"][data-gallery-detail="true"] .demo-app-shell__scene {
+  mix-blend-mode: normal;
 }
 
 .demo-app-shell[data-active-surface="market"] .demo-app-shell__scene::after,

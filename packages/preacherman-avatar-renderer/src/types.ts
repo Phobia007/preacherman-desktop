@@ -55,6 +55,8 @@ export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   /** Procedural mouth opening driven by actual output audio (0 through 1). */
   readonly jawOpen?: number;
   readonly environment?: AvatarSceneEnvironment;
+  /** Keep cinematic lighting and the platform, but composite the companion over another scene. */
+  readonly isolateCompanion?: boolean;
   /** Holds the cinematic platform ring at its active light level. */
   readonly awakened?: boolean;
   readonly motionSource?: AvatarMotionStreamSource;

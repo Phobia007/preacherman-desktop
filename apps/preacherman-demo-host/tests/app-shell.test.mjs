@@ -49,7 +49,7 @@ test("Demo Host owns one persistent shell outside the changing screen content", 
   assert.match(app, /\{appShell\}[\s\S]*\{showStartupIntro\s*\?\s*\(\s*<IntroSplash/);
   assert.match(app, /key=\{contentKey\}/);
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface\s*\/>/);
-  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s*\/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface active=\{activeSurfaceType === "market"\} onDetailChange=\{setGalleryDetailOpen\} \/>/);
   assert.match(styles, /\.demo-app-shell__prewarmed-surface\[data-active="false"\] \*\s*\{\s*pointer-events:\s*none !important;/);
   assert.doesNotMatch(app, /TaskSurface/);
   assert.equal((app.match(/<GallerySurface(?:\s+hideProjectCards)?\s*\/>/g) ?? []).length, 1);
@@ -61,7 +61,7 @@ test("Task keeps its entry motion while Gallery mounts the original runtime", as
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
 
   assert.match(app, /data-surface="workspace"[\s\S]*demo-app-shell__surface-reveal-line[\s\S]*demo-app-shell__surface-reveal-mask/);
-  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s*\/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface active=\{activeSurfaceType === "market"\} onDetailChange=\{setGalleryDetailOpen\} \/>/);
   assert.equal((app.match(/demo-app-shell__surface-reveal-line/g) ?? []).length, 1);
   assert.equal((app.match(/demo-app-shell__surface-reveal-mask/g) ?? []).length, 1);
   assert.match(styles, /data-active="true"[^}]*surface-reveal-mask[^}]*\{\s*animation:\s*demo-surface-unfold 1180ms cubic-bezier\(\.7, 0, \.2, 1\) forwards/);
@@ -214,7 +214,7 @@ test("Home, Task, Settings, and Gallery share the persistent scene", async () =>
   assert.match(app, /activeSurfaceType === "ledger"\s*\? null/);
   assert.match(app, /activeSurfaceType !== "ledger" \? \(/);
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
-  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s*\/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface active=\{activeSurfaceType === "market"\} onDetailChange=\{setGalleryDetailOpen\} \/>/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(hostRule, /background:\s*transparent/);
   assert.equal(emptyRule, "");

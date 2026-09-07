@@ -180,18 +180,21 @@ function BreathingPlatformLight({ awakened }: { readonly awakened: boolean }) {
  * A real, deliberately under-lit 3D room for the persistent companion stage.
  * The geometry stays restrained so Cortana remains the only visual subject.
  */
-export function CinematicEnvironment({ awakened = false }: { readonly awakened?: boolean }) {
+export function CinematicEnvironment({ awakened = false, isolateCompanion = false }: {
+  readonly awakened?: boolean;
+  readonly isolateCompanion?: boolean;
+}) {
   return (
     <>
-      <color attach="background" args={["#010409"]} />
+      {!isolateCompanion ? <color attach="background" args={["#010409"]} /> : null}
       <fog attach="fog" args={["#010409", 3.8, 9.5]} />
 
-      <mesh position={[0, -0.025, -0.4]} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh visible={!isolateCompanion} position={[0, -0.025, -0.4]} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[14, 14]} />
         <meshStandardMaterial color="#050b12" metalness={0.22} roughness={0.72} />
       </mesh>
 
-      <mesh position={[0, 2.15, -2.35]} receiveShadow>
+      <mesh visible={!isolateCompanion} position={[0, 2.15, -2.35]} receiveShadow>
         <planeGeometry args={[11, 5.4]} />
         <meshStandardMaterial color="#02070d" metalness={0.08} roughness={0.92} />
       </mesh>

@@ -1,0 +1,88 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import test from 'node:test';
+const read = path => fs.readFileSync(new URL('../'+path, import.meta.url), 'utf8');
+const bridgeSource = read('public/active-theory-gallery/gallery/detail-bridge.js');
+
+function fixture() {
+  let observer, timer;
+  const scroll = {scroll: 4217};
+  const window = {addEventListener(){}};
+  const work = {
+    bind(_key, callback) { observer = callback; },
+    findParent() { return {scroll:{renderManager:{controller:scroll}}}; },
+    set(key, value) { assert.equal(key,'Work/project'); observer(value); },
+  };
+  vm.runInNewContext(bridgeSource, {window,Set,Number,Math,setTimeout:fn=>(timer=fn,1),clearTimeout:()=>{timer=null;}});
+  const api=window.PreachermanGalleryDetail;
+  api.attach(work);
+  return {api,scroll,enter:project=>observer(project),finish:()=>timer?.()};
+}
+
+test('small-window close preserves the project and only explicit back closes detail',()=>{
+  const f=fixture(),states=[];
+  const unsubscribe=f.api.subscribe(s=>states.push(s));
+  f.enter({perma:'cortana',title:'Cortana'});
+  f.api.closeWindow();
+  assert.equal(f.api.snapshot.phase,'open');
+  assert.equal(f.api.snapshot.project,'cortana');
+  assert.equal(f.api.snapshot.smallWindow,false);
+  f.scroll.scroll=9999;
+  f.api.back();
+  assert.equal(f.api.snapshot.phase,'closing');
+  assert.equal(f.scroll.scroll,4217);
+  f.finish();
+  assert.equal(f.api.snapshot.phase,'closed');
+  unsubscribe();const count=states.length;
+  f.enter({perma:'zima',title:'Zima'});
+  assert.equal(states.length,count);
+  assert.equal(f.api.snapshot.smallWindow,true);
+});
+
+test('reentry cancels the old closing timer and reopens the small window',()=>{
+  const f=fixture();f.enter({perma:'one',title:'One'});f.api.back();f.enter({perma:'two',title:'Two'});f.finish();
+  assert.equal(f.api.snapshot.phase,'open');assert.equal(f.api.snapshot.project,'two');
+});
+
+test('runtime retains the reflection pass and rail, without scroll exit or old close text',()=>{
+  const runtime=read('public/active-theory-gallery/gallery/assets/js/app.1780406240914.js');
+  assert.match(runtime,/window\.PreachermanGalleryDetail\.attach\(_this\)/);
+  assert.match(runtime,/attachContent\(_this,video\)/);
+  assert.doesNotMatch(runtime,/_this\.startRender\(checkScrollOut\)|_this\.stopRender\(checkScrollOut\)/);
+  assert.doesNotMatch(runtime,/title:"<- Close"/);
+  assert.match(runtime,/_this\.layers\.body\.visible=!1;window\.PreachermanGalleryDetail/);
+  assert.match(runtime,/cube\.shader\.set\("tPrevFrame",_this\.nuke\.finalTexture\)/);
+  assert.match(runtime,/_this\.startRender\(_this\.handleCameraScroll\)/);
+  assert.doesNotMatch(bridgeSource,/\.pause\(|\.play\(|document\.createElement\("video"/);
+});
+
+test('mirror uses the room video, preserves aspect, and releases frame callbacks',()=>{
+  const overlay=read('src/surfaces/gallery/GalleryDetailOverlay.tsx');
+  assert.match(overlay,/const video = bridge\.video/);
+  assert.match(overlay,/requestVideoFrameCallback\(draw\)/);
+  assert.match(overlay,/cancelVideoFrameCallback\(callback\)/);
+  assert.match(overlay,/cancelAnimationFrame\(frame\)/);
+  assert.match(overlay,/Math\.max\(canvas\.width \/ video\.videoWidth/);
+  assert.doesNotMatch(overlay,/\.pause\(|\.play\(|<video/);
+  assert.match(overlay,/Close video window/);assert.match(overlay,/Back to Gallery cards/);
+});
+
+test('new controls are theme semantic and keyboard accessible in both appearances',()=>{
+  const css=read('src/surfaces/gallery/active-theory-gallery-surface.css');
+  const shell=read('src/styles.css');
+  for(const token of ['gallery-detail-control-bg','gallery-detail-control-text','gallery-detail-control-border','gallery-detail-control-hover']){
+    assert.match(css,new RegExp('var\\(--demo-theme-'+token+'\\)'));
+    assert.ok(shell.split('--demo-theme-'+token+':').length>=3,token+' supplied for both themes');
+  }
+  assert.match(css,/:focus-visible/);assert.match(css,/:disabled/);assert.match(css,/:hover/);assert.match(css,/prefers-reduced-motion/);
+  assert.match(shell,/data-gallery-detail="true"[^}]+mix-blend-mode: normal/s);
+  assert.match(read('src/App.tsx'),/isolateCompanion=\{activeSurfaceType === "market" && galleryDetailOpen\}/);
+});
+
+test('detail clears the R3F restored background and uses this workspace renderer',()=>{
+  const scene=fs.readFileSync(new URL('../../../packages/preacherman-avatar-renderer/src/InteractiveAvatarScene.tsx',import.meta.url),'utf8');
+  assert.match(scene,/if \(isolateCompanion\) scene\.background = null/);
+  assert.match(scene,/setClearAlpha\(environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
+  assert.ok(read('vite.config.ts').includes('find: /^@preacherman\\/avatar-renderer$/, replacement: rendererSource("index.ts")'));
+});

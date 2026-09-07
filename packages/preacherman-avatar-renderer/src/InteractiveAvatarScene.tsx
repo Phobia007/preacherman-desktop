@@ -1,6 +1,6 @@
 import { OrbitControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { AvatarModel } from "./AvatarModel";
 import { CinematicEnvironment } from "./CinematicEnvironment";
@@ -28,6 +28,7 @@ interface InteractiveAvatarSceneProps {
   readonly resetKey: number;
   readonly jawOpen: number;
   readonly environment: AvatarSceneEnvironment;
+  readonly isolateCompanion?: boolean;
   readonly awakened: boolean;
   readonly motionSource?: AvatarMotionStreamSource;
   readonly motionRigBinding?: AvatarMotionRigBinding;
@@ -150,6 +151,7 @@ export function InteractiveAvatarScene({
   resetKey,
   jawOpen,
   environment,
+  isolateCompanion = false,
   awakened,
   motionSource,
   motionRigBinding,
@@ -157,9 +159,17 @@ export function InteractiveAvatarScene({
   cameraFraming,
   rotationOffsetY,
 }: InteractiveAvatarSceneProps) {
+  const { gl, scene, invalidate } = useThree();
+  useLayoutEffect(() => {
+    // R3F restores the previous attached Color when <color> is removed. Explicitly
+    // clear it for the isolated pass; otherwise Three clears the whole frame opaque.
+    if (isolateCompanion) scene.background = null;
+    gl.setClearAlpha(environment === "cinematic" && !isolateCompanion ? 1 : 0);
+    invalidate();
+  }, [environment, gl, scene, invalidate, isolateCompanion]);
   return (
     <>
-      {environment === "cinematic" ? <CinematicEnvironment awakened={awakened} /> : null}
+      {environment === "cinematic" ? <CinematicEnvironment awakened={awakened} isolateCompanion={isolateCompanion} /> : null}
       {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
       <AvatarModel
         actionId={actionId}

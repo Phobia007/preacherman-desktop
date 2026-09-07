@@ -40,6 +40,7 @@ export function InteractiveAvatarViewport({
   resetKey = 0,
   jawOpen = 0,
   environment = "transparent",
+  isolateCompanion = false,
   awakened = false,
   motionSource,
   motionRigBinding,
@@ -103,7 +104,8 @@ export function InteractiveAvatarViewport({
           dpr={dpr}
           frameloop={renderActive ? "always" : "demand"}
           gl={{
-            alpha: environment !== "cinematic",
+            // Allocate alpha once so Gallery can change composition without remounting the model.
+            alpha: true,
             antialias: true,
             powerPreference: "high-performance",
           }}
@@ -129,6 +131,7 @@ export function InteractiveAvatarViewport({
               resetKey={resetKey}
               jawOpen={jawOpen}
               environment={environment}
+              isolateCompanion={isolateCompanion}
               awakened={awakened}
               motionSource={motionSource}
               motionRigBinding={motionRigBinding}
