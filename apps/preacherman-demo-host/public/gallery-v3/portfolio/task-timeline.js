@@ -178,8 +178,10 @@ export default {
           open.value = new Set((dated.length ? dated : groups.value).slice(-1).map(group => group.day));
         }
         await nextTick();
+        if (disposed) return;
         folio.declare();
         await folio.booted;
+        if (disposed) return;
         await Promise.all(projects.value.filter(project => project.preachermanTask).map(project => folio.texture(project.src)));
         if (disposed) return;
         folio.hideHome();
@@ -192,6 +194,7 @@ export default {
         folio.setScroll(0);
         ready.value = true;
         await nextTick();
+        if (disposed) return;
         horizontal.value.scrollLeft = view.x;
         for (const column of root.value.querySelectorAll(".task-timeline__column")) column.scrollTop = view.columns.get(column.dataset.day) ?? 0;
         observer = new ResizeObserver(scheduleMeasure);

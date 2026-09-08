@@ -114,8 +114,8 @@ test("hamburger opens a click-only, opaque six-item Clash Display navigation dra
   assert.match(styles, /@font-face[\s\S]*ClashDisplay-Light\.ttf/);
   assert.match(styles, /--demo-font-primary:\s*"Clash Display", sans-serif/);
   assert.match(styles, /font-family:\s*var\(--demo-font-primary\)/);
-  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[^}]*top:\s*14px;[^}]*left:\s*24px;[^}]*width:\s*32px;[^}]*height:\s*32px/);
-  assert.match(styles, /\.demo-app-shell__brand-icon\s*\{[^}]*width:\s*30px;[^}]*height:\s*30px/);
+  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[^}]*top:\s*6px;[^}]*left:\s*16px;[^}]*width:\s*48px;[^}]*height:\s*48px/);
+  assert.match(styles, /\.demo-app-shell__brand-icon\s*\{[^}]*width:\s*40px;[^}]*height:\s*40px/);
   assert.match(shell, /viewBox="0 0 80 80"[^>]*strokeWidth="4"/);
   assert.match(shell, /M18 24H62M18 40H62M18 56H62/);
   assert.match(styles, /\.demo-app-shell__brand-menu\s*\{[\s\S]*gap:\s*68px/);
@@ -138,7 +138,7 @@ test("hamburger opens a click-only, opaque six-item Clash Display navigation dra
   assert.match(shell, /"--menu-order": index/);
   assert.match(styles, /brand-drawer\s*\{[^}]*background:\s*var\(--demo-theme-brand-menu-surface\);[^}]*transform:\s*translate3d\(-100%, 0, 0\);[^}]*transition:\s*transform 820ms cubic-bezier\(\.76, 0, \.16, 1\)/);
   assert.match(styles, /\.demo-app-shell__brand-menu\s*\{[\s\S]*background:\s*transparent/);
-  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[^}]*background:\s*var\(--demo-theme-brand-menu-surface\)/);
+  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[^}]*background:\s*transparent/);
   assert.equal((styles.match(/--demo-theme-brand-menu-surface:\s*#000000/g) ?? []).length, 2);
   assert.equal((styles.match(/--demo-theme-brand-menu-edge:\s*rgb\(255 255 255 \/ 16%\)/g) ?? []).length, 2);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.demo-app-shell__brand-drawer,\s*\.demo-app-shell__brand-menu-row,[\s\S]*transition: none/);
