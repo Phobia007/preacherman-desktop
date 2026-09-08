@@ -9,3 +9,9 @@
 - Other Gallery cards have no Activate button until assigned an actual model. No new catalog assignments, logo, media, shader or route changes are included.
 
 Verification: focused Node regressions, real pointer/keyboard interruption and completion, preview/equip separation, persistence after reload, paired native shortcut smoke tests in both appearances. The original desktop executable and sidecar must be preserved before deployment.
+
+## Cortana detail refinement — 2026-09-09
+
+The capsule is now 80% of its previous dimensions (163.2 by 49.6 CSS pixels); the label is reduced further to 22px for more internal space. The existing SVG charge paths scale with the capsule. The Cortana return arrow shaft grows from 22 to 38px, preserving its arrowhead and the other cards. The first card metadata now reads 2003 / HALO 4 / Preacherman Avatar; its Microsoft logo is unchanged.
+
+Source checks: 14 Gallery regressions, TypeScript and Impeccable detector passed. Browser pointer and keyboard flows passed in dark and light appearances at 1800x1000 and 1440x900; evidence is output/playwright/refinement-preview-report.json. Desktop deployment and cold-launch verification remain pending until the user permits this round of desktop restart.
