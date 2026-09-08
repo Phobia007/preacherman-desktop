@@ -1,90 +1,162 @@
 {
   "schemaVersion": 1,
-  "buildId": "task-transparent-controls-20260908T132312+0800",
+  "buildId": "task-timeline-20260908T171944+0800",
   "productVersion": "0.1.0",
-  "sourceTask": "task-transparent-add-delete-circle-interiors",
+  "sourceTask": "task-all-horizontal-date-timeline",
   "sourceThread": "01a04c0c-fd42-7ca1-bb81-9ae558616e5f",
-  "sourceState": "Task's floating plus/delete circles have transparent interiors in rest, hover, focus and selection states. Retain outline geometry, icons, placement, scale motion and create/delete behavior. Reuse existing pale brand-menu and focus tokens so transparent controls remain legible on the authored rail in both appearances.",
-  "sourceCommit": "721610d400eabd731a6e1b02df2219751c4808b8",
+  "sourceState": "Task All is a bounded horizontal date timeline. Date arrows expand independently with downward stagger; long lists scroll internally with hidden scrollbars. Preserve incumbent typography, original WebGL hover previews, card navigation and surrounding controls. Sample authored cards across 7/8/9 September without rewriting user timestamps.",
+  "sourceCommit": "5f4bb7c025e5a65178bbba9ef6270f6d946a4fd4",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-08T13:22:14.3571482+08:00",
-  "deployedAt": "2026-09-08T13:23:12.1450561+08:00",
-  "verifiedAt": "2026-09-08T13:28:37.4916754+08:00",
-  "sizeBytes": 554754048,
-  "sha256": "A0F77ADBF9F9AB4485EBA05742A2FF4D1B600800EC905479AD8707ECDBB0D5F0",
+  "builtAt": "2026-09-08T15:04:37.8930113+08:00",
+  "deployedAt": "2026-09-08T17:19:44.2066522+08:00",
+  "verifiedAt": "2026-09-08T17:24:10.0126493+08:00",
+  "sizeBytes": 554757632,
+  "sha256": "283849666D42C38DE860D83C761E4AADC50E9D7ECDBD913D3E3B1CA3F04CB39D",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-transparent-before-20260908/preacherman-demo-host.exe",
-  "backupSha256": "A8E2504537B4D6F97CDAE8201CD0611B6CFD29F3F4779AC697CF3E0346E5B630",
-  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-transparent-before-20260908/preacherman-service.exe",
+  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-timeline-before-20260908/preacherman-demo-host.exe",
+  "backupSha256": "A0F77ADBF9F9AB4485EBA05742A2FF4D1B600800EC905479AD8707ECDBB0D5F0",
+  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-timeline-before-20260908/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-transparent-before-20260908/desktop-build-manifest.json",
-  "rollbackBaselineCommit": "199217473743b43932dea27af6c7312d3730a3c6",
-  "previousVerificationCommit": "199217473743b43932dea27af6c7312d3730a3c6",
+  "rollbackBaselineCommit": "721610d400eabd731a6e1b02df2219751c4808b8",
+  "previousVerificationCommit": "ac91d33",
   "verification": {
-    "status": "passed-with-confirmed-preexisting-core-console-diagnostics",
+    "status": "passed-with-confirmed-preexisting-external-media-and-cms-diagnostics",
     "typescript": "passed",
-    "focusedTests": "43 passed: Task metadata, creation, batch deletion, transparent control styling, theme contract and app shell. TypeScript and git diff --check passed after the final correction and before the delivered build.",
-    "sourceBoundary": "Integration checkout started clean at1992174. D:/preacherman retains108 preexisting status entries on codex/frontend-redesign; unrelated source preserved. Runnable source changes are limited to two Task CSS files; one regression test updated.",
-    "implementation": "Shared task-create__button also styles the delete button. Remove rest/hover fill, keep 1px circular border,5.6rem diameter, mirrored position and scale(1.06) hover. Existing brand-menu semantic colors keep icons/confirm text and focus visible through transparent centers. Stronger scoped focus precedence prevents inherited authored iframe focus styles overriding the controls.",
-    "productionBuild": "Two sequential cache-reusing builds, never overlapping. First candidate held and never deployed after detailed computed-style review exposed inherited focus precedence; final source corrected and rechecked before delivery. Final Vite4.80s/Tauri1m27s, npm run tauri -- build --no-bundle. Same verified sidecar reused, no installer or external runtime UI architecture.",
-    "browserFlow": "Final sequential preview passed18 state/viewport checks: light/dark rest, add/delete hover and keyboard focus, create modal open/Escape, delete selecting/selected and confirmation Cancel. Compact1280x720 and narrow540x900 retain the existing scaled stage. Creation/deletion were not submitted. Screenshots visually reviewed.",
-    "nativeFlow": "Canonical shortcut cold launch with no previous service passed Home/model and first Task entry. All16 native Task control state checks passed in both appearances; interiors compute rgba(0,0,0,0), image none,1px circular outline, pale symbols and white2px focused outline. Native screenshots confirm material is visible through circles. Create/Escape and delete selection/confirmation Cancel work.",
-    "coreNavigation": "Home, Task real card open/close, Gallery rail/simple chat, Market/legacy Ledger including profile lens, Settings/Execution Mode and Account passed normal pointer navigation. Native screenshots reviewed. No reload, retry, missing content or first-entry workaround.",
-    "appearance": "Both appearances verified with theme propagation into the iframe. Existing semantic brand-menu tokens reused; no new palette, font, asset or model change. All desktop controls visible/enabled across core pages in both modes. Temporary appearance restored.",
+    "focusedTests": "78 passed before production build: 36 Task timeline/metadata/cover tests and 42 adjacent Gallery/Task/Market regressions; git diff --check and layout scan passed.",
+    "sourceBoundary": "Runnable integration source committed in 5f4bb7c. D:/preacherman unrelated source preserved. This approval turn modified deployment manifests and ignored verification scripts only; no further production source or asset changes.",
+    "implementation": "Date groups retain original project indices for hover/media and detail navigation. Independently expandable columns; remembered view-only open/scroll state; fixed axis and bounded vertical body with horizontal overflow for many dates. Previews continue to use the incumbent rail/shader and media, with hit bounds clipped to visible names. No new font or content palette.",
+    "dataBoundary": "Authored sample cards use display-only 7/8/9 September thirds. Real user createdAt has priority; native data therefore also shows 5.sep. No actual creation timestamps/messages/tasks overwritten. Stress records live only in temporary preview contexts; native long-list probes were DOM-only and removed. Existing detail flow may initialize a title and ordinary navigation state.",
+    "productionBuild": "One incremental npm run tauri -- build --no-bundle production build: Vite 6.84s, Tauri 2m00s. Existing verified sidecar reused unchanged. Same candidate redeployed after exact old-version diagnostic comparison; no second build, installer, cargo clean, overlapping build or runtime UI HTTP dependency.",
+    "browserFlow": "Both appearances, independent expansion/collapse/keyboard, bounded long-content wheel scroll, original hover/entry/return and state retention passed. 48-date temporary fixture verified horizontal clipping and no-cover preview; 1280x720 and 540x900 host viewports preserve incumbent scaled 1800x1000 stage.",
+    "nativeFlow": "Shortcut cold launch of final candidate passed Home model readiness and Task first entry without reload/retry. Light/dark native timeline checks passed with 26 real cards in four date groups. Axis stays at y230; body stays y359..850; wheel probe scrollTop850 and outer document scrollTop0. No bars or overlap with navigation. Original hover card, card entry/title, close and return/open-state retention passed. Native screenshots visually reviewed.",
+    "coreNavigation": "Home, Task featured rail and real card open/close, Gallery rail/simple chat, Market/legacy Ledger with image and profile lens, Settings/Execution Mode and Account passed. Desktop controls visible/enabled across all six routes in light/dark. No new core console errors or HTTP failures. Normal Home startup retained.",
+    "appearance": "Uses existing semantic brand-menu/theme and focus tokens on authored stage. Both modes verified; temporary appearance restored. Impeccable refinement and Karpathy surgical-change checks preserved existing typography, video/cover assets, model and surrounding navigation.",
     "nativeRuntimeExceptions": 0,
     "newConsoleErrors": 0,
-    "consoleReview": "Native Task-control errors=[]; core newErrors=[] and HTTP failures=[]. Only2 exact inherited DatoCMS/CSP diagnostics matched the prior baseline. An initial preview run emitted _this.initSync is not a function; it did not recur in two subsequent preview checks or native checks. Known preview hydration warning retained; no runtime/security policy changed.",
-    "windowControls": "Native maximize false→true→false, minimize=true and authored close passed.",
-    "shortcut": "Canonical target and empty arguments re-resolved; built/deployed timestamp, size and SHA256 match. Verification window8644 closed, then shortcut reopened normally without debugging at2026-09-08T13:26:29.176433+08:00. Final user window3268 Responding=true, MainWindowHandle524342, normal Home startup unchanged.",
+    "consoleReview": "Timeline diagnostic set contains only two inherited DatoCMS violations plus an exact Mux media-src violation reproduced on restored A0F77ADB old desktop for The Lookback. Core check newErrors=[] and failures=[]. Old version comparison evidence stored separately. Existing remote preview limitations remain; no CSP, asset URL or playback policy relaxed.",
+    "windowControls": "Native maximize false→true→false, minimize=true and authored close passed; errors=[].",
+    "shortcut": "Canonical shortcut re-resolved with empty arguments at 17:24:10. Source and deployed size, timestamp and SHA-256 match. After debug-window checks, exact owned orphan service24752 was stopped; shortcut reopened normally without debugging at 17:22:55.027+08:00. Final app22496 Responding=true; MainWindowHandle722620. Sidecar28712 belongs to app22496.",
     "resourceSample": {
-      "sampledAt": "2026-09-08T13:27:53.4394749+08:00",
-      "processIds": [
-        3268,
-        20612,
-        25244,
-        26276,
-        19280,
-        29460,
-        24352,
-        15608,
-        26124,
-        3160,
-        3572
+      "SampledAt": "2026-09-08T17:23:28.8181110+08:00",
+      "ProcessIds": [
+        22496,
+        14096,
+        26500,
+        13832,
+        29236,
+        18016,
+        11708,
+        28712,
+        22108,
+        7768,
+        27052
       ],
-      "normalizedCpuPercent": 4.89,
-      "workingSetMiB": 1875,
-      "gpuDedicatedBytes": 5427310592,
-      "gpuSharedBytes": 85663744,
-      "gpu3DPercent": 24.05,
-      "gpuVideoDecodePercent": 6.18,
-      "freeRamKiB": 17667424,
-      "comparison": "Dedicated GPU memory5.43GB is below the same-day prior desktop sample5.62GB. CPU4.89% and1875MiB working set are comparable to the previous verified run. Window responsive; no sustained saturation."
+      "NativePid": 22496,
+      "Responding": true,
+      "MainWindowHandle": 722620,
+      "NormalizedCpuPercent": 6.46,
+      "WorkingSetMiB": 1937,
+      "GpuDedicatedBytes": 3255500800,
+      "GpuSharedBytes": 87691264,
+      "Gpu3DPercent": 22.90392933842581,
+      "GpuVideoDecodePercent": 6.2898749216359375,
+      "FreeRamKiB": 19090628,
+      "Listeners": [
+        {
+          "LocalPort": 8787,
+          "OwningProcess": 28712
+        }
+      ],
+      "Processes": [
+        {
+          "ProcessId": 22496,
+          "ParentProcessId": 892,
+          "CreationDate": "/Date(1788859375027)/",
+          "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe"
+        },
+        {
+          "ProcessId": 14096,
+          "ParentProcessId": 22496,
+          "CreationDate": "/Date(1788859375074)/",
+          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+        },
+        {
+          "ProcessId": 26500,
+          "ParentProcessId": 14096,
+          "CreationDate": "/Date(1788859375088)/",
+          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+        },
+        {
+          "ProcessId": 13832,
+          "ParentProcessId": 14096,
+          "CreationDate": "/Date(1788859375163)/",
+          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+        },
+        {
+          "ProcessId": 29236,
+          "ParentProcessId": 14096,
+          "CreationDate": "/Date(1788859375165)/",
+          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+        },
+        {
+          "ProcessId": 18016,
+          "ParentProcessId": 14096,
+          "CreationDate": "/Date(1788859375184)/",
+          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+        },
+        {
+          "ProcessId": 11708,
+          "ParentProcessId": 14096,
+          "CreationDate": "/Date(1788859375239)/",
+          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+        },
+        {
+          "ProcessId": 28712,
+          "ParentProcessId": 22496,
+          "CreationDate": "/Date(1788859375311)/",
+          "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-service.exe"
+        },
+        {
+          "ProcessId": 22108,
+          "ParentProcessId": 28712,
+          "CreationDate": "/Date(1788859375316)/",
+          "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe"
+        },
+        {
+          "ProcessId": 7768,
+          "ParentProcessId": 14096,
+          "CreationDate": "/Date(1788859378487)/",
+          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+        },
+        {
+          "ProcessId": 27052,
+          "ParentProcessId": 14096,
+          "CreationDate": "/Date(1788859379860)/",
+          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+        }
+      ],
+      "comparison": "10s settled sample: normalized CPU6.46%, working set1937MiB, GPU3D22.90%, decode6.29%, dedicated3.26GB. Comparable to prior verified CPU4.89%, RAM1875MiB, GPU3D24.05%; no sustained saturation and native window responsive."
     },
-    "cleanup": "Both temporary preview instances were run sequentially and stopped. Automated browsers and all Node test/compiler processes exited. Test host8644 and owned WebView children exited; exact orphan service6076 was verified and stopped. Ports1420/8788/9236 free. Only intentionally reopened native3268 and matching sidecar15608(port8787) remain. No shared processes terminated.",
-    "configurationBoundary": "No AI calls, API/backend/sidecar changes, task creation/deletion submission or message mutation. Existing user content preserved. Only ordinary navigation state may update.",
-    "designConsistency": "Karpathy surgical changes and Impeccable refinement checks preserved the incumbent circles, icon paths, placement, motion, typography and surrounding authored material; transparent centers and their necessary contrast/focus support are the only UI changes.",
+    "cleanup": "All verification scripts closed their CDP connections in finally; temporary Node/Python/compiler/preview/headless browser query empty. Prior debug app10360 and service24752 exited. Ports1420/8788/9236 free. Only intended normal native22496 and owned sidecar28712 on8787 remain. No shared processes terminated.",
+    "configurationBoundary": "No AI calls, API/backend/sidecar changes, task creation/deletion submissions or messages sent. Production is still self-contained.",
     "evidenceDirectory": "apps/preacherman-demo-host/output/playwright",
     "nativeEvidence": [
-      "task-transparent-native-report.json",
-      "task-transparent-native-light.png",
-      "task-transparent-native-dark.png",
-      "task-transparent-preview-report.json",
-      "task-transparent-preview-1280.png",
-      "task-transparent-preview-540.png",
+      "task-timeline-native-report.json",
+      "task-timeline-native-light.png",
+      "task-timeline-native-dark.png",
+      "task-timeline-native-dark-hover-8.png",
+      "task-timeline-native-dark-scrolled.png",
+      "task-timeline-native-card.png",
+      "task-timeline-preview-report.json",
+      "task-timeline-baseline-report.json",
+      "task-timeline-baseline-core-report.json",
       "task-core-native-report.json",
-      "task-core-native-home.png",
-      "task-core-native-card.png",
-      "task-core-native-gallery.png",
-      "task-core-native-market.png",
-      "task-core-native-settings.png",
-      "task-core-native-account.png",
-      "task-panel-controls.json",
-      "task-console-baseline.json"
+      "task-panel-controls.json"
     ]
   },
   "releaseAttempts": [
@@ -130,33 +202,8 @@
       "restoredHostSha256": "A0F77ADBF9F9AB4485EBA05742A2FF4D1B600800EC905479AD8707ECDBB0D5F0",
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
       "candidateBackupDirectory": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-timeline-candidate-20260908",
-      "comparisonEvidence": "output/playwright/task-timeline-baseline-report.json"
+      "comparisonEvidence": "output/playwright/task-timeline-baseline-report.json",
+      "comparisonConclusion": "Exact diagnostic inherited; old core navigation passed with no new errors or HTTP failures. Restoration recorded in ac91d33. Same unchanged candidate redeployed at 17:19:44 and final native checks passed."
     }
-  ],
-  "pendingCandidate": {
-    "status": "approved-comparison-complete-awaiting-final-native-verification",
-    "sourceTask": "task-all-horizontal-date-timeline",
-    "sourceThread": "01a04c0c-fd42-7ca1-bb81-9ae558616e5f",
-    "sourceCommit": "5f4bb7c025e5a65178bbba9ef6270f6d946a4fd4",
-    "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
-    "executablePath": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-    "builtAt": "2026-09-08T15:04:37.8930113+08:00",
-    "sizeBytes": 554757632,
-    "sha256": "283849666D42C38DE860D83C761E4AADC50E9D7ECDBD913D3E3B1CA3F04CB39D",
-    "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-    "rollbackDirectory": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-timeline-before-20260908",
-    "checks": {
-      "focusedTests": "36 passed",
-      "adjacentRegressionTests": "42 passed",
-      "typescript": "passed",
-      "diffCheck": "passed",
-      "layoutScan": "no findings",
-      "browser": "Passed both appearances, expand/collapse/keyboard, native-area vertical wheel scroll, original preview/entry/return, view-state retention, transient long-content probe, many-date horizontal clipping/empty previews, 1280 and 540 host viewports retaining incumbent scaled stage. No new console errors; known preview hydration warning only.",
-      "productionBuild": "One incremental Tauri --no-bundle build; Vite 6.84s, Tauri 2m00s. Same verified sidecar reused.",
-      "native": "First candidate native timeline interactions passed; an unlisted media CSP diagnostic caused a precautionary pair restoration. Exact same The Lookback video URL/CSP error reproduced on old A0F77ADB desktop. No production source, assets or security policy changed during comparison.",
-      "evidence": "output/playwright/task-timeline-preview-report.json"
-    },
-    "dataBoundary": "Dates 7/8/9 September are display-only sample thirds for original authored cards. User task creation timestamps take precedence and were not rewritten. Test records exist only in disposed temporary browser contexts; no native records/messages changed.",
-    "canonicalDesktopUnchanged": false
-  }
+  ]
 }
