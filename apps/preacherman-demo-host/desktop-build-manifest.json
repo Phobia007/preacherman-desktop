@@ -10,8 +10,8 @@
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
   "builtAt": "2026-09-08T22:40:32.3215285+08:00",
-  "deployedAt": "2026-09-08T22:42:59.7503722+08:00",
-  "verifiedAt": "2026-09-08T22:49:38.3872385+08:00",
+  "deployedAt": "2026-09-08T23:26:03.7295446+08:00",
+  "verifiedAt": "2026-09-08T15:29:38.703Z",
   "sizeBytes": 579525120,
   "sha256": "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
@@ -236,6 +236,18 @@
       "candidateBackupDirectory": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-timeline-candidate-20260908",
       "comparisonEvidence": "output/playwright/task-timeline-baseline-report.json",
       "comparisonConclusion": "Exact diagnostic inherited; old core navigation passed with no new errors or HTTP failures. Restoration recorded in ac91d33. Same unchanged candidate redeployed at 17:19:44 and final native checks passed."
+    },
+    {
+      "sourceCommit": "dc708d12e5fd772616b395f9cd23ec1e20846d74",
+      "sha256": "5D6F3BCA2A0233B1B24D83BD8D11732B8DD212E473A8DDA761FCBF1A1BEFF25F",
+      "status": "rolled-back",
+      "reason": "Native visual review found the logo showing the renderer UV fallback. Its worker createImageBitmap path does not support SVG blobs; HTML image.decode had passed and concealed the mismatch. Runtime/fonts/shaders remain unchanged; logo will be rasterized to transparent PNG and the actual GPU decoder verified.",
+      "deployedAt": "2026-09-08T23:19:04.2809573+08:00",
+      "restoredAt": "2026-09-08T23:26:03.7295446+08:00",
+      "restoredHostSha256": "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "failedArtifactPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-svg-rejected-20260908/preacherman-demo-host.exe",
+      "rollbackVerification": "Canonical shortcut cold launch restored the matched baseline. Home model, Task, Gallery, Market/Ledger, Settings and Account passed in both appearances, background playback and explicit return passed, zero new diagnostics. Evidence: output/playwright/identity-rollback-native-report.json."
     }
   ],
   "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/first-gallery-video-before-20260908/desktop-build-manifest.json"
