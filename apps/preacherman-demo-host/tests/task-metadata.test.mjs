@@ -82,19 +82,20 @@ test("saved names synchronize the authored card and index copy without changing 
   assert.equal(fixture().context.taskDisplayTitle(selected), "Nathan Riley");
 });
 
-test("card and full index keep original text nodes and typography with synchronized titles", () => {
+test("cards retain authored typography and the bounded timeline uses synchronized titles", () => {
   const cards = fs.readFileSync(new URL("_nuxt/DxOxRmZ4.js", root), "utf8");
   const index = fs.readFileSync(new URL("_nuxt/CCsiJzJJ.js", root), "utf8");
   const featuredHtml = fs.readFileSync(new URL("index.html", root), "utf8");
   assert.ok(cards.includes('E("span",te,F(taskDisplayTitle(l)),1)'));
   assert.ok(cards.includes('whitespace-nowrap text-16 s:text-18 tracking-[-0.05em]'));
-  assert.equal(index.match(/k\(taskDisplayTitle\(a\)\)/g)?.length, 3);
-  assert.ok(index.includes('text-18 s:text-30 leading-none tracking-[-0.05em]'));
+  const timeline = fs.readFileSync(new URL("task-timeline.js", root), "utf8");
+  assert.ok(index.includes('export {default} from "../task-timeline.js"'));
+  assert.ok(timeline.includes("taskDisplayTitle(project)"));
   assert.ok(cards.includes('e.showTitles('));
   assert.ok(cards.includes("augmentTaskProjects"));
   assert.ok(cards.includes("TaskCreateControl"));
   assert.ok(featuredHtml.includes('class="task-create"'));
-  assert.ok(index.includes('t.text(e,{reveal:!1})'));
+  assert.ok(timeline.includes("folio.text(name, {reveal: false})"));
 });
 
 test("new conversation cards persist as blank task projects and relate to their source", () => {
@@ -304,11 +305,11 @@ test("full index shares created names, task routes, framed empty previews and de
   assert.equal(f.context.taskDisplayTitle(index[1]),"改名后");
   f.context.deleteTaskProject(created.id);
   assert.equal(f.context.taskIndexProjects(index).length,1);
-  const runtime=fs.readFileSync(new URL("_nuxt/CCsiJzJJ.js",root),"utf8");
-  assert.ok(runtime.includes("v.value=taskIndexProjects(v.value||[])"));
-  assert.ok(runtime.includes("t.texture(e.src)"));
-  assert.ok(runtime.includes("t.rail.bind(j.value,_.value)"));
-  assert.ok(runtime.includes("t.rail.pick(e)"));
+  const runtime=fs.readFileSync(new URL("task-timeline.js",root),"utf8");
+  assert.ok(runtime.includes("projects.value = taskIndexProjects(data.value ?? [])"));
+  assert.ok(runtime.includes("folio.texture(project.src)"));
+  assert.ok(runtime.includes("folio.rail.bind(panel.value, projects.value, () => bounds)"));
+  assert.ok(runtime.includes("folio.rail.pick(index)"));
 });
 
 test("batch deletion writes once, preserves all records and excludes every selection from both lists", () => {
