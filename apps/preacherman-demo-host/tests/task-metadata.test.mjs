@@ -95,7 +95,7 @@ test("cards retain authored typography and the bounded timeline uses synchronize
   assert.ok(cards.includes("augmentTaskProjects"));
   assert.ok(cards.includes("TaskCreateControl"));
   assert.ok(featuredHtml.includes('class="task-create"'));
-  assert.ok(timeline.includes("folio.text(name, {reveal: false})"));
+  assert.ok(timeline.includes("folio.text(event.currentTarget, {reveal: false})"));
 });
 
 test("new conversation cards persist as blank task projects and relate to their source", () => {
@@ -308,7 +308,7 @@ test("full index shares created names, task routes, framed empty previews and de
   const runtime=fs.readFileSync(new URL("task-timeline.js",root),"utf8");
   assert.ok(runtime.includes("projects.value = taskIndexProjects(data.value ?? [])"));
   assert.ok(runtime.includes("folio.texture(project.src)"));
-  assert.ok(runtime.includes("folio.rail.bind(panel.value, projects.value, () => bounds)"));
+  assert.ok(runtime.includes("folio.rail.bind(panel.value, projects.value, previewBounds)"));
   assert.ok(runtime.includes("folio.rail.pick(index)"));
 });
 

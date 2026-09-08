@@ -2,7 +2,7 @@ import {a0 as useNuxtApp, a1 as withAsyncContext, a2 as useHead, a3 as onMounted
 import {u as usePrefetch} from "./_nuxt/DXCfcV2M.js";
 import {loadTaskCovers} from "./task-covers.js";
 import {readTaskProjects, taskDisplayTitle, taskIndexProjects, taskProjectRoute} from "./task-metadata.js";
-import {taskTimelineGroups} from "./task-timeline-data.js";
+import {taskTimelineGroups, taskTickHeight, taskNameBounds} from "./task-timeline-data.js";
 
 const style = document.createElement("link");
 style.rel = "stylesheet";
@@ -10,7 +10,7 @@ style.href = new URL("./task-timeline.css", import.meta.url).href;
 document.head.append(style);
 
 // View state only. Nothing here changes saved task records, dates or conversations.
-const view = {open: null, x: 0, y: 0};
+const view = {open: null, x: 0, columns: new Map()};
 export default {
   __name: "full",
   async setup() {
@@ -19,43 +19,66 @@ export default {
     let pending, restore;
     const {data} = ([pending, restore] = withAsyncContext(() => useAsyncData("projects", () => dato.projects())), pending = await pending, restore(), pending);
     useHead(() => ({title: "Index"}));
-    const root = ref(null), panel = ref(null), horizontal = ref(null), body = ref(null);
+    const root = ref(null), panel = ref(null), horizontal = ref(null), track = ref(null), ruler = ref(null);
     const projects = ref([]), records = ref([]), ready = ref(false), error = ref("");
     const authored = (data.value ?? []).filter(project => !project.preachermanTask).map(project => project.slug);
     const groups = computed(() => taskTimelineGroups(projects.value, records.value, authored));
-    const open = ref(new Set(view.open ?? []));
-    let disposed = false, observer, frame = 0, bounds = null, flying = null, navigating = false;
-    const point = event => resize.mouse && folio.rail.point(event.clientX, event.clientY);
+    const open = ref(new Set(view.open ?? [])), markers = ref([]), rulerWidth = ref(0), rulerPointer = ref(null), dragging = ref(false);
+    let disposed = false, observer, frame = 0, scrollFrame = 0, scrollTarget = 0, flying = null, navigating = false;
+    let activeName = null, pointer = null, keyboardPreview = false, drag = null;
+    const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const clearPreview = () => { activeName = null; keyboardPreview = false; };
+    const previewBounds = () => {
+      if (!activeName?.isConnected || nuxt.payload.state["$sprofile-open"]) return null;
+      const column = activeName.closest(".task-timeline__column");
+      if (!column || !horizontal.value) return null;
+      const bounds = taskNameBounds(activeName.getBoundingClientRect(), column.getBoundingClientRect(), horizontal.value.getBoundingClientRect());
+      if (!bounds || (!keyboardPreview && (!pointer || pointer.x < bounds.left || pointer.x > bounds.right || pointer.y < bounds.top || pointer.y > bounds.bottom))) return null;
+      // No union of rows and no activation padding. The rail keeps its original damping.
+      return bounds;
+    };
+    const point = event => {
+      if (!resize.mouse) return;
+      pointer = {x: event.clientX, y: event.clientY};
+      folio.rail.point(pointer.x, pointer.y);
+      const name = event.target.closest?.(".task-timeline__name");
+      if (ready.value && name && root.value?.contains(name)) {
+        activeName = name;
+        keyboardPreview = false;
+        folio.rail.pick(Number(name.dataset.projectIndex));
+      } else clearPreview();
+    };
     const measure = () => {
       frame = 0;
-      if (!body.value) return;
-      const bodyRect = body.value.getBoundingClientRect();
-      const viewportRect = horizontal.value.getBoundingClientRect();
-      const clip = {left: Math.max(bodyRect.left, viewportRect.left), top: bodyRect.top, right: Math.min(bodyRect.right, viewportRect.right), bottom: bodyRect.bottom};
-      let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
-      for (const name of body.value.querySelectorAll(".task-timeline__name")) {
-        const rect = name.getBoundingClientRect();
-        if (rect.right <= clip.left || rect.left >= clip.right || rect.bottom <= clip.top || rect.top >= clip.bottom) continue;
-        left = Math.min(left, Math.max(clip.left, rect.left));
-        top = Math.min(top, Math.max(clip.top, rect.top));
-        right = Math.max(right, Math.min(clip.right, rect.right));
-        bottom = Math.max(bottom, Math.min(clip.bottom, rect.bottom));
-      }
-      bounds = left < right ? {left, top, right, bottom} : null;
+      if (!track.value) return;
+      rulerWidth.value = track.value.clientWidth;
+      const start = track.value.getBoundingClientRect().left;
+      markers.value = [...track.value.querySelectorAll(".task-timeline__date-label")].map(label => {
+        const rect = label.getBoundingClientRect();
+        return rect.left + rect.width / 2 - start;
+      });
     };
     const scheduleMeasure = () => { if (!frame) frame = requestAnimationFrame(measure); };
+    const ticks = computed(() => Array.from({length: Math.ceil(rulerWidth.value / 10)}, (_, index) => index * 10)
+      .filter(x => markers.value.every(marker => Math.abs(marker - x) > 4))
+      .map(x => ({x, height: taskTickHeight(Math.min(...markers.value.map(marker => Math.abs(x - marker))), rulerPointer.value === null ? Infinity : Math.abs(x - rulerPointer.value))})));
     const toggle = async day => {
       const next = new Set(open.value);
       next.has(day) ? next.delete(day) : next.add(day);
       open.value = next;
       view.open = [...next];
+      clearPreview();
       await nextTick();
-      scheduleMeasure();
+      const column = root.value.querySelector('[data-day="' + day + '"]');
+      if (column) column.scrollTop = view.columns.get(day) ?? 0;
     };
     const preview = (event, index) => {
       if (!ready.value || (!resize.mouse && event.type !== "focus")) return;
-      const rect = event.currentTarget.getBoundingClientRect();
-      folio.rail.point(event.clientX ?? rect.left + rect.width / 2, event.clientY ?? rect.top + rect.height / 2);
+      activeName = event.currentTarget;
+      keyboardPreview = event.type === "focus";
+      const rect = activeName.getBoundingClientRect();
+      pointer = {x: event.clientX ?? rect.left + rect.width / 2, y: event.clientY ?? rect.top + rect.height / 2};
+      folio.rail.point(pointer.x, pointer.y);
       folio.rail.pick(index);
     };
     const visit = async (event, project) => {
@@ -63,17 +86,76 @@ export default {
       event.preventDefault();
       if (navigating || !ready.value) return;
       navigating = true;
-      // Rasterize only the clicked title for the original card-entry transition.
-      const name = event.currentTarget;
-      flying = await folio.text(name, {reveal: false});
+      flying = await folio.text(event.currentTarget, {reveal: false});
       if (disposed) { folio.dropTexts(flying); return; }
       folio.selectTitle(flying, project.slug);
       await navigateTo(taskProjectRoute(project));
     };
-    const rememberScroll = () => {
+    const rememberColumn = event => {
+      view.columns.set(event.currentTarget.dataset.day, event.currentTarget.scrollTop);
+      clearPreview();
+    };
+    const rememberHorizontal = () => {
       view.x = horizontal.value?.scrollLeft ?? 0;
-      view.y = body.value?.scrollTop ?? 0;
-      scheduleMeasure();
+      clearPreview();
+    };
+    const stopScroll = () => { cancelAnimationFrame(scrollFrame); scrollFrame = 0; };
+    const moveHorizontal = (delta, smooth = true) => {
+      const el = horizontal.value;
+      if (!el) return;
+      scrollTarget = Math.max(0, Math.min(el.scrollWidth - el.clientWidth, (scrollFrame ? scrollTarget : el.scrollLeft) + delta));
+      if (!smooth || reducedMotion()) { stopScroll(); el.scrollLeft = scrollTarget; return; }
+      if (scrollFrame) return;
+      let last = performance.now(), position = el.scrollLeft;
+      const step = now => {
+        const remaining = scrollTarget - position;
+        if (Math.abs(remaining) < 1) { el.scrollLeft = scrollTarget; scrollFrame = 0; return; }
+        position += remaining * (1 - Math.exp(-Math.min(now - last, 50) / 65));
+        el.scrollLeft = position;
+        last = now;
+        scrollFrame = requestAnimationFrame(step);
+      };
+      scrollFrame = requestAnimationFrame(step);
+    };
+    const wheel = event => {
+      event.stopPropagation();
+      event.preventDefault();
+      if (drag) return;
+      const column = event.target.closest?.(".task-timeline__column");
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? horizontal.value.clientHeight : 1;
+      if (!event.shiftKey && Math.abs(event.deltaY) >= Math.abs(event.deltaX) && column?.dataset.expanded === "true" && column.scrollHeight > column.clientHeight + 1) {
+        stopScroll();
+        column.scrollTop += event.deltaY * unit;
+      } else moveHorizontal((Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY) * unit);
+    };
+    const rulerMove = event => {
+      rulerPointer.value = event.clientX - track.value.getBoundingClientRect().left;
+      if (!drag || event.pointerId !== drag.id) return;
+      stopScroll();
+      horizontal.value.scrollLeft = drag.scroll + drag.x - event.clientX;
+    };
+    const rulerDown = event => {
+      if (event.button !== 0 || !ready.value) return;
+      event.preventDefault();
+      clearPreview();
+      stopScroll();
+      drag = {id: event.pointerId, x: event.clientX, scroll: horizontal.value.scrollLeft};
+      dragging.value = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    };
+    const rulerUp = event => {
+      if (!drag || event.pointerId !== drag.id) return;
+      drag = null;
+      dragging.value = false;
+      if (ruler.value?.hasPointerCapture(event.pointerId)) ruler.value.releasePointerCapture(event.pointerId);
+      rulerPointer.value = null;
+    };
+    const rulerKey = event => {
+      const el = horizontal.value;
+      const delta = {ArrowLeft: -el.clientWidth / 3, ArrowRight: el.clientWidth / 3, Home: -el.scrollWidth, End: el.scrollWidth}[event.key];
+      if (delta === undefined) return;
+      event.preventDefault();
+      moveHorizontal(delta);
     };
     usePrefetch(() => data.value?.length ? [`/projects/${data.value[0].slug}`] : [], {payloads: 0});
     onMounted(async () => {
@@ -95,16 +177,17 @@ export default {
         folio.scan(root.value);
         folio.depart();
         folio.fadeLeaving();
-        folio.rail.bind(panel.value, projects.value, () => bounds);
+        folio.rail.bind(panel.value, projects.value, previewBounds);
         window.addEventListener("pointermove", point, {passive: true});
         folio.staggerHud(.2, .03);
         folio.setScroll(0);
         ready.value = true;
         await nextTick();
         horizontal.value.scrollLeft = view.x;
-        body.value.scrollTop = view.y;
+        for (const column of root.value.querySelectorAll(".task-timeline__column")) column.scrollTop = view.columns.get(column.dataset.day) ?? 0;
         observer = new ResizeObserver(scheduleMeasure);
-        observer.observe(body.value);
+        observer.observe(track.value);
+        document.fonts.ready.then(() => { if (!disposed) scheduleMeasure(); });
         scheduleMeasure();
       } catch {
         if (!disposed) error.value = "Unable to load tasks. Return to Featured and try again.";
@@ -115,6 +198,7 @@ export default {
       observer?.disconnect();
       window.removeEventListener("pointermove", point);
       cancelAnimationFrame(frame);
+      stopScroll();
       folio.rail.bind(null);
       folio.dropTexts(flying);
     });
@@ -123,20 +207,27 @@ export default {
       ref: root, class: "task-timeline", "data-gl-shield": "", "aria-label": "Task timeline",
       "data-profile-open": !!nuxt.payload.state["$sprofile-open"],
     }, [
-      h("div", {class: "task-timeline__viewport", ref: horizontal, onScroll: rememberScroll, onWheel: event => event.stopPropagation(), "data-lenis-prevent": ""},
-        [h("div", {class: "task-timeline__track", style: {"--date-count": Math.max(1, groups.value.length)}}, [
+      h("div", {class: "task-timeline__viewport", ref: horizontal, onScroll: rememberHorizontal, onWheel: wheel, "data-lenis-prevent": ""},
+        [h("div", {class: "task-timeline__track", ref: track, style: {"--date-count": Math.max(1, groups.value.length)}}, [
+          h("div", {class: "task-timeline__ruler", ref: ruler, role: "group", tabindex: 0, "aria-label": "Timeline — drag or use arrow keys to scroll dates", "data-dragging": dragging.value,
+            onPointerdown: rulerDown, onPointermove: rulerMove, onPointerup: rulerUp, onPointercancel: rulerUp, onLostpointercapture: rulerUp, onPointerleave: () => { if (!drag) rulerPointer.value = null; }, onKeydown: rulerKey,
+          }, [
+            ...ticks.value.map(tick => h("i", {key: tick.x, class: "task-timeline__tick", "aria-hidden": "true", style: {left: tick.x + "px", transform: "scaleY(" + tick.height / 44 + ")"}})),
+            ...markers.value.map((x, index) => h("i", {key: "date-" + index, class: "task-timeline__tick task-timeline__tick--date", "aria-hidden": "true", style: {left: x + "px"}})),
+          ]),
           h("div", {class: "task-timeline__axis"}, groups.value.map(group => h("button", {
             key: group.day, type: "button", class: "task-timeline__date",
             "aria-expanded": open.value.has(group.day), "aria-controls": "task-day-" + group.day,
             onClick: () => toggle(group.day),
-          }, [h("span", null, group.label), arrow(open.value.has(group.day))]))),
-          h("div", {class: "task-timeline__body", ref: body, onScroll: rememberScroll, onAnimationend: scheduleMeasure, tabindex: 0, "aria-label": "Scroll tasks", "data-lenis-prevent": ""}, groups.value.map(group => h("section", {
-            key: group.day, id: "task-day-" + group.day, class: "task-timeline__column", "aria-label": group.label,
+          }, [h("span", {class: "task-timeline__date-label"}, group.label), arrow(open.value.has(group.day))]))),
+          h("div", {class: "task-timeline__body"}, groups.value.map(group => h("section", {
+            key: group.day, id: "task-day-" + group.day, class: "task-timeline__column", "aria-label": group.label + " tasks",
+            "data-day": group.day, "data-expanded": open.value.has(group.day), tabindex: open.value.has(group.day) ? 0 : -1, onScroll: rememberColumn, "data-lenis-prevent": "",
           }, open.value.has(group.day) ? [h("ul", {class: "task-timeline__names"}, group.items.map(({project, index}, row) => h("li", {
             key: project.slug, style: {"--row-delay": Math.min(row * 32, 256) + "ms"},
           }, [h("a", {
-            class: "task-timeline__name", href: taskProjectRoute(project),
-            onPointerenter: event => preview(event, index), onFocus: event => preview(event, index),
+            class: "task-timeline__name", href: taskProjectRoute(project), "data-project-index": index,
+            onPointerenter: event => preview(event, index), onPointerleave: clearPreview, onFocus: event => preview(event, index), onBlur: clearPreview,
             onClick: event => visit(event, project),
           }, taskDisplayTitle(project))])))] : []))),
         ])]),
