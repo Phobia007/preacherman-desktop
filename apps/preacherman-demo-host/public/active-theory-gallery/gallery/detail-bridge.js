@@ -69,7 +69,7 @@
         clearTimeout(exitTimer);
         if (data) {
           if (state.phase === "closed") savedScroll = controller()?.scroll;
-          state = { phase: "open", project: data.perma, title: data.title, smallWindow: true };
+          state = { phase: "open", project: data.perma, title: data.title, poster: data.thumbnailURL || "", smallWindow: true };
           notify();
         } else if (state.phase !== "closed") {
           state.phase = "closing";

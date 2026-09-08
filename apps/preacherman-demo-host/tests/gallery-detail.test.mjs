@@ -46,6 +46,28 @@ test('reentry cancels the old closing timer and reopens the small window',()=>{
   assert.equal(f.api.snapshot.phase,'open');assert.equal(f.api.snapshot.project,'two');
 });
 
+test('detail carries the card cover without leaking it into the next card',()=>{
+  const f=fixture();
+  f.enter({perma:'secret-sky',title:'Secret Sky',thumbnailURL:'/assets/gallery/cortana-intro-cover.jpg'});
+  assert.equal(f.api.snapshot.poster,'/assets/gallery/cortana-intro-cover.jpg');
+  f.enter({perma:'two',title:'Two'});
+  assert.equal(f.api.snapshot.poster,'');
+  f.api.back();f.finish();
+  assert.equal(f.api.snapshot.poster,undefined);
+});
+
+test('the first Gallery card uses one packaged introduction video and the supplied cover',()=>{
+  const projects=JSON.parse(read('public/active-theory-gallery/gallery/external/storage.googleapis.com/activetheory-v6.appspot.com/cms/projects-dev.json'));
+  assert.equal(projects.length,31);
+  const first=[...projects].sort((a,b)=>a.priority-b.priority)[0];
+  assert.equal(first.slug,'secret-sky');
+  assert.equal(first.video.url,'/assets/gallery/cortana-intro.mp4');
+  assert.equal(first.video.thumbnail,'/assets/gallery/cortana-intro-cover.jpg');
+  assert.equal(fs.statSync(new URL('../public'+first.video.url,import.meta.url)).size,first.video.filesize);
+  assert.ok(fs.statSync(new URL('../public'+first.video.thumbnail,import.meta.url)).size>100_000);
+  assert.ok(projects.slice(1).every(p=>!p.video.url.includes('cortana-intro')));
+});
+
 test('late native scroll and route updates cannot move the rail during detail or return',()=>{
   const f=fixture();f.enter({perma:'one',title:'One'});
   f.scroll.scroll=4817;f.tick();assert.equal(f.scroll.scroll,4217);
@@ -72,7 +94,10 @@ test('mirror uses the room video, preserves aspect, and releases frame callbacks
   assert.match(overlay,/requestVideoFrameCallback\(draw\)/);
   assert.match(overlay,/cancelVideoFrameCallback\(callback\)/);
   assert.match(overlay,/cancelAnimationFrame\(frame\)/);
-  assert.match(overlay,/Math\.max\(canvas\.width \/ video\.videoWidth/);
+  assert.match(overlay,/Math\.max\(canvas\.width \/ sourceWidth/);
+  assert.match(overlay,/drawSource\(video, video\.videoWidth, video\.videoHeight\)/);
+  assert.match(overlay,/drawSource\(poster, poster\.naturalWidth, poster\.naturalHeight\)/);
+  assert.match(overlay,/poster\.onload = null/);
   assert.doesNotMatch(overlay,/\.pause\(|\.play\(|<video/);
   assert.match(overlay,/Close video window/);assert.match(overlay,/Back to Gallery cards/);
 });

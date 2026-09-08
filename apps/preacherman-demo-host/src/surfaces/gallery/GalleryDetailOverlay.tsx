@@ -5,6 +5,7 @@ export interface GalleryDetailState {
   phase: "closed" | "open" | "closing";
   project: string;
   title: string;
+  poster?: string;
   smallWindow: boolean;
 }
 export interface GalleryDetailBridge {
@@ -50,12 +51,22 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack }: {
     if (!video || !canvas || !context) return;
     let stopped = false, callback = 0, fallback = 0;
     setMediaState("loading");
+    const drawSource = (source: CanvasImageSource, sourceWidth: number, sourceHeight: number) => {
+      const ratio = Math.max(canvas.width / sourceWidth, canvas.height / sourceHeight);
+      const width = canvas.width / ratio, height = canvas.height / ratio;
+      context.drawImage(source, (sourceWidth - width) / 2, (sourceHeight - height) / 2, width, height, 0, 0, canvas.width, canvas.height);
+    };
+    const poster = new Image();
+    poster.onload = () => {
+      if (stopped || video.readyState >= 2 || video.error) return;
+      drawSource(poster, poster.naturalWidth, poster.naturalHeight);
+      setMediaState("poster");
+    };
+    if (detail.poster) poster.src = detail.poster;
     const draw = () => {
       if (stopped) return;
       if (video.readyState >= 2 && video.videoWidth > 0) {
-        const ratio = Math.max(canvas.width / video.videoWidth, canvas.height / video.videoHeight);
-        const width = canvas.width / ratio, height = canvas.height / ratio;
-        context.drawImage(video, (video.videoWidth - width) / 2, (video.videoHeight - height) / 2, width, height, 0, 0, canvas.width, canvas.height);
+        drawSource(video, video.videoWidth, video.videoHeight);
         canvas.dataset.videoTime = String(video.currentTime);
         setMediaState("ready");
       }
@@ -68,6 +79,7 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack }: {
     draw();
     return () => {
       stopped = true;
+      poster.onload = null;
       if (callback) video.cancelVideoFrameCallback(callback);
       window.clearTimeout(fallback);
       video.removeEventListener("error", failed);
@@ -87,7 +99,7 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack }: {
     <div className="gallery-detail" data-phase={detail.phase} data-project={detail.project}>
       {detail.smallWindow ? <div className="gallery-detail__window" ref={windowRef} key={detail.project}>
         <canvas aria-label={`${detail.title} video preview`} className="gallery-detail__video" data-media-state={mediaState} height={576} ref={canvasRef} role="img" width={960} />
-        {mediaState !== "ready" ? <span className="gallery-detail__status" role="status">{mediaState === "error" ? "Video unavailable" : "Loading video"}</span> : null}
+        {mediaState === "loading" || mediaState === "error" ? <span className="gallery-detail__status" role="status">{mediaState === "error" ? "Video unavailable" : "Loading video"}</span> : null}
         <button aria-label="Close video window" className="gallery-detail__control gallery-detail__close" disabled={detail.phase !== "open"} onClick={() => { bridge.closeWindow(); backRef.current?.focus(); }} type="button">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
         </button>
