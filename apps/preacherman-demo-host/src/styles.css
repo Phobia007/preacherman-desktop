@@ -289,6 +289,7 @@ html[data-appearance="dark"] #root {
   --demo-theme-activate-hover-shadow: 0 20px 44px -22px rgb(15 18 20 / 48%), inset 0 1px 0 rgb(255 255 255 / 96%);
   --demo-theme-activate-flash: rgb(17 17 17 / 55%);
   --demo-theme-brand-menu-surface: #000000;
+  --demo-theme-brand-menu-corner-radius: 8px;
   --demo-theme-brand-menu-edge: rgb(255 255 255 / 16%);
   --demo-theme-brand-menu-text: rgb(255 255 255 / 68%);
   --demo-theme-brand-menu-text-hover: rgb(255 255 255 / 94%);
@@ -503,6 +504,10 @@ html[data-appearance="dark"] #root {
   pointer-events: none;
 }
 
+.demo-app-shell__brand-navigation[data-open="true"] {
+  pointer-events: auto;
+}
+
 .demo-app-shell__brand-backdrop {
   position: absolute;
   inset: 0 auto auto 0;
@@ -516,7 +521,7 @@ html[data-appearance="dark"] #root {
   pointer-events: none;
 }
 
-.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-backdrop {
+.demo-app-shell__brand-backdrop[data-open="true"] {
   visibility: visible;
   pointer-events: auto;
 }
@@ -535,6 +540,7 @@ html[data-appearance="dark"] #root {
   z-index: 1;
   box-sizing: border-box;
   border-right: 1px solid var(--demo-theme-brand-menu-edge);
+  border-bottom-right-radius: var(--demo-theme-brand-menu-corner-radius);
   background: var(--demo-theme-brand-menu-surface);
   transform: translate3d(-100%, 0, 0);
   /* Slow departure, acceleration, then a long damped landing; reversible in place. */

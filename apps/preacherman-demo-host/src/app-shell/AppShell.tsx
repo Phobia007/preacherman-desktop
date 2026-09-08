@@ -73,7 +73,6 @@ export function AppShell({
   }, [brandNavigationOpen]);
 
   const selectBrandDestination = (surfaceType: typeof brandNavigationItems[number]["surfaceType"]) => {
-    closeBrandNavigation();
     onNavigate(surfaceType);
     void dispatch(navigationCommand(surfaceType));
   };
@@ -106,23 +105,29 @@ export function AppShell({
           className="demo-app-shell__drag-region demo-app-shell__drag-region--right"
           onMouseDown={startDragging}
         />
+        <button
+          aria-hidden={!brandNavigationOpen}
+          aria-label="Close navigation"
+          className="demo-app-shell__brand-backdrop"
+          data-open={brandNavigationOpen ? "true" : "false"}
+          onClick={closeBrandNavigation}
+          tabIndex={-1}
+          type="button"
+        />
         <div
           className="demo-app-shell__brand-navigation"
           data-open={brandNavigationOpen ? "true" : "false"}
+          onPointerLeave={(event) => {
+            if (brandNavigationOpen && event.pointerType === "mouse") {
+              closeBrandNavigation();
+            }
+          }}
           onBlur={(event) => {
             if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
               setBrandNavigationOpen(false);
             }
           }}
         >
-          <button
-            aria-hidden={!brandNavigationOpen}
-            aria-label="Close navigation"
-            className="demo-app-shell__brand-backdrop"
-            onClick={closeBrandNavigation}
-            tabIndex={-1}
-            type="button"
-          />
           <div aria-hidden="true" className="demo-app-shell__brand-drawer-clip">
             <div className="demo-app-shell__brand-drawer" />
           </div>

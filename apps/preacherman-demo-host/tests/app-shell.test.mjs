@@ -87,7 +87,16 @@ test("hamburger opens a click-only, opaque six-item Clash Display navigation dra
   assert.match(shell, /event\.key !== "Escape"/);
   assert.doesNotMatch(shell, /onMouseEnter|onMouseLeave|brandNavigationPinned|window.setTimeout/);
   assert.match(shell, /onClick=\{\(\) => setBrandNavigationOpen\(\(open\) => !open\)\}/);
-  assert.match(shell, /closeBrandNavigation\(\);[\s\S]*onNavigate\(surfaceType\);[\s\S]*dispatch\(navigationCommand\(surfaceType\)\)/);
+  assert.match(shell, /onNavigate\(surfaceType\);[\s\S]*dispatch\(navigationCommand\(surfaceType\)\)/);
+  const selectDestination = shell.match(/const selectBrandDestination =[^]*?\n  };/)?.[0] ?? "";
+  assert.ok(selectDestination);
+  assert.doesNotMatch(selectDestination, /closeBrandNavigation|setBrandNavigationOpen/);
+  assert.match(shell, /onPointerLeave=\{\(event\) => \{\s*if \(brandNavigationOpen && event.pointerType === "mouse"\) \{\s*closeBrandNavigation\(\)/);
+  assert.ok(shell.indexOf('className="demo-app-shell__brand-backdrop"') < shell.indexOf('className="demo-app-shell__brand-navigation"'), "outside backdrop must not enlarge the panel's pointer-leave boundary");
+  assert.match(styles, /\.demo-app-shell__brand-navigation\[data-open="true"\]\s*\{\s*pointer-events: auto/);
+  assert.match(styles, /\.demo-app-shell__brand-backdrop\[data-open="true"\]/);
+  assert.match(styles, /--demo-theme-brand-menu-corner-radius:\s*8px/);
+  assert.match(styles, /\.demo-app-shell__brand-drawer\s*\{[^}]*border-bottom-right-radius:\s*var\(--demo-theme-brand-menu-corner-radius\)/);
   assert.match(shell, /brandButtonRef.current\?\.focus\(\{ preventScroll: true \}\)/);
   assert.match(shell, /document.removeEventListener\("keydown", closeOnEscape\)/);
   assert.match(app, /handleSurfaceNavigate[\s\S]*setRoute\(surfaceType === "home"[\s\S]*kind: "surface", surfaceType/);
