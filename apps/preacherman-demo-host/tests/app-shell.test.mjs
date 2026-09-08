@@ -38,8 +38,8 @@ test("Demo Host owns one persistent shell outside the changing screen content", 
   const app = await readFile(appPath, "utf8");
   const styles = await readFile(stylesPath, "utf8");
 
-  assert.match(shell, /preacherman-mark-light\.png/);
-  assert.match(shell, /preacherman-mark-dark\.png/);
+  assert.match(shell, /className="demo-app-shell__brand-icon"/);
+  assert.doesNotMatch(shell, /preacherman-mark-(?:light|dark)\.png/);
   assert.match(shell, /<WindowControls\b/);
   assert.doesNotMatch(shell, /<BottomNavigation\b/);
   assert.match(shell, /demo-app-shell__screen-content/);
@@ -73,7 +73,7 @@ test("Task keeps its entry motion while Gallery mounts the original runtime", as
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*surface-reveal-mask[\s\S]*animation:\s*none[\s\S]*surface-reveal-line[\s\S]*display:\s*none/);
 });
 
-test("Preacherman mark opens a six-item Clash Display navigation menu", async () => {
+test("hamburger opens a click-only, opaque six-item Clash Display navigation drawer", async () => {
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
@@ -83,14 +83,13 @@ test("Preacherman mark opens a six-item Clash Display navigation menu", async ()
   assert.match(shell, /aria-expanded=\{brandNavigationOpen\}/);
   assert.match(shell, /aria-controls="preacherman-brand-navigation"/);
   assert.match(shell, /navigationCommand\(surfaceType\)/);
-  assert.match(shell, /document\.addEventListener\("pointerdown", closeOnOutsidePress\)/);
+  assert.match(shell, /className="demo-app-shell__brand-backdrop"[\s\S]*onClick=\{closeBrandNavigation\}/);
   assert.match(shell, /event\.key !== "Escape"/);
-  assert.match(shell, /onMouseEnter=\{openBrandNavigation\}/);
-  assert.match(shell, /onMouseLeave=\{scheduleBrandNavigationClose\}/);
-  assert.match(shell, /window\.setTimeout\([\s\S]*220\)/);
-  assert.match(shell, /aria-pressed=\{brandNavigationPinned\}/);
-  assert.match(shell, /onClick=\{toggleBrandNavigationPinned\}/);
-  assert.match(shell, /setBrandNavigationPinned\(false\);[\s\S]*setBrandNavigationOpen\(false\);[\s\S]*onNavigate\(surfaceType\);[\s\S]*dispatch\(navigationCommand\(surfaceType\)\)/);
+  assert.doesNotMatch(shell, /onMouseEnter|onMouseLeave|brandNavigationPinned|window.setTimeout/);
+  assert.match(shell, /onClick=\{\(\) => setBrandNavigationOpen\(\(open\) => !open\)\}/);
+  assert.match(shell, /closeBrandNavigation\(\);[\s\S]*onNavigate\(surfaceType\);[\s\S]*dispatch\(navigationCommand\(surfaceType\)\)/);
+  assert.match(shell, /brandButtonRef.current\?\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(shell, /document.removeEventListener\("keydown", closeOnEscape\)/);
   assert.match(app, /handleSurfaceNavigate[\s\S]*setRoute\(surfaceType === "home"[\s\S]*kind: "surface", surfaceType/);
   assert.match(app, /<AppShell[\s\S]*onNavigate=\{handleSurfaceNavigate\}/);
   for (const [label, surfaceType] of [
@@ -106,22 +105,34 @@ test("Preacherman mark opens a six-item Clash Display navigation menu", async ()
   assert.match(styles, /@font-face[\s\S]*ClashDisplay-Light\.ttf/);
   assert.match(styles, /--demo-font-primary:\s*"Clash Display", sans-serif/);
   assert.match(styles, /font-family:\s*var\(--demo-font-primary\)/);
-  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[\s\S]*width:\s*108px;[\s\S]*height:\s*108px/);
+  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[^}]*top:\s*14px;[^}]*left:\s*24px;[^}]*width:\s*32px;[^}]*height:\s*32px/);
+  assert.match(styles, /\.demo-app-shell__brand-icon\s*\{[^}]*width:\s*30px;[^}]*height:\s*30px/);
+  assert.match(shell, /viewBox="0 0 80 80"[^>]*strokeWidth="4"/);
+  assert.match(shell, /M18 24H62M18 40H62M18 56H62/);
   assert.match(styles, /\.demo-app-shell__brand-menu\s*\{[\s\S]*gap:\s*68px/);
   assert.match(styles, /\.demo-app-shell__brand-menu-item\s*\{[\s\S]*font-size:\s*32px/);
   assert.match(styles, /\.demo-app-shell__brand-navigation\[data-open="true"\] \.demo-app-shell__brand-menu-item\[aria-current="page"\]/);
   assert.match(shell, /className="demo-app-shell__brand-menu-charge-ring"/);
   assert.match(shell, /pathLength=\{100\}/);
-  assert.match(styles, /\.demo-app-shell__brand-navigation\[data-open="true"\] \.demo-app-shell__brand-menu-item:hover[\s\S]*transform:\s*translate3d\(10px, 0, 0\) scale\(1\)/);
+  assert.match(styles, /\.demo-app-shell__brand-navigation\[data-open="true"\] \.demo-app-shell__brand-menu-item:hover[\s\S]*transform:\s*translate3d\(0, 0, 0\) scale\(1\)/);
+  assert.match(styles, /\.demo-app-shell__brand-navigation\s*\{[^}]*position:\s*absolute;[^}]*width:\s*288px/);
+  assert.match(styles, /\.demo-app-shell__brand-menu\s*\{[^}]*top:\s*72px;[^}]*right:\s*24px;[^}]*bottom:\s*72px;[^}]*left:\s*24px;[^}]*align-content:\s*center/);
+  assert.match(styles, /\.demo-app-shell__brand-menu-row\s*\{[^}]*justify-items:\s*center/);
+  assert.match(shell, /className="demo-app-shell__brand-drawer-clip">\s*<div className="demo-app-shell__brand-drawer"/);
+  assert.match(styles, /\.demo-app-shell__brand-drawer-clip\s*\{[^}]*overflow:\s*hidden/);
   assert.match(styles, /\.demo-app-shell__brand-menu-charge-outline\s*\{[\s\S]*stroke-dasharray:\s*243/);
   assert.match(styles, /@keyframes brand-menu-charge-outline[\s\S]*stroke-dashoffset:\s*243[\s\S]*stroke-dashoffset:\s*0/);
   assert.match(styles, /@keyframes brand-menu-charge-tracer/);
   assert.match(styles, /@keyframes brand-menu-word-charge/);
   assert.doesNotMatch(styles, /@keyframes brand-navigation-wave-in/);
-  assert.match(styles, /nth-child\(5\)[\s\S]*transition-delay:\s*280ms/);
-  assert.match(styles, /nth-child\(6\)[\s\S]*transition-delay:\s*350ms/);
+  assert.match(styles, /brand-menu-row\s*\{[^}]*transition-delay: calc\(460ms \+ var\(--menu-order\) \* 70ms\)/);
+  assert.match(shell, /"--menu-order": index/);
+  assert.match(styles, /brand-drawer\s*\{[^}]*background:\s*var\(--demo-theme-brand-menu-surface\);[^}]*transform:\s*translate3d\(-100%, 0, 0\);[^}]*transition:\s*transform 820ms cubic-bezier\(\.76, 0, \.16, 1\)/);
   assert.match(styles, /\.demo-app-shell__brand-menu\s*\{[\s\S]*background:\s*transparent/);
-  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[\s\S]*border:\s*0;[\s\S]*background:\s*transparent/);
+  assert.match(styles, /\.demo-app-shell__brand-trigger\s*\{[^}]*background:\s*var\(--demo-theme-brand-menu-surface\)/);
+  assert.equal((styles.match(/--demo-theme-brand-menu-surface:\s*#000000/g) ?? []).length, 2);
+  assert.equal((styles.match(/--demo-theme-brand-menu-edge:\s*rgb\(255 255 255 \/ 16%\)/g) ?? []).length, 2);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.demo-app-shell__brand-drawer,\s*\.demo-app-shell__brand-menu-row,[\s\S]*transition: none/);
   assert.match(styles, /--demo-theme-brand-menu-text:\s*rgb\(255 255 255 \/ 68%\)/);
   assert.match(styles, /\.demo-app-shell\[data-appearance="dark"\][\s\S]*--demo-theme-brand-menu-text:\s*rgb\(255 255 255 \/ 68%\)/);
 });

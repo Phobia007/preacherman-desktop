@@ -288,6 +288,8 @@ html[data-appearance="dark"] #root {
   --demo-theme-activate-shadow: 0 16px 36px -24px rgb(15 34 41 / 42%), inset 0 1px 0 rgb(255 255 255 / 82%);
   --demo-theme-activate-hover-shadow: 0 20px 44px -22px rgb(15 18 20 / 48%), inset 0 1px 0 rgb(255 255 255 / 96%);
   --demo-theme-activate-flash: rgb(17 17 17 / 55%);
+  --demo-theme-brand-menu-surface: #000000;
+  --demo-theme-brand-menu-edge: rgb(255 255 255 / 16%);
   --demo-theme-brand-menu-text: rgb(255 255 255 / 68%);
   --demo-theme-brand-menu-text-hover: rgb(255 255 255 / 94%);
   --demo-theme-brand-menu-focus: #ffffff;
@@ -395,6 +397,8 @@ html[data-appearance="dark"] #root {
   --demo-theme-activate-shadow: 0 18px 42px -24px rgb(0 0 0 / 78%), inset 0 1px 0 rgb(255 255 255 / 12%);
   --demo-theme-activate-hover-shadow: 0 22px 52px -22px rgb(0 0 0 / 84%), inset 0 1px 0 rgb(255 255 255 / 18%);
   --demo-theme-activate-flash: rgb(255 255 255 / 70%);
+  --demo-theme-brand-menu-surface: #000000;
+  --demo-theme-brand-menu-edge: rgb(255 255 255 / 16%);
   --demo-theme-brand-menu-text: rgb(255 255 255 / 68%);
   --demo-theme-brand-menu-text-hover: rgb(255 255 255 / 94%);
   --demo-theme-brand-menu-focus: #ffffff;
@@ -492,73 +496,139 @@ html[data-appearance="dark"] #root {
 
 .demo-app-shell__brand-navigation {
   position: absolute;
-  top: 17px;
-  left: 22px;
+  inset: 0 auto 0 0;
   z-index: 1;
-  width: 108px;
+  width: 288px;
+  height: var(--demo-app-height);
+  pointer-events: none;
+}
+
+.demo-app-shell__brand-backdrop {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: var(--demo-app-width);
+  height: var(--demo-app-height);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-backdrop {
+  visibility: visible;
   pointer-events: auto;
 }
 
+.demo-app-shell__brand-drawer-clip {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.demo-app-shell__brand-drawer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  border-right: 1px solid var(--demo-theme-brand-menu-edge);
+  background: var(--demo-theme-brand-menu-surface);
+  transform: translate3d(-100%, 0, 0);
+  /* Slow departure, acceleration, then a long damped landing; reversible in place. */
+  transition: transform 820ms cubic-bezier(.76, 0, .16, 1);
+  pointer-events: auto;
+}
+
+.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-drawer {
+  transform: translate3d(0, 0, 0);
+}
+
 .demo-app-shell__brand-trigger {
+  position: absolute;
+  top: 14px;
+  left: 24px;
+  z-index: 3;
   display: grid;
   box-sizing: border-box;
-  width: 108px;
-  height: 108px;
+  width: 32px;
+  height: 32px;
   margin: 0;
-  padding: 10px;
+  padding: 0;
   place-items: center;
   border: 0;
   border-radius: 0;
-  color: var(--demo-theme-control);
-  background: transparent;
-  box-shadow: none;
+  color: var(--demo-theme-brand-menu-text);
+  background: var(--demo-theme-brand-menu-surface);
   cursor: pointer;
-  opacity: 0.68;
-  transform: scale(1);
-  transition: opacity 180ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+  transition: color 180ms ease;
 }
 
 .demo-app-shell__brand-trigger:hover,
 .demo-app-shell__brand-trigger:focus-visible,
 .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-trigger {
-  opacity: 0.96;
-  transform: scale(1.08);
+  color: var(--demo-theme-brand-menu-text-hover);
 }
 
 .demo-app-shell__brand-trigger:focus-visible {
-  outline: 1px solid var(--demo-theme-focus);
+  outline: 1px solid var(--demo-theme-brand-menu-focus);
   outline-offset: 2px;
 }
 
-.demo-app-shell__brand-mark {
+.demo-app-shell__brand-icon {
   display: block;
-  width: 100%;
-  height: 100%;
-  filter: brightness(0) invert(1);
-  object-fit: contain;
+  width: 30px;
+  height: 30px;
   pointer-events: none;
-  user-select: none;
 }
 
 .demo-app-shell__brand-menu {
   position: absolute;
-  top: 122px;
-  left: 16px;
+  top: 72px;
+  right: 24px;
+  bottom: 72px;
+  left: 24px;
+  z-index: 2;
   display: grid;
-  width: 210px;
+  align-content: center;
   gap: 68px;
-  padding: 10px 0 8px;
+  padding: 8px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
   color: var(--demo-theme-brand-menu-text);
   background: transparent;
   visibility: hidden;
   pointer-events: none;
-  transition: visibility 0s linear 560ms;
+  transition: visibility 0s linear 820ms;
 }
+
+.demo-app-shell__brand-menu::-webkit-scrollbar { display: none; }
 
 .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu {
   visibility: visible;
   pointer-events: auto;
   transition-delay: 0s;
+}
+
+.demo-app-shell__brand-menu-row {
+  display: grid;
+  justify-items: center;
+  opacity: 0;
+  transform: translate3d(0, -14px, 0);
+  transition: opacity 160ms ease, transform 240ms ease;
+}
+
+.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-row {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-duration: 380ms, 460ms;
+  transition-timing-function: cubic-bezier(.16, 1, .3, 1);
+  transition-delay: calc(460ms + var(--menu-order) * 70ms);
 }
 
 .demo-app-shell__brand-menu-item {
@@ -580,40 +650,9 @@ html[data-appearance="dark"] #root {
   letter-spacing: 0.018em;
   text-align: center;
   cursor: pointer;
-  opacity: 0;
-  transform: translate3d(-8px, -12px, 0) scale(0.96);
-  transform-origin: left center;
-  transition:
-    color 220ms ease,
-    opacity 460ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 520ms cubic-bezier(0.4, 0, 0.2, 1);
-  transition-delay: 0ms;
-}
-
-.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-item {
-  opacity: 1;
   transform: translate3d(0, 0, 0) scale(1);
-  transition-timing-function: ease, cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-item:nth-child(2) {
-  transition-delay: 70ms;
-}
-
-.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-item:nth-child(3) {
-  transition-delay: 140ms;
-}
-
-.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-item:nth-child(4) {
-  transition-delay: 210ms;
-}
-
-.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-item:nth-child(5) {
-  transition-delay: 280ms;
-}
-
-.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-item:nth-child(6) {
-  transition-delay: 350ms;
+  transform-origin: center;
+  transition: color 220ms ease, transform 520ms cubic-bezier(.16, 1, .3, 1);
 }
 
 .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-item[aria-current="page"] {
@@ -625,7 +664,7 @@ html[data-appearance="dark"] #root {
 .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-menu-item:focus-visible {
   color: var(--demo-theme-brand-menu-text-hover);
   opacity: 1;
-  transform: translate3d(10px, 0, 0) scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
   will-change: transform;
 }
 
@@ -743,6 +782,8 @@ html[data-appearance="dark"] #root {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .demo-app-shell__brand-drawer,
+  .demo-app-shell__brand-menu-row,
   .demo-app-shell__brand-menu,
   .demo-app-shell__brand-menu-item,
   .demo-app-shell__brand-menu-label,
@@ -761,6 +802,7 @@ html[data-appearance="dark"] #root {
 
 .demo-window-controls {
   position: absolute;
+  z-index: 2;
   top: 14px;
   right: 24px;
   display: flex;

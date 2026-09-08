@@ -82,7 +82,7 @@ test("Settings mounts its themed surface while preserving desktop chrome", async
   assert.match(styles, /--demo-theme-canvas:/);
   assert.match(styles, /--demo-theme-surface:/);
   assert.match(styles, /--demo-theme-text:/);
-  assert.match(shell, /className="demo-app-shell__brand-mark"/);
+  assert.match(shell, /className="demo-app-shell__brand-icon"/);
   assert.match(shell, /<WindowControls\b/);
   assert.match(shell, /data-appearance=\{appearance\}/);
 });
@@ -96,8 +96,8 @@ test("the persistent shell hides navigation while preserving its localized compo
     "utf8",
   );
 
-  assert.match(shell, /preacherman-mark-light\.png/);
-  assert.match(shell, /preacherman-mark-dark\.png/);
+  assert.match(shell, /className="demo-app-shell__brand-drawer"/);
+  assert.match(shell, /aria-controls="preacherman-brand-navigation"/);
   assert.match(shell, /data-appearance=\{appearance\}/);
   assert.doesNotMatch(shell, /<BottomNavigation\b|navigationLabels/);
   assert.match(shell, /locale/);
