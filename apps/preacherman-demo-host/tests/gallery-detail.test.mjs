@@ -155,4 +155,36 @@ test('detail clears the R3F restored background and uses this workspace renderer
   assert.match(scene,/if \(isolateCompanion\) scene\.background = null/);
   assert.match(scene,/setClearAlpha\(environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
   assert.ok(read('vite.config.ts').includes('find: /^@preacherman\\/avatar-renderer$/, replacement: rendererSource("index.ts")'));
+  const viewport=fs.readFileSync(new URL('../../../packages/preacherman-avatar-renderer/src/InteractiveAvatarViewport.tsx',import.meta.url),'utf8');
+  assert.match(viewport,/setClearColor\(0x010409, environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
+});
+
+test('Cortana activation is persistent, while detail preview never equips on entry',()=>{
+  const app=read('src/App.tsx'),surface=read('src/surfaces/gallery/ActiveTheoryGallerySurface.tsx');
+  assert.match(surface,/detail.project === "secret-sky" \? "cortana" : null/);
+  assert.match(surface,/onPreviewModelChange\(active && detail.phase === "open" \? modelId : null\)/);
+  assert.match(app,/setPreferences\(\(current\) => \(\{ \.\.\.current, activeModelId: modelId \}\)\)/);
+  assert.match(app,/savePreferences\(preferences\)/);
+  assert.match(app,/galleryPreviewModelId \?\? activeModelId/);
+  assert.match(read('src/surfaces/gallery/GalleryDetailOverlay.tsx'),/activated=\{activeModelId === modelId\}/);
+});
+
+test('hold activation is cancellable and keyboard accessible with a permanently transparent outline',()=>{
+  const button=read('src/surfaces/gallery/GalleryActivateButton.tsx'),css=read('src/surfaces/gallery/active-theory-gallery-surface.css');
+  assert.match(button,/GALLERY_ACTIVATION_HOLD_MS = 1600/);
+  assert.match(button,/clearTimeout\(timer\)/);
+  for(const event of ['onPointerUp','onPointerLeave','onPointerCancel','onLostPointerCapture','onBlur']) assert.ok(button.includes(event+'={cancel}'));
+  assert.match(button,/onKeyDown/);assert.match(button,/onKeyUp/);assert.match(button,/visibilitychange/);
+  assert.match(button,/activated \? "Activated" : "Activate"/);
+  assert.match(button,/M102 1H173/);assert.match(button,/M102 1H31/);
+  assert.match(css,/\.gallery-detail__activate \{[^}]*background: transparent;/s);
+  assert.match(css,/\.gallery-detail__activate \{[^}]*font-family: var\(--demo-font-primary\);/s);
+  assert.match(css,/\.gallery-detail__back:hover \{[^}]*border: 0;[^}]*background: transparent;/s);
+  assert.match(css,/align-items: flex-end/);
+  assert.match(css,/prefers-reduced-motion/);
+});
+
+test('only the Cortana case-study label changes to Details, retaining its link and reveal',()=>{
+  const runtime=read('public/active-theory-gallery/gallery/assets/js/app.1780406240914.js');
+  assert.ok(runtime.includes('title:title==="Cortana"?"Details":"Medium Case Study",href:caseStudyURL,animated:!0,delay:800'));
 });

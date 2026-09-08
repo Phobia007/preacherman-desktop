@@ -113,7 +113,7 @@ export function InteractiveAvatarViewport({
             gl.info.autoReset = true;
             if (environment === "cinematic") configureHologramRenderer(gl, environment);
             else configureHologramRenderer(gl);
-            gl.setClearColor(0x010409, environment === "cinematic" ? 1 : 0);
+            gl.setClearColor(0x010409, environment === "cinematic" && !isolateCompanion ? 1 : 0);
           }}
           shadows={environment === "cinematic"}
         >

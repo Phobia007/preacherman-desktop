@@ -30,7 +30,7 @@ test("the saved model remains persistent while Gallery changes its camera framin
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /preachermanPanelSurface === "home" \|\| preachermanPanelSurface === "market"/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
-  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface \/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.match(stage, /pose="standby"/);
   assert.match(stage, /quality="high"/);

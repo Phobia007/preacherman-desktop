@@ -13,13 +13,13 @@ test("Task and Settings keep the Home scene while Gallery mounts its original sc
   ]);
 
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
-  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface \/>/);
+  assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s/);
   assert.equal((app.match(/<GallerySurface\b/g) ?? []).length, 1);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.doesNotMatch(app, /<PreachermanGameletPanel/);
-  assert.match(app, /const sceneModelId = activeModelId;/);
+  assert.match(app, /const sceneModelId = activeSurfaceType === "market" && galleryDetailOpen\s*\? galleryPreviewModelId \?\? activeModelId\s*: activeModelId;/);
   assert.match(app, /<CortanaModelStage[\s\S]*renderActive/);
-  assert.match(app, /sceneModelId && activeSurfaceType !== "market"/);
+  assert.match(app, /scene=\{sceneModelId \? \(/);
   assert.doesNotMatch(app, /sceneHidden=/);
   assert.doesNotMatch(shell, /activeSurfaceType === "market"[\s\S]*Math\.max/);
   assert.match(shell, /Math\.min\(window\.innerWidth \/ 1800, window\.innerHeight \/ 1000\)/);

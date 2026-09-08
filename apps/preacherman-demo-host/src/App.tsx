@@ -40,6 +40,7 @@ import {
   readPreferences,
   savePreferences,
   uiCopy,
+  type ModelId,
 } from "./preferences";
 import { VoiceSessionControl } from "./realtime/VoiceSessionControl";
 import { PreachermanExecutionFusionPanel } from "./preacherman-execution/PreachermanExecutionFusionPanel";
@@ -149,6 +150,10 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const [labView, setLabView] = useState("voice");
   const [galleryView, setGalleryView] = useState("characters");
   const [galleryDetailOpen, setGalleryDetailOpen] = useState(false);
+  const [galleryPreviewModelId, setGalleryPreviewModelId] = useState<ModelId | null>(null);
+  const activateGalleryModel = useCallback((modelId: ModelId) => {
+    setPreferences((current) => ({ ...current, activeModelId: modelId }));
+  }, []);
   const [testView, setTestView] = useState("diagnostics");
   const [requestedControl, setRequestedControl] = useState<string | null>(null);
   const handleSurfaceNavigate = useCallback((surfaceType: LocalSurfaceType) => {
@@ -259,7 +264,9 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const HomeSurface = adapter.resolve(manifest).component;
   const activeModelId = preferences.activeModelId;
   const isCompanionActive = activeModelId !== null;
-  const sceneModelId = activeModelId;
+  const sceneModelId = activeSurfaceType === "market" && galleryDetailOpen
+    ? galleryPreviewModelId ?? activeModelId
+    : activeModelId;
   const preachermanPanelSurface: LocalSurfaceType | null = route.kind === "surface"
     ? activeSurfaceType
     : route.kind === "screen" && (screen?.manifest?.surfaceId ?? manifest.surfaceId) === manifest.surfaceId
@@ -411,7 +418,13 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         data-active={activeSurfaceType === "market"}
         data-surface="market"
       >
-        <ActiveTheoryGallerySurface active={activeSurfaceType === "market"} onDetailChange={setGalleryDetailOpen} />
+        <ActiveTheoryGallerySurface
+          active={activeSurfaceType === "market"}
+          activeModelId={activeModelId}
+          onActivate={activateGalleryModel}
+          onDetailChange={setGalleryDetailOpen}
+          onPreviewModelChange={setGalleryPreviewModelId}
+        />
       </div>
       {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
       {activeSurfaceType !== "ledger" ? (

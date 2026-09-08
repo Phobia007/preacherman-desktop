@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import type { ModelId } from "../../preferences";
+import { GalleryActivateButton } from "./GalleryActivateButton";
 
 export interface GalleryDetailState {
   phase: "closed" | "open" | "closing";
@@ -16,14 +18,18 @@ export interface GalleryDetailBridge {
   geometry(): { left: number; top: number; width: number; height: number; backBottom: number; backHeight: number } | null;
 }
 
-export function GalleryDetailOverlay({ bridge, detail, portal, onBack }: {
+export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, activeModelId, onActivate }: {
   bridge: GalleryDetailBridge;
   detail: GalleryDetailState;
   portal: Element;
   onBack: () => void;
+  modelId: ModelId | null;
+  activeModelId: ModelId | null;
+  onActivate: (modelId: ModelId) => void;
 }) {
   const windowRef = useRef<HTMLDivElement>(null);
   const backRef = useRef<HTMLButtonElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mediaState, setMediaState] = useState("loading");
 
@@ -35,8 +41,9 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack }: {
         left: `${geometry.left}px`, top: `${geometry.top}px`,
         width: `${geometry.width}px`, height: `${geometry.height}px`,
       });
-      if (geometry && backRef.current) Object.assign(backRef.current.style, {
-        bottom: `${geometry.backBottom}px`, height: `${Math.max(44, geometry.backHeight)}px`,
+      if (geometry && actionsRef.current) Object.assign(actionsRef.current.style, {
+        bottom: `${geometry.backBottom}px`,
+        "--back-height": `${Math.max(44, geometry.backHeight)}px`,
       });
       frame = requestAnimationFrame(position);
     };
@@ -104,9 +111,18 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack }: {
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
         </button>
       </div> : null}
-      <button aria-label="Back to Gallery cards" className="gallery-detail__control gallery-detail__back" disabled={detail.phase !== "open"} onClick={onBack} ref={backRef} type="button">
-        <svg viewBox="0 0 32 24" aria-hidden="true"><path d="M27 12H5m8-8-8 8 8 8" /></svg>
-      </button>
+      <div className="gallery-detail__actions" ref={actionsRef}>
+        {modelId ? <GalleryActivateButton
+          key={detail.project}
+          modelId={modelId}
+          activated={activeModelId === modelId}
+          enabled={detail.phase === "open"}
+          onActivate={onActivate}
+        /> : null}
+        <button aria-label="Back to Gallery cards" className="gallery-detail__control gallery-detail__back" disabled={detail.phase !== "open"} onClick={onBack} ref={backRef} type="button">
+          <svg viewBox="0 0 32 24" aria-hidden="true"><path d="M27 12H5m8-8-8 8 8 8" /></svg>
+        </button>
+      </div>
     </div>, portal,
   );
 }
