@@ -119,10 +119,22 @@
       "reason": "Computed-style review found inherited iframe focus rules overriding the transparent controls in light appearance. Candidate was held while the user remained on verified A8E250 release. Specificity corrected in721610d and explicitly checked before final build/deployment.",
       "canonicalHostUnchanged": "A8E2504537B4D6F97CDAE8201CD0611B6CFD29F3F4779AC697CF3E0346E5B630",
       "sidecarUnchanged": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E"
+    },
+    {
+      "sourceCommit": "5f4bb7c025e5a65178bbba9ef6270f6d946a4fd4",
+      "sha256": "283849666D42C38DE860D83C761E4AADC50E9D7ECDBD913D3E3B1CA3F04CB39D",
+      "deployedAt": "2026-09-08T17:08:36.3098151+08:00",
+      "status": "temporarily-restored-for-baseline-comparison",
+      "reason": "Candidate passed timeline interactions but emitted an unlisted external-video CSP diagnostic. Paired desktop and sidecar were restored for direct old-version comparison. The exact same 01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/high.mp4 media-src violation was reproduced on the old executable; diagnostic is inherited, not introduced by timeline. Production source and security policy unchanged.",
+      "restoredAt": "2026-09-08T17:10:45.7693894+08:00",
+      "restoredHostSha256": "A0F77ADBF9F9AB4485EBA05742A2FF4D1B600800EC905479AD8707ECDBB0D5F0",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "candidateBackupDirectory": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-timeline-candidate-20260908",
+      "comparisonEvidence": "output/playwright/task-timeline-baseline-report.json"
     }
   ],
   "pendingCandidate": {
-    "status": "built-awaiting-user-restart-approval-and-native-verification",
+    "status": "approved-comparison-complete-awaiting-final-native-verification",
     "sourceTask": "task-all-horizontal-date-timeline",
     "sourceThread": "01a04c0c-fd42-7ca1-bb81-9ae558616e5f",
     "sourceCommit": "5f4bb7c025e5a65178bbba9ef6270f6d946a4fd4",
@@ -141,10 +153,10 @@
       "layoutScan": "no findings",
       "browser": "Passed both appearances, expand/collapse/keyboard, native-area vertical wheel scroll, original preview/entry/return, view-state retention, transient long-content probe, many-date horizontal clipping/empty previews, 1280 and 540 host viewports retaining incumbent scaled stage. No new console errors; known preview hydration warning only.",
       "productionBuild": "One incremental Tauri --no-bundle build; Vite 6.84s, Tauri 2m00s. Same verified sidecar reused.",
-      "native": "Not yet run; existing approved desktop kept open pending restart approval.",
+      "native": "First candidate native timeline interactions passed; an unlisted media CSP diagnostic caused a precautionary pair restoration. Exact same The Lookback video URL/CSP error reproduced on old A0F77ADB desktop. No production source, assets or security policy changed during comparison.",
       "evidence": "output/playwright/task-timeline-preview-report.json"
     },
     "dataBoundary": "Dates 7/8/9 September are display-only sample thirds for original authored cards. User task creation timestamps take precedence and were not rewritten. Test records exist only in disposed temporary browser contexts; no native records/messages changed.",
-    "canonicalDesktopUnchanged": true
+    "canonicalDesktopUnchanged": false
   }
 }
