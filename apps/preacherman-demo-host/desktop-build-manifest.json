@@ -1,104 +1,121 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-cortana-identity-png-20260908T234055+0800",
+  "buildId": "gallery-cortana-activation-20260909",
   "productVersion": "0.1.0",
-  "sourceTask": "gallery-first-card-cortana-name-microsoft-logo-and-english-description",
+  "sourceTask": "gallery-cortana-hold-activation-transparent-back-and-details",
   "sourceThread": "01a04c0c-fd42-7ca1-bb81-9ae558616e5f",
-  "sourceState": "Only first card identity and logo asset/path replaced; original fonts, styles, runtime, motion, shared video and other 30 cards retained.",
-  "sourceCommit": "6b34ac8ae15560dfd7d540e3a97d991960ce1725",
+  "sourceState": "Cortana detail only: transparent hold-to-activate, bare back arrow, Details label; persistent avatar selection with separate detail preview and remount alpha correction.",
+  "sourceCommit": "8ba72b6760a5349af5769deaedddfbfea71135f7",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-08T23:39:03.5319686+08:00",
-  "deployedAt": "2026-09-08T23:40:55.7612367+08:00",
-  "verifiedAt": "2026-09-08T23:46:11.5805747+08:00",
-  "sizeBytes": 579527680,
-  "sha256": "F43A3EB0E422D70BC19C4ADD79383D1996DB7AE07C01F793FEE83295828F28B4",
+  "builtAt": "2026-09-09T01:10:23.2500832+08:00",
+  "deployedAt": "2026-09-09T01:59:52.2519714+08:00",
+  "verifiedAt": "2026-09-09T02:05:16.5319000+08:00",
+  "sizeBytes": 579529216,
+  "sha256": "2F884C5A246B8CC83B421A85447A7239836FCE8CF7D7CD2F03679973ECD2C8A8",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-before-20260908/preacherman-demo-host.exe",
-  "backupSha256": "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
-  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-before-20260908/preacherman-service.exe",
+  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-activation-before-20260909/preacherman-demo-host.exe",
+  "backupSha256": "F43A3EB0E422D70BC19C4ADD79383D1996DB7AE07C01F793FEE83295828F28B4",
+  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-activation-before-20260909/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "4cbc1e6",
-  "previousVerificationCommit": "1d70436",
+  "rollbackBaselineCommit": "c64e14c",
+  "previousVerificationCommit": "c64e14c",
   "verification": {
-    "status": "passed-with-preexisting-task-cms-diagnostics",
+    "status": "passed-with-qualified-preexisting-template-diagnostics",
     "typescript": "passed",
-    "focusedTests": "25 passed; git diff --check passed. Impeccable scoped-refinement check preserved incumbent styling.",
-    "browserFlow": "Corrected base-relative PNG passed exact worker-decoded dimensions, four brand colors and alpha transparency, Cortana title/metadata/English copy, both appearances (1800x1000 and 1440x900), video mirror/dismiss/back and core navigation. Actual screenshots reviewed; no new errors.",
-    "sourceBoundary": "Only first CMS identity fields/logo asset and regression tests/docs changed. Other 30 records and first video/cover, slug, priority, uiColor, case-study link unchanged. Runtime code, CSS, fonts, shaders and animations byte-identical to previous verified source.",
-    "logo": {
-      "source": "https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-branding-in-apps",
-      "svgSource": "https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg",
-      "runtimePath": "../assets/gallery/microsoft-logo.png",
-      "pngSha256": "F3ADA9D23989AF349DFF1E775896B6CE5677D65DAE489F5479D344C73B8E21DB",
-      "width": 400,
-      "height": 200,
-      "background": "transparent",
-      "workerPixelsVerified": true
-    },
-    "evidence": [
-      "output/playwright/identity-png-preview-report.json",
-      "output/playwright/identity-png-native-report.json",
-      "output/playwright/identity-rollback-native-report.json",
-      "output/playwright/identity-final-resources.json",
-      "output/playwright/identity-png-native-dark-rail.png",
-      "output/playwright/identity-png-native-light-rail.png",
-      "output/playwright/identity-png-native-light-detail.png",
-      "output/playwright/identity-png-native-dark-background.png",
-      "output/playwright/identity-png-native-light-task.png",
-      "output/playwright/identity-png-native-light-market.png",
-      "output/playwright/identity-png-native-light-settings.png",
-      "output/playwright/identity-png-native-light-home.png"
-    ],
-    "nativePid": 31352,
-    "nativeStartedAt": "2026-09-08T23:44:24.0889350+08:00",
-    "nativeWindowHandle": 2229922,
-    "nativeFlow": "Canonical shortcut cold launch passed Home model readiness; actual first Gallery card click; Cortana title, 2003/Microsoft/Preacherman Avatar metadata and full translated description; actual worker PNG decoding at 400x200 with all four exact brand colors and transparent margin; video mirror/room within 19ms; front-window close leaves rear video advancing; explicit back clears model isolation. Both appearance modes and Home, Task, Gallery, Market/Ledger, Settings and Account navigation passed. Screenshots reviewed. Original preferences restored and shortcut relaunched normally without debugging flags.",
+    "focusedTests": "31 passed; git diff --check passed",
+    "browserFlow": "Both appearances passed real pointer/keyboard hold cancellation and completion, independent preview/equip state, reload persistence, transparent video room, Details and core routes.",
+    "nativeFlow": "Canonical shortcut cold launch Home model ready. Both themes: actual first-card click, video and mirror synchronization, foreground close keeps backdrop playing, Cortana-only preview without equipping, pointer/key release/exit/blur cancellation, complete hold applies Cortana, preference persists across reload, transparent renderer clear alpha0, bare back arrow, right-aligned transparent permanent-border capsule, Details label retained original link. Home, Task, Gallery, Market/Ledger, Settings and Account passed. Screenshots visually reviewed. Original preferences restored, then canonical shortcut relaunched normally with no debugging port.",
     "consoleReview": {
-      "baselineReport": "output/playwright/intro-native-report.json",
-      "report": "output/playwright/identity-png-native-report.json",
-      "qualifiedDiagnosticCount": 25,
-      "newErrors": [],
-      "explanation": "Only exact baseline diagnostics and the preexisting hydration diagnostic were accepted. No production code/CSP changed to suppress errors."
+      "rawGate": "Stopped on two previously unlisted external thumbnail URLs; raw failed report retained.",
+      "oldNativeEvidence": "activation-baseline-native-report.json",
+      "oldRuntimeExceptionReproduced": true,
+      "staticAttribution": {
+        "method": "Both the complete originating portfolio asset tree and Tauri security policy are byte-identical to the previously verified source. Only these two exact URLs from that frame are classified as inherited external-thumbnail CSP diagnostics; corresponding packaged textures exist. This is source-based attribution, not a claim that those exact URL messages were observed in the old native run.",
+        "sources": [
+          {
+            "path": "apps/preacherman-demo-host/public/gallery-v3/portfolio",
+            "baseline": "f92cedebe5d655388654a54373c7894f977ae0aa",
+            "candidate": "f92cedebe5d655388654a54373c7894f977ae0aa"
+          },
+          {
+            "path": "apps/preacherman-demo-host/src-tauri/tauri.conf.json",
+            "baseline": "4816190e099bfbc22f51ecf38935238b2405aeb6",
+            "candidate": "4816190e099bfbc22f51ecf38935238b2405aeb6"
+          }
+        ],
+        "assets": [
+          {
+            "url": "https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200",
+            "packagedFallback": "/gallery-v3/portfolio/textures/223669_1785656901-image-63.ktx2"
+          },
+          {
+            "url": "https://www.datocms-assets.com/223669/1786208283-betteroff-thumb.avif?auto=format&fit=max&w=1200",
+            "packagedFallback": "/gallery-v3/portfolio/textures/223669_1786208283-betteroff-thumb.ktx2"
+          }
+        ],
+        "diagnostics": [
+          "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+          "Connecting to 'https://www.datocms-assets.com/223669/1786208283-betteroff-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked."
+        ]
+      },
+      "firstAttemptManifestDiagnostic": "Observed once in activation-candidate-first-report.json; not reproduced in bounded old-version refresh comparison or final candidate run. Not allow-listed and no security policy/code was changed to suppress it.",
+      "newUnattributedErrors": []
     },
+    "nativePid": 32052,
+    "nativeStartedAt": "2026-09-09T02:04:46.4443328+08:00",
+    "nativeWindowHandle": 182847644,
     "resourceSample": {
-      "SampledAt": "2026-09-08T23:46:11.5805747+08:00",
-      "NativePid": 31352,
-      "StartedAt": "2026-09-08T23:44:24.0889350+08:00",
-      "WindowHandle": 2229922,
+      "SampledAt": "2026-09-09T02:05:16.5319000+08:00",
+      "NativePid": 32052,
+      "StartedAt": "2026-09-09T02:04:46.4443328+08:00",
+      "WindowHandle": 182847644,
       "Responding": true,
       "ProcessIds": [
-        31352,
-        27504,
-        28708,
-        32316,
-        28172,
-        22728,
-        9740,
-        30004,
-        32616,
-        30668,
-        5064
+        32052,
+        30868,
+        30088,
+        10792,
+        29640,
+        30796,
+        23012,
+        29732,
+        3752,
+        32308,
+        32076
       ],
-      "NormalizedCpuPercent": 6.24,
-      "WorkingSetMiB": 1884,
-      "GpuDedicatedBytes": 3232854016,
-      "FreeRamKiB": 17884976,
+      "NormalizedCpuPercent": 5.62,
+      "WorkingSetMiB": 2018,
+      "GpuDedicatedBytes": 3238187008,
+      "FreeRamKiB": 14113948,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 30004
+          "OwningProcess": 29732
         }
       ]
     },
-    "resourceReview": "Native normalized CPU 6.24%, working set 1884 MiB, dedicated GPU 3.233 GB, free RAM 17.885 million KiB; whole GPU 25%, VRAM 4400/16303 MiB. Responsive; no sustained abnormal saturation or remaining temporary processes.",
-    "cleanup": "Disposable preview browsers/contexts closed in finally; all test Node, Vite, Cargo/Rust/linker processes exited. Verification native window and owned sidecar closed by exact PID. Normal app and its own sidecar/WebView children remain; only service port 8787 is listening, and 1420/8788/9236 are free.",
-    "rollbackRecheck": "Paired previous verified release restored; cold-start comparison in progress."
+    "sourceBoundary": "Original templates, Microsoft logo, video and cover, navigation, fonts, routes and security policy preserved. Impeccable refinement followed existing typography and motion; only requested controls, model preview/equip separation and renderer remount alpha fix changed.",
+    "evidence": [
+      "output/playwright/activation-preview-report.json",
+      "output/playwright/activation-native-report.json",
+      "output/playwright/activation-native-qualified-report.json",
+      "output/playwright/activation-baseline-native-report.json",
+      "output/playwright/activation-manifest-baseline-report.json",
+      "output/playwright/activation-candidate-first-report.json",
+      "output/playwright/activation-final-resources.json",
+      "output/playwright/activation-native-dark-charging.png",
+      "output/playwright/activation-native-dark-activated.png",
+      "output/playwright/activation-native-light-activated.png",
+      "output/playwright/activation-native-light-task.png",
+      "output/playwright/activation-native-light-market.png",
+      "output/playwright/activation-native-light-settings.png"
+    ]
   },
   "releaseAttempts": [
     {
@@ -169,8 +186,9 @@
       "restoredHostSha256": "F43A3EB0E422D70BC19C4ADD79383D1996DB7AE07C01F793FEE83295828F28B4",
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
       "failedArtifactPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-activation-diagnostics-20260909/preacherman-demo-host.exe",
-      "comparisonEvidence": "output/playwright/activation-baseline-native-report.json"
+      "comparisonEvidence": "output/playwright/activation-baseline-native-report.json",
+      "comparisonConclusion": "Direct paired old-executable test reproduced the exact _this.initSync diagnostic. A separate bounded old-version reload comparison did not reproduce the Nuxt manifest diagnostic; it remains a strict failure in the final candidate test, not allow-listed. Same unchanged candidate redeployed at 2026-09-09T01:59:52.2519714+08:00. Final native interaction checks passed in both themes. Two additional remote-thumbnail CSP messages were attributed using identical legacy portfolio-tree and security-policy Git object hashes and existing packaged fallback textures; raw reports retained. Qualification evidence: output/playwright/activation-native-qualified-report.json."
     }
   ],
-  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-before-20260908/desktop-build-manifest.json"
+  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-activation-before-20260909/desktop-build-manifest.json"
 }
