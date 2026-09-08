@@ -1,159 +1,266 @@
 {
   "schemaVersion": 1,
-  "buildId": "navigation-presence-20260908T191550+0800",
+  "buildId": "menu-task-switch-20260908T194444+0800",
   "productVersion": "0.1.0",
-  "sourceTask": "navigation-stays-open-until-mouse-leaves-and-small-corner",
+  "sourceTask": "transparent-larger-hamburger-and-rapid-task-view-overlap-fix",
   "sourceThread": "01a04c0c-fd42-7ca1-bb81-9ae558616e5f",
-  "sourceState": "Keep the existing centered black overlay drawer open while navigating and while the mouse remains anywhere in its288px region. Retract with unchanged damping only on mouse leave or explicit/keyboard dismissal. Add only a subtle8px bottom-right corner; original layout, typography, hover glow, routes and model untouched.",
-  "sourceCommit": "821c26da7f4b7af623662eaadc12bc92f99c73bc",
+  "sourceState": "Transparent 48px menu hit target with 40px line SVG at the unchanged center. Exclusive Featured/All page ownership and disposed async-mount guards; authored entry and project-detail motion preserved.",
+  "sourceCommit": "5a2798500d3146fa2c6285767fcc973ae49e53b3",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-08T19:15:07.6939135+08:00",
-  "deployedAt": "2026-09-08T19:15:50.6423030+08:00",
-  "verifiedAt": "2026-09-08T19:20:02.8664277+08:00",
-  "sizeBytes": 554760192,
-  "sha256": "DC0AFCA8207A8CE69A6004EB290CB176B5C3718FE3DC7A5F70DBA2D47829DB67",
+  "builtAt": "2026-09-08T19:43:51.4196961+08:00",
+  "deployedAt": "2026-09-08T19:44:44.7216894+08:00",
+  "verifiedAt": "2026-09-08T19:53:12.9393222+08:00",
+  "sizeBytes": 554760704,
+  "sha256": "6C9F65051F589B5C277CD767730AD190576336B3297330B2A89B34899891C9E1",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/navigation-presence-before-20260908/preacherman-demo-host.exe",
-  "backupSha256": "3910F32F3EC737FB7BDCE80C52BFE2A7287EE06A39EB5F9FF44E1F9B6BD6EB7E",
-  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/navigation-presence-before-20260908/preacherman-service.exe",
+  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/menu-and-task-switch-before-20260908/preacherman-demo-host.exe",
+  "backupSha256": "DC0AFCA8207A8CE69A6004EB290CB176B5C3718FE3DC7A5F70DBA2D47829DB67",
+  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/menu-and-task-switch-before-20260908/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "cd02385574304f18a68f2726ef991fe215918c15",
-  "previousVerificationCommit": "cd02385574304f18a68f2726ef991fe215918c15",
+  "rollbackBaselineCommit": "3f871baf64417ddd430fba083bddb095f290534b",
+  "previousVerificationCommit": "3f871baf64417ddd430fba083bddb095f290534b",
   "verification": {
     "status": "passed-with-confirmed-preexisting-cms-diagnostics",
     "typescript": "passed",
-    "focusedTests": "63 passed: AppShell, theme, preferences/window, intro, Task timeline, Gallery v3/detail and Market import/profile lens. git diff --check passed.",
-    "sourceBoundary": "Four scoped source/test/doc files,34 additions and12 deletions. No edits to authored pages, stage scale, timeline, model, assets, API/backend or sidecar. Unrelated D:/preacherman worktree changes preserved.",
-    "implementation": "Destination selection no longer closes or resets the drawer. Pointer leave on the actual288px navigation region closes mouse-open state using the existing820ms cubic-bezier(.76,0,.16,1). The transparent full-stage backdrop is a sibling, not a child, so it cannot expand the leave boundary. Whole-panel pointer events keep gaps/blank space active while open. Touch pointer leave is ignored. Only bottom-right has semantic8px radius; other three corners remain0px.",
-    "preserved": "Overlay-only composition,288px width,x144 centered buttons, y500 centered group, 32px Clash Display,68px gaps, primary font, original charged-outline hover, top-to-bottom row reveal, responsive1800x1000 stage, existing destination mapping and all authored page content remain unchanged.",
-    "browserFlow": "One sequential disposable Edge run passed both appearances, all six consecutive selections while open, per-frame unchanged panel identity/open flag/x0/row opacity1, blank-space retention, inside x287/outside x290 boundary, damped partial close, no hover re-open, explicit toggle, Escape/focus return, keyboard selection, Tab-out, ignored touch leave,1280/540/2100 viewport bounds and reduced motion. Temporary white probes showed only bottom-right8px rounding; other corners0px. Browser/context closed in finally.",
-    "nativeFlow": "Canonical shortcut cold-launch Home model ready. In both appearances all six destinations stayed open throughout205–218 sampled frames per selection with unchanged DOM panel, transformx0 and fully visible rows. Blank panel regions retained open state; pointer x287 inside stays, x290 outside closes. At220ms after leave, native translation was-22.3948px(light)/-22.3763px(dark), then settled closed. Hover-back did not reopen. Keyboard/touch/Escape/toggle/Tab-out all passed. Menu errors=[] and newErrors=[].",
-    "appearance": "Impeccable local refinement preserved approved width, type, centering and motion while changing only persistence and one small corner. Both modes use the incumbent semantic black menu surface and text/focus tokens; inherited semantic radius8px verified in both. White-content, Task card, Gallery, Market, Home, Settings and Account screenshots visually checked. Temporary appearance values restored.",
-    "productionBuild": "One incremental npm run tauri -- build --no-bundle; Vite5.58s and Tauri2m13s. Reused release cache and unchanged verified sidecar; retained fully packaged UI/models/media/fonts. No installer, sidecar rebuild, external UI server, cache deletion or overlapping build.",
+    "focusedTests": "66 passed: AppShell, theme, preferences/window, intro, Task timeline/view transitions, Gallery v3/detail and Market import/profile lens. git diff --check passed.",
+    "sourceBoundary": "Nine scoped source/test/doc files,93 additions and14 deletions. Main authored bundle verified byte-for-byte against previous commit after removing exactly one import and reverting the scoped transition selector. No assets, shader, routes, tasks, providers, backend or sidecar changes. Unrelated D:/preacherman changes preserved.",
+    "implementation": "Hamburger: transparent background in default/hover/focus,40px authored SVG in48px hit target atx16/y6 (original centerx40/y30). No bitmap or filled square. Task: only / <-> /full uses synchronous leave completion and out-in page ownership, preventing old timeline/rail lifetimes from overlapping. Both views cancel disposed async mount work.",
+    "preserved": "Impeccable local refinement:288px black overlay drawer, centered menu names, typography, damped820ms transition, persistent-on-selection and mouse-leave dismissal retained. Original Task entry reveal, card-to-detail morph, video hover hit area, dates, independent columns, ruler gestures and scrolling damping remain.",
+    "baselineReproduction": "Prior Task runtime reproduced7098 overlapping frames across9289 sampled frames in eight rapid-switch runs. Existing one-second concurrent page transition left the HTML timeline above the WebGL card rail.",
+    "browserFlow": "Eight runs at60/180/420/600ms intervals in both appearances:9363 sampled frames,zero overlaps,zero exceptions.37 transparent/enlarged trigger checks across six routes including off-center hit target and panel retention. Timeline both-mode hover, independent scroll, bounds, ruler drag/keyboard, detail navigation,1280/540responsive and reduced motion passed.",
+    "nativeFlow": "Canonical shortcut cold launch completed Home local model and all core paths on first entry. Eight rapid-switch runs in both appearances:10015 sampled frames,zero overlaps,zero exceptions.37 menu checks passed including enlarged off-center click and unchanged retention/dismissal. Both-mode timeline date/layout, precise video hover, per-column scroll, ruler drag, keyboard Home and detail return passed.",
+    "appearance": "Native Gallery screenshots in light/dark visually confirmed three enlarged lines over scene with no black backing. Task rail/timeline, white detail sheet with overlaid menu, Home, Market/legacy Ledger, Settings and Account visually checked. Temporary appearance changes restored.",
+    "productionBuild": "Single incremental npm run tauri -- build --no-bundle, Vite5.27s/Tauri2m16s. Reused verified sidecar and release cache. Fully packaged UI/models/fonts/media; no installer, external asset server or cache deletion.",
+    "coreNavigation": "Home model ready; Task real nathan-riley/Preacherman detail; Gallery authored rotating cards and simple chat; Market/legacy Ledger image content and profile lens; Settings Execution Mode; Account. No first-entry reload/retry/timeout, missing content, white screen or loss of interaction.",
     "nativeRuntimeExceptions": 0,
     "newConsoleErrors": 0,
-    "consoleReview": "Native menu errors=[]; native core newErrors=[], failures=[] with2 exact inherited CMS/CSP diagnostics. Browser preview only known hydration warning and repeated exact initSync stack already reproduced on unchanged baseline in task-spacing-baseline-report.json. No new diagnostics or security-policy/runtime modifications.",
-    "dataBoundary": "No AI messages submitted, no test tasks created, no task content/timestamps/groups/covers or provider settings changed. White-background and per-frame DOM probes removed in finally.",
-    "evidence": [
-      "output/playwright/navigation-presence-preview-report.json",
-      "output/playwright/navigation-presence-native-report.json",
-      "output/playwright/navigation-presence-native-light-white-corner.png",
-      "output/playwright/navigation-presence-native-dark-market.png",
-      "output/playwright/navigation-presence-native-dark-gallery.png",
-      "output/playwright/navigation-presence-core-native-menu-over-task-card.png",
-      "output/playwright/navigation-presence-core-native-report.json",
-      "output/playwright/task-panel-controls.json"
+    "consoleReview": "Switch and menu errors=[] in preview and native. Native core/timeline only two exact previously recorded DatoCMS CSP/fetch diagnostics; newErrors=[] and core HTTP failures=[]. Preview timeline only inherited hydration diagnostic. No CSP/security changes.",
+    "windowControls": "Native maximize false→true→false, minimize=true and authored close passed;errors=[].",
+    "dataBoundary": "No AI messages sent, tasks created or task dates/covers/groups/provider settings changed. Native tests only ordinary navigation and temporary DOM scroll probes; probes removed in finally. Preview-only fixture was isolated in disposable browser context.",
+    "shortcut": "Canonical shortcut target/empty arguments re-resolved; source/deployed size,timestamp,SHA256 match. Test app27512 and its exact-owned sidecar31456 closed. Canonical shortcut reopened without remote debugging: app27192,sidecar29860(parent27192),window responding with handle920030.",
+    "resourceSamples": [
+      {
+        "SampledAt": "2026-09-08T19:51:50.1036483+08:00",
+        "ProcessIds": [
+          27192,
+          3876,
+          24568,
+          30432,
+          28112,
+          1512,
+          28120,
+          29860,
+          29652,
+          12076,
+          29380
+        ],
+        "NativePid": 27192,
+        "Responding": true,
+        "MainWindowHandle": 920030,
+        "NormalizedCpuPercent": 6.46,
+        "WorkingSetMiB": 1970,
+        "GpuDedicatedBytes": 5424492544,
+        "GpuSharedBytes": 84000768,
+        "Gpu3DPercent": 24.063257801373553,
+        "GpuVideoDecodePercent": 6.5287037452227885,
+        "FreeRamKiB": 17332188,
+        "Listeners": [
+          {
+            "LocalPort": 8787,
+            "OwningProcess": 29860
+          }
+        ],
+        "Processes": [
+          {
+            "ProcessId": 27192,
+            "ParentProcessId": 30028,
+            "CreationDate": "/Date(1788868256408)/",
+            "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe"
+          },
+          {
+            "ProcessId": 3876,
+            "ParentProcessId": 27192,
+            "CreationDate": "/Date(1788868256456)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 24568,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256478)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 30432,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256555)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 28112,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256557)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 1512,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256577)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 28120,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256634)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 29860,
+            "ParentProcessId": 27192,
+            "CreationDate": "/Date(1788868256708)/",
+            "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-service.exe"
+          },
+          {
+            "ProcessId": 29652,
+            "ParentProcessId": 29860,
+            "CreationDate": "/Date(1788868256714)/",
+            "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe"
+          },
+          {
+            "ProcessId": 12076,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868259987)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 29380,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868261326)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          }
+        ]
+      },
+      {
+        "SampledAt": "2026-09-08T19:53:12.9393222+08:00",
+        "ProcessIds": [
+          27192,
+          3876,
+          24568,
+          30432,
+          28112,
+          1512,
+          28120,
+          29860,
+          29652,
+          12076,
+          29380
+        ],
+        "NativePid": 27192,
+        "Responding": true,
+        "MainWindowHandle": 920030,
+        "NormalizedCpuPercent": 6.46,
+        "WorkingSetMiB": 1946,
+        "GpuDedicatedBytes": 5424410624,
+        "GpuSharedBytes": 51908608,
+        "Gpu3DPercent": 23.28058665527335,
+        "GpuVideoDecodePercent": 6.160507452405996,
+        "FreeRamKiB": 17363532,
+        "Listeners": [
+          {
+            "LocalPort": 8787,
+            "OwningProcess": 29860
+          }
+        ],
+        "Processes": [
+          {
+            "ProcessId": 27192,
+            "ParentProcessId": 30028,
+            "CreationDate": "/Date(1788868256408)/",
+            "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe"
+          },
+          {
+            "ProcessId": 3876,
+            "ParentProcessId": 27192,
+            "CreationDate": "/Date(1788868256456)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 24568,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256478)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 30432,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256555)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 28112,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256557)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 1512,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256577)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 28120,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868256634)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 29860,
+            "ParentProcessId": 27192,
+            "CreationDate": "/Date(1788868256708)/",
+            "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-service.exe"
+          },
+          {
+            "ProcessId": 29652,
+            "ParentProcessId": 29860,
+            "CreationDate": "/Date(1788868256714)/",
+            "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe"
+          },
+          {
+            "ProcessId": 12076,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868259987)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          },
+          {
+            "ProcessId": 29380,
+            "ParentProcessId": 3876,
+            "CreationDate": "/Date(1788868261326)/",
+            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
+          }
+        ]
+      }
     ],
-    "coreNavigation": "Home local model, Task authored rail and real nathan-riley white card, Gallery rotating cards/simple chat, Market/legacy Ledger image and profile lens, Settings/Execution Mode and Account passed first-entry interactions. Native menu overlays Task's white card correctly. All six route controls readable/enabled in both appearances. No missing content, white screen, timeout, reload or retry workaround.",
-    "windowControls": "Native maximize false→true→false, minimize=true and authored close dispatched; errors=[].",
-    "shortcut": "Canonical shortcut target/empty arguments re-resolved; deployed/source SHA256, timestamp and size match. Verified test app4752 and exact owned sidecar10436 closed. Shortcut reopened normally without debugging at19:19:20.601+08:00, app29364 Responding=true with MainWindowHandle14027374; sidecar31572 parent29364.",
-    "resourceSample": {
-      "SampledAt": "2026-09-08T19:20:02.8664277+08:00",
-      "ProcessIds": [
-        29364,
-        3276,
-        27248,
-        27328,
-        27788,
-        18724,
-        22048,
-        31572,
-        8448,
-        21776,
-        27152
-      ],
-      "NativePid": 29364,
-      "Responding": true,
-      "MainWindowHandle": 14027374,
-      "NormalizedCpuPercent": 5.45,
-      "WorkingSetMiB": 1882,
-      "GpuDedicatedBytes": 3251294208,
-      "GpuSharedBytes": 85467136,
-      "Gpu3DPercent": 23.028166621431616,
-      "GpuVideoDecodePercent": 7.138742813256675,
-      "FreeRamKiB": 17317668,
-      "Listeners": [
-        {
-          "LocalPort": 8787,
-          "OwningProcess": 31572
-        }
-      ],
-      "Processes": [
-        {
-          "ProcessId": 29364,
-          "ParentProcessId": 23984,
-          "CreationDate": "2026-09-08T19:19:20.601688+08:00",
-          "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe"
-        },
-        {
-          "ProcessId": 3276,
-          "ParentProcessId": 29364,
-          "CreationDate": "2026-09-08T19:19:20.651572+08:00",
-          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-        },
-        {
-          "ProcessId": 27248,
-          "ParentProcessId": 3276,
-          "CreationDate": "2026-09-08T19:19:20.663865+08:00",
-          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-        },
-        {
-          "ProcessId": 27328,
-          "ParentProcessId": 3276,
-          "CreationDate": "2026-09-08T19:19:20.739628+08:00",
-          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-        },
-        {
-          "ProcessId": 27788,
-          "ParentProcessId": 3276,
-          "CreationDate": "2026-09-08T19:19:20.741248+08:00",
-          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-        },
-        {
-          "ProcessId": 18724,
-          "ParentProcessId": 3276,
-          "CreationDate": "2026-09-08T19:19:20.7612+08:00",
-          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-        },
-        {
-          "ProcessId": 22048,
-          "ParentProcessId": 3276,
-          "CreationDate": "2026-09-08T19:19:20.818052+08:00",
-          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-        },
-        {
-          "ProcessId": 31572,
-          "ParentProcessId": 29364,
-          "CreationDate": "2026-09-08T19:19:20.893755+08:00",
-          "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-service.exe"
-        },
-        {
-          "ProcessId": 8448,
-          "ParentProcessId": 31572,
-          "CreationDate": "2026-09-08T19:19:20.898985+08:00",
-          "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe"
-        },
-        {
-          "ProcessId": 21776,
-          "ParentProcessId": 3276,
-          "CreationDate": "2026-09-08T19:19:24.091029+08:00",
-          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-        },
-        {
-          "ProcessId": 27152,
-          "ParentProcessId": 3276,
-          "CreationDate": "2026-09-08T19:19:25.636881+08:00",
-          "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-        }
-      ]
-    },
-    "resourceComparison": "Final CPU5.45%,1882MiB working set,3.25GB dedicated GPU,3D23.03%,decode7.14%, comparable to prior accepted CPU6.44%,2018MiB,3.23GB GPU,3D24.02%. No sustained abnormal utilization. Build sample total CPU29% and15.78GiB free RAM.",
-    "cleanup": "All test browsers/contexts closed in finally, temporary probes removed, Vite stopped via original terminal. Final audit found no remaining project Node/Python/Playwright/preview/Cargo/Rust/linker children. Only normal canonical app/WebView2 and sidecar remain; only8787 listening,1420/8788/9236 free. Services stopped only after exact path,parent PID and creation-time verification. Paired previous executable/service and manifest preserved for recovery."
+    "resourceComparison": "CPU stable6.46%,working set1970→1946MiB,GPU3D24.06→23.28%,decode6.53→6.16%. Dedicated GPU allocation5.42449→5.42441GB, higher than previous sample3.25GB but stable with ample capacity: NVIDIA total16303MiB,whole-system used6653MiB,utilization26%. No rising allocation trend, saturation or sustained abnormal CPU.17.36 millionKiB RAM free.",
+    "cleanup": "All disposable browsers/contexts closed in finally; native CDP disconnected; temporary probes removed. Vite stopped via original terminal before single production build. Final ownership audit found no task Node/Python/Playwright/Cargo/Rust/linker or preview children. Only normal canonical app/WebView2/sidecar remain; port8787 only,1420/8788/9236 free. Previous executable,sidecar and manifest retained as a verified rollback pair.",
+    "evidence": [
+      "output/playwright/task-switch-baseline-report.json",
+      "output/playwright/task-switch-preview-report.json",
+      "output/playwright/task-switch-native-report.json",
+      "output/playwright/hamburger-preview-report.json",
+      "output/playwright/hamburger-native-report.json",
+      "output/playwright/hamburger-native-dark-gallery.png",
+      "output/playwright/hamburger-native-light-gallery.png",
+      "output/playwright/task-switch-regression-native-report.json",
+      "output/playwright/task-switch-regression-native-light-layout.png",
+      "output/playwright/menu-task-core-native-report.json",
+      "output/playwright/menu-task-core-native-menu-over-task-card.png",
+      "output/playwright/task-panel-controls.json"
+    ]
   },
   "releaseAttempts": [
     {
@@ -202,5 +309,5 @@
       "comparisonConclusion": "Exact diagnostic inherited; old core navigation passed with no new errors or HTTP failures. Restoration recorded in ac91d33. Same unchanged candidate redeployed at 17:19:44 and final native checks passed."
     }
   ],
-  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/navigation-presence-before-20260908/desktop-build-manifest.json"
+  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/menu-and-task-switch-before-20260908/desktop-build-manifest.json"
 }
