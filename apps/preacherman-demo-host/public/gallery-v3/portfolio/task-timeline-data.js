@@ -13,7 +13,7 @@ export function taskTimelineLabel(day, includeYear = false) {
 // A low resting rhythm, rising around each date and around the pointer.
 export function taskTickHeight(dateDistance, pointerDistance = Infinity) {
   const rise = (distance, radius) => Math.pow(Math.max(0, 1 - Math.abs(distance) / radius), 2);
-  return 8 + Math.max(18 * rise(dateDistance, 88), 30 * rise(pointerDistance, 74));
+  return 4 + Math.max(9 * rise(dateDistance, 88), 15 * rise(pointerDistance, 74));
 }
 
 export function taskNameBounds(rect, column, viewport) {

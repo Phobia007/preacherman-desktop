@@ -44,12 +44,14 @@ test("date labels use calendar month abbreviations and correct English ordinals"
 });
 
 test("ruler ticks rise progressively around dates and the pointer without exceeding markers", () => {
-  assert.equal(taskTickHeight(1000), 8);
+  assert.equal(taskTickHeight(1000), 4);
   assert.ok(taskTickHeight(70) < taskTickHeight(30));
   assert.ok(taskTickHeight(30) < taskTickHeight(0));
   assert.ok(taskTickHeight(1000, 30) < taskTickHeight(1000, 0));
   assert.equal(taskTickHeight(20), taskTickHeight(-20));
-  assert.ok(taskTickHeight(0, 0) < 44);
+  assert.equal(taskTickHeight(0), 13);
+  assert.equal(taskTickHeight(0, 0), 19);
+  assert.ok(taskTickHeight(0, 0) < 22);
 });
 
 test("preview hit bounds are the single name clipped to its own column and viewport", () => {
@@ -62,7 +64,7 @@ test("preview hit bounds are the single name clipped to its own column and viewp
 
 test("timeline is bounded, scrollable, keyboard accessible and hides both scrollbars", () => {
   const css = read("task-timeline.css"), source = read("task-timeline.js");
-  assert.match(css, /inset: calc\(15.5vh - 4rem\) 10vw 15vh/);
+  assert.match(css, /inset: calc\(15.5vh - 4rem\) 0 15vh/);
   assert.match(css, /overflow-y: auto/);
   assert.match(css, /overflow-x: auto/);
   assert.match(css, /min-height: 0/);
@@ -83,7 +85,12 @@ test("timeline is bounded, scrollable, keyboard accessible and hides both scroll
   assert.match(source, /"aria-controls":/);
   assert.match(source, /onFocus: event => preview/);
   assert.match(source, /onWheel: wheel/);
-  assert.match(source, /column.scrollTop \+= event.deltaY/);
+  assert.match(source, /ruler.value\?\.contains\(event.target\)/);
+  assert.match(source, /moveScroll\(column, "scrollTop", event.deltaY \* unit \* .55\)/);
+  assert.doesNotMatch(source, /else moveHorizontal|column.scrollHeight > column.clientHeight/);
+  assert.match(source, /scrolling\?\.el !== el/);
+  assert.match(source, /Math.exp\(-Math.min\(now - last, 50\) \/ 190\)/);
+  assert.match(source, /scrolling.position \+= remaining/);
   assert.match(source, /view.columns.set/);
   assert.match(source, /setPointerCapture/);
   assert.match(source, /onPointercancel: rulerUp/);
@@ -95,6 +102,16 @@ test("timeline is bounded, scrollable, keyboard accessible and hides both scroll
   assert.match(source, /cancelAnimationFrame\(frame\)/);
   assert.match(source, /observer\?\.disconnect\(\)/);
   assert.doesNotMatch(source, /localStorage.setItem|sessionStorage.setItem/);
+});
+
+test("compact ruler and dates retain name size, larger gaps and full-width bounds", () => {
+  const css = read("task-timeline.css");
+  assert.match(css, /task-timeline__tick\s*\{[^}]*height: 22px/s);
+  assert.match(css, /task-timeline__date\s*\{[^}]*min-height: 44px[^}]*font-size: 1.2rem/s);
+  assert.match(css, /task-timeline__axis\s*\{[^}]*padding-bottom: 4rem/s);
+  assert.match(css, /task-timeline__names\s*\{[^}]*gap: 3rem/s);
+  assert.match(css, /task-timeline__name\s*\{[^}]*font-size: 2.5rem/s);
+  assert.doesNotMatch(css, /inset:.* (?:10|7)vw/);
 });
 
 test("timeline reuses the original rail and clips its hover bounds to visible names", () => {

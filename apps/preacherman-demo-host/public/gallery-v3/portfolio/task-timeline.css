@@ -11,7 +11,7 @@
 .task-timeline__viewport {
   position: absolute;
   /* Ruler baseline at 15.5vh: half the old gap to the brand wordmark. */
-  inset: calc(15.5vh - 4rem) 10vw 15vh;
+  inset: calc(15.5vh - 4rem) 0 15vh;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior: contain;
@@ -45,7 +45,7 @@
   position: absolute;
   bottom: 0;
   width: 1px;
-  height: 44px;
+  height: 22px;
   background: color-mix(in srgb, var(--demo-theme-brand-menu-focus) 52%, transparent);
   transform-origin: bottom;
   transition: transform 180ms cubic-bezier(.16,1,.3,1);
@@ -55,12 +55,12 @@
 .task-timeline__axis {
   flex: none;
   padding-top: 1.2rem;
-  padding-bottom: 2.4rem;
+  padding-bottom: 4rem;
 }
 .task-timeline__date {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: .6rem;
   width: fit-content;
   min-width: 5rem;
   min-height: 44px;
@@ -70,14 +70,14 @@
   background: transparent;
   color: var(--demo-theme-brand-menu-text);
   font: inherit;
-  font-size: 2.4rem;
+  font-size: 1.2rem;
   line-height: 1.2;
   letter-spacing: -.035em;
   cursor: pointer;
 }
 .task-timeline__date[aria-expanded="true"],
 .task-timeline__date:hover { color: var(--demo-theme-brand-menu-text-hover); }
-.task-timeline__arrow { width: 2rem; height: 2rem; transition: transform 280ms cubic-bezier(.16,1,.3,1); }
+.task-timeline__arrow { width: 1.2rem; height: 1.2rem; transition: transform 280ms cubic-bezier(.16,1,.3,1); }
 .task-timeline__body {
   flex: 1;
   min-height: 0;
@@ -95,7 +95,7 @@
 }
 .task-timeline__viewport::-webkit-scrollbar,
 .task-timeline__column::-webkit-scrollbar { display: none; }
-.task-timeline__names { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.8rem; }
+.task-timeline__names { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 3rem; }
 .task-timeline__names > li { min-width: 0; animation: task-timeline-enter 420ms cubic-bezier(.16,1,.3,1) var(--row-delay) both; }
 .task-timeline__name {
   display: block;
@@ -124,7 +124,7 @@
 .task-timeline__status[role="alert"] { color: var(--demo-theme-chat-error); }
 @keyframes task-timeline-enter { from { opacity: 0; transform: translateY(-1.2rem); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 649px) {
-  .task-timeline__viewport { inset: calc(15.5vh - 4rem) 7vw 16vh; }
+  .task-timeline__viewport { inset: calc(15.5vh - 4rem) 0 16vh; }
   .task-timeline__track { width: max(100%, calc(var(--date-count) * 27rem)); }
   .task-timeline__name { font-size: 2rem; }
 }

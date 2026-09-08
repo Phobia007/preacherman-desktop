@@ -24,7 +24,7 @@ export default {
     const authored = (data.value ?? []).filter(project => !project.preachermanTask).map(project => project.slug);
     const groups = computed(() => taskTimelineGroups(projects.value, records.value, authored));
     const open = ref(new Set(view.open ?? [])), markers = ref([]), rulerWidth = ref(0), rulerPointer = ref(null), dragging = ref(false);
-    let disposed = false, observer, frame = 0, scrollFrame = 0, scrollTarget = 0, flying = null, navigating = false;
+    let disposed = false, observer, frame = 0, scrollFrame = 0, scrolling = null, flying = null, navigating = false;
     let activeName = null, pointer = null, keyboardPreview = false, drag = null;
     const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const clearPreview = () => { activeName = null; keyboardPreview = false; };
@@ -63,6 +63,7 @@ export default {
       .filter(x => markers.value.every(marker => Math.abs(marker - x) > 4))
       .map(x => ({x, height: taskTickHeight(Math.min(...markers.value.map(marker => Math.abs(x - marker))), rulerPointer.value === null ? Infinity : Math.abs(x - rulerPointer.value))})));
     const toggle = async day => {
+      stopScroll();
       const next = new Set(open.value);
       next.has(day) ? next.delete(day) : next.add(day);
       open.value = next;
@@ -86,6 +87,7 @@ export default {
       event.preventDefault();
       if (navigating || !ready.value) return;
       navigating = true;
+      stopScroll();
       flying = await folio.text(event.currentTarget, {reveal: false});
       if (disposed) { folio.dropTexts(flying); return; }
       folio.selectTitle(flying, project.slug);
@@ -99,34 +101,41 @@ export default {
       view.x = horizontal.value?.scrollLeft ?? 0;
       clearPreview();
     };
-    const stopScroll = () => { cancelAnimationFrame(scrollFrame); scrollFrame = 0; };
-    const moveHorizontal = (delta, smooth = true) => {
-      const el = horizontal.value;
+    const stopScroll = () => { cancelAnimationFrame(scrollFrame); scrollFrame = 0; scrolling = null; };
+    const moveScroll = (el, property, delta, smooth = true) => {
       if (!el) return;
-      scrollTarget = Math.max(0, Math.min(el.scrollWidth - el.clientWidth, (scrollFrame ? scrollTarget : el.scrollLeft) + delta));
-      if (!smooth || reducedMotion()) { stopScroll(); el.scrollLeft = scrollTarget; return; }
+      // Changing columns stops the previous column's inertia; no shared page scroll.
+      if (scrolling?.el !== el || scrolling?.property !== property) stopScroll();
+      const maximum = property === "scrollLeft" ? el.scrollWidth - el.clientWidth : el.scrollHeight - el.clientHeight;
+      if (!scrolling) scrolling = {el, property, target: el[property], position: el[property]};
+      if ((scrolling.target - scrolling.position) * delta < 0) scrolling.target = scrolling.position;
+      scrolling.target = Math.max(0, Math.min(maximum, scrolling.target + delta));
+      if (!smooth || reducedMotion()) { el[property] = scrolling.target; stopScroll(); return; }
       if (scrollFrame) return;
-      let last = performance.now(), position = el.scrollLeft;
+      let last = performance.now();
       const step = now => {
-        const remaining = scrollTarget - position;
-        if (Math.abs(remaining) < 1) { el.scrollLeft = scrollTarget; scrollFrame = 0; return; }
-        position += remaining * (1 - Math.exp(-Math.min(now - last, 50) / 65));
-        el.scrollLeft = position;
+        const remaining = scrolling.target - scrolling.position;
+        if (Math.abs(remaining) < .5) { el[property] = scrolling.target; stopScroll(); return; }
+        // Keep the fractional position: DOM scroll offsets may be rounded by WebView2.
+        scrolling.position += remaining * (1 - Math.exp(-Math.min(now - last, 50) / 190));
+        el[property] = scrolling.position;
         last = now;
         scrollFrame = requestAnimationFrame(step);
       };
       scrollFrame = requestAnimationFrame(step);
     };
+    const moveHorizontal = delta => moveScroll(horizontal.value, "scrollLeft", delta);
     const wheel = event => {
       event.stopPropagation();
       event.preventDefault();
       if (drag) return;
       const column = event.target.closest?.(".task-timeline__column");
       const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? horizontal.value.clientHeight : 1;
-      if (!event.shiftKey && Math.abs(event.deltaY) >= Math.abs(event.deltaX) && column?.dataset.expanded === "true" && column.scrollHeight > column.clientHeight + 1) {
-        stopScroll();
-        column.scrollTop += event.deltaY * unit;
-      } else moveHorizontal((Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY) * unit);
+      if (ruler.value?.contains(event.target)) {
+        moveHorizontal((Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY) * unit * .55);
+      } else if (column?.dataset.expanded === "true") {
+        moveScroll(column, "scrollTop", event.deltaY * unit * .55);
+      } else stopScroll(); // Short/closed columns and dates never turn the wheel sideways.
     };
     const rulerMove = event => {
       rulerPointer.value = event.clientX - track.value.getBoundingClientRect().left;
@@ -212,7 +221,7 @@ export default {
           h("div", {class: "task-timeline__ruler", ref: ruler, role: "group", tabindex: 0, "aria-label": "Timeline — drag or use arrow keys to scroll dates", "data-dragging": dragging.value,
             onPointerdown: rulerDown, onPointermove: rulerMove, onPointerup: rulerUp, onPointercancel: rulerUp, onLostpointercapture: rulerUp, onPointerleave: () => { if (!drag) rulerPointer.value = null; }, onKeydown: rulerKey,
           }, [
-            ...ticks.value.map(tick => h("i", {key: tick.x, class: "task-timeline__tick", "aria-hidden": "true", style: {left: tick.x + "px", transform: "scaleY(" + tick.height / 44 + ")"}})),
+            ...ticks.value.map(tick => h("i", {key: tick.x, class: "task-timeline__tick", "aria-hidden": "true", style: {left: tick.x + "px", transform: "scaleY(" + tick.height / 22 + ")"}})),
             ...markers.value.map((x, index) => h("i", {key: "date-" + index, class: "task-timeline__tick task-timeline__tick--date", "aria-hidden": "true", style: {left: x + "px"}})),
           ]),
           h("div", {class: "task-timeline__axis"}, groups.value.map(group => h("button", {
