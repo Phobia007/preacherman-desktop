@@ -145,10 +145,10 @@ test("both floating task controls keep transparent centers and their existing ou
   assert.match(hover, /transform: scale\(1\.06\)/);
   assert.doesNotMatch(hover, /background/);
   assert.match(deletion, /class:"task-create__button task-delete__button"/);
-  assert.match(css, /\.task-create__button:focus-visible \{\s*outline: 2px solid var\(--demo-theme-brand-menu-focus\)/);
+  assert.match(css, /\.task-create__button:focus-visible \{\s*outline: 2px solid var\(--demo-theme-brand-menu-focus\) !important/);
   const deleteCss = fs.readFileSync(new URL("task-delete-control.css", root), "utf8");
   assert.match(deleteCss, /\.task-delete__button\[aria-pressed="true"\] \{ border-color: var\(--demo-theme-brand-menu-focus\)/);
-  assert.match(deleteCss, /\.task-delete__button:focus-visible \{ outline-color: var\(--demo-theme-brand-menu-focus\)/);
+  assert.match(deleteCss, /\.task-delete \.task-delete__button:focus-visible \{ outline-color: var\(--demo-theme-brand-menu-focus\)/);
 });
 
 test("task creation reuses the authored profile lens and owns dismiss/focus cleanup", () => {
