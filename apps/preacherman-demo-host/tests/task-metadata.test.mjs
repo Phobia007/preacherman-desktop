@@ -133,6 +133,24 @@ test("floating plus requests only the empty dialog without creating or navigatin
   assert.equal(render().children[0].props["aria-haspopup"],"dialog");
 });
 
+test("both floating task controls keep transparent centers and their existing outlines and motion", () => {
+  const css = fs.readFileSync(new URL("task-metadata.css", root), "utf8");
+  const control = css.match(/\.task-create__button \{([^}]+)\}/)[1];
+  const hover = css.match(/\.task-create__button:hover \{([^}]+)\}/)[1];
+  const deletion = fs.readFileSync(new URL("task-delete-control.js", root), "utf8");
+  assert.match(control, /background: transparent;/);
+  assert.match(control, /color: var\(--demo-theme-brand-menu-text-hover\)/);
+  assert.match(control, /border: 1px solid color-mix\(in srgb, currentColor 28%, transparent\)/);
+  assert.match(control, /border-radius: 50%/);
+  assert.match(hover, /transform: scale\(1\.06\)/);
+  assert.doesNotMatch(hover, /background/);
+  assert.match(deletion, /class:"task-create__button task-delete__button"/);
+  assert.match(css, /\.task-create__button:focus-visible \{\s*outline: 2px solid var\(--demo-theme-brand-menu-focus\)/);
+  const deleteCss = fs.readFileSync(new URL("task-delete-control.css", root), "utf8");
+  assert.match(deleteCss, /\.task-delete__button\[aria-pressed="true"\] \{ border-color: var\(--demo-theme-brand-menu-focus\)/);
+  assert.match(deleteCss, /\.task-delete__button:focus-visible \{ outline-color: var\(--demo-theme-brand-menu-focus\)/);
+});
+
 test("task creation reuses the authored profile lens and owns dismiss/focus cleanup", () => {
   const runtime = fs.readFileSync(new URL("_nuxt/D9b8F35K.js", root), "utf8");
   const dialog = fs.readFileSync(new URL("task-create-dialog.js", root), "utf8");

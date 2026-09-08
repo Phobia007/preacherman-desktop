@@ -12,7 +12,7 @@
 }
 .task-delete::backdrop { background: transparent; pointer-events: none; }
 .task-delete__button { font: inherit; font-size: 1.2rem; }
-.task-delete__button[aria-pressed="true"] { border-color: var(--demo-theme-chat-focus); }
+.task-delete__button[aria-pressed="true"] { border-color: var(--demo-theme-brand-menu-focus); }
 .task-delete__status { position: absolute; top: calc(100% + 1.4rem); left: 0; width: 18rem; font-size: 1.2rem; line-height: 1.5; overflow-wrap: anywhere; }
 .task-delete__status:not(:empty) { padding: 1.2rem 1.6rem; border-radius: 2rem; background: var(--demo-theme-chat-composer); }
 .task-delete__status p { margin: 0 0 .8rem; }
@@ -48,6 +48,7 @@
 .task-delete-dialog__actions button:not(:disabled):hover { background: var(--demo-theme-chat-hover); transform: translateY(-2px); }
 .task-delete-dialog__actions button:disabled { color: var(--demo-theme-chat-disabled); cursor: wait; }
 .task-delete :is(button, dialog):focus-visible { outline: 2px solid var(--demo-theme-chat-focus) !important; outline-offset: 4px; }
+.task-delete__button:focus-visible { outline-color: var(--demo-theme-brand-menu-focus) !important; }
 .task-delete-dialog ::selection { background: var(--demo-theme-chat-text); color: var(--demo-theme-chat-composer); }
 @keyframes task-delete-confirm-in { from { opacity: .65; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
 @media (max-width: 649px) { .task-delete { left: 1.2rem; top: calc(50% - 2.4rem); } .task-delete__status { width: 13rem; } .task-delete-dialog { padding: 2.4rem; } }
