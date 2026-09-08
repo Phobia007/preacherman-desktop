@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="-10.5 0 42 21">
+  <title>Microsoft</title>
+  <!-- Official Microsoft Learn symbol, centered in the existing 2:1 Gallery logo slot without stretching. -->
+  <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+  <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+  <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+  <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+</svg>

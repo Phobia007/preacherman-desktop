@@ -1,6 +1,6 @@
 # Gallery first-card media
 
-The first Active Theory Gallery card (`secret-sky`, priority 0) now uses the supplied Cortana introduction. Only its media changes; names, descriptions, card ordering, model selection, shaders and transitions are unchanged.
+The first Active Theory Gallery card (`secret-sky`, priority 0) uses the supplied Cortana introduction. Its display name and description now identify Cortana; the internal slug, ordering, model selection, shaders and transitions are unchanged.
 
 - Source video: `E:/50/8月16日(1)/8月16日(1).mp4` (HEVC, 7680×4320, 120 fps, 77.670998 seconds). The original is not modified.
 - Packaged playback copy: `apps/preacherman-demo-host/public/assets/gallery/cortana-intro.mp4` (H.264, 1920×1080, 30 fps, CRF 20, original AAC stream, faststart; full original duration).
@@ -13,3 +13,13 @@ The CMS entry owns both local media paths. The rail thumbnail uses that cover; t
 The media are packaged into Tauri, with no runtime dependency on the E: drive or a local UI HTTP server. Model preview/activation behavior is outside this change.
 
 Verification: `tests/gallery-detail.test.mjs`, `tests/gallery-v3.test.mjs`, `tests/app-shell.test.mjs`, type checking, and sequential preview/native checks for both appearances. Desktop deployment evidence belongs in `desktop-build-manifest.json`.
+
+## Cortana identity and logo
+
+- Display name: Cortana (both the rotating card and detail).
+- Detail metadata: 2003 / Microsoft / Preacherman Avatar. The year is the user's supplied value, not a claim about Halo's release date.
+- Description: Cortana is from the Halo series. An advanced AI created from Dr. Catherine Halsey's neural architecture, she was initially tasked with system infiltration, intelligence analysis, and tactical support.
+- Official symbol source: [Microsoft Learn branding assets](https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-branding-in-apps), [original SVG](https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg).
+- Packaged asset: `apps/preacherman-demo-host/public/assets/gallery/microsoft-logo.svg`. The four official rectangles and colors are unchanged; a transparent 2:1 canvas centers the square symbol in the incumbent 400×200 logo slot without stretching or a backing panel.
+
+The existing title sizing, font, uppercase presentation, line wrapping, logo material, reveal animation and detail positioning remain in the authored runtime, unchanged. Only first-record content and the logo asset change. The previous case-study link and the other 30 cards are outside this request and are retained. No external logo request is needed at runtime.
