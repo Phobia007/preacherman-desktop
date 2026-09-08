@@ -120,7 +120,7 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, 
           onActivate={onActivate}
         /> : null}
         <button aria-label="Back to Gallery cards" className="gallery-detail__control gallery-detail__back" disabled={detail.phase !== "open"} onClick={onBack} ref={backRef} type="button">
-          <svg viewBox="0 0 32 24" aria-hidden="true"><path d="M27 12H5m8-8-8 8 8 8" /></svg>
+          <svg viewBox={detail.project === "secret-sky" ? "0 0 48 24" : "0 0 32 24"} aria-hidden="true"><path d={detail.project === "secret-sky" ? "M43 12H5m8-8-8 8 8 8" : "M27 12H5m8-8-8 8 8 8"} /></svg>
         </button>
       </div>
     </div>, portal,

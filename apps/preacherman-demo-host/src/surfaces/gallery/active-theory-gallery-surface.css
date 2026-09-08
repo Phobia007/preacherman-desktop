@@ -119,21 +119,22 @@
   transform: none;
 }
 .gallery-detail__back svg { width: 32px; transition: transform 520ms cubic-bezier(.16, 1, .3, 1); }
+.gallery-detail[data-project="secret-sky"] .gallery-detail__back svg { width: 48px; }
 .gallery-detail[data-project="secret-sky"] .gallery-detail__back:hover svg { transform: translateX(-4px); }
 .gallery-detail__activate {
   position: relative;
   box-sizing: border-box;
   display: grid;
   place-items: center;
-  width: 204px;
-  height: 62px;
+  width: 163.2px;
+  height: 49.6px;
   padding: 0 24px;
   border: 1px solid var(--demo-theme-gallery-detail-control-border);
   border-radius: 999px;
   color: var(--demo-theme-gallery-detail-control-text);
   background: transparent;
   font-family: var(--demo-font-primary);
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 300;
   line-height: 1.15;
   letter-spacing: .018em;
@@ -152,7 +153,7 @@
 .gallery-detail__activate:hover .gallery-detail__activate-label {
   animation: gallery-activate-word 680ms cubic-bezier(.65, 0, .15, 1) forwards;
 }
-.gallery-detail__charge { position: absolute; inset: -1px; width: 204px; height: 62px; pointer-events: none; overflow: visible; }
+.gallery-detail__charge { position: absolute; inset: -1px; width: 163.2px; height: 49.6px; pointer-events: none; overflow: visible; }
 .gallery-detail__charge-pulse {
   stroke: var(--demo-theme-gallery-detail-control-text);
   stroke-width: 2;

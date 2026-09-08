@@ -72,7 +72,7 @@ test('first card shares Cortana identity and translated copy without changing it
   const projects=JSON.parse(read('public/active-theory-gallery/gallery/external/storage.googleapis.com/activetheory-v6.appspot.com/cms/projects-dev.json'));
   const first=projects.find(p=>p.slug==='secret-sky');
   assert.equal(first.name,'Cortana');
-  assert.equal(first.clientName,'Microsoft');
+  assert.equal(first.clientName,'HALO 4');
   assert.equal(new Date(first.completionDate).getUTCFullYear(),2003);
   assert.equal(first.tags,'Preacherman Avatar');
   assert.equal(first.description,"Cortana is from the Halo series. An advanced AI created from Dr. Catherine Halsey's neural architecture, she was initially tasked with system infiltration, intelligence analysis, and tactical support.");
@@ -137,6 +137,9 @@ test('new controls are theme semantic and keyboard accessible in both appearance
     assert.match(css,new RegExp('var\\(--demo-theme-'+token+'\\)'));
     assert.ok(shell.split('--demo-theme-'+token+':').length>=3,token+' supplied for both themes');
   }
+  assert.match(css,/width: 163\.2px;[\s\S]*height: 49\.6px;/);
+  assert.match(css,/font-size: 22px;/);
+  assert.match(read('src/surfaces/gallery/GalleryDetailOverlay.tsx'),/M43 12H5m8-8-8 8 8 8/);
   assert.match(css,/:focus-visible/);assert.match(css,/:disabled/);assert.match(css,/:hover/);assert.match(css,/prefers-reduced-motion/);
   assert.match(shell,/data-gallery-detail="true"[^}]+mix-blend-mode: normal/s);
   assert.match(read('src/App.tsx'),/isolateCompanion=\{activeSurfaceType === "market" && galleryDetailOpen\}/);
