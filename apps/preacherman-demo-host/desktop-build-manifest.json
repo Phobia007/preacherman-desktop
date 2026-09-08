@@ -1,195 +1,103 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-first-video-20260908T224259+0800",
+  "buildId": "gallery-cortana-identity-png-20260908T234055+0800",
   "productVersion": "0.1.0",
-  "sourceTask": "gallery-first-card-cortana-introduction-video-and-cover",
+  "sourceTask": "gallery-first-card-cortana-name-microsoft-logo-and-english-description",
   "sourceThread": "01a04c0c-fd42-7ca1-bb81-9ae558616e5f",
-  "sourceState": "Only first Gallery card media and loading poster replaced; shared decoder, room reflections, original text, model selection and motion retained.",
-  "sourceCommit": "0ffc2cb0f8e3c4d7708d84041e24afa4d4907b4b",
+  "sourceState": "Only first card identity and logo asset/path replaced; original fonts, styles, runtime, motion, shared video and other 30 cards retained.",
+  "sourceCommit": "6b34ac8ae15560dfd7d540e3a97d991960ce1725",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-08T22:40:32.3215285+08:00",
-  "deployedAt": "2026-09-08T23:26:03.7295446+08:00",
-  "verifiedAt": "2026-09-08T15:29:38.703Z",
-  "sizeBytes": 579525120,
-  "sha256": "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
+  "builtAt": "2026-09-08T23:39:03.5319686+08:00",
+  "deployedAt": "2026-09-08T23:40:55.7612367+08:00",
+  "verifiedAt": "2026-09-08T23:46:11.5805747+08:00",
+  "sizeBytes": 579527680,
+  "sha256": "F43A3EB0E422D70BC19C4ADD79383D1996DB7AE07C01F793FEE83295828F28B4",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/first-gallery-video-before-20260908/preacherman-demo-host.exe",
-  "backupSha256": "6C9F65051F589B5C277CD767730AD190576336B3297330B2A89B34899891C9E1",
-  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/first-gallery-video-before-20260908/preacherman-service.exe",
+  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-before-20260908/preacherman-demo-host.exe",
+  "backupSha256": "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
+  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-before-20260908/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "2bba6a1aa6295747d2baee1eb60baa653eeffb49",
-  "previousVerificationCommit": "2bba6a1aa6295747d2baee1eb60baa653eeffb49",
+  "rollbackBaselineCommit": "4cbc1e6",
+  "previousVerificationCommit": "1d70436",
   "verification": {
-    "status": "passed-with-source-confirmed-preexisting-task-cms-diagnostics",
+    "status": "passed-with-preexisting-task-cms-diagnostics",
     "typescript": "passed",
-    "focusedTests": "24 passed; git diff --check passed; Impeccable detector returned no findings.",
-    "browserFlow": "Both appearances passed actual card click, shared video synchronization, front-window dismissal with continuing rear playback, back, and core navigation. Only inherited hydration diagnostic; zero new exceptions.",
-    "media": {
-      "videoBytes": 24451664,
-      "videoSha256": "FE4DFA6198E24FAA80C19173DD60CC0148DE76C9F50DEC104F45E82DD23D9004",
-      "coverSha256": "697729D943269F922928E4DD3F8EA6B082E505F64A1C38465A25B6B2243E6E0B",
-      "width": 1920,
-      "height": 1080,
-      "fps": 30,
-      "durationSeconds": 77.670998,
-      "sourcePreserved": true,
-      "coverByteIdentical": true
+    "focusedTests": "25 passed; git diff --check passed. Impeccable scoped-refinement check preserved incumbent styling.",
+    "browserFlow": "Corrected base-relative PNG passed exact worker-decoded dimensions, four brand colors and alpha transparency, Cortana title/metadata/English copy, both appearances (1800x1000 and 1440x900), video mirror/dismiss/back and core navigation. Actual screenshots reviewed; no new errors.",
+    "sourceBoundary": "Only first CMS identity fields/logo asset and regression tests/docs changed. Other 30 records and first video/cover, slug, priority, uiColor, case-study link unchanged. Runtime code, CSS, fonts, shaders and animations byte-identical to previous verified source.",
+    "logo": {
+      "source": "https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-branding-in-apps",
+      "svgSource": "https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg",
+      "runtimePath": "../assets/gallery/microsoft-logo.png",
+      "pngSha256": "F3ADA9D23989AF349DFF1E775896B6CE5677D65DAE489F5479D344C73B8E21DB",
+      "width": 400,
+      "height": 200,
+      "background": "transparent",
+      "workerPixelsVerified": true
     },
-    "nativePid": 10476,
-    "nativeStartedAt": "2026-09-08T22:48:35.387372+08:00",
-    "nativeWindowHandle": 1509046,
-    "nativeFlow": "Canonical shortcut cold-launch; first Gallery card physically clicked. Packaged http://tauri.localhost video 1920x1080/30fps/77.670998s advances; mirror and room are within 33ms; close leaves rear video playing; explicit back clears isolation. Both appearances passed. Home model ready, Task complete, Market content, Settings ready and Account retained; screenshots reviewed. Original theme preference restored, debug window stopped, shortcut launched again without debugging flags.",
-    "sourceBoundary": "Only first CMS record video URL, thumbnail, filename and byte size change; other 30 records, labels, model activation, runtime shaders, card motion and Task assets unchanged. Cover is byte-identical to user JPG; source movie is untouched. Impeccable refinement preserved the existing visual world.",
+    "evidence": [
+      "output/playwright/identity-png-preview-report.json",
+      "output/playwright/identity-png-native-report.json",
+      "output/playwright/identity-rollback-native-report.json",
+      "output/playwright/identity-final-resources.json",
+      "output/playwright/identity-png-native-dark-rail.png",
+      "output/playwright/identity-png-native-light-rail.png",
+      "output/playwright/identity-png-native-light-detail.png",
+      "output/playwright/identity-png-native-dark-background.png",
+      "output/playwright/identity-png-native-light-task.png",
+      "output/playwright/identity-png-native-light-market.png",
+      "output/playwright/identity-png-native-light-settings.png",
+      "output/playwright/identity-png-native-light-home.png"
+    ],
+    "nativePid": 31352,
+    "nativeStartedAt": "2026-09-08T23:44:24.0889350+08:00",
+    "nativeWindowHandle": 2229922,
+    "nativeFlow": "Canonical shortcut cold launch passed Home model readiness; actual first Gallery card click; Cortana title, 2003/Microsoft/Preacherman Avatar metadata and full translated description; actual worker PNG decoding at 400x200 with all four exact brand colors and transparent margin; video mirror/room within 19ms; front-window close leaves rear video advancing; explicit back clears model isolation. Both appearance modes and Home, Task, Gallery, Market/Ledger, Settings and Account navigation passed. Screenshots reviewed. Original preferences restored and shortcut relaunched normally without debugging flags.",
     "consoleReview": {
-      "status": "passed-with-source-confirmed-preexisting-task-cms-diagnostics",
-      "rawReport": "intro-native-report.json",
-      "explanation": "All native Gallery and core route assertions passed in both appearances. The final generic console assertion failed because its allowlist omitted existing Task CMS URLs. Every additional URL was found in the previous verified commit's Task assets; git diff confirms the entire Task portfolio and Tauri CSP configuration are unchanged. No production code or CSP was changed to suppress diagnostics.",
-      "baselineCommit": "2bba6a1aa6295747d2baee1eb60baa653eeffb49",
+      "baselineReport": "output/playwright/intro-native-report.json",
+      "report": "output/playwright/identity-png-native-report.json",
+      "qualifiedDiagnosticCount": 25,
       "newErrors": [],
-      "qualifiedDiagnosticCount": 24,
-      "evidence": [
-        {
-          "id": "1786371616-face",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/site.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        },
-        {
-          "id": "1786432901-dlc-thumbnail",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        },
-        {
-          "id": "9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        },
-        {
-          "id": "graphql.datocms.com",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_nuxt/D9b8F35K.js",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/projects/book-of-happiness/index.html",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/projects/casa-di-solare/index.html"
-          ]
-        },
-        {
-          "id": "e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        },
-        {
-          "id": "X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        },
-        {
-          "id": "BV6q01JxClCQwHfNI2sVS76jGjg5isqkq",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        },
-        {
-          "id": "wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        },
-        {
-          "id": "Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        },
-        {
-          "id": "F7soo79aHLgeYDtjug6X599kMSZoBja4",
-          "existsInBaseline": true,
-          "files": [
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
-            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
-          ]
-        }
-      ]
+      "explanation": "Only exact baseline diagnostics and the preexisting hydration diagnostic were accepted. No production code/CSP changed to suppress errors."
     },
     "resourceSample": {
-      "SampledAt": "2026-09-08T22:49:38.3872385+08:00",
-      "NativePid": 10476,
+      "SampledAt": "2026-09-08T23:46:11.5805747+08:00",
+      "NativePid": 31352,
+      "StartedAt": "2026-09-08T23:44:24.0889350+08:00",
+      "WindowHandle": 2229922,
       "Responding": true,
       "ProcessIds": [
-        10476,
-        9932,
-        9480,
-        30780,
-        9976,
-        9120,
-        30160,
-        29904,
-        5732,
-        11356,
-        6708
+        31352,
+        27504,
+        28708,
+        32316,
+        28172,
+        22728,
+        9740,
+        30004,
+        32616,
+        30668,
+        5064
       ],
-      "NormalizedCpuPercent": 4.84,
-      "WorkingSetMiB": 2039,
-      "GpuDedicatedBytes": 5414084608,
-      "FreeRamKiB": 17729780,
+      "NormalizedCpuPercent": 6.24,
+      "WorkingSetMiB": 1884,
+      "GpuDedicatedBytes": 3232854016,
+      "FreeRamKiB": 17884976,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 9480
+          "OwningProcess": 30004
         }
       ]
     },
-    "resourceReview": "Normal app CPU 4.84%, working set 2039 MiB, dedicated GPU 5.414 GB (prior verified 5.424 GB). Whole-system GPU 24%, 6502/16303 MiB VRAM. 17.73 million KiB RAM free. No sustained abnormal CPU or resource growth observed.",
-    "cleanup": "All disposable preview contexts/browsers closed in finally. Vite, FFmpeg, installer attempt, Cargo/Rust and QA Node processes exited. Native CDP disconnected and debug-enabled window closed; original sidecar orphan was identity-checked and stopped by exact PID. Final normal shortcut app and its sidecar/WebView children remain, only port 8787; 1420/8788/9236 free.",
-    "skillUpdate": "User authorized npx impeccable update; command reported no installed skill folder and exited 1. No reinstall or skill modification performed.",
-    "evidence": [
-      "output/playwright/intro-preview-report.json",
-      "output/playwright/intro-native-report.json",
-      "output/playwright/intro-native-console-review.json",
-      "output/playwright/intro-native-dark-rail.png",
-      "output/playwright/intro-native-dark-detail.png",
-      "output/playwright/intro-native-dark-background.png",
-      "output/playwright/intro-native-light-detail.png",
-      "output/playwright/intro-native-light-task.png",
-      "output/playwright/intro-native-light-market.png",
-      "output/playwright/intro-native-light-settings.png",
-      "output/playwright/intro-native-light-home.png"
-    ]
+    "resourceReview": "Native normalized CPU 6.24%, working set 1884 MiB, dedicated GPU 3.233 GB, free RAM 17.885 million KiB; whole GPU 25%, VRAM 4400/16303 MiB. Responsive; no sustained abnormal saturation or remaining temporary processes.",
+    "cleanup": "Disposable preview browsers/contexts closed in finally; all test Node, Vite, Cargo/Rust/linker processes exited. Verification native window and owned sidecar closed by exact PID. Normal app and its own sidecar/WebView children remain; only service port 8787 is listening, and 1420/8788/9236 are free."
   },
   "releaseAttempts": [
     {
@@ -241,14 +149,15 @@
       "sourceCommit": "dc708d12e5fd772616b395f9cd23ec1e20846d74",
       "sha256": "5D6F3BCA2A0233B1B24D83BD8D11732B8DD212E473A8DDA761FCBF1A1BEFF25F",
       "status": "rolled-back",
-      "reason": "Native visual review found the logo showing the renderer UV fallback. Its worker createImageBitmap path does not support SVG blobs; HTML image.decode had passed and concealed the mismatch. Runtime/fonts/shaders remain unchanged; logo will be rasterized to transparent PNG and the actual GPU decoder verified.",
+      "reason": "Native visual review rejected the UV diagnostic texture in place of the Microsoft mark. Initial HTML Image.decode checks had passed, unlike the worker texture path. Subsequent worker pixel checks proved Thread.absolutePath prefixes the Gallery base even for root-relative URLs. Fixed with a base-relative packaged RGBA PNG, without changing runtime code or shaders.",
       "deployedAt": "2026-09-08T23:19:04.2809573+08:00",
       "restoredAt": "2026-09-08T23:26:03.7295446+08:00",
       "restoredHostSha256": "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
       "failedArtifactPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-svg-rejected-20260908/preacherman-demo-host.exe",
-      "rollbackVerification": "Canonical shortcut cold launch restored the matched baseline. Home model, Task, Gallery, Market/Ledger, Settings and Account passed in both appearances, background playback and explicit return passed, zero new diagnostics. Evidence: output/playwright/identity-rollback-native-report.json."
+      "rollbackVerification": "Canonical shortcut cold launch restored the matched baseline. Home model, Task, Gallery, Market/Ledger, Settings and Account passed in both appearances, background playback and explicit return passed, zero new diagnostics. Evidence: output/playwright/identity-rollback-native-report.json.",
+      "correctedSourceCommit": "6b34ac8ae15560dfd7d540e3a97d991960ce1725"
     }
   ],
-  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/first-gallery-video-before-20260908/desktop-build-manifest.json"
+  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-before-20260908/desktop-build-manifest.json"
 }
