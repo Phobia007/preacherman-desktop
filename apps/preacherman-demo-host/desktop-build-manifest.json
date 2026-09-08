@@ -1,265 +1,194 @@
 {
   "schemaVersion": 1,
-  "buildId": "menu-task-switch-20260908T194444+0800",
+  "buildId": "gallery-first-video-20260908T224259+0800",
   "productVersion": "0.1.0",
-  "sourceTask": "transparent-larger-hamburger-and-rapid-task-view-overlap-fix",
+  "sourceTask": "gallery-first-card-cortana-introduction-video-and-cover",
   "sourceThread": "01a04c0c-fd42-7ca1-bb81-9ae558616e5f",
-  "sourceState": "Transparent 48px menu hit target with 40px line SVG at the unchanged center. Exclusive Featured/All page ownership and disposed async-mount guards; authored entry and project-detail motion preserved.",
-  "sourceCommit": "5a2798500d3146fa2c6285767fcc973ae49e53b3",
+  "sourceState": "Only first Gallery card media and loading poster replaced; shared decoder, room reflections, original text, model selection and motion retained.",
+  "sourceCommit": "0ffc2cb0f8e3c4d7708d84041e24afa4d4907b4b",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-08T19:43:51.4196961+08:00",
-  "deployedAt": "2026-09-08T19:44:44.7216894+08:00",
-  "verifiedAt": "2026-09-08T19:53:12.9393222+08:00",
-  "sizeBytes": 554760704,
-  "sha256": "6C9F65051F589B5C277CD767730AD190576336B3297330B2A89B34899891C9E1",
+  "builtAt": "2026-09-08T22:40:32.3215285+08:00",
+  "deployedAt": "2026-09-08T22:42:59.7503722+08:00",
+  "verifiedAt": "2026-09-08T22:49:38.3872385+08:00",
+  "sizeBytes": 579525120,
+  "sha256": "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/menu-and-task-switch-before-20260908/preacherman-demo-host.exe",
-  "backupSha256": "DC0AFCA8207A8CE69A6004EB290CB176B5C3718FE3DC7A5F70DBA2D47829DB67",
-  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/menu-and-task-switch-before-20260908/preacherman-service.exe",
+  "backupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/first-gallery-video-before-20260908/preacherman-demo-host.exe",
+  "backupSha256": "6C9F65051F589B5C277CD767730AD190576336B3297330B2A89B34899891C9E1",
+  "sidecarBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/first-gallery-video-before-20260908/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "3f871baf64417ddd430fba083bddb095f290534b",
-  "previousVerificationCommit": "3f871baf64417ddd430fba083bddb095f290534b",
+  "rollbackBaselineCommit": "2bba6a1aa6295747d2baee1eb60baa653eeffb49",
+  "previousVerificationCommit": "2bba6a1aa6295747d2baee1eb60baa653eeffb49",
   "verification": {
-    "status": "passed-with-confirmed-preexisting-cms-diagnostics",
+    "status": "passed-with-source-confirmed-preexisting-task-cms-diagnostics",
     "typescript": "passed",
-    "focusedTests": "66 passed: AppShell, theme, preferences/window, intro, Task timeline/view transitions, Gallery v3/detail and Market import/profile lens. git diff --check passed.",
-    "sourceBoundary": "Nine scoped source/test/doc files,93 additions and14 deletions. Main authored bundle verified byte-for-byte against previous commit after removing exactly one import and reverting the scoped transition selector. No assets, shader, routes, tasks, providers, backend or sidecar changes. Unrelated D:/preacherman changes preserved.",
-    "implementation": "Hamburger: transparent background in default/hover/focus,40px authored SVG in48px hit target atx16/y6 (original centerx40/y30). No bitmap or filled square. Task: only / <-> /full uses synchronous leave completion and out-in page ownership, preventing old timeline/rail lifetimes from overlapping. Both views cancel disposed async mount work.",
-    "preserved": "Impeccable local refinement:288px black overlay drawer, centered menu names, typography, damped820ms transition, persistent-on-selection and mouse-leave dismissal retained. Original Task entry reveal, card-to-detail morph, video hover hit area, dates, independent columns, ruler gestures and scrolling damping remain.",
-    "baselineReproduction": "Prior Task runtime reproduced7098 overlapping frames across9289 sampled frames in eight rapid-switch runs. Existing one-second concurrent page transition left the HTML timeline above the WebGL card rail.",
-    "browserFlow": "Eight runs at60/180/420/600ms intervals in both appearances:9363 sampled frames,zero overlaps,zero exceptions.37 transparent/enlarged trigger checks across six routes including off-center hit target and panel retention. Timeline both-mode hover, independent scroll, bounds, ruler drag/keyboard, detail navigation,1280/540responsive and reduced motion passed.",
-    "nativeFlow": "Canonical shortcut cold launch completed Home local model and all core paths on first entry. Eight rapid-switch runs in both appearances:10015 sampled frames,zero overlaps,zero exceptions.37 menu checks passed including enlarged off-center click and unchanged retention/dismissal. Both-mode timeline date/layout, precise video hover, per-column scroll, ruler drag, keyboard Home and detail return passed.",
-    "appearance": "Native Gallery screenshots in light/dark visually confirmed three enlarged lines over scene with no black backing. Task rail/timeline, white detail sheet with overlaid menu, Home, Market/legacy Ledger, Settings and Account visually checked. Temporary appearance changes restored.",
-    "productionBuild": "Single incremental npm run tauri -- build --no-bundle, Vite5.27s/Tauri2m16s. Reused verified sidecar and release cache. Fully packaged UI/models/fonts/media; no installer, external asset server or cache deletion.",
-    "coreNavigation": "Home model ready; Task real nathan-riley/Preacherman detail; Gallery authored rotating cards and simple chat; Market/legacy Ledger image content and profile lens; Settings Execution Mode; Account. No first-entry reload/retry/timeout, missing content, white screen or loss of interaction.",
-    "nativeRuntimeExceptions": 0,
-    "newConsoleErrors": 0,
-    "consoleReview": "Switch and menu errors=[] in preview and native. Native core/timeline only two exact previously recorded DatoCMS CSP/fetch diagnostics; newErrors=[] and core HTTP failures=[]. Preview timeline only inherited hydration diagnostic. No CSP/security changes.",
-    "windowControls": "Native maximize false→true→false, minimize=true and authored close passed;errors=[].",
-    "dataBoundary": "No AI messages sent, tasks created or task dates/covers/groups/provider settings changed. Native tests only ordinary navigation and temporary DOM scroll probes; probes removed in finally. Preview-only fixture was isolated in disposable browser context.",
-    "shortcut": "Canonical shortcut target/empty arguments re-resolved; source/deployed size,timestamp,SHA256 match. Test app27512 and its exact-owned sidecar31456 closed. Canonical shortcut reopened without remote debugging: app27192,sidecar29860(parent27192),window responding with handle920030.",
-    "resourceSamples": [
-      {
-        "SampledAt": "2026-09-08T19:51:50.1036483+08:00",
-        "ProcessIds": [
-          27192,
-          3876,
-          24568,
-          30432,
-          28112,
-          1512,
-          28120,
-          29860,
-          29652,
-          12076,
-          29380
-        ],
-        "NativePid": 27192,
-        "Responding": true,
-        "MainWindowHandle": 920030,
-        "NormalizedCpuPercent": 6.46,
-        "WorkingSetMiB": 1970,
-        "GpuDedicatedBytes": 5424492544,
-        "GpuSharedBytes": 84000768,
-        "Gpu3DPercent": 24.063257801373553,
-        "GpuVideoDecodePercent": 6.5287037452227885,
-        "FreeRamKiB": 17332188,
-        "Listeners": [
-          {
-            "LocalPort": 8787,
-            "OwningProcess": 29860
-          }
-        ],
-        "Processes": [
-          {
-            "ProcessId": 27192,
-            "ParentProcessId": 30028,
-            "CreationDate": "/Date(1788868256408)/",
-            "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe"
-          },
-          {
-            "ProcessId": 3876,
-            "ParentProcessId": 27192,
-            "CreationDate": "/Date(1788868256456)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 24568,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256478)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 30432,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256555)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 28112,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256557)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 1512,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256577)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 28120,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256634)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 29860,
-            "ParentProcessId": 27192,
-            "CreationDate": "/Date(1788868256708)/",
-            "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-service.exe"
-          },
-          {
-            "ProcessId": 29652,
-            "ParentProcessId": 29860,
-            "CreationDate": "/Date(1788868256714)/",
-            "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe"
-          },
-          {
-            "ProcessId": 12076,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868259987)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 29380,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868261326)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          }
-        ]
-      },
-      {
-        "SampledAt": "2026-09-08T19:53:12.9393222+08:00",
-        "ProcessIds": [
-          27192,
-          3876,
-          24568,
-          30432,
-          28112,
-          1512,
-          28120,
-          29860,
-          29652,
-          12076,
-          29380
-        ],
-        "NativePid": 27192,
-        "Responding": true,
-        "MainWindowHandle": 920030,
-        "NormalizedCpuPercent": 6.46,
-        "WorkingSetMiB": 1946,
-        "GpuDedicatedBytes": 5424410624,
-        "GpuSharedBytes": 51908608,
-        "Gpu3DPercent": 23.28058665527335,
-        "GpuVideoDecodePercent": 6.160507452405996,
-        "FreeRamKiB": 17363532,
-        "Listeners": [
-          {
-            "LocalPort": 8787,
-            "OwningProcess": 29860
-          }
-        ],
-        "Processes": [
-          {
-            "ProcessId": 27192,
-            "ParentProcessId": 30028,
-            "CreationDate": "/Date(1788868256408)/",
-            "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe"
-          },
-          {
-            "ProcessId": 3876,
-            "ParentProcessId": 27192,
-            "CreationDate": "/Date(1788868256456)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 24568,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256478)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 30432,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256555)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 28112,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256557)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 1512,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256577)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 28120,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868256634)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 29860,
-            "ParentProcessId": 27192,
-            "CreationDate": "/Date(1788868256708)/",
-            "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-service.exe"
-          },
-          {
-            "ProcessId": 29652,
-            "ParentProcessId": 29860,
-            "CreationDate": "/Date(1788868256714)/",
-            "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe"
-          },
-          {
-            "ProcessId": 12076,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868259987)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          },
-          {
-            "ProcessId": 29380,
-            "ParentProcessId": 3876,
-            "CreationDate": "/Date(1788868261326)/",
-            "ExecutablePath": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe"
-          }
-        ]
-      }
-    ],
-    "resourceComparison": "CPU stable6.46%,working set1970→1946MiB,GPU3D24.06→23.28%,decode6.53→6.16%. Dedicated GPU allocation5.42449→5.42441GB, higher than previous sample3.25GB but stable with ample capacity: NVIDIA total16303MiB,whole-system used6653MiB,utilization26%. No rising allocation trend, saturation or sustained abnormal CPU.17.36 millionKiB RAM free.",
-    "cleanup": "All disposable browsers/contexts closed in finally; native CDP disconnected; temporary probes removed. Vite stopped via original terminal before single production build. Final ownership audit found no task Node/Python/Playwright/Cargo/Rust/linker or preview children. Only normal canonical app/WebView2/sidecar remain; port8787 only,1420/8788/9236 free. Previous executable,sidecar and manifest retained as a verified rollback pair.",
+    "focusedTests": "24 passed; git diff --check passed; Impeccable detector returned no findings.",
+    "browserFlow": "Both appearances passed actual card click, shared video synchronization, front-window dismissal with continuing rear playback, back, and core navigation. Only inherited hydration diagnostic; zero new exceptions.",
+    "media": {
+      "videoBytes": 24451664,
+      "videoSha256": "FE4DFA6198E24FAA80C19173DD60CC0148DE76C9F50DEC104F45E82DD23D9004",
+      "coverSha256": "697729D943269F922928E4DD3F8EA6B082E505F64A1C38465A25B6B2243E6E0B",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "durationSeconds": 77.670998,
+      "sourcePreserved": true,
+      "coverByteIdentical": true
+    },
+    "nativePid": 10476,
+    "nativeStartedAt": "2026-09-08T22:48:35.387372+08:00",
+    "nativeWindowHandle": 1509046,
+    "nativeFlow": "Canonical shortcut cold-launch; first Gallery card physically clicked. Packaged http://tauri.localhost video 1920x1080/30fps/77.670998s advances; mirror and room are within 33ms; close leaves rear video playing; explicit back clears isolation. Both appearances passed. Home model ready, Task complete, Market content, Settings ready and Account retained; screenshots reviewed. Original theme preference restored, debug window stopped, shortcut launched again without debugging flags.",
+    "sourceBoundary": "Only first CMS record video URL, thumbnail, filename and byte size change; other 30 records, labels, model activation, runtime shaders, card motion and Task assets unchanged. Cover is byte-identical to user JPG; source movie is untouched. Impeccable refinement preserved the existing visual world.",
+    "consoleReview": {
+      "status": "passed-with-source-confirmed-preexisting-task-cms-diagnostics",
+      "rawReport": "intro-native-report.json",
+      "explanation": "All native Gallery and core route assertions passed in both appearances. The final generic console assertion failed because its allowlist omitted existing Task CMS URLs. Every additional URL was found in the previous verified commit's Task assets; git diff confirms the entire Task portfolio and Tauri CSP configuration are unchanged. No production code or CSP was changed to suppress diagnostics.",
+      "baselineCommit": "2bba6a1aa6295747d2baee1eb60baa653eeffb49",
+      "newErrors": [],
+      "qualifiedDiagnosticCount": 24,
+      "evidence": [
+        {
+          "id": "1786371616-face",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/site.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        },
+        {
+          "id": "1786432901-dlc-thumbnail",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        },
+        {
+          "id": "9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        },
+        {
+          "id": "graphql.datocms.com",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_nuxt/D9b8F35K.js",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/projects/book-of-happiness/index.html",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/projects/casa-di-solare/index.html"
+          ]
+        },
+        {
+          "id": "e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        },
+        {
+          "id": "X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        },
+        {
+          "id": "BV6q01JxClCQwHfNI2sVS76jGjg5isqkq",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        },
+        {
+          "id": "wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        },
+        {
+          "id": "Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        },
+        {
+          "id": "F7soo79aHLgeYDtjug6X599kMSZoBja4",
+          "existsInBaseline": true,
+          "files": [
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/assets/data/home.json",
+            "2bba6a1aa6295747d2baee1eb60baa653eeffb49:apps/preacherman-demo-host/public/gallery-v3/portfolio/full/_payload.json"
+          ]
+        }
+      ]
+    },
+    "resourceSample": {
+      "SampledAt": "2026-09-08T22:49:38.3872385+08:00",
+      "NativePid": 10476,
+      "Responding": true,
+      "ProcessIds": [
+        10476,
+        9932,
+        9480,
+        30780,
+        9976,
+        9120,
+        30160,
+        29904,
+        5732,
+        11356,
+        6708
+      ],
+      "NormalizedCpuPercent": 4.84,
+      "WorkingSetMiB": 2039,
+      "GpuDedicatedBytes": 5414084608,
+      "FreeRamKiB": 17729780,
+      "TemporaryProcesses": [],
+      "Listeners": [
+        {
+          "LocalPort": 8787,
+          "OwningProcess": 9480
+        }
+      ]
+    },
+    "resourceReview": "Normal app CPU 4.84%, working set 2039 MiB, dedicated GPU 5.414 GB (prior verified 5.424 GB). Whole-system GPU 24%, 6502/16303 MiB VRAM. 17.73 million KiB RAM free. No sustained abnormal CPU or resource growth observed.",
+    "cleanup": "All disposable preview contexts/browsers closed in finally. Vite, FFmpeg, installer attempt, Cargo/Rust and QA Node processes exited. Native CDP disconnected and debug-enabled window closed; original sidecar orphan was identity-checked and stopped by exact PID. Final normal shortcut app and its sidecar/WebView children remain, only port 8787; 1420/8788/9236 free.",
+    "skillUpdate": "User authorized npx impeccable update; command reported no installed skill folder and exited 1. No reinstall or skill modification performed.",
     "evidence": [
-      "output/playwright/task-switch-baseline-report.json",
-      "output/playwright/task-switch-preview-report.json",
-      "output/playwright/task-switch-native-report.json",
-      "output/playwright/hamburger-preview-report.json",
-      "output/playwright/hamburger-native-report.json",
-      "output/playwright/hamburger-native-dark-gallery.png",
-      "output/playwright/hamburger-native-light-gallery.png",
-      "output/playwright/task-switch-regression-native-report.json",
-      "output/playwright/task-switch-regression-native-light-layout.png",
-      "output/playwright/menu-task-core-native-report.json",
-      "output/playwright/menu-task-core-native-menu-over-task-card.png",
-      "output/playwright/task-panel-controls.json"
+      "output/playwright/intro-preview-report.json",
+      "output/playwright/intro-native-report.json",
+      "output/playwright/intro-native-console-review.json",
+      "output/playwright/intro-native-dark-rail.png",
+      "output/playwright/intro-native-dark-detail.png",
+      "output/playwright/intro-native-dark-background.png",
+      "output/playwright/intro-native-light-detail.png",
+      "output/playwright/intro-native-light-task.png",
+      "output/playwright/intro-native-light-market.png",
+      "output/playwright/intro-native-light-settings.png",
+      "output/playwright/intro-native-light-home.png"
     ]
   },
   "releaseAttempts": [
@@ -309,5 +238,5 @@
       "comparisonConclusion": "Exact diagnostic inherited; old core navigation passed with no new errors or HTTP failures. Restoration recorded in ac91d33. Same unchanged candidate redeployed at 17:19:44 and final native checks passed."
     }
   ],
-  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/menu-and-task-switch-before-20260908/desktop-build-manifest.json"
+  "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/first-gallery-video-before-20260908/desktop-build-manifest.json"
 }
