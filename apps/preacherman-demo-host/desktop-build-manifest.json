@@ -11,7 +11,7 @@
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
   "builtAt": "2026-09-09T01:10:23.2500832+08:00",
   "deployedAt": "2026-09-09T01:59:52.2519714+08:00",
-  "verifiedAt": "2026-09-09T02:05:16.5319000+08:00",
+  "verifiedAt": "2026-09-09T02:05:16.5319+08:00",
   "sizeBytes": 579529216,
   "sha256": "2F884C5A246B8CC83B421A85447A7239836FCE8CF7D7CD2F03679973ECD2C8A8",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
@@ -70,7 +70,7 @@
     "nativeStartedAt": "2026-09-09T02:04:46.4443328+08:00",
     "nativeWindowHandle": 182847644,
     "resourceSample": {
-      "SampledAt": "2026-09-09T02:05:16.5319000+08:00",
+      "SampledAt": "2026-09-09T02:05:16.5319+08:00",
       "NativePid": 32052,
       "StartedAt": "2026-09-09T02:04:46.4443328+08:00",
       "WindowHandle": 182847644,
@@ -136,7 +136,7 @@
       "deployedAt": "2026-09-07T18:48:22.8469999+08:00",
       "status": "rolled-back",
       "reason": "Native dual-video and compositing passed, but rail return-position assertion failed after wheel input. One-shot restoration could be overwritten during the return transition; revised to hold saved position through the transition and prevent room wheel default/focus scrolling.",
-      "restoredAt": "2026-09-07T18:50:03.8660220+08:00",
+      "restoredAt": "2026-09-07T18:50:03.866022+08:00",
       "restoredHostSha256": "D4D3494575AC5241CDEFC7BE8FBDBD0C654D972B10B89CEB4EC7B1B5CB08B64C",
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
       "failedArtifactPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/gallery-detail-rejected-20260907-1849.exe",
@@ -188,6 +188,18 @@
       "failedArtifactPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-activation-diagnostics-20260909/preacherman-demo-host.exe",
       "comparisonEvidence": "output/playwright/activation-baseline-native-report.json",
       "comparisonConclusion": "Direct paired old-executable test reproduced the exact _this.initSync diagnostic. A separate bounded old-version reload comparison did not reproduce the Nuxt manifest diagnostic; it remains a strict failure in the final candidate test, not allow-listed. Same unchanged candidate redeployed at 2026-09-09T01:59:52.2519714+08:00. Final native interaction checks passed in both themes. Two additional remote-thumbnail CSP messages were attributed using identical legacy portfolio-tree and security-policy Git object hashes and existing packaged fallback textures; raw reports retained. Qualification evidence: output/playwright/activation-native-qualified-report.json."
+    },
+    {
+      "sourceCommit": "832c3c3",
+      "sha256": "D9F3610E958BB35006B759130C9AF9D3CEB6F1067A402A11D6BBBB8CAA04BE51",
+      "deployedAt": "2026-09-09T02:56:13.9360219+08:00",
+      "status": "rolled-back-pending-native-pointer-diagnosis",
+      "reason": "Native cold launch, video, new dimensions and label passed; pointer hold was not charging after 650ms. Restored matching previous pair before diagnosis.",
+      "restoredAt": "2026-09-09T02:57:31.6375287+08:00",
+      "restoredHostSha256": "2F884C5A246B8CC83B421A85447A7239836FCE8CF7D7CD2F03679973ECD2C8A8",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "failedArtifactPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-refinement-first-native-20260909\\preacherman-demo-host.exe",
+      "evidence": "output/playwright/refinement-first-native-report.json"
     }
   ],
   "canonicalManifestBackupPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-activation-before-20260909/desktop-build-manifest.json"
