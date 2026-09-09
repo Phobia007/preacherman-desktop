@@ -213,5 +213,16 @@
       "finalEvidence": "output/playwright/zima-native-report.json"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-video-before-20260909/desktop-build-manifest.json"
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-video-before-20260909/desktop-build-manifest.json",
+  "rollbackHistory": [
+    {
+      "at": "2026-09-09T11:23:27.161Z",
+      "sourceCommit": "6b88841f4434e2365f9491d08cad7dc659c09def",
+      "failedSha256": "3822F1BA303E5388BBCD564157FDAE921DE75171068C6F8C10462DED464CE10C",
+      "restoredSha256": "BBC4C419504794198370D3C84D293EFF8CBE5DD5DB97CF9A2FFB6D485ABC8A04",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "reason": "Native minimize verification: WebView2 leaves document.hidden false, so the browser-only visibility gate did not suspend rendering. Restored verified pair while adding an explicit native-window activity signal.",
+      "evidence": "output/playwright/avatar-performance-native-visibility-first-attempt.json"
+    }
+  ]
 }
