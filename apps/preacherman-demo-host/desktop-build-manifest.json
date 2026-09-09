@@ -96,8 +96,8 @@
       ],
       "NormalizedCpuPercent": 4.99,
       "WorkingSetMiB": 2043.3,
-      "GpuDedicatedBytes": 3237486592.0,
-      "MaxGpuEngineUtilization": 23.0,
+      "GpuDedicatedBytes": 3237486592,
+      "MaxGpuEngineUtilization": 23,
       "FreeRamKiB": 18243500,
       "TemporaryProcesses": [],
       "Listeners": [
@@ -214,10 +214,11 @@
       "sha256": "0FDBE96A0BC8F06FB5A30FE037E0923ADBDECC560189B06997F41D195AA7631E",
       "failedArtifactPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-remote-poster-before-fix-20260909\\preacherman-demo-host.exe",
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-      "evidence": "output/playwright/zima-native-report.json",
+      "evidence": "output/playwright/zima-remote-media-native-failure.json",
       "restoredAt": "2026-09-09T16:52:33.5927274+08:00",
       "status": "restored-pending-packaged-second-card-media",
-      "sourceCommit": "f037c14d4f23b3d43351cd723095c64cd33f8e17"
+      "sourceCommit": "f037c14d4f23b3d43351cd723095c64cd33f8e17",
+      "rollbackVerification": "Restored canonical shortcut Home, Task, Gallery and Settings passed without page errors. Screenshots: output/playwright/zima-rollback-{task,gallery,settings}.png; report: output/playwright/zima-rollback-report.json."
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-toggle-before-20260909\\desktop-build-manifest.json"

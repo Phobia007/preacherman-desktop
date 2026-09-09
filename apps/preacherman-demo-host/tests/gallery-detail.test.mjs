@@ -202,6 +202,10 @@ test('second card presents the supplied ZIMA identity and the existing local mod
   assert.equal(second.clientName, 'Alastair Reynolds');
   assert.equal(new Date(second.completionDate).getUTCFullYear(), 2019);
   assert.equal(second.tags, 'Preacherman Avatar');
+  assert.equal(second.video.url, '/assets/gallery/zima-card-video.mp4');
+  assert.equal(second.video.thumbnail, '/assets/gallery/zima-card-cover.jpg');
+  assert.equal(fs.statSync(new URL('../public' + second.video.url, import.meta.url)).size, second.video.filesize);
+  assert.ok(fs.statSync(new URL('../public' + second.video.thumbnail, import.meta.url)).size > 50_000);
   assert.equal(second.description, 'ZIMA is an artificial intelligence character created by science fiction writer Alastair Reynolds. Originally a simple robot tasked with cleaning blue swimming pool tiles, he became an artist renowned across the universe after years of upgrades and evolving intelligence. His work always centers on a shade of blue known as "Zima Blue".');
   assert.ok(fs.statSync(new URL('../public/assets/avatars/zima/zima-runtime.glb', import.meta.url)).size > 0);
 });

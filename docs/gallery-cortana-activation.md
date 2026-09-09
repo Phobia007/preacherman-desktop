@@ -13,3 +13,5 @@ Cortana and Zima share the Gallery detail layout and controls. Card data supplie
 - Explicit saved null survives reload; missing or invalid preferences still use the fresh-install Cortana default.
 
 Verification covers both appearances, direct card entry, previous/next direction, video continuity, keyboard/reduced-motion controls, activation/deactivation, persistence and core navigation. Current evidence uses `output/playwright/zima-*`; earlier click-toggle evidence remains under `toggle-*`. The desktop manifest records the production executable, matching sidecar, recoverable pair, native results and cleanup.
+
+The second card keeps its existing authored video and cover, now bundled as `/assets/gallery/zima-card-video.mp4` and `/assets/gallery/zima-card-cover.jpg`. Source URLs were the original Gallery CMS media `1516321800519.mp4` / `.jpg` on storage.googleapis.com/activetheory-v6.appspot.com/media. The model and biography are Zima; the film content is retained. Native validation requires both media to decode from the packaged application origin.
