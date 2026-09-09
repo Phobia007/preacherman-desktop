@@ -61,3 +61,7 @@ All Demo Host updates must follow [docs/desktop-lightweight-update-contract.md](
 - Never terminate Edge, Chrome, WebView2, Node, Python, Codex, or another shared process by name. Confirm ownership using the full command line, project path, parent-child chain, listening port, and start time, then stop only the exact project PID. Prefer the originating terminal or graceful stop; force termination is a last resort.
 - During heavy builds or 3D/browser checks, limit concurrency and sample CPU, GPU, video memory, and RAM. Sustained abnormal utilization after the operation completes is a failed cleanup condition and blocks handoff.
 - If process ownership is uncertain, preserve the process and report it instead of guessing.
+
+## Automatic Desktop Restart Authorization
+
+The user explicitly authorized automatic desktop restarts on 2026-09-09. For authorized Demo Host changes, finish the build, deploy the canonical executable and matching sidecar, restart through the canonical shortcut, and complete native verification without asking for a separate restart confirmation each time. This supersedes the earlier handoff request for per-round restart approval. Preserve the backup, rollback, process ownership, and verification contracts above.

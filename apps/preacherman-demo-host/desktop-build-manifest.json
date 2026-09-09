@@ -1,94 +1,124 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-cortana-refinement-20260909",
+  "buildId": "gallery-cortana-toggle-20260909",
   "productVersion": "0.1.0",
-  "sourceTask": "frontend3-cortana-controls-refinement",
+  "sourceTask": "frontend3-gallery-companion-click-toggle",
   "sourceThread": null,
-  "sourceState": "Cortana capsule at 80% dimensions with 22px text, HALO 4 metadata, longer return arrow shaft; existing activation behavior and other cards preserved.",
-  "sourceCommit": "832c3c3",
+  "sourceState": "Single-click Gallery Activate applies the card model outside Gallery; clicking Activated hides the global companion. Gallery previews remain independent and saved null persists. Existing capsule, typography, HALO 4 metadata and longer return arrow are preserved. User authorized automatic desktop restarts.",
+  "sourceCommit": "ee0eb57b2a53af74e780b2507e318730f67295f3",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-09T02:53:33.1791374+08:00",
-  "deployedAt": "2026-09-09T03:00:07.9638235+08:00",
-  "verifiedAt": "2026-09-09T03:03:46.7891043+08:00",
+  "builtAt": "2026-09-09T15:06:42.7511833+08:00",
+  "deployedAt": "2026-09-09T15:13:51.1256967+08:00",
+  "verifiedAt": "2026-09-09T15:20:45.7127587+08:00",
   "sizeBytes": 579529216,
-  "sha256": "D9F3610E958BB35006B759130C9AF9D3CEB6F1067A402A11D6BBBB8CAA04BE51",
+  "sha256": "B1DB8D29EC3FE8F9557204058C04BFEB9AAEB5B4808BD65E0810FAAF22373229",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-refinement-before-20260909/preacherman-demo-host.exe",
-  "backupSha256": "2F884C5A246B8CC83B421A85447A7239836FCE8CF7D7CD2F03679973ECD2C8A8",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-refinement-before-20260909/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-toggle-before-20260909\\preacherman-demo-host.exe",
+  "backupSha256": "D9F3610E958BB35006B759130C9AF9D3CEB6F1067A402A11D6BBBB8CAA04BE51",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-toggle-before-20260909\\preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "65f208a",
-  "previousVerificationCommit": "65f208a",
+  "rollbackBaselineCommit": "ab29d35cc3dd3291599a8e992deb4cc2ac485434",
+  "previousVerificationCommit": "ab29d35cc3dd3291599a8e992deb4cc2ac485434",
   "verification": {
     "status": "passed-with-qualified-preexisting-template-diagnostics",
     "typescript": "passed",
-    "focusedTests": "14 Gallery regressions; diff check and Impeccable detector passed",
-    "browserFlow": "Both dark and light appearances, 1800x1000 and 1440x900, new dimensions and typography, metadata, longer arrow, hold cancellation/completion and core navigation passed.",
-    "nativeFlow": "Canonical shortcut cold Home ready. Both appearances passed video playback, synchronization, foreground close, model transparency, pointer/key holds, cancellation, applied-avatar persistence, explicit return and Home/Task/Gallery/Market (ledger route)/Settings/Account. Screenshot visual checks passed. Original preferences restored, then canonical shortcut launched normally without debug port; actual Home window captured.",
+    "focusedTests": "17 focused Gallery/model-activation regressions passed; explicit null round-trips in both appearances, diff check and Impeccable detector passed.",
+    "browserFlow": "Both appearances passed single click on/off, applied Zima to Cortana selection, Gallery preview/rail independence, all core routes with companion hidden/shown, reload persistence, Enter/Space, reduced motion, local media and unchanged controls. Settled production visual check passed.",
+    "nativeFlow": "Canonical shortcut cold Home ready. Both appearances passed actual mouse clicks, immediate toggle, enabled Activated state, Enter/Space, reduced motion, on/off persistence after reload, Gallery preview identity, background playback, local video synchronization and worker logo decoding. Home, Task, Gallery, Market (ledger route), Settings and Account passed with companion hidden and shown. Screenshots visually reviewed. Original dark/en/Cortana preferences restored, then shortcut cold-launched normally without debug arguments; actual Home window captured with Cortana visible.",
     "consoleReview": {
-      "newUnattributedErrors": [],
       "baselineReports": [
         "intro-native-report.json",
         "activation-baseline-native-report.json",
-        "refinement-baseline-native-report.json"
+        "refinement-native-report.json",
+        "refinement-baseline-native-report.json",
+        "activation-native-qualified-report.json"
       ],
-      "qualifiedPriorDiagnostics": [
-        "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1786208283-betteroff-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked."
-      ],
-      "note": "Exact old-version diagnostic matching; additional external thumbnail CSP messages observed directly in the restored baseline. No broad new suppression or CSP changes. Raw reports retained."
+      "rawReport": "output/playwright/toggle-native-report.json",
+      "qualificationReport": "output/playwright/toggle-native-qualified-report.json",
+      "newUnattributedErrors": [],
+      "note": "Raw console gate stopped on one new-to-the-checker external-thumbnail CSP message after both interaction suites passed. Source-based attribution proves the complete originating portfolio tree and security policy match the previous verified release. Only that exact diagnostic is qualified; it was not directly observed in prior native baseline runs. The packaged fallback was fetched from the native Tauri origin (200, 56905 bytes). No security policy changes or broad suppression.",
+      "staticAttribution": {
+        "newUnattributedErrors": [],
+        "assets": [
+          {
+            "sha256": "6D14915D6150F5B0A1528B40B4E4B96A5113496D651C64FEF248B6D40D2D23EE",
+            "bytes": 56905,
+            "url": "https://image.mux.com/ONW93srqx6kGfiHTKQtV2pkqByQY01nF01/thumbnail.jpg",
+            "packagedFallback": "/gallery-v3/portfolio/textures/ONW93srqx6kGfiHTKQtV2pkqByQY01nF01_thumbnail.ktx2"
+          }
+        ],
+        "qualifiedDiagnostics": [
+          "Connecting to 'https://image.mux.com/ONW93srqx6kGfiHTKQtV2pkqByQY01nF01/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked."
+        ],
+        "sources": [
+          {
+            "baseline": "f92cedebe5d655388654a54373c7894f977ae0aa",
+            "candidate": "f92cedebe5d655388654a54373c7894f977ae0aa",
+            "path": "apps/preacherman-demo-host/public/gallery-v3/portfolio"
+          },
+          {
+            "baseline": "4816190e099bfbc22f51ecf38935238b2405aeb6",
+            "candidate": "4816190e099bfbc22f51ecf38935238b2405aeb6",
+            "path": "apps/preacherman-demo-host/src-tauri/tauri.conf.json"
+          }
+        ],
+        "method": "Source-based attribution only: the complete originating portfolio tree and Tauri security policy match the previous verified release byte-for-byte. The exact diagnostic was not observed in prior baseline runs. Only this exact external-thumbnail diagnostic is qualified; no production policy or suppression was changed.",
+        "rawGate": "Raw interaction checks passed in both appearances; the final console gate stopped on one previously unlisted remote thumbnail CSP message. Original failed gate report retained unchanged."
+      }
     },
-    "nativePid": 10936,
-    "nativeStartedAt": "2026-09-09T03:02:32.0982348+08:00",
-    "nativeWindowHandle": 723812,
+    "nativePid": 18320,
+    "nativeStartedAt": "2026-09-09T15:19:36.7352337+08:00",
+    "nativeWindowHandle": 2492060,
     "resourceSample": {
-      "SampledAt": "2026-09-09T03:03:46.7891043+08:00",
-      "NativePid": 10936,
-      "StartedAt": "2026-09-09T03:02:32.0982348+08:00",
-      "WindowHandle": 723812,
+      "SampledAt": "2026-09-09T15:20:45.7127587+08:00",
+      "NativePid": 18320,
+      "StartedAt": "2026-09-09T15:19:36.7352337+08:00",
+      "WindowHandle": 2492060,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        10936,
-        33136,
-        19316,
-        26044,
-        2616,
-        31144,
-        32656,
-        2304,
-        20776,
-        17940,
-        30412
+        18320,
+        9264,
+        27600,
+        28856,
+        25868,
+        27780,
+        1208,
+        28256,
+        30712,
+        22288,
+        24568
       ],
-      "NormalizedCpuPercent": 5.19,
-      "WorkingSetMiB": 1858.0,
-      "GpuDedicatedBytes": 3245719552.0,
-      "MaxGpuEngineUtilization": 22.0,
-      "FreeRamKiB": 17450028,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 2043.3,
+      "GpuDedicatedBytes": 3237486592.0,
+      "MaxGpuEngineUtilization": 23.0,
+      "FreeRamKiB": 18243500,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 2304
+          "OwningProcess": 28256
         }
       ],
-      "OwnershipCheck": "Parent ancestry plus child creation time at or after host startup; excluded preexisting Homerail processes with reused parent PID."
+      "OwnershipCheck": "Canonical host executable path, descendant ancestry, and child creation time at or after host startup; shared services excluded."
     },
+    "restartAuthorization": "User explicitly authorized automatic restart after authorized changes on 2026-09-09; recorded in AGENTS.md.",
     "evidence": [
-      "output/playwright/refinement-preview-report.json",
-      "output/playwright/refinement-first-native-report.json",
-      "output/playwright/refinement-baseline-native-report.json",
-      "output/playwright/refinement-native-report.json",
-      "output/playwright/refinement-final-resources.json",
-      "output/playwright/refinement-final-home.png",
-      "output/playwright/refinement-native-dark-charging.png",
-      "output/playwright/refinement-native-light-activated.png"
+      "output/playwright/toggle-preview-report.json",
+      "output/playwright/toggle-visual-report.json",
+      "output/playwright/toggle-native-report.json",
+      "output/playwright/toggle-native-qualified-report.json",
+      "output/playwright/toggle-before-final-restart.json",
+      "output/playwright/toggle-final-resources.json",
+      "output/playwright/toggle-final-home.png",
+      "output/playwright/toggle-native-dark-gallery-disabled.png",
+      "output/playwright/toggle-native-light-gallery-enabled.png"
     ]
   },
   "releaseAttempts": [
@@ -178,5 +208,5 @@
       "comparisonEvidence": "output/playwright/refinement-baseline-native-report.json"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-refinement-before-20260909/desktop-build-manifest.json"
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-toggle-before-20260909\\desktop-build-manifest.json"
 }
