@@ -1,124 +1,95 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-cortana-toggle-20260909",
+  "buildId": "gallery-zima-shared-navigation-20260909",
   "productVersion": "0.1.0",
-  "sourceTask": "frontend3-gallery-companion-click-toggle",
+  "sourceTask": "frontend3-gallery-zima-shared-navigation",
   "sourceThread": null,
-  "sourceState": "Single-click Gallery Activate applies the card model outside Gallery; clicking Activated hides the global companion. Gallery previews remain independent and saved null persists. Existing capsule, typography, HALO 4 metadata and longer return arrow are preserved. User authorized automatic desktop restarts.",
-  "sourceCommit": "ee0eb57b2a53af74e780b2507e318730f67295f3",
+  "sourceState": "Cortana and Zima share video mirror, close, activation, long return arrow and lateral previous/next controls. Second card has the local Zima model, supplied English identity and biography, and bundled original media. Browsing preserves global selection; Activate applies the card model outside Gallery and Activated hides it. Original Home startup and user preferences preserved.",
+  "sourceCommit": "0009128ce3e9f852985d53d0631cd143ae60a531",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-09T15:06:42.7511833+08:00",
-  "deployedAt": "2026-09-09T15:13:51.1256967+08:00",
-  "verifiedAt": "2026-09-09T15:20:45.7127587+08:00",
-  "sizeBytes": 579529216,
-  "sha256": "B1DB8D29EC3FE8F9557204058C04BFEB9AAEB5B4808BD65E0810FAAF22373229",
+  "builtAt": "2026-09-09T17:04:08.8401148+08:00",
+  "deployedAt": "2026-09-09T17:04:49.7380840+08:00",
+  "verifiedAt": "2026-09-09T17:08:00.2099348+08:00",
+  "sizeBytes": 592732160,
+  "sha256": "17DCC9B6161B96FBC50D3CDCD27119A9C0FC1BA2ECC9E8E946CE5E00313ADF5E",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-toggle-before-20260909\\preacherman-demo-host.exe",
-  "backupSha256": "D9F3610E958BB35006B759130C9AF9D3CEB6F1067A402A11D6BBBB8CAA04BE51",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-toggle-before-20260909\\preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-gallery-before-20260909/preacherman-demo-host.exe",
+  "backupSha256": "B1DB8D29EC3FE8F9557204058C04BFEB9AAEB5B4808BD65E0810FAAF22373229",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-gallery-before-20260909/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "ab29d35cc3dd3291599a8e992deb4cc2ac485434",
-  "previousVerificationCommit": "ab29d35cc3dd3291599a8e992deb4cc2ac485434",
+  "rollbackBaselineCommit": "adaf2964359687b12c05bf23e9f0c16ec37071e3",
+  "previousVerificationCommit": "adaf2964359687b12c05bf23e9f0c16ec37071e3",
   "verification": {
     "status": "passed-with-qualified-preexisting-template-diagnostics",
     "typescript": "passed",
-    "focusedTests": "17 focused Gallery/model-activation regressions passed; explicit null round-trips in both appearances, diff check and Impeccable detector passed.",
-    "browserFlow": "Both appearances passed single click on/off, applied Zima to Cortana selection, Gallery preview/rail independence, all core routes with companion hidden/shown, reload persistence, Enter/Space, reduced motion, local media and unchanged controls. Settled production visual check passed.",
-    "nativeFlow": "Canonical shortcut cold Home ready. Both appearances passed actual mouse clicks, immediate toggle, enabled Activated state, Enter/Space, reduced motion, on/off persistence after reload, Gallery preview identity, background playback, local video synchronization and worker logo decoding. Home, Task, Gallery, Market (ledger route), Settings and Account passed with companion hidden and shown. Screenshots visually reviewed. Original dark/en/Cortana preferences restored, then shortcut cold-launched normally without debug arguments; actual Home window captured with Cortana visible.",
+    "focusedTests": "20 focused Gallery and model-activation tests passed, including both appearances, identity and packaged media existence/byte size. JavaScript syntax, patch idempotency, diff check and Impeccable detector passed.",
+    "browserFlow": "Both appearances passed direct first/second entry, previous/next direction, title/date/English biography and Details URL, video/cover decoding from local origin, mirror close, keyboard, reduced motion, activation/deactivation, persistence and core navigation. Description clearance verified at 1800 and 1440 viewport widths.",
+    "nativeFlow": "Canonical shortcut cold Home ready. Both appearances passed first/second model identity, common controls and original first-card refinements, lateral movement, direct second-card entry, local Zima video and cover decoding, background playback after mirror close, keyboard/reduced motion, Activate/Activated, persistence and Gallery preview independence. Home, Task, Gallery, Market (ledger route), Settings and Account passed. Screenshots reviewed in both modes. Original dark/en/Cortana preferences restored, then canonical shortcut cold-launched normally without debug arguments; actual Home window captured and visually verified.",
     "consoleReview": {
       "baselineReports": [
         "intro-native-report.json",
         "activation-baseline-native-report.json",
         "refinement-native-report.json",
         "refinement-baseline-native-report.json",
-        "activation-native-qualified-report.json"
+        "toggle-native-report.json"
       ],
-      "rawReport": "output/playwright/toggle-native-report.json",
-      "qualificationReport": "output/playwright/toggle-native-qualified-report.json",
+      "rawReport": "output/playwright/zima-native-report.json",
       "newUnattributedErrors": [],
-      "note": "Raw console gate stopped on one new-to-the-checker external-thumbnail CSP message after both interaction suites passed. Source-based attribution proves the complete originating portfolio tree and security policy match the previous verified release. Only that exact diagnostic is qualified; it was not directly observed in prior native baseline runs. The packaged fallback was fetched from the native Tauri origin (200, 56905 bytes). No security policy changes or broad suppression.",
-      "staticAttribution": {
-        "newUnattributedErrors": [],
-        "assets": [
-          {
-            "sha256": "6D14915D6150F5B0A1528B40B4E4B96A5113496D651C64FEF248B6D40D2D23EE",
-            "bytes": 56905,
-            "url": "https://image.mux.com/ONW93srqx6kGfiHTKQtV2pkqByQY01nF01/thumbnail.jpg",
-            "packagedFallback": "/gallery-v3/portfolio/textures/ONW93srqx6kGfiHTKQtV2pkqByQY01nF01_thumbnail.ktx2"
-          }
-        ],
-        "qualifiedDiagnostics": [
-          "Connecting to 'https://image.mux.com/ONW93srqx6kGfiHTKQtV2pkqByQY01nF01/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked."
-        ],
-        "sources": [
-          {
-            "baseline": "f92cedebe5d655388654a54373c7894f977ae0aa",
-            "candidate": "f92cedebe5d655388654a54373c7894f977ae0aa",
-            "path": "apps/preacherman-demo-host/public/gallery-v3/portfolio"
-          },
-          {
-            "baseline": "4816190e099bfbc22f51ecf38935238b2405aeb6",
-            "candidate": "4816190e099bfbc22f51ecf38935238b2405aeb6",
-            "path": "apps/preacherman-demo-host/src-tauri/tauri.conf.json"
-          }
-        ],
-        "method": "Source-based attribution only: the complete originating portfolio tree and Tauri security policy match the previous verified release byte-for-byte. The exact diagnostic was not observed in prior baseline runs. Only this exact external-thumbnail diagnostic is qualified; no production policy or suppression was changed.",
-        "rawGate": "Raw interaction checks passed in both appearances; the final console gate stopped on one previously unlisted remote thumbnail CSP message. Original failed gate report retained unchanged."
-      }
+      "note": "Final native console gate passed against exact existing diagnostic strings, with no new errors. The changed second-card remote-poster failure was fixed by bundling the original video and cover; no CSP relaxation, broad suppression or new allow-list. Raw rejected report is preserved as zima-remote-media-native-failure.json."
     },
-    "nativePid": 18320,
-    "nativeStartedAt": "2026-09-09T15:19:36.7352337+08:00",
-    "nativeWindowHandle": 2492060,
+    "nativePid": 22252,
+    "nativeStartedAt": "2026-09-09T17:07:32.8752504+08:00",
+    "nativeWindowHandle": 657150,
     "resourceSample": {
-      "SampledAt": "2026-09-09T15:20:45.7127587+08:00",
-      "NativePid": 18320,
-      "StartedAt": "2026-09-09T15:19:36.7352337+08:00",
-      "WindowHandle": 2492060,
+      "SampledAt": "2026-09-09T17:08:00.2099348+08:00",
+      "NativePid": 22252,
+      "StartedAt": "2026-09-09T17:07:32.8752504+08:00",
+      "WindowHandle": 657150,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        18320,
-        9264,
-        27600,
-        28856,
-        25868,
-        27780,
-        1208,
-        28256,
-        30712,
-        22288,
-        24568
+        22252,
+        5744,
+        29000,
+        20508,
+        9608,
+        30360,
+        17492,
+        29708,
+        29080,
+        10828,
+        2908
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 2043.3,
-      "GpuDedicatedBytes": 3237486592,
-      "MaxGpuEngineUtilization": 23,
-      "FreeRamKiB": 18243500,
+      "NormalizedCpuPercent": 5.99,
+      "WorkingSetMiB": 1930.8,
+      "GpuDedicatedBytes": 3229212672,
+      "MaxGpuEngineUtilization": 22,
+      "FreeRamKiB": 18062516,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 28256
+          "OwningProcess": 29708
         }
       ],
-      "OwnershipCheck": "Canonical host executable path, descendant ancestry, and child creation time at or after host startup; shared services excluded."
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
     },
-    "restartAuthorization": "User explicitly authorized automatic restart after authorized changes on 2026-09-09; recorded in AGENTS.md.",
+    "restartAuthorization": "User explicitly authorized automatic rebuild/restart without asking again.",
     "evidence": [
-      "output/playwright/toggle-preview-report.json",
-      "output/playwright/toggle-visual-report.json",
-      "output/playwright/toggle-native-report.json",
-      "output/playwright/toggle-native-qualified-report.json",
-      "output/playwright/toggle-before-final-restart.json",
-      "output/playwright/toggle-final-resources.json",
-      "output/playwright/toggle-final-home.png",
-      "output/playwright/toggle-native-dark-gallery-disabled.png",
-      "output/playwright/toggle-native-light-gallery-enabled.png"
+      "output/playwright/zima-preview-report.json",
+      "output/playwright/zima-native-report.json",
+      "output/playwright/zima-native-dark-zima.png",
+      "output/playwright/zima-native-light-zima.png",
+      "output/playwright/zima-native-dark-zima-direct.png",
+      "output/playwright/zima-final-native-home.png",
+      "output/playwright/zima-final-resources.json",
+      "output/playwright/zima-rollback-report.json",
+      "output/playwright/zima-delivery.json"
     ]
   },
   "releaseAttempts": [
@@ -216,10 +187,14 @@
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
       "evidence": "output/playwright/zima-remote-media-native-failure.json",
       "restoredAt": "2026-09-09T16:52:33.5927274+08:00",
-      "status": "restored-pending-packaged-second-card-media",
+      "status": "resolved-by-packaged-media",
       "sourceCommit": "f037c14d4f23b3d43351cd723095c64cd33f8e17",
-      "rollbackVerification": "Restored canonical shortcut Home, Task, Gallery and Settings passed without page errors. Screenshots: output/playwright/zima-rollback-{task,gallery,settings}.png; report: output/playwright/zima-rollback-report.json."
+      "rollbackVerification": "Restored canonical shortcut Home, Task, Gallery and Settings passed without page errors. Screenshots: output/playwright/zima-rollback-{task,gallery,settings}.png; report: output/playwright/zima-rollback-report.json.",
+      "correctedSourceCommit": "0009128ce3e9f852985d53d0631cd143ae60a531",
+      "finalOutcome": "Previous pair restored and verified, second-card original media bundled, corrected release rebuilt and redeployed. Final native checks passed in both appearances with zero new diagnostics.",
+      "finalSha256": "17DCC9B6161B96FBC50D3CDCD27119A9C0FC1BA2ECC9E8E946CE5E00313ADF5E",
+      "finalEvidence": "output/playwright/zima-native-report.json"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-toggle-before-20260909\\desktop-build-manifest.json"
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-gallery-before-20260909/desktop-build-manifest.json"
 }
