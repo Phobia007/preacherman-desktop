@@ -206,6 +206,18 @@
       "evidence": "output/playwright/refinement-first-native-report.json",
       "finalOutcome": "Same unchanged candidate redeployed; explicit bringToFront before input and event capture; both native themes and all interaction checks passed. First failure cause not conclusively established; raw failure retained. No production activation logic or security policy changes.",
       "comparisonEvidence": "output/playwright/refinement-baseline-native-report.json"
+    },
+    {
+      "deployedAt": "2026-09-09T16:49:30.8703690+08:00",
+      "reason": "Both native appearance and interaction flows passed, but the second card retained a remote poster URL blocked by img-src. Native video also used the inherited remote URL. Restore the previous pair while binding the changed card to existing packaged video and cover.",
+      "restoredHostSha256": "B1DB8D29EC3FE8F9557204058C04BFEB9AAEB5B4808BD65E0810FAAF22373229",
+      "sha256": "0FDBE96A0BC8F06FB5A30FE037E0923ADBDECC560189B06997F41D195AA7631E",
+      "failedArtifactPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-remote-poster-before-fix-20260909\\preacherman-demo-host.exe",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "evidence": "output/playwright/zima-native-report.json",
+      "restoredAt": "2026-09-09T16:52:33.5927274+08:00",
+      "status": "restored-pending-packaged-second-card-media",
+      "sourceCommit": "f037c14d4f23b3d43351cd723095c64cd33f8e17"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-toggle-before-20260909\\desktop-build-manifest.json"
