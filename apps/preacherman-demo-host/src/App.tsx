@@ -1,3 +1,4 @@
+import { useWindowActivity } from "./app-shell/useWindowActivity";
 import {
   createSurfaceSkinAdapter,
   type SurfaceManifest,
@@ -138,6 +139,7 @@ const tabs = {
 } satisfies Partial<Record<LocalSurfaceType, readonly SurfaceToolbarTab[]>>;
 
 export function App({ enteringOnMount = false }: AppProps = {}) {
+  const windowActive = useWindowActivity();
   const [route, setRoute] = useState(currentRoute);
   const activeSurfaceType = route.kind === "surface" && route.surfaceType
     ? route.surfaceType
@@ -395,7 +397,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           prefetchModelId={activeSurfaceType === "market" ? (sceneModelId === "cortana" ? "zima" : "cortana") : undefined}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}
-          renderActive
+          renderActive={windowActive}
         />
       ) : null}
     >
@@ -421,6 +423,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       >
         <ActiveTheoryGallerySurface
           active={activeSurfaceType === "market"}
+          renderActive={windowActive}
           activeModelId={activeModelId}
           onActivate={activateGalleryModel}
           onDetailChange={setGalleryDetailOpen}

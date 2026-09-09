@@ -4,11 +4,11 @@
   const listeners = new Set();
   let work, video, camera, foreground, savedScroll, exitTimer;
   let switching = false;
-  let requestedActive = true, warmed = false, paused = false;
+  let requestedActive = true, windowVisible = true, warmed = false, paused = false;
   const pausedMedia = new Set();
   function syncActivity() {
     // Let cold prewarming finish the authored entry reveal before suspending it.
-    const visible = !document.hidden && (requestedActive || !warmed);
+    const visible = windowVisible && !document.hidden && (requestedActive || !warmed);
     if (!window.Render || paused === !visible) return;
     paused = !visible;
     document.documentElement.dataset.galleryRenderActive = String(visible);
@@ -54,7 +54,7 @@
   };
   window.addEventListener("wheel", preventDetailWheel, { capture: true, passive: false });
   const api = window.PreachermanGalleryDetail = {
-    setActive(active) { requestedActive = active; syncActivity(); },
+    setActive(active, visible = true) { requestedActive = active; windowVisible = visible; syncActivity(); },
     subscribe(listener) {
       listeners.add(listener);
       listener({ ...state });

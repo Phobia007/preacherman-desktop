@@ -8,8 +8,9 @@ import "./active-theory-gallery-surface.css";
 
 const gallerySource = "/active-theory-gallery/gallery/work.html";
 
-export function ActiveTheoryGallerySurface({ active = true, onDetailChange, onPreviewModelChange, activeModelId, onActivate }: {
+export function ActiveTheoryGallerySurface({ active = true, renderActive = true, onDetailChange, onPreviewModelChange, activeModelId, onActivate }: {
   readonly active?: boolean;
+  readonly renderActive?: boolean;
   readonly onDetailChange?: (open: boolean) => void;
   readonly onPreviewModelChange: (modelId: ModelId | null) => void;
   readonly activeModelId: ModelId | null;
@@ -34,11 +35,11 @@ export function ActiveTheoryGallerySurface({ active = true, onDetailChange, onPr
   }, [loaded]);
   useEffect(() => {
     if (!bridge) return;
-    const sync = () => bridge.setActive(active && !document.hidden);
+    const sync = () => bridge.setActive(active, renderActive && !document.hidden);
     sync();
     document.addEventListener("visibilitychange", sync);
-    return () => { document.removeEventListener("visibilitychange", sync); bridge.setActive(false); };
-  }, [active, bridge]);
+    return () => { document.removeEventListener("visibilitychange", sync); bridge.setActive(false, false); };
+  }, [active, bridge, renderActive]);
   useLayoutEffect(() => {
     // Restore rail compositing before the first exit frame, not after its tween.
     // The overlay may keep fading while the companion is already back in the rail.

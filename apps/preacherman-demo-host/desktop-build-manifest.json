@@ -222,7 +222,9 @@
       "restoredSha256": "BBC4C419504794198370D3C84D293EFF8CBE5DD5DB97CF9A2FFB6D485ABC8A04",
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
       "reason": "Native minimize verification: WebView2 leaves document.hidden false, so the browser-only visibility gate did not suspend rendering. Restored verified pair while adding an explicit native-window activity signal.",
-      "evidence": "output/playwright/avatar-performance-native-visibility-first-attempt.json"
+      "evidence": "output/playwright/avatar-performance-native-visibility-first-attempt.json",
+      "restoredNativeSmoke": "output/playwright/avatar-performance-rollback-smoke.json",
+      "restoredNativeSmokePassed": true
     }
   ]
 }

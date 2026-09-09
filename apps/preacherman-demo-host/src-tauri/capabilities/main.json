@@ -1,7 +1,9 @@
 {
   "identifier": "main-capability",
   "description": "Native window controls for the local Preacherman demo host",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:window:default",
     "core:window:allow-close",
@@ -9,6 +11,8 @@
     "core:window:allow-toggle-maximize",
     "core:window:allow-start-dragging",
     "core:window:allow-start-resize-dragging",
-    "shell:allow-spawn"
+    "shell:allow-spawn",
+    "core:event:allow-listen",
+    "core:event:allow-unlisten"
   ]
 }

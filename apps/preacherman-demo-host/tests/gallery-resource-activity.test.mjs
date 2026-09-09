@@ -17,7 +17,8 @@ for (const appearance of ["light", "dark"]) test(`Gallery prewarms, pauses and r
   let draw;
   const view = { flag: () => true, uniforms: { uVisible: { value: 0 } }, scroll: { renderManager: { controller: { scroll: 0 } } } };
   api.attach({ startRender: fn => { draw = fn; }, findParent: () => view, bind() {} });
-  api.setActive(false); draw(); assert.equal(Render.isPaused, false, "cold initialization still renders");
+  api.setActive(false, false); draw(); assert.equal(Render.isPaused, true, "native minimize suspends unfinished prewarming even when document.hidden is false");
+  api.setActive(false, true); draw(); assert.equal(Render.isPaused, false, "cold initialization still renders");
   document.hidden = true; events.get("visibilitychange")(); assert.equal(Render.isPaused, true);
   document.hidden = false; events.get("visibilitychange")(); assert.equal(Render.isPaused, false, "prewarming resumes after minimizing during startup");
   view.uniforms.uVisible.value = 1; draw(); assert.equal(Render.isPaused, true); assert.equal(owned.paused, true);

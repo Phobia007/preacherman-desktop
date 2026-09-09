@@ -57,3 +57,13 @@ Source verification:
 
 Native before/after measurements and delivery hashes follow in the deployment
 manifest and the final evidence record after desktop verification.
+
+Native correction (2026-09-09): the first desktop attempt exposed that WebView2
+keeps document.hidden=false when minimized. The verified previous executable and
+sidecar were restored together; Home, Task, Gallery and Settings were smoke-tested.
+The host now observes Tauri resize/focus events and queries isMinimized, combines
+that with document visibility, and passes one activity value to the existing
+avatar and Gallery renderers. Native event listen/unlisten permissions are scoped
+to the main window capability. Startup prewarming also pauses while minimized.
+Tests cover native minimize/resume, late async listener cleanup, and the browser
+fallback; the focused Demo Host suite now has 32 passing tests.

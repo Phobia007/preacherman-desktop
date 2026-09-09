@@ -111,14 +111,14 @@ export function CortanaModelStage({
   }, [modelId]);
 
   useEffect(() => {
-    if (loadState !== "ready" || !prefetchModelId || prefetchModelId === modelId) return;
+    if (!renderActive || loadState !== "ready" || !prefetchModelId || prefetchModelId === modelId) return;
     const timer = window.setTimeout(() => {
       if (document.hidden) return;
       const url = createAvatarAssetUrls(localAvatarAssetBaseUrl(prefetchModelId), prefetchModelId).model;
       void prefetchAvatarModel(url).catch(() => undefined);
     }, 500);
     return () => window.clearTimeout(timer);
-  }, [loadState, modelId, prefetchModelId]);
+  }, [loadState, modelId, prefetchModelId, renderActive]);
 
   useEffect(() => {
     const applyJawOpen = (event: Event) => setJawOpen((event as CustomEvent<number>).detail || 0);
