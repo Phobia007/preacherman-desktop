@@ -9,16 +9,20 @@ export interface GalleryDetailState {
   title: string;
   poster?: string;
   smallWindow: boolean;
+  navigationEntry?: boolean;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
 }
 export interface GalleryDetailBridge {
   video: HTMLVideoElement | null;
   subscribe(listener: (state: GalleryDetailState) => void): () => void;
   closeWindow(): void;
+  navigate(direction: -1 | 1): boolean;
   back(): void;
   geometry(): { left: number; top: number; width: number; height: number; backBottom: number; backHeight: number } | null;
 }
 
-export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, activeModelId, onActivate }: {
+export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, activeModelId, onActivate, onNavigate, switching, navigationError }: {
   bridge: GalleryDetailBridge;
   detail: GalleryDetailState;
   portal: Element;
@@ -26,6 +30,9 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, 
   modelId: ModelId | null;
   activeModelId: ModelId | null;
   onActivate: (modelId: ModelId) => void;
+  onNavigate: (direction: -1 | 1) => void;
+  switching: boolean;
+  navigationError: string;
 }) {
   const windowRef = useRef<HTMLDivElement>(null);
   const backRef = useRef<HTMLButtonElement>(null);
@@ -103,26 +110,35 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, 
   }, [onBack]);
 
   return createPortal(
-    <div className="gallery-detail" data-phase={detail.phase} data-project={detail.project}>
-      {detail.smallWindow ? <div className="gallery-detail__window" ref={windowRef} key={detail.project}>
-        <canvas aria-label={`${detail.title} video preview`} className="gallery-detail__video" data-media-state={mediaState} height={576} ref={canvasRef} role="img" width={960} />
-        {mediaState === "loading" || mediaState === "error" ? <span className="gallery-detail__status" role="status">{mediaState === "error" ? "Video unavailable" : "Loading video"}</span> : null}
-        <button aria-label="Close video window" className="gallery-detail__control gallery-detail__close" disabled={detail.phase !== "open"} onClick={() => { bridge.closeWindow(); backRef.current?.focus(); }} type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
-        </button>
-      </div> : null}
-      <div className="gallery-detail__actions" ref={actionsRef}>
-        {modelId ? <GalleryActivateButton
-          key={detail.project}
-          modelId={modelId}
-          activated={activeModelId === modelId}
-          enabled={detail.phase === "open"}
-          onActivate={onActivate}
-        /> : null}
-        <button aria-label="Back to Gallery cards" className="gallery-detail__control gallery-detail__back" disabled={detail.phase !== "open"} onClick={onBack} ref={backRef} type="button">
-          <svg viewBox={detail.project === "secret-sky" ? "0 0 48 24" : "0 0 32 24"} aria-hidden="true"><path d={detail.project === "secret-sky" ? "M43 12H5m8-8-8 8 8 8" : "M27 12H5m8-8-8 8 8 8"} /></svg>
-        </button>
+    <div className="gallery-detail" data-phase={detail.phase} data-project={detail.project} data-switching={switching} data-navigation-entry={detail.navigationEntry}>
+      <div className="gallery-detail__content">
+        {detail.smallWindow ? <div className="gallery-detail__window" ref={windowRef} key={detail.project}>
+          <canvas aria-label={`${detail.title} video preview`} className="gallery-detail__video" data-media-state={mediaState} height={576} ref={canvasRef} role="img" width={960} />
+          {mediaState === "loading" || mediaState === "error" ? <span className="gallery-detail__status" role="status">{mediaState === "error" ? "Video unavailable" : "Loading video"}</span> : null}
+          <button aria-label="Close video window" className="gallery-detail__control gallery-detail__close" disabled={detail.phase !== "open" || switching} onClick={() => { bridge.closeWindow(); backRef.current?.focus(); }} type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+          </button>
+        </div> : null}
+        <div className="gallery-detail__actions" ref={actionsRef}>
+          {modelId ? <GalleryActivateButton
+            key={detail.project}
+            modelId={modelId}
+            activated={activeModelId === modelId}
+            enabled={detail.phase === "open" && !switching}
+            onActivate={onActivate}
+          /> : null}
+          <button aria-label="Back to Gallery cards" className="gallery-detail__control gallery-detail__back" disabled={detail.phase !== "open" || switching} onClick={onBack} ref={backRef} type="button">
+            <svg viewBox="0 0 48 24" aria-hidden="true"><path d="M43 12H5m8-8-8 8 8 8" /></svg>
+          </button>
+        </div>
       </div>
+      <button aria-label="Previous character" className="gallery-detail__step gallery-detail__step--previous" disabled={detail.phase !== "open" || switching || !detail.hasPrevious} onClick={() => onNavigate(-1)} type="button">
+        <svg viewBox="0 0 32 64" aria-hidden="true"><path d="M24 8 12 32 24 56" /></svg>
+      </button>
+      <button aria-label="Next character" className="gallery-detail__step gallery-detail__step--next" disabled={detail.phase !== "open" || switching || !detail.hasNext} onClick={() => onNavigate(1)} type="button">
+        <svg viewBox="0 0 32 64" aria-hidden="true"><path d="m8 8 12 24-12 24" /></svg>
+      </button>
+      {navigationError ? <span className="gallery-detail__status" role="alert">{navigationError}</span> : null}
     </div>, portal,
   );
 }

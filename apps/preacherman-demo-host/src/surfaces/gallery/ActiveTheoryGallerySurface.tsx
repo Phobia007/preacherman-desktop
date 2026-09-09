@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { GalleryDetailOverlay, type GalleryDetailBridge, type GalleryDetailState } from "./GalleryDetailOverlay";
 import { useExecutionFrameBridge } from "../../execution/useExecutionFrameBridge";
 import type { ModelId } from "../../preferences";
+import { useGalleryCardNavigation } from "./useGalleryCardNavigation";
 
 import "./active-theory-gallery-surface.css";
 
@@ -20,8 +21,8 @@ export function ActiveTheoryGallerySurface({ active = true, onDetailChange, onPr
   const [bridge, setBridge] = useState<GalleryDetailBridge>();
   const [detail, setDetail] = useState<GalleryDetailState>({ phase: "closed", project: "", title: "", smallWindow: true });
   const [portal, setPortal] = useState<Element | null>(null);
-  // Other catalog cards do not yet have an assigned avatar.
-  const modelId: ModelId | null = detail.project === "secret-sky" ? "cortana" : null;
+  const modelId: ModelId | null = detail.project === "secret-sky" ? "cortana" : detail.project === "watson-masters" ? "zima" : null;
+  const navigation = useGalleryCardNavigation(bridge, portal, active);
   useEffect(() => {
     if (!loaded) return;
     const frame = frameRef.current?.contentWindow as (Window & { PreachermanGalleryDetail?: GalleryDetailBridge }) | null;
@@ -37,7 +38,7 @@ export function ActiveTheoryGallerySurface({ active = true, onDetailChange, onPr
     onDetailChange?.(active && detail.phase === "open");
     onPreviewModelChange(active && detail.phase === "open" ? modelId : null);
   }, [active, detail.phase, modelId, onDetailChange, onPreviewModelChange]);
-  const back = useCallback(() => { bridge?.back(); frameRef.current?.focus({ preventScroll: true }); }, [bridge]);
+  const back = useCallback(() => { navigation.cancel(); bridge?.back(); frameRef.current?.focus({ preventScroll: true }); }, [bridge, navigation.cancel]);
 
   return (
     <section
@@ -46,7 +47,7 @@ export function ActiveTheoryGallerySurface({ active = true, onDetailChange, onPr
       className="active-theory-gallery-surface"
       data-loaded={loaded ? "true" : "false"}
     >
-      {portal && bridge && active && detail.phase !== "closed" ? <GalleryDetailOverlay bridge={bridge} detail={detail} portal={portal} onBack={back} modelId={modelId} activeModelId={activeModelId} onActivate={onActivate} /> : null}
+      {portal && bridge && active && detail.phase !== "closed" ? <GalleryDetailOverlay bridge={bridge} detail={detail} portal={portal} onBack={back} modelId={modelId} activeModelId={activeModelId} onActivate={onActivate} onNavigate={navigation.navigate} switching={navigation.switching} navigationError={navigation.error} /> : null}
       <iframe
         ref={frameRef}
         className="active-theory-gallery-surface__frame"

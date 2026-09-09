@@ -5,20 +5,20 @@ import test from 'node:test';
 const read = path => fs.readFileSync(new URL('../'+path, import.meta.url), 'utf8');
 const bridgeSource = read('public/active-theory-gallery/gallery/detail-bridge.js');
 
-function fixture() {
-  let observer, timer, render;
+function fixture(projects = []) {
+  let observer, timer, render, videoUrl;
   const scroll = {scroll: 4217};
-  const window = {addEventListener(){}};
+  const window = {addEventListener(){}, CMS_DATA: {projects}};
   const work = {
     startRender(callback) { render = callback; },
     bind(_key, callback) { observer = callback; },
     findParent() { return {scroll:{renderManager:{controller:scroll}}}; },
-    set(key, value) { assert.equal(key,'Work/project'); observer(value); },
+    set(key, value) { if (key === 'WorkItems/videoURL') videoUrl = value; else {assert.equal(key,'Work/project'); observer(value);} },
   };
   vm.runInNewContext(bridgeSource, {window,Set,Number,Math,setTimeout:fn=>(timer=fn,1),clearTimeout:()=>{timer=null;}});
   const api=window.PreachermanGalleryDetail;
   api.attach(work);
-  return {api,scroll,enter:project=>observer(project),finish:()=>timer?.(),tick:()=>render?.()};
+  return {api,scroll,videoUrl:()=>videoUrl,enter:project=>observer(project),finish:()=>timer?.(),tick:()=>render?.()};
 }
 
 test('small-window close preserves the project and only explicit back closes detail',()=>{
@@ -164,7 +164,7 @@ test('detail clears the R3F restored background and uses this workspace renderer
 
 test('Cortana activation is persistent, while detail preview never equips on entry',()=>{
   const app=read('src/App.tsx'),surface=read('src/surfaces/gallery/ActiveTheoryGallerySurface.tsx');
-  assert.match(surface,/detail.project === "secret-sky" \? "cortana" : null/);
+  assert.match(surface,/detail.project === "secret-sky" \? "cortana" : detail.project === "watson-masters" \? "zima" : null/);
   assert.match(surface,/onPreviewModelChange\(active && detail.phase === "open" \? modelId : null\)/);
   assert.match(app,/setPreferences\(\(current\) => \(\{ \.\.\.current, activeModelId: current\.activeModelId === modelId \? null : modelId \}\)\)/);
   assert.match(app,/savePreferences\(preferences\)/);
@@ -189,7 +189,63 @@ test('click toggles application immediately with semantic keyboard support and v
   assert.match(css,/prefers-reduced-motion/);
 });
 
-test('only the Cortana case-study label changes to Details, retaining its link and reveal',()=>{
+test('both assigned avatars share the Details label with their own links',()=>{
   const runtime=read('public/active-theory-gallery/gallery/assets/js/app.1780406240914.js');
-  assert.ok(runtime.includes('title:title==="Cortana"?"Details":"Medium Case Study",href:caseStudyURL,animated:!0,delay:800'));
+  assert.ok(runtime.includes('title:title==="Cortana"||title==="ZIMA"?"Details":"Medium Case Study",href:caseStudyURL,animated:animateEntry,delay:800'));
+});
+
+test('second card presents the supplied ZIMA identity and the existing local model', () => {
+  const projects = JSON.parse(read('public/active-theory-gallery/gallery/external/storage.googleapis.com/activetheory-v6.appspot.com/cms/projects-dev.json'));
+  const second = [...projects].sort((a, b) => a.priority - b.priority)[1];
+  assert.equal(second.slug, 'watson-masters');
+  assert.equal(second.name, 'ZIMA');
+  assert.equal(second.clientName, 'Alastair Reynolds');
+  assert.equal(new Date(second.completionDate).getUTCFullYear(), 2019);
+  assert.equal(second.tags, 'Preacherman Avatar');
+  assert.equal(second.description, 'ZIMA is an artificial intelligence character created by science fiction writer Alastair Reynolds. Originally a simple robot tasked with cleaning blue swimming pool tiles, he became an artist renowned across the universe after years of upgrades and evolving intelligence. His work always centers on a shade of blue known as "Zima Blue".');
+  assert.ok(fs.statSync(new URL('../public/assets/avatars/zima/zima-runtime.glb', import.meta.url)).size > 0);
+});
+
+test('detail navigation follows the card order, shares the selected video and keeps the original rail position', () => {
+  const projects = [{perma:'secret-sky',title:'Cortana',videoURL:'cortana.mp4'}, {perma:'watson-masters',title:'ZIMA',videoURL:'zima.mp4'}, {perma:'third',title:'Third',videoURL:'third.mp4'}];
+  const f = fixture(projects);
+  assert.equal(f.api.navigate(1), false);
+  f.enter(projects[0]);
+  assert.equal(f.api.snapshot.hasPrevious, false);
+  assert.equal(f.api.snapshot.hasNext, true);
+  assert.equal(f.api.navigate(-1), false);
+  f.api.closeWindow();
+  assert.equal(f.api.navigate(1), true);
+  assert.equal(f.api.snapshot.project, 'watson-masters');
+  assert.equal(f.api.snapshot.smallWindow, true);
+  assert.equal(f.api.snapshot.navigationEntry, true);
+  assert.equal(f.videoUrl(), 'zima.mp4');
+  assert.equal(f.api.isSwitching, true);
+  assert.equal(f.api.navigate(1), true);
+  assert.equal(f.api.snapshot.hasNext, false);
+  assert.equal(f.api.navigate(1), false);
+  assert.equal(f.api.navigate(-1), true);
+  assert.equal(f.api.snapshot.project, 'watson-masters');
+  assert.equal(f.api.navigate(0), false);
+  f.scroll.scroll = 9200;
+  f.api.back();f.finish();
+  assert.equal(f.scroll.scroll, 4217);
+});
+
+test('side navigation keeps semantic chevrons stationary and moves all content in the correct direction', () => {
+  const overlay = read('src/surfaces/gallery/GalleryDetailOverlay.tsx');
+  const motion = read('src/surfaces/gallery/useGalleryCardNavigation.ts');
+  const css = read('src/surfaces/gallery/active-theory-gallery-surface.css');
+  assert.match(overlay, /aria-label="Previous character"/);
+  assert.match(overlay, /aria-label="Next character"/);
+  assert.match(overlay, /M24 8 12 32 24 56/);
+  assert.match(overlay, /switching \|\| !detail.hasNext/);
+  for (const layer of ['active-theory-gallery-surface', 'demo-app-shell__scene', 'gallery-detail__content']) assert.ok(motion.includes(layer));
+  assert.match(motion, /animate\(0, -direction \* 100/);
+  assert.match(motion, /animate\(direction \* 100, 0/);
+  assert.match(motion, /animation.cancel\(\)/);
+  assert.match(motion, /observer.disconnect\(\)/);
+  assert.match(motion, /prefers-reduced-motion/);
+  assert.match(css, /gallery-detail__step:focus-visible[^}]*var\(--demo-theme-focus\)/);
+  assert.match(css, /gallery-detail__step:disabled/);
 });

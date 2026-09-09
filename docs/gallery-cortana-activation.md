@@ -1,14 +1,15 @@
-# Cortana detail activation
+# Gallery character cards and activation
 
-The Gallery activation button is a single-click toggle for the companion displayed outside Gallery.
+Cortana and Zima share the Gallery detail layout and controls. Card data supplies the character identity and media; the shared overlay owns the video mirror, close control, activation capsule, return arrow, and previous/next navigation.
 
-- Click Activate to apply that card's model to Home, Task, Market, Settings and the other non-Gallery routes.
-- Click Activated to save `activeModelId: null` and hide the companion on those routes. The button remains enabled while active.
-- Gallery previews are independent of this preference. Opening the Cortana card shows Cortana even when the global companion is disabled or a different model is applied. Toggling does not replace or hide the current preview.
-- The current outer Gallery defaults to Cortana. Only the Cortana card (`secret-sky`) has a real avatar mapping; unassigned cards do not borrow the global companion or expose an activation button.
-- An explicit saved null survives reload. Missing or invalid preferences still use the fresh-install Cortana default.
-- Native button click, Enter and Space toggle immediately. The 1.6-second outline pulse is feedback only and never delays or locks the change.
-- The capsule remains transparent, 163.2 by 49.6 CSS pixels, with 22px Clash Display type. HALO 4 metadata, the Microsoft logo, Details link, media, arrow geometry and right alignment are preserved.
+- The first card (`secret-sky`) previews Cortana. The second (`watson-masters`) previews the existing packaged Zima model and shows the supplied English biography with `2019 / Alastair Reynolds / Preacherman Avatar`.
+- Both cards have a Details link. Zima's link opens [the author's Zima Blue page](https://www.alastairreynolds.com/release/zima-blue/).
+- Click Activate to apply that card's model to Home, Task, Market, Settings and other non-Gallery routes. Click Activated to save `activeModelId: null` and hide it on those routes.
+- Browsing or switching cards never changes the applied character. Gallery detail previews remain independent of that preference. The outer Gallery defaults to Cortana; unassigned cards do not borrow the global model or expose activation.
+- Both cards use the same transparent 163.2 by 49.6 CSS pixel capsule with 22px type, video-close behavior, and long return arrow. Closing the foreground video leaves the room's shared video playing.
+- Fixed chevrons at the left and right edges navigate in Gallery card order. The previous control moves the current room, character, video and text right, then brings the previous content in from the left. Next reverses the direction. The first/last card disables the unavailable direction.
+- A switch locks repeated input until its 280ms exit and 440ms arrival finish. It waits for the selected local model, supports keyboard activation and reduced motion, and cancels animations and observers when leaving Gallery.
+- Return restores the original rail position. Long descriptions keep clear of the foreground video, and lateral navigation does not replay the initial depth or text-reveal animations.
+- Explicit saved null survives reload; missing or invalid preferences still use the fresh-install Cortana default.
 
-Verification covers activation, deactivation, switching from an applied Zima, independent Gallery preview and outer rail, hidden/shown companions across core routes, both appearance modes, keyboard and reduced-motion interaction, and persistence after reload. Source checks and desktop delivery evidence are recorded in the deployment manifest; browser/native evidence for this change uses the `output/playwright/toggle-*` prefix.
-Desktop delivery on 2026-09-09 passed both native appearance flows and a normal canonical-shortcut restart. The raw console gate and its exact preexisting-template CSP attribution remain available in the qualified report; the deployment manifest records artifact hashes, the recoverable pair, and process cleanup.
+Verification covers both appearances, direct card entry, previous/next direction, video continuity, keyboard/reduced-motion controls, activation/deactivation, persistence and core navigation. Current evidence uses `output/playwright/zima-*`; earlier click-toggle evidence remains under `toggle-*`. The desktop manifest records the production executable, matching sidecar, recoverable pair, native results and cleanup.

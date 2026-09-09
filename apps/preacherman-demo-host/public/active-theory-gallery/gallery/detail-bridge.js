@@ -3,8 +3,14 @@
 (() => {
   const listeners = new Set();
   let work, video, camera, foreground, savedScroll, exitTimer;
+  let switching = false;
+  const projects = () => window.CMS_DATA?.projects || [];
+  const index = () => projects().findIndex(project => project.perma === state.project);
   let state = { phase: "closed", project: "", title: "", smallWindow: true };
-  const notify = () => listeners.forEach(listener => listener({ ...state }));
+  const notify = () => {
+    window.document?.documentElement?.setAttribute("data-gallery-detail", state.phase);
+    listeners.forEach(listener => listener({ ...state }));
+  };
   const controller = () => work?.findParent("ViewController").scroll.renderManager.controller;
   const restoreRail = () => {
     if (Number.isFinite(savedScroll)) controller().scroll = savedScroll;
@@ -23,6 +29,20 @@
     },
     get video() { return video?.video?.video ?? null; },
     get snapshot() { return { ...state }; },
+    get isSwitching() { return switching || state.navigationEntry === true; },
+    navigate(direction) {
+      if (state.phase !== "open" || (direction !== -1 && direction !== 1)) return false;
+      const currentIndex = index();
+      const target = currentIndex >= 0 ? projects()[currentIndex + direction] : null;
+      if (!target) return false;
+      switching = true;
+      try {
+        work.set("Work/project", target);
+        work.set("WorkItems/videoURL", target.videoURL);
+        work.navigate?.("work/" + target.perma);
+      } finally { switching = false; }
+      return true;
+    },
     closeWindow() {
       if (state.phase !== "open") return;
       state.smallWindow = false;
@@ -38,8 +58,12 @@
       const bottom = new Vector3(foreground.scale.x / 2, -foreground.scale.y / 2, foreground.position.z).project(camera.camera);
       const input = document.querySelector('[data-preacherman-chat] textarea');
       const rect = input?.getBoundingClientRect();
+      const left = (top.x + 1) * Stage.width / 2;
+      const value = left + "px";
+      const style = window.document.documentElement.style;
+      if (style.getPropertyValue("--gallery-detail-video-left") !== value) style.setProperty("--gallery-detail-video-left", value);
       return {
-        left: (top.x + 1) * Stage.width / 2,
+        left,
         top: (1 - top.y) * Stage.height / 2,
         width: (bottom.x - top.x) * Stage.width / 2,
         height: (top.y - bottom.y) * Stage.height / 2,
@@ -69,7 +93,9 @@
         clearTimeout(exitTimer);
         if (data) {
           if (state.phase === "closed") savedScroll = controller()?.scroll;
-          state = { phase: "open", project: data.perma, title: data.title, poster: data.thumbnailURL || "", smallWindow: true };
+          state = { phase: "open", project: data.perma, title: data.title, poster: data.thumbnailURL || "", smallWindow: true, navigationEntry: switching || (state.phase === "open" && state.navigationEntry === true),
+            hasPrevious: projects().findIndex(project => project.perma === data.perma) > 0,
+            hasNext: projects().findIndex(project => project.perma === data.perma) >= 0 && projects().findIndex(project => project.perma === data.perma) < projects().length - 1 };
           notify();
         } else if (state.phase !== "closed") {
           state.phase = "closing";

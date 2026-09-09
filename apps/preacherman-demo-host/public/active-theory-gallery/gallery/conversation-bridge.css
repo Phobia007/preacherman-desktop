@@ -10,3 +10,10 @@
 @media (max-width: 600px) {
   [data-preacherman-chat] { max-width: calc(100vw - 32px) !important; padding-inline: 16px !important; }
 }
+
+/* Keep shared character copy clear of the foreground video window. */
+@media (min-width: 769px) {
+  html[data-gallery-detail="open"] [data-preacherman-chat] {
+    max-width: min(450px, calc(var(--gallery-detail-video-left, 22vw) + 32px));
+  }
+}
