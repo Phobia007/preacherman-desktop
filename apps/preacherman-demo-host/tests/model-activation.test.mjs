@@ -3,6 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { stripTypeScriptTypes } from "node:module";
 
 const hostRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = join(hostRoot, "src");
@@ -48,4 +49,29 @@ test("Gallery and Home use the same semantic black canvas in both appearances", 
   assert.equal((styles.match(/--demo-theme-home-canvas:\s*#010409/g) ?? []).length, 2);
   assert.match(styles, /\.demo-app-shell__scene\s*\{[\s\S]*background:\s*var\(--demo-theme-home-canvas\)/);
   assert.match(styles, /\.demo-app-shell__screen-content\s*\{[\s\S]*background:\s*transparent/);
+});
+
+
+test("an explicit disabled companion survives saving and reload in both themes", async () => {
+  const source = await readFile(join(sourceRoot, "preferences.ts"), "utf8");
+  const module = await import(`data:text/javascript;base64,${Buffer.from(stripTypeScriptTypes(source)).toString("base64")}`);
+  const originalWindow = globalThis.window;
+  let stored = null;
+  globalThis.window = { localStorage: { getItem: () => stored, setItem: (_key, value) => { stored = value; } } };
+  try {
+    for (const appearance of ["light", "dark"]) {
+      for (const activeModelId of ["cortana", "zima", null]) {
+        const preferences = { activeModelId, appearance, locale: "en" };
+        module.savePreferences(preferences);
+        assert.deepEqual(module.readPreferences(), preferences);
+      }
+      stored = JSON.stringify({ appearance, locale: "en" });
+      assert.equal(module.readPreferences().activeModelId, "cortana", "missing preference uses the fresh-install default");
+      stored = JSON.stringify({ appearance, activeModelId: "missing-model" });
+      assert.equal(module.readPreferences().activeModelId, "cortana", "invalid model uses the default");
+    }
+  } finally {
+    if (originalWindow === undefined) delete globalThis.window;
+    else globalThis.window = originalWindow;
+  }
 });

@@ -152,7 +152,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const [galleryDetailOpen, setGalleryDetailOpen] = useState(false);
   const [galleryPreviewModelId, setGalleryPreviewModelId] = useState<ModelId | null>(null);
   const activateGalleryModel = useCallback((modelId: ModelId) => {
-    setPreferences((current) => ({ ...current, activeModelId: modelId }));
+    setPreferences((current) => ({ ...current, activeModelId: current.activeModelId === modelId ? null : modelId }));
   }, []);
   const [testView, setTestView] = useState("diagnostics");
   const [requestedControl, setRequestedControl] = useState<string | null>(null);
@@ -264,9 +264,9 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const HomeSurface = adapter.resolve(manifest).component;
   const activeModelId = preferences.activeModelId;
   const isCompanionActive = activeModelId !== null;
-  const sceneModelId = activeSurfaceType === "market" && galleryDetailOpen
-    ? galleryPreviewModelId ?? activeModelId
-    : activeModelId;
+  // Gallery previews its catalog independently of the companion used elsewhere.
+  const galleryModelId = galleryDetailOpen ? galleryPreviewModelId : "cortana";
+  const sceneModelId = activeSurfaceType === "market" ? galleryModelId : activeModelId;
   const preachermanPanelSurface: LocalSurfaceType | null = route.kind === "surface"
     ? activeSurfaceType
     : route.kind === "screen" && (screen?.manifest?.surfaceId ?? manifest.surfaceId) === manifest.surfaceId

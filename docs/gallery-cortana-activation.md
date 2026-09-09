@@ -1,17 +1,13 @@
-# Cortana detail actions
+# Cortana detail activation
 
-- The first Gallery card (internal slug `secret-sky`) previews Cortana independently of the globally applied avatar. Browsing never changes preferences; leaving detail restores the applied avatar before the exit frame.
-- Its transparent Activate capsule uses the existing navigation's Clash Display Light typeface and charge/word-light motion language. The outline stays visible in both appearance modes. Two paths start at the top midpoint and charge outward with two eased pulses over 1.6 seconds.
-- Primary pointer or Enter/Space must remain held until completion. Release, moving outside, cancellation, focus/window loss, hidden document, navigation and unmount cancel an incomplete hold.
-- Completion updates the existing `preacherman.preferences.activeModelId` through App state. An already applied Cortana reads Activated immediately; there is no fake unselected state or toggle-to-disable.
-- The return arrow has no visible border or fill and retains its hit area, chat baseline and explicit-back behavior. The capsule and arrow share a right edge.
-- Only Cortana's existing Medium Case Study label becomes Details; the existing destination, underline, font and 800ms reveal delay remain unchanged.
-- Other Gallery cards have no Activate button until assigned an actual model. No new catalog assignments, logo, media, shader or route changes are included.
+The Gallery activation button is a single-click toggle for the companion displayed outside Gallery.
 
-Verification: focused Node regressions, real pointer/keyboard interruption and completion, preview/equip separation, persistence after reload, paired native shortcut smoke tests in both appearances. The original desktop executable and sidecar must be preserved before deployment.
+- Click Activate to apply that card's model to Home, Task, Market, Settings and the other non-Gallery routes.
+- Click Activated to save `activeModelId: null` and hide the companion on those routes. The button remains enabled while active.
+- Gallery previews are independent of this preference. Opening the Cortana card shows Cortana even when the global companion is disabled or a different model is applied. Toggling does not replace or hide the current preview.
+- The current outer Gallery defaults to Cortana. Only the Cortana card (`secret-sky`) has a real avatar mapping; unassigned cards do not borrow the global companion or expose an activation button.
+- An explicit saved null survives reload. Missing or invalid preferences still use the fresh-install Cortana default.
+- Native button click, Enter and Space toggle immediately. The 1.6-second outline pulse is feedback only and never delays or locks the change.
+- The capsule remains transparent, 163.2 by 49.6 CSS pixels, with 22px Clash Display type. HALO 4 metadata, the Microsoft logo, Details link, media, arrow geometry and right alignment are preserved.
 
-## Cortana detail refinement — 2026-09-09
-
-The capsule is now 80% of its previous dimensions (163.2 by 49.6 CSS pixels); the label is reduced further to 22px for more internal space. The existing SVG charge paths scale with the capsule. The Cortana return arrow shaft grows from 22 to 38px, preserving its arrowhead and the other cards. The first card metadata now reads 2003 / HALO 4 / Preacherman Avatar; its Microsoft logo is unchanged.
-
-Source checks: 14 Gallery regressions, TypeScript and Impeccable detector passed. Browser pointer and keyboard flows passed in dark and light appearances at 1800x1000 and 1440x900; evidence is output/playwright/refinement-preview-report.json. Desktop delivery completed after user authorization: canonical shortcut cold start, both native appearances and core navigation passed. Native evidence is output/playwright/refinement-native-report.json. An initial hold check failed and triggered immediate paired rollback; explicit window focus and event capture were added to verification only. The unchanged candidate passed the final complete run. Raw first failure and old-version comparison remain available; the initial cause is not conclusively established. Original preferences were restored and the final shortcut launched without debugging.
+Verification covers activation, deactivation, switching from an applied Zima, independent Gallery preview and outer rail, hidden/shown companions across core routes, both appearance modes, keyboard and reduced-motion interaction, and persistence after reload. Source checks and desktop delivery evidence are recorded in the deployment manifest; browser/native evidence for this change uses the `output/playwright/toggle-*` prefix.

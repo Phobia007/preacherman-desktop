@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import type { ModelId } from "../../preferences";
 
-export const GALLERY_ACTIVATION_HOLD_MS = 1600;
+const ACTIVATION_FEEDBACK_MS = 1600;
 
 export function GalleryActivateButton({ modelId, activated, enabled, onActivate }: {
   modelId: ModelId;
@@ -9,78 +9,36 @@ export function GalleryActivateButton({ modelId, activated, enabled, onActivate 
   enabled: boolean;
   onActivate: (modelId: ModelId) => void;
 }) {
-  const [holding, setHolding] = useState(false);
-  const inputRef = useRef<string | null>(null);
-  const cancel = () => { inputRef.current = null; setHolding(false); };
-  const start = (input: string) => {
-    if (!enabled || activated || inputRef.current) return;
-    inputRef.current = input;
-    setHolding(true);
-  };
+  const [feedbackId, setFeedbackId] = useState(0);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const modelName = modelId === "cortana" ? "Cortana" : "Zima";
 
+  // Feedback follows the click; the preference changes immediately.
   useEffect(() => {
-    if (!holding || !enabled || activated) return;
-    const timer = window.setTimeout(() => {
-      inputRef.current = null;
-      setHolding(false);
-      onActivate(modelId);
-    }, GALLERY_ACTIVATION_HOLD_MS);
+    if (!feedbackId) return;
+    const timer = window.setTimeout(() => setShowFeedback(false), ACTIVATION_FEEDBACK_MS);
     return () => window.clearTimeout(timer);
-  }, [holding, enabled, activated, modelId, onActivate]);
-
-  useEffect(() => {
-    if (!enabled || activated) cancel();
-  }, [enabled, activated]);
-
-  useEffect(() => {
-    const hidden = () => { if (document.hidden) cancel(); };
-    window.addEventListener("blur", cancel);
-    document.addEventListener("visibilitychange", hidden);
-    return () => {
-      window.removeEventListener("blur", cancel);
-      document.removeEventListener("visibilitychange", hidden);
-    };
-  }, []);
+  }, [feedbackId]);
 
   return <>
     <button
       aria-describedby="gallery-activate-hint"
-      aria-label={activated ? "Cortana activated" : "Hold to activate Cortana"}
-      aria-disabled={!enabled || activated}
+      aria-label={activated ? `Deactivate ${modelName}` : `Activate ${modelName}`}
+      aria-pressed={activated}
+      disabled={!enabled}
       className="gallery-detail__activate"
       data-activated={activated}
-      data-charging={holding && enabled && !activated}
-      onBlur={cancel}
-      onContextMenu={(event) => event.preventDefault()}
-      onPointerDown={(event) => {
-        if (event.button !== 0 || !event.isPrimary) return;
-        start("pointer");
-        event.currentTarget.setPointerCapture(event.pointerId);
+      data-charging={showFeedback}
+      onClick={() => {
+        onActivate(modelId);
+        setShowFeedback(true);
+        setFeedbackId((current) => current + 1);
       }}
-      onPointerUp={cancel}
-      onPointerCancel={cancel}
-      onLostPointerCapture={cancel}
-      onPointerLeave={cancel}
-      onPointerMove={(event) => {
-        if (inputRef.current !== "pointer") return;
-        const rect = event.currentTarget.getBoundingClientRect();
-        if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) cancel();
-      }}
-      onKeyDown={(event) => {
-        if (event.key !== " " && event.key !== "Enter") return;
-        event.preventDefault();
-        if (!event.repeat) start(event.key);
-      }}
-      onKeyUp={(event) => {
-        if (event.key !== " " && event.key !== "Enter") return;
-        event.preventDefault();
-        cancel();
-      }}
-      style={{ "--activation-duration": `${GALLERY_ACTIVATION_HOLD_MS}ms` } as CSSProperties}
+      style={{ "--activation-duration": `${ACTIVATION_FEEDBACK_MS}ms` } as CSSProperties}
       type="button"
     >
-      <span className="gallery-detail__activate-label">{activated ? "Activated" : "Activate"}</span>
-      <svg aria-hidden="true" className="gallery-detail__charge" viewBox="0 0 204 62" fill="none">
+      <span className="gallery-detail__activate-label" key={`label-${feedbackId}`}>{activated ? "Activated" : "Activate"}</span>
+      <svg aria-hidden="true" className="gallery-detail__charge" viewBox="0 0 204 62" fill="none" key={feedbackId}>
         {[
           "M102 1H173A30 30 0 0 1 173 61H102",
           "M102 1H31A30 30 0 0 0 31 61H102",
@@ -88,8 +46,10 @@ export function GalleryActivateButton({ modelId, activated, enabled, onActivate 
       </svg>
     </button>
     <span className="gallery-detail__assistive" id="gallery-activate-hint">
-      {activated ? "This avatar is currently applied." : "Hold for 1.6 seconds to apply this avatar. Release or move away to cancel."}
+      {activated ? "Click to hide the companion outside Gallery. This preview stays visible." : "Click to show this companion on Home and other pages. Gallery previews stay independent."}
     </span>
-    <span aria-live="polite" className="gallery-detail__assistive">{activated ? "Cortana activated" : ""}</span>
+    <span aria-live="polite" className="gallery-detail__assistive">
+      {activated ? `${modelName} is shown outside Gallery.` : `${modelName} is not applied outside Gallery.`}
+    </span>
   </>;
 }

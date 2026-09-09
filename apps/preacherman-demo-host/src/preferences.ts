@@ -98,7 +98,7 @@ export function readPreferences(): DemoPreferences {
       | Partial<DemoPreferences>
       | null;
     return {
-      activeModelId: isModelId(stored?.activeModelId)
+      activeModelId: stored?.activeModelId === null || isModelId(stored?.activeModelId)
         ? stored.activeModelId
         : DEFAULT_PREFERENCES.activeModelId,
       appearance: isAppearance(stored?.appearance)

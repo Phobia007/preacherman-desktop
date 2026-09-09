@@ -147,7 +147,7 @@
 .gallery-detail__activate:hover,
 .gallery-detail__activate:focus-visible { border-color: var(--demo-theme-gallery-detail-control-text); }
 .gallery-detail__activate:focus-visible { outline: 2px solid var(--demo-theme-gallery-detail-control-text); outline-offset: 5px; }
-.gallery-detail__activate[aria-disabled="true"] { cursor: default; }
+.gallery-detail__activate:disabled { cursor: default; opacity: .5; pointer-events: none; }
 .gallery-detail__activate[data-activated="true"] { border-color: var(--demo-theme-gallery-detail-control-text); }
 .gallery-detail__activate-label { position: relative; }
 .gallery-detail__activate:hover .gallery-detail__activate-label {

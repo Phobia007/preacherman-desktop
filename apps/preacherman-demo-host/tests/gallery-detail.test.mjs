@@ -166,18 +166,20 @@ test('Cortana activation is persistent, while detail preview never equips on ent
   const app=read('src/App.tsx'),surface=read('src/surfaces/gallery/ActiveTheoryGallerySurface.tsx');
   assert.match(surface,/detail.project === "secret-sky" \? "cortana" : null/);
   assert.match(surface,/onPreviewModelChange\(active && detail.phase === "open" \? modelId : null\)/);
-  assert.match(app,/setPreferences\(\(current\) => \(\{ \.\.\.current, activeModelId: modelId \}\)\)/);
+  assert.match(app,/setPreferences\(\(current\) => \(\{ \.\.\.current, activeModelId: current\.activeModelId === modelId \? null : modelId \}\)\)/);
   assert.match(app,/savePreferences\(preferences\)/);
-  assert.match(app,/galleryPreviewModelId \?\? activeModelId/);
+  assert.match(app,/const galleryModelId = galleryDetailOpen \? galleryPreviewModelId : "cortana"/);
+  assert.match(app,/activeSurfaceType === "market" \? galleryModelId : activeModelId/);
   assert.match(read('src/surfaces/gallery/GalleryDetailOverlay.tsx'),/activated=\{activeModelId === modelId\}/);
 });
 
-test('hold activation is cancellable and keyboard accessible with a permanently transparent outline',()=>{
+test('click toggles application immediately with semantic keyboard support and visual feedback',()=>{
   const button=read('src/surfaces/gallery/GalleryActivateButton.tsx'),css=read('src/surfaces/gallery/active-theory-gallery-surface.css');
-  assert.match(button,/GALLERY_ACTIVATION_HOLD_MS = 1600/);
-  assert.match(button,/clearTimeout\(timer\)/);
-  for(const event of ['onPointerUp','onPointerLeave','onPointerCancel','onLostPointerCapture','onBlur']) assert.ok(button.includes(event+'={cancel}'));
-  assert.match(button,/onKeyDown/);assert.match(button,/onKeyUp/);assert.match(button,/visibilitychange/);
+  assert.match(button,/onClick=\{\(\) => \{\s*onActivate\(modelId\)/);
+  assert.match(button,/aria-pressed=\{activated\}/);
+  assert.match(button,/disabled=\{!enabled\}/);
+  assert.doesNotMatch(button,/onPointerDown|onKeyDown|onKeyUp|Hold to activate/);
+  assert.match(button,/setTimeout\(\(\) => setShowFeedback\(false\)/);
   assert.match(button,/activated \? "Activated" : "Activate"/);
   assert.match(button,/M102 1H173/);assert.match(button,/M102 1H31/);
   assert.match(css,/\.gallery-detail__activate \{[^}]*background: transparent;/s);
