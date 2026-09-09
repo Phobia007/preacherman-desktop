@@ -7,6 +7,9 @@ import {
   Mesh,
   MeshStandardMaterial,
   Object3D,
+  Bone,
+  Skeleton,
+  SkinnedMesh,
   Texture,
 } from "three";
 
@@ -44,4 +47,17 @@ test("scene cleanup disposes each unique geometry, material, and texture exactly
     texture: 1,
   });
   assert.deepEqual(report, { geometries: 1, materials: 2, textures: 1 });
+});
+
+
+test("replacing a character frees a shared skeleton's bone texture once", async () => {
+  const { disposeAvatarSceneResources } = await import(pathToFileURL(join(packageRoot, "dist", "index.js")));
+  const root = new Object3D(), bone = new Bone(), skeleton = new Skeleton([bone]);
+  skeleton.computeBoneTexture();
+  let disposed = 0;
+  skeleton.boneTexture.addEventListener("dispose", () => disposed++);
+  for (let i = 0; i < 2; i++) { const mesh = new SkinnedMesh(new BufferGeometry(), new MeshStandardMaterial()); mesh.bind(skeleton); root.add(mesh); }
+  disposeAvatarSceneResources(root);
+  assert.equal(disposed, 1);
+  assert.equal(skeleton.boneTexture, null);
 });

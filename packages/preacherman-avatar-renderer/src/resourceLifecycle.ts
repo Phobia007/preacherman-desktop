@@ -3,6 +3,8 @@ import {
   Material,
   Mesh,
   Object3D,
+  Skeleton,
+  SkinnedMesh,
   Texture,
 } from "three";
 
@@ -38,17 +40,20 @@ export function disposeAvatarSceneResources(
   extras: AvatarResourceExtras = {},
 ): AvatarDisposeReport {
   const geometries = new Set<BufferGeometry>();
+  const skeletons = new Set<Skeleton>();
   const materials = new Set<Material>(extras.materials ?? []);
   const textures = new Set<Texture>(extras.textures ?? []);
 
   root.traverse((object) => {
     if (!(object instanceof Mesh)) return;
     geometries.add(object.geometry);
+    if (object instanceof SkinnedMesh) skeletons.add(object.skeleton);
     for (const material of materialList(object.material)) materials.add(material);
   });
   for (const material of materials) collectMaterialTextures(material, textures);
 
   for (const texture of textures) texture.dispose();
+  for (const skeleton of skeletons) skeleton.dispose();
   for (const material of materials) material.dispose();
   for (const geometry of geometries) geometry.dispose();
 

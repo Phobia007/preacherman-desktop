@@ -65,3 +65,5 @@ export {
   type AvatarViewportProps,
   type InteractiveAvatarViewportProps,
 } from "./types";
+
+export { prefetchAvatarModel, avatarModelCacheSnapshot } from "./avatarModelCache";

@@ -4,6 +4,38 @@
   const listeners = new Set();
   let work, video, camera, foreground, savedScroll, exitTimer;
   let switching = false;
+  let requestedActive = true, warmed = false, paused = false;
+  const pausedMedia = new Set();
+  function syncActivity() {
+    // Let cold prewarming finish the authored entry reveal before suspending it.
+    const visible = !document.hidden && (requestedActive || !warmed);
+    if (!window.Render || paused === !visible) return;
+    paused = !visible;
+    document.documentElement.dataset.galleryRenderActive = String(visible);
+    if (paused) {
+      const seen = new Set();
+      const visit = component => {
+        if (!component || seen.has(component)) return;
+        seen.add(component);
+        const media = component.video instanceof HTMLVideoElement ? component.video : component.video?.video;
+        if (media instanceof HTMLVideoElement && !media.paused && !media.ended) {
+          pausedMedia.add(media);
+          media.pause();
+        }
+        for (const child of Object.values(component.classes || {})) visit(child);
+      };
+      visit(window.Container?.instance());
+      for (const media of document.querySelectorAll("video")) {
+        if (!media.paused && !media.ended) { pausedMedia.add(media); media.pause(); }
+      }
+      Render.pause();
+    } else {
+      Render.resume();
+      for (const media of pausedMedia) if (!media.ended) void media.play().catch(() => undefined);
+      pausedMedia.clear();
+    }
+  }
+  document.addEventListener("visibilitychange", syncActivity);
   const projects = () => window.CMS_DATA?.projects || [];
   const index = () => projects().findIndex(project => project.perma === state.project);
   let state = { phase: "closed", project: "", title: "", smallWindow: true };
@@ -22,6 +54,7 @@
   };
   window.addEventListener("wheel", preventDetailWheel, { capture: true, passive: false });
   const api = window.PreachermanGalleryDetail = {
+    setActive(active) { requestedActive = active; syncActivity(); },
     subscribe(listener) {
       listeners.add(listener);
       listener({ ...state });
@@ -88,7 +121,14 @@
     },
     attach(instance) {
       work = instance;
-      work.startRender(() => { if (state.phase !== "closed") restoreRail(); });
+      work.startRender(() => {
+        if (state.phase !== "closed") restoreRail();
+        if (!warmed) {
+          const view = work.findParent("ViewController");
+          warmed = view.flag?.("__ready") && view.uniforms?.uVisible?.value >= 0.9999;
+        }
+        syncActivity();
+      });
       work.bind("Work/project", data => {
         clearTimeout(exitTimer);
         if (data) {
@@ -113,6 +153,8 @@
   };
   window.addEventListener("pagehide", () => {
     clearTimeout(exitTimer);
+    document.removeEventListener("visibilitychange", syncActivity);
+    pausedMedia.clear();
     window.removeEventListener("wheel", preventDetailWheel, true);
     listeners.clear();
   });

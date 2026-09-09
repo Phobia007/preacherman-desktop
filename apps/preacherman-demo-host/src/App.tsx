@@ -392,6 +392,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           isolateCompanion={activeSurfaceType === "market" && galleryDetailOpen}
           cameraFraming={activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
           modelId={sceneModelId}
+          prefetchModelId={activeSurfaceType === "market" ? (sceneModelId === "cortana" ? "zima" : "cortana") : undefined}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}
           renderActive

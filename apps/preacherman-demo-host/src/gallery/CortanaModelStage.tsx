@@ -1,5 +1,7 @@
 import {
   InteractiveAvatarViewport,
+  createAvatarAssetUrls,
+  prefetchAvatarModel,
   type AvatarActionDescriptor,
   type AvatarCameraFraming,
   type AvatarSceneEnvironment,
@@ -24,6 +26,7 @@ interface CortanaModelStageProps {
   readonly wakeEnabled?: boolean;
   readonly renderActive?: boolean;
   readonly modelId?: ModelId;
+  readonly prefetchModelId?: ModelId;
   readonly cameraFraming?: AvatarCameraFraming;
   readonly rotationOffsetY?: number;
 }
@@ -38,6 +41,7 @@ export function CortanaModelStage({
   wakeEnabled = false,
   renderActive = true,
   modelId = "cortana",
+  prefetchModelId,
   cameraFraming = "full-body",
   rotationOffsetY = 0,
 }: CortanaModelStageProps) {
@@ -107,6 +111,16 @@ export function CortanaModelStage({
   }, [modelId]);
 
   useEffect(() => {
+    if (loadState !== "ready" || !prefetchModelId || prefetchModelId === modelId) return;
+    const timer = window.setTimeout(() => {
+      if (document.hidden) return;
+      const url = createAvatarAssetUrls(localAvatarAssetBaseUrl(prefetchModelId), prefetchModelId).model;
+      void prefetchAvatarModel(url).catch(() => undefined);
+    }, 500);
+    return () => window.clearTimeout(timer);
+  }, [loadState, modelId, prefetchModelId]);
+
+  useEffect(() => {
     const applyJawOpen = (event: Event) => setJawOpen((event as CustomEvent<number>).detail || 0);
     window.addEventListener("preacherman:avatar-jaw", applyJawOpen);
     return () => window.removeEventListener("preacherman:avatar-jaw", applyJawOpen);
@@ -163,7 +177,6 @@ export function CortanaModelStage({
         cameraFraming={cameraFraming}
         renderActive={renderActive}
         rotationOffsetY={rotationOffsetY}
-        key={modelId}
       />
       {wakeEnabled ? (
         <button

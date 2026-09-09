@@ -3,6 +3,7 @@ import { normalizeAvatarError, type AvatarError } from "./types";
 
 interface AvatarErrorBoundaryProps {
   readonly children: ReactNode;
+  readonly resetKey?: string;
   readonly onError: (error: AvatarError) => void;
 }
 interface AvatarErrorBoundaryState {
@@ -21,6 +22,10 @@ export class AvatarErrorBoundary extends Component<
 
   componentDidCatch(error: Error, _info: ErrorInfo): void {
     this.props.onError(normalizeAvatarError(error, "RENDER_FAILED"));
+  }
+
+  componentDidUpdate(previous: AvatarErrorBoundaryProps): void {
+    if (this.state.failed && previous.resetKey !== this.props.resetKey) this.setState({ failed: false });
   }
 
   render(): ReactNode {

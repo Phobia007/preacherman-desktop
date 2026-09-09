@@ -304,8 +304,9 @@ export function AvatarModel({
   }, [actionId, actionRequestKey, controller, invalidate, root]);
 
   useFrame((_, deltaSeconds) => {
-    adapter.update(deltaSeconds);
-    motionPlayer?.update(deltaSeconds);
+    const animationDelta = Math.min(deltaSeconds, 0.1);
+    adapter.update(animationDelta);
+    motionPlayer?.update(animationDelta);
     if (!root || jawOpen <= 0) return;
     const jaw = profile.jawBone ? root.getObjectByName(profile.jawBone) : null;
     if (jaw) jaw.rotation.x += Math.min(1, jawOpen) * 0.22;
@@ -421,7 +422,7 @@ export function AvatarModel({
       for (const controlMap of new Set(Object.values(controlMaps))) {
         controlMap.dispose();
       }
-      for (const url of urls.textures) useTexture.clear(url);
+      useTexture.clear([...urls.textures]);
     },
     [
       controlMaps,

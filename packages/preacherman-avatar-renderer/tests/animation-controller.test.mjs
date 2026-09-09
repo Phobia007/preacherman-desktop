@@ -275,7 +275,12 @@ test("motion manifest loads one GLB pack once and caches only its animation clip
     assert.equal(packRequests(), 1);
     assert.equal(snapshot.loadedPacks.length, 1);
     assert.equal(snapshot.registeredActions, 413);
-    assert.equal(snapshot.loadedClips.length, 47);
+    assert.equal(snapshot.loadedClips.length, 3);
+    for (let i = 2; i < 20; i++) { await adapter.play(`motion-${i}`); adapter.update(0.5); }
+    assert.ok(adapter.getDebugSnapshot().loadedClips.length <= 9, "idle plus eight requested motions");
+    await adapter.play("motion-0");
+    assert.equal(adapter.getDebugSnapshot().currentAction, "motion-0");
+    assert.equal(packRequests(), 1, "retired clip can be recovered from the bounded pack cache");
     assert.equal(adapter.getRoot().children.length, rootChildren);
     adapter.dispose();
   });

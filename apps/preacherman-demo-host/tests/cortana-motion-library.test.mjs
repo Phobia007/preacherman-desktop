@@ -58,7 +58,7 @@ test("renderer resolves pack_export lazily, caches animations, and discards dupl
 
   assert.match(adapter, /motion\.pack_export/);
   assert.match(adapter, /clipName:\s*motion\.action/);
-  assert.match(adapter, /animationPackCache\.get\(url\)/);
+  assert.match(adapter, /animationPackCache\.get\(url,/);
   assert.match(adapter, /disposeAvatarSceneResources\(gltf\.scene\)/);
   assert.doesNotMatch(adapter, /this\.root\.add\(gltf\.scene\)/);
   assert.match(model, /motion-library\/motions\.json/);

@@ -8,14 +8,15 @@ const bridgeSource = read('public/active-theory-gallery/gallery/detail-bridge.js
 function fixture(projects = []) {
   let observer, timer, render, videoUrl;
   const scroll = {scroll: 4217};
-  const window = {addEventListener(){}, CMS_DATA: {projects}};
+  const document = {hidden:false,addEventListener(){},removeEventListener(){}};
+  const window = {document,addEventListener(){}, CMS_DATA: {projects}};
   const work = {
     startRender(callback) { render = callback; },
     bind(_key, callback) { observer = callback; },
     findParent() { return {scroll:{renderManager:{controller:scroll}}}; },
     set(key, value) { if (key === 'WorkItems/videoURL') videoUrl = value; else {assert.equal(key,'Work/project'); observer(value);} },
   };
-  vm.runInNewContext(bridgeSource, {window,Set,Number,Math,setTimeout:fn=>(timer=fn,1),clearTimeout:()=>{timer=null;}});
+  vm.runInNewContext(bridgeSource, {window,document,Set,Number,Math,setTimeout:fn=>(timer=fn,1),clearTimeout:()=>{timer=null;}});
   const api=window.PreachermanGalleryDetail;
   api.attach(work);
   return {api,scroll,videoUrl:()=>videoUrl,enter:project=>observer(project),finish:()=>timer?.(),tick:()=>render?.()};
@@ -113,7 +114,8 @@ test('runtime retains the reflection pass and rail, without scroll exit or old c
   assert.match(runtime,/_this\.layers\.body\.visible=!1;window\.PreachermanGalleryDetail/);
   assert.match(runtime,/cube\.shader\.set\("tPrevFrame",_this\.nuke\.finalTexture\)/);
   assert.match(runtime,/_this\.startRender\(_this\.handleCameraScroll\)/);
-  assert.doesNotMatch(bridgeSource,/\.pause\(|\.play\(|document\.createElement\("video"/);
+  assert.doesNotMatch(bridgeSource,/document\.createElement\("video"/);
+  assert.doesNotMatch(bridgeSource.slice(bridgeSource.indexOf("    closeWindow()"), bridgeSource.indexOf("    back()")),/\.pause\(|\.play\(/);
 });
 
 test('mirror uses the room video, preserves aspect, and releases frame callbacks',()=>{

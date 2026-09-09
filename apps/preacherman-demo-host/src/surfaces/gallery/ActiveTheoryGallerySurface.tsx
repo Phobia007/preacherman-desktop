@@ -32,6 +32,13 @@ export function ActiveTheoryGallerySurface({ active = true, onDetailChange, onPr
     setPortal(frameRef.current?.closest(".demo-app-shell") ?? null);
     return api.subscribe(setDetail);
   }, [loaded]);
+  useEffect(() => {
+    if (!bridge) return;
+    const sync = () => bridge.setActive(active && !document.hidden);
+    sync();
+    document.addEventListener("visibilitychange", sync);
+    return () => { document.removeEventListener("visibilitychange", sync); bridge.setActive(false); };
+  }, [active, bridge]);
   useLayoutEffect(() => {
     // Restore rail compositing before the first exit frame, not after its tween.
     // The overlay may keep fading while the companion is already back in the rail.

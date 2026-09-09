@@ -141,7 +141,7 @@ test("Gallery shares the Home canvas while embedded content and model rendering 
   assert.doesNotMatch(modelStage, /appearance=|theme=|material=/);
   assert.match(viewport, /alpha:\s*true/);
   assert.match(scene, /setClearAlpha\(environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
-  assert.match(viewport, /setClearColor\(0x010409,\s*environment === "cinematic" \? 1 : 0\)/);
+  assert.match(viewport, /setClearColor\(0x010409,\s*environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
   assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment awakened=\{awakened\} isolateCompanion=\{isolateCompanion\} \/>/);
   assert.match(galleryStyles, /var\(--demo-theme-loading\)/);
   assert.match(galleryStyles, /var\(--demo-theme-error\)/);

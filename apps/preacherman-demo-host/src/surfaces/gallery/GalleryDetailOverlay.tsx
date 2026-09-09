@@ -15,6 +15,7 @@ export interface GalleryDetailState {
 }
 export interface GalleryDetailBridge {
   video: HTMLVideoElement | null;
+  setActive(active: boolean): void;
   subscribe(listener: (state: GalleryDetailState) => void): () => void;
   closeWindow(): void;
   navigate(direction: -1 | 1): boolean;

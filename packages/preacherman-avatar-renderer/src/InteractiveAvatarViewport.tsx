@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { AvatarErrorBoundary } from "./AvatarErrorBoundary";
 import { AvatarAnimationDebugPanel } from "./AvatarAnimationDebugPanel";
 import { configureHologramRenderer } from "./HologramLights";
@@ -50,6 +50,16 @@ export function InteractiveAvatarViewport({
   rotationOffsetY = 0,
 }: InteractiveAvatarViewportProps) {
   const [loadState, setLoadState] = useState<AvatarLoadState>("loading");
+  const [documentVisible, setDocumentVisible] = useState(() => typeof document === "undefined" || !document.hidden);
+  const [loadedModel, setLoadedModel] = useState("");
+  const modelKey = modelId + ":" + assetBaseUrl;
+  const rendering = renderActive && documentVisible;
+  useEffect(() => {
+    const sync = () => setDocumentVisible(!document.hidden);
+    document.addEventListener("visibilitychange", sync);
+    return () => document.removeEventListener("visibilitychange", sync);
+  }, []);
+  useLayoutEffect(() => { setLoadState("loading"); }, [modelKey]);
   const [animationDebug, setAnimationDebug] =
     useState<AvatarAnimationDebugSnapshot | null>(null);
   const dpr = useMemo<[number, number]>(() => {
@@ -78,9 +88,10 @@ export function InteractiveAvatarViewport({
 
   const reportFirstFrame = useCallback((snapshot: AvatarPerformanceSnapshot) => {
     setLoadState("ready");
+    setLoadedModel(modelKey);
     onPerformance?.(snapshot);
     onReady?.({ state: "ready", ...snapshot });
-  }, [onPerformance, onReady]);
+  }, [modelKey, onPerformance, onReady]);
 
   useEffect(() => {
     if (supportsWebGL()) return;
@@ -95,14 +106,15 @@ export function InteractiveAvatarViewport({
       className={["preacherman-avatar-viewport", "preacherman-avatar-viewport--interactive", className]
         .filter(Boolean)
         .join(" ")}
-      data-avatar-load-state={loadState}
+      data-avatar-load-state={loadState === "ready" && loadedModel !== modelKey ? "loading" : loadState}
+      data-avatar-render-active={rendering}
       data-avatar-environment={environment}
     >
-      <AvatarErrorBoundary onError={reportError}>
+      <AvatarErrorBoundary onError={reportError} resetKey={modelKey}>
         <Canvas
           camera={{ fov: 30, near: 0.01, far: 100, position: [0, 0.86, 3.35] }}
           dpr={dpr}
-          frameloop={renderActive ? "always" : "demand"}
+          frameloop={rendering ? "always" : "never"}
           gl={{
             // Allocate alpha once so Gallery can change composition without remounting the model.
             alpha: true,

@@ -300,7 +300,7 @@ test("runtime animation replaces component-local standby bone posing", async () 
 
   assert.match(source, /new CortanaAnimationController\(adapter\)/);
   assert.match(source, /controller\.setState\("idle"\)/);
-  assert.match(source, /useFrame\(\(_, deltaSeconds\) => \{[\s\S]*adapter\.update\(deltaSeconds\)/);
+  assert.match(source, /useFrame\(\(_, deltaSeconds\) => \{[\s\S]*adapter\.update\(animationDelta\)/);
   assert.doesNotMatch(source, /aimBoneAt|pose\.bones|new Vector3/);
 });
 

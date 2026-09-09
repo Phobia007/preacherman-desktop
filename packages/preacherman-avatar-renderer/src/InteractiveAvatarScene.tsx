@@ -1,3 +1,4 @@
+import { AvatarFrameMetrics } from "./AvatarFrameMetrics";
 import { OrbitControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useRef } from "react";
@@ -172,6 +173,7 @@ export function InteractiveAvatarScene({
       {environment === "cinematic" ? <CinematicEnvironment awakened={awakened} isolateCompanion={isolateCompanion} /> : null}
       {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
       <AvatarModel
+        key={`${modelId}:${assetBaseUrl}`}
         actionId={actionId}
         actionRequestKey={actionRequestKey}
         assetBaseUrl={assetBaseUrl}
@@ -187,6 +189,7 @@ export function InteractiveAvatarScene({
         rotationOffsetY={rotationOffsetY}
       />
       <CameraRig cameraFraming={cameraFraming} environment={environment} resetKey={resetKey} />
+      <AvatarFrameMetrics />
       <ContextLossListener onContextLost={onContextLost} />
     </>
   );

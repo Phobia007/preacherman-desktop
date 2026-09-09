@@ -9,6 +9,8 @@ import {
   LoopOnce,
   LoopRepeat,
 } from "three";
+import { AsyncResourceCache } from "../../AsyncResourceCache";
+import { loadAvatarModelFile } from "../../avatarModelCache";
 import { disposeAvatarSceneResources } from "../../resourceLifecycle";
 import type { AvatarAnimationPort } from "../contracts/AvatarAnimationPort";
 import type {
@@ -66,7 +68,14 @@ interface AnimationPackPayload {
   readonly boneTranslations: ReadonlyMap<string, readonly [number, number, number]>;
 }
 
-const animationPackCache = new Map<string, Promise<AnimationPackPayload>>();
+const animationPackCache = new AsyncResourceCache<AnimationPackPayload>(2, 96 * 1024 * 1024, pack => {
+  const buffers = new Set<ArrayBufferLike>();
+  for (const clip of pack.animations) for (const track of clip.tracks) {
+    buffers.add(track.times.buffer);
+    buffers.add(track.values.buffer);
+  }
+  return [...buffers].reduce((bytes, buffer) => bytes + buffer.byteLength, 0);
+});
 
 function withTrailingSlash(value: string): string {
   return value.endsWith("/") ? value : `${value}/`;
@@ -80,9 +89,7 @@ function loadAnimationPack(
   loader: GLTFLoader,
   url: string,
 ): Promise<AnimationPackPayload> {
-  const cached = animationPackCache.get(url);
-  if (cached) return cached;
-  const pending = loader.loadAsync(url)
+  return animationPackCache.get(url, () => loader.loadAsync(url)
     .then((gltf) => {
       const animations = Object.freeze([...gltf.animations]);
       const boneTranslations = new Map<string, readonly [number, number, number]>();
@@ -96,13 +103,7 @@ function loadAnimationPack(
       });
       disposeAvatarSceneResources(gltf.scene);
       return { animations, boneTranslations };
-    })
-    .catch((error) => {
-      animationPackCache.delete(url);
-      throw error;
-    });
-  animationPackCache.set(url, pending);
-  return pending;
+    }));
 }
 
 function deriveTranslationScale(
@@ -272,7 +273,10 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
   }
 
   update(deltaSeconds: number): void {
-    if (!this.disposed) this.mixer?.update(deltaSeconds);
+    if (!this.disposed) {
+      this.mixer?.update(deltaSeconds);
+      this.retireUnusedClips();
+    }
   }
 
   getRoot(): Group | null {
@@ -336,7 +340,9 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
   private async loadModel(): Promise<void> {
     let gltf: GLTF;
     try {
-      gltf = await this.loader.loadAsync(this.options.modelUrl);
+      const url = this.options.modelUrl;
+      const source = await loadAvatarModelFile(url);
+      gltf = await this.loader.parseAsync(source, url.slice(0, url.lastIndexOf("/") + 1));
     } catch (cause) {
       throw this.fail(
         new AvatarAnimationError(
@@ -484,7 +490,12 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
         { actionId: id },
       ));
     }
-    if (this.clipByName.has(descriptor.clipName)) return;
+    const loaded = this.clipByName.get(descriptor.clipName);
+    if (loaded) {
+      this.clipByName.delete(descriptor.clipName);
+      this.clipByName.set(descriptor.clipName, loaded);
+      return;
+    }
     if (!descriptor.packUrl) {
       throw this.fail(new AvatarAnimationError(
         "CLIP_MISSING",
@@ -513,10 +524,8 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       this.modelBoneTranslations,
       pack.boneTranslations,
     );
-    for (const clip of pack.animations) {
-      const normalizedClip = scaleClipTranslations(clip, translationScale);
-      this.clipByName.set(normalizedClip.name, normalizedClip);
-    }
+    const clip = pack.animations.find(clip => clip.name === descriptor.clipName);
+    if (clip) this.clipByName.set(clip.name, scaleClipTranslations(clip, translationScale));
     this.loadedPacks.add(descriptor.packUrl);
     if (!this.clipByName.has(descriptor.clipName)) {
       this.missingClipErrors.push(descriptor.clipName);
@@ -527,6 +536,27 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       ));
     }
     this.emitDebug();
+  }
+
+  private retireUnusedClips(): void {
+    // Keep eight recently used motion clips, plus built-in idle clips. Active
+    // crossfades are protected until their weight reaches zero on a later frame.
+    if (this.clipByName.size <= this.staticDescriptorIds.size + 8) return;
+    for (const [name, clip] of this.clipByName) {
+      const descriptor = [...this.descriptors.values()].find(item => item.clipName === name);
+      if (!descriptor?.packUrl || this.current?.id === descriptor.id) continue;
+      const action = this.actionById.get(descriptor.id);
+      if (action?.isRunning() && action.getEffectiveWeight() > 0.0001) continue;
+      action?.stop();
+      this.mixer?.uncacheClip(clip);
+      this.actionById.delete(descriptor.id);
+      this.clipByName.delete(name);
+      if (this.clipByName.size <= this.staticDescriptorIds.size + 8) break;
+    }
+    this.loadedPacks.clear();
+    for (const descriptor of this.descriptors.values()) {
+      if (descriptor.packUrl && this.clipByName.has(descriptor.clipName)) this.loadedPacks.add(descriptor.packUrl);
+    }
   }
 
   private resolveAction(id: string): CurrentAction {
