@@ -32,7 +32,6 @@ export {
 export {
   AvatarAnimationError,
   type AvatarActionDescriptor,
-  type AvatarMotionLibraryOptions,
   type AvatarAnimationDebugSnapshot,
   type AvatarAnimationErrorCode,
   type AvatarMotionState,

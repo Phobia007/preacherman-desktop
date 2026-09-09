@@ -38,7 +38,7 @@ test("the saved model remains persistent while Gallery changes its camera framin
   assert.match(stage, /modelId=\{modelId\}/);
   assert.match(stage, /renderActive=\{renderActive\}/);
   assert.match(stage, /modelId === "zima" \? "idle\.zima" : "idle\.catwalk"/);
-  assert.match(stage, /actionId=\{actionsModelId === modelId \? playingActionId : undefined\}/);
+  assert.match(stage, /actionId=\{defaultActionId\}/);
   assert.doesNotMatch(stage, /key=\{modelId\}/, "switching models must retain the Canvas");
   const scene = await readFile(join(hostRoot, "../../packages/preacherman-avatar-renderer/src/InteractiveAvatarScene.tsx"), "utf8");
   assert.match(scene, /<AvatarModel\s+key=\{`\$\{modelId\}:\$\{assetBaseUrl\}`\}/);

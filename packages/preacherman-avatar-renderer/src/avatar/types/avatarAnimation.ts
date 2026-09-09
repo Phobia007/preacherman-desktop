@@ -19,13 +19,6 @@ export interface AvatarActionDescriptor {
   readonly priority: number;
   readonly interruptible: boolean;
   readonly fallback?: string;
-  readonly packUrl?: string;
-}
-
-export interface AvatarMotionLibraryOptions {
-  readonly manifestUrl: string;
-  readonly indexUrl: string;
-  readonly packsBaseUrl: string;
 }
 
 export interface PlayActionOptions {
@@ -37,8 +30,6 @@ export interface PlayActionOptions {
 
 export type AvatarAnimationErrorCode =
   | "MODEL_LOAD_FAILED"
-  | "MANIFEST_LOAD_FAILED"
-  | "PACK_LOAD_FAILED"
   | "CLIP_MISSING"
   | "ACTION_UNKNOWN"
   | "STATE_UNMAPPED"
@@ -69,6 +60,5 @@ export interface AvatarAnimationDebugSnapshot {
   readonly mixerState: "idle" | "playing" | "disposed" | "error";
   readonly boneCount: number;
   readonly missingClipErrors: readonly string[];
-  readonly loadedPacks: readonly string[];
   readonly registeredActions: number;
 }

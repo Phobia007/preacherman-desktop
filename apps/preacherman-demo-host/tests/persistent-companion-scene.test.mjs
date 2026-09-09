@@ -22,7 +22,7 @@ test("Home, Task, Settings, and Gallery share one persistent companion scene", a
   assert.match(app, /sceneModelId \? \(/);
   assert.doesNotMatch(app, /sceneModelId && activeSurfaceType !== "market"/);
   assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
-  assert.match(app, /<ActiveTheoryGallerySurface active=\{activeSurfaceType === "market"\} onDetailChange=\{setGalleryDetailOpen\} \/>/);
+  assert.match(app, /<ActiveTheoryGallerySurface\s+active=\{activeSurfaceType === "market"\}[\s\S]*?onDetailChange=\{setGalleryDetailOpen\}/);
   assert.match(shell, /className="demo-app-shell__scene"/);
   assert.match(shell, /data-active-surface=\{activeSurfaceType\}/);
   assert.match(styles, /\.demo-app-shell__scene\s*\{[\s\S]*z-index:\s*0/);
@@ -33,9 +33,8 @@ test("Home, Task, Settings, and Gallery share one persistent companion scene", a
   assert.match(stage, /aria-pressed=\{awakened\}/);
   assert.doesNotMatch(stage, /interactionSignal/);
   assert.doesNotMatch(stage, /cortana-model-stage__interaction-target/);
-  assert.match(stage, /data-motion-action=\{playingActionId \|\| ""\}/);
-  assert.match(stage, /"conversation_loop"/);
-  assert.match(stage, /"looking_around"/);
+  assert.match(stage, /data-motion-action=\{defaultActionId\}/);
+  assert.doesNotMatch(stage, /"conversation_loop"|"looking_around"|motion\.select/);
   assert.match(styles, /\.cortana-model-stage__wake-button\s*\{[\s\S]*bottom:\s*34px;[\s\S]*width:\s*500px;[\s\S]*height:\s*94px;[\s\S]*clip-path:\s*ellipse\(50% 50% at 50% 50%\)[\s\S]*transform:\s*translateX\(-50%\)/);
 });
 

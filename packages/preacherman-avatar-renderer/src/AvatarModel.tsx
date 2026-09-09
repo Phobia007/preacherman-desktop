@@ -68,7 +68,6 @@ const AVATAR_PROFILES = {
       scale: 1,
       verticalOffset: 0,
     },
-    usesMotionLibrary: true,
   },
   zima: {
     avatarId: ZIMA_AVATAR_ID,
@@ -83,17 +82,11 @@ const AVATAR_PROFILES = {
       scale: 0.9,
       verticalOffset: 0,
     },
-    usesMotionLibrary: false,
   },
 } as const;
 
 interface AvatarAssetUrls {
   readonly model: string;
-  readonly motionLibrary?: {
-    readonly manifestUrl: string;
-    readonly indexUrl: string;
-    readonly packsBaseUrl: string;
-  };
   readonly textures: readonly [
     scanline: string,
     irisNormal: string,
@@ -142,11 +135,6 @@ export function createAvatarAssetUrls(
     `${base}shader/${file}`;
   return {
     model: `${base}${profile.modelFile}`,
-    ...(profile.usesMotionLibrary ? { motionLibrary: {
-      manifestUrl: `${base}motion-library/motions.json`,
-      indexUrl: `${base}motion-library/index.json`,
-      packsBaseUrl: `${base}motion-library/packs/`,
-    } } : {}),
     textures: [
       shaderUrl(SHADER_FILES[0]),
       shaderUrl(SHADER_FILES[1]),
@@ -232,10 +220,9 @@ export function AvatarModel({
       actions: profile.actions,
       defaultActionId: profile.defaultActionId,
       stateMap: profile.stateMap,
-      motionLibrary: urls.motionLibrary,
       onError: onAnimationError,
     }),
-    [onAnimationError, profile, urls.model, urls.motionLibrary],
+    [onAnimationError, profile, urls.model],
   );
   const controller = useMemo(
     () => new CortanaAnimationController(adapter),

@@ -4,12 +4,10 @@ import {
   AnimationClip,
   AnimationMixer,
   Bone,
-  FileLoader,
   Group,
   LoopOnce,
   LoopRepeat,
 } from "three";
-import { AsyncResourceCache } from "../../AsyncResourceCache";
 import { loadAvatarModelFile } from "../../avatarModelCache";
 import { disposeAvatarSceneResources } from "../../resourceLifecycle";
 import type { AvatarAnimationPort } from "../contracts/AvatarAnimationPort";
@@ -17,7 +15,6 @@ import type {
   AvatarActionDescriptor,
   AvatarAnimationDebugSnapshot,
   AvatarMotionState,
-  AvatarMotionLibraryOptions,
   PlayActionOptions,
 } from "../types/avatarAnimation";
 import { AvatarAnimationError } from "../types/avatarAnimation";
@@ -29,7 +26,6 @@ interface ThreeAvatarAnimationAdapterOptions {
   readonly actions: readonly AvatarActionDescriptor[];
   readonly defaultActionId: string;
   readonly stateMap: Readonly<Partial<Record<AvatarMotionState, string>>>;
-  readonly motionLibrary?: AvatarMotionLibraryOptions;
   readonly onError?: (error: AvatarAnimationError) => void;
 }
 
@@ -41,113 +37,13 @@ interface CurrentAction {
 
 type DebugListener = (snapshot: AvatarAnimationDebugSnapshot) => void;
 
-interface MotionManifestEntry {
-  readonly id: string;
-  readonly action: string;
-  readonly category: string;
-  readonly loop: boolean;
-  readonly pack_export: string;
-}
-
-interface MotionLibraryManifest {
-  readonly motion_count: number;
-  readonly motions: readonly MotionManifestEntry[];
-}
-
-interface MotionPackIndex {
-  readonly total_actions: number;
-  readonly packs: ReadonlyArray<{
-    readonly id: string;
-    readonly file: string;
-    readonly animations: readonly string[];
-  }>;
-}
-
-interface AnimationPackPayload {
-  readonly animations: readonly AnimationClip[];
-  readonly boneTranslations: ReadonlyMap<string, readonly [number, number, number]>;
-}
-
-const animationPackCache = new AsyncResourceCache<AnimationPackPayload>(2, 96 * 1024 * 1024, pack => {
-  const buffers = new Set<ArrayBufferLike>();
-  for (const clip of pack.animations) for (const track of clip.tracks) {
-    buffers.add(track.times.buffer);
-    buffers.add(track.values.buffer);
-  }
-  return [...buffers].reduce((bytes, buffer) => bytes + buffer.byteLength, 0);
-});
-
-function withTrailingSlash(value: string): string {
-  return value.endsWith("/") ? value : `${value}/`;
-}
-
-function fileName(value: string): string {
-  return value.replaceAll("\\", "/").split("/").at(-1) ?? "";
-}
-
-function loadAnimationPack(
-  loader: GLTFLoader,
-  url: string,
-): Promise<AnimationPackPayload> {
-  return animationPackCache.get(url, () => loader.loadAsync(url)
-    .then((gltf) => {
-      const animations = Object.freeze([...gltf.animations]);
-      const boneTranslations = new Map<string, readonly [number, number, number]>();
-      gltf.scene.traverse((object) => {
-        if (!(object instanceof Bone)) return;
-        boneTranslations.set(object.name, [
-          object.position.x,
-          object.position.y,
-          object.position.z,
-        ]);
-      });
-      disposeAvatarSceneResources(gltf.scene);
-      return { animations, boneTranslations };
-    }));
-}
-
-function deriveTranslationScale(
-  targetTranslations: ReadonlyMap<string, readonly [number, number, number]>,
-  sourceTranslations: ReadonlyMap<string, readonly [number, number, number]>,
-): number {
-  const ratios: number[] = [];
-  for (const [name, target] of targetTranslations) {
-    const source = sourceTranslations.get(name);
-    if (!source) continue;
-    const sourceLength = Math.hypot(...source);
-    const targetLength = Math.hypot(...target);
-    if (sourceLength > 1e-5 && targetLength > 1e-5) {
-      ratios.push(targetLength / sourceLength);
-    }
-  }
-  if (ratios.length === 0) return 1;
-  ratios.sort((left, right) => left - right);
-  return ratios[Math.floor(ratios.length / 2)];
-}
-
-function scaleClipTranslations(clip: AnimationClip, scale: number): AnimationClip {
-  if (Math.abs(scale - 1) < 1e-6) return clip;
-  const normalized = clip.clone();
-  for (const track of normalized.tracks) {
-    if (!track.name.endsWith(".position")) continue;
-    for (let index = 0; index < track.values.length; index += 1) {
-      track.values[index] *= scale;
-    }
-  }
-  return normalized;
-}
-
 export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
   private readonly descriptors: Map<string, AvatarActionDescriptor>;
   private readonly loader = new GLTFLoader();
-  private readonly fileLoader = new FileLoader();
   private readonly clipByName = new Map<string, AnimationClip>();
   private readonly actionById = new Map<string, AnimationAction>();
   private readonly debugListeners = new Set<DebugListener>();
   private readonly missingClipErrors: string[] = [];
-  private readonly modelBoneTranslations = new Map<string, readonly [number, number, number]>();
-  private readonly staticDescriptorIds: Set<string>;
-  private readonly loadedPacks = new Set<string>();
   private root: Group | null = null;
   private mixer: AnimationMixer | null = null;
   private current: CurrentAction | null = null;
@@ -160,7 +56,6 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
     this.descriptors = new Map(
       options.actions.map((descriptor) => [descriptor.id, descriptor]),
     );
-    this.staticDescriptorIds = new Set(this.descriptors.keys());
   }
 
   load(): Promise<void> {
@@ -168,12 +63,12 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       return Promise.reject(this.fail(
         new AvatarAnimationError(
           "NOT_LOADED",
-          "The Cortana animation adapter has been disposed.",
+          "The avatar animation adapter has been disposed.",
         ),
       ));
     }
     if (this.loadPromise) return this.loadPromise;
-    this.loadPromise = this.loadAssets();
+    this.loadPromise = this.loadModel();
     return this.loadPromise;
   }
 
@@ -192,7 +87,6 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
     options: PlayActionOptions = {},
   ): Promise<void> {
     await this.load();
-    await this.ensureActionClip(id);
     const next = this.resolveAction(id);
     if (
       this.current?.id === id
@@ -224,7 +118,6 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
 
   async crossFadeTo(id: string, duration = 0.35): Promise<void> {
     await this.load();
-    await this.ensureActionClip(id);
     const next = this.resolveAction(id);
     if (this.current?.id === id && this.current.action.isRunning()) return;
 
@@ -264,7 +157,7 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       throw this.fail(
         new AvatarAnimationError(
           "STATE_UNMAPPED",
-          `No Cortana clip is registered for motion state "${state}".`,
+          `No avatar clip is registered for motion state "${state}".`,
           { state },
         ),
       );
@@ -275,7 +168,6 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
   update(deltaSeconds: number): void {
     if (!this.disposed) {
       this.mixer?.update(deltaSeconds);
-      this.retireUnusedClips();
     }
   }
 
@@ -293,7 +185,6 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       mixerState: this.mixerState,
       boneCount: this.boneCount,
       missingClipErrors: [...this.missingClipErrors],
-      loadedPacks: [...this.loadedPacks].sort(),
       registeredActions: this.descriptors.size,
     };
   }
@@ -321,20 +212,12 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
     }
     this.actionById.clear();
     this.clipByName.clear();
-    this.modelBoneTranslations.clear();
     this.current = null;
     this.root = null;
     this.mixer = null;
     this.mixerState = "disposed";
     this.emitDebug();
     this.debugListeners.clear();
-  }
-
-  private async loadAssets(): Promise<void> {
-    await Promise.all([
-      this.loadModel(),
-      this.options.motionLibrary ? this.loadMotionLibrary(this.options.motionLibrary) : undefined,
-    ]);
   }
 
   private async loadModel(): Promise<void> {
@@ -347,7 +230,7 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       throw this.fail(
         new AvatarAnimationError(
           "MODEL_LOAD_FAILED",
-          `Failed to load Cortana model from ${this.options.modelUrl}.`,
+          `Failed to load avatar model from ${this.options.modelUrl}.`,
           { modelUrl: this.options.modelUrl, cause: String(cause) },
         ),
       );
@@ -358,7 +241,7 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       throw this.fail(
         new AvatarAnimationError(
           "NOT_LOADED",
-          "The Cortana animation adapter was disposed during model loading.",
+          "The avatar animation adapter was disposed during model loading.",
         ),
       );
     }
@@ -368,19 +251,12 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
     this.root.traverse((object) => {
       if (!(object instanceof Bone)) return;
       this.boneCount += 1;
-      this.modelBoneTranslations.set(object.name, [
-        object.position.x,
-        object.position.y,
-        object.position.z,
-      ]);
     });
     for (const clip of gltf.animations) {
       this.clipByName.set(clip.name, clip);
     }
 
-    for (const id of this.staticDescriptorIds) {
-      const descriptor = this.descriptors.get(id);
-      if (!descriptor) continue;
+    for (const descriptor of this.descriptors.values()) {
       if (!this.clipByName.has(descriptor.clipName)) {
         this.missingClipErrors.push(descriptor.clipName);
       }
@@ -389,7 +265,7 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       throw this.fail(
         new AvatarAnimationError(
           "CLIP_MISSING",
-          `Cortana model is missing required clip(s): ${this.missingClipErrors.join(", ")}.`,
+          `Avatar model is missing required clip(s): ${this.missingClipErrors.join(", ")}.`,
           {
             modelUrl: this.options.modelUrl,
             missingClips: [...this.missingClipErrors],
@@ -404,168 +280,13 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
     this.emitDebug();
   }
 
-  private async loadMotionLibrary(options: AvatarMotionLibraryOptions): Promise<void> {
-    let manifest: MotionLibraryManifest;
-    let index: MotionPackIndex;
-    try {
-      const [manifestSource, indexSource] = await Promise.all([
-        this.fileLoader.loadAsync(options.manifestUrl),
-        this.fileLoader.loadAsync(options.indexUrl),
-      ]);
-      manifest = JSON.parse(String(manifestSource)) as MotionLibraryManifest;
-      index = JSON.parse(String(indexSource)) as MotionPackIndex;
-    } catch (cause) {
-      throw this.fail(new AvatarAnimationError(
-        "MANIFEST_LOAD_FAILED",
-        "Failed to load the Cortana motion library manifest or pack index.",
-        { cause: String(cause) },
-      ));
-    }
-
-    if (
-      manifest.motion_count !== 412
-      || manifest.motions?.length !== 412
-      || index.total_actions !== 412
-      || index.packs?.length !== 9
-    ) {
-      throw this.fail(new AvatarAnimationError(
-        "MANIFEST_LOAD_FAILED",
-        "The Cortana motion library must contain 412 motions across 9 packs.",
-      ));
-    }
-
-    const packsByFile = new Map(index.packs.map((pack) => [pack.file, pack]));
-    const nextDescriptors: AvatarActionDescriptor[] = [];
-    const ids = new Set<string>();
-    const clipNames = new Set<string>();
-    for (const motion of manifest.motions) {
-      const pack = packsByFile.get(motion.pack_export);
-      if (
-        !motion.id
-        || !motion.action
-        || ids.has(motion.id)
-        || clipNames.has(motion.action)
-        || !pack?.animations.includes(motion.action)
-      ) {
-        throw this.fail(new AvatarAnimationError(
-          "MANIFEST_LOAD_FAILED",
-          `Invalid Cortana motion entry: ${motion.id || motion.action || "unknown"}.`,
-        ));
-      }
-      ids.add(motion.id);
-      clipNames.add(motion.action);
-      nextDescriptors.push({
-        id: motion.id,
-        clipName: motion.action,
-        category: motion.category,
-        loop: motion.loop ? "repeat" : "once",
-        fadeIn: 0.25,
-        fadeOut: 0.25,
-        timeScale: 1,
-        priority: 20,
-        interruptible: true,
-        ...(!motion.loop ? { fallback: this.options.defaultActionId } : {}),
-        packUrl: `${withTrailingSlash(options.packsBaseUrl)}${fileName(motion.pack_export)}`,
-      });
-    }
-
-    for (const descriptor of nextDescriptors) {
-      if (this.descriptors.has(descriptor.id)) {
-        throw this.fail(new AvatarAnimationError(
-          "MANIFEST_LOAD_FAILED",
-          `Cortana motion id collides with an existing action: ${descriptor.id}.`,
-        ));
-      }
-      this.descriptors.set(descriptor.id, descriptor);
-    }
-    this.emitDebug();
-  }
-
-  private async ensureActionClip(id: string): Promise<void> {
-    const descriptor = this.descriptors.get(id);
-    if (!descriptor) {
-      throw this.fail(new AvatarAnimationError(
-        "ACTION_UNKNOWN",
-        `Cortana action "${id}" is not registered.`,
-        { actionId: id },
-      ));
-    }
-    const loaded = this.clipByName.get(descriptor.clipName);
-    if (loaded) {
-      this.clipByName.delete(descriptor.clipName);
-      this.clipByName.set(descriptor.clipName, loaded);
-      return;
-    }
-    if (!descriptor.packUrl) {
-      throw this.fail(new AvatarAnimationError(
-        "CLIP_MISSING",
-        `Cortana clip "${descriptor.clipName}" is unavailable.`,
-        { actionId: id, clipName: descriptor.clipName },
-      ));
-    }
-
-    let pack: AnimationPackPayload;
-    try {
-      pack = await loadAnimationPack(this.loader, descriptor.packUrl);
-    } catch (cause) {
-      throw this.fail(new AvatarAnimationError(
-        "PACK_LOAD_FAILED",
-        `Failed to load Cortana animation pack ${descriptor.packUrl}.`,
-        { actionId: id, packUrl: descriptor.packUrl, cause: String(cause) },
-      ));
-    }
-    if (this.disposed) {
-      throw this.fail(new AvatarAnimationError(
-        "NOT_LOADED",
-        "The Cortana animation adapter was disposed during pack loading.",
-      ));
-    }
-    const translationScale = deriveTranslationScale(
-      this.modelBoneTranslations,
-      pack.boneTranslations,
-    );
-    const clip = pack.animations.find(clip => clip.name === descriptor.clipName);
-    if (clip) this.clipByName.set(clip.name, scaleClipTranslations(clip, translationScale));
-    this.loadedPacks.add(descriptor.packUrl);
-    if (!this.clipByName.has(descriptor.clipName)) {
-      this.missingClipErrors.push(descriptor.clipName);
-      throw this.fail(new AvatarAnimationError(
-        "CLIP_MISSING",
-        `Cortana pack is missing clip "${descriptor.clipName}".`,
-        { actionId: id, clipName: descriptor.clipName, packUrl: descriptor.packUrl },
-      ));
-    }
-    this.emitDebug();
-  }
-
-  private retireUnusedClips(): void {
-    // Keep eight recently used motion clips, plus built-in idle clips. Active
-    // crossfades are protected until their weight reaches zero on a later frame.
-    if (this.clipByName.size <= this.staticDescriptorIds.size + 8) return;
-    for (const [name, clip] of this.clipByName) {
-      const descriptor = [...this.descriptors.values()].find(item => item.clipName === name);
-      if (!descriptor?.packUrl || this.current?.id === descriptor.id) continue;
-      const action = this.actionById.get(descriptor.id);
-      if (action?.isRunning() && action.getEffectiveWeight() > 0.0001) continue;
-      action?.stop();
-      this.mixer?.uncacheClip(clip);
-      this.actionById.delete(descriptor.id);
-      this.clipByName.delete(name);
-      if (this.clipByName.size <= this.staticDescriptorIds.size + 8) break;
-    }
-    this.loadedPacks.clear();
-    for (const descriptor of this.descriptors.values()) {
-      if (descriptor.packUrl && this.clipByName.has(descriptor.clipName)) this.loadedPacks.add(descriptor.packUrl);
-    }
-  }
-
   private resolveAction(id: string): CurrentAction {
     const descriptor = this.descriptors.get(id);
     if (!descriptor) {
       throw this.fail(
         new AvatarAnimationError(
           "ACTION_UNKNOWN",
-          `Cortana action "${id}" is not registered.`,
+          `Avatar action "${id}" is not registered.`,
           { actionId: id },
         ),
       );
@@ -575,7 +296,7 @@ export class ThreeAvatarAnimationAdapter implements AvatarAnimationPort {
       throw this.fail(
         new AvatarAnimationError(
           "CLIP_MISSING",
-          `Cortana clip "${descriptor.clipName}" is unavailable.`,
+          `Avatar clip "${descriptor.clipName}" is unavailable.`,
           { actionId: id, clipName: descriptor.clipName },
         ),
       );

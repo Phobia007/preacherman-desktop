@@ -1,5 +1,9 @@
 # Existing avatar resource performance plan
 
+Subsequent user change (2026-09-09): the imported 412-action library is now retired.
+See [default avatar animations](avatar-default-actions.md). Measurements below
+record the earlier performance update before that removal.
+
 Scope: improve the two installed characters (Cortana/Zima), their existing videos,
 412-motion library, and shared Gallery navigation. Preserve authored quality,
 Activate semantics, normal Home startup and self-contained desktop packaging.
