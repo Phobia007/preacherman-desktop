@@ -1,53 +1,202 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-zima-supplied-video-20260909",
+  "buildId": "avatar-resource-performance-20260909",
   "productVersion": "0.1.0",
-  "sourceTask": "frontend3-gallery-zima-supplied-video",
+  "sourceTask": "avatar-resource-performance-existing-cortana-zima",
   "sourceThread": null,
-  "sourceState": "Zima Gallery card uses the complete user-supplied 53.638-second film and its 5-second frame as cover. Packaged 1080p H.264 preserves 60 fps and original AAC audio. Existing shared card controls, model identity, activation, lateral navigation and normal Home startup remain intact.",
-  "sourceCommit": "60afcb03b2caa7bdec5882445de455a911560e05",
+  "sourceState": "Reuse the existing avatar Canvas; bound source model and decoded motion caches; retain only recent requested clips; release old skeleton/texture resources; prefetch one existing neighbouring model; suspend Gallery and avatar rendering when inactive or natively minimized. All existing authored assets, 412 motions, activation behavior, themes, navigation and normal Home startup are preserved.",
+  "sourceCommit": "d1a57f6dd1d842767cae053b5d0dde95a1bab315",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-09T18:21:08.7758764+08:00",
-  "deployedAt": "2026-09-09T18:21:54.7773554+08:00",
-  "verifiedAt": "2026-09-09T18:24:59.9263442+08:00",
-  "sizeBytes": 617288192,
-  "sha256": "BBC4C419504794198370D3C84D293EFF8CBE5DD5DB97CF9A2FFB6D485ABC8A04",
+  "builtAt": "2026-09-09T19:29:59.5769275+08:00",
+  "deployedAt": "2026-09-09T19:31:39.5365070+08:00",
+  "verifiedAt": "2026-09-09T19:37:38.3062624+08:00",
+  "sizeBytes": 617295360,
+  "sha256": "E751748A2C3A3C39E927AEA2146C24107643EB997B36F96050C2DBFC4E11CF4F",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-video-before-20260909/preacherman-demo-host.exe",
-  "backupSha256": "17DCC9B6161B96FBC50D3CDCD27119A9C0FC1BA2ECC9E8E946CE5E00313ADF5E",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-video-before-20260909/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-performance-before-20260909/preacherman-demo-host.exe",
+  "backupSha256": "BBC4C419504794198370D3C84D293EFF8CBE5DD5DB97CF9A2FFB6D485ABC8A04",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-performance-before-20260909/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "cf677cb5042a353c845b1b97f10dc0147042cf6d",
-  "previousVerificationCommit": "cf677cb5042a353c845b1b97f10dc0147042cf6d",
+  "rollbackBaselineCommit": "26c28d58a8c17b2ee1c3d50f20baf892eae8d676",
+  "previousVerificationCommit": "26c28d58a8c17b2ee1c3d50f20baf892eae8d676",
   "verification": {
     "status": "passed-with-qualified-preexisting-template-diagnostics",
     "typescript": "passed",
-    "focusedTests": "20 existing Gallery and model-activation regressions passed. Complete packaged video decoded without errors; source and packaged AAC payload SHA-256 matched. No theme-sensitive UI code changed.",
-    "mediaVerification": {
-      "source": "E:/50/8月16日/8月16日.mp4",
-      "sourceSha256": "DB4DE0D4DC3CCDA14923BBE84096A786B5712DCF3C7F89A46EAC39BF5B25E469",
-      "sourceBytes": 556128975,
-      "sourceVideo": "HEVC 7680x4320 60 fps",
-      "packagedVideo": "H.264 1920x1080 60 fps",
-      "durationSeconds": 53.638005,
-      "packagedBytes": 37660684,
-      "packagedSha256": "EA8197461E2BCAD0938EC2666833598CC7F5E15AA1A21349FD78D180EE2CA85D",
-      "posterTimestampSeconds": 5,
-      "posterBytes": 163638,
-      "posterSha256": "99B217E0DCD3CF267CC50AB976F7C5D9A456FDAB945229171C4077DAD2FC9B79",
-      "sourceAndPackagedAudioSha256": "15d078a5ae70e15b6416b1d483428aefbb5a3115efbb504b4745e5fb6b013676",
-      "fullDecode": "passed",
-      "duplicateFrames": 0,
-      "droppedFrames": 0,
-      "encode": "scale=1920:1080:flags=lanczos; libx264 -preset fast -crf 18 -profile:v high -pix_fmt yuv420p; AAC stream copy; faststart"
+    "focusedTests": "28 renderer tests and 32 focused Demo Host tests passed. Covers bounded caches, retry, request coalescing, serial decode, action retirement/replay, skeleton texture disposal, both appearances and native window activity with async subscription cleanup.",
+    "browserFlow": "Full existing Gallery/activation/video/core-route flow and 40 consecutive character switches passed in both appearances. Native-window correction additionally has browser-fallback regression coverage.",
+    "nativeFlow": "Corrected release cold launched through the canonical shortcut. Both appearances passed all core routes, videos, shared controls, direct second-card entry, keyboard/reduced motion, activation persistence, native minimize/restore/maximize and 40 repeated character switches. No new console errors. Original preferences restored, then restarted through the shortcut without debugging arguments.",
+    "performance": {
+      "before": {
+        "switches": 12,
+        "meanMs": 1516,
+        "medianMs": 1653,
+        "p95Ms": 1681,
+        "minMs": 1342,
+        "maxMs": 1681
+      },
+      "after": {
+        "switches": 40,
+        "meanMs": 1441,
+        "medianMs": 1472,
+        "p95Ms": 1538,
+        "minMs": 1338,
+        "maxMs": 1540
+      },
+      "nativeResourceCounts": [
+        {
+          "appearance": "dark",
+          "cortana": {
+            "samples": 480,
+            "frameMsP95": 4.399999998509884,
+            "drawCalls": 5,
+            "triangles": 19958,
+            "geometries": 13,
+            "textures": 18,
+            "programs": 11
+          },
+          "zima": {
+            "samples": 472,
+            "frameMsP95": 4.400000002235174,
+            "drawCalls": 1,
+            "triangles": 4862,
+            "geometries": 9,
+            "textures": 11,
+            "programs": 7
+          },
+          "afterSwitches": {
+            "samples": 479,
+            "frameMsP95": 4.400000002235174,
+            "drawCalls": 5,
+            "triangles": 19958,
+            "geometries": 13,
+            "textures": 18,
+            "programs": 11
+          }
+        },
+        {
+          "appearance": "light",
+          "cortana": {
+            "samples": 480,
+            "frameMsP95": 4.399999998509884,
+            "drawCalls": 5,
+            "triangles": 19958,
+            "geometries": 13,
+            "textures": 18,
+            "programs": 11
+          },
+          "zima": {
+            "samples": 476,
+            "frameMsP95": 4.400000002235174,
+            "drawCalls": 1,
+            "triangles": 4862,
+            "geometries": 9,
+            "textures": 11,
+            "programs": 7
+          },
+          "afterSwitches": {
+            "samples": 475,
+            "frameMsP95": 4.5,
+            "drawCalls": 5,
+            "triangles": 19958,
+            "geometries": 13,
+            "textures": 18,
+            "programs": 11
+          }
+        }
+      ],
+      "note": "Same machine, native 1800x1000 viewport, samples include the existing slide animation. Before had six switches per theme, after has twenty. RAF/renderer intervals are diagnostic samples, not a guarantee for future characters or other hardware."
     },
-    "browserFlow": "Both appearances passed supplied-video playback and local poster decode, 1920-pixel width and complete duration, small-window/background synchronization, close and continued background playback, previous/next, direct second-card entry, keyboard/reduced motion, activation/persistence and core routes. Screenshots reviewed.",
-    "nativeFlow": "Canonical shortcut cold Home ready. Supplied Zima video decoded at 1920x1080 for its complete 53.638-second duration from the packaged Tauri origin. Both appearances passed video/cover, shared controls, lateral switching, direct entry, activation/deactivation and persistence, Home, Task, Gallery, Market (ledger), Settings and Account. Screenshots reviewed. Original preferences restored before normal shortcut restart without debug arguments; actual Home window captured and visually verified.",
+    "assetInventory": {
+      "publicBytes": 763840946,
+      "groups": {
+        "active-theory-gallery": 60619454,
+        "assets/avatars": 387394560,
+        "assets/gallery": 63055904,
+        "favicon.ico": 682,
+        "gallery": 491222,
+        "gallery-v3": 58131344,
+        "licenses": 1667,
+        "market-love": 78557137,
+        "settings-v3-local": 86925267,
+        "task-lookback-v3": 28663709
+      },
+      "models": [
+        {
+          "path": "assets/avatars/cortana/cortana-runtime.glb",
+          "bytes": 7181576,
+          "triangles": 19958,
+          "primitives": 5,
+          "textures": 10
+        },
+        {
+          "path": "assets/avatars/zima/zima-runtime.glb",
+          "bytes": 4483600,
+          "triangles": 4862,
+          "primitives": 1,
+          "textures": 2
+        }
+      ],
+      "motionLibrary": {
+        "count": 9,
+        "bytes": 369233548
+      },
+      "media": [
+        {
+          "path": "assets/gallery/cortana-intro.mp4",
+          "bytes": 24451664
+        },
+        {
+          "path": "assets/gallery/zima-card-video.mp4",
+          "bytes": 37660684
+        }
+      ]
+    },
+    "nativeVisibility": {
+      "themes": [
+        {
+          "appearance": "dark",
+          "hidden": {
+            "hidden": false,
+            "minimized": true,
+            "renderActive": "false"
+          },
+          "media": {
+            "renderPaused": true,
+            "videoPaused": true,
+            "time": 4.313766
+          },
+          "resumed": {
+            "renderPaused": false,
+            "videoPaused": false,
+            "time": 5.439263
+          }
+        },
+        {
+          "appearance": "light",
+          "hidden": {
+            "hidden": false,
+            "minimized": true,
+            "renderActive": "false"
+          },
+          "media": {
+            "renderPaused": true,
+            "videoPaused": true,
+            "time": 4.053808
+          },
+          "resumed": {
+            "renderPaused": false,
+            "videoPaused": false,
+            "time": 5.163563
+          }
+        }
+      ],
+      "passed": true
+    },
     "consoleReview": {
       "baselineReports": [
         "intro-native-report.json",
@@ -56,57 +205,60 @@
         "refinement-baseline-native-report.json",
         "toggle-native-report.json"
       ],
-      "rawReport": "output/playwright/zima-video-native-report.json",
+      "rawReport": "output/playwright/avatar-performance-native-report.json",
       "newUnattributedErrors": [],
-      "note": "Final console gate passed with no new errors against exact existing template diagnostic strings. No CSP changes or expanded allow-list."
+      "note": "No new errors compared with the exact preexisting diagnostic strings; no CSP change or expanded error allow-list."
     },
-    "nativePid": 29344,
-    "nativeStartedAt": "2026-09-09T18:24:32.0082562+08:00",
-    "nativeWindowHandle": 6031296,
+    "nativePid": 7696,
+    "nativeStartedAt": "2026-09-09T19:37:05.4872132+08:00",
+    "nativeWindowHandle": 2492798,
     "resourceSample": {
-      "SampledAt": "2026-09-09T18:24:59.9263442+08:00",
-      "NativePid": 29344,
-      "StartedAt": "2026-09-09T18:24:32.0082562+08:00",
-      "WindowHandle": 6031296,
+      "SampledAt": "2026-09-09T19:37:38.3062624+08:00",
+      "NativePid": 7696,
+      "StartedAt": "2026-09-09T19:37:05.4872132+08:00",
+      "WindowHandle": 2492798,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        29344,
-        7080,
-        5048,
-        10892,
-        15544,
-        30088,
-        16852,
-        1256,
-        1844,
-        27472,
-        9320
+        7696,
+        552,
+        29624,
+        24548,
+        25276,
+        27072,
+        28628,
+        28224,
+        2336,
+        21864,
+        3792
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 2011.7,
-      "GpuDedicatedBytes": 3200700416,
-      "MaxGpuEngineUtilization": 23,
-      "FreeRamKiB": 18182908,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1857.8,
+      "GpuDedicatedBytes": 3215261696,
+      "MaxGpuEngineUtilization": 10,
+      "FreeRamKiB": 18348848,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 1256
+          "OwningProcess": 28224
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
     },
     "restartAuthorization": "User explicitly authorized automatic rebuild/restart without asking again.",
     "evidence": [
-      "output/playwright/zima-video-media-report.json",
-      "output/playwright/zima-video-preview-report.json",
-      "output/playwright/zima-video-native-report.json",
-      "output/playwright/zima-video-native-dark-zima.png",
-      "output/playwright/zima-video-native-light-zima.png",
-      "output/playwright/zima-video-final-native-home.png",
-      "output/playwright/zima-video-final-resources.json",
-      "output/playwright/zima-video-delivery.json"
+      "output/playwright/avatar-performance-before.json",
+      "output/playwright/avatar-performance-after.json",
+      "output/playwright/avatar-performance-preview-report.json",
+      "output/playwright/avatar-performance-preview-stress.json",
+      "output/playwright/avatar-performance-native-report.json",
+      "output/playwright/avatar-performance-native-visibility.json",
+      "output/playwright/avatar-performance-native-dark-zima-off-background.png",
+      "output/playwright/avatar-performance-native-light-cortana-return.png",
+      "output/playwright/avatar-performance-final-native-home.png",
+      "output/playwright/avatar-performance-final-resources.json",
+      "docs/avatar-resource-performance.md"
     ]
   },
   "releaseAttempts": [
@@ -213,7 +365,7 @@
       "finalEvidence": "output/playwright/zima-native-report.json"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-video-before-20260909/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-performance-before-20260909/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",

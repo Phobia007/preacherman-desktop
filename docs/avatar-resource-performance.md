@@ -67,3 +67,21 @@ avatar and Gallery renderers. Native event listen/unlisten permissions are scope
 to the main window capability. Startup prewarming also pauses while minimized.
 Tests cover native minimize/resume, late async listener cleanup, and the browser
 fallback; the focused Demo Host suite now has 32 passing tests.
+
+Final native verification:
+- Corrected release passed both appearances, the complete existing Gallery/video/
+  activation flow, normal cold Home and all core navigation paths, plus actual
+  native minimize/restore/maximize. No new console errors.
+- 40 native switches (20 per appearance) retained one Canvas. Cortana returned to
+  13 geometries / 18 textures / 11 programs after each series; no growth observed.
+- Native switch sample mean: 1,516 ms before (12 samples), 1,441 ms after (40).
+  Sample p95: 1,681 ms before, 1,538 ms after. These include the authored slide and
+  are one-machine observations; the main improvement is bounded resource use.
+- Normal shortcut restart completed, original preferences restored, Home visually
+  verified. Final sample: CPU 3.99% normalized, process-tree working set 1,857.8 MiB.
+  No temporary build, preview or browser-automation processes remained. Only the
+  expected packaged service port 8787 remained; debug port 9236 was closed.
+- Deployed executable: 617,295,360 bytes; SHA-256
+  E751748A2C3A3C39E927AEA2146C24107643EB997B36F96050C2DBFC4E11CF4F.
+  All content assets remain unchanged; executable size is effectively unchanged.
+  See desktop-build-manifest.json for the matching sidecar, backups and evidence.
