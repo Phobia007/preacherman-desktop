@@ -1,5 +1,7 @@
 import {
   InteractiveAvatarViewport,
+  avatarModelName,
+  avatarDefaultActionId,
   createAvatarAssetUrls,
   prefetchAvatarModel,
   type AvatarCameraFraming,
@@ -40,14 +42,14 @@ export function CortanaModelStage({
   cameraFraming = "full-body",
   rotationOffsetY = 0,
 }: CortanaModelStageProps) {
-  const modelName = modelId === "cortana" ? "Cortana" : "Zima";
+  const modelName = avatarModelName(modelId);
   const interactionState = useAvatarInteractionState();
   const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading");
   const [jawOpen, setJawOpen] = useState(0);
   const [awakened, setAwakened] = useState(false);
   const handleError = useCallback(() => setLoadState("error"), []);
   const handleReady = useCallback(() => setLoadState("ready"), []);
-  const defaultActionId = modelId === "zima" ? "idle.zima" : "idle.catwalk";
+  const defaultActionId = avatarDefaultActionId(modelId);
 
   useEffect(() => {
     setLoadState("loading");
@@ -112,7 +114,7 @@ export function CortanaModelStage({
         isolateCompanion={isolateCompanion}
         awakened={awakened}
         motionSource={speechMotionRuntime}
-        motionRigBinding={modelId === "cortana" ? cortanaSpeechMotionBinding : zimaSpeechMotionBinding}
+        motionRigBinding={modelId === "cortana" ? cortanaSpeechMotionBinding : modelId === "zima" ? zimaSpeechMotionBinding : undefined}
         modelId={modelId}
         cameraFraming={cameraFraming}
         renderActive={renderActive}

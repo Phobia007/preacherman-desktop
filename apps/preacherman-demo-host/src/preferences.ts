@@ -1,6 +1,7 @@
+import { isAvatarModelId, type AvatarModelId } from "@preacherman/avatar-renderer";
 export type Appearance = "light" | "dark";
 export type Locale = "en" | "zh-CN";
-export type ModelId = "cortana" | "zima";
+export type ModelId = AvatarModelId;
 
 export interface DemoPreferences {
   readonly activeModelId: ModelId | null;
@@ -86,7 +87,7 @@ function isLocale(value: unknown): value is Locale {
 }
 
 function isModelId(value: unknown): value is ModelId {
-  return value === "cortana" || value === "zima";
+  return isAvatarModelId(value);
 }
 
 export function readPreferences(): DemoPreferences {

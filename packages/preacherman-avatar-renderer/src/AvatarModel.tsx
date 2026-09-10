@@ -1,3 +1,4 @@
+import { importedAvatarProfiles, avatarUsesHologram } from "./avatarCatalog";
 import { addAfterEffect, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -55,6 +56,7 @@ const SHADER_FILES = [
 ] as const;
 
 const AVATAR_PROFILES = {
+  ...importedAvatarProfiles,
   cortana: {
     avatarId: CORTANA_AVATAR_ID,
     defaultActionId: CORTANA_DEFAULT_ACTION_ID,
@@ -87,14 +89,7 @@ const AVATAR_PROFILES = {
 
 interface AvatarAssetUrls {
   readonly model: string;
-  readonly textures: readonly [
-    scanline: string,
-    irisNormal: string,
-    bodyControl: string,
-    faceControl: string,
-    hairControl: string,
-    eyeControl: string,
-  ];
+  readonly textures: readonly string[];
 }
 
 interface AvatarModelProps {
@@ -135,14 +130,14 @@ export function createAvatarAssetUrls(
     `${base}shader/${file}`;
   return {
     model: `${base}${profile.modelFile}`,
-    textures: [
+    textures: avatarUsesHologram(modelId) ? [
       shaderUrl(SHADER_FILES[0]),
       shaderUrl(SHADER_FILES[1]),
       shaderUrl(SHADER_FILES[2]),
       shaderUrl(SHADER_FILES[3]),
       shaderUrl(SHADER_FILES[4]),
       shaderUrl(SHADER_FILES[5]),
-    ],
+    ] : [],
   };
 }
 
@@ -199,6 +194,7 @@ export function AvatarModel({
   modelId,
   rotationOffsetY = 0,
 }: AvatarModelProps) {
+  const holographic = avatarUsesHologram(modelId);
   const profile = AVATAR_PROFILES[modelId];
   const urls = useMemo(
     () => createAvatarAssetUrls(assetBaseUrl, modelId),
@@ -250,7 +246,7 @@ export function AvatarModel({
     [bodyControlMap, eyeControlMap, faceControlMap, hairControlMap],
   );
   const bindings = useMemo(
-    () => root
+    () => root && holographic
       ? buildMaterialBindings(
         root,
         scanlineMap,
@@ -259,7 +255,7 @@ export function AvatarModel({
         modelId === "zima" ? 2.25 : 1,
       )
       : null,
-    [controlMaps, irisNormalMap, modelId, root, scanlineMap],
+    [controlMaps, holographic, irisNormalMap, modelId, root, scanlineMap],
   );
 
   useEffect(() => {
@@ -307,6 +303,7 @@ export function AvatarModel({
   useEffect(() => () => motionPlayer?.dispose(), [motionPlayer]);
 
   useEffect(() => {
+    if (!holographic) return;
     scanlineMap.wrapS = RepeatWrapping;
     scanlineMap.wrapT = RepeatWrapping;
     scanlineMap.colorSpace = SRGBColorSpace;
@@ -358,6 +355,7 @@ export function AvatarModel({
     eyeControlMap,
     faceControlMap,
     gl,
+    holographic,
     hairControlMap,
     irisNormalMap,
     scanlineMap,
@@ -404,6 +402,7 @@ export function AvatarModel({
 
   useEffect(
     () => () => {
+      if (!holographic) return;
       scanlineMap.dispose();
       irisNormalMap.dispose();
       for (const controlMap of new Set(Object.values(controlMaps))) {
@@ -413,6 +412,7 @@ export function AvatarModel({
     },
     [
       controlMaps,
+      holographic,
       irisNormalMap,
       scanlineMap,
       urls.textures,

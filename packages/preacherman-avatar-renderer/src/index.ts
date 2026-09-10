@@ -66,3 +66,5 @@ export {
 } from "./types";
 
 export { prefetchAvatarModel, avatarModelCacheSnapshot } from "./avatarModelCache";
+
+export { importedAvatarModels, avatarModelName, isAvatarModelId, avatarUsesHologram, avatarDefaultActionId } from "./avatarCatalog";

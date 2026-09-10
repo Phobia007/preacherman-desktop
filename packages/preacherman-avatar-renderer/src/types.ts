@@ -1,3 +1,4 @@
+import type { ImportedAvatarModelId } from "./avatarCatalog";
 import type { AvatarActionDescriptor } from "./avatar/types/avatarAnimation";
 import type { AvatarMotionRigBinding, AvatarMotionStreamSource } from "./avatar/contracts/AvatarMotionStream";
 
@@ -11,7 +12,7 @@ export type AvatarQuality = "low" | "balanced" | "high";
 export type AvatarPose = "rest" | "standby";
 export type AvatarSceneEnvironment = "transparent" | "cinematic";
 export type AvatarCameraFraming = "full-body" | "portrait";
-export type AvatarModelId = "cortana" | "zima";
+export type AvatarModelId = "cortana" | "zima" | ImportedAvatarModelId;
 
 export type AvatarErrorCode =
   | "WEBGL_UNAVAILABLE"

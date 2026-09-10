@@ -166,7 +166,7 @@ test('detail clears the R3F restored background and uses this workspace renderer
 
 test('Cortana activation is persistent, while detail preview never equips on entry',()=>{
   const app=read('src/App.tsx'),surface=read('src/surfaces/gallery/ActiveTheoryGallerySurface.tsx');
-  assert.match(surface,/detail.project === "secret-sky" \? "cortana" : detail.project === "watson-masters" \? "zima" : null/);
+  assert.match(surface,/galleryModelForProject\(detail.project\)/);
   assert.match(surface,/onPreviewModelChange\(active && detail.phase === "open" \? modelId : null\)/);
   assert.match(app,/setPreferences\(\(current\) => \(\{ \.\.\.current, activeModelId: current\.activeModelId === modelId \? null : modelId \}\)\)/);
   assert.match(app,/savePreferences\(preferences\)/);

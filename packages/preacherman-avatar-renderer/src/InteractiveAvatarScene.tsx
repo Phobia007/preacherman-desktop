@@ -1,3 +1,5 @@
+import { AuthoredAvatarLights } from "./AuthoredAvatarLights";
+import { avatarUsesHologram } from "./avatarCatalog";
 import { AvatarFrameMetrics } from "./AvatarFrameMetrics";
 import { OrbitControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -171,7 +173,7 @@ export function InteractiveAvatarScene({
   return (
     <>
       {environment === "cinematic" ? <CinematicEnvironment awakened={awakened} isolateCompanion={isolateCompanion} /> : null}
-      {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
+      {avatarUsesHologram(modelId) ? (environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />) : <AuthoredAvatarLights />}
       <AvatarModel
         key={`${modelId}:${assetBaseUrl}`}
         actionId={actionId}

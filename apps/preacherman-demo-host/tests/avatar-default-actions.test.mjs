@@ -8,7 +8,7 @@ const hostRoot = join(import.meta.dirname, "..");
 test("the packaged avatars contain their defaults and no imported animation packs", async () => {
   const audit = await auditAvatarResources();
   assert.deepEqual(audit.motionLibrary, { count: 0, bytes: 0 });
-  assert.equal(audit.models.length, 2);
+  assert.equal(audit.models.length, 10);
   for (const modelId of ["cortana", "zima"]) {
     const root = join(hostRoot, "public/assets/avatars", modelId);
     const bytes = await readFile(join(root, modelId + "-runtime.glb"));

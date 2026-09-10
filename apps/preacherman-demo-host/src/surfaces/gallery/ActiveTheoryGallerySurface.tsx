@@ -1,3 +1,4 @@
+import { galleryModelForProject } from "./galleryModelBindings";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { GalleryDetailOverlay, type GalleryDetailBridge, type GalleryDetailState } from "./GalleryDetailOverlay";
 import { useExecutionFrameBridge } from "../../execution/useExecutionFrameBridge";
@@ -22,7 +23,7 @@ export function ActiveTheoryGallerySurface({ active = true, renderActive = true,
   const [bridge, setBridge] = useState<GalleryDetailBridge>();
   const [detail, setDetail] = useState<GalleryDetailState>({ phase: "closed", project: "", title: "", smallWindow: true });
   const [portal, setPortal] = useState<Element | null>(null);
-  const modelId: ModelId | null = detail.project === "secret-sky" ? "cortana" : detail.project === "watson-masters" ? "zima" : null;
+  const modelId: ModelId | null = galleryModelForProject(detail.project);
   const navigation = useGalleryCardNavigation(bridge, portal, active);
   useEffect(() => {
     if (!loaded) return;

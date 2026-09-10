@@ -1,3 +1,4 @@
+import { avatarModelName } from "@preacherman/avatar-renderer";
 import { useEffect, useState, type CSSProperties } from "react";
 import type { ModelId } from "../../preferences";
 
@@ -11,7 +12,7 @@ export function GalleryActivateButton({ modelId, activated, enabled, onActivate 
 }) {
   const [feedbackId, setFeedbackId] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
-  const modelName = modelId === "cortana" ? "Cortana" : "Zima";
+  const modelName = avatarModelName(modelId);
 
   // Feedback follows the click; the preference changes immediately.
   useEffect(() => {

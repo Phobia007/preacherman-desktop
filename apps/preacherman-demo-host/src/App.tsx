@@ -1,3 +1,5 @@
+import { avatarModelName } from "@preacherman/avatar-renderer";
+import { adjacentGalleryModel } from "./surfaces/gallery/galleryModelBindings";
 import { useWindowActivity } from "./app-shell/useWindowActivity";
 import {
   createSurfaceSkinAdapter,
@@ -389,12 +391,12 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       onNavigate={handleSurfaceNavigate}
       scene={sceneModelId ? (
         <CortanaModelStage
-          ariaLabel={`Persistent ${sceneModelId === "cortana" ? "Cortana" : "Zima"} companion scene`}
+          ariaLabel={`Persistent ${avatarModelName(sceneModelId)} companion scene`}
           environment="cinematic"
           isolateCompanion={activeSurfaceType === "market" && galleryDetailOpen}
           cameraFraming={activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
           modelId={sceneModelId}
-          prefetchModelId={activeSurfaceType === "market" ? (sceneModelId === "cortana" ? "zima" : "cortana") : undefined}
+          prefetchModelId={activeSurfaceType === "market" ? adjacentGalleryModel(sceneModelId) : undefined}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}
           renderActive={windowActive}

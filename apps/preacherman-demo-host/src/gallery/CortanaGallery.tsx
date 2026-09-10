@@ -1,3 +1,4 @@
+import { avatarModelName } from "@preacherman/avatar-renderer";
 import { useState } from "react";
 import type { Appearance, Locale, ModelId } from "../preferences";
 import { JesperPortfolioExperience } from "../components/sites/127-0-0-1-8131-a5f8cf00/root-8a5edab2/JesperPortfolioExperience";
@@ -47,12 +48,12 @@ export function CortanaGallery({
       {detailModelPrepared ? (
         <section
           aria-hidden={!modelVisible}
-          aria-label={`${detailModelId === "cortana" ? "Cortana" : "Zima"} 3D model preview`}
+          aria-label={`${avatarModelName(detailModelId)} 3D model preview`}
           className="cortana-gallery__detail-model"
           data-visible={modelVisible ? "true" : "false"}
         >
           <CortanaModelStage
-            ariaLabel={`${detailModelId === "cortana" ? "Cortana" : "Zima"} 3D model`}
+            ariaLabel={`${avatarModelName(detailModelId)} 3D model`}
             key={detailModelId}
             modelId={detailModelId}
             renderActive={modelVisible}
