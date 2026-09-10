@@ -514,6 +514,18 @@
       "comparisonConclusion": "Eight Gallery poster diagnostics reproduced on paired old executable. Four portfolio thumbnail diagnostics separately attributed by identical emitting tree, CSP and packed fallback textures; not claimed as runtime-reproduced. Same candidate redeployed without source changes.",
       "redeployedAt": "2026-09-10T16:58:10.7094634+08:00",
       "finalNativeVisibilityPassed": true
+    },
+    {
+      "status": "rolled-back-loading-state-desynchronization",
+      "sourceCommit": "76b8b6d6bd2c71080d9c2935bc42a58c3a06c8e9",
+      "sha256": "94156D6C5620B4DB57D78F01CD2D4C7125928ABCA36044CEC970FAAF2152908B",
+      "deployedAt": "2026-09-10T17:58:02.9226713+08:00",
+      "restoredAt": "2026-09-10T18:03:14.9881947+08:00",
+      "restoredHostSha256": "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "reason": "Native model and lighting are visible, but returning from Home to the same equipped Gallery character leaves load-state stuck loading. Restore verified pair before fixing the state race.",
+      "candidateArtifact": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
+      "evidence": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\failed-release-1\\native-report.json"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-models-before-20260910/desktop-build-manifest.json",
