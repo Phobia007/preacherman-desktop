@@ -11,7 +11,7 @@
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
   "builtAt": "2026-09-09T21:30:41.8335646+08:00",
   "deployedAt": "2026-09-09T21:31:05.8470686+08:00",
-  "verifiedAt": "2026-09-09T21:38:00.6561550+08:00",
+  "verifiedAt": "2026-09-09T21:38:00.656155+08:00",
   "sizeBytes": 332398592,
   "sha256": "04FAB5091C0783E65ED49670B93AC86A4B9E329ACB3D3C919DD1715B2B2E6C6B",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
@@ -154,7 +154,7 @@
     "nativeStartedAt": "2026-09-09T21:37:32.7228214+08:00",
     "nativeWindowHandle": 2033658,
     "resourceSample": {
-      "SampledAt": "2026-09-09T21:38:00.6561550+08:00",
+      "SampledAt": "2026-09-09T21:38:00.656155+08:00",
       "NativePid": 30308,
       "StartedAt": "2026-09-09T21:37:32.7228214+08:00",
       "WindowHandle": 2033658,
@@ -288,7 +288,7 @@
       "comparisonEvidence": "output/playwright/refinement-baseline-native-report.json"
     },
     {
-      "deployedAt": "2026-09-09T16:49:30.8703690+08:00",
+      "deployedAt": "2026-09-09T16:49:30.870369+08:00",
       "reason": "Both native appearance and interaction flows passed, but the second card retained a remote poster URL blocked by img-src. Native video also used the inherited remote URL. Restore the previous pair while binding the changed card to existing packaged video and cover.",
       "restoredHostSha256": "B1DB8D29EC3FE8F9557204058C04BFEB9AAEB5B4808BD65E0810FAAF22373229",
       "sha256": "0FDBE96A0BC8F06FB5A30FE037E0923ADBDECC560189B06997F41D195AA7631E",
@@ -303,6 +303,18 @@
       "finalOutcome": "Previous pair restored and verified, second-card original media bundled, corrected release rebuilt and redeployed. Final native checks passed in both appearances with zero new diagnostics.",
       "finalSha256": "17DCC9B6161B96FBC50D3CDCD27119A9C0FC1BA2ECC9E8E946CE5E00313ADF5E",
       "finalEvidence": "output/playwright/zima-native-report.json"
+    },
+    {
+      "status": "restored-for-console-baseline-comparison",
+      "sourceCommit": "b3738ce4e89e900cdf4d361c6dbb3150636dc9f9",
+      "sha256": "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
+      "deployedAt": "2026-09-10T16:41:16.2161607+08:00",
+      "restoredAt": "2026-09-10T16:48:37.5336126+08:00",
+      "restoredHostSha256": "04FAB5091C0783E65ED49670B93AC86A4B9E329ACB3D3C919DD1715B2B2E6C6B",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "reason": "Both native themes, ten models and core interactions passed; previously unlisted CSP diagnostics for existing remote Gallery posters and Market thumbnails require baseline attribution. Restore verified pair before comparison. User requested unchanged card media.",
+      "candidateArtifact": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
+      "evidence": "D:\\preacherman\\output\\gallery-model-import-20260910\\native-candidate-diagnostics.json"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\default-actions-before-20260909/desktop-build-manifest.json",
