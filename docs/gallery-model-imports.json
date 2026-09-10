@@ -1,0 +1,164 @@
+{
+  "sourceCommit": "b3738ce4e89e900cdf4d361c6dbb3150636dc9f9",
+  "models": [
+    {
+      "card": 3,
+      "modelId": "jubilee-midnight-mutant",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/jubilee-midnight-mutant/jubilee-midnight-mutant-runtime.glb",
+      "bytes": 10973752,
+      "sha256": "a53332b17cee3033a12e9dac206aab16f33d46900ec154723c7d91c0161d87d1",
+      "sourceBlendSha256": "0d28b0cbb4817ab710d7832129b0ea113c9a05c1b7a131733193d6fcc4701967",
+      "defaultClip": "jubilee-midnight-mutant.idle.cortana.v1"
+    },
+    {
+      "card": 4,
+      "modelId": "halo-mk-v-model",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/halo-mk-v-model/halo-mk-v-model-runtime.glb",
+      "bytes": 8870764,
+      "sha256": "a53f76fd06d55b48a20761aa5fcbe438262f2f173802adc2da0341212b7c1734",
+      "sourceBlendSha256": "f6207f4f9b869382e41f067ff26516e9abb452f2ac1b74d81c7a91fabf9d3b6c",
+      "defaultClip": "halo-mk-v-model.idle.cortana.v1"
+    },
+    {
+      "card": 5,
+      "modelId": "magik-soul-surfer",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/magik-soul-surfer/magik-soul-surfer-runtime.glb",
+      "bytes": 16091532,
+      "sha256": "3a148d87ee657731fa3f420a9f9d065a4a144c80ee99606f35da65a5723295a4",
+      "sourceBlendSha256": "8253da4c10384cb973e3fd9ce84573d417abe8cc5cef585f62697f8aa032e9c0",
+      "defaultClip": "magik-soul-surfer.idle.cortana.v1"
+    },
+    {
+      "card": 6,
+      "modelId": "punk-magik",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/punk-magik/punk-magik-runtime.glb",
+      "bytes": 14473660,
+      "sha256": "616374a315faa661eaa122fddc1aac1ad74eb82f8a8a4eb9ed65febaf2f4ac4d",
+      "sourceBlendSha256": "b32e2e2d961f975000447d7f2252d3f700c4ec8b27db045839e5a6dbd71a484b",
+      "defaultClip": "punk-magik.idle.cortana.v1"
+    },
+    {
+      "card": 7,
+      "modelId": "sanhua-wuthering-waves",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/sanhua-wuthering-waves/sanhua-wuthering-waves-runtime.glb",
+      "bytes": 2843316,
+      "sha256": "122ee5424938e38adfc2fe9fc6c21313a42cbc7d65f156c000871158015adf42",
+      "sourceBlendSha256": "721d53a39dc51ff820d19fdd700ce0515cb53944007de9d142044d6d55357096",
+      "defaultClip": "sanhua-wuthering-waves.idle.cortana.v1"
+    },
+    {
+      "card": 8,
+      "modelId": "black-cat-coastal-cat",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/black-cat-coastal-cat/black-cat-coastal-cat-runtime.glb",
+      "bytes": 16151704,
+      "sha256": "816197c9c728e43b5374fb8f85c89805d9304aa22b07774ac79178da7f8fc4f4",
+      "sourceBlendSha256": "f722513f8a2005f463ecc41c8bebb1d4ebd8776c8660a398e1175f2334678bdd",
+      "defaultClip": "black-cat-coastal-cat.idle.cortana.v1"
+    },
+    {
+      "card": 9,
+      "modelId": "clove-t-pose",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/clove-t-pose/clove-t-pose-runtime.glb",
+      "bytes": 2226236,
+      "sha256": "6bbe1892439f83fc967a8df3994aa82859582a1c78341f839cc9ad23bd0ca5de",
+      "sourceBlendSha256": "b0e425fe63bfebf98397f3f692f016accb6b1c379f2fccaf39c52f26fec150da",
+      "defaultClip": "clove-t-pose.idle.cortana.v1"
+    },
+    {
+      "card": 10,
+      "modelId": "black-widow-aquatic-assassin",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/black-widow-aquatic-assassin/black-widow-aquatic-assassin-runtime.glb",
+      "bytes": 16159096,
+      "sha256": "bd04abe28fc7b62b2dc6a325c56cdb61190824c12b0fa7acb5151be48b614f6d",
+      "sourceBlendSha256": "d2f017b41e30e6d6ee81b3aed315c5d1aed61da4ecb548d7d390da113f40192d",
+      "defaultClip": "black-widow-aquatic-assassin.idle.cortana.v1"
+    }
+  ],
+  "sizeImpact": {
+    "addedPublicBytes": 87790060,
+    "publicBytes": 480530277,
+    "previousExecutableBytes": 332398592,
+    "executableBytes": 383153664,
+    "addedExecutableBytes": 50755072
+  },
+  "verification": {
+    "previewPassed": true,
+    "nativePassed": true,
+    "newErrors": [],
+    "nativeVisibility": {
+      "themes": [
+        {
+          "appearance": "dark",
+          "hidden": {
+            "hidden": false,
+            "minimized": true,
+            "renderActive": "false"
+          },
+          "media": {
+            "renderPaused": true,
+            "videoPaused": true,
+            "time": 2.672435
+          },
+          "resumed": {
+            "renderPaused": false,
+            "videoPaused": false,
+            "time": 3.76391
+          }
+        },
+        {
+          "appearance": "light",
+          "hidden": {
+            "hidden": false,
+            "minimized": true,
+            "renderActive": "false"
+          },
+          "media": {
+            "renderPaused": true,
+            "videoPaused": true,
+            "time": 2.686274
+          },
+          "resumed": {
+            "renderPaused": false,
+            "videoPaused": false,
+            "time": 3.776554
+          }
+        }
+      ],
+      "passed": true
+    },
+    "resourceSample": {
+      "SampledAt": "2026-09-10T17:00:52.5082248+08:00",
+      "NativePid": 3528,
+      "StartedAt": "2026-09-10T17:00:18.8017813+08:00",
+      "WindowHandle": 853912,
+      "Responding": true,
+      "WindowCaptured": true,
+      "ProcessIds": [
+        3528,
+        23900,
+        28756,
+        9528,
+        15424,
+        28304,
+        4368,
+        28828,
+        15404,
+        30216,
+        27080
+      ],
+      "NormalizedCpuPercent": 3.0,
+      "WorkingSetMiB": 1956.6,
+      "GpuDedicatedBytes": 3212881920.0,
+      "MaxGpuEngineUtilization": 9.0,
+      "FreeRamKiB": 17578336,
+      "TemporaryProcesses": [],
+      "Listeners": [
+        {
+          "LocalPort": 8787,
+          "OwningProcess": 28828
+        }
+      ],
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
+    }
+  }
+}

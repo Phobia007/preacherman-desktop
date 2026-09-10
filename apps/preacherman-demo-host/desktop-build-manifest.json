@@ -1,45 +1,35 @@
 {
   "schemaVersion": 1,
-  "buildId": "avatar-default-actions-20260909",
+  "buildId": "gallery-model-import-20260910",
   "productVersion": "0.1.0",
-  "sourceTask": "remove-412-imported-actions-preserve-model-defaults",
+  "sourceTask": "import-eight-prepared-avatars-into-gallery-cards-3-through-10",
   "sourceThread": null,
-  "sourceState": "Remove 412 imported animations and all nine packaged packs, manifests, pack loading/retargeting/cache code, sync script and motion picker. Preserve the exact Cortana and Zima runtime GLBs and their single embedded default animation; preserve bounded model cache, shared Canvas, Gallery/activation, media, appearance and native visibility handling.",
-  "sourceCommit": "bdf969ec0a2aeedbddbcd87edbf1e68de93c3915",
+  "sourceState": "Bind the eight prepared avatars in upload order to Gallery cards 3–10. Preserve authored colors, one prepared default idle per model, unchanged Cortana/Zima GLBs, all CMS text/posters/videos, shared Canvas, bounded cache, activation and appearances. Package all model resources locally.",
+  "sourceCommit": "b3738ce4e89e900cdf4d361c6dbb3150636dc9f9",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-09T21:30:41.8335646+08:00",
-  "deployedAt": "2026-09-09T21:31:05.8470686+08:00",
-  "verifiedAt": "2026-09-09T21:38:00.656155+08:00",
-  "sizeBytes": 332398592,
-  "sha256": "04FAB5091C0783E65ED49670B93AC86A4B9E329ACB3D3C919DD1715B2B2E6C6B",
+  "builtAt": "2026-09-10T16:40:18.7344463+08:00",
+  "deployedAt": "2026-09-10T16:58:10.7094634+08:00",
+  "verifiedAt": "2026-09-10T17:00:52.5082248+08:00",
+  "sizeBytes": 383153664,
+  "sha256": "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\default-actions-before-20260909/preacherman-demo-host.exe",
-  "backupSha256": "E751748A2C3A3C39E927AEA2146C24107643EB997B36F96050C2DBFC4E11CF4F",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\default-actions-before-20260909/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-models-before-20260910/preacherman-demo-host.exe",
+  "backupSha256": "04FAB5091C0783E65ED49670B93AC86A4B9E329ACB3D3C919DD1715B2B2E6C6B",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-models-before-20260910/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "9ac1918dbda50f2e854acbf0550e4e4a3e410c12",
-  "previousVerificationCommit": "9ac1918dbda50f2e854acbf0550e4e4a3e410c12",
+  "rollbackBaselineCommit": "19087bb21a7e663c03d92dc1ecb57ddd19518927",
+  "previousVerificationCommit": "19087bb21a7e663c03d92dc1ecb57ddd19518927",
   "verification": {
     "status": "passed-with-qualified-preexisting-template-diagnostics",
-    "typescript": "Renderer and host passed",
-    "focusedTests": "28 renderer and 38 focused host tests passed; actual shipped skeletons animate beyond two loops, retired actions reject, only embedded defaults are registered, packaged motion count is zero, both appearances and window lifecycle checks pass.",
-    "browserFlow": "Both appearances passed core routes, Gallery videos, shared Canvas, previous/next motion, keyboard, reduced motion, direct second-card entry, activation persistence. No motion-library requests.",
-    "nativeFlow": "Cold canonical-shortcut launch; Home, Task, Gallery, Market/ledger, Settings, Account; Cortana/Zima defaults and shared Gallery flows; both appearances and native minimize/restore/maximize passed. Preferences restored and normal shortcut restarted with debugging disabled.",
-    "sizeReduction": {
-      "publicBytesBefore": 763841026,
-      "publicBytesAfter": 394268838,
-      "removedPublicBytes": 369572188,
-      "executableBytesBefore": 617295360,
-      "executableBytesAfter": 332398592,
-      "executableBytesRemoved": 284896768,
-      "removedMotionCount": 412,
-      "removedPackCount": 9
-    },
+    "typescript": "Renderer and host passed; complete Tauri beforeBuild passed.",
+    "focusedTests": "38 host and 26 renderer tests passed, including all eight actual GLBs animated for over two loops; one embedded idle each, finite bounds and bone motion.",
+    "browserFlow": "Both appearances; all ten cards; unchanged titles/bodies; shared Canvas; browsing does not activate; previous/next and activation persist across core navigation and reload.",
+    "nativeFlow": "Canonical-shortcut cold Home; all ten cards and core Home, Task, Gallery, Market/Ledger, Settings, Account in both modes; original hologram restored after colored models; minimize/resume/maximize verified with Clove; original preferences restored and normal Home shortcut restarted without debugging.",
     "modelHashes": [
       {
         "Algorithm": "SHA256",
@@ -52,19 +42,269 @@
         "Path": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\public\\assets\\avatars\\zima\\zima-runtime.glb"
       }
     ],
+    "importedModels": [
+      {
+        "card": 3,
+        "modelId": "jubilee-midnight-mutant",
+        "path": "apps/preacherman-demo-host/public/assets/avatars/jubilee-midnight-mutant/jubilee-midnight-mutant-runtime.glb",
+        "bytes": 10973752,
+        "sha256": "a53332b17cee3033a12e9dac206aab16f33d46900ec154723c7d91c0161d87d1",
+        "sourceBlendSha256": "0d28b0cbb4817ab710d7832129b0ea113c9a05c1b7a131733193d6fcc4701967",
+        "defaultClip": "jubilee-midnight-mutant.idle.cortana.v1"
+      },
+      {
+        "card": 4,
+        "modelId": "halo-mk-v-model",
+        "path": "apps/preacherman-demo-host/public/assets/avatars/halo-mk-v-model/halo-mk-v-model-runtime.glb",
+        "bytes": 8870764,
+        "sha256": "a53f76fd06d55b48a20761aa5fcbe438262f2f173802adc2da0341212b7c1734",
+        "sourceBlendSha256": "f6207f4f9b869382e41f067ff26516e9abb452f2ac1b74d81c7a91fabf9d3b6c",
+        "defaultClip": "halo-mk-v-model.idle.cortana.v1"
+      },
+      {
+        "card": 5,
+        "modelId": "magik-soul-surfer",
+        "path": "apps/preacherman-demo-host/public/assets/avatars/magik-soul-surfer/magik-soul-surfer-runtime.glb",
+        "bytes": 16091532,
+        "sha256": "3a148d87ee657731fa3f420a9f9d065a4a144c80ee99606f35da65a5723295a4",
+        "sourceBlendSha256": "8253da4c10384cb973e3fd9ce84573d417abe8cc5cef585f62697f8aa032e9c0",
+        "defaultClip": "magik-soul-surfer.idle.cortana.v1"
+      },
+      {
+        "card": 6,
+        "modelId": "punk-magik",
+        "path": "apps/preacherman-demo-host/public/assets/avatars/punk-magik/punk-magik-runtime.glb",
+        "bytes": 14473660,
+        "sha256": "616374a315faa661eaa122fddc1aac1ad74eb82f8a8a4eb9ed65febaf2f4ac4d",
+        "sourceBlendSha256": "b32e2e2d961f975000447d7f2252d3f700c4ec8b27db045839e5a6dbd71a484b",
+        "defaultClip": "punk-magik.idle.cortana.v1"
+      },
+      {
+        "card": 7,
+        "modelId": "sanhua-wuthering-waves",
+        "path": "apps/preacherman-demo-host/public/assets/avatars/sanhua-wuthering-waves/sanhua-wuthering-waves-runtime.glb",
+        "bytes": 2843316,
+        "sha256": "122ee5424938e38adfc2fe9fc6c21313a42cbc7d65f156c000871158015adf42",
+        "sourceBlendSha256": "721d53a39dc51ff820d19fdd700ce0515cb53944007de9d142044d6d55357096",
+        "defaultClip": "sanhua-wuthering-waves.idle.cortana.v1"
+      },
+      {
+        "card": 8,
+        "modelId": "black-cat-coastal-cat",
+        "path": "apps/preacherman-demo-host/public/assets/avatars/black-cat-coastal-cat/black-cat-coastal-cat-runtime.glb",
+        "bytes": 16151704,
+        "sha256": "816197c9c728e43b5374fb8f85c89805d9304aa22b07774ac79178da7f8fc4f4",
+        "sourceBlendSha256": "f722513f8a2005f463ecc41c8bebb1d4ebd8776c8660a398e1175f2334678bdd",
+        "defaultClip": "black-cat-coastal-cat.idle.cortana.v1"
+      },
+      {
+        "card": 9,
+        "modelId": "clove-t-pose",
+        "path": "apps/preacherman-demo-host/public/assets/avatars/clove-t-pose/clove-t-pose-runtime.glb",
+        "bytes": 2226236,
+        "sha256": "6bbe1892439f83fc967a8df3994aa82859582a1c78341f839cc9ad23bd0ca5de",
+        "sourceBlendSha256": "b0e425fe63bfebf98397f3f692f016accb6b1c379f2fccaf39c52f26fec150da",
+        "defaultClip": "clove-t-pose.idle.cortana.v1"
+      },
+      {
+        "card": 10,
+        "modelId": "black-widow-aquatic-assassin",
+        "path": "apps/preacherman-demo-host/public/assets/avatars/black-widow-aquatic-assassin/black-widow-aquatic-assassin-runtime.glb",
+        "bytes": 16159096,
+        "sha256": "bd04abe28fc7b62b2dc6a325c56cdb61190824c12b0fa7acb5151be48b614f6d",
+        "sourceBlendSha256": "d2f017b41e30e6d6ee81b3aed315c5d1aed61da4ecb548d7d390da113f40192d",
+        "defaultClip": "black-widow-aquatic-assassin.idle.cortana.v1"
+      }
+    ],
+    "sizeImpact": {
+      "addedPublicBytes": 87790060,
+      "publicBytes": 480530277,
+      "previousExecutableBytes": 332398592,
+      "executableBytes": 383153664,
+      "addedExecutableBytes": 50755072
+    },
+    "nativeVisibility": {
+      "themes": [
+        {
+          "appearance": "dark",
+          "hidden": {
+            "hidden": false,
+            "minimized": true,
+            "renderActive": "false"
+          },
+          "media": {
+            "renderPaused": true,
+            "videoPaused": true,
+            "time": 2.672435
+          },
+          "resumed": {
+            "renderPaused": false,
+            "videoPaused": false,
+            "time": 3.76391
+          }
+        },
+        {
+          "appearance": "light",
+          "hidden": {
+            "hidden": false,
+            "minimized": true,
+            "renderActive": "false"
+          },
+          "media": {
+            "renderPaused": true,
+            "videoPaused": true,
+            "time": 2.686274
+          },
+          "resumed": {
+            "renderPaused": false,
+            "videoPaused": false,
+            "time": 3.776554
+          }
+        }
+      ],
+      "passed": true
+    },
+    "consoleReview": {
+      "baselineReports": [
+        "intro-native-report.json",
+        "activation-baseline-native-report.json",
+        "refinement-native-report.json",
+        "refinement-baseline-native-report.json",
+        "toggle-native-report.json"
+      ],
+      "newUnattributedErrors": [],
+      "note": "Exact prior diagnostic strings only; no security-policy or allow-list changes.",
+      "pairedBaselineComparison": {
+        "baselinePassed": true,
+        "sourceObjectComparisons": [
+          {
+            "path": "apps/preacherman-demo-host/public/active-theory-gallery",
+            "baselineObject": "8e15650bb25402e5dde8c5add2e9e74bdfe6c5c6",
+            "candidateObject": "8e15650bb25402e5dde8c5add2e9e74bdfe6c5c6"
+          },
+          {
+            "path": "apps/preacherman-demo-host/public/gallery-v3",
+            "baselineObject": "0c64f5f0f61f2561c258519de01e3719c0961ce5",
+            "candidateObject": "0c64f5f0f61f2561c258519de01e3719c0961ce5"
+          },
+          {
+            "path": "apps/preacherman-demo-host/public/market-love",
+            "baselineObject": "f72cb23e5e8afff1c789d356988b6f00106d111b",
+            "candidateObject": "f72cb23e5e8afff1c789d356988b6f00106d111b"
+          },
+          {
+            "path": "apps/preacherman-demo-host/src-tauri/tauri.conf.json",
+            "baselineObject": "4816190e099bfbc22f51ecf38935238b2405aeb6",
+            "candidateObject": "4816190e099bfbc22f51ecf38935238b2405aeb6"
+          }
+        ],
+        "reproducedExactErrors": [
+          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322316302%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/storiesretold.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/henessey.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323267016.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
+        ],
+        "sourceAttributedLegacyErrors": [
+          {
+            "message": "Connecting to 'https://image.mux.com/HofYkQ00DP02B202026iOjEsHVlOHoXqJB02y/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+            "origin": "http://tauri.localhost/gallery-v3/portfolio/",
+            "packagedTexture": "/gallery-v3/portfolio/textures/HofYkQ00DP02B202026iOjEsHVlOHoXqJB02y_thumbnail.ktx2",
+            "textureSha256": "e973a1053725a4b92872c53d1c21c6026869872356584e4774a654cdf6af1d81",
+            "basis": "Entire emitting portfolio tree, texture manifest, packed fallback and CSP have identical baseline/candidate Git objects. This exact runtime message did not recur during bounded old-version comparison; source attribution is separate from reproduction."
+          },
+          {
+            "message": "Connecting to 'https://image.mux.com/iyDjwB2orEKXdIKP5u02RfT68xRnllt7a/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+            "origin": "http://tauri.localhost/gallery-v3/portfolio/",
+            "packagedTexture": "/gallery-v3/portfolio/textures/iyDjwB2orEKXdIKP5u02RfT68xRnllt7a_thumbnail.ktx2",
+            "textureSha256": "17052bd1729a198a684261a75f559955d024002e30a7f310c1a6b8dedc1755eb",
+            "basis": "Entire emitting portfolio tree, texture manifest, packed fallback and CSP have identical baseline/candidate Git objects. This exact runtime message did not recur during bounded old-version comparison; source attribution is separate from reproduction."
+          },
+          {
+            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656629-image-39.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+            "origin": "http://tauri.localhost/gallery-v3/portfolio/",
+            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1785656629-image-39.ktx2",
+            "textureSha256": "12061e5586ad3b762e6030f77866fea19533e96fbf503c6d9b0443530a37b54a",
+            "basis": "Entire emitting portfolio tree, texture manifest, packed fallback and CSP have identical baseline/candidate Git objects. This exact runtime message did not recur during bounded old-version comparison; source attribution is separate from reproduction."
+          },
+          {
+            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656633-tlb4.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+            "origin": "http://tauri.localhost/gallery-v3/portfolio/",
+            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1785656633-tlb4.ktx2",
+            "textureSha256": "e0ece58b78f0b018e0d4900ff4611a40748db35d757313677fe0f1055d91a787",
+            "basis": "Entire emitting portfolio tree, texture manifest, packed fallback and CSP have identical baseline/candidate Git objects. This exact runtime message did not recur during bounded old-version comparison; source attribution is separate from reproduction."
+          }
+        ],
+        "unattributed": []
+      },
+      "rawCandidateReport": "D:\\preacherman\\output\\gallery-model-import-20260910\\native-candidate-diagnostics.json",
+      "qualifiedReport": "D:\\preacherman\\output\\gallery-model-import-20260910\\native-qualified-report.json"
+    },
+    "nativePid": 3528,
+    "nativeStartedAt": "2026-09-10T17:00:18.8017813+08:00",
+    "nativeWindowHandle": 853912,
+    "resourceSample": {
+      "SampledAt": "2026-09-10T17:00:52.5082248+08:00",
+      "NativePid": 3528,
+      "StartedAt": "2026-09-10T17:00:18.8017813+08:00",
+      "WindowHandle": 853912,
+      "Responding": true,
+      "WindowCaptured": true,
+      "ProcessIds": [
+        3528,
+        23900,
+        28756,
+        9528,
+        15424,
+        28304,
+        4368,
+        28828,
+        15404,
+        30216,
+        27080
+      ],
+      "NormalizedCpuPercent": 3.0,
+      "WorkingSetMiB": 1956.6,
+      "GpuDedicatedBytes": 3212881920.0,
+      "MaxGpuEngineUtilization": 9.0,
+      "FreeRamKiB": 17578336,
+      "TemporaryProcesses": [],
+      "Listeners": [
+        {
+          "LocalPort": 8787,
+          "OwningProcess": 28828
+        }
+      ],
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
+    },
+    "restartAuthorization": "User explicitly authorized automatic deployment and restart.",
+    "evidence": [
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\installed-assets.json",
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\production-build.log",
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\host-tests.log",
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\renderer-tests.log",
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\preview-report.json",
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\native-report.json",
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\native-visibility.json",
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\final-native-home.png",
+      "D:\\preacherman\\output\\gallery-model-import-20260910\\final-resources.json"
+    ],
     "assetInventory": {
-      "publicBytes": 394268838,
+      "publicBytes": 480530277,
       "groups": {
-        "active-theory-gallery": 60619534,
-        "assets/avatars": 17822372,
-        "assets/gallery": 63055904,
         "favicon.ico": 682,
+        "active-theory-gallery": 60514865,
         "gallery": 491222,
-        "gallery-v3": 58131344,
         "licenses": 1667,
         "market-love": 78557137,
-        "settings-v3-local": 86925267,
-        "task-lookback-v3": 28663709
+        "settings-v3-local": 86512858,
+        "task-lookback-v3": 27652166,
+        "assets/gallery": 63055904,
+        "assets/avatars": 105612432,
+        "gallery-v3": 58131344
       },
       "models": [
         {
@@ -80,6 +320,62 @@
           "triangles": 4862,
           "primitives": 1,
           "textures": 2
+        },
+        {
+          "path": "assets/avatars/jubilee-midnight-mutant/jubilee-midnight-mutant-runtime.glb",
+          "bytes": 10973752,
+          "triangles": 103356,
+          "primitives": 12,
+          "textures": 22
+        },
+        {
+          "path": "assets/avatars/halo-mk-v-model/halo-mk-v-model-runtime.glb",
+          "bytes": 8870764,
+          "triangles": 29692,
+          "primitives": 6,
+          "textures": 22
+        },
+        {
+          "path": "assets/avatars/magik-soul-surfer/magik-soul-surfer-runtime.glb",
+          "bytes": 16091532,
+          "triangles": 155694,
+          "primitives": 13,
+          "textures": 32
+        },
+        {
+          "path": "assets/avatars/punk-magik/punk-magik-runtime.glb",
+          "bytes": 14473660,
+          "triangles": 143415,
+          "primitives": 10,
+          "textures": 22
+        },
+        {
+          "path": "assets/avatars/sanhua-wuthering-waves/sanhua-wuthering-waves-runtime.glb",
+          "bytes": 2843316,
+          "triangles": 32902,
+          "primitives": 31,
+          "textures": 7
+        },
+        {
+          "path": "assets/avatars/black-cat-coastal-cat/black-cat-coastal-cat-runtime.glb",
+          "bytes": 16151704,
+          "triangles": 163950,
+          "primitives": 15,
+          "textures": 27
+        },
+        {
+          "path": "assets/avatars/clove-t-pose/clove-t-pose-runtime.glb",
+          "bytes": 2226236,
+          "triangles": 20625,
+          "primitives": 3,
+          "textures": 3
+        },
+        {
+          "path": "assets/avatars/black-widow-aquatic-assassin/black-widow-aquatic-assassin-runtime.glb",
+          "bytes": 16159096,
+          "triangles": 163590,
+          "primitives": 10,
+          "textures": 24
         }
       ],
       "motionLibrary": {
@@ -95,111 +391,10 @@
           "path": "assets/gallery/zima-card-video.mp4",
           "bytes": 37660684
         }
-      ]
-    },
-    "nativeVisibility": {
-      "themes": [
-        {
-          "appearance": "dark",
-          "hidden": {
-            "hidden": false,
-            "minimized": true,
-            "renderActive": "false"
-          },
-          "media": {
-            "renderPaused": true,
-            "videoPaused": true,
-            "time": 5.417836
-          },
-          "resumed": {
-            "renderPaused": false,
-            "videoPaused": false,
-            "time": 6.533372
-          }
-        },
-        {
-          "appearance": "light",
-          "hidden": {
-            "hidden": false,
-            "minimized": true,
-            "renderActive": "false"
-          },
-          "media": {
-            "renderPaused": true,
-            "videoPaused": true,
-            "time": 4.295236
-          },
-          "resumed": {
-            "renderPaused": false,
-            "videoPaused": false,
-            "time": 5.420387
-          }
-        }
       ],
-      "passed": true
+      "inventoryMethod": "Current filesystem byte inventory. Public Git diff from verified baseline contains only eight added model files; prior aggregate inventory was stale for three unchanged source trees."
     },
-    "consoleReview": {
-      "baselineReports": [
-        "intro-native-report.json",
-        "activation-baseline-native-report.json",
-        "refinement-native-report.json",
-        "refinement-baseline-native-report.json",
-        "toggle-native-report.json"
-      ],
-      "rawReport": "output/playwright/default-actions-native-report.json",
-      "newUnattributedErrors": [],
-      "note": "Exact prior diagnostic strings only; no CSP change or expanded error allow-list."
-    },
-    "nativePid": 30308,
-    "nativeStartedAt": "2026-09-09T21:37:32.7228214+08:00",
-    "nativeWindowHandle": 2033658,
-    "resourceSample": {
-      "SampledAt": "2026-09-09T21:38:00.656155+08:00",
-      "NativePid": 30308,
-      "StartedAt": "2026-09-09T21:37:32.7228214+08:00",
-      "WindowHandle": 2033658,
-      "Responding": true,
-      "WindowCaptured": true,
-      "ProcessIds": [
-        30308,
-        14340,
-        28584,
-        27860,
-        5420,
-        28796,
-        18032,
-        956,
-        28752,
-        9684,
-        6616
-      ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1885.2,
-      "GpuDedicatedBytes": 5358886912,
-      "MaxGpuEngineUtilization": 9,
-      "FreeRamKiB": 17656700,
-      "TemporaryProcesses": [],
-      "Listeners": [
-        {
-          "LocalPort": 8787,
-          "OwningProcess": 956
-        }
-      ],
-      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
-    },
-    "restartAuthorization": "User explicitly authorized automatic rebuild/restart without asking again.",
-    "evidence": [
-      "docs/avatar-default-actions.md",
-      "output/playwright/default-actions-assets-before.json",
-      "output/playwright/default-actions-assets-after.json",
-      "output/playwright/default-actions-renderer-tests.log",
-      "output/playwright/default-actions-host-tests.log",
-      "output/playwright/default-actions-preview-report.json",
-      "output/playwright/default-actions-native-report.json",
-      "output/playwright/default-actions-native-visibility.json",
-      "output/playwright/default-actions-final-native-home.png",
-      "output/playwright/default-actions-final-resources.json"
-    ]
+    "harnessCorrection": "First native run assumed returning to Gallery resets the detail. Screenshot showed existing card 10 retained correctly. Corrected harness assertion, preserved raw report, and reran the unchanged executable from a fresh shortcut launch."
   },
   "releaseAttempts": [
     {
@@ -305,7 +500,7 @@
       "finalEvidence": "output/playwright/zima-native-report.json"
     },
     {
-      "status": "restored-for-console-baseline-comparison",
+      "status": "resolved-by-baseline-and-source-attribution",
       "sourceCommit": "b3738ce4e89e900cdf4d361c6dbb3150636dc9f9",
       "sha256": "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
       "deployedAt": "2026-09-10T16:41:16.2161607+08:00",
@@ -314,10 +509,14 @@
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
       "reason": "Both native themes, ten models and core interactions passed; previously unlisted CSP diagnostics for existing remote Gallery posters and Market thumbnails require baseline attribution. Restore verified pair before comparison. User requested unchanged card media.",
       "candidateArtifact": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
-      "evidence": "D:\\preacherman\\output\\gallery-model-import-20260910\\native-candidate-diagnostics.json"
+      "evidence": "D:\\preacherman\\output\\gallery-model-import-20260910\\native-candidate-diagnostics.json",
+      "comparisonEvidence": "D:\\preacherman\\output\\gallery-model-import-20260910\\console-comparison.json",
+      "comparisonConclusion": "Eight Gallery poster diagnostics reproduced on paired old executable. Four portfolio thumbnail diagnostics separately attributed by identical emitting tree, CSP and packed fallback textures; not claimed as runtime-reproduced. Same candidate redeployed without source changes.",
+      "redeployedAt": "2026-09-10T16:58:10.7094634+08:00",
+      "finalNativeVisibilityPassed": true
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\default-actions-before-20260909/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-models-before-20260910/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
