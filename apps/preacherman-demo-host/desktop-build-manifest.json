@@ -1,35 +1,35 @@
 {
   "schemaVersion": 1,
-  "buildId": "avatar-motion-lighting-20260910",
+  "buildId": "active-companion-20260910",
   "productVersion": "0.1.0",
-  "sourceTask": "dark-cortana-lighting-tailored-library-idles-and-sanhua-skin-repair",
+  "sourceTask": "follow-equipped-avatar-on-gallery-overview-and-all-surfaces",
   "sourceThread": null,
-  "sourceState": "Share Cortana cinematic lighting across eight authored-color models. Retarget six selected library idles individually; repair Sanhua regional weights and use four-influence linear skinning. Preserve original materials, embedded textures, geometry topology, Cortana/Zima, card content and navigation. Package one optimized clip per character; no full animation library.",
-  "sourceCommit": "4e3e850b76b4e34b213dd3e96033b715b1470697",
+  "sourceState": "Gallery overview uses the global activeModelId, matching Home and all other surfaces. Only an open character card previews its own model. Explicit deactivation hides the shared companion while leaving card previews usable. Existing assets, card copy, lighting, motion, navigation and startup route are unchanged.",
+  "sourceCommit": "19c164e2b33d098fabe7261236dd695bf0ee3154",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-10T18:19:06.1428987+08:00",
-  "deployedAt": "2026-09-10T18:19:47.8356193+08:00",
-  "verifiedAt": "2026-09-10T18:29:25.4694762+08:00",
+  "builtAt": "2026-09-10T19:20:03.4999336+08:00",
+  "deployedAt": "2026-09-10T19:20:54.4502173+08:00",
+  "verifiedAt": "2026-09-10T19:24:52.7601775+08:00",
   "sizeBytes": 383052288,
-  "sha256": "44D6A01D2AC2CD732AA42E655BC41C51265B3E801FDAD8BD46A8D0DD70EBE622",
+  "sha256": "09C9D1D2DE450AC52DCBB297262C45BDFF19FC6535A34CAEB3859EACD79D0A6A",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-motion-lighting-before-20260910/preacherman-demo-host.exe",
-  "backupSha256": "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-motion-lighting-before-20260910/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\active-companion-before-20260910/preacherman-demo-host.exe",
+  "backupSha256": "44D6A01D2AC2CD732AA42E655BC41C51265B3E801FDAD8BD46A8D0DD70EBE622",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\active-companion-before-20260910/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "ac4623fd0e9d5d4b632b82c031e1df8beef2ae95",
-  "previousVerificationCommit": "ac4623fd0e9d5d4b632b82c031e1df8beef2ae95",
+  "rollbackBaselineCommit": "87cb34f7b61e4ddb2b6e6e66401cfaf17a615413",
+  "previousVerificationCommit": "87cb34f7b61e4ddb2b6e6e66401cfaf17a615413",
   "verification": {
-    "status": "passed-with-qualified-preexisting-template-diagnostics",
-    "typescript": "Renderer check, host typecheck and complete production beforeBuild passed.",
-    "focusedTests": "47 host and 31 renderer checks passed. Actual shipped GLBs use their runtime profiles, animate through two loops, retain embedded textures and bounded cache size. Sanhua normalized weights and deformed skin edges checked through playback. Readiness regression fails on the prior source and passes after the fix; same-model callback changes retain one adapter.",
-    "browserFlow": "Both appearances, all ten characters with separate motion samples, unchanged card titles/bodies, shared Canvas, next/previous, activation and reload, Home, Task, Gallery, Market/Ledger, Settings and Account passed.",
-    "nativeFlow": "Canonical-shortcut cold Home and all ten cards in both appearances passed. Black Widow full-body Home and all core routes with Clove verified, as well as returning to Cortana. Minimize pauses model/media, restore resumes and maximize toggles. User preferences restored and final shortcut launch opened normal Home without debugging.",
+    "status": "passed-with-recorded-preexisting-template-diagnostics",
+    "typescript": "Host typecheck and production beforeBuild passed.",
+    "focusedTests": "35 focused checks passed; prior-source regression fails on Gallery overview with Zima equipped. The shipped App selection is exercised across all 10 models plus disabled state, all 8 surfaces and both appearances.",
+    "browserFlow": "Both appearances: saved Black Widow appears in overview; activate Jubilee and verify Home, Task, Market/Ledger, Settings, Account and Gallery; activate Halo and verify reload via normal Home; deactivate without removing card preview, hide overview/Home companion, preview Sanhua while disabled, then reactivate.",
+    "nativeFlow": "Same flow passed in the canonical desktop release after shortcut cold launch in both appearances. Minimize/restore and maximize controls passed. Original preferences restored; final normal shortcut launch returned to Home.",
     "modelHashes": [
       {
         "Algorithm": "SHA256",
@@ -878,9 +878,8 @@
       "passed": true
     },
     "consoleReview": {
-      "baselineReport": "D:/preacherman/output/gallery-model-import-20260910/native-qualified-report.json",
-      "restoredBaselineReport": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\baseline-report.json",
-      "comparison": "Previously recorded diagnostics plus four dynamic portfolio thumbnail messages attributed by identical emitting source, CSP, local mapping and packaged texture hashes. These four exact messages were not reproduced during the bounded baseline run. No CSP or asset allow-list changes.",
+      "baselineReport": "D:/preacherman/output/avatar-motion-lighting-20260910/native-qualified-report.json",
+      "newErrors": [],
       "sourceComparison": {
         "baselinePassed": true,
         "sourceObjectComparisons": [
@@ -907,38 +906,42 @@
         ],
         "sourceAttributedLegacyErrors": [
           {
-            "message": "Connecting to 'https://image.mux.com/R3vmn027401UtGEikdEo5clIi5MUU9aZs02/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
             "origin": "http://tauri.localhost/gallery-v3/portfolio/",
-            "packagedTexture": "/gallery-v3/portfolio/textures/R3vmn027401UtGEikdEo5clIi5MUU9aZs02_thumbnail.ktx2",
-            "textureSha256": "c2d0a961bfabc861a78d6a0937e85a8c144e3ab2241e560fc28d95f251ff1b53",
-            "basis": "Emitting portfolio tree, CSP, mapping and packaged fallback texture are identical to the verified baseline. This exact dynamic thumbnail message was not reproduced in the bounded baseline run; attribution is by unchanged source, not claimed runtime reproduction."
+            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1786212398-david-thumb.ktx2",
+            "textureSha256": "432808dc014598e33501eba2cf7046fcf881bbcc5f95c63e6d67203156efa88b",
+            "basis": "Emitting portfolio tree, CSP, mapping and packaged fallback texture are identical to the verified baseline. This exact dynamic thumbnail message was not recorded in the preceding baseline evidence; attribution is by unchanged source, not claimed runtime reproduction."
           },
           {
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207557-nathan-3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215135-op-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
             "origin": "http://tauri.localhost/gallery-v3/portfolio/",
-            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1786207557-nathan-3.ktx2",
-            "textureSha256": "de0002dff0f47fb8dc27174def1c1d2bb083e6b3e6b894824754c14e045aea26",
-            "basis": "Emitting portfolio tree, CSP, mapping and packaged fallback texture are identical to the verified baseline. This exact dynamic thumbnail message was not reproduced in the bounded baseline run; attribution is by unchanged source, not claimed runtime reproduction."
+            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1786215135-op-thumb.ktx2",
+            "textureSha256": "cf9092db9dc1450b69578a94d44bf2093d7ac4f286bfa7b23fdbf5ae3ebbb0b7",
+            "basis": "Emitting portfolio tree, CSP, mapping and packaged fallback texture are identical to the verified baseline. This exact dynamic thumbnail message was not recorded in the preceding baseline evidence; attribution is by unchanged source, not claimed runtime reproduction."
           },
           {
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207557-nathan-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
             "origin": "http://tauri.localhost/gallery-v3/portfolio/",
-            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1786207557-nathan-2.ktx2",
-            "textureSha256": "67e77d1ff2963e9e523863ba74d126231b4a3744dc3bdc82961c2dff9df0b209",
-            "basis": "Emitting portfolio tree, CSP, mapping and packaged fallback texture are identical to the verified baseline. This exact dynamic thumbnail message was not reproduced in the bounded baseline run; attribution is by unchanged source, not claimed runtime reproduction."
+            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1786212214-chris-thumb.ktx2",
+            "textureSha256": "b0b243c1b7fea48c29b52d31574076500eadd7eaf138e8f74900b35c011cdd44",
+            "basis": "Emitting portfolio tree, CSP, mapping and packaged fallback texture are identical to the verified baseline. This exact dynamic thumbnail message was not recorded in the preceding baseline evidence; attribution is by unchanged source, not claimed runtime reproduction."
           },
           {
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207557-nathan-1.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
             "origin": "http://tauri.localhost/gallery-v3/portfolio/",
-            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1786207557-nathan-1.ktx2",
-            "textureSha256": "e29cc013047e53c13f77f471f7e68a9c787889bd4b46fc7e9ad5410825a69b68",
-            "basis": "Emitting portfolio tree, CSP, mapping and packaged fallback texture are identical to the verified baseline. This exact dynamic thumbnail message was not reproduced in the bounded baseline run; attribution is by unchanged source, not claimed runtime reproduction."
+            "packagedTexture": "/gallery-v3/portfolio/textures/223669_1786215014-5p-thumb.ktx2",
+            "textureSha256": "aa3d61eaf7abc8c6a1539155481591aeb1c5f59f13c4179d01a7add83b5e21f1",
+            "basis": "Emitting portfolio tree, CSP, mapping and packaged fallback texture are identical to the verified baseline. This exact dynamic thumbnail message was not recorded in the preceding baseline evidence; attribution is by unchanged source, not claimed runtime reproduction."
           }
         ],
         "unattributed": []
       },
-      "newUnattributedErrors": [],
+      "qualification": "Four dynamic portfolio thumbnail messages attributed by unchanged source tree, CSP, local mapping and fallback image bytes against the preceding verified release; raw console report preserved.",
       "observedErrors": [
+        "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://www.datocms-assets.com/223669/1786215135-op-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
         "Hydration completed but contains mismatches.",
         "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
@@ -955,7 +958,6 @@
         "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "TypeError: _this.initSync is not a function",
         "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
         "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
         "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
@@ -969,71 +971,62 @@
         "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322316302%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/storiesretold.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/henessey.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323267016.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/R3vmn027401UtGEikdEo5clIi5MUU9aZs02/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1786207557-nathan-3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1786207557-nathan-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1786207557-nathan-1.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked."
+        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/henessey.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
       ]
     },
-    "nativePid": 30376,
-    "nativeStartedAt": "2026-09-10T18:28:52.7304485+08:00",
-    "nativeWindowHandle": 1442978,
+    "nativePid": 21328,
+    "nativeStartedAt": "2026-09-10T19:24:25.4916222+08:00",
+    "nativeWindowHandle": 1181684,
     "resourceSample": {
-      "SampledAt": "2026-09-10T18:29:25.4694762+08:00",
-      "NativePid": 30376,
-      "StartedAt": "2026-09-10T18:28:52.7304485+08:00",
-      "WindowHandle": 1442978,
+      "SampledAt": "2026-09-10T19:24:52.7601775+08:00",
+      "NativePid": 21328,
+      "StartedAt": "2026-09-10T19:24:25.4916222+08:00",
+      "WindowHandle": 1181684,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        30376,
-        22184,
-        26976,
-        6680,
-        11192,
-        22064,
-        30664,
-        13388,
-        8048,
-        22392,
-        7596
+        21328,
+        12404,
+        28764,
+        19544,
+        27916,
+        30524,
+        21260,
+        21256,
+        22216,
+        28220,
+        24148
       ],
       "NormalizedCpuPercent": 4.0,
-      "WorkingSetMiB": 2110.2,
-      "GpuDedicatedBytes": 3455107072.0,
-      "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 18185212,
+      "WorkingSetMiB": 2143.5,
+      "GpuDedicatedBytes": 3462324224.0,
+      "MaxGpuEngineUtilization": 10.0,
+      "FreeRamKiB": 17997456,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 13388
+          "OwningProcess": 21256
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
     },
     "restartAuthorization": "Previously authorized automatic deployment and native restart.",
     "evidence": [
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\host-tests.log",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\renderer-tests.log",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\baseline-readiness-test.log",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\production-build.log",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\preview-report.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\readiness-preview-report.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\native-report.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\native-qualified-report.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\console-comparison.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\native-visibility.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\asset-preservation.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\clip-optimization.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\skin-diagnostics.json",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\final-native-home.png",
-      "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\final-resources.json"
-    ]
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\baseline-regression.log",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\source-tests.log",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\typecheck.log",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\console-comparison.json",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\final-native-home.png",
+      "D:\\preacherman\\output\\playwright\\active-companion-20260910\\final-resources.json"
+    ],
+    "assetVerificationSourceCommit": "4e3e850b76b4e34b213dd3e96033b715b1470697",
+    "assetVerificationTimestamp": "2026-09-10T18:29:25.4694762+08:00",
+    "assetPreservation": "Git trees for bundled public content, avatar renderer and Tauri host match the preceding verified release; no assets, motions, shaders or sidecar rebuilt."
   },
   "releaseAttempts": [
     {
@@ -1177,9 +1170,18 @@
       "deployedAt": "2026-09-10T18:19:47.8356193+08:00",
       "verifiedAt": "2026-09-10T18:29:25.4694762+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-motion-lighting-before-20260910"
+    },
+    {
+      "buildId": "active-companion-20260910",
+      "sourceCommit": "19c164e2b33d098fabe7261236dd695bf0ee3154",
+      "sha256": "09C9D1D2DE450AC52DCBB297262C45BDFF19FC6535A34CAEB3859EACD79D0A6A",
+      "status": "passed",
+      "deployedAt": "2026-09-10T19:20:54.4502173+08:00",
+      "verifiedAt": "2026-09-10T19:24:52.7601775+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\active-companion-before-20260910"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-motion-lighting-before-20260910/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\active-companion-before-20260910/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
