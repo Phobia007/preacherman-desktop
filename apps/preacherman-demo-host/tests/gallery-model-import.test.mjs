@@ -4,11 +4,15 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import test from "node:test";
 import ts from "typescript";
-import { Box3 } from "three";
+import { Box3, Vector3 } from "three";
 
 const host = join(import.meta.dirname, "..");
 const renderer = await import(pathToFileURL(join(host, "../../packages/preacherman-avatar-renderer/dist/index.js")));
 const models = renderer.importedAvatarModels;
+const catalogSource = await readFile(join(host, "../../packages/preacherman-avatar-renderer/src/avatarCatalog.ts"), "utf8");
+const catalogCode = ts.transpileModule(catalogSource, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
+const { importedAvatarProfiles } = await import("data:text/javascript;base64," + Buffer.from(catalogCode).toString("base64"));
+
 
 test("cards 3 through 10 bind the approved models in upload order", async () => {
   const source = await readFile(join(host, "src/surfaces/gallery/galleryModelBindings.ts"), "utf8");
@@ -35,7 +39,10 @@ for (const { id } of models) {
     const length = bytes.readUInt32LE(12), offset = 20 + length;
     const gltf = JSON.parse(bytes.toString("utf8", 20, offset));
     assert.equal(gltf.animations.length, 1);
-    assert.equal(gltf.animations[0].name, id + ".idle.cortana.v1");
+    assert.ok(gltf.animations[0].channels.length <= 64, "fixed accessory transforms do not need per-frame tracks");
+    assert.equal(gltf.animations[0].name, importedAvatarProfiles[id].actions[0].clipName);
+    assert.match(gltf.animations[0].name, /\.idle\.(female|male|breathing|neutral|standard|weight_shift)\.v2$/);
+    assert.ok(gltf.animations[0].channels.every(channel => channel.target.path !== "scale"), "retargeting preserves authored bone scale");
     assert.ok(gltf.images.length > 0);
     assert.ok(gltf.images.every(image => image.bufferView !== undefined && !image.uri));
     assert.ok(gltf.buffers.every(buffer => !buffer.uri));
@@ -51,7 +58,7 @@ for (const { id } of models) {
       avatarId: id, rigId: id,
       modelUrl: "data:model/gltf+json;base64," + Buffer.from(JSON.stringify(gltf)).toString("base64"),
       defaultActionId: "idle.default", stateMap: { idle: "idle.default" },
-      actions: [{ id: "idle.default", clipName: gltf.animations[0].name, category: "idle", loop: "repeat", fadeIn: 0, fadeOut: 0, timeScale: 1, priority: 10, interruptible: true }],
+      actions: importedAvatarProfiles[id].actions.map(action => ({ ...action, fadeIn: 0, fadeOut: 0 })),
     });
     try {
       await adapter.load(); await adapter.setState("idle"); adapter.update(0.4);
@@ -61,7 +68,36 @@ for (const { id } of models) {
       const bones = []; root.traverse(object => { if (object.isBone) bones.push(object); });
       const pose = () => bones.flatMap(bone => [...bone.position.toArray(), ...bone.quaternion.toArray()]);
       const first = pose(); adapter.update(0.3); assert.notDeepEqual(pose(), first);
-      for (let frame = 0; frame < 1260; frame++) adapter.update(1 / 60);
+      for (let frame = 0; frame < 1260; frame++) {
+        adapter.update(1 / 60);
+        if (id !== "sanhua-wuthering-waves" || frame % 120 !== 0) continue;
+        root.updateMatrixWorld(true);
+        root.traverse(mesh => {
+          if (!mesh.isSkinnedMesh) return;
+          mesh.skeleton.update();
+          const position = mesh.geometry.attributes.position, weights = mesh.geometry.attributes.skinWeight;
+          assert.equal(weights.itemSize, 4);
+          const posed = [];
+          for (let vertex = 0; vertex < position.count; vertex++) {
+            assert.ok(Math.abs(weights.getX(vertex) + weights.getY(vertex) + weights.getZ(vertex) + weights.getW(vertex) - 1) < 0.00001);
+            posed.push(mesh.getVertexPosition(vertex, new Vector3()).applyMatrix4(mesh.matrixWorld));
+            assert.ok(posed.at(-1).toArray().every(Number.isFinite));
+          }
+          // The GLB stores normalized bind vertices. Compare actual desktop LBS edges
+          // throughout two loops to catch stretched shoulders, neck and split hip seams.
+          const indices = mesh.geometry.index;
+          for (let triangle = 0; triangle < (indices?.count ?? position.count); triangle += 3) {
+            for (let edge = 0; edge < 3; edge++) {
+              const a = indices ? indices.getX(triangle + edge) : triangle + edge;
+              const b = indices ? indices.getX(triangle + (edge + 1) % 3) : triangle + (edge + 1) % 3;
+              const length = new Vector3().fromBufferAttribute(position, a).distanceTo(new Vector3().fromBufferAttribute(position, b));
+              if (length < 0.002) continue;
+              const limit = mesh.name === "身体" ? 1.5 : 2.3;
+              assert.ok(posed[a].distanceTo(posed[b]) / length < limit, `${mesh.name}: skin edge stretched at frame ${frame}`);
+            }
+          }
+        });
+      }
       assert.ok(pose().every(Number.isFinite));
       assert.equal(adapter.getDebugSnapshot().currentAction, "idle.default");
       assert.equal(adapter.getDebugSnapshot().registeredActions, 1);
@@ -69,3 +105,10 @@ for (const { id } of models) {
     } finally { adapter.dispose(); }
   });
 }
+
+test("all characters share the existing dark stage lights while retaining authored materials", async () => {
+  const source = await readFile(join(host, "../../packages/preacherman-avatar-renderer/src/InteractiveAvatarScene.tsx"), "utf8");
+  assert.match(source, /environment === "cinematic" \? <CinematicHologramLights \/> : <HologramLights \/>/);
+  assert.doesNotMatch(source, /AuthoredAvatarLights|RoomEnvironment|avatarUsesHologram/);
+  assert.ok(new Set(Object.values(importedAvatarProfiles).map(profile => profile.actions[0].clipName.split(".idle.")[1])).size >= 5);
+});

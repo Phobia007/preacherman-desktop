@@ -1,0 +1,428 @@
+{
+  "library": "asset-library/digital-humans/assets/classified-actions/v1/source/Cortana_Action_Library.zip",
+  "library_record_count": 2858,
+  "selection": "Five types of stationary idle plus a weight-shift clip, tailored to body proportions, clothing and character presentation.",
+  "models": [
+    {
+      "model": "black-cat-coastal-cat",
+      "library_key": "female",
+      "source_action": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
+      "source_batch": 2,
+      "source_frames": 251,
+      "fps": 30,
+      "clip": "black-cat-coastal-cat.idle.female.v2",
+      "hip_gain": 0.55,
+      "arm_clearance_degrees": 3,
+      "foot_lock_max_error": 3.5824821234259925e-07,
+      "bone_scale_max_error": 1.1563301086425781e-05,
+      "source_rest_geometry_unchanged": true,
+      "skinning": "linear-four-influences",
+      "loop_endpoint_blend_frames": 14,
+      "sha256": "2577009bd2f1c530c559276f2e2a18d5f05e503c8a9359fe85a9eb08a1a4f508"
+    },
+    {
+      "model": "black-widow-aquatic-assassin",
+      "library_key": "breathing",
+      "source_action": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
+      "source_batch": 1,
+      "source_frames": 299,
+      "fps": 30,
+      "clip": "black-widow-aquatic-assassin.idle.breathing.v2",
+      "hip_gain": 0.5,
+      "arm_clearance_degrees": 3,
+      "foot_lock_max_error": 3.542749115219337e-07,
+      "bone_scale_max_error": 8.785724639892578e-05,
+      "source_rest_geometry_unchanged": true,
+      "skinning": "linear-four-influences",
+      "loop_endpoint_blend_frames": 14,
+      "sha256": "cd5157529eb8a902b60a1a303c46655fb701c17418dfcad833cb226cd49ed789"
+    },
+    {
+      "model": "clove-t-pose",
+      "library_key": "neutral",
+      "source_action": "CT_LOC_IDLE_neutral_idle_30cfd31362b959560463",
+      "source_batch": 1,
+      "source_frames": 264,
+      "fps": 30,
+      "clip": "clove-t-pose.idle.neutral.v2",
+      "hip_gain": 0.5,
+      "arm_clearance_degrees": 2,
+      "foot_lock_max_error": 3.7814907850174666e-07,
+      "bone_scale_max_error": 8.875131607055664e-05,
+      "source_rest_geometry_unchanged": true,
+      "skinning": "linear-four-influences",
+      "loop_endpoint_blend_frames": 14,
+      "sha256": "5ef964cede0aee4360cb548c9f39aefd3572ea25090bc989e1df2d7ebb2d16c1"
+    },
+    {
+      "model": "halo-mk-v-model",
+      "library_key": "male",
+      "source_action": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
+      "source_batch": 2,
+      "source_frames": 251,
+      "fps": 30,
+      "clip": "halo-mk-v-model.idle.male.v2",
+      "hip_gain": 0.38,
+      "arm_clearance_degrees": 4,
+      "foot_lock_max_error": 1.3676636106471736e-06,
+      "bone_scale_max_error": 2.2649765014648438e-06,
+      "source_rest_geometry_unchanged": true,
+      "skinning": "linear-four-influences",
+      "loop_endpoint_blend_frames": 14,
+      "sha256": "c8ef4d6305a89b3944a13726192f9935f0bb5f30c565f47c5674777bfdcb8df4"
+    },
+    {
+      "model": "jubilee-midnight-mutant",
+      "library_key": "female",
+      "source_action": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
+      "source_batch": 2,
+      "source_frames": 251,
+      "fps": 30,
+      "clip": "jubilee-midnight-mutant.idle.female.v2",
+      "hip_gain": 0.65,
+      "arm_clearance_degrees": 2,
+      "foot_lock_max_error": 3.108999711827386e-07,
+      "bone_scale_max_error": 8.285045623779297e-06,
+      "source_rest_geometry_unchanged": true,
+      "skinning": "linear-four-influences",
+      "loop_endpoint_blend_frames": 14,
+      "sha256": "638d83d963e23bbf6ac4b55bff09ba749067a827ad7eae4b0193a5ae4c3d886e"
+    },
+    {
+      "model": "magik-soul-surfer",
+      "library_key": "weight_shift",
+      "source_action": "CT_LOC_IDLE_weight_shift_a3ce1c7b98f3a6de456c",
+      "source_batch": 1,
+      "source_frames": 284,
+      "fps": 30,
+      "clip": "magik-soul-surfer.idle.weight_shift.v2",
+      "hip_gain": 0.65,
+      "arm_clearance_degrees": 3,
+      "foot_lock_max_error": 3.4410069104300406e-07,
+      "bone_scale_max_error": 7.367134094238281e-05,
+      "source_rest_geometry_unchanged": true,
+      "skinning": "linear-four-influences",
+      "loop_endpoint_blend_frames": 14,
+      "sha256": "f6bdf1a4c3fb4e00967694cd06480507a1bdb3c91b052f19a0182bf0b701b4ee"
+    },
+    {
+      "model": "punk-magik",
+      "library_key": "standard",
+      "source_action": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702",
+      "source_batch": 1,
+      "source_frames": 91,
+      "fps": 30,
+      "clip": "punk-magik.idle.standard.v2",
+      "hip_gain": 0.6,
+      "arm_clearance_degrees": 4,
+      "foot_lock_max_error": 3.0547380447387695e-07,
+      "bone_scale_max_error": 6.449222564697266e-05,
+      "source_rest_geometry_unchanged": true,
+      "skinning": "linear-four-influences",
+      "loop_endpoint_blend_frames": 14,
+      "sha256": "68b8c722883c15c52daa74c4d76a5f1d042b80b901da8889d0711d8752267cb6"
+    },
+    {
+      "model": "sanhua-wuthering-waves",
+      "library_key": "breathing",
+      "source_action": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
+      "source_batch": 1,
+      "source_frames": 299,
+      "fps": 30,
+      "clip": "sanhua-wuthering-waves.idle.breathing.v2",
+      "hip_gain": 0.35,
+      "arm_clearance_degrees": 1,
+      "foot_lock_max_error": 7.964806565578441e-07,
+      "bone_scale_max_error": 5.543231964111328e-05,
+      "source_rest_geometry_unchanged": true,
+      "skinning": "linear-four-influences",
+      "loop_endpoint_blend_frames": 14,
+      "sha256": "32b5a98c947e27e6348500aeab410117ccf22b5ab7d7a77161e312de10cf7f9c"
+    }
+  ],
+  "sanhua_skin_repair": [
+    {
+      "mesh": "face",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "裙子金属",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "上半身",
+      "max_before": 53,
+      "max_after": 3,
+      "geometry_unchanged": true,
+      "region_reweighted": true
+    },
+    {
+      "mesh": "meimao",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "she",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "zhi",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "身体",
+      "max_before": 47,
+      "max_after": 3,
+      "geometry_unchanged": true,
+      "region_reweighted": true
+    },
+    {
+      "mesh": "ear",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "kou",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "eye",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "前皮带",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "teeth",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "star",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "裙子",
+      "max_before": 3,
+      "max_after": 3,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "bai",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "chun",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "hou",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "头发",
+      "max_before": 2,
+      "max_after": 2,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "前缎带",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "带子",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "jie",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "nose",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "heart",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "眼白3",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "眼白2",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "eye_",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "头发2",
+      "max_before": 2,
+      "max_after": 2,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "穗子",
+      "max_before": 3,
+      "max_after": 3,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "xianlian",
+      "max_before": 3,
+      "max_after": 3,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "Cheek",
+      "max_before": 1,
+      "max_after": 1,
+      "geometry_unchanged": true,
+      "region_reweighted": false
+    },
+    {
+      "mesh": "黑丝腿",
+      "max_before": 9,
+      "max_after": 2,
+      "geometry_unchanged": true,
+      "region_reweighted": true
+    }
+  ],
+  "runtime_optimization": [
+    {
+      "model": "black-cat-coastal-cat",
+      "channels_before": 2601,
+      "animated_channels": 53,
+      "invariant_channels_baked": 2548,
+      "loop_seam_max_component_error": 0,
+      "bytes": 15952568
+    },
+    {
+      "model": "black-widow-aquatic-assassin",
+      "channels_before": 1656,
+      "animated_channels": 53,
+      "invariant_channels_baked": 1603,
+      "loop_seam_max_component_error": 0,
+      "bytes": 16125436
+    },
+    {
+      "model": "clove-t-pose",
+      "channels_before": 603,
+      "animated_channels": 43,
+      "invariant_channels_baked": 560,
+      "loop_seam_max_component_error": 0,
+      "bytes": 2248088
+    },
+    {
+      "model": "halo-mk-v-model",
+      "channels_before": 195,
+      "animated_channels": 22,
+      "invariant_channels_baked": 173,
+      "loop_seam_max_component_error": 0,
+      "bytes": 8850960
+    },
+    {
+      "model": "jubilee-midnight-mutant",
+      "channels_before": 1566,
+      "animated_channels": 53,
+      "invariant_channels_baked": 1513,
+      "loop_seam_max_component_error": 0,
+      "bytes": 10908812
+    },
+    {
+      "model": "magik-soul-surfer",
+      "channels_before": 3858,
+      "animated_channels": 53,
+      "invariant_channels_baked": 3805,
+      "loop_seam_max_component_error": 0,
+      "bytes": 15739416
+    },
+    {
+      "model": "punk-magik",
+      "channels_before": 1734,
+      "animated_channels": 51,
+      "invariant_channels_baked": 1683,
+      "loop_seam_max_component_error": 0,
+      "bytes": 14246772
+    },
+    {
+      "model": "sanhua-wuthering-waves",
+      "channels_before": 201,
+      "animated_channels": 23,
+      "invariant_channels_baked": 178,
+      "loop_seam_max_component_error": 0,
+      "bytes": 2842200
+    }
+  ]
+}

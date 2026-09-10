@@ -24,6 +24,17 @@ export function isAvatarModelId(value: unknown): value is AvatarModelId {
 export const avatarUsesHologram = (id: AvatarModelId): boolean => id === "cortana" || id === "zima";
 export const avatarDefaultActionId = (id: AvatarModelId): string => id === "cortana" ? "idle.catwalk" : id === "zima" ? "idle.zima" : "idle.default";
 
+const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {
+  "black-cat-coastal-cat": "female",
+  "black-widow-aquatic-assassin": "breathing",
+  "clove-t-pose": "neutral",
+  "halo-mk-v-model": "male",
+  "jubilee-midnight-mutant": "female",
+  "magik-soul-surfer": "weight_shift",
+  "punk-magik": "standard",
+  "sanhua-wuthering-waves": "breathing"
+};
+
 interface ImportedAvatarProfile {
   readonly avatarId: string;
   readonly defaultActionId: string;
@@ -38,7 +49,7 @@ export const importedAvatarProfiles = importedAvatarModels.reduce((profiles, { i
   profiles[id] = {
   avatarId: id,
   defaultActionId: "idle.default",
-  actions: [{ id: "idle.default", clipName: `${id}.idle.cortana.v1`, category: "idle", loop: "repeat", fadeIn: 0.35, fadeOut: 0.35, timeScale: 1, priority: 10, interruptible: true }],
+  actions: [{ id: "idle.default", clipName: `${id}.idle.${importedIdleMotions[id]}.v2`, category: "idle", loop: "repeat", fadeIn: 0.35, fadeOut: 0.35, timeScale: 1, priority: 10, interruptible: true }],
   jawBone: null,
   modelFile: `${id}-runtime.glb`,
   rigId: id,
