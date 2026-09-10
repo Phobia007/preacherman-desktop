@@ -1,0 +1,142 @@
+{
+  "sourceCommit": "4e3e850b76b4e34b213dd3e96033b715b1470697",
+  "sha256": "44D6A01D2AC2CD732AA42E655BC41C51265B3E801FDAD8BD46A8D0DD70EBE622",
+  "sizeImpact": {
+    "publicBytes": 479654469,
+    "publicByteDelta": -875808,
+    "importedModelBytes": 86914252,
+    "previousExecutableBytes": 383153664,
+    "executableBytes": 383052288,
+    "executableByteDelta": -101376
+  },
+  "models": [
+    {
+      "card": 3,
+      "modelId": "jubilee-midnight-mutant",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/jubilee-midnight-mutant/jubilee-midnight-mutant-runtime.glb",
+      "bytes": 10908812,
+      "sha256": "638D83D963E23BBF6AC4B55BFF09BA749067A827AD7EAE4B0193A5AE4C3D886E",
+      "sourceBlendSha256": "2D19C544FF781AF574B347871A3D24F73AF5CB51BB42CF9ECB15D8D6C4B45A4D",
+      "defaultClip": "jubilee-midnight-mutant.idle.female.v2",
+      "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\jubilee-midnight-mutant\\jubilee-midnight-mutant.blend",
+      "sourceLibraryAction": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e"
+    },
+    {
+      "card": 4,
+      "modelId": "halo-mk-v-model",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/halo-mk-v-model/halo-mk-v-model-runtime.glb",
+      "bytes": 8850960,
+      "sha256": "C8EF4D6305A89B3944A13726192F9935F0BB5F30C565F47C5674777BFDCB8DF4",
+      "sourceBlendSha256": "4A243F103F9FA756791E6F86D1FE914B21545BF446F5A19A1EB13A062B8A7B18",
+      "defaultClip": "halo-mk-v-model.idle.male.v2",
+      "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\halo-mk-v-model\\halo-mk-v-model.blend",
+      "sourceLibraryAction": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906"
+    },
+    {
+      "card": 5,
+      "modelId": "magik-soul-surfer",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/magik-soul-surfer/magik-soul-surfer-runtime.glb",
+      "bytes": 15739416,
+      "sha256": "F6BDF1A4C3FB4E00967694CD06480507A1BDB3C91B052F19A0182BF0B701B4EE",
+      "sourceBlendSha256": "E53DCF7AE2C3E87DEA753B9875395DF524E148A42869F361156F408F4E979131",
+      "defaultClip": "magik-soul-surfer.idle.weight_shift.v2",
+      "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\magik-soul-surfer\\magik-soul-surfer.blend",
+      "sourceLibraryAction": "CT_LOC_IDLE_weight_shift_a3ce1c7b98f3a6de456c"
+    },
+    {
+      "card": 6,
+      "modelId": "punk-magik",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/punk-magik/punk-magik-runtime.glb",
+      "bytes": 14246772,
+      "sha256": "68B8C722883C15C52DAA74C4D76A5F1D042B80B901DA8889D0711D8752267CB6",
+      "sourceBlendSha256": "692064FFBBA929CB303DFF507F79009476DFA2ECE8337E6724F1E2BA618398CC",
+      "defaultClip": "punk-magik.idle.standard.v2",
+      "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\punk-magik\\punk-magik.blend",
+      "sourceLibraryAction": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702"
+    },
+    {
+      "card": 7,
+      "modelId": "sanhua-wuthering-waves",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/sanhua-wuthering-waves/sanhua-wuthering-waves-runtime.glb",
+      "bytes": 2842200,
+      "sha256": "32B5A98C947E27E6348500AEAB410117CCF22B5AB7D7A77161E312DE10CF7F9C",
+      "sourceBlendSha256": "D97D3D1CE42580F662D11220D173BA4D49CF151455D8DD2C3BC331672C43EC1F",
+      "defaultClip": "sanhua-wuthering-waves.idle.breathing.v2",
+      "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\sanhua-wuthering-waves\\sanhua-wuthering-waves.blend",
+      "sourceLibraryAction": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea"
+    },
+    {
+      "card": 8,
+      "modelId": "black-cat-coastal-cat",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/black-cat-coastal-cat/black-cat-coastal-cat-runtime.glb",
+      "bytes": 15952568,
+      "sha256": "2577009BD2F1C530C559276F2E2A18D5F05E503C8A9359FE85A9EB08A1A4F508",
+      "sourceBlendSha256": "6F0EA557D1426C6480D99C0173E79A281E9312BD717560570D091811895EF6B5",
+      "defaultClip": "black-cat-coastal-cat.idle.female.v2",
+      "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\black-cat-coastal-cat\\black-cat-coastal-cat.blend",
+      "sourceLibraryAction": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e"
+    },
+    {
+      "card": 9,
+      "modelId": "clove-t-pose",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/clove-t-pose/clove-t-pose-runtime.glb",
+      "bytes": 2248088,
+      "sha256": "5EF964CEDE0AEE4360CB548C9F39AEFD3572EA25090BC989E1DF2D7EBB2D16C1",
+      "sourceBlendSha256": "F0A05B664AEC1CD79F111350377C99D97294BD7D78146038E5A66DD146329FDF",
+      "defaultClip": "clove-t-pose.idle.neutral.v2",
+      "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\clove-t-pose\\clove-t-pose.blend",
+      "sourceLibraryAction": "CT_LOC_IDLE_neutral_idle_30cfd31362b959560463"
+    },
+    {
+      "card": 10,
+      "modelId": "black-widow-aquatic-assassin",
+      "path": "apps/preacherman-demo-host/public/assets/avatars/black-widow-aquatic-assassin/black-widow-aquatic-assassin-runtime.glb",
+      "bytes": 16125436,
+      "sha256": "CD5157529EB8A902B60A1A303C46655FB701C17418DFCAD833CB226CD49ED789",
+      "sourceBlendSha256": "A79F1A406892A533DAFC5AEA80A1EF51E8FB19C2C0B70E029EAFB0367635CF28",
+      "defaultClip": "black-widow-aquatic-assassin.idle.breathing.v2",
+      "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\black-widow-aquatic-assassin\\black-widow-aquatic-assassin.blend",
+      "sourceLibraryAction": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea"
+    }
+  ],
+  "verification": {
+    "browserPassed": true,
+    "nativePassed": true,
+    "newErrors": [],
+    "resourceSample": {
+      "SampledAt": "2026-09-10T18:29:25.4694762+08:00",
+      "NativePid": 30376,
+      "StartedAt": "2026-09-10T18:28:52.7304485+08:00",
+      "WindowHandle": 1442978,
+      "Responding": true,
+      "WindowCaptured": true,
+      "ProcessIds": [
+        30376,
+        22184,
+        26976,
+        6680,
+        11192,
+        22064,
+        30664,
+        13388,
+        8048,
+        22392,
+        7596
+      ],
+      "NormalizedCpuPercent": 4.0,
+      "WorkingSetMiB": 2110.2,
+      "GpuDedicatedBytes": 3455107072.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 18185212,
+      "TemporaryProcesses": [],
+      "Listeners": [
+        {
+          "LocalPort": 8787,
+          "OwningProcess": 13388
+        }
+      ],
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
+    }
+  },
+  "evidenceRoot": "D:\\preacherman\\output\\avatar-motion-lighting-20260910"
+}
