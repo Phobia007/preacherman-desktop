@@ -44,16 +44,14 @@ export function CortanaModelStage({
 }: CortanaModelStageProps) {
   const modelName = avatarModelName(modelId);
   const interactionState = useAvatarInteractionState();
-  const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading");
+  const [readyModel, setReadyModel] = useState<ModelId | null>(null);
+  const [failedModel, setFailedModel] = useState<ModelId | null>(null);
+  const loadState = failedModel === modelId ? "error" : readyModel === modelId ? "ready" : "loading";
   const [jawOpen, setJawOpen] = useState(0);
   const [awakened, setAwakened] = useState(false);
-  const handleError = useCallback(() => setLoadState("error"), []);
-  const handleReady = useCallback(() => setLoadState("ready"), []);
+  const handleError = useCallback(() => setFailedModel(modelId), [modelId]);
+  const handleReady = useCallback(() => { setReadyModel(modelId); setFailedModel(null); }, [modelId]);
   const defaultActionId = avatarDefaultActionId(modelId);
-
-  useEffect(() => {
-    setLoadState("loading");
-  }, [modelId]);
 
   useEffect(() => {
     if (!renderActive || loadState !== "ready" || !prefetchModelId || prefetchModelId === modelId) return;

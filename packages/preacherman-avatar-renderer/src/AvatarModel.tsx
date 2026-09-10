@@ -208,6 +208,8 @@ export function AvatarModel({
     hairControlMap,
     eyeControlMap,
   ] = useTexture([...urls.textures]);
+  const animationErrorHandler = useRef(onAnimationError);
+  animationErrorHandler.current = onAnimationError;
   const adapter = useMemo(
     () => new ThreeAvatarAnimationAdapter({
       avatarId: profile.avatarId,
@@ -216,9 +218,9 @@ export function AvatarModel({
       actions: profile.actions,
       defaultActionId: profile.defaultActionId,
       stateMap: profile.stateMap,
-      onError: onAnimationError,
+      onError: error => animationErrorHandler.current(error),
     }),
-    [onAnimationError, profile, urls.model],
+    [profile, urls.model],
   );
   const controller = useMemo(
     () => new CortanaAnimationController(adapter),

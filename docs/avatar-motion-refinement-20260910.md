@@ -21,6 +21,8 @@ Seven authored rigs are retained. Sanhua's prepared rig is retained with new reg
 
 Retargeting preserves bone lengths and shoe pitch, solves planted feet using each target's leg lengths, adjusts arm clearance and blends the last 14 source frames into the first pose. Identical first/last values eliminate loop jumps. Fixed animation channels are baked into node transforms, leaving 22–53 animated channels per character instead of hundreds or thousands. This does not alter inverse bind matrices or require a runtime animation library.
 
+Loading status follows the last model that actually rendered, including a transient A → B → A selection while the shared Canvas retains A. Stale completion/error callbacks are ignored. Updating host callbacks reuses the current animation adapter instead of decoding the same model again.
+
 ## Source and verification
 
 Source: `D:/preacherman/asset-library/digital-humans/assets/classified-actions/v1/source/Cortana_Action_Library.zip`, idle batches 001 and 002. Exact source action names, exported hashes and numerical checks are in [avatar-motion-refinement-20260910.json](avatar-motion-refinement-20260910.json).

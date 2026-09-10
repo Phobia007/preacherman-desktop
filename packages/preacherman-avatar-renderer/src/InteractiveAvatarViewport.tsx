@@ -1,5 +1,6 @@
+import { avatarModelName } from "./avatarCatalog";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AvatarErrorBoundary } from "./AvatarErrorBoundary";
 import { AvatarAnimationDebugPanel } from "./AvatarAnimationDebugPanel";
 import { configureHologramRenderer } from "./HologramLights";
@@ -49,17 +50,21 @@ export function InteractiveAvatarViewport({
   cameraFraming = "full-body",
   rotationOffsetY = 0,
 }: InteractiveAvatarViewportProps) {
-  const [loadState, setLoadState] = useState<AvatarLoadState>("loading");
+  const [failure, setFailure] = useState<{ modelKey: string; state: AvatarLoadState } | null>(null);
   const [documentVisible, setDocumentVisible] = useState(() => typeof document === "undefined" || !document.hidden);
   const [loadedModel, setLoadedModel] = useState("");
   const modelKey = modelId + ":" + assetBaseUrl;
+  const currentModel = useRef(modelKey);
+  currentModel.current = modelKey;
+  // Canvas commits can skip a transient A → B → A selection. Keep the ready
+  // identity until another model actually renders; resetting on props loses it.
+  const loadState = failure?.modelKey === modelKey ? failure.state : loadedModel === modelKey ? "ready" : "loading";
   const rendering = renderActive && documentVisible;
   useEffect(() => {
     const sync = () => setDocumentVisible(!document.hidden);
     document.addEventListener("visibilitychange", sync);
     return () => document.removeEventListener("visibilitychange", sync);
   }, []);
-  useLayoutEffect(() => { setLoadState("loading"); }, [modelKey]);
   const [animationDebug, setAnimationDebug] =
     useState<AvatarAnimationDebugSnapshot | null>(null);
   const dpr = useMemo<[number, number]>(() => {
@@ -69,16 +74,18 @@ export function InteractiveAvatarViewport({
   }, [quality]);
 
   const reportError = useCallback((error: AvatarError) => {
-    setLoadState("error");
+    if (currentModel.current !== modelKey) return;
+    setFailure({ modelKey, state: "error" });
     onError?.(error);
-  }, [onError]);
+  }, [modelKey, onError]);
 
   const reportContextLost = useCallback((error: AvatarError) => {
     const contextError = normalizeAvatarError(error, "CONTEXT_LOST");
-    setLoadState("context-lost");
+    if (currentModel.current !== modelKey) return;
+    setFailure({ modelKey, state: "context-lost" });
     onContextLost?.(contextError);
     onError?.(contextError);
-  }, [onContextLost, onError]);
+  }, [modelKey, onContextLost, onError]);
 
   const reportAnimationError = useCallback((error: AvatarAnimationError) => {
     reportError(
@@ -87,7 +94,8 @@ export function InteractiveAvatarViewport({
   }, [reportError]);
 
   const reportFirstFrame = useCallback((snapshot: AvatarPerformanceSnapshot) => {
-    setLoadState("ready");
+    if (currentModel.current !== modelKey) return;
+    setFailure(null);
     setLoadedModel(modelKey);
     onPerformance?.(snapshot);
     onReady?.({ state: "ready", ...snapshot });
@@ -102,11 +110,11 @@ export function InteractiveAvatarViewport({
 
   return (
     <div
-      aria-label={`Interactive ${modelId === "cortana" ? "Cortana" : "Zima"} model`}
+      aria-label={`Interactive ${avatarModelName(modelId)} model`}
       className={["preacherman-avatar-viewport", "preacherman-avatar-viewport--interactive", className]
         .filter(Boolean)
         .join(" ")}
-      data-avatar-load-state={loadState === "ready" && loadedModel !== modelKey ? "loading" : loadState}
+      data-avatar-load-state={loadState}
       data-avatar-render-active={rendering}
       data-avatar-environment={environment}
     >
