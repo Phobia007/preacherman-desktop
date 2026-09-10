@@ -268,8 +268,8 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const HomeSurface = adapter.resolve(manifest).component;
   const activeModelId = preferences.activeModelId;
   const isCompanionActive = activeModelId !== null;
-  // Gallery previews its catalog independently of the companion used elsewhere.
-  const galleryModelId = galleryDetailOpen ? galleryPreviewModelId : "cortana";
+  // Only an open card previews its own character; the overview uses the equipped companion.
+  const galleryModelId = galleryDetailOpen ? galleryPreviewModelId : activeModelId;
   const sceneModelId = activeSurfaceType === "market" ? galleryModelId : activeModelId;
   const preachermanPanelSurface: LocalSurfaceType | null = route.kind === "surface"
     ? activeSurfaceType

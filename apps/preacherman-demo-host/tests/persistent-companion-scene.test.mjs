@@ -149,3 +149,23 @@ test("light and dark overlay chrome use semantic tokens above the same dark stag
   assert.match(styles, /\.demo-app-shell__scene\s*\{[\s\S]*background:\s*var\(--demo-theme-home-canvas\)/);
   assert.match(styles, /\.cortana-model-stage__wake-button:focus-visible\s*\{[\s\S]*var\(--demo-theme-focus\)/);
 });
+
+
+test("every surface and Gallery overview follows the equipped companion, with card-only previews", async () => {
+  const app = await readFile(join(hostRoot, "src", "App.tsx"), "utf8");
+  const selection = app.slice(app.indexOf("  const activeModelId = preferences.activeModelId;"), app.indexOf("  const preachermanPanelSurface:"));
+  assert.ok(selection.includes("const sceneModelId ="));
+  const resolveScene = new Function("preferences", "activeSurfaceType", "galleryDetailOpen", "galleryPreviewModelId", `${selection}; return sceneModelId;`);
+  const models = ["cortana", "zima", "jubilee-midnight-mutant", "halo-mk-v-model", "magik-soul-surfer", "punk-magik", "sanhua-wuthering-waves", "black-cat-coastal-cat", "clove-t-pose", "black-widow-aquatic-assassin", null];
+  for (const appearance of ["dark", "light"]) {
+    for (const activeModelId of models) {
+      const preferences = { appearance, activeModelId };
+      for (const surface of ["home", "workspace", "market", "ledger", "settings", "account", "lab", "test"]) {
+        for (const preview of models) {
+          assert.equal(resolveScene(preferences, surface, false, preview), activeModelId, `${appearance}: ${surface} overview must follow ${activeModelId}, including disabled state`);
+          assert.equal(resolveScene(preferences, surface, true, preview), surface === "market" ? preview : activeModelId, "only an open Gallery card may override the equipped model");
+        }
+      }
+    }
+  }
+});

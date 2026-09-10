@@ -170,7 +170,7 @@ test('Cortana activation is persistent, while detail preview never equips on ent
   assert.match(surface,/onPreviewModelChange\(active && detail.phase === "open" \? modelId : null\)/);
   assert.match(app,/setPreferences\(\(current\) => \(\{ \.\.\.current, activeModelId: current\.activeModelId === modelId \? null : modelId \}\)\)/);
   assert.match(app,/savePreferences\(preferences\)/);
-  assert.match(app,/const galleryModelId = galleryDetailOpen \? galleryPreviewModelId : "cortana"/);
+  assert.match(app,/const galleryModelId = galleryDetailOpen \? galleryPreviewModelId : activeModelId/);
   assert.match(app,/activeSurfaceType === "market" \? galleryModelId : activeModelId/);
   assert.match(read('src/surfaces/gallery/GalleryDetailOverlay.tsx'),/activated=\{activeModelId === modelId\}/);
 });
