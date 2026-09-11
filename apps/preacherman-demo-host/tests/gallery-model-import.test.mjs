@@ -14,22 +14,26 @@ const catalogCode = ts.transpileModule(catalogSource, { compilerOptions: { modul
 const { importedAvatarProfiles } = await import("data:text/javascript;base64," + Buffer.from(catalogCode).toString("base64"));
 
 
-test("cards keep their upload order with all withdrawn slots empty", async () => {
+test("new characters fill vacant cards in source order while existing characters retain their slots", async () => {
   const source = await readFile(join(host, "src/surfaces/gallery/galleryModelBindings.ts"), "utf8");
-  const { outputText: code } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } });
-  const bindings = await import("data:text/javascript;base64," + Buffer.from(code).toString("base64"));
-  const cards = JSON.parse(await readFile(join(host, "public/active-theory-gallery/gallery/external/storage.googleapis.com/activetheory-v6.appspot.com/cms/projects-dev.json"), "utf8")).sort((a, b) => a.priority - b.priority);
-  const order = ["cortana", "zima", ...models.map(model => ["sanhua-wuthering-waves", "magik-soul-surfer", "black-cat-coastal-cat", "black-widow-aquatic-assassin"].includes(model.id) ? null : model.id)];
-  assert.equal(order.length, 10);
-  assert.deepEqual(cards.slice(0, 10).map(card => bindings.galleryModelForProject(card.slug)), order);
-  assert.equal(bindings.galleryModelForProject(cards[10].slug), null);
-  assert.equal(bindings.galleryModelForProject("unknown"), null);
-  const available = order.filter(modelId => modelId !== null);
-  for (let index = 0; index < available.length; index++) {
-    assert.equal(bindings.adjacentGalleryModel(available[index]), available[index + 1] ?? available[index - 1]);
-    assert.equal(renderer.isAvatarModelId(available[index]), true);
+  const { outputText } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } });
+  const bindings = await import("data:text/javascript;base64," + Buffer.from(outputText).toString("base64"));
+  const cards = JSON.parse(await readFile(join(host, "public/active-theory-gallery/gallery/external/storage.googleapis.com/activetheory-v6.appspot.com/cms/projects-dev.json"), "utf8")).sort((a,b)=>a.priority-b.priority);
+  const manifest = JSON.parse(await readFile(join(host,"avatar-intake-20260911.json"),"utf8"));
+  assert.equal(manifest.models.length,16);
+  assert.equal(new Set(manifest.models.map(m=>m.id)).size,16);
+  const kept = {0:"cortana",1:"zima",2:"jubilee-midnight-mutant",3:"halo-mk-v-model",5:"punk-magik",8:"clove-t-pose"};
+  let next=0;
+  const order=cards.map((_,i)=>kept[i]??manifest.models[next++]?.id??null);
+  assert.deepEqual(cards.map(c=>bindings.galleryModelForProject(c.slug)),order);
+  assert.equal(bindings.galleryModelForProject("unknown"),null);
+  const available=order.filter(Boolean);
+  for(let i=0;i<available.length;i++) {
+    assert.equal(bindings.adjacentGalleryModel(available[i]),available[i+1]??available[i-1]);
+    assert.equal(renderer.isAvatarModelId(available[i]),true);
   }
-  for (const value of ["__proto__", "constructor", "unknown", null, 4]) assert.equal(renderer.isAvatarModelId(value), false);
+  for(const value of ["__proto__","constructor","unknown",null,4]) assert.equal(renderer.isAvatarModelId(value),false);
+  assert.ok(available.includes("nier-print-2b") && available.includes("nier-automata-2b"));
 });
 
 for (const { id } of models) {
@@ -42,10 +46,10 @@ for (const { id } of models) {
     assert.equal(gltf.animations.length, 1);
     assert.ok(gltf.animations[0].channels.length <= 64, "fixed accessory transforms do not need per-frame tracks");
     assert.equal(gltf.animations[0].name, importedAvatarProfiles[id].actions[0].clipName);
-    assert.match(gltf.animations[0].name, /\.idle\.(female|male|breathing|neutral|standard|weight_shift)\.v2$/);
+    assert.match(gltf.animations[0].name, /\.idle\.(female|male|breathing|neutral|standard|weight_shift|ready)\.v2$/);
     assert.ok(gltf.animations[0].channels.every(channel => channel.target.path !== "scale"), "retargeting preserves authored bone scale");
-    assert.ok(gltf.images.length > 0);
-    assert.ok(gltf.images.every(image => image.bufferView !== undefined && !image.uri));
+    assert.ok((gltf.images?.length ?? 0) > 0 || ["iron-man-mark-85", "modural-robot-mecha-chimera-dyan-high-poly-mesh"].includes(id), "authored texture or original untextured PBR material");
+    assert.ok((gltf.images ?? []).every(image => image.bufferView !== undefined && !image.uri));
     assert.ok(gltf.buffers.every(buffer => !buffer.uri));
     const urls = renderer.createAvatarAssetUrls("/assets/avatars/" + id, id);
     assert.deepEqual(urls, { model: `/assets/avatars/${id}/${id}-runtime.glb`, textures: [] });

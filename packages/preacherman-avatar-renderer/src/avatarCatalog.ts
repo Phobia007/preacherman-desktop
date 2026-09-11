@@ -10,6 +10,22 @@ export const importedAvatarModels = [
   { id: "black-cat-coastal-cat", name: "Black Cat" },
   { id: "clove-t-pose", name: "Clove" },
   { id: "black-widow-aquatic-assassin", name: "Black Widow" },
+  { id: "kitana-mk11-in-mk9-suit", name: "Kitana" },
+  { id: "nier-print-2b", name: "2B · Seated" },
+  { id: "nier-print-9s", name: "9S" },
+  { id: "nier-automata-2b", name: "2B" },
+  { id: "iron-man-mark-1", name: "Iron Man Mark I" },
+  { id: "stellar-blade-lily-stargazer-coat", name: "Lily" },
+  { id: "miles-variant-1", name: "Miles · Masked" },
+  { id: "miles-variant-2", name: "Miles · Unmasked" },
+  { id: "iron-man-mark-85", name: "Iron Man Mark 85" },
+  { id: "the-twins-atomic-heart", name: "Atomic Heart · Twin" },
+  { id: "modural-robot-mecha-chimera-dyan-high-poly-mesh", name: "Dyan" },
+  { id: "dark-knight", name: "Dark Knight" },
+  { id: "spartan-armour-mkv-halo-reach", name: "Spartan MK V · Reach" },
+  { id: "scifi-girl-v01", name: "Sci-fi Girl" },
+  { id: "proxima", name: "Proxima" },
+  { id: "halloween-the-game-michael-myers-samhain", name: "Michael Myers · Samhain" },
 ] as const;
 export type ImportedAvatarModelId = typeof importedAvatarModels[number]["id"];
 
@@ -32,7 +48,23 @@ const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {
   "jubilee-midnight-mutant": "female",
   "magik-soul-surfer": "weight_shift",
   "punk-magik": "standard",
-  "sanhua-wuthering-waves": "breathing"
+  "sanhua-wuthering-waves": "breathing",
+  "kitana-mk11-in-mk9-suit": "female",
+  "nier-print-2b": "breathing",
+  "nier-print-9s": "breathing",
+  "nier-automata-2b": "breathing",
+  "iron-man-mark-1": "breathing",
+  "stellar-blade-lily-stargazer-coat": "neutral",
+  "miles-variant-1": "standard",
+  "miles-variant-2": "standard",
+  "iron-man-mark-85": "breathing",
+  "the-twins-atomic-heart": "breathing",
+  "modural-robot-mecha-chimera-dyan-high-poly-mesh": "breathing",
+  "dark-knight": "breathing",
+  "spartan-armour-mkv-halo-reach": "male",
+  "scifi-girl-v01": "breathing",
+  "proxima": "ready",
+  "halloween-the-game-michael-myers-samhain": "male"
 };
 
 interface ImportedAvatarProfile {
