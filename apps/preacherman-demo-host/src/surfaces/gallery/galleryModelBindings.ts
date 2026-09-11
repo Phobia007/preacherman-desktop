@@ -8,15 +8,15 @@ export const galleryModelBindings = {
   "eye-of-the-stormers": "halo-mk-v-model",
   "bon-iver-viisualiizer": "magik-soul-surfer",
   "classic-stories-retold": "punk-magik",
-  "mastered-from-chaos": "sanhua-wuthering-waves",
+  "mastered-from-chaos": null, // Reserved slot: Sanhua has been withdrawn.
   "emmit-fenn": "black-cat-coastal-cat",
   "spacecraft-for-all": "clove-t-pose",
   "i-will-what-i-want": "black-widow-aquatic-assassin",
-} as const satisfies Readonly<Record<string, ModelId>>;
+} as const satisfies Readonly<Record<string, ModelId | null>>;
 export function galleryModelForProject(project: string): ModelId | null {
-  return (galleryModelBindings as Readonly<Record<string, ModelId>>)[project] ?? null;
+  return (galleryModelBindings as Readonly<Record<string, ModelId | null>>)[project] ?? null;
 }
-const models = Object.values(galleryModelBindings);
+const models: ModelId[] = Object.values(galleryModelBindings).filter(modelId => modelId !== null);
 export function adjacentGalleryModel(modelId: ModelId): ModelId | undefined {
   const index = models.indexOf(modelId);
   return index < 0 ? undefined : models[index + 1] ?? models[index - 1];

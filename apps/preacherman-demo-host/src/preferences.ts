@@ -99,9 +99,12 @@ export function readPreferences(): DemoPreferences {
       | Partial<DemoPreferences>
       | null;
     return {
-      activeModelId: stored?.activeModelId === null || isModelId(stored?.activeModelId)
-        ? stored.activeModelId
-        : DEFAULT_PREFERENCES.activeModelId,
+      // A withdrawn character leaves the companion slot empty, preserving every other choice.
+      activeModelId: stored?.activeModelId === "sanhua-wuthering-waves"
+        ? null
+        : stored?.activeModelId === null || isModelId(stored?.activeModelId)
+          ? stored.activeModelId
+          : DEFAULT_PREFERENCES.activeModelId,
       appearance: isAppearance(stored?.appearance)
         ? stored.appearance
         : DEFAULT_PREFERENCES.appearance,
