@@ -3,8 +3,8 @@
   "batch": "20260911",
   "sourceArchiveCount": 14,
   "runtimeVariants": 16,
-  "totalRuntimeBytes": 153300976,
-  "preparationRoot": "D:\\preacherman\\output\\avatar-prepare-20260911",
+  "totalRuntimeBytes": 360714712,
+  "preparationRoot": "D:\\preacherman\\output\\avatar-quality-20260911",
   "models": [
     {
       "id": "kitana-mk11-in-mk9-suit",
@@ -18,22 +18,23 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/kitana-mk11-in-mk9-suit/kitana-mk11-in-mk9-suit-runtime.glb",
-      "bytes": 8603880,
-      "sha256": "872ca5c23fd0c117c94f4c90636d315e7922c54905306fb80d4ed0fa40c7f6d6",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\kitana-mk11-in-mk9-suit\\kitana-mk11-in-mk9-suit.blend",
+      "bytes": 10657308,
+      "sha256": "4a814bbc788234d7731f8262005bf155cdd10812ff12641ff43d387c4456e06d",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\kitana-mk11-in-mk9-suit\\kitana-mk11-in-mk9-suit.blend",
       "triangles": 83007,
       "drawCalls": 10,
       "clip": "kitana-mk11-in-mk9-suit.idle.female.v2",
       "sourceMotion": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
       "maximumSampledDynamicEdgeRatio": 1.1641329758280967,
-      "rigScope": "retargeted character idle"
+      "rigScope": "retargeted character idle",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "nier-print-2b",
       "name": "2B · Seated",
-      "motion": "breathing",
+      "motion": "seated",
       "source": "nier-automata-3d-print-figure",
-      "rigScope": "pose-preserving display rig; seated pose and gentle breathing",
+      "rigScope": "Pose-specific seated rig; library idle retargeted to spine, neck and head with anchored seat and restrained arms.",
       "card": 7,
       "project": "mastered-from-chaos",
       "sourceArchive": {
@@ -42,14 +43,15 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/nier-print-2b/nier-print-2b-runtime.glb",
-      "bytes": 11139888,
-      "sha256": "22d95c0d5bd5b4dedf346a2cdefb75ac6c2a2407ded0f20e2c3272a4efbd417e",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\nier-print-2b\\nier-print-2b.blend",
-      "triangles": 140622,
+      "bytes": 36660020,
+      "sha256": "b0009bd96020a93fd854995aa8657f8bd234a937f4c4498ded0846342e260104",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\nier-print-2b\\nier-print-2b.blend",
+      "triangles": 409998,
       "drawCalls": 14,
-      "clip": "nier-print-2b.idle.breathing.v2",
-      "sourceMotion": "authored seated/folded-arm pose; display breathing only; not a full locomotion rig",
-      "maximumSampledDynamicEdgeRatio": 1.0426954850974448
+      "clip": "nier-print-2b.idle.seated.v3",
+      "sourceMotion": "CT_LOC_SIT_sitting_idle_494883756a7a2b9359a1",
+      "maximumSampledDynamicEdgeRatio": 1.2392832480658735,
+      "reflectionIntensity": 0.3
     },
     {
       "id": "nier-print-9s",
@@ -65,14 +67,15 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/nier-print-9s/nier-print-9s-runtime.glb",
-      "bytes": 12774132,
-      "sha256": "8459f915b5232bf9c7bf2fcae2ff9ae27cbb3ac7c1abd95ccfa60bf5dbbe4d09",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\nier-print-9s\\nier-print-9s.blend",
-      "triangles": 139988,
+      "bytes": 37472544,
+      "sha256": "257790c1f35d3c2feb6e5497cdcd5b1aeb2d1738b4a232cf25ce7078bd02372d",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\nier-print-9s\\nier-print-9s.blend",
+      "triangles": 439995,
       "drawCalls": 13,
       "clip": "nier-print-9s.idle.breathing.v2",
       "sourceMotion": "authored seated/folded-arm pose; display breathing only; not a full locomotion rig",
-      "maximumSampledDynamicEdgeRatio": 1.0113540155182246
+      "maximumSampledDynamicEdgeRatio": 1.0118875200781294,
+      "reflectionIntensity": 0.3
     },
     {
       "id": "nier-automata-2b",
@@ -86,15 +89,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/nier-automata-2b/nier-automata-2b-runtime.glb",
-      "bytes": 12319796,
-      "sha256": "c26f56232c2979992675fbc4a2b193049666628e658ccddf73b16694551c402b",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\nier-automata-2b\\nier-automata-2b.blend",
+      "bytes": 12373128,
+      "sha256": "09cc655c973aeb627c763713ebaf3d1158bba14b6a70351b9f0ccc167d0d03ac",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\nier-automata-2b\\nier-automata-2b.blend",
       "triangles": 73302,
       "drawCalls": 7,
       "clip": "nier-automata-2b.idle.breathing.v2",
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.1981836866349573,
-      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained"
+      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "iron-man-mark-1",
@@ -108,15 +112,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/iron-man-mark-1/iron-man-mark-1-runtime.glb",
-      "bytes": 7203140,
-      "sha256": "2f0a87e7c21c8cc466a0909fa51874a60d26c3ffd5e635153318ffd10279406f",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\iron-man-mark-1\\iron-man-mark-1.blend",
+      "bytes": 11762360,
+      "sha256": "cf5c6169e104fd1cb7387c6cd2173fdbbc2035d88d26b34925a4458258d281df",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\iron-man-mark-1\\iron-man-mark-1.blend",
       "triangles": 69071,
       "drawCalls": 10,
       "clip": "iron-man-mark-1.idle.breathing.v2",
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.3320520262887798,
-      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained"
+      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "stellar-blade-lily-stargazer-coat",
@@ -130,15 +135,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/stellar-blade-lily-stargazer-coat/stellar-blade-lily-stargazer-coat-runtime.glb",
-      "bytes": 10960508,
-      "sha256": "e5104caed0904bd84d8497958ed86cee44b672cd6f3244ed300397761e6cf086",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\stellar-blade-lily-stargazer-coat\\stellar-blade-lily-stargazer-coat.blend",
+      "bytes": 18629480,
+      "sha256": "e373a9672a75efc010c4a4280585ab676681410598396af0a8c3fbfe0e099769",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\stellar-blade-lily-stargazer-coat\\stellar-blade-lily-stargazer-coat.blend",
       "triangles": 110900,
       "drawCalls": 19,
       "clip": "stellar-blade-lily-stargazer-coat.idle.neutral.v2",
       "sourceMotion": "CT_LOC_IDLE_neutral_idle_30cfd31362b959560463",
       "maximumSampledDynamicEdgeRatio": 1.1739370495591106,
-      "rigScope": "retargeted character idle"
+      "rigScope": "retargeted character idle",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "miles-variant-1",
@@ -153,15 +159,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/miles-variant-1/miles-variant-1-runtime.glb",
-      "bytes": 1812880,
-      "sha256": "6972cf4f8ef7e53297db30a6fe7f4f64e11f36b8ada5fb327cdd3dc43cc7b907",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\miles-variant-1\\miles-variant-1.blend",
+      "bytes": 1953864,
+      "sha256": "90c46c1a133f5ee5d615b3782a41760f327cdcd4764e145542ebd602b489813b",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\miles-variant-1\\miles-variant-1.blend",
       "triangles": 14354,
       "drawCalls": 3,
       "clip": "miles-variant-1.idle.standard.v2",
       "sourceMotion": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702",
       "maximumSampledDynamicEdgeRatio": 1.2114133352329937,
-      "rigScope": "retargeted character idle"
+      "rigScope": "retargeted character idle",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "miles-variant-2",
@@ -176,15 +183,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/miles-variant-2/miles-variant-2-runtime.glb",
-      "bytes": 2571936,
-      "sha256": "204529cbd7e7671790cb3ac62f94bc1493594ad5047b60fa9fefb690451c0c0a",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\miles-variant-2\\miles-variant-2.blend",
+      "bytes": 2877828,
+      "sha256": "3917d7bab077420cd4a21356e570c7905b3a1d4701b9b20a4ba11dc1d057858d",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\miles-variant-2\\miles-variant-2.blend",
       "triangles": 26738,
       "drawCalls": 6,
       "clip": "miles-variant-2.idle.standard.v2",
       "sourceMotion": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702",
       "maximumSampledDynamicEdgeRatio": 1.1706328792581473,
-      "rigScope": "retargeted character idle"
+      "rigScope": "retargeted character idle",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "iron-man-mark-85",
@@ -198,15 +206,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/iron-man-mark-85/iron-man-mark-85-runtime.glb",
-      "bytes": 5864108,
-      "sha256": "f5cd36382b717ff739b245160a1ace1b7191eeb3175e84484b8a6e65308456fa",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\iron-man-mark-85\\iron-man-mark-85.blend",
-      "triangles": 159998,
-      "drawCalls": 16,
+      "bytes": 21536872,
+      "sha256": "9b3e5125b26b7fb3df2e124bfda5b14ca1c40854aecc7015b36ca08338765d84",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\iron-man-mark-85\\iron-man-mark-85.blend",
+      "triangles": 549996,
+      "drawCalls": 10,
       "clip": "iron-man-mark-85.idle.breathing.v2",
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-      "maximumSampledDynamicEdgeRatio": 1.1585122760874382,
-      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained"
+      "maximumSampledDynamicEdgeRatio": 1.3078543032433294,
+      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "the-twins-atomic-heart",
@@ -220,15 +229,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/the-twins-atomic-heart/the-twins-atomic-heart-runtime.glb",
-      "bytes": 7874416,
-      "sha256": "d8a5f9a6248c330ba2e78f92c3a550cf1774666dbddbca02b2a7561352dfe842",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\the-twins-atomic-heart\\the-twins-atomic-heart.blend",
-      "triangles": 159995,
+      "bytes": 25536760,
+      "sha256": "2af40c1e3edd06972bc2bf0b9f8a069d29e2a8d8bd1992048aa42a726e543200",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\the-twins-atomic-heart\\the-twins-atomic-heart.blend",
+      "triangles": 419996,
       "drawCalls": 4,
       "clip": "the-twins-atomic-heart.idle.breathing.v2",
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-      "maximumSampledDynamicEdgeRatio": 1.183588755347739,
-      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained"
+      "maximumSampledDynamicEdgeRatio": 1.335882537627604,
+      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "modural-robot-mecha-chimera-dyan-high-poly-mesh",
@@ -242,15 +252,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/modural-robot-mecha-chimera-dyan-high-poly-mesh/modural-robot-mecha-chimera-dyan-high-poly-mesh-runtime.glb",
-      "bytes": 9982648,
-      "sha256": "57b0cba68428be877e1bfe4cec190fb879a8700662a5dfb4886180c4b22c5d9d",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\modural-robot-mecha-chimera-dyan-high-poly-mesh\\modural-robot-mecha-chimera-dyan-high-poly-mesh.blend",
-      "triangles": 111586,
+      "bytes": 50085616,
+      "sha256": "bf0f7b94fc3902021263dc358c326b40a3612bee2b569d361910bcd8e813e3df",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\modural-robot-mecha-chimera-dyan-high-poly-mesh\\modural-robot-mecha-chimera-dyan-high-poly-mesh.blend",
+      "triangles": 523871,
       "drawCalls": 4,
       "clip": "modural-robot-mecha-chimera-dyan-high-poly-mesh.idle.breathing.v2",
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-      "maximumSampledDynamicEdgeRatio": 1.2695677018560836,
-      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained"
+      "maximumSampledDynamicEdgeRatio": 1.221558789226437,
+      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "dark-knight",
@@ -264,15 +275,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/dark-knight/dark-knight-runtime.glb",
-      "bytes": 4967716,
-      "sha256": "3346ab246c6608775acc3af6312b86528466ea8d74151c57a96d540164a8134b",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\dark-knight\\dark-knight.blend",
+      "bytes": 10265364,
+      "sha256": "f42fb6f4dc2265de7e64e98571860895be1f0d4b6d3834af8aa77450dbefd5cb",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\dark-knight\\dark-knight.blend",
       "triangles": 41607,
       "drawCalls": 2,
       "clip": "dark-knight.idle.breathing.v2",
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.2225777667037754,
-      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained"
+      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "spartan-armour-mkv-halo-reach",
@@ -286,15 +298,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/spartan-armour-mkv-halo-reach/spartan-armour-mkv-halo-reach-runtime.glb",
-      "bytes": 13792584,
-      "sha256": "b783b399faa3e5f8970f938b7f0c381b303ff0fafece51beac11f1393d093335",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\spartan-armour-mkv-halo-reach\\spartan-armour-mkv-halo-reach.blend",
+      "bytes": 29782016,
+      "sha256": "7250d8c6d5db615be7f3c200a169da8993682d417265b77407355005e139a279",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\spartan-armour-mkv-halo-reach\\spartan-armour-mkv-halo-reach.blend",
       "triangles": 42600,
       "drawCalls": 9,
       "clip": "spartan-armour-mkv-halo-reach.idle.male.v2",
       "sourceMotion": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
       "maximumSampledDynamicEdgeRatio": 1.0802009802067978,
-      "rigScope": "retargeted character idle"
+      "rigScope": "retargeted character idle",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "scifi-girl-v01",
@@ -308,15 +321,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/scifi-girl-v01/scifi-girl-v01-runtime.glb",
-      "bytes": 14640880,
-      "sha256": "70d6c86fbac9842d99dc781ab64694010f70837c39afce6bec83b25b49e3b6f5",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\scifi-girl-v01\\scifi-girl-v01.blend",
-      "triangles": 109998,
+      "bytes": 35567720,
+      "sha256": "9c83e0f4440942efe049070de0a626fae72bf320e5fbf7e0933a421eda877b7c",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\scifi-girl-v01\\scifi-girl-v01.blend",
+      "triangles": 326971,
       "drawCalls": 17,
       "clip": "scifi-girl-v01.idle.breathing.v2",
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-      "maximumSampledDynamicEdgeRatio": 1.1913629855847823,
-      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained"
+      "maximumSampledDynamicEdgeRatio": 1.3245204460153888,
+      "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "proxima",
@@ -330,15 +344,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/proxima/proxima-runtime.glb",
-      "bytes": 13495696,
-      "sha256": "9574aa17bf81828793e9e34632c16d417f69444a7e9f2b70882376add9d5c949",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\proxima\\proxima.blend",
-      "triangles": 110000,
+      "bytes": 22807436,
+      "sha256": "b164417731dc9c665b6ed65a85bf36a44eec0fa57709b26d89673f0d844f4965",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\proxima\\proxima.blend",
+      "triangles": 193810,
       "drawCalls": 4,
       "clip": "proxima.idle.ready.v2",
       "sourceMotion": "CT_LOC_IDLE_ready_idle_face296590a98729cf45",
-      "maximumSampledDynamicEdgeRatio": 1.069899643667976,
-      "rigScope": "retargeted character idle"
+      "maximumSampledDynamicEdgeRatio": 1.0771794465910611,
+      "rigScope": "retargeted character idle",
+      "reflectionIntensity": 0.3
     },
     {
       "id": "halloween-the-game-michael-myers-samhain",
@@ -352,15 +367,16 @@
         "unchanged": true
       },
       "runtimeFile": "public/assets/avatars/halloween-the-game-michael-myers-samhain/halloween-the-game-michael-myers-samhain-runtime.glb",
-      "bytes": 15296768,
-      "sha256": "829164dc4b7c1a69387c1548108255cfd974065c04c4c66a1c6e232180d50d0c",
-      "preparedBlend": "D:\\preacherman\\output\\avatar-prepare-20260911\\ready\\halloween-the-game-michael-myers-samhain\\halloween-the-game-michael-myers-samhain.blend",
-      "triangles": 109996,
-      "drawCalls": 9,
+      "bytes": 32746396,
+      "sha256": "aa70e8cf6e70d5fe5b993a5b27b6ad69a79664e074982ffa7592e999924ea2c3",
+      "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\halloween-the-game-michael-myers-samhain\\halloween-the-game-michael-myers-samhain.blend",
+      "triangles": 198532,
+      "drawCalls": 8,
       "clip": "halloween-the-game-michael-myers-samhain.idle.male.v2",
       "sourceMotion": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
-      "maximumSampledDynamicEdgeRatio": 1.0982808225508163,
-      "rigScope": "retargeted character idle"
+      "maximumSampledDynamicEdgeRatio": 1.1382400149158356,
+      "rigScope": "retargeted character idle",
+      "reflectionIntensity": 0.3
     }
   ],
   "notes": [
@@ -372,5 +388,6 @@
     "Original source archives unchanged; prepared .blend masters retained separately.",
     "Existing six characters and every card title, description and media file unchanged.",
     "Previously withdrawn four characters remain unavailable."
-  ]
+  ],
+  "qualityRevision": "material-and-seated-idle-20260911"
 }

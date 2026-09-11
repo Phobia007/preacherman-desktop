@@ -2,7 +2,7 @@ import { FileLoader } from "three";
 import { AsyncResourceCache } from "./AsyncResourceCache";
 
 // Cache source bytes only. Each live adapter exclusively owns its parsed GPU resources.
-const modelFiles = new AsyncResourceCache<ArrayBuffer>(2, 24 * 1024 * 1024, value => value.byteLength);
+const modelFiles = new AsyncResourceCache<ArrayBuffer>(2, 64 * 1024 * 1024, value => value.byteLength);
 export const avatarModelCacheSnapshot = () => modelFiles.snapshot;
 export function loadAvatarModelFile(url: string): Promise<ArrayBuffer> {
   return modelFiles.get(url, async () => {

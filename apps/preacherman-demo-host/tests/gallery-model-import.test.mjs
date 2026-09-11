@@ -40,13 +40,13 @@ for (const { id } of models) {
   test(id + " has one animated, normalized, self-contained model using original materials", { timeout: 30000 }, async () => {
     globalThis.ProgressEvent ??= class ProgressEvent extends Event {};
     const bytes = await readFile(join(host, "public/assets/avatars", id, id + "-runtime.glb"));
-    assert.ok(bytes.length < 24 * 1024 * 1024, "fits the existing bounded model cache");
+    assert.ok(bytes.length < 52 * 1024 * 1024, "fits the 64 MiB cache while retaining source detail");
     const length = bytes.readUInt32LE(12), offset = 20 + length;
     const gltf = JSON.parse(bytes.toString("utf8", 20, offset));
     assert.equal(gltf.animations.length, 1);
     assert.ok(gltf.animations[0].channels.length <= 64, "fixed accessory transforms do not need per-frame tracks");
     assert.equal(gltf.animations[0].name, importedAvatarProfiles[id].actions[0].clipName);
-    assert.match(gltf.animations[0].name, /\.idle\.(female|male|breathing|neutral|standard|weight_shift|ready)\.v2$/);
+    assert.match(gltf.animations[0].name, /\.idle\.((female|male|breathing|neutral|standard|weight_shift|ready)\.v2|seated\.v3)$/);
     assert.ok(gltf.animations[0].channels.every(channel => channel.target.path !== "scale"), "retargeting preserves authored bone scale");
     assert.ok((gltf.images?.length ?? 0) > 0 || ["iron-man-mark-85", "modural-robot-mecha-chimera-dyan-high-poly-mesh"].includes(id), "authored texture or original untextured PBR material");
     assert.ok((gltf.images ?? []).every(image => image.bufferView !== undefined && !image.uri));
