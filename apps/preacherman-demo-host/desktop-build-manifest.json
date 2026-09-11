@@ -1,1576 +1,181 @@
 {
   "schemaVersion": 1,
-  "buildId": "avatar-material-quality-20260911",
+  "buildId": "avatar-cortana-lighting-compaction-20260911",
   "productVersion": "0.1.0",
-  "sourceTask": "restore-character-material-detail-and-seated-idle",
+  "sourceTask": "withdraw-nine-models-compact-cards-and-share-cortana-lights",
   "sourceThread": null,
-  "sourceState": "Restored material channels and detailed geometry for all sixteen recent avatars. Repaired dielectric skin and cloth, source roughness/normal maps, print android mechanisms, Myers alpha cutouts and ember maps. Added a scoped low-intensity studio reflection source while preserving the six existing avatars. Seated 2B now uses a pose-specific rig with an adapted sitting idle from the existing library. Source-byte cache remains count- and size-bounded at two entries and 64 MiB; one selected clip per avatar.",
-  "sourceCommit": "d1a08123bb1ba4a1c9a11efbd38b989c7d612acd",
+  "sourceState": "Removed the extra studio environment reflections so every character uses the existing Cortana stage lights. Preserved authored materials, textures and previous quality fixes. Withdrew the nine screenshot-selected models, migrated saved activation to null when withdrawn, and packed the thirteen retained characters into consecutive cards without altering card copy or media.",
+  "sourceCommit": "591307c767d5fe5ea1ef1e68d72d9c20e83ffe19",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-11T21:37:38.4563954+08:00",
-  "deployedAt": "2026-09-11T21:38:04.8603099+08:00",
-  "verifiedAt": "2026-09-11T21:44:46.5185700+08:00",
+  "builtAt": "2026-09-11T22:28:12.4021086+08:00",
+  "deployedAt": "2026-09-11T22:28:58.1072115+08:00",
+  "verifiedAt": "2026-09-11T22:46:20.6024153+08:00",
   "sizeBytes": 616317440,
-  "sha256": "74D55AC2759AA152DACF27D516F1615316109B7E0E28E58EDE619578F51E700B",
+  "sha256": "3FAEB6C6358DCE4477D76E8B8CFC86CEB65EDE1C3D8C03569FCEEE0B3EE310C0",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\model-quality-before-20260911/preacherman-demo-host.exe",
-  "backupSha256": "B69E62E7965E825058F3B651C064D70A8226C5DCE2BE9B0E9EF1B34DC9AE2D36",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\model-quality-before-20260911/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911/preacherman-demo-host.exe",
+  "backupSha256": "74D55AC2759AA152DACF27D516F1615316109B7E0E28E58EDE619578F51E700B",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "d662e1851712583261b4314276fe1066862d5262",
-  "previousVerificationCommit": "d662e1851712583261b4314276fe1066862d5262",
+  "rollbackBaselineCommit": "46b80c83059f5de394a3d236d7929b0704bbab1c",
+  "previousVerificationCommit": "46b80c83059f5de394a3d236d7929b0704bbab1c",
   "verification": {
-    "status": "passed-with-recorded-preexisting-template-diagnostics",
-    "typescript": "Shared renderer build and host typecheck passed; production beforeBuild passed.",
-    "focusedTests": "58 checks passed: 51 material, model, detail, activation, theme, withdrawal and resource-activity checks plus 7 bounded-cache, resource-disposal and readiness checks.",
-    "browserFlow": "Both appearances: traverse cards 1–23, verify 16 new models and unchanged authored card copy; equip each new model and verify Home replacement; toggle off/on standing 2B; previous/next/back navigation; empty card 23; saved activation survives reload. Home, Task, Gallery, Market/Ledger, Settings and Account passed. No withdrawn model requests or new console errors.",
-    "nativeFlow": "Same complete flow passed through the canonical shortcut after cold launch in both appearances; native minimize/restore and maximize tested. Original preferences restored; final normal shortcut launch visually verified. No preview servers or debug port remain.",
-    "modelHashes": [
-      {
-        "Algorithm": "SHA256",
-        "Hash": "AB36D62398DD2D3FD11CD168671DD735266ABB0976981DC908B8D9DDA8A7933C",
-        "Path": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\public\\assets\\avatars\\cortana\\cortana-runtime.glb"
-      },
-      {
-        "Algorithm": "SHA256",
-        "Hash": "0EC7B5319B021D709EE8D4D0138A2AAFE173232AD38665DB530300FE85705C0F",
-        "Path": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\public\\assets\\avatars\\zima\\zima-runtime.glb"
-      }
+    "status": "passed-focused-native-check",
+    "scope": "User requested rapid delivery without additional extended verification. No browser preview or full repeated core-route sweep was run this revision.",
+    "typescript": "Renderer build, host typecheck and production build passed.",
+    "focusedTests": "4 checks: consecutive ordering, shared lights, withdrawn availability and preferences migration in both appearances.",
+    "nativeFlow": "Canonical shortcut cold Home; all 13 retained Gallery models ready in sequence; first empty slot is card 14; removed seated model preference cleared; activation updates Home and survives reload; light Home and Gallery checked; original preferences restored and shortcut restarted normally.",
+    "appearances": [
+      "dark",
+      "light"
     ],
-    "importedModels": [
-      {
-        "card": 3,
-        "modelId": "jubilee-midnight-mutant",
-        "path": "apps/preacherman-demo-host/public/assets/avatars/jubilee-midnight-mutant/jubilee-midnight-mutant-runtime.glb",
-        "bytes": 10908812,
-        "sha256": "638D83D963E23BBF6AC4B55BFF09BA749067A827AD7EAE4B0193A5AE4C3D886E",
-        "sourceBlendSha256": "2D19C544FF781AF574B347871A3D24F73AF5CB51BB42CF9ECB15D8D6C4B45A4D",
-        "defaultClip": "jubilee-midnight-mutant.idle.female.v2",
-        "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\jubilee-midnight-mutant\\jubilee-midnight-mutant.blend",
-        "sourceLibraryAction": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e"
-      },
-      {
-        "card": 4,
-        "modelId": "halo-mk-v-model",
-        "path": "apps/preacherman-demo-host/public/assets/avatars/halo-mk-v-model/halo-mk-v-model-runtime.glb",
-        "bytes": 8850960,
-        "sha256": "C8EF4D6305A89B3944A13726192F9935F0BB5F30C565F47C5674777BFDCB8DF4",
-        "sourceBlendSha256": "4A243F103F9FA756791E6F86D1FE914B21545BF446F5A19A1EB13A062B8A7B18",
-        "defaultClip": "halo-mk-v-model.idle.male.v2",
-        "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\halo-mk-v-model\\halo-mk-v-model.blend",
-        "sourceLibraryAction": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906"
-      },
-      {
-        "card": 5,
-        "modelId": "magik-soul-surfer",
-        "path": "apps/preacherman-demo-host/public/assets/avatars/magik-soul-surfer/magik-soul-surfer-runtime.glb",
-        "bytes": 15739416,
-        "sha256": "F6BDF1A4C3FB4E00967694CD06480507A1BDB3C91B052F19A0182BF0B701B4EE",
-        "sourceBlendSha256": "E53DCF7AE2C3E87DEA753B9875395DF524E148A42869F361156F408F4E979131",
-        "defaultClip": "magik-soul-surfer.idle.weight_shift.v2",
-        "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\magik-soul-surfer\\magik-soul-surfer.blend",
-        "sourceLibraryAction": "CT_LOC_IDLE_weight_shift_a3ce1c7b98f3a6de456c"
-      },
-      {
-        "card": 6,
-        "modelId": "punk-magik",
-        "path": "apps/preacherman-demo-host/public/assets/avatars/punk-magik/punk-magik-runtime.glb",
-        "bytes": 14246772,
-        "sha256": "68B8C722883C15C52DAA74C4D76A5F1D042B80B901DA8889D0711D8752267CB6",
-        "sourceBlendSha256": "692064FFBBA929CB303DFF507F79009476DFA2ECE8337E6724F1E2BA618398CC",
-        "defaultClip": "punk-magik.idle.standard.v2",
-        "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\punk-magik\\punk-magik.blend",
-        "sourceLibraryAction": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702"
-      },
-      {
-        "card": 7,
-        "modelId": "sanhua-wuthering-waves",
-        "path": "apps/preacherman-demo-host/public/assets/avatars/sanhua-wuthering-waves/sanhua-wuthering-waves-runtime.glb",
-        "bytes": 2842200,
-        "sha256": "32B5A98C947E27E6348500AEAB410117CCF22B5AB7D7A77161E312DE10CF7F9C",
-        "sourceBlendSha256": "D97D3D1CE42580F662D11220D173BA4D49CF151455D8DD2C3BC331672C43EC1F",
-        "defaultClip": "sanhua-wuthering-waves.idle.breathing.v2",
-        "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\sanhua-wuthering-waves\\sanhua-wuthering-waves.blend",
-        "sourceLibraryAction": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea"
-      },
-      {
-        "card": 8,
-        "modelId": "black-cat-coastal-cat",
-        "path": "apps/preacherman-demo-host/public/assets/avatars/black-cat-coastal-cat/black-cat-coastal-cat-runtime.glb",
-        "bytes": 15952568,
-        "sha256": "2577009BD2F1C530C559276F2E2A18D5F05E503C8A9359FE85A9EB08A1A4F508",
-        "sourceBlendSha256": "6F0EA557D1426C6480D99C0173E79A281E9312BD717560570D091811895EF6B5",
-        "defaultClip": "black-cat-coastal-cat.idle.female.v2",
-        "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\black-cat-coastal-cat\\black-cat-coastal-cat.blend",
-        "sourceLibraryAction": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e"
-      },
-      {
-        "card": 9,
-        "modelId": "clove-t-pose",
-        "path": "apps/preacherman-demo-host/public/assets/avatars/clove-t-pose/clove-t-pose-runtime.glb",
-        "bytes": 2248088,
-        "sha256": "5EF964CEDE0AEE4360CB548C9F39AEFD3572EA25090BC989E1DF2D7EBB2D16C1",
-        "sourceBlendSha256": "F0A05B664AEC1CD79F111350377C99D97294BD7D78146038E5A66DD146329FDF",
-        "defaultClip": "clove-t-pose.idle.neutral.v2",
-        "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\clove-t-pose\\clove-t-pose.blend",
-        "sourceLibraryAction": "CT_LOC_IDLE_neutral_idle_30cfd31362b959560463"
-      },
-      {
-        "card": 10,
-        "modelId": "black-widow-aquatic-assassin",
-        "path": "apps/preacherman-demo-host/public/assets/avatars/black-widow-aquatic-assassin/black-widow-aquatic-assassin-runtime.glb",
-        "bytes": 16125436,
-        "sha256": "CD5157529EB8A902B60A1A303C46655FB701C17418DFCAD833CB226CD49ED789",
-        "sourceBlendSha256": "A79F1A406892A533DAFC5AEA80A1EF51E8FB19C2C0B70E029EAFB0367635CF28",
-        "defaultClip": "black-widow-aquatic-assassin.idle.breathing.v2",
-        "sourceBlendPath": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\ready\\black-widow-aquatic-assassin\\black-widow-aquatic-assassin.blend",
-        "sourceLibraryAction": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea"
-      }
+    "galleryModelOrder": [
+      "cortana",
+      "zima",
+      "jubilee-midnight-mutant",
+      "halo-mk-v-model",
+      "kitana-mk11-in-mk9-suit",
+      "punk-magik",
+      "clove-t-pose",
+      "nier-automata-2b",
+      "stellar-blade-lily-stargazer-coat",
+      "iron-man-mark-85",
+      "the-twins-atomic-heart",
+      "spartan-armour-mkv-halo-reach",
+      "halloween-the-game-michael-myers-samhain"
     ],
-    "assetInventory": {
-      "publicBytes": 479654469,
-      "groups": {
-        "favicon.ico": 682,
-        "active-theory-gallery": 60514865,
-        "gallery": 491222,
-        "licenses": 1667,
-        "market-love": 78557137,
-        "settings-v3-local": 86512858,
-        "task-lookback-v3": 27652166,
-        "assets/gallery": 63055904,
-        "assets/avatars": 104736624,
-        "gallery-v3": 58131344
-      },
-      "models": [
-        {
-          "path": "assets/avatars/cortana/cortana-runtime.glb",
-          "bytes": 7181576,
-          "triangles": 19958,
-          "primitives": 5,
-          "textures": 10
-        },
-        {
-          "path": "assets/avatars/zima/zima-runtime.glb",
-          "bytes": 4483600,
-          "triangles": 4862,
-          "primitives": 1,
-          "textures": 2
-        },
-        {
-          "path": "assets/avatars/jubilee-midnight-mutant/jubilee-midnight-mutant-runtime.glb",
-          "bytes": 10908812,
-          "triangles": 103356,
-          "primitives": 12,
-          "textures": 22
-        },
-        {
-          "path": "assets/avatars/halo-mk-v-model/halo-mk-v-model-runtime.glb",
-          "bytes": 8850960,
-          "triangles": 29692,
-          "primitives": 6,
-          "textures": 22
-        },
-        {
-          "path": "assets/avatars/magik-soul-surfer/magik-soul-surfer-runtime.glb",
-          "bytes": 15739416,
-          "triangles": 155694,
-          "primitives": 13,
-          "textures": 32
-        },
-        {
-          "path": "assets/avatars/punk-magik/punk-magik-runtime.glb",
-          "bytes": 14246772,
-          "triangles": 143415,
-          "primitives": 10,
-          "textures": 22
-        },
-        {
-          "path": "assets/avatars/sanhua-wuthering-waves/sanhua-wuthering-waves-runtime.glb",
-          "bytes": 2842200,
-          "triangles": 32902,
-          "primitives": 31,
-          "textures": 7
-        },
-        {
-          "path": "assets/avatars/black-cat-coastal-cat/black-cat-coastal-cat-runtime.glb",
-          "bytes": 15952568,
-          "triangles": 163950,
-          "primitives": 15,
-          "textures": 27
-        },
-        {
-          "path": "assets/avatars/clove-t-pose/clove-t-pose-runtime.glb",
-          "bytes": 2248088,
-          "triangles": 20625,
-          "primitives": 3,
-          "textures": 3
-        },
-        {
-          "path": "assets/avatars/black-widow-aquatic-assassin/black-widow-aquatic-assassin-runtime.glb",
-          "bytes": 16125436,
-          "triangles": 163590,
-          "primitives": 10,
-          "textures": 24
-        }
-      ],
-      "motionLibrary": {
-        "count": 0,
-        "bytes": 0
-      },
-      "media": [
-        {
-          "path": "assets/gallery/cortana-intro.mp4",
-          "bytes": 24451664
-        },
-        {
-          "path": "assets/gallery/zima-card-video.mp4",
-          "bytes": 37660684
-        }
-      ],
-      "inventoryMethod": "Fresh filesystem inventory; Git public diff is exactly the eight refined GLBs. Material definitions, embedded texture hashes and triangle counts match the verified import release."
-    },
-    "sizeImpact": {
-      "publicBytes": 479654469,
-      "publicByteDelta": -875808,
-      "importedModelBytes": 86914252,
-      "previousExecutableBytes": 383153664,
-      "executableBytes": 383052288,
-      "executableByteDelta": -101376
-    },
-    "sourcePreservation": {
-      "baseline_commit": "ac4623f",
-      "models": [
-        {
-          "model": "black-cat-coastal-cat",
-          "old_bytes": 16151704,
-          "bytes": 15952568,
-          "sha256": "2577009bd2f1c530c559276f2e2a18d5f05e503c8a9359fe85a9eb08a1a4f508",
-          "materials_unchanged": true,
-          "embedded_images_unchanged": true,
-          "triangles_before": 163950,
-          "triangles": 163950
-        },
-        {
-          "model": "black-widow-aquatic-assassin",
-          "old_bytes": 16159096,
-          "bytes": 16125436,
-          "sha256": "cd5157529eb8a902b60a1a303c46655fb701c17418dfcad833cb226cd49ed789",
-          "materials_unchanged": true,
-          "embedded_images_unchanged": true,
-          "triangles_before": 163590,
-          "triangles": 163590
-        },
-        {
-          "model": "clove-t-pose",
-          "old_bytes": 2226236,
-          "bytes": 2248088,
-          "sha256": "5ef964cede0aee4360cb548c9f39aefd3572ea25090bc989e1df2d7ebb2d16c1",
-          "materials_unchanged": true,
-          "embedded_images_unchanged": true,
-          "triangles_before": 20625,
-          "triangles": 20625
-        },
-        {
-          "model": "halo-mk-v-model",
-          "old_bytes": 8870764,
-          "bytes": 8850960,
-          "sha256": "c8ef4d6305a89b3944a13726192f9935f0bb5f30c565f47c5674777bfdcb8df4",
-          "materials_unchanged": true,
-          "embedded_images_unchanged": true,
-          "triangles_before": 29692,
-          "triangles": 29692
-        },
-        {
-          "model": "jubilee-midnight-mutant",
-          "old_bytes": 10973752,
-          "bytes": 10908812,
-          "sha256": "638d83d963e23bbf6ac4b55bff09ba749067a827ad7eae4b0193a5ae4c3d886e",
-          "materials_unchanged": true,
-          "embedded_images_unchanged": true,
-          "triangles_before": 103356,
-          "triangles": 103356
-        },
-        {
-          "model": "magik-soul-surfer",
-          "old_bytes": 16091532,
-          "bytes": 15739416,
-          "sha256": "f6bdf1a4c3fb4e00967694cd06480507a1bdb3c91b052f19a0182bf0b701b4ee",
-          "materials_unchanged": true,
-          "embedded_images_unchanged": true,
-          "triangles_before": 155694,
-          "triangles": 155694
-        },
-        {
-          "model": "punk-magik",
-          "old_bytes": 14473660,
-          "bytes": 14246772,
-          "sha256": "68b8c722883c15c52daa74c4d76a5f1d042b80b901da8889d0711d8752267cb6",
-          "materials_unchanged": true,
-          "embedded_images_unchanged": true,
-          "triangles_before": 143415,
-          "triangles": 143415
-        },
-        {
-          "model": "sanhua-wuthering-waves",
-          "old_bytes": 2843316,
-          "bytes": 2842200,
-          "sha256": "32b5a98c947e27e6348500aeab410117ccf22b5ab7d7a77161e312de10cf7f9c",
-          "materials_unchanged": true,
-          "embedded_images_unchanged": true,
-          "triangles_before": 32902,
-          "triangles": 32902
-        }
-      ],
-      "only_eight_glbs_changed": true,
-      "public_byte_delta": -875808
-    },
-    "motionRefinement": {
-      "library": "asset-library/digital-humans/assets/classified-actions/v1/source/Cortana_Action_Library.zip",
-      "library_record_count": 2858,
-      "selection": "Five types of stationary idle plus a weight-shift clip, tailored to body proportions, clothing and character presentation.",
-      "models": [
-        {
-          "model": "black-cat-coastal-cat",
-          "library_key": "female",
-          "source_action": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
-          "source_batch": 2,
-          "source_frames": 251,
-          "fps": 30,
-          "clip": "black-cat-coastal-cat.idle.female.v2",
-          "hip_gain": 0.55,
-          "arm_clearance_degrees": 3,
-          "foot_lock_max_error": 3.5824821234259925e-07,
-          "bone_scale_max_error": 1.1563301086425781e-05,
-          "source_rest_geometry_unchanged": true,
-          "skinning": "linear-four-influences",
-          "loop_endpoint_blend_frames": 14,
-          "sha256": "2577009bd2f1c530c559276f2e2a18d5f05e503c8a9359fe85a9eb08a1a4f508"
-        },
-        {
-          "model": "black-widow-aquatic-assassin",
-          "library_key": "breathing",
-          "source_action": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "source_batch": 1,
-          "source_frames": 299,
-          "fps": 30,
-          "clip": "black-widow-aquatic-assassin.idle.breathing.v2",
-          "hip_gain": 0.5,
-          "arm_clearance_degrees": 3,
-          "foot_lock_max_error": 3.542749115219337e-07,
-          "bone_scale_max_error": 8.785724639892578e-05,
-          "source_rest_geometry_unchanged": true,
-          "skinning": "linear-four-influences",
-          "loop_endpoint_blend_frames": 14,
-          "sha256": "cd5157529eb8a902b60a1a303c46655fb701c17418dfcad833cb226cd49ed789"
-        },
-        {
-          "model": "clove-t-pose",
-          "library_key": "neutral",
-          "source_action": "CT_LOC_IDLE_neutral_idle_30cfd31362b959560463",
-          "source_batch": 1,
-          "source_frames": 264,
-          "fps": 30,
-          "clip": "clove-t-pose.idle.neutral.v2",
-          "hip_gain": 0.5,
-          "arm_clearance_degrees": 2,
-          "foot_lock_max_error": 3.7814907850174666e-07,
-          "bone_scale_max_error": 8.875131607055664e-05,
-          "source_rest_geometry_unchanged": true,
-          "skinning": "linear-four-influences",
-          "loop_endpoint_blend_frames": 14,
-          "sha256": "5ef964cede0aee4360cb548c9f39aefd3572ea25090bc989e1df2d7ebb2d16c1"
-        },
-        {
-          "model": "halo-mk-v-model",
-          "library_key": "male",
-          "source_action": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
-          "source_batch": 2,
-          "source_frames": 251,
-          "fps": 30,
-          "clip": "halo-mk-v-model.idle.male.v2",
-          "hip_gain": 0.38,
-          "arm_clearance_degrees": 4,
-          "foot_lock_max_error": 1.3676636106471736e-06,
-          "bone_scale_max_error": 2.2649765014648438e-06,
-          "source_rest_geometry_unchanged": true,
-          "skinning": "linear-four-influences",
-          "loop_endpoint_blend_frames": 14,
-          "sha256": "c8ef4d6305a89b3944a13726192f9935f0bb5f30c565f47c5674777bfdcb8df4"
-        },
-        {
-          "model": "jubilee-midnight-mutant",
-          "library_key": "female",
-          "source_action": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
-          "source_batch": 2,
-          "source_frames": 251,
-          "fps": 30,
-          "clip": "jubilee-midnight-mutant.idle.female.v2",
-          "hip_gain": 0.65,
-          "arm_clearance_degrees": 2,
-          "foot_lock_max_error": 3.108999711827386e-07,
-          "bone_scale_max_error": 8.285045623779297e-06,
-          "source_rest_geometry_unchanged": true,
-          "skinning": "linear-four-influences",
-          "loop_endpoint_blend_frames": 14,
-          "sha256": "638d83d963e23bbf6ac4b55bff09ba749067a827ad7eae4b0193a5ae4c3d886e"
-        },
-        {
-          "model": "magik-soul-surfer",
-          "library_key": "weight_shift",
-          "source_action": "CT_LOC_IDLE_weight_shift_a3ce1c7b98f3a6de456c",
-          "source_batch": 1,
-          "source_frames": 284,
-          "fps": 30,
-          "clip": "magik-soul-surfer.idle.weight_shift.v2",
-          "hip_gain": 0.65,
-          "arm_clearance_degrees": 3,
-          "foot_lock_max_error": 3.4410069104300406e-07,
-          "bone_scale_max_error": 7.367134094238281e-05,
-          "source_rest_geometry_unchanged": true,
-          "skinning": "linear-four-influences",
-          "loop_endpoint_blend_frames": 14,
-          "sha256": "f6bdf1a4c3fb4e00967694cd06480507a1bdb3c91b052f19a0182bf0b701b4ee"
-        },
-        {
-          "model": "punk-magik",
-          "library_key": "standard",
-          "source_action": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702",
-          "source_batch": 1,
-          "source_frames": 91,
-          "fps": 30,
-          "clip": "punk-magik.idle.standard.v2",
-          "hip_gain": 0.6,
-          "arm_clearance_degrees": 4,
-          "foot_lock_max_error": 3.0547380447387695e-07,
-          "bone_scale_max_error": 6.449222564697266e-05,
-          "source_rest_geometry_unchanged": true,
-          "skinning": "linear-four-influences",
-          "loop_endpoint_blend_frames": 14,
-          "sha256": "68b8c722883c15c52daa74c4d76a5f1d042b80b901da8889d0711d8752267cb6"
-        },
-        {
-          "model": "sanhua-wuthering-waves",
-          "library_key": "breathing",
-          "source_action": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "source_batch": 1,
-          "source_frames": 299,
-          "fps": 30,
-          "clip": "sanhua-wuthering-waves.idle.breathing.v2",
-          "hip_gain": 0.35,
-          "arm_clearance_degrees": 1,
-          "foot_lock_max_error": 7.964806565578441e-07,
-          "bone_scale_max_error": 5.543231964111328e-05,
-          "source_rest_geometry_unchanged": true,
-          "skinning": "linear-four-influences",
-          "loop_endpoint_blend_frames": 14,
-          "sha256": "32b5a98c947e27e6348500aeab410117ccf22b5ab7d7a77161e312de10cf7f9c"
-        }
-      ],
-      "sanhua_skin_repair": [
-        {
-          "mesh": "face",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "裙子金属",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "上半身",
-          "max_before": 53,
-          "max_after": 3,
-          "geometry_unchanged": true,
-          "region_reweighted": true
-        },
-        {
-          "mesh": "meimao",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "she",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "zhi",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "身体",
-          "max_before": 47,
-          "max_after": 3,
-          "geometry_unchanged": true,
-          "region_reweighted": true
-        },
-        {
-          "mesh": "ear",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "kou",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "eye",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "前皮带",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "teeth",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "star",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "裙子",
-          "max_before": 3,
-          "max_after": 3,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "bai",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "chun",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "hou",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "头发",
-          "max_before": 2,
-          "max_after": 2,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "前缎带",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "带子",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "jie",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "nose",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "heart",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "眼白3",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "眼白2",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "eye_",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "头发2",
-          "max_before": 2,
-          "max_after": 2,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "穗子",
-          "max_before": 3,
-          "max_after": 3,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "xianlian",
-          "max_before": 3,
-          "max_after": 3,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "Cheek",
-          "max_before": 1,
-          "max_after": 1,
-          "geometry_unchanged": true,
-          "region_reweighted": false
-        },
-        {
-          "mesh": "黑丝腿",
-          "max_before": 9,
-          "max_after": 2,
-          "geometry_unchanged": true,
-          "region_reweighted": true
-        }
-      ],
-      "runtime_optimization": [
-        {
-          "model": "black-cat-coastal-cat",
-          "channels_before": 2601,
-          "animated_channels": 53,
-          "invariant_channels_baked": 2548,
-          "loop_seam_max_component_error": 0,
-          "bytes": 15952568
-        },
-        {
-          "model": "black-widow-aquatic-assassin",
-          "channels_before": 1656,
-          "animated_channels": 53,
-          "invariant_channels_baked": 1603,
-          "loop_seam_max_component_error": 0,
-          "bytes": 16125436
-        },
-        {
-          "model": "clove-t-pose",
-          "channels_before": 603,
-          "animated_channels": 43,
-          "invariant_channels_baked": 560,
-          "loop_seam_max_component_error": 0,
-          "bytes": 2248088
-        },
-        {
-          "model": "halo-mk-v-model",
-          "channels_before": 195,
-          "animated_channels": 22,
-          "invariant_channels_baked": 173,
-          "loop_seam_max_component_error": 0,
-          "bytes": 8850960
-        },
-        {
-          "model": "jubilee-midnight-mutant",
-          "channels_before": 1566,
-          "animated_channels": 53,
-          "invariant_channels_baked": 1513,
-          "loop_seam_max_component_error": 0,
-          "bytes": 10908812
-        },
-        {
-          "model": "magik-soul-surfer",
-          "channels_before": 3858,
-          "animated_channels": 53,
-          "invariant_channels_baked": 3805,
-          "loop_seam_max_component_error": 0,
-          "bytes": 15739416
-        },
-        {
-          "model": "punk-magik",
-          "channels_before": 1734,
-          "animated_channels": 51,
-          "invariant_channels_baked": 1683,
-          "loop_seam_max_component_error": 0,
-          "bytes": 14246772
-        },
-        {
-          "model": "sanhua-wuthering-waves",
-          "channels_before": 201,
-          "animated_channels": 23,
-          "invariant_channels_baked": 178,
-          "loop_seam_max_component_error": 0,
-          "bytes": 2842200
-        }
-      ]
-    },
-    "nativeVisibility": {
-      "themes": [
-        {
-          "appearance": "dark",
-          "hidden": {
-            "hidden": false,
-            "minimized": true,
-            "renderActive": "false"
-          },
-          "media": {
-            "renderPaused": true,
-            "videoPaused": true,
-            "time": 2.673359
-          },
-          "resumed": {
-            "renderPaused": false,
-            "videoPaused": false,
-            "time": 3.773496
-          }
-        },
-        {
-          "appearance": "light",
-          "hidden": {
-            "hidden": false,
-            "minimized": true,
-            "renderActive": "false"
-          },
-          "media": {
-            "renderPaused": true,
-            "videoPaused": true,
-            "time": 2.680918
-          },
-          "resumed": {
-            "renderPaused": false,
-            "videoPaused": false,
-            "time": 3.693418
-          }
-        }
-      ],
-      "passed": true
-    },
-    "readinessRegression": {
-      "mode": "preview",
-      "quick": false,
-      "themes": [
-        {
-          "appearance": "dark",
-          "rounds": [
-            {
-              "samples": 416,
-              "frameMsP95": 5,
-              "drawCalls": 22,
-              "triangles": 192240,
-              "geometries": 18,
-              "textures": 26,
-              "programs": 12
-            },
-            {
-              "samples": 473,
-              "frameMsP95": 4.600000001490116,
-              "drawCalls": 13,
-              "triangles": 189424,
-              "geometries": 18,
-              "textures": 26,
-              "programs": 12
-            },
-            {
-              "samples": 472,
-              "frameMsP95": 4.699999999254942,
-              "drawCalls": 13,
-              "triangles": 189424,
-              "geometries": 18,
-              "textures": 26,
-              "programs": 12
-            }
-          ],
-          "errors": [],
-          "passed": true
-        },
-        {
-          "appearance": "light",
-          "rounds": [
-            {
-              "samples": 469,
-              "frameMsP95": 5.5,
-              "drawCalls": 15,
-              "triangles": 189936,
-              "geometries": 18,
-              "textures": 26,
-              "programs": 12
-            },
-            {
-              "samples": 464,
-              "frameMsP95": 5.699999999254942,
-              "drawCalls": 13,
-              "triangles": 189424,
-              "geometries": 18,
-              "textures": 26,
-              "programs": 12
-            },
-            {
-              "samples": 475,
-              "frameMsP95": 4.5,
-              "drawCalls": 13,
-              "triangles": 189424,
-              "geometries": 18,
-              "textures": 26,
-              "programs": 12
-            }
-          ],
-          "errors": [],
-          "passed": true
-        }
-      ],
-      "errors": [],
-      "details": [],
-      "requests": [],
-      "failures": [],
-      "passed": true
-    },
-    "consoleReview": {
-      "baselineReport": "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\baseline-native-qualified-report.json",
-      "newErrors": [],
-      "observedErrors": [
-        "Hydration completed but contains mismatches.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/qmEPTzOaDQBZL5258j01i2mMBkGh3G9BI/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-        "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-        "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-        "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-        "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322316302%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/storiesretold.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/henessey.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323267016.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/autoneum_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322994106.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322228996.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322166826.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Rick_and_Morty%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Discover_Your_Patronus_Case_Study%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/video%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/NASA_JPL_-_Open_Source_Rover_Digital_Experience.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Acura__Beat_That.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/video.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Wonderful_Weekends.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Million_Piece_Mission_1.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/adventure_time__distant_lands_-_bmo%20(1080p).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
-      ],
-      "qualification": {
-        "baselineCommit": "d662e1851712583261b4314276fe1066862d5262",
-        "baselineReport": "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\baseline-native-qualified-report.json",
-        "unchangedSource": [
-          {
-            "path": "apps/preacherman-demo-host/public/active-theory-gallery",
-            "gitObject": "8e15650bb25402e5dde8c5add2e9e74bdfe6c5c6"
-          },
-          {
-            "path": "apps/preacherman-demo-host/public/gallery-v3",
-            "gitObject": "0c64f5f0f61f2561c258519de01e3719c0961ce5"
-          },
-          {
-            "path": "apps/preacherman-demo-host/src-tauri/tauri.conf.json",
-            "gitObject": "4816190e099bfbc22f51ecf38935238b2405aeb6"
-          },
-          {
-            "path": "apps/preacherman-demo-host/src/surfaces/gallery/GalleryDetailOverlay.tsx",
-            "gitObject": "e8854b6fcd74eb46c908e2c2b06d5cc5f504c22e"
-          }
-        ],
-        "observedErrors": [
-          "Hydration completed but contains mismatches.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Connecting to 'https://image.mux.com/qmEPTzOaDQBZL5258j01i2mMBkGh3G9BI/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-          "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-          "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-          "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-          "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322316302%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/storiesretold.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/henessey.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323267016.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/autoneum_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322994106.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322228996.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322166826.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Rick_and_Morty%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Discover_Your_Patronus_Case_Study%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/video%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/NASA_JPL_-_Open_Source_Rover_Digital_Experience.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Acura__Beat_That.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/video.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Wonderful_Weekends.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/Million_Piece_Mission_1.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-          "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/adventure_time__distant_lands_-_bmo%20(1080p).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
-        ],
-        "newErrors": [],
-        "method": "Exact pre-existing console diagnostic comparison plus identical bundled template and CSP sources. New errors fail the browser/native runner."
-      }
-    },
-    "nativePid": 47592,
-    "nativeStartedAt": "2026-09-11T21:44:19.9013249+08:00",
-    "nativeWindowHandle": 657262,
-    "resourceSample": {
-      "SampledAt": "2026-09-11T21:44:46.5185700+08:00",
-      "NativePid": 47592,
-      "StartedAt": "2026-09-11T21:44:19.9013249+08:00",
-      "WindowHandle": 657262,
-      "Responding": true,
-      "WindowCaptured": true,
-      "ProcessIds": [
-        47592,
-        47256,
-        48056,
-        44120,
-        30612,
-        34428,
-        44732,
-        44416,
-        39900,
-        41176,
-        38408
-      ],
-      "NormalizedCpuPercent": 4.0,
-      "WorkingSetMiB": 1855.4,
-      "GpuDedicatedBytes": 3215687680.0,
-      "MaxGpuEngineUtilization": 9.0,
-      "FreeRamKiB": 19004680,
-      "TemporaryProcesses": [],
-      "Listeners": [
-        {
-          "LocalPort": 8787,
-          "OwningProcess": 44416
-        }
-      ],
-      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
-    },
-    "restartAuthorization": "Previously authorized automatic deployment and native restart.",
-    "evidence": [
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\preview-report.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\production-build.log",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\native-report.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\native-qualified-report.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\console-comparison.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\source-verification.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\final-native-home.png",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\final-resources.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\cycled-resources.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\native-dark-gallery-overview.jpg",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\native-light-gallery-overview.jpg",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\native-dark-core-overview.jpg",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\desktop-verification\\native-light-core-overview.jpg",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\runtime-validation.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\browser-quality-report.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\clip-optimization.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\delivery-model-manifest.json",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\README.md",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\previews\\before-after.jpg",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\previews\\quality-close.jpg",
-      "D:\\preacherman\\output\\avatar-quality-20260911\\previews\\seated-idle.webp"
+    "withdrawnThisRevision": [
+      "miles-variant-1",
+      "miles-variant-2",
+      "modural-robot-mecha-chimera-dyan-high-poly-mesh",
+      "dark-knight",
+      "scifi-girl-v01",
+      "proxima",
+      "iron-man-mark-1",
+      "nier-print-9s",
+      "nier-print-2b"
     ],
-    "assetVerificationSourceCommit": "4e3e850b76b4e34b213dd3e96033b715b1470697",
-    "assetVerificationTimestamp": "2026-09-10T18:29:25.4694762+08:00",
-    "assetPreservation": "Git trees for bundled public content, avatar renderer and Tauri host match the preceding verified release; no assets, motions, shaders or sidecar rebuilt.",
-    "postModelSweepResourceSample": {
-      "SampledAt": "2026-09-11T21:43:49.3394711+08:00",
-      "NativePid": 41844,
-      "StartedAt": "2026-09-11T21:38:05.2821364+08:00",
-      "WindowHandle": 10554692,
-      "Responding": true,
-      "WindowCaptured": true,
-      "ProcessIds": [
-        41844,
-        40228,
-        33468,
-        15864,
-        45452,
-        45676,
-        40476,
-        43600,
-        40416,
-        40572,
-        43156
-      ],
-      "NormalizedCpuPercent": 3.98,
-      "WorkingSetMiB": 2705.9,
-      "GpuDedicatedBytes": 3715678208.0,
-      "MaxGpuEngineUtilization": 14.0,
-      "FreeRamKiB": 18220116,
-      "TemporaryProcesses": [],
-      "Listeners": [
-        {
-          "LocalPort": 9236,
-          "OwningProcess": 40228
-        },
-        {
-          "LocalPort": 8787,
-          "OwningProcess": 43600
-        }
-      ],
-      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
-    },
-    "newModelBatch": {
-      "version": 1,
-      "batch": "20260911",
-      "sourceArchiveCount": 14,
-      "runtimeVariants": 16,
-      "totalRuntimeBytes": 360714712,
-      "preparationRoot": "D:\\preacherman\\output\\avatar-quality-20260911",
-      "models": [
-        {
-          "id": "kitana-mk11-in-mk9-suit",
-          "name": "Kitana",
-          "motion": "female",
-          "card": 5,
-          "project": "bon-iver-viisualiizer",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\kitana-mk11-in-mk9-suit.zip",
-            "sha256": "4633fb8a8c6e39ab9faa38b05df300000420f4e18d1b47d903cfe49c8e57f075",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/kitana-mk11-in-mk9-suit/kitana-mk11-in-mk9-suit-runtime.glb",
-          "bytes": 10657308,
-          "sha256": "4a814bbc788234d7731f8262005bf155cdd10812ff12641ff43d387c4456e06d",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\kitana-mk11-in-mk9-suit\\kitana-mk11-in-mk9-suit.blend",
-          "triangles": 83007,
-          "drawCalls": 10,
-          "clip": "kitana-mk11-in-mk9-suit.idle.female.v2",
-          "sourceMotion": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
-          "maximumSampledDynamicEdgeRatio": 1.1641329758280967,
-          "rigScope": "retargeted character idle",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "nier-print-2b",
-          "name": "2B · Seated",
-          "motion": "seated",
-          "source": "nier-automata-3d-print-figure",
-          "rigScope": "Pose-specific seated rig; library idle retargeted to spine, neck and head with anchored seat and restrained arms.",
-          "card": 7,
-          "project": "mastered-from-chaos",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\nier-automata-3d-print-figure.zip",
-            "sha256": "4000cd9decee13480f8f181b36e1a449b48837fa6a6080241a10b1f4ec23942a",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/nier-print-2b/nier-print-2b-runtime.glb",
-          "bytes": 36660020,
-          "sha256": "b0009bd96020a93fd854995aa8657f8bd234a937f4c4498ded0846342e260104",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\nier-print-2b\\nier-print-2b.blend",
-          "triangles": 409998,
-          "drawCalls": 14,
-          "clip": "nier-print-2b.idle.seated.v3",
-          "sourceMotion": "CT_LOC_SIT_sitting_idle_494883756a7a2b9359a1",
-          "maximumSampledDynamicEdgeRatio": 1.2392832480658735,
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "nier-print-9s",
-          "name": "9S",
-          "motion": "breathing",
-          "source": "nier-automata-3d-print-figure",
-          "rigScope": "pose-preserving display rig; folded-arm pose and gentle breathing",
-          "card": 8,
-          "project": "emmit-fenn",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\nier-automata-3d-print-figure.zip",
-            "sha256": "4000cd9decee13480f8f181b36e1a449b48837fa6a6080241a10b1f4ec23942a",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/nier-print-9s/nier-print-9s-runtime.glb",
-          "bytes": 37472544,
-          "sha256": "257790c1f35d3c2feb6e5497cdcd5b1aeb2d1738b4a232cf25ce7078bd02372d",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\nier-print-9s\\nier-print-9s.blend",
-          "triangles": 439995,
-          "drawCalls": 13,
-          "clip": "nier-print-9s.idle.breathing.v2",
-          "sourceMotion": "authored seated/folded-arm pose; display breathing only; not a full locomotion rig",
-          "maximumSampledDynamicEdgeRatio": 1.0118875200781294,
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "nier-automata-2b",
-          "name": "2B",
-          "motion": "breathing",
-          "card": 10,
-          "project": "i-will-what-i-want",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\nier-automata-2b.zip",
-            "sha256": "6c691dc21422515384279129164b88da475fe41e914807a3017bcf9f499b0222",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/nier-automata-2b/nier-automata-2b-runtime.glb",
-          "bytes": 12373128,
-          "sha256": "09cc655c973aeb627c763713ebaf3d1158bba14b6a70351b9f0ccc167d0d03ac",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\nier-automata-2b\\nier-automata-2b.blend",
-          "triangles": 73302,
-          "drawCalls": 7,
-          "clip": "nier-automata-2b.idle.breathing.v2",
-          "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "maximumSampledDynamicEdgeRatio": 1.1981836866349573,
-          "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "iron-man-mark-1",
-          "name": "Iron Man Mark I",
-          "motion": "breathing",
-          "card": 11,
-          "project": "acoustic-garage",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\iron-man-mark-1.zip",
-            "sha256": "ad581b791af74590117e060280433def66f9b059ee29ae4c4b90f26f3c0e1870",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/iron-man-mark-1/iron-man-mark-1-runtime.glb",
-          "bytes": 11762360,
-          "sha256": "cf5c6169e104fd1cb7387c6cd2173fdbbc2035d88d26b34925a4458258d281df",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\iron-man-mark-1\\iron-man-mark-1.blend",
-          "triangles": 69071,
-          "drawCalls": 10,
-          "clip": "iron-man-mark-1.idle.breathing.v2",
-          "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "maximumSampledDynamicEdgeRatio": 1.3320520262887798,
-          "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "stellar-blade-lily-stargazer-coat",
-          "name": "Lily",
-          "motion": "neutral",
-          "card": 12,
-          "project": "witness-gotham",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\stellar-blade-lily-stargazer-coat.zip",
-            "sha256": "4a5a33b3a39920f6b58a280ad0e76eb7832ea8f718a5b68674d552b6b4a0cee0",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/stellar-blade-lily-stargazer-coat/stellar-blade-lily-stargazer-coat-runtime.glb",
-          "bytes": 18629480,
-          "sha256": "e373a9672a75efc010c4a4280585ab676681410598396af0a8c3fbfe0e099769",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\stellar-blade-lily-stargazer-coat\\stellar-blade-lily-stargazer-coat.blend",
-          "triangles": 110900,
-          "drawCalls": 19,
-          "clip": "stellar-blade-lily-stargazer-coat.idle.neutral.v2",
-          "sourceMotion": "CT_LOC_IDLE_neutral_idle_30cfd31362b959560463",
-          "maximumSampledDynamicEdgeRatio": 1.1739370495591106,
-          "rigScope": "retargeted character idle",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "miles-variant-1",
-          "name": "Miles · Masked",
-          "motion": "standard",
-          "source": "miles-from-spider-man-across-the-spider-verse",
-          "card": 13,
-          "project": "toonami",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\miles-from-spider-man-across-the-spider-verse.zip",
-            "sha256": "fd72bbd78c6d47ce373e92e173bd84e4a7b77fd5ba4d035b86825bc601ebfc5f",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/miles-variant-1/miles-variant-1-runtime.glb",
-          "bytes": 1953864,
-          "sha256": "90c46c1a133f5ee5d615b3782a41760f327cdcd4764e145542ebd602b489813b",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\miles-variant-1\\miles-variant-1.blend",
-          "triangles": 14354,
-          "drawCalls": 3,
-          "clip": "miles-variant-1.idle.standard.v2",
-          "sourceMotion": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702",
-          "maximumSampledDynamicEdgeRatio": 1.2114133352329937,
-          "rigScope": "retargeted character idle",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "miles-variant-2",
-          "name": "Miles · Unmasked",
-          "motion": "standard",
-          "source": "miles-from-spider-man-across-the-spider-verse",
-          "card": 14,
-          "project": "halo-5-visualizer",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\miles-from-spider-man-across-the-spider-verse.zip",
-            "sha256": "fd72bbd78c6d47ce373e92e173bd84e4a7b77fd5ba4d035b86825bc601ebfc5f",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/miles-variant-2/miles-variant-2-runtime.glb",
-          "bytes": 2877828,
-          "sha256": "3917d7bab077420cd4a21356e570c7905b3a1d4701b9b20a4ba11dc1d057858d",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\miles-variant-2\\miles-variant-2.blend",
-          "triangles": 26738,
-          "drawCalls": 6,
-          "clip": "miles-variant-2.idle.standard.v2",
-          "sourceMotion": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702",
-          "maximumSampledDynamicEdgeRatio": 1.1706328792581473,
-          "rigScope": "retargeted character idle",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "iron-man-mark-85",
-          "name": "Iron Man Mark 85",
-          "motion": "breathing",
-          "card": 15,
-          "project": "rick-and-morty",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\iron-man-mark-85.zip",
-            "sha256": "e11ed9f380e0e8baac867a8f85f608d0bc3eb11ec0e9200fcc464d3bde0e1dec",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/iron-man-mark-85/iron-man-mark-85-runtime.glb",
-          "bytes": 21536872,
-          "sha256": "9b3e5125b26b7fb3df2e124bfda5b14ca1c40854aecc7015b36ca08338765d84",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\iron-man-mark-85\\iron-man-mark-85.blend",
-          "triangles": 549996,
-          "drawCalls": 10,
-          "clip": "iron-man-mark-85.idle.breathing.v2",
-          "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "maximumSampledDynamicEdgeRatio": 1.3078543032433294,
-          "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "the-twins-atomic-heart",
-          "name": "Atomic Heart · Twin",
-          "motion": "breathing",
-          "card": 16,
-          "project": "discover-your-patronus",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\the-twins-atomic-heart.zip",
-            "sha256": "6d3bc587d2a6ec64a8855bcc2d06fe0f1b810c99363eeea0ddeea0bf4ed5d0b6",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/the-twins-atomic-heart/the-twins-atomic-heart-runtime.glb",
-          "bytes": 25536760,
-          "sha256": "2af40c1e3edd06972bc2bf0b9f8a069d29e2a8d8bd1992048aa42a726e543200",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\the-twins-atomic-heart\\the-twins-atomic-heart.blend",
-          "triangles": 419996,
-          "drawCalls": 4,
-          "clip": "the-twins-atomic-heart.idle.breathing.v2",
-          "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "maximumSampledDynamicEdgeRatio": 1.335882537627604,
-          "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "modural-robot-mecha-chimera-dyan-high-poly-mesh",
-          "name": "Dyan",
-          "motion": "breathing",
-          "card": 17,
-          "project": "airman-challenge",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\modural-robot-mecha-chimera-dyan-high-poly-mesh.zip",
-            "sha256": "bdeb3dd26b066be64a0d8970680b85e369fd8ceef74341ac49d9815c52f321b6",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/modural-robot-mecha-chimera-dyan-high-poly-mesh/modural-robot-mecha-chimera-dyan-high-poly-mesh-runtime.glb",
-          "bytes": 50085616,
-          "sha256": "bf0f7b94fc3902021263dc358c326b40a3612bee2b569d361910bcd8e813e3df",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\modural-robot-mecha-chimera-dyan-high-poly-mesh\\modural-robot-mecha-chimera-dyan-high-poly-mesh.blend",
-          "triangles": 523871,
-          "drawCalls": 4,
-          "clip": "modural-robot-mecha-chimera-dyan-high-poly-mesh.idle.breathing.v2",
-          "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "maximumSampledDynamicEdgeRatio": 1.221558789226437,
-          "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "dark-knight",
-          "name": "Dark Knight",
-          "motion": "breathing",
-          "card": 18,
-          "project": "open-source-rover",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\dark-knight.zip",
-            "sha256": "c313ff9ffdd201b83a923e73c61f06abf54434f9b5a0589b247e96456a64db48",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/dark-knight/dark-knight-runtime.glb",
-          "bytes": 10265364,
-          "sha256": "f42fb6f4dc2265de7e64e98571860895be1f0d4b6d3834af8aa77450dbefd5cb",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\dark-knight\\dark-knight.blend",
-          "triangles": 41607,
-          "drawCalls": 2,
-          "clip": "dark-knight.idle.breathing.v2",
-          "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "maximumSampledDynamicEdgeRatio": 1.2225777667037754,
-          "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "spartan-armour-mkv-halo-reach",
-          "name": "Spartan MK V · Reach",
-          "motion": "male",
-          "card": 19,
-          "project": "beat-that",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\spartan-armour-mkv-halo-reach.zip",
-            "sha256": "e611e30ff9587e0ed1b89fee9cbb09cda3e8bcda0fcd1c8d03dd19452145bb26",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/spartan-armour-mkv-halo-reach/spartan-armour-mkv-halo-reach-runtime.glb",
-          "bytes": 29782016,
-          "sha256": "7250d8c6d5db615be7f3c200a169da8993682d417265b77407355005e139a279",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\spartan-armour-mkv-halo-reach\\spartan-armour-mkv-halo-reach.blend",
-          "triangles": 42600,
-          "drawCalls": 9,
-          "clip": "spartan-armour-mkv-halo-reach.idle.male.v2",
-          "sourceMotion": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
-          "maximumSampledDynamicEdgeRatio": 1.0802009802067978,
-          "rigScope": "retargeted character idle",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "scifi-girl-v01",
-          "name": "Sci-fi Girl",
-          "motion": "breathing",
-          "card": 20,
-          "project": "welcome-to-hogwarts",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\scifi-girl-v01.zip",
-            "sha256": "996a13fd4ac8a908707e6b9367fe71ce314754fbe639e1d9c4e76d89321bc830",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/scifi-girl-v01/scifi-girl-v01-runtime.glb",
-          "bytes": 35567720,
-          "sha256": "9c83e0f4440942efe049070de0a626fae72bf320e5fbf7e0933a421eda877b7c",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\scifi-girl-v01\\scifi-girl-v01.blend",
-          "triangles": 326971,
-          "drawCalls": 17,
-          "clip": "scifi-girl-v01.idle.breathing.v2",
-          "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
-          "maximumSampledDynamicEdgeRatio": 1.3245204460153888,
-          "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "proxima",
-          "name": "Proxima",
-          "motion": "ready",
-          "card": 21,
-          "project": "wonderful-weekends",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\proxima.zip",
-            "sha256": "aadada86da1471393aede5101c94e257a6483dd7ff58381afc40570f00811390",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/proxima/proxima-runtime.glb",
-          "bytes": 22807436,
-          "sha256": "b164417731dc9c665b6ed65a85bf36a44eec0fa57709b26d89673f0d844f4965",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\proxima\\proxima.blend",
-          "triangles": 193810,
-          "drawCalls": 4,
-          "clip": "proxima.idle.ready.v2",
-          "sourceMotion": "CT_LOC_IDLE_ready_idle_face296590a98729cf45",
-          "maximumSampledDynamicEdgeRatio": 1.0771794465910611,
-          "rigScope": "retargeted character idle",
-          "reflectionIntensity": 0.3
-        },
-        {
-          "id": "halloween-the-game-michael-myers-samhain",
-          "name": "Michael Myers · Samhain",
-          "motion": "male",
-          "card": 22,
-          "project": "million-piece-mission",
-          "sourceArchive": {
-            "sourceArchive": "D:\\开源项目\\halloween-the-game-michael-myers-samhain.zip",
-            "sha256": "d1b4ff7fa1e1d16d154b71f6931907cb89ccd5764ec366ec074a844932310842",
-            "unchanged": true
-          },
-          "runtimeFile": "public/assets/avatars/halloween-the-game-michael-myers-samhain/halloween-the-game-michael-myers-samhain-runtime.glb",
-          "bytes": 32746396,
-          "sha256": "aa70e8cf6e70d5fe5b993a5b27b6ad69a79664e074982ffa7592e999924ea2c3",
-          "preparedBlend": "D:\\preacherman\\output\\avatar-quality-20260911\\ready\\halloween-the-game-michael-myers-samhain\\halloween-the-game-michael-myers-samhain.blend",
-          "triangles": 198532,
-          "drawCalls": 8,
-          "clip": "halloween-the-game-michael-myers-samhain.idle.male.v2",
-          "sourceMotion": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
-          "maximumSampledDynamicEdgeRatio": 1.1382400149158356,
-          "rigScope": "retargeted character idle",
-          "reflectionIntensity": 0.3
-        }
-      ],
-      "notes": [
-        "Both seated print 2B and standing 2B included per user request.",
-        "Print 9S retains folded-arm pose. Sculpture display rigs are not full locomotion rigs.",
-        "Miles source copies separated into two distinct masked/unmasked appearances.",
-        "Original authored colours; common cinematic lighting; one selected looping idle each.",
-        "No 2858-motion-library bundle: only selected baked clips embedded.",
-        "Original source archives unchanged; prepared .blend masters retained separately.",
-        "Existing six characters and every card title, description and media file unchanged.",
-        "Previously withdrawn four characters remain unavailable."
-      ],
-      "qualityRevision": "material-and-seated-idle-20260911"
-    },
-    "withdrawnModels": [
-      {
-        "id": "sanhua-wuthering-waves",
-        "state": "unavailable; former slot reassigned to new character",
-        "sourceAssetsRetained": true
-      },
-      {
-        "id": "magik-soul-surfer",
-        "state": "unavailable; former slot reassigned to new character",
-        "sourceAssetsRetained": true
-      },
-      {
-        "id": "black-cat-coastal-cat",
-        "state": "unavailable; former slot reassigned to new character",
-        "sourceAssetsRetained": true
-      },
-      {
-        "id": "black-widow-aquatic-assassin",
-        "state": "unavailable; former slot reassigned to new character",
-        "sourceAssetsRetained": true
-      }
+    "noWithdrawnRequests": true,
+    "newConsoleErrors": [],
+    "preexistingConsoleErrors": [
+      "Hydration completed but contains mismatches.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Connecting to 'https://www.datocms-assets.com/223669/1786208283-betteroff-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322316302%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/storiesretold.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/henessey.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323267016.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/autoneum_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322994106.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322228996.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322166826.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked."
     ],
+    "consoleBaseline": "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\baseline-native-qualified-report.json",
+    "additionalConsoleBaseline": "D:/preacherman/output/avatar-prepare-20260911/desktop-verification/native-qualified-report.json",
+    "initialAutomationAttempts": "Preserved original reports: pointer-dismissal and card-hit timing; final run closes navigation using Escape and waits for the authored card entrance. No failed report was changed.",
     "unchangedSourceTrees": [
       {
-        "path": "apps/preacherman-demo-host/public/active-theory-gallery",
-        "gitObject": "8e15650bb25402e5dde8c5add2e9e74bdfe6c5c6"
-      },
-      {
-        "path": "apps/preacherman-demo-host/public/gallery-v3",
-        "gitObject": "0c64f5f0f61f2561c258519de01e3719c0961ce5"
+        "path": "apps/preacherman-demo-host/public",
+        "gitObject": "ee0bbfed02f5e26091835da17072edd06df4be3b"
       },
       {
         "path": "apps/preacherman-demo-host/src-tauri",
         "gitObject": "dda95a237a35687c1148fe9acadd97933a107a7c"
       },
       {
-        "path": "apps/preacherman-demo-host/public/assets/avatars/cortana",
-        "gitObject": "315daca24b2e945ff7c559c8fce0a9bec3e2c752"
+        "path": "packages/preacherman-avatar-renderer/src/HologramLights.tsx",
+        "gitObject": "61c5f617e91d70fb9d25706e24dcb5df4f16e293"
       },
       {
-        "path": "apps/preacherman-demo-host/public/assets/avatars/zima",
-        "gitObject": "c1ac6f1e43889fd05a318dff883b947877525a6c"
-      },
-      {
-        "path": "apps/preacherman-demo-host/public/assets/avatars/jubilee-midnight-mutant",
-        "gitObject": "70ce2307a8cbf660ca764c955ab16ff25529362a"
-      },
-      {
-        "path": "apps/preacherman-demo-host/public/assets/avatars/halo-mk-v-model",
-        "gitObject": "cc648f7297c1f387d1daf3f13005484b0c84bf1c"
-      },
-      {
-        "path": "apps/preacherman-demo-host/public/assets/avatars/punk-magik",
-        "gitObject": "020298f54564b456424ebd277f3c2999a3eb4589"
-      },
-      {
-        "path": "apps/preacherman-demo-host/public/assets/avatars/clove-t-pose",
-        "gitObject": "0ccd1505cd04a7a53a65446a0d7a314c8c7cfa92"
+        "path": "packages/preacherman-avatar-renderer/src/AvatarModel.tsx",
+        "gitObject": "6bf9b970d0cff5149b05b8302d5445382dcbce7f"
       }
+    ],
+    "resourceSample": {
+      "SampledAt": "2026-09-11T22:46:20.6024153+08:00",
+      "NativePid": 37852,
+      "StartedAt": "2026-09-11T22:45:59.1278935+08:00",
+      "WindowHandle": 853836,
+      "Responding": true,
+      "WindowCaptured": true,
+      "ProcessIds": [
+        37852,
+        47388,
+        43408,
+        40416,
+        43688,
+        43548,
+        35580,
+        42272,
+        42584,
+        47944,
+        25548
+      ],
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1949.7,
+      "GpuDedicatedBytes": 5358776320.0,
+      "MaxGpuEngineUtilization": 12.0,
+      "FreeRamKiB": 17052096,
+      "TemporaryProcesses": [],
+      "Listeners": [
+        {
+          "LocalPort": 8787,
+          "OwningProcess": 42272
+        }
+      ],
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
+    },
+    "evidence": [
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\focused-tests.log",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\renderer-build.log",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\typecheck.log",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\production-build.log",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-report.json",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-retry-report.json",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-final-report.json",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\final-resources.json",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\final-native-home.png",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-dark-card-5.png",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-dark-card-8.png",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-dark-card-10.png",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-dark-card-11.png",
+      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-light-gallery.png"
     ]
   },
   "releaseAttempts": [
@@ -1760,9 +365,18 @@
       "deployedAt": "2026-09-11T21:38:04.8603099+08:00",
       "verifiedAt": "2026-09-11T21:44:46.5185700+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\model-quality-before-20260911"
+    },
+    {
+      "buildId": "avatar-cortana-lighting-compaction-20260911",
+      "sourceCommit": "591307c767d5fe5ea1ef1e68d72d9c20e83ffe19",
+      "sha256": "3FAEB6C6358DCE4477D76E8B8CFC86CEB65EDE1C3D8C03569FCEEE0B3EE310C0",
+      "status": "passed-focused-native-check",
+      "deployedAt": "2026-09-11T22:28:58.1072115+08:00",
+      "verifiedAt": "2026-09-11T22:46:20.6024153+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\model-quality-before-20260911/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
