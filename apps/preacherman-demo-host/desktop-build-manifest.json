@@ -1,35 +1,35 @@
 {
   "schemaVersion": 1,
-  "buildId": "remove-sanhua-20260911",
+  "buildId": "withdraw-three-models-20260911",
   "productVersion": "0.1.0",
-  "sourceTask": "withdraw-sanhua-and-preserve-empty-gallery-slot",
+  "sourceTask": "withdraw-magik-soul-surfer-black-cat-black-widow",
   "sourceThread": null,
-  "sourceState": "Withdraw Sanhua from Gallery card seven (mastered-from-chaos), keep its position and original content. Null model binding removes the preview and Activate control and excludes it from adjacent prefetch. Persisted Sanhua activation migrates to null; other equipped characters remain unchanged. Original model assets and editable masters are retained.",
-  "sourceCommit": "14338d70a378bfc1c5d963e90719e09a53dcf590",
+  "sourceState": "Withdraw Magik Soul Surfer, Black Cat and Black Widow from Gallery cards 5, 8 and 10, preserving card order and authored copy/media. Existing empty Sanhua slot 7 stays empty. All four withdrawn models have no preview or Activate control, are excluded from prefetch, and persisted activation migrates to null. Other equipped characters and all source assets are preserved.",
+  "sourceCommit": "ac743f6cb947dec2904d02984dc3c1b50eacaccd",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-11T16:18:07.0720004+08:00",
-  "deployedAt": "2026-09-11T16:22:33.9597175+08:00",
-  "verifiedAt": "2026-09-11T16:26:55.5160249+08:00",
+  "builtAt": "2026-09-11T16:50:54.4072841+08:00",
+  "deployedAt": "2026-09-11T16:51:42.4398325+08:00",
+  "verifiedAt": "2026-09-11T16:57:14.9597977+08:00",
   "sizeBytes": 383052288,
-  "sha256": "EEF5104C57784EC2EADCCDF4C9B625D3449C111FDE20923742770267D8CAF944",
+  "sha256": "3EFE1752C5FF61642D3AA8F8AC7DA62D5CAC27C20CFA359631658024B8531332",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\remove-sanhua-before-20260911/preacherman-demo-host.exe",
-  "backupSha256": "09C9D1D2DE450AC52DCBB297262C45BDFF19FC6535A34CAEB3859EACD79D0A6A",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\remove-sanhua-before-20260911/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdraw-three-models-before-20260911/preacherman-demo-host.exe",
+  "backupSha256": "EEF5104C57784EC2EADCCDF4C9B625D3449C111FDE20923742770267D8CAF944",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdraw-three-models-before-20260911/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "38e37cd77695dee8a3f283ed2df799e19bf1b596",
-  "previousVerificationCommit": "38e37cd77695dee8a3f283ed2df799e19bf1b596",
+  "rollbackBaselineCommit": "1399e0f348e48fb3378f778f21f9ad5533fa32a8",
+  "previousVerificationCommit": "1399e0f348e48fb3378f778f21f9ad5533fa32a8",
   "verification": {
     "status": "passed-with-recorded-preexisting-template-diagnostics",
     "typescript": "Host typecheck and production beforeBuild passed.",
-    "focusedTests": "38 focused checks passed. Prior-source regressions demonstrate the old Sanhua binding and saved activation. Both appearances preserve other saved models; card seven remains empty and adjacency excludes Sanhua.",
-    "browserFlow": "Both appearances: migrate saved Sanhua to disabled companion; enter empty card seven, retain title/body/video and remove Activate; navigate to Punk Magik and Black Cat in both directions; activate Black Cat and verify card seven stays empty while the overview and all other routes retain Black Cat; restart preserves Black Cat. No Sanhua request or prefetch.",
-    "nativeFlow": "Same checks passed after canonical-shortcut cold launch in both appearances. Home, Task, Gallery, Market/Ledger, Settings and Account passed. Minimize/restore and maximize passed. Original supported preference restored and final normal shortcut startup verified.",
+    "focusedTests": "35 focused checks passed: four empty model slots, retained card order, adjacent prefetch exclusion, both-theme saved-model migration and preservation, global companion, controls and detail behavior. Updated outdated activation test imports and assertions to current shared catalog interfaces.",
+    "browserFlow": "Both appearances: each of the three newly withdrawn saved activations migrates to null; traverse all ten cards, visually verify empty cards 5/7/8/10 with unchanged titles and descriptions; no Activate on empty slots. Equip Clove, revisit empty slots, confirm other routes and Gallery overview retain Clove across reload. No withdrawn-model requests.",
+    "nativeFlow": "Same flow passed after canonical-shortcut cold launch in both appearances. Home, Task, Gallery, Market/Ledger, Settings and Account passed. Minimize/restore and maximize passed. Original preference restored and final normal shortcut launch verified.",
     "modelHashes": [
       {
         "Algorithm": "SHA256",
@@ -878,13 +878,9 @@
       "passed": true
     },
     "consoleReview": {
-      "baselineReport": "D:/preacherman/output/playwright/active-companion-20260910/native-qualified-report.json",
+      "baselineReport": "D:/preacherman/output/playwright/remove-sanhua-20260911/native-qualified-report.json",
       "newErrors": [],
       "observedErrors": [
-        "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
         "Hydration completed but contains mismatches.",
         "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
@@ -899,6 +895,15 @@
         "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+        "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://image.mux.com/qmEPTzOaDQBZL5258j01i2mMBkGh3G9BI/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+        "TypeError: _this.initSync is not a function",
         "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
@@ -915,76 +920,100 @@
         "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/storiesretold.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
         "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/henessey.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
+        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+        "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323267016.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
       ],
       "qualification": {
-        "rawReport": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
+        "rawReport": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
         "rawFailures": [
-          "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   `Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Connecting to 'https://image.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.`\n+ ]\n- []\n\n    at D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\verify.cjs:62:107"
+          "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   `Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.`,\n+   `Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323267016.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.`\n+ ]\n- []\n\n    at D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\verify.cjs:74:107"
         ],
-        "comparison": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\console-comparison.json",
-        "note": "All model removal, navigation, activation, appearance and core-route checks passed. Additional diagnostics are individually attributed to previously observed or unchanged template sources. No CSP or runtime allow-list edits."
+        "comparison": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\console-comparison.json",
+        "note": "All native functional checks passed; both additional poster diagnostics match earlier verified native messages exactly. No CSP or application changes."
       }
     },
-    "nativePid": 38128,
-    "nativeStartedAt": "2026-09-11T16:26:28.2567552+08:00",
-    "nativeWindowHandle": 198528,
+    "nativePid": 26904,
+    "nativeStartedAt": "2026-09-11T16:56:46.7835666+08:00",
+    "nativeWindowHandle": 395126,
     "resourceSample": {
-      "SampledAt": "2026-09-11T16:26:55.5160249+08:00",
-      "NativePid": 38128,
-      "StartedAt": "2026-09-11T16:26:28.2567552+08:00",
-      "WindowHandle": 198528,
+      "SampledAt": "2026-09-11T16:57:14.9597977+08:00",
+      "NativePid": 26904,
+      "StartedAt": "2026-09-11T16:56:46.7835666+08:00",
+      "WindowHandle": 395126,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        38128,
-        37256,
-        38280,
-        24688,
-        26776,
-        33048,
-        39620,
-        36380,
-        38292,
-        1744,
-        29724
+        26904,
+        37188,
+        38668,
+        36544,
+        38676,
+        38584,
+        40596,
+        38108,
+        36432,
+        29632,
+        37372
       ],
-      "NormalizedCpuPercent": 4.0,
-      "WorkingSetMiB": 1878.3,
-      "GpuDedicatedBytes": 3184603136.0,
-      "MaxGpuEngineUtilization": 10.0,
-      "FreeRamKiB": 18979808,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1950.2,
+      "GpuDedicatedBytes": 3179732992.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 16831956,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 36380
+          "OwningProcess": 38108
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
     },
     "restartAuthorization": "Previously authorized automatic deployment and native restart.",
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\baseline-regression.log",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\source-tests.log",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\card-order-test.log",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\typecheck.log",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\final-native-home.png",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-      "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\console-comparison.json"
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\source-tests.log",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\card-order-test.log",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\typecheck.log",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\final-native-home.png",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\console-comparison.json",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-dark-core-surfaces.png",
+      "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-light-core-surfaces.png"
     ],
     "assetVerificationSourceCommit": "4e3e850b76b4e34b213dd3e96033b715b1470697",
     "assetVerificationTimestamp": "2026-09-10T18:29:25.4694762+08:00",
     "assetPreservation": "Git trees for bundled public content, avatar renderer and Tauri host match the preceding verified release; no assets, motions, shaders or sidecar rebuilt.",
     "withdrawnModels": [
       {
+        "id": "magik-soul-surfer",
+        "project": "bon-iver-viisualiizer",
+        "cardNumber": 5,
+        "state": "empty-slot",
+        "sourceAssetsRetained": true
+      },
+      {
         "id": "sanhua-wuthering-waves",
         "project": "mastered-from-chaos",
         "cardNumber": 7,
+        "state": "empty-slot",
+        "sourceAssetsRetained": true
+      },
+      {
+        "id": "black-cat-coastal-cat",
+        "project": "emmit-fenn",
+        "cardNumber": 8,
+        "state": "empty-slot",
+        "sourceAssetsRetained": true
+      },
+      {
+        "id": "black-widow-aquatic-assassin",
+        "project": "i-will-what-i-want",
+        "cardNumber": 10,
         "state": "empty-slot",
         "sourceAssetsRetained": true
       }
@@ -1164,9 +1193,18 @@
       "deployedAt": "2026-09-11T16:22:33.9597175+08:00",
       "verifiedAt": "2026-09-11T16:26:55.5160249+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\remove-sanhua-before-20260911"
+    },
+    {
+      "buildId": "withdraw-three-models-20260911",
+      "sourceCommit": "ac743f6cb947dec2904d02984dc3c1b50eacaccd",
+      "sha256": "3EFE1752C5FF61642D3AA8F8AC7DA62D5CAC27C20CFA359631658024B8531332",
+      "status": "passed",
+      "deployedAt": "2026-09-11T16:51:42.4398325+08:00",
+      "verifiedAt": "2026-09-11T16:57:14.9597977+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdraw-three-models-before-20260911"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\remove-sanhua-before-20260911/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdraw-three-models-before-20260911/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
