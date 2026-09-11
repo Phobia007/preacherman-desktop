@@ -6,12 +6,12 @@ export const galleryModelBindings = {
   "watson-masters": "zima",
   "climatune": "jubilee-midnight-mutant",
   "eye-of-the-stormers": "halo-mk-v-model",
-  "bon-iver-viisualiizer": "magik-soul-surfer",
+  "bon-iver-viisualiizer": null,
   "classic-stories-retold": "punk-magik",
   "mastered-from-chaos": null, // Reserved slot: Sanhua has been withdrawn.
-  "emmit-fenn": "black-cat-coastal-cat",
+  "emmit-fenn": null,
   "spacecraft-for-all": "clove-t-pose",
-  "i-will-what-i-want": "black-widow-aquatic-assassin",
+  "i-will-what-i-want": null,
 } as const satisfies Readonly<Record<string, ModelId | null>>;
 export function galleryModelForProject(project: string): ModelId | null {
   return (galleryModelBindings as Readonly<Record<string, ModelId | null>>)[project] ?? null;

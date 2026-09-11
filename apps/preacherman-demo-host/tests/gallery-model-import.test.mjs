@@ -14,12 +14,12 @@ const catalogCode = ts.transpileModule(catalogSource, { compilerOptions: { modul
 const { importedAvatarProfiles } = await import("data:text/javascript;base64," + Buffer.from(catalogCode).toString("base64"));
 
 
-test("cards keep their upload order with the withdrawn Sanhua slot empty", async () => {
+test("cards keep their upload order with all withdrawn slots empty", async () => {
   const source = await readFile(join(host, "src/surfaces/gallery/galleryModelBindings.ts"), "utf8");
   const { outputText: code } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } });
   const bindings = await import("data:text/javascript;base64," + Buffer.from(code).toString("base64"));
   const cards = JSON.parse(await readFile(join(host, "public/active-theory-gallery/gallery/external/storage.googleapis.com/activetheory-v6.appspot.com/cms/projects-dev.json"), "utf8")).sort((a, b) => a.priority - b.priority);
-  const order = ["cortana", "zima", ...models.map(model => model.id === "sanhua-wuthering-waves" ? null : model.id)];
+  const order = ["cortana", "zima", ...models.map(model => ["sanhua-wuthering-waves", "magik-soul-surfer", "black-cat-coastal-cat", "black-widow-aquatic-assassin"].includes(model.id) ? null : model.id)];
   assert.equal(order.length, 10);
   assert.deepEqual(cards.slice(0, 10).map(card => bindings.galleryModelForProject(card.slug)), order);
   assert.equal(bindings.galleryModelForProject(cards[10].slug), null);

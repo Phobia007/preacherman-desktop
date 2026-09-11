@@ -18,6 +18,12 @@ export const DEFAULT_PREFERENCES: DemoPreferences = {
 };
 
 const PREFERENCES_STORAGE_KEY = "preacherman.preferences";
+const WITHDRAWN_MODEL_IDS: readonly ModelId[] = [
+  "sanhua-wuthering-waves",
+  "magik-soul-surfer",
+  "black-cat-coastal-cat",
+  "black-widow-aquatic-assassin",
+];
 
 export const uiCopy = {
   en: {
@@ -100,7 +106,7 @@ export function readPreferences(): DemoPreferences {
       | null;
     return {
       // A withdrawn character leaves the companion slot empty, preserving every other choice.
-      activeModelId: stored?.activeModelId === "sanhua-wuthering-waves"
+      activeModelId: WITHDRAWN_MODEL_IDS.some(modelId => modelId === stored?.activeModelId)
         ? null
         : stored?.activeModelId === null || isModelId(stored?.activeModelId)
           ? stored.activeModelId

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile, stat } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import test from "node:test";
 import { stripTypeScriptTypes } from "node:module";
 
@@ -18,8 +18,7 @@ test("the saved model remains persistent while Gallery changes its camera framin
 
   assert.match(preferences, /activeModelId:\s*ModelId \| null/);
   assert.match(preferences, /activeModelId:\s*"cortana"/);
-  assert.match(preferences, /value === "cortana"/);
-  assert.match(preferences, /value === "zima"/);
+  assert.match(preferences, /return isAvatarModelId\(value\)/);
   assert.match(app, /const activeModelId = preferences\.activeModelId/);
   assert.match(app, /const isCompanionActive = activeModelId !== null/);
   assert.match(app, /data-model-active=\{isCompanionActive\}/);
@@ -37,7 +36,7 @@ test("the saved model remains persistent while Gallery changes its camera framin
   assert.match(stage, /quality="high"/);
   assert.match(stage, /modelId=\{modelId\}/);
   assert.match(stage, /renderActive=\{renderActive\}/);
-  assert.match(stage, /modelId === "zima" \? "idle\.zima" : "idle\.catwalk"/);
+  assert.match(stage, /const defaultActionId = avatarDefaultActionId\(modelId\)/);
   assert.match(stage, /actionId=\{defaultActionId\}/);
   assert.doesNotMatch(stage, /key=\{modelId\}/, "switching models must retain the Canvas");
   const scene = await readFile(join(hostRoot, "../../packages/preacherman-avatar-renderer/src/InteractiveAvatarScene.tsx"), "utf8");
@@ -56,7 +55,7 @@ test("Gallery and Home use the same semantic black canvas in both appearances", 
 
 test("an explicit disabled companion survives saving and reload in both themes", async () => {
   const source = await readFile(join(sourceRoot, "preferences.ts"), "utf8");
-  const module = await import(`data:text/javascript;base64,${Buffer.from(stripTypeScriptTypes(source)).toString("base64")}`);
+  const module = await import(`data:text/javascript;base64,${Buffer.from(stripTypeScriptTypes(source).replaceAll("@preacherman/avatar-renderer", pathToFileURL(join(hostRoot, "../../packages/preacherman-avatar-renderer/dist/index.js")).href)).toString("base64")}`);
   const originalWindow = globalThis.window;
   let stored = null;
   globalThis.window = { localStorage: { getItem: () => stored, setItem: (_key, value) => { stored = value; } } };

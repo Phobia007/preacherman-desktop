@@ -13,16 +13,23 @@ async function load(relative) {
   return import("data:text/javascript;base64," + Buffer.from(outputText.replaceAll("@preacherman/avatar-renderer", renderer)).toString("base64"));
 }
 
-test("withdrawn Sanhua leaves card seven empty without moving its neighbours or prefetching it", async () => {
+const withdrawn = ["sanhua-wuthering-waves", "magik-soul-surfer", "black-cat-coastal-cat", "black-widow-aquatic-assassin"];
+
+test("withdrawn models leave cards five, seven, eight and ten empty without shifting other cards or prefetching them", async () => {
   const bindings = await load("src/surfaces/gallery/galleryModelBindings.ts");
-  assert.equal(bindings.galleryModelForProject("mastered-from-chaos"), null);
+  for (const project of ["bon-iver-viisualiizer", "mastered-from-chaos", "emmit-fenn", "i-will-what-i-want"]) {
+    assert.equal(bindings.galleryModelForProject(project), null);
+  }
+  assert.equal(bindings.galleryModelForProject("eye-of-the-stormers"), "halo-mk-v-model");
   assert.equal(bindings.galleryModelForProject("classic-stories-retold"), "punk-magik");
-  assert.equal(bindings.galleryModelForProject("emmit-fenn"), "black-cat-coastal-cat");
-  assert.equal(bindings.adjacentGalleryModel("punk-magik"), "black-cat-coastal-cat");
-  assert.equal(bindings.adjacentGalleryModel("sanhua-wuthering-waves"), undefined);
+  assert.equal(bindings.galleryModelForProject("spacecraft-for-all"), "clove-t-pose");
+  assert.equal(bindings.adjacentGalleryModel("halo-mk-v-model"), "punk-magik");
+  assert.equal(bindings.adjacentGalleryModel("punk-magik"), "clove-t-pose");
+  assert.equal(bindings.adjacentGalleryModel("clove-t-pose"), "punk-magik");
+  for (const model of withdrawn) assert.equal(bindings.adjacentGalleryModel(model), undefined);
 });
 
-test("withdrawn Sanhua is cleared on startup while other saved choices and both appearances survive", async () => {
+test("every withdrawn model is cleared on startup while other saved choices and both appearances survive", async () => {
   const preferences = await load("src/preferences.ts");
   const originalWindow = globalThis.window;
   let stored;
@@ -31,7 +38,7 @@ test("withdrawn Sanhua is cleared on startup while other saved choices and both 
     for (const appearance of ["dark", "light"]) {
       for (const activeModelId of ["sanhua-wuthering-waves", "cortana", "zima", "jubilee-midnight-mutant", "halo-mk-v-model", "magik-soul-surfer", "punk-magik", "black-cat-coastal-cat", "clove-t-pose", "black-widow-aquatic-assassin", null]) {
         stored = JSON.stringify({ activeModelId, appearance, locale: "en" });
-        const expected = { activeModelId: activeModelId === "sanhua-wuthering-waves" ? null : activeModelId, appearance, locale: "en" };
+        const expected = { activeModelId: withdrawn.includes(activeModelId) ? null : activeModelId, appearance, locale: "en" };
         assert.deepEqual(preferences.readPreferences(), expected);
         preferences.savePreferences(preferences.readPreferences());
         assert.deepEqual(preferences.readPreferences(), expected, "migration remains stable after saving and reopening");
