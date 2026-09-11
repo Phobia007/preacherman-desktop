@@ -10,22 +10,22 @@ export const importedAvatarModels = [
   { id: "black-cat-coastal-cat", name: "Black Cat" },
   { id: "clove-t-pose", name: "Clove" },
   { id: "black-widow-aquatic-assassin", name: "Black Widow" },
-  { id: "kitana-mk11-in-mk9-suit", name: "Kitana", studioReflections: true },
-  { id: "nier-print-2b", name: "2B · Seated", studioReflections: true },
-  { id: "nier-print-9s", name: "9S", studioReflections: true },
-  { id: "nier-automata-2b", name: "2B", studioReflections: true },
-  { id: "iron-man-mark-1", name: "Iron Man Mark I", studioReflections: true },
-  { id: "stellar-blade-lily-stargazer-coat", name: "Lily", studioReflections: true },
-  { id: "miles-variant-1", name: "Miles · Masked", studioReflections: true },
-  { id: "miles-variant-2", name: "Miles · Unmasked", studioReflections: true },
-  { id: "iron-man-mark-85", name: "Iron Man Mark 85", studioReflections: true },
-  { id: "the-twins-atomic-heart", name: "Atomic Heart · Twin", studioReflections: true },
-  { id: "modural-robot-mecha-chimera-dyan-high-poly-mesh", name: "Dyan", studioReflections: true },
-  { id: "dark-knight", name: "Dark Knight", studioReflections: true },
-  { id: "spartan-armour-mkv-halo-reach", name: "Spartan MK V · Reach", studioReflections: true },
-  { id: "scifi-girl-v01", name: "Sci-fi Girl", studioReflections: true },
-  { id: "proxima", name: "Proxima", studioReflections: true },
-  { id: "halloween-the-game-michael-myers-samhain", name: "Michael Myers · Samhain", studioReflections: true },
+  { id: "kitana-mk11-in-mk9-suit", name: "Kitana" },
+  { id: "nier-print-2b", name: "2B · Seated" },
+  { id: "nier-print-9s", name: "9S" },
+  { id: "nier-automata-2b", name: "2B" },
+  { id: "iron-man-mark-1", name: "Iron Man Mark I" },
+  { id: "stellar-blade-lily-stargazer-coat", name: "Lily" },
+  { id: "miles-variant-1", name: "Miles · Masked" },
+  { id: "miles-variant-2", name: "Miles · Unmasked" },
+  { id: "iron-man-mark-85", name: "Iron Man Mark 85" },
+  { id: "the-twins-atomic-heart", name: "Atomic Heart · Twin" },
+  { id: "modural-robot-mecha-chimera-dyan-high-poly-mesh", name: "Dyan" },
+  { id: "dark-knight", name: "Dark Knight" },
+  { id: "spartan-armour-mkv-halo-reach", name: "Spartan MK V · Reach" },
+  { id: "scifi-girl-v01", name: "Sci-fi Girl" },
+  { id: "proxima", name: "Proxima" },
+  { id: "halloween-the-game-michael-myers-samhain", name: "Michael Myers · Samhain" },
 ] as const;
 export type ImportedAvatarModelId = typeof importedAvatarModels[number]["id"];
 
@@ -38,7 +38,6 @@ export function isAvatarModelId(value: unknown): value is AvatarModelId {
   return typeof value === "string" && Object.hasOwn(names, value);
 }
 export const avatarUsesHologram = (id: AvatarModelId): boolean => id === "cortana" || id === "zima";
-export const avatarReflectionIntensity = (id: AvatarModelId): number => importedAvatarModels.some(model => model.id === id && "studioReflections" in model) ? 0.3 : 0;
 export const avatarDefaultActionId = (id: AvatarModelId): string => id === "cortana" ? "idle.catwalk" : id === "zima" ? "idle.zima" : "idle.default";
 
 const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {

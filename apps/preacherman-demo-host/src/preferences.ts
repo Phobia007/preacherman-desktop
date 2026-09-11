@@ -23,6 +23,15 @@ const WITHDRAWN_MODEL_IDS: readonly ModelId[] = [
   "magik-soul-surfer",
   "black-cat-coastal-cat",
   "black-widow-aquatic-assassin",
+  "miles-variant-1",
+  "miles-variant-2",
+  "modural-robot-mecha-chimera-dyan-high-poly-mesh",
+  "dark-knight",
+  "scifi-girl-v01",
+  "proxima",
+  "iron-man-mark-1",
+  "nier-print-9s",
+  "nier-print-2b",
 ];
 
 export const uiCopy = {

@@ -13,14 +13,14 @@ async function load(relative) {
   return import("data:text/javascript;base64," + Buffer.from(outputText.replaceAll("@preacherman/avatar-renderer", renderer)).toString("base64"));
 }
 
-const withdrawn = ["sanhua-wuthering-waves", "magik-soul-surfer", "black-cat-coastal-cat", "black-widow-aquatic-assassin"];
+const withdrawn = ["sanhua-wuthering-waves", "magik-soul-surfer", "black-cat-coastal-cat", "black-widow-aquatic-assassin", "miles-variant-1", "miles-variant-2", "modural-robot-mecha-chimera-dyan-high-poly-mesh", "dark-knight", "scifi-girl-v01", "proxima", "iron-man-mark-1", "nier-print-9s", "nier-print-2b"];
 
 test("withdrawn models stay unavailable when their former slots receive new characters", async () => {
   const bindings=await load("src/surfaces/gallery/galleryModelBindings.ts");
   assert.equal(bindings.galleryModelForProject("bon-iver-viisualiizer"),"kitana-mk11-in-mk9-suit");
-  assert.equal(bindings.galleryModelForProject("mastered-from-chaos"),"nier-print-2b");
-  assert.equal(bindings.galleryModelForProject("emmit-fenn"),"nier-print-9s");
-  assert.equal(bindings.galleryModelForProject("i-will-what-i-want"),"nier-automata-2b");
+  assert.equal(bindings.galleryModelForProject("mastered-from-chaos"),"clove-t-pose");
+  assert.equal(bindings.galleryModelForProject("emmit-fenn"),"nier-automata-2b");
+  assert.equal(bindings.galleryModelForProject("i-will-what-i-want"),"iron-man-mark-85");
   assert.equal(bindings.galleryModelForProject("adventure-time-distant-lands"),null);
   for(const model of withdrawn) assert.equal(bindings.adjacentGalleryModel(model),undefined);
 });

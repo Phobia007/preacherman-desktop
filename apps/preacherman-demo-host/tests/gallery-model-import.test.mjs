@@ -14,7 +14,7 @@ const catalogCode = ts.transpileModule(catalogSource, { compilerOptions: { modul
 const { importedAvatarProfiles } = await import("data:text/javascript;base64," + Buffer.from(catalogCode).toString("base64"));
 
 
-test("new characters fill vacant cards in source order while existing characters retain their slots", async () => {
+test("retained characters occupy consecutive cards in their original order", async () => {
   const source = await readFile(join(host, "src/surfaces/gallery/galleryModelBindings.ts"), "utf8");
   const { outputText } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } });
   const bindings = await import("data:text/javascript;base64," + Buffer.from(outputText).toString("base64"));
@@ -22,9 +22,8 @@ test("new characters fill vacant cards in source order while existing characters
   const manifest = JSON.parse(await readFile(join(host,"avatar-intake-20260911.json"),"utf8"));
   assert.equal(manifest.models.length,16);
   assert.equal(new Set(manifest.models.map(m=>m.id)).size,16);
-  const kept = {0:"cortana",1:"zima",2:"jubilee-midnight-mutant",3:"halo-mk-v-model",5:"punk-magik",8:"clove-t-pose"};
-  let next=0;
-  const order=cards.map((_,i)=>kept[i]??manifest.models[next++]?.id??null);
+  const order = ["cortana", "zima", "jubilee-midnight-mutant", "halo-mk-v-model", "kitana-mk11-in-mk9-suit", "punk-magik", "clove-t-pose", "nier-automata-2b", "stellar-blade-lily-stargazer-coat", "iron-man-mark-85", "the-twins-atomic-heart", "spartan-armour-mkv-halo-reach", "halloween-the-game-michael-myers-samhain"];
+  while(order.length<cards.length) order.push(null);
   assert.deepEqual(cards.map(c=>bindings.galleryModelForProject(c.slug)),order);
   assert.equal(bindings.galleryModelForProject("unknown"),null);
   const available=order.filter(Boolean);
@@ -33,7 +32,7 @@ test("new characters fill vacant cards in source order while existing characters
     assert.equal(renderer.isAvatarModelId(available[i]),true);
   }
   for(const value of ["__proto__","constructor","unknown",null,4]) assert.equal(renderer.isAvatarModelId(value),false);
-  assert.ok(available.includes("nier-print-2b") && available.includes("nier-automata-2b"));
+  assert.ok(!available.includes("nier-print-2b") && available.includes("nier-automata-2b"));
 });
 
 for (const { id } of models) {
@@ -114,6 +113,6 @@ for (const { id } of models) {
 test("all characters share the existing dark stage lights while retaining authored materials", async () => {
   const source = await readFile(join(host, "../../packages/preacherman-avatar-renderer/src/InteractiveAvatarScene.tsx"), "utf8");
   assert.match(source, /environment === "cinematic" \? <CinematicHologramLights \/> : <HologramLights \/>/);
-  assert.doesNotMatch(source, /AuthoredAvatarLights|RoomEnvironment|avatarUsesHologram/);
+  assert.doesNotMatch(source, /AuthoredAvatarLights|RoomEnvironment|StudioReflections|avatarReflectionIntensity|avatarUsesHologram/);
   assert.ok(new Set(Object.values(importedAvatarProfiles).map(profile => profile.actions[0].clipName.split(".idle.")[1])).size >= 5);
 });

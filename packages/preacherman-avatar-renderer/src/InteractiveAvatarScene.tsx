@@ -1,5 +1,3 @@
-import { StudioReflections } from "./StudioReflections";
-import { avatarReflectionIntensity } from "./avatarCatalog";
 import { AvatarFrameMetrics } from "./AvatarFrameMetrics";
 import { OrbitControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -174,7 +172,6 @@ export function InteractiveAvatarScene({
     <>
       {environment === "cinematic" ? <CinematicEnvironment awakened={awakened} isolateCompanion={isolateCompanion} /> : null}
       {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
-      <StudioReflections intensity={environment === "cinematic" ? avatarReflectionIntensity(modelId) : 0} />
       <AvatarModel
         key={`${modelId}:${assetBaseUrl}`}
         actionId={actionId}

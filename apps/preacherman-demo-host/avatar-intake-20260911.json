@@ -27,7 +27,8 @@
       "sourceMotion": "CT_LOC_IDLE_idle_ce9b790da2c6882af00e",
       "maximumSampledDynamicEdgeRatio": 1.1641329758280967,
       "rigScope": "retargeted character idle",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": true
     },
     {
       "id": "nier-print-2b",
@@ -35,8 +36,8 @@
       "motion": "seated",
       "source": "nier-automata-3d-print-figure",
       "rigScope": "Pose-specific seated rig; library idle retargeted to spine, neck and head with anchored seat and restrained arms.",
-      "card": 7,
-      "project": "mastered-from-chaos",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\nier-automata-3d-print-figure.zip",
         "sha256": "4000cd9decee13480f8f181b36e1a449b48837fa6a6080241a10b1f4ec23942a",
@@ -51,7 +52,8 @@
       "clip": "nier-print-2b.idle.seated.v3",
       "sourceMotion": "CT_LOC_SIT_sitting_idle_494883756a7a2b9359a1",
       "maximumSampledDynamicEdgeRatio": 1.2392832480658735,
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "nier-print-9s",
@@ -59,8 +61,8 @@
       "motion": "breathing",
       "source": "nier-automata-3d-print-figure",
       "rigScope": "pose-preserving display rig; folded-arm pose and gentle breathing",
-      "card": 8,
-      "project": "emmit-fenn",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\nier-automata-3d-print-figure.zip",
         "sha256": "4000cd9decee13480f8f181b36e1a449b48837fa6a6080241a10b1f4ec23942a",
@@ -75,14 +77,15 @@
       "clip": "nier-print-9s.idle.breathing.v2",
       "sourceMotion": "authored seated/folded-arm pose; display breathing only; not a full locomotion rig",
       "maximumSampledDynamicEdgeRatio": 1.0118875200781294,
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "nier-automata-2b",
       "name": "2B",
       "motion": "breathing",
-      "card": 10,
-      "project": "i-will-what-i-want",
+      "card": 8,
+      "project": "emmit-fenn",
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\nier-automata-2b.zip",
         "sha256": "6c691dc21422515384279129164b88da475fe41e914807a3017bcf9f499b0222",
@@ -98,14 +101,15 @@
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.1981836866349573,
       "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": true
     },
     {
       "id": "iron-man-mark-1",
       "name": "Iron Man Mark I",
       "motion": "breathing",
-      "card": 11,
-      "project": "acoustic-garage",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\iron-man-mark-1.zip",
         "sha256": "ad581b791af74590117e060280433def66f9b059ee29ae4c4b90f26f3c0e1870",
@@ -121,14 +125,15 @@
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.3320520262887798,
       "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "stellar-blade-lily-stargazer-coat",
       "name": "Lily",
       "motion": "neutral",
-      "card": 12,
-      "project": "witness-gotham",
+      "card": 9,
+      "project": "spacecraft-for-all",
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\stellar-blade-lily-stargazer-coat.zip",
         "sha256": "4a5a33b3a39920f6b58a280ad0e76eb7832ea8f718a5b68674d552b6b4a0cee0",
@@ -144,15 +149,16 @@
       "sourceMotion": "CT_LOC_IDLE_neutral_idle_30cfd31362b959560463",
       "maximumSampledDynamicEdgeRatio": 1.1739370495591106,
       "rigScope": "retargeted character idle",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": true
     },
     {
       "id": "miles-variant-1",
       "name": "Miles · Masked",
       "motion": "standard",
       "source": "miles-from-spider-man-across-the-spider-verse",
-      "card": 13,
-      "project": "toonami",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\miles-from-spider-man-across-the-spider-verse.zip",
         "sha256": "fd72bbd78c6d47ce373e92e173bd84e4a7b77fd5ba4d035b86825bc601ebfc5f",
@@ -168,15 +174,16 @@
       "sourceMotion": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702",
       "maximumSampledDynamicEdgeRatio": 1.2114133352329937,
       "rigScope": "retargeted character idle",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "miles-variant-2",
       "name": "Miles · Unmasked",
       "motion": "standard",
       "source": "miles-from-spider-man-across-the-spider-verse",
-      "card": 14,
-      "project": "halo-5-visualizer",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\miles-from-spider-man-across-the-spider-verse.zip",
         "sha256": "fd72bbd78c6d47ce373e92e173bd84e4a7b77fd5ba4d035b86825bc601ebfc5f",
@@ -192,14 +199,15 @@
       "sourceMotion": "CT_LOC_IDLE_standard_idle_9a8fa8252e9c4fd32702",
       "maximumSampledDynamicEdgeRatio": 1.1706328792581473,
       "rigScope": "retargeted character idle",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "iron-man-mark-85",
       "name": "Iron Man Mark 85",
       "motion": "breathing",
-      "card": 15,
-      "project": "rick-and-morty",
+      "card": 10,
+      "project": "i-will-what-i-want",
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\iron-man-mark-85.zip",
         "sha256": "e11ed9f380e0e8baac867a8f85f608d0bc3eb11ec0e9200fcc464d3bde0e1dec",
@@ -215,14 +223,15 @@
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.3078543032433294,
       "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": true
     },
     {
       "id": "the-twins-atomic-heart",
       "name": "Atomic Heart · Twin",
       "motion": "breathing",
-      "card": 16,
-      "project": "discover-your-patronus",
+      "card": 11,
+      "project": "acoustic-garage",
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\the-twins-atomic-heart.zip",
         "sha256": "6d3bc587d2a6ec64a8855bcc2d06fe0f1b810c99363eeea0ddeea0bf4ed5d0b6",
@@ -238,14 +247,15 @@
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.335882537627604,
       "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": true
     },
     {
       "id": "modural-robot-mecha-chimera-dyan-high-poly-mesh",
       "name": "Dyan",
       "motion": "breathing",
-      "card": 17,
-      "project": "airman-challenge",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\modural-robot-mecha-chimera-dyan-high-poly-mesh.zip",
         "sha256": "bdeb3dd26b066be64a0d8970680b85e369fd8ceef74341ac49d9815c52f321b6",
@@ -261,14 +271,15 @@
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.221558789226437,
       "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "dark-knight",
       "name": "Dark Knight",
       "motion": "breathing",
-      "card": 18,
-      "project": "open-source-rover",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\dark-knight.zip",
         "sha256": "c313ff9ffdd201b83a923e73c61f06abf54434f9b5a0589b247e96456a64db48",
@@ -284,14 +295,15 @@
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.2225777667037754,
       "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "spartan-armour-mkv-halo-reach",
       "name": "Spartan MK V · Reach",
       "motion": "male",
-      "card": 19,
-      "project": "beat-that",
+      "card": 12,
+      "project": "witness-gotham",
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\spartan-armour-mkv-halo-reach.zip",
         "sha256": "e611e30ff9587e0ed1b89fee9cbb09cda3e8bcda0fcd1c8d03dd19452145bb26",
@@ -307,14 +319,15 @@
       "sourceMotion": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
       "maximumSampledDynamicEdgeRatio": 1.0802009802067978,
       "rigScope": "retargeted character idle",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": true
     },
     {
       "id": "scifi-girl-v01",
       "name": "Sci-fi Girl",
       "motion": "breathing",
-      "card": 20,
-      "project": "welcome-to-hogwarts",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\scifi-girl-v01.zip",
         "sha256": "996a13fd4ac8a908707e6b9367fe71ce314754fbe639e1d9c4e76d89321bc830",
@@ -330,14 +343,15 @@
       "sourceMotion": "CT_LOC_IDLE_breathing_idle_4a39f6b2c0f238797cea",
       "maximumSampledDynamicEdgeRatio": 1.3245204460153888,
       "rigScope": "anatomical rig with restrained torso/head breathing; original stance retained",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "proxima",
       "name": "Proxima",
       "motion": "ready",
-      "card": 21,
-      "project": "wonderful-weekends",
+      "card": null,
+      "project": null,
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\proxima.zip",
         "sha256": "aadada86da1471393aede5101c94e257a6483dd7ff58381afc40570f00811390",
@@ -353,14 +367,15 @@
       "sourceMotion": "CT_LOC_IDLE_ready_idle_face296590a98729cf45",
       "maximumSampledDynamicEdgeRatio": 1.0771794465910611,
       "rigScope": "retargeted character idle",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": false
     },
     {
       "id": "halloween-the-game-michael-myers-samhain",
       "name": "Michael Myers · Samhain",
       "motion": "male",
-      "card": 22,
-      "project": "million-piece-mission",
+      "card": 13,
+      "project": "toonami",
       "sourceArchive": {
         "sourceArchive": "D:\\开源项目\\halloween-the-game-michael-myers-samhain.zip",
         "sha256": "d1b4ff7fa1e1d16d154b71f6931907cb89ccd5764ec366ec074a844932310842",
@@ -376,7 +391,8 @@
       "sourceMotion": "CT_LOC_IDLE_idle_8393ae5781b8e64d1906",
       "maximumSampledDynamicEdgeRatio": 1.1382400149158356,
       "rigScope": "retargeted character idle",
-      "reflectionIntensity": 0.3
+      "lightingProfile": "cortana-shared",
+      "available": true
     }
   ],
   "notes": [
@@ -389,5 +405,33 @@
     "Existing six characters and every card title, description and media file unchanged.",
     "Previously withdrawn four characters remain unavailable."
   ],
-  "qualityRevision": "material-and-seated-idle-20260911"
+  "qualityRevision": "material-and-seated-idle-20260911",
+  "availableRuntimeVariants": 7,
+  "galleryModelOrder": [
+    "cortana",
+    "zima",
+    "jubilee-midnight-mutant",
+    "halo-mk-v-model",
+    "kitana-mk11-in-mk9-suit",
+    "punk-magik",
+    "clove-t-pose",
+    "nier-automata-2b",
+    "stellar-blade-lily-stargazer-coat",
+    "iron-man-mark-85",
+    "the-twins-atomic-heart",
+    "spartan-armour-mkv-halo-reach",
+    "halloween-the-game-michael-myers-samhain"
+  ],
+  "withdrawnThisRevision": [
+    "miles-variant-1",
+    "miles-variant-2",
+    "modural-robot-mecha-chimera-dyan-high-poly-mesh",
+    "dark-knight",
+    "scifi-girl-v01",
+    "proxima",
+    "iron-man-mark-1",
+    "nier-print-9s",
+    "nier-print-2b"
+  ],
+  "lightingRevision": "cortana-shared-20260911"
 }
