@@ -64,10 +64,15 @@ test("Task keeps its entry motion while Gallery mounts the original runtime", as
   assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s+active=\{activeSurfaceType === "market"\}[\s\S]*onDetailChange=\{setGalleryDetailOpen\}/);
   assert.equal((app.match(/demo-app-shell__surface-reveal-line/g) ?? []).length, 1);
   assert.equal((app.match(/demo-app-shell__surface-reveal-mask/g) ?? []).length, 1);
-  assert.match(styles, /data-active="true"[^}]*surface-reveal-mask[^}]*\{\s*animation:\s*demo-surface-unfold 1180ms cubic-bezier\(\.7, 0, \.2, 1\) forwards/);
-  assert.match(styles, /data-active="true"[^}]*surface-reveal-line[^}]*\{\s*animation:\s*demo-surface-line-sweep 1180ms cubic-bezier\(\.2, 1, \.3, 1\) forwards/);
-  assert.match(styles, /@keyframes demo-surface-line-sweep\s*\{[\s\S]*34% \{ opacity: 1; transform: scaleX\(1\); \}[\s\S]*100% \{ opacity: 0; transform: scaleX\(1\); \}/);
-  assert.match(styles, /@keyframes demo-surface-unfold\s*\{[\s\S]*0%, 33% \{ clip-path: inset\(50% 0 50% 0\); opacity: 0; \}[\s\S]*82%, 100% \{ clip-path: inset\(0\); opacity: 1; \}/);
+  assert.match(styles, /data-active="true"[^}]*surface-reveal-mask[^}]*\{\s*animation:\s*demo-surface-unfold 1180ms linear forwards/);
+  assert.match(styles, /data-active="true"[^}]*surface-reveal-line[^}]*\{\s*animation:\s*demo-surface-line-sweep 1180ms linear forwards/);
+  assert.match(styles, /@keyframes demo-surface-line-sweep\s*\{[\s\S]*34%, 82% \{ opacity: 1; transform: scaleX\(1\); \}[\s\S]*100% \{ opacity: 0; transform: scaleX\(1\); \}/);
+  const unfold = styles.slice(styles.indexOf("@keyframes demo-surface-unfold"), styles.indexOf("@media (prefers-reduced-motion: reduce)", styles.indexOf("@keyframes demo-surface-unfold")));
+  assert.match(unfold, /0%, 34%/);
+  assert.match(unfold, /cubic-bezier\(\.55, \.02, \.8, \.35\)/);
+  // The aperture never contracts or fades while the charged line opens it.
+  assert.deepEqual([...unfold.matchAll(/clip-path: inset\((\d+)/g)].map(m => Number(m[1])), [50, 0]);
+  assert.deepEqual([...unfold.matchAll(/opacity: ([\d.]+)/g)].map(m => Number(m[1])), [1, 1]);
   assert.match(styles, /data-surface="workspace"[^}]*--demo-surface-reveal-line:\s*var\(--demo-theme-task-text\)/);
   assert.match(styles, /data-surface="market"[^}]*--demo-surface-reveal-line:\s*var\(--demo-theme-gallery-scan, var\(--demo-theme-text\)\)/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*surface-reveal-mask[\s\S]*animation:\s*none[\s\S]*surface-reveal-line[\s\S]*display:\s*none/);
