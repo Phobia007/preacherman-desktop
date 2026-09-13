@@ -1,68 +1,107 @@
 {
   "schemaVersion": 1,
-  "buildId": "avatar-cortana-lighting-compaction-20260911",
+  "buildId": "market-fixed-header-20260913",
   "productVersion": "0.1.0",
-  "sourceTask": "withdraw-nine-models-compact-cards-and-share-cortana-lights",
+  "sourceTask": "remove-market-categories-and-fix-scroll-boundary",
   "sourceThread": null,
-  "sourceState": "Removed the extra studio environment reflections so every character uses the existing Cortana stage lights. Preserved authored materials, textures and previous quality fixes. Withdrew the nine screenshot-selected models, migrated saved activation to null when withdrawn, and packed the thirteen retained characters into consecutive cards without altering card copy or media.",
-  "sourceCommit": "591307c767d5fe5ea1ef1e68d72d9c20e83ffe19",
+  "sourceState": "Removed the unused category/search row. Moved the fixed Market content viewport to 100px below the window top with its separator owned by the host; scrolling media clips at the iframe edge and cannot paint over the signature. Preserved the signature profile/lens by sampling main content without the removed donor header, and preserved the configurator offset, all five sections and model materials.",
+  "sourceCommit": "d911ceb8b6438fefa0021cb9ea654066809989a4",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-11T22:28:12.4021086+08:00",
-  "deployedAt": "2026-09-11T22:28:58.1072115+08:00",
-  "verifiedAt": "2026-09-11T22:46:20.6024153+08:00",
-  "sizeBytes": 616317440,
-  "sha256": "3FAEB6C6358DCE4477D76E8B8CFC86CEB65EDE1C3D8C03569FCEEE0B3EE310C0",
+  "builtAt": "2026-09-13T13:48:06.7153272+08:00",
+  "deployedAt": "2026-09-13T13:49:12.3708748+08:00",
+  "verifiedAt": "2026-09-13T13:51:31.0786038+08:00",
+  "sizeBytes": 616316416,
+  "sha256": "9329E96E33E3EA2DBCB5A3EB05463ABB654403A8BD78EDB6DBD27A78463DF3BB",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911/preacherman-demo-host.exe",
-  "backupSha256": "74D55AC2759AA152DACF27D516F1615316109B7E0E28E58EDE619578F51E700B",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20260913/preacherman-demo-host.exe",
+  "backupSha256": "3FAEB6C6358DCE4477D76E8B8CFC86CEB65EDE1C3D8C03569FCEEE0B3EE310C0",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20260913/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "46b80c83059f5de394a3d236d7929b0704bbab1c",
-  "previousVerificationCommit": "46b80c83059f5de394a3d236d7929b0704bbab1c",
+  "rollbackBaselineCommit": "f44b23ec45b74b460093489d5b301abe3245112d",
+  "previousVerificationCommit": "f44b23ec45b74b460093489d5b301abe3245112d",
   "verification": {
-    "status": "passed-focused-native-check",
-    "scope": "User requested rapid delivery without additional extended verification. No browser preview or full repeated core-route sweep was run this revision.",
-    "typescript": "Renderer build, host typecheck and production build passed.",
-    "focusedTests": "4 checks: consecutive ordering, shared lights, withdrawn availability and preferences migration in both appearances.",
-    "nativeFlow": "Canonical shortcut cold Home; all 13 retained Gallery models ready in sequence; first empty slot is card 14; removed seated model preference cleared; activation updates Home and survives reload; light Home and Gallery checked; original preferences restored and shortcut restarted normally.",
-    "appearances": [
-      "dark",
-      "light"
+    "status": "passed-with-recorded-preexisting-template-diagnostics",
+    "typescript": "Host typecheck and production build passed.",
+    "focusedTests": "18 Market import, theme synchronization, asset preservation, boundary and profile-lens checks passed.",
+    "browserFlow": "Both appearances: five original sections, removed categories/search; real wheel scroll clips below fixed boundary; signature profile opens/closes; configurator opens at preserved 116px and returns to intro.",
+    "nativeFlow": "Same Market checks passed through the canonical shortcut; normal Home startup and Home, Task, Gallery, Settings, Account navigation verified. Original preferences restored; final normal shortcut launch visually verified.",
+    "unchangedSourceTrees": [
+      {
+        "path": "apps/preacherman-demo-host/public/assets/avatars",
+        "gitObject": "e020df441c162900def5ac93a0d2f9540a997954"
+      },
+      {
+        "path": "apps/preacherman-demo-host/public/gallery-v3",
+        "gitObject": "0c64f5f0f61f2561c258519de01e3719c0961ce5"
+      },
+      {
+        "path": "apps/preacherman-demo-host/public/active-theory-gallery",
+        "gitObject": "8e15650bb25402e5dde8c5add2e9e74bdfe6c5c6"
+      },
+      {
+        "path": "apps/preacherman-demo-host/public/market-love/assets",
+        "gitObject": "39aeb1203fbd2fd20ee786246728420a0028bd7b"
+      },
+      {
+        "path": "apps/preacherman-demo-host/src-tauri",
+        "gitObject": "dda95a237a35687c1148fe9acadd97933a107a7c"
+      },
+      {
+        "path": "apps/preacherman-demo-host/src/app-shell/AppShell.tsx",
+        "gitObject": "9fcecfdbebe3015751419a86b177028fda1d8995"
+      },
+      {
+        "path": "packages/preacherman-avatar-renderer",
+        "gitObject": "bbeb5273cd86017be6059e96180743c25f9198d8"
+      }
     ],
-    "galleryModelOrder": [
-      "cortana",
-      "zima",
-      "jubilee-midnight-mutant",
-      "halo-mk-v-model",
-      "kitana-mk11-in-mk9-suit",
-      "punk-magik",
-      "clove-t-pose",
-      "nier-automata-2b",
-      "stellar-blade-lily-stargazer-coat",
-      "iron-man-mark-85",
-      "the-twins-atomic-heart",
-      "spartan-armour-mkv-halo-reach",
-      "halloween-the-game-michael-myers-samhain"
+    "resourceSample": {
+      "SampledAt": "2026-09-13T13:51:31.0786038+08:00",
+      "NativePid": 9504,
+      "StartedAt": "2026-09-13T13:51:09.9053848+08:00",
+      "WindowHandle": 918718,
+      "Responding": true,
+      "WindowCaptured": true,
+      "ProcessIds": [
+        9504,
+        10304,
+        13700,
+        26204,
+        12100,
+        25520,
+        26336,
+        24292,
+        12968,
+        25724,
+        11720
+      ],
+      "NormalizedCpuPercent": 4.0,
+      "WorkingSetMiB": 1996.1,
+      "GpuDedicatedBytes": 3392335872.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 18616700,
+      "TemporaryProcesses": [],
+      "Listeners": [
+        {
+          "LocalPort": 8787,
+          "OwningProcess": 24292
+        }
+      ],
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
+    },
+    "consoleBaselines": [
+      "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration/output/playwright/activation-baseline-native-report.json",
+      "D:/preacherman/output/avatar-cortana-lighting-20260911/desktop-verification/native-final-report.json",
+      "D:/preacherman/output/avatar-prepare-20260911/desktop-verification/native-qualified-report.json",
+      "D:/preacherman/output/avatar-quality-20260911/desktop-verification/native-qualified-report.json"
     ],
-    "withdrawnThisRevision": [
-      "miles-variant-1",
-      "miles-variant-2",
-      "modural-robot-mecha-chimera-dyan-high-poly-mesh",
-      "dark-knight",
-      "scifi-girl-v01",
-      "proxima",
-      "iron-man-mark-1",
-      "nier-print-9s",
-      "nier-print-2b"
-    ],
-    "noWithdrawnRequests": true,
-    "newConsoleErrors": [],
-    "preexistingConsoleErrors": [
+    "newErrors": [],
+    "observedErrors": [
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
@@ -77,8 +116,6 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Connecting to 'https://www.datocms-assets.com/223669/1786208283-betteroff-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
@@ -89,93 +126,25 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322316302%20(1).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/storiesretold.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/henessey.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323267016.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/autoneum_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322994106.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322228996.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322166826.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
-    "consoleBaseline": "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\baseline-native-qualified-report.json",
-    "additionalConsoleBaseline": "D:/preacherman/output/avatar-prepare-20260911/desktop-verification/native-qualified-report.json",
-    "initialAutomationAttempts": "Preserved original reports: pointer-dismissal and card-hit timing; final run closes navigation using Escape and waits for the authored card entrance. No failed report was changed.",
-    "unchangedSourceTrees": [
-      {
-        "path": "apps/preacherman-demo-host/public",
-        "gitObject": "ee0bbfed02f5e26091835da17072edd06df4be3b"
-      },
-      {
-        "path": "apps/preacherman-demo-host/src-tauri",
-        "gitObject": "dda95a237a35687c1148fe9acadd97933a107a7c"
-      },
-      {
-        "path": "packages/preacherman-avatar-renderer/src/HologramLights.tsx",
-        "gitObject": "61c5f617e91d70fb9d25706e24dcb5df4f16e293"
-      },
-      {
-        "path": "packages/preacherman-avatar-renderer/src/AvatarModel.tsx",
-        "gitObject": "6bf9b970d0cff5149b05b8302d5445382dcbce7f"
-      }
-    ],
-    "resourceSample": {
-      "SampledAt": "2026-09-11T22:46:20.6024153+08:00",
-      "NativePid": 37852,
-      "StartedAt": "2026-09-11T22:45:59.1278935+08:00",
-      "WindowHandle": 853836,
-      "Responding": true,
-      "WindowCaptured": true,
-      "ProcessIds": [
-        37852,
-        47388,
-        43408,
-        40416,
-        43688,
-        43548,
-        35580,
-        42272,
-        42584,
-        47944,
-        25548
-      ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1949.7,
-      "GpuDedicatedBytes": 5358776320.0,
-      "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 17052096,
-      "TemporaryProcesses": [],
-      "Listeners": [
-        {
-          "LocalPort": 8787,
-          "OwningProcess": 42272
-        }
-      ],
-      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
-    },
+    "initialPreviewReport": "preview-initial-report.json retained; first run stopped at an exact previously recorded initSync diagnostic, then rerun with the verified historical baseline.",
     "evidence": [
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\focused-tests.log",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\renderer-build.log",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\typecheck.log",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\production-build.log",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-report.json",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-retry-report.json",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-final-report.json",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\final-resources.json",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\final-native-home.png",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-dark-card-5.png",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-dark-card-8.png",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-dark-card-10.png",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-dark-card-11.png",
-      "D:\\preacherman\\output\\avatar-cortana-lighting-20260911\\desktop-verification\\native-light-gallery.png"
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\preview-initial-report.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\source-checks.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\final-native-home.png",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-dark-top.png",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-dark-scrolled.png",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-light-top.png",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-light-scrolled.png",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-dark-profile.png",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-light-profile.png",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-dark-configurator.png",
+      "D:\\preacherman\\output\\playwright\\market-header-20260913\\native-light-configurator.png"
     ]
   },
   "releaseAttempts": [
@@ -374,9 +343,18 @@
       "deployedAt": "2026-09-11T22:28:58.1072115+08:00",
       "verifiedAt": "2026-09-11T22:46:20.6024153+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911"
+    },
+    {
+      "buildId": "market-fixed-header-20260913",
+      "sourceCommit": "d911ceb8b6438fefa0021cb9ea654066809989a4",
+      "sha256": "9329E96E33E3EA2DBCB5A3EB05463ABB654403A8BD78EDB6DBD27A78463DF3BB",
+      "status": "passed-with-recorded-preexisting-template-diagnostics",
+      "deployedAt": "2026-09-13T13:49:12.3708748+08:00",
+      "verifiedAt": "2026-09-13T13:51:31.0786038+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20260913"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20260913/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
