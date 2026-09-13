@@ -348,6 +348,26 @@
       "deployedAt": "2026-09-13T16:59:42.3233820+08:00",
       "verifiedAt": "2026-09-13T17:03:05.8276015+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-orbit-before-20260913"
+    },
+    {
+      "buildId": "gallery-type-video-20260913-first-attempt",
+      "sha256": "EC87A65C233B0144CAE9CA106F51F5A2EE2334E3417E2897F6C370E78BFC5925",
+      "status": "rolled-back-console-error",
+      "restoredSha256": "D7EEE9C7DB5D660E673FC4CEFBDF5C51664445EC99CC72B1709DD4A3FED197A5",
+      "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "at": "2026-09-13T17:44:34.1030057+08:00",
+      "reason": "Legacy WorkItem deferred click invoked after destruction; native flow passed but console verification rejected this release.",
+      "failedPair": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-type-video-20260913-failed-callback",
+      "verification": {
+        "routes": [
+          "Home",
+          "Task",
+          "Gallery",
+          "Settings"
+        ],
+        "passed": true
+      },
+      "evidence": "D:\\preacherman\\output\\playwright\\gallery-type-video-20260913\\native-failed-callback.json"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-orbit-before-20260913/desktop-build-manifest.json",
