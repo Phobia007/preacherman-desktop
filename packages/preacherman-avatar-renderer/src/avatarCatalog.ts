@@ -42,7 +42,7 @@ export const avatarUsesHologram = (id: AvatarModelId): boolean => id === "cortan
 export const avatarDefaultActionId = (id: AvatarModelId): string => id === "cortana" ? "idle.catwalk" : id === "zima" ? "idle.zima" : "idle.default";
 
 const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {
-  "apex-legend-pathfinder": "greeting",
+  "apex-legend-pathfinder": "happy",
   "black-cat-coastal-cat": "female",
   "black-widow-aquatic-assassin": "breathing",
   "clove-t-pose": "neutral",
