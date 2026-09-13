@@ -11,7 +11,7 @@
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
   "builtAt": "2026-09-13T15:35:35.3493367+08:00",
   "deployedAt": "2026-09-13T15:37:13.8611346+08:00",
-  "verifiedAt": "2026-09-13T15:39:40.3020955+08:00",
+  "verifiedAt": "2026-09-13T15:45:52.6393654+08:00",
   "sizeBytes": 628150784,
   "sha256": "9D697D9585976E13BFD6C35CB121A4A778B831E1A865E86E7D5CED6E85EA9DA0",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
@@ -60,35 +60,35 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-13T15:39:40.3020955+08:00",
-      "NativePid": 4956,
-      "StartedAt": "2026-09-13T15:39:19.5801434+08:00",
-      "WindowHandle": 1115814,
+      "SampledAt": "2026-09-13T15:45:52.6393654+08:00",
+      "NativePid": 27828,
+      "StartedAt": "2026-09-13T15:45:37.4128784+08:00",
+      "WindowHandle": 720918,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        4956,
-        24164,
-        21732,
-        7520,
-        29496,
-        23320,
-        25484,
+        27828,
+        21536,
+        28680,
+        29676,
+        10284,
+        27644,
+        22612,
+        26676,
         7788,
-        25840,
-        16796,
-        13776
+        29520,
+        22988
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2012.9,
-      "GpuDedicatedBytes": 3416752128.0,
+      "WorkingSetMiB": 2091.0,
+      "GpuDedicatedBytes": 3414654976.0,
       "MaxGpuEngineUtilization": 10.0,
-      "FreeRamKiB": 18553860,
+      "FreeRamKiB": 18412408,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 7788
+          "OwningProcess": 26676
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
@@ -134,7 +134,10 @@
       "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\final-resources.json",
       "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\final-native-home.png",
       "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\dark-overview.jpg",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\light-overview.jpg"
+      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\light-overview.jpg",
+      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\native-settled-core-report.json",
+      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\native-core-market-settled.png",
+      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\native-core-workspace-settled.png"
     ]
   },
   "releaseAttempts": [
@@ -322,7 +325,7 @@
       "sha256": "74D55AC2759AA152DACF27D516F1615316109B7E0E28E58EDE619578F51E700B",
       "status": "passed",
       "deployedAt": "2026-09-11T21:38:04.8603099+08:00",
-      "verifiedAt": "2026-09-11T21:44:46.5185700+08:00",
+      "verifiedAt": "2026-09-11T21:44:46.51857+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\model-quality-before-20260911"
     },
     {
