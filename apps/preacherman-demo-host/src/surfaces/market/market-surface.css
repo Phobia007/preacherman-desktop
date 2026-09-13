@@ -66,3 +66,9 @@
   outline: 2px solid var(--demo-theme-market-focus);
   outline-offset: 4px;
 }
+
+/* The logo finishes before any product column enters the viewport. */
+.market-surface[data-logo-ready="false"] .market-profile__toggle { opacity: 0; }
+.market-surface[data-entrance="logo"] .market-surface__frame { visibility: hidden; }
+.market-surface[data-entrance="logo"]::before { opacity: 0; }
+.market-surface .market-profile__toggle:disabled { cursor: default; }

@@ -4,7 +4,8 @@ import { TaskProfileLens } from "./TaskProfileLens";
 import "./market-profile.css";
 
 /** Task's original spatial lens, with Market's current image/text viewport as its source. */
-export function MarketProfile({ open, onOpenChange, frameRef, onLensActiveChange }: {
+export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, onLensActiveChange }: {
+  disabled?: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   frameRef: RefObject<HTMLIFrameElement>;
@@ -72,7 +73,7 @@ export function MarketProfile({ open, onOpenChange, frameRef, onLensActiveChange
 
   return (
     <div ref={profileRef} className="market-profile" data-open={open} data-phase={phase}>
-      <button ref={toggleRef} type="button" className="market-profile__toggle" aria-expanded={open}
+      <button ref={toggleRef} disabled={disabled} type="button" className="market-profile__toggle" aria-expanded={open}
         aria-controls="market-profile-content" onClick={() => onOpenChange(!open)}>
         {open ? "关闭" : "Preacherman"}
       </button>
