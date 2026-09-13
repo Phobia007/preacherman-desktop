@@ -34,7 +34,9 @@
     return workItems;
   };
 
+  const nativeOwnsNavigation = () => document.documentElement.dataset.galleryNavigationOwner === "native";
   const findCardHit = (x, y) => {
+    if (nativeOwnsNavigation()) return null;
     if (document.elementFromPoint(x, y)?.closest("[data-preacherman-chat]")) return null;
     if (
       typeof Interaction3D === "undefined"
@@ -100,7 +102,7 @@
     });
     setTimeout(() => {
       if (
-        AppState.get("Router/state") !== routeBefore
+        nativeOwnsNavigation() || AppState.get("Router/state") !== routeBefore
         || AppState.get("Work/project") !== projectBefore
       ) return;
       match.view.navigate?.(`work/${match.view.data.perma}`);
@@ -108,6 +110,7 @@
   };
 
   const install = () => {
+    if (nativeOwnsNavigation()) { diagnostics.installed = true; diagnostics.owner = "native"; return; }
     const workItems = findWorkItems();
     if (!workItems?.viewState?.views?.length) {
       setTimeout(install, 100);

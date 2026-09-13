@@ -17,15 +17,21 @@ export function MarketSurface() {
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
-    frameRef.current?.toggleAttribute("inert", profileOpen || lensActive || entrance !== "complete");
-  }, [profileOpen, lensActive, attempt, entrance]);
+    frameRef.current?.toggleAttribute("inert", profileOpen || lensActive);
+  }, [profileOpen, lensActive, attempt]);
 
   useEffect(() => {
     let disposed = false;
     let animation: Animation | undefined;
+    let fontDeadline: ReturnType<typeof setTimeout>;
     const logo = surfaceRef.current?.querySelector<HTMLElement>(".market-profile__toggle");
     if (!logo) return;
-    void document.fonts.load('38px "Market Task Signature"').then(async () => {
+    // Font readiness may lag on a cold launch; it must never hold the page inert.
+    void Promise.race([
+      document.fonts.load('38px "Market Task Signature"'),
+      new Promise<void>(resolve => { fontDeadline = setTimeout(resolve, 250); }),
+    ]).then(async () => {
+      clearTimeout(fontDeadline);
       if (disposed) return;
       if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         animation = logo.animate([{ opacity: 0 }, { opacity: 1 }], {
@@ -34,8 +40,8 @@ export function MarketSurface() {
         await animation.finished;
       }
       if (!disposed) setLogoReady(true);
-    }).catch(() => { if (!disposed) setLogoReady(true); });
-    return () => { disposed = true; animation?.cancel(); };
+    }).catch(() => { clearTimeout(fontDeadline); if (!disposed) setLogoReady(true); });
+    return () => { disposed = true; clearTimeout(fontDeadline); animation?.cancel(); };
   }, []);
 
   useEffect(() => {
@@ -44,14 +50,13 @@ export function MarketSurface() {
     if (!doc) return;
     let disposed = false;
     let motion: ReturnType<typeof animateMarketPanels> | undefined;
-    const portrait = doc.querySelector<HTMLImageElement>(".descriptive-card img");
-    void Promise.all([portrait?.decode().catch(() => {}), doc.fonts.ready]).then(async () => {
-      if (disposed) return;
-      entranceStarted.current = true;
-      motion = animateMarketPanels(doc, window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-      setEntrance("panels");
-      await motion.finished;
-      if (!disposed) { setEntrance("complete"); motion.cancel(); }
+    // Layout is ready at the embed handshake. Images and fonts load independently
+    // while native scrolling remains available throughout the panel animation.
+    entranceStarted.current = true;
+    motion = animateMarketPanels(doc, window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    setEntrance("panels");
+    void motion.finished.then(() => {
+      if (!disposed) { setEntrance("complete"); motion?.cancel(); }
     }).catch(() => { if (!disposed) setEntrance("complete"); });
     return () => { disposed = true; motion?.cancel(); };
   }, [logoReady, status, attempt]);
@@ -99,7 +104,7 @@ export function MarketSurface() {
           {status === "loading" ? "Opening Market…" : (
             <>
               <p>Market could not open.</p>
-              <button type="button" onClick={() => setAttempt(value => value + 1)}>Try again</button>
+              <button type="button" onClick={() => { entranceStarted.current = false; setEntrance("logo"); setStatus("loading"); setAttempt(value => value + 1); }}>Try again</button>
             </>
           )}
         </div>

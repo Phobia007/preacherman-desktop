@@ -42,9 +42,22 @@ test('small-window close preserves the project and only explicit back closes det
   assert.equal(f.api.snapshot.smallWindow,true);
 });
 
-test('reentry cancels the old closing timer and reopens the small window',()=>{
-  const f=fixture();f.enter({perma:'one',title:'One'});f.api.back();f.enter({perma:'two',title:'Two'});f.finish();
-  assert.equal(f.api.snapshot.phase,'open');assert.equal(f.api.snapshot.project,'two');
+test('late old routes cannot cancel exit or replace the newly selected card',()=>{
+  const one={perma:'one',title:'One'},two={perma:'two',title:'Two'};
+  const f=fixture([one,two]);f.api.openProject('one');f.api.back();
+  assert.equal(f.api.acceptsProjectRoute('one'),false);
+  f.enter(one);f.enter(two);f.finish();
+  assert.equal(f.api.snapshot.phase,'closed');
+  f.api.openProject('two');f.enter(one);
+  assert.equal(f.api.snapshot.project,'two');
+  assert.equal(f.api.acceptsProjectRoute('two'),true);
+  assert.equal(f.api.acceptsProjectRoute('one'),false);
+});
+
+test('duplicate router acknowledgement does not reopen a dismissed video',()=>{
+  const project={perma:'one',title:'One'};const f=fixture([project]);
+  f.api.openProject('one');f.api.closeWindow();f.enter(project);
+  assert.equal(f.api.snapshot.smallWindow,false);
 });
 
 test('detail carries the card cover without leaking it into the next card',()=>{

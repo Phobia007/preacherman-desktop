@@ -17,3 +17,7 @@
     max-width: min(450px, calc(var(--gallery-detail-video-left, 22vw) + 32px));
   }
 }
+
+/* Only painted chat rows own input. The tall transparent log must not cover cards. */
+html[data-gallery-native-rail="true"] [data-preacherman-chat] [role="log"] { pointer-events: none; }
+html[data-gallery-native-rail="true"] [data-preacherman-chat] [role="log"] > * { pointer-events: auto; }

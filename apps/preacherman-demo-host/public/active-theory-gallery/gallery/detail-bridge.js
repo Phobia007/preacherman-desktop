@@ -13,6 +13,10 @@
   };
   let work, video, camera, foreground, savedScroll, exitTimer;
   let switching = false;
+  // Ownership is stable across open/closing phases; visibility is not ownership.
+  document.documentElement.dataset.galleryNavigationOwner = "native";
+  let selectedProject;
+  const acceptsProjectRoute = id => selectedProject === undefined || selectedProject === id;
   let requestedActive = true, windowVisible = true, warmed = false, paused = false;
   const pausedMedia = new Set();
   function syncActivity() {
@@ -87,8 +91,9 @@
     subscribeInput(listener) { inputListeners.add(listener); return () => inputListeners.delete(listener); },
     setRailCursor(cursor) { if (document.body) document.body.style.cursor = cursor; },
     previewProject(id) { const project = projects().find(project => project.perma === id); if (project && rail() && work.get?.("WorkItems/videoURL", true) !== project.videoURL) work.set("WorkItems/videoURL", project.videoURL); },
-    openProject(id) { const project = projects().find(project => project.perma === id); if (project && rail()) { work.set("Work/project", project); work.set("WorkItems/videoURL", project.videoURL); work.navigate?.("work/" + project.perma); } },
-    showWork() { work.set("ViewController/contact", false); work.set("Work/project", null); work.fire("ViewController/goToWork"); },
+    acceptsProjectRoute,
+    openProject(id) { const project = projects().find(project => project.perma === id); if (project && rail()) { selectedProject = id; work.set("Work/project", project); work.set("WorkItems/videoURL", project.videoURL); work.navigate?.("work/" + project.perma); } },
+    showWork() { selectedProject = null; work.set("ViewController/contact", false); work.set("Work/project", null); work.fire("ViewController/goToWork"); },
     toggleContact() { work.set("ViewController/contact", !contact); },
     setActive(active, visible = true) { requestedActive = active; windowVisible = visible; syncActivity(); },
     subscribe(listener) {
@@ -104,6 +109,7 @@
       const currentIndex = index();
       const target = currentIndex >= 0 ? projects()[currentIndex + direction] : null;
       if (!target) return false;
+      selectedProject = target.perma;
       switching = true;
       try {
         work.set("Work/project", target);
@@ -119,6 +125,7 @@
     },
     back() {
       if (state.phase !== "open") return;
+      selectedProject = null;
       work.set("Work/project", null);
     },
     geometry() {
@@ -176,6 +183,10 @@
         syncActivity();
       });
       work.bind("Work/project", data => {
+        if (data && !acceptsProjectRoute(data.perma)) return;
+        // A router acknowledgement must not restart entry or resurrect a closed video.
+        if (data && state.phase === "open" && data.perma === state.project) return;
+        if (!data) selectedProject = null;
         clearTimeout(exitTimer);
         if (data) {
           if (state.phase === "closed") savedScroll = controller()?.scroll;

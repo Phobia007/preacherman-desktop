@@ -10,3 +10,21 @@ if (!source.includes(after)) {
   source = source.replace(before, after);
   fs.writeFileSync(file, source);
 }
+
+// The native picker owns navigation even while the legacy detail is visible.
+const navigationPatches = [
+  [
+    "document.documentElement.dataset.galleryNativeRail===\"true\"||typeof _this.get!==\"function\"",
+    "document.documentElement.dataset.galleryNavigationOwner===\"native\"||document.documentElement.dataset.galleryNativeRail===\"true\"||typeof _this.get!==\"function\""
+  ],
+  [
+    "val==`work/${_this.data.perma}`&&(_this.set(\"Work/project\",_this.data)",
+    "val==`work/${_this.data.perma}`&&(window.PreachermanGalleryDetail?.acceptsProjectRoute(_this.data.perma)??true)&&(_this.set(\"Work/project\",_this.data)"
+  ]
+];
+for (const [before, after] of navigationPatches) {
+  if (source.includes(after)) continue;
+  if (source.split(before).length !== 2) throw new Error("Gallery navigation patch drift");
+  source = source.replace(before, after);
+}
+fs.writeFileSync(file, source);
