@@ -1,150 +1,163 @@
 {
   "schemaVersion": 1,
-  "buildId": "pathfinder-happy-20260914",
+  "buildId": "gallery-market-interaction-20260914",
   "productVersion": "0.1.0",
-  "sourceTask": "bind-supplied-happy-idle-to-pathfinder",
+  "sourceTask": "fix-gallery-card-selection-exit-and-market-early-scroll",
   "sourceThread": null,
-  "sourceState": "Pathfinder uses the complete 2.916667-second Happy_Idle.fbx supplied by the user. Mixamo rotations adapted to its original 145-bone mechanical skeleton with fixed limb lengths and proportionate pelvis/foot motion; original mesh, skin, inverse bind, material and texture buffers preserved exactly. A 150 ms endpoint alignment closes the default loop. Shared lighting, Market images, other characters, navigation and Home startup remain unchanged",
-  "sourceCommit": "9c9570b24f8fc2a705ab9571112a6185f7f6089b",
+  "sourceState": "Gallery native orbit owns card navigation across detail open/closing phases; obsolete router callbacks cannot replace a selection or reopen closed details. Duplicate acknowledgements preserve dismissed video state. Transparent chat log whitespace no longer intercepts visible cards, while actual messages and controls retain input. Market retains 420 ms logo / 760 ms panels, bounds the logo font wait and releases scrolling independently of image decode and document font readiness. Retry resets entrance readiness. Existing models, animations, authored assets, theme colors and Home startup preserved.",
+  "sourceCommit": "43fa19da55344a361b14c7f0cd486a8d128141bb",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-14T01:54:59.1350341+08:00",
-  "deployedAt": "2026-09-14T01:56:00.4130196+08:00",
-  "verifiedAt": "2026-09-14T01:58:40.7886248+08:00",
+  "builtAt": "2026-09-14T02:33:58.2462733+08:00",
+  "deployedAt": "2026-09-14T02:35:26.7194125+08:00",
+  "verifiedAt": "2026-09-14T02:39:05.8120001+08:00",
   "sizeBytes": 670041600,
-  "sha256": "BDFE84DA43F963590298299DC32C4A19311A40B1916F3403CEE405F74410818C",
+  "sha256": "2D59A66E5CE9FC2BDA2E20588111E63F789350EFE2B73200463D62BA30106AA0",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-happy-before-20260914/preacherman-demo-host.exe",
-  "backupSha256": "DE04AFF0FD6D4A1CC93DF1F1A32ED03031B865EE233B95D81619439D73783576",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-happy-before-20260914/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914/preacherman-demo-host.exe",
+  "backupSha256": "BDFE84DA43F963590298299DC32C4A19311A40B1916F3403CEE405F74410818C",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "622100171dbbc3bef9b41067f2e9b3f4b2dbfd24",
-  "previousVerificationCommit": "622100171dbbc3bef9b41067f2e9b3f4b2dbfd24",
+  "rollbackBaselineCommit": "3d070e4463b9f1bd2e64133e798214d6d1ca22a1",
+  "previousVerificationCommit": "3d070e4463b9f1bd2e64133e798214d6d1ca22a1",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "rendererBuild": "passed",
       "typecheck": "passed",
-      "testEvidence": "All eight focused checks passed: Pathfinder authored geometry/texture and loop checks, actual runtime skinning/default playback, and preservation of the six previously assigned FBX/ActorCore motions.",
-      "scope": "Change-scoped tests for Pathfinder and prior custom defaults; not the complete repository test suite.",
-      "motions": [
-        {
-          "clip": "apex-legend-pathfinder.idle.happy.v2",
-          "channels": 53,
-          "duration": 2.9166666666666665,
-          "runtimeSha256": "36507991df9c0ca9503adf6c953e44233fe9b7525a2fba842b4e6e736aa7bfde",
-          "runtimeBytes": 14985064,
-          "originalBinarySha256": "5c6272d8a1ac32e87d4bc6cac1021ccd9ae1e3638d0ec9fcbca0c77a191b6752",
-          "originalBinaryBytes": 14808312,
-          "originalMeshSkinMaterialImageBuffersUnchanged": true,
-          "loopSeam": 0,
-          "id": "apex-legend-pathfinder",
-          "source": "D:/开源项目/Happy_Idle.fbx",
-          "sourceSha256": "0f6b7fd2b90d9c3bbcaf8a86d6c12bbf961c045e8988107375dafcab47d00e71",
-          "sourceDuration": 2.9166666666666665,
-          "sourceFps": 60,
-          "sampleFps": 30,
-          "boneMapping": {
-            "b_pelvis": "def_c_hip",
-            "b_spine0": "def_c_spineA",
-            "b_spine1": "def_c_spineB",
-            "b_spine3": "def_c_spineC",
-            "b_neck0": "def_c_neckA",
-            "b_head": "def_c_head",
-            "b_l_thigh": "def_l_thigh",
-            "b_l_calf": "def_l_knee",
-            "b_l_foot": "def_l_ankle",
-            "b_l_toe": "def_l_ball",
-            "b_l_clav": "def_l_clav",
-            "b_l_upperarm": "def_l_shoulder",
-            "b_l_forearm": "def_l_elbow",
-            "b_l_hand": "def_l_wrist",
-            "b_l_thumb1": "def_l_finThumbA",
-            "b_l_thumb2": "def_l_finThumbB",
-            "b_l_thumb3": "def_l_finThumbC",
-            "b_l_index1": "def_l_finIndexA",
-            "b_l_index2": "def_l_finIndexB",
-            "b_l_index3": "def_l_finIndexC",
-            "b_l_middle1": "def_l_finMidA",
-            "b_l_middle2": "def_l_finMidB",
-            "b_l_middle3": "def_l_finMidC",
-            "b_l_ring1": "def_l_finRingA",
-            "b_l_ring2": "def_l_finRingB",
-            "b_l_ring3": "def_l_finRingC",
-            "b_l_pinky1": "def_l_finPinkyA",
-            "b_l_pinky2": "def_l_finPinkyB",
-            "b_l_pinky3": "def_l_finPinkyC",
-            "b_r_thigh": "def_r_thigh",
-            "b_r_calf": "def_r_knee",
-            "b_r_foot": "def_r_ankle",
-            "b_r_toe": "def_r_ball",
-            "b_r_clav": "def_r_clav",
-            "b_r_upperarm": "def_r_shoulder",
-            "b_r_forearm": "def_r_elbow",
-            "b_r_hand": "def_r_wrist",
-            "b_r_thumb1": "def_r_finThumbA",
-            "b_r_thumb2": "def_r_finThumbB",
-            "b_r_thumb3": "def_r_finThumbC",
-            "b_r_index1": "def_r_finIndexA",
-            "b_r_index2": "def_r_finIndexB",
-            "b_r_index3": "def_r_finIndexC",
-            "b_r_middle1": "def_r_finMidA",
-            "b_r_middle2": "def_r_finMidB",
-            "b_r_middle3": "def_r_finMidC",
-            "b_r_ring1": "def_r_finRingA",
-            "b_r_ring2": "def_r_finRingB",
-            "b_r_ring3": "def_r_finRingC",
-            "b_r_pinky1": "def_r_finPinkyA",
-            "b_r_pinky2": "def_r_finPinkyB",
-            "b_r_pinky3": "def_r_finPinkyC"
-          },
-          "footGoalMaxError": 3.3653330538010517e-07,
-          "originalGLBSha256": "f0636b672b13a4fc63a75e1fcd7d713fa7303d91af6f39b767122121be05d0ed",
-          "loopMode": "complete source idle with 150ms endpoint alignment"
-        }
-      ]
+      "testEvidence": "58 focused Gallery/Market/activation/media checks passed; behavioral regressions include stale routes during exit and new selection, duplicate acknowledgements and native/legacy input ownership.",
+      "scope": "Change-scoped checks, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through canonical desktop shortcut. Pathfinder Happy Idle inspected in Gallery and activated as the shared Home companion in both appearances. Core Home, Task, Gallery, Market, Settings and Account navigation inspected. Original selection, locale and appearance restored before final normal shortcut restart; Home visually checked.",
+    "nativeFlow": "Cold launch through canonical shortcut. Real mouse selection of left/right cards, repeated exits, obsolete-route delivery, dismissed-video acknowledgement and cancellation of arrow transitions verified in both appearances. Market scrolled during entrance while image decode/document fonts/logo font promises were deliberately held pending; immediate wheel on reentry also passed. Core Home, Task, Gallery, Market, Settings and Account visually inspected. Preferences restored before final normal shortcut restart.",
+    "gallery": [
+      {
+        "appearance": "dark",
+        "card": "watson-masters",
+        "realPointer": true,
+        "staleRouteIgnored": true,
+        "exitStable": true
+      },
+      {
+        "appearance": "dark",
+        "card": "climatune",
+        "realPointer": true,
+        "staleRouteIgnored": true,
+        "exitStable": true
+      },
+      {
+        "appearance": "dark",
+        "card": "frontier-within",
+        "realPointer": true,
+        "staleRouteIgnored": true,
+        "exitStable": true
+      },
+      {
+        "appearance": "dark",
+        "card": "watson-masters",
+        "realPointer": true,
+        "staleRouteIgnored": true,
+        "exitStable": true
+      },
+      {
+        "appearance": "dark",
+        "cancelInFlightNavigation": true
+      },
+      {
+        "appearance": "light",
+        "card": "watson-masters",
+        "realPointer": true,
+        "staleRouteIgnored": true,
+        "exitStable": true
+      },
+      {
+        "appearance": "light",
+        "card": "climatune",
+        "realPointer": true,
+        "staleRouteIgnored": true,
+        "exitStable": true
+      },
+      {
+        "appearance": "light",
+        "card": "frontier-within",
+        "realPointer": true,
+        "staleRouteIgnored": true,
+        "exitStable": true
+      },
+      {
+        "appearance": "light",
+        "card": "watson-masters",
+        "realPointer": true,
+        "staleRouteIgnored": true,
+        "exitStable": true
+      },
+      {
+        "appearance": "light",
+        "cancelInFlightNavigation": true
+      }
+    ],
+    "market": [
+      {
+        "appearance": "dark",
+        "firstPanelsMs": 902,
+        "earlyScrollY": 580,
+        "blockedImageDecodeAndFonts": true,
+        "scrollsDuringEntrance": true
+      },
+      {
+        "appearance": "dark",
+        "reentryWheel": true
+      },
+      {
+        "appearance": "light",
+        "firstPanelsMs": 875,
+        "earlyScrollY": 580,
+        "blockedImageDecodeAndFonts": true,
+        "scrollsDuringEntrance": true
+      },
+      {
+        "appearance": "light",
+        "reentryWheel": true
+      }
+    ],
     "resourceSample": {
-      "SampledAt": "2026-09-14T01:58:40.7886248+08:00",
-      "NativePid": 32604,
-      "StartedAt": "2026-09-14T01:58:25.3416453+08:00",
-      "WindowHandle": 3802794,
+      "SampledAt": "2026-09-14T02:39:05.8120001+08:00",
+      "NativePid": 33976,
+      "StartedAt": "2026-09-14T02:38:50.1959792+08:00",
+      "WindowHandle": 1837358,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        32604,
-        5536,
-        32124,
-        34072,
-        18080,
-        34216,
-        34228,
-        33504,
-        31164,
-        34444,
-        23012
+        33976,
+        27832,
+        14812,
+        24684,
+        16748,
+        26384,
+        26700,
+        26776,
+        31944,
+        29272,
+        34372
       ],
-      "NormalizedCpuPercent": 5.98,
-      "WorkingSetMiB": 1949.7,
-      "GpuDedicatedBytes": 5498793984.0,
+      "NormalizedCpuPercent": 5.0,
+      "WorkingSetMiB": 1902.2,
+      "GpuDedicatedBytes": 5499322368.0,
       "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 16438620,
+      "FreeRamKiB": 16683332,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 33504
+          "OwningProcess": 26776
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
     },
     "consoleBaseline": "D:/preacherman/output/pathfinder-20260913/native-qualified-report.json",
-    "diagnosticComparison": "Existing hydration/CSP diagnostics compared with the previously verified Pathfinder native report. Only external asset URL paths are normalized within the same CSP message and origin; no new console errors.",
+    "diagnosticComparison": "Known hydration/CSP diagnostics compared with previously verified native baseline; only external asset URL paths normalized within same CSP message and origin. No new console errors.",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -172,18 +185,21 @@
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322166826.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/thorne_installation.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\native-report.json",
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\preview-report.json",
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\logs\\production-build.log",
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\logs\\source-tests.log",
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\logs\\typecheck.log",
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\final-resources.json",
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\final-native-home.png",
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\native-core-contact.jpg",
-      "D:\\preacherman\\output\\pathfinder-happy-20260914\\native-motion-contact.jpg"
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\verify.cjs",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\final-native-home.png",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-dark-gallery-cards.png",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-light-gallery-cards.png",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-dark-market-early-scroll.png",
+      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-light-market-early-scroll.png"
     ]
   },
   "releaseAttempts": [
@@ -525,9 +541,18 @@
       "deployedAt": "2026-09-14T01:56:00.4130196+08:00",
       "verifiedAt": "2026-09-14T01:58:40.7886248+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-happy-before-20260914"
+    },
+    {
+      "buildId": "gallery-market-interaction-20260914",
+      "sourceCommit": "43fa19da55344a361b14c7f0cd486a8d128141bb",
+      "sha256": "2D59A66E5CE9FC2BDA2E20588111E63F789350EFE2B73200463D62BA30106AA0",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T02:35:26.7194125+08:00",
+      "verifiedAt": "2026-09-14T02:39:05.8120001+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-happy-before-20260914/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
