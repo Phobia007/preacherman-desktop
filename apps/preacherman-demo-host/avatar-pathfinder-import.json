@@ -111,15 +111,25 @@
   "selectedScreen": "def_c_screen_06",
   "removedScreenVariants": 11,
   "bones": 145,
-  "action": "apex-legend-pathfinder.idle.neutral.v2",
-  "actionSeconds": 6.4,
+  "action": "apex-legend-pathfinder.idle.greeting.v2",
+  "actionSeconds": 10.0,
   "animatedJoints": [
     "def_c_spineB",
     "def_c_spineC",
     "def_c_head",
     "def_c_neckB",
     "def_l_shoulder",
-    "def_r_elbow"
+    "def_l_elbow",
+    "def_l_wrist",
+    "def_r_elbow",
+    "def_l_finIndexB",
+    "def_l_finIndexC",
+    "def_l_finMidB",
+    "def_l_finMidC",
+    "def_l_finRingB",
+    "def_l_finRingC",
+    "def_l_finPinkyB",
+    "def_l_finPinkyC"
   ],
   "materials": [
     {
@@ -171,7 +181,7 @@
   ],
   "textureDownsampling": false,
   "geometryDecimation": false,
-  "runtimeBytes": 14868692,
+  "runtimeBytes": 14899228,
   "runtimeHeight": 1.8,
   "sourceMissingMaps": [
     "body anisoSpecDir",
@@ -182,17 +192,17 @@
   "runtimeTriangles": 45055,
   "sourceArchive": "D:/\u5f00\u6e90\u9879\u76ee/apex-legend-pathfinder.zip",
   "sourceSha256": "8f2ef6d89b8be0a6fe1c3ec3cb85fb115fc89aded0dcc8b6c87859a9a869a041",
-  "runtimeSha256": "281999ab7a25ad684b96d585cbda68bc95f201b5808a57b42bf8c8b61380f0b7",
+  "runtimeSha256": "f0636b672b13a4fc63a75e1fcd7d713fa7303d91af6f39b767122121be05d0ed",
   "galleryCard": "halo-5-visualizer",
   "galleryPosition": 14,
   "blenderMaster": "D:\\preacherman\\output\\pathfinder-20260913\\ready\\apex-legend-pathfinder.blend",
   "clipOptimization": {
     "model": "apex-legend-pathfinder",
     "channels_before": 435,
-    "animated_channels": 6,
-    "invariant_channels_baked": 429,
+    "animated_channels": 16,
+    "invariant_channels_baked": 419,
     "loop_seam_max_component_error": 0,
-    "bytes": 14868692
+    "bytes": 14899228
   },
   "marketPortrait": {
     "id": "apex-legend-pathfinder",
@@ -204,5 +214,6 @@
     "sha256": "3e30821cf41dd88fb0c9b1678a9dc6dbd5d553de082e6310cb22683e87b24032",
     "blenderScene": "D:\\preacherman\\output\\pathfinder-20260913\\scenes\\14-apex-legend-pathfinder.blend",
     "losslessMaster": "D:\\preacherman\\output\\pathfinder-20260913\\images\\14-apex-legend-pathfinder.png"
-  }
+  },
+  "defaultMotion": "Friendly open-hand greeting: ease into raised arm, two small wrist waves, lower the arm, quiet head scanning. Ten-second seamless cycle on original mechanical joints."
 }

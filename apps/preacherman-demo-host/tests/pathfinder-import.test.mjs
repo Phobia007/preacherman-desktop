@@ -20,12 +20,12 @@ test("Pathfinder retains the complete mechanical body, source-resolution texture
     assert.equal(image.mimeType, "image/png"); return [png.readUInt32BE(16), png.readUInt32BE(20)];
   });
   assert.equal(dimensions.filter(([w,h]) => w===2048&&h===2048).length, 2, "both body color and normal maps retain 2K resolution");
-  const animation = gltf.animations[0]; assert.equal(gltf.animations.length, 1); assert.equal(animation.channels.length, 6);
-  assert.equal(animation.name, `${id}.idle.neutral.v2`);
+  const animation = gltf.animations[0]; assert.equal(gltf.animations.length, 1); assert.equal(animation.channels.length, 16);
+  assert.equal(animation.name, `${id}.idle.greeting.v2`);
   for (const channel of animation.channels) {
     assert.equal(channel.target.path, "rotation"); assert.doesNotMatch(gltf.nodes[channel.target.node].name, /hip|thigh|knee|ankle|ball/);
     const times = gltf.accessors[animation.samplers[channel.sampler].input];
-    assert.ok(Math.abs(times.max[0] - times.min[0] - 6.4) < 1e-5);
+    assert.ok(Math.abs(times.max[0] - times.min[0] - 10) < 1e-5);
   }
   assert.equal(report.clipOptimization.loop_seam_max_component_error, 0);
 });
