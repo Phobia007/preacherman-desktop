@@ -39,13 +39,13 @@ test("Market mounts only at its route without replacing the shared scene", async
   assert.match(surface, /removeEventListener\("message", onMessage\)/);
 });
 
-test("the long page, fonts and all five Start Designing links remain", async () => {
+test("the long page, fonts and all 13 Start Designing links remain", async () => {
   const html = await text(join(imported, "cartier-love.html"));
   for (const section of ["style", "material", "diamonds", "finish", "closure"]) {
     assert.match(html, new RegExp(`data-od-id="love-${section}"`));
   }
   assert.doesNotMatch(html, /site-header|search-dialog/);
-  assert.equal((html.match(/href="love-configurator.html"/g) || []).length, 5);
+  assert.equal((html.match(/href="love-configurator.html"/g) || []).length, 13);
   assert.match(html, /assets\/fonts\/fonts.css/);
   for (const font of ["BrilliantCutPro-Regular.woff2", "BrilliantCutPro-Medium.woff2", "FancyCutPro-Regular.woff2"]) assert.ok((await stat(join(imported, "assets/fonts", font))).size > 0);
 });
@@ -145,4 +145,31 @@ test("both appearances use white ink on transparent paper without restyling dono
   assert.match(adapter, /style.colorScheme = parent.getComputedStyle\(parent.document.documentElement\).colorScheme/);
   assert.match(adapter, /pagehide/);
   assert.match(adapter, /themeObserver.disconnect/);
+});
+
+test("all Gallery portraits are packaged in order with alternating sides and identical copy", async () => {
+  const portraits = JSON.parse(await text(join(imported, "characters.json")));
+  const html = await text(join(imported, "cartier-love.html"));
+  const bindings = await text(join(root, "src/surfaces/gallery/galleryModelBindings.ts"));
+  const expected = [...bindings.matchAll(/^  "[^"]+": "([^"]+)",/gm)].map(match => match[1]);
+  assert.deepEqual(portraits.map(p => p.id), expected);
+  const rows = [...html.matchAll(/<article\b[\s\S]*?<\/article>/g)].map(match => match[0]);
+  assert.equal(rows.length, 13);
+  const copy = row => row.match(/<div class="descriptive-card__content component-custom-width"[\s\S]*/)[0].replace(/data-od-id="[^"]+"/g, "");
+  for (const [index, portrait] of portraits.entries()) {
+    const row = rows[index];
+    assert.ok(row.includes(`data-character-id="${portrait.id}"`));
+    assert.ok(row.includes(`src="${portrait.image}"`));
+    assert.equal(row.includes("order--small-up-1"), index % 2 === 1);
+    assert.equal(copy(row), copy(rows[0]));
+    assert.ok(row.includes('width="4096" height="4096"'));
+    assert.ok(row.includes(index === 0 ? 'loading="eager"' : 'loading="lazy"'));
+    const bytes = await readFile(join(imported, portrait.image));
+    assert.equal(bytes.length, portrait.bytes);
+    assert.equal(createHash("sha256").update(bytes).digest("hex"), portrait.sha256);
+  }
+  assert.doesNotMatch(html, /assets\/images\/(Size|Color|Diamonds|Finish|Closure)\.jpg/);
+  const { populateMarketCharacters } = await import("../scripts/market-character-sections.mjs");
+  const normalize = value => value.replace(/>\s+</g, "><").replace(/\s+/g, " ");
+  assert.equal(normalize(await populateMarketCharacters(html)), normalize(html));
 });

@@ -1,3 +1,4 @@
+import { populateMarketCharacters } from "./market-character-sections.mjs";
 import { cp, mkdir, readFile, writeFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { resolve, join, relative } from "node:path";
@@ -47,6 +48,7 @@ for (const page of ["cartier-love.html", "love-configurator.html"]) {
   }
   html = replaceOnce(html, "</head>", '<link rel="stylesheet" href="market-embed.css"><script src="market-embed.js"></script></head>');
   html = replaceOnce(html, "<body>", `<body>\n${contract}`);
+  if (page === "cartier-love.html") html = await populateMarketCharacters(html);
   await writeFile(join(destination, page), html);
 }
 const bundlePath = join(destination, "assets/configurator/app.js");
