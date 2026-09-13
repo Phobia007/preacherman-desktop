@@ -400,7 +400,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           cameraFraming={activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
           modelId={sceneModelId ?? "cortana"}
           companionVisible={sceneModelId !== null}
-          sceneContent={galleryBridge ? <GalleryOrbitCards bridge={galleryBridge} active={activeSurfaceType === "market"} /> : null}
+          sceneContent={galleryBridge ? <GalleryOrbitCards bridge={galleryBridge} active={activeSurfaceType === "market"} renderActive={windowActive} /> : null}
           prefetchModelId={activeSurfaceType === "market" && sceneModelId ? adjacentGalleryModel(sceneModelId) : undefined}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}

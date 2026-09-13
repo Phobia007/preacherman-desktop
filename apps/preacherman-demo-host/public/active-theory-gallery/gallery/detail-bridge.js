@@ -4,7 +4,13 @@
   const listeners = new Set(), railListeners = new Set(), inputListeners = new Set();
   let railCards = [], contact = false, railSignature = null;
   const rail = () => state.phase === "closed" && !contact;
-  const syncRail = () => { document.documentElement.dataset.galleryNativeRail = String(rail()); if (warmed && window.World?.NUKE) window.World.NUKE.paused = rail(); };
+  const syncRail = () => {
+    document.documentElement.dataset.galleryNativeRail = String(rail());
+    if (warmed && window.World?.NUKE) window.World.NUKE.paused = rail();
+    // Overview previews have bounded per-card decoders; the old decoder serves details only.
+    const sharedVideo = video?.video?.video ?? work?.get?.("Work/video", true)?.video?.video;
+    if (rail() && sharedVideo && !sharedVideo.paused) sharedVideo.pause();
+  };
   let work, video, camera, foreground, savedScroll, exitTimer;
   let switching = false;
   let requestedActive = true, windowVisible = true, warmed = false, paused = false;
@@ -158,7 +164,7 @@
         const signature = items.map(item => item.perma).join("|");
         if (signature !== railSignature) {
           railSignature = signature;
-          railCards = items.map(item => ({ id: item.perma, title: item.title, client: item.clientName || "", thumbnail: new URL(window.PreachermanGalleryRailAssets?.[item.thumbnailURL] || item.thumbnailURL, document.baseURI).href }));
+          railCards = items.map(item => ({ id: item.perma, title: item.title, client: item.clientName || "", thumbnail: new URL(window.PreachermanGalleryRailAssets?.[item.thumbnailURL] || item.thumbnailURL, document.baseURI).href, video: window.PreachermanGalleryRailMedia?.[item.videoURL], logo: window.PreachermanGalleryRailMedia?.[item.projectLogo?.url], color: "#" + (item.color || "ffffff") }));
           railListeners.forEach(listener => listener(railCards));
         }
         if (state.phase !== "closed") restoreRail();
