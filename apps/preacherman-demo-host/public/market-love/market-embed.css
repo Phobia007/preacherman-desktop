@@ -81,22 +81,12 @@ svg [stroke="#0D0D0D"], svg [stroke="#0d0d0d"], svg [stroke="#000000"], svg [str
 
 html {
   scrollbar-width: none;
-  scroll-padding-top: 72px;
+  scroll-padding-top: 0;
 }
 
 html::-webkit-scrollbar { width: 0; height: 0; }
 
-/* Host owns the fixed Task logo. This category row stays at the top of its frame. */
-.love-header { position: sticky; top: 0; }
-@media (max-width: 1023px) {
-  .love-header .brand-nav {
-    display: flex;
-    position: static;
-    flex-wrap: wrap;
-    gap: 8px 20px;
-    padding: 8px 24px;
-  }
-}
+/* The host owns the signature and fixed content boundary. */
 
 input { caret-color: var(--demo-theme-market-text, #fff); }
 

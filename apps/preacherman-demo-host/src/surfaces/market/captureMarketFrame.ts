@@ -5,7 +5,7 @@
 export async function captureMarketFrame(frame: HTMLIFrameElement, signal: AbortSignal) {
   const doc = frame.contentDocument;
   const view = doc?.defaultView;
-  if (!doc || !view || !doc.querySelector(".love-header")) throw new Error("Market is not ready.");
+  if (!doc || !view || !doc.getElementById("main")) throw new Error("Market is not ready.");
   const images = [...doc.querySelectorAll<HTMLImageElement>("#main img")];
   const visibleImages = images.filter(image => {
     const box = image.getBoundingClientRect();
@@ -70,9 +70,6 @@ export async function captureMarketFrame(frame: HTMLIFrameElement, signal: Abort
       const metrics = ctx.measureText("Mg");
       const ascent = metrics.fontBoundingBoxAscent;
       const descent = metrics.fontBoundingBoxDescent;
-      ctx.shadowColor = parent.closest(".brand-nav") ? view.getComputedStyle(doc.documentElement).getPropertyValue("--demo-theme-market-ink-shadow") : "transparent";
-      ctx.shadowBlur = parent.closest(".brand-nav") ? 3 : 0;
-      ctx.shadowOffsetY = parent.closest(".brand-nav") ? 1 : 0;
       for (let index = 0; index < text.length; index++) {
         if (/\s/.test(text[index])) continue;
         range.setStart(node, index); range.setEnd(node, index + 1);
@@ -85,10 +82,9 @@ export async function captureMarketFrame(frame: HTMLIFrameElement, signal: Abort
     ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
   };
   paintText(doc.getElementById("main")!);
-  paintText(doc.querySelector(".love-header")!);
 
-  // Existing link underlines and header rule are part of the sampled page too.
-  for (const element of doc.querySelectorAll<HTMLElement>(".love-header,#main .link")) {
+  // Link underlines move with the page; the host keeps its boundary fixed.
+  for (const element of doc.querySelectorAll<HTMLElement>("#main .link")) {
     const box = element.getBoundingClientRect(), style = view.getComputedStyle(element);
     if (box.bottom < 0 || box.top > frame.clientHeight) continue;
     const border = parseFloat(style.borderBottomWidth);
@@ -99,19 +95,6 @@ export async function captureMarketFrame(frame: HTMLIFrameElement, signal: Abort
       ctx.fillStyle = after.backgroundColor;
       ctx.fillRect(box.left, box.bottom - height, box.width, height);
     }
-  }
-  const svg = doc.querySelector<SVGSVGElement>("#search-toggle svg");
-  if (svg) {
-    const box = svg.getBoundingClientRect();
-    const vb = svg.viewBox.baseVal;
-    ctx.save(); ctx.translate(box.x, box.y); ctx.scale(box.width / vb.width, box.height / vb.height);
-    const style = view.getComputedStyle(svg);
-    ctx.strokeStyle = style.stroke; ctx.lineWidth = parseFloat(style.strokeWidth) || 1;
-    for (const path of svg.querySelectorAll("path")) ctx.stroke(new Path2D(path.getAttribute("d") || ""));
-    for (const circle of svg.querySelectorAll("circle")) {
-      ctx.beginPath(); ctx.arc(circle.cx.baseVal.value, circle.cy.baseVal.value, circle.r.baseVal.value, 0, Math.PI * 2); ctx.stroke();
-    }
-    ctx.restore();
   }
   ctx.restore();
   return canvas;

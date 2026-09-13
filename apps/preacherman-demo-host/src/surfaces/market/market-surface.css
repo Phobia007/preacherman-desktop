@@ -1,4 +1,5 @@
 .market-surface {
+  --market-content-top: 100px;
   position: absolute;
   inset: 0;
   background: transparent;
@@ -7,17 +8,28 @@
 
 .market-surface__frame {
   position: absolute;
-  top: 112px;
+  top: var(--market-content-top);
   display: block;
   width: 100%;
-  height: calc(100% - 112px);
+  height: calc(100% - var(--market-content-top));
   border: 0;
   background: transparent;
 }
 
-.market-surface[data-page="configurator"] .market-surface__frame {
-  top: 116px;
-  height: calc(100% - 116px);
+/* The iframe viewport clips every scrolling pixel below this fixed rule. */
+.market-surface[data-page="intro"]::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--market-content-top) - 1px);
+  right: 0;
+  left: 0;
+  z-index: 1;
+  border-top: 1px solid var(--demo-theme-market-border);
+  pointer-events: none;
+}
+
+.market-surface[data-page="configurator"] {
+  --market-content-top: 116px;
 }
 
 /* The lens supplies the current page pixels until its closing frame reaches zero. */

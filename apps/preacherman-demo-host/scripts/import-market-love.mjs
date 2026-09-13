@@ -17,7 +17,7 @@ function replaceOnce(text, needle, replacement) {
 const contract = `<!-- THESIS: Import the complete LOVE experience onto the existing Preacherman stage.
 OWN-WORLD: Original layout, fonts, assets and interaction; transparent paper, white ink.
 STORY: Browse the five retained image/text sections, start designing, configure and return.
-FIRST VIEWPORT: Task's Preacherman profile above the fixed category row; no opening film or introduction.
+FIRST VIEWPORT: Task's Preacherman profile above the fixed content boundary; no opening film or introduction.
 FORM: User-pinned complete document import; no composition redesign.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->`;
 for (const page of ["cartier-love.html", "love-configurator.html"]) {
@@ -35,7 +35,11 @@ for (const page of ["cartier-love.html", "love-configurator.html"]) {
     if (headerTop?.length !== 1 || introduction?.length !== 1) throw new Error("Source changed: expected one header utility row and introduction");
     html = replaceOnce(html, headerTop[0], "");
     html = replaceOnce(html, introduction[0], "");
-    for (const id of ["saved-dialog", "bag-dialog"]) {
+    const categoryHeader = html.match(/<header class="love-header"[\s\S]*?<\/header>/g);
+    if (categoryHeader?.length !== 1) throw new Error("Source changed: expected one category header");
+    html = replaceOnce(html, categoryHeader[0], "");
+    html = replaceOnce(html, '<script src="assets/love-intro.js"></script>', "");
+    for (const id of ["saved-dialog", "bag-dialog", "search-dialog"]) {
       const dialog = html.match(new RegExp(`<dialog id="${id}"[\\s\\S]*?<\\/dialog>`, "g"));
       if (dialog?.length !== 1) throw new Error(`Source changed: expected one ${id}`);
       html = replaceOnce(html, dialog[0], "");
@@ -99,7 +103,7 @@ await record(join(destination, "assets"));
 await writeFile(join(destination, "import-manifest.json"), JSON.stringify({
   sourceProject: "70f215b1-59d7-4c44-a675-0a48d1730917", importedAt: new Date().toISOString(),
   originalBundleSha256,
-  scope: "Local experience without the requested footer, film, introduction and utility header; Task profile and fixed categories are host-owned. Transparent paper, white text and isolated configurator storage.",
+  scope: "Local experience without the requested footer, film, introduction and utility header; The host owns the Task profile and fixed content boundary; the category/search row is removed. Transparent paper, white text and isolated configurator storage.",
   files,
 }, null, 2) + "\n");
 console.log(`Imported ${files.length} assets into ${destination}`);
