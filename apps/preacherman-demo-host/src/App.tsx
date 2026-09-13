@@ -106,10 +106,6 @@ const surfaceCopy = {
     title: { en: "Settings", "zh-CN": "设置" },
     description: { en: "Configure the local runtime, providers, tools, and connections.", "zh-CN": "配置本地运行时、模型服务、工具与外部连接。" },
   },
-  account: {
-    title: { en: "Account", "zh-CN": "账户" },
-    description: { en: "Account controls will appear here when account services are connected.", "zh-CN": "账户服务接入后，相关控制将在这里显示。" },
-  },
   test: {
     title: { en: "Test", "zh-CN": "测试" },
     description: { en: "Run one acceptance path, then inspect its real runtime trace.", "zh-CN": "运行一次验收链路，再检查真实运行轨迹。" },
@@ -442,7 +438,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       {activeSurfaceType !== "ledger" ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}
-          {visiblePanelSurface && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
+          {visiblePanelSurface && visiblePanelSurface !== "account" && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
             <SurfaceToolbar
               activeTab={activeSurfaceTab}
               description={surfaceCopy[visiblePanelSurface].description}
