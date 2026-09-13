@@ -22,7 +22,7 @@ test("retained characters occupy consecutive cards in their original order", asy
   const manifest = JSON.parse(await readFile(join(host,"avatar-intake-20260911.json"),"utf8"));
   assert.equal(manifest.models.length,16);
   assert.equal(new Set(manifest.models.map(m=>m.id)).size,16);
-  const order = ["cortana", "zima", "jubilee-midnight-mutant", "halo-mk-v-model", "kitana-mk11-in-mk9-suit", "punk-magik", "clove-t-pose", "nier-automata-2b", "stellar-blade-lily-stargazer-coat", "iron-man-mark-85", "the-twins-atomic-heart", "spartan-armour-mkv-halo-reach", "halloween-the-game-michael-myers-samhain"];
+  const order = ["cortana", "zima", "jubilee-midnight-mutant", "halo-mk-v-model", "kitana-mk11-in-mk9-suit", "punk-magik", "clove-t-pose", "nier-automata-2b", "stellar-blade-lily-stargazer-coat", "iron-man-mark-85", "the-twins-atomic-heart", "spartan-armour-mkv-halo-reach", "halloween-the-game-michael-myers-samhain", "apex-legend-pathfinder"];
   while(order.length<cards.length) order.push(null);
   assert.deepEqual(cards.map(c=>bindings.galleryModelForProject(c.slug)),order);
   assert.equal(bindings.galleryModelForProject("unknown"),null);

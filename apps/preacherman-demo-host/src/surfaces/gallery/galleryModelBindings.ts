@@ -15,6 +15,7 @@ export const galleryModelBindings = {
   "acoustic-garage": "the-twins-atomic-heart",
   "witness-gotham": "spartan-armour-mkv-halo-reach",
   "toonami": "halloween-the-game-michael-myers-samhain",
+  "halo-5-visualizer": "apex-legend-pathfinder",
 } as const satisfies Readonly<Record<string, ModelId | null>>;
 export function galleryModelForProject(project: string): ModelId | null {
   return (galleryModelBindings as Readonly<Record<string, ModelId | null>>)[project] ?? null;

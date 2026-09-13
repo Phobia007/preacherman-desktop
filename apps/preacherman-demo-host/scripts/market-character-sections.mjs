@@ -26,5 +26,5 @@ export async function populateMarketCharacters(html) {
     if (!first) return "";
     first = false;
     return sections;
-  }).replace("Browse the five retained image/text sections", "Browse all 13 Gallery character image/text sections");
+  }).replace(/Browse (?:the five retained|all \d+ Gallery character) image\/text sections/g, `Browse all ${characters.length} Gallery character image/text sections`);
 }

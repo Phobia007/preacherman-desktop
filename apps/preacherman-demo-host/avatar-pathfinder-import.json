@@ -1,0 +1,208 @@
+{
+  "id": "apex-legend-pathfinder",
+  "sourceTriangles": 45165,
+  "sourcePolygonCounts": {
+    "pilot_heavy_pathfinder_LOD0_SEModelMesh.083": 8176,
+    "pilot_heavy_pathfinder_LOD0_SEModelMesh.084": 3406,
+    "pilot_heavy_pathfinder_LOD0_SEModelMesh.081": 120,
+    "pilot_heavy_pathfinder_LOD0_SEModelMesh.082": 28899,
+    "pilot_heavy_pathfinder_LOD0_SEModelMesh.085": 60,
+    "pilot_heavy_pathfinder_LOD0_SEModelMesh.086": 3232,
+    "pilot_heavy_pathfinder_LOD0_SEModelMesh.087": 1272
+  },
+  "screenVariants": [
+    [
+      "def_c_screen_06",
+      [
+        0.1247510313987732,
+        0.4978945851325989
+      ],
+      12
+    ],
+    [
+      "def_c_screen_09",
+      [
+        0.3750252425670624,
+        0.13010568916797638
+      ],
+      12
+    ],
+    [
+      "def_c_screen_07",
+      [
+        0.37502533197402954,
+        0.4998421370983124
+      ],
+      12
+    ],
+    [
+      "def_c_screen_03",
+      [
+        0.3750251829624176,
+        0.8723689913749695
+      ],
+      12
+    ],
+    [
+      "def_c_screen_01",
+      [
+        0.12475107610225677,
+        0.8723662495613098
+      ],
+      12
+    ],
+    [
+      "def_c_screen_05",
+      [
+        0.8740874528884888,
+        0.8707573413848877
+      ],
+      12
+    ],
+    [
+      "def_c_screen_08",
+      [
+        0.6259904503822327,
+        0.4980744421482086
+      ],
+      12
+    ],
+    [
+      "def_c_screen_02",
+      [
+        0.6245682835578918,
+        0.13162943720817566
+      ],
+      12
+    ],
+    [
+      "def_c_screen_011",
+      [
+        0.8751130700111389,
+        0.13089768588542938
+      ],
+      12
+    ],
+    [
+      "def_c_screen_010",
+      [
+        0.12602755427360535,
+        0.12985144555568695
+      ],
+      12
+    ],
+    [
+      "def_c_screen_04",
+      [
+        0.6261153817176819,
+        0.8726593255996704
+      ],
+      12
+    ],
+    [
+      "def_c_screen_012",
+      [
+        0.8761592507362366,
+        0.498117059469223
+      ],
+      12
+    ]
+  ],
+  "selectedScreen": "def_c_screen_06",
+  "removedScreenVariants": 11,
+  "bones": 145,
+  "action": "apex-legend-pathfinder.idle.neutral.v2",
+  "actionSeconds": 6.4,
+  "animatedJoints": [
+    "def_c_spineB",
+    "def_c_spineC",
+    "def_c_head",
+    "def_c_neckB",
+    "def_l_shoulder",
+    "def_r_elbow"
+  ],
+  "materials": [
+    {
+      "material": "pathfinder_base_body",
+      "images": [
+        "pathfinder_base_body_albedoTexture.png",
+        "pathfinder_base_body_normalTexture.png.001"
+      ],
+      "metallic": 0.6499999761581421,
+      "roughness": 0.4300000071525574
+    },
+    {
+      "material": "pathfinder_base_emotes",
+      "images": [
+        "pathfinder_base_emotes_albedoTexture.png"
+      ],
+      "metallic": 0.0,
+      "roughness": 0.23999999463558197
+    },
+    {
+      "material": "pathfinder_base_gear",
+      "images": [
+        "pathfinder_base_gear_albedoTexture.png",
+        "pathfinder_base_gear_normalTexture.png.001"
+      ],
+      "metallic": 0.6499999761581421,
+      "roughness": 0.4300000071525574
+    },
+    {
+      "material": "pathfinder_base_head",
+      "images": [
+        "pathfinder_base_head_albedoTexture.png",
+        "pathfinder_base_head_normalTexture.png.001",
+        "pathfinder_base_head_emissiveTexture.png.001"
+      ],
+      "metallic": 0.6499999761581421,
+      "roughness": 0.4300000071525574
+    },
+    {
+      "material": "pathfinder_base_lens",
+      "images": [
+        "pathfinder_epicp_v21_herohunter_lens_albedoTexture.png",
+        "pathfinder_epicp_v21_herohunter_lens_normalTexture.png.001",
+        "pathfinder_epicp_v21_herohunter_lens_emissiveTexture.png.001"
+      ],
+      "metallic": 0.15000000596046448,
+      "roughness": 0.23999999463558197
+    }
+  ],
+  "textureDownsampling": false,
+  "geometryDecimation": false,
+  "runtimeBytes": 14868692,
+  "runtimeHeight": 1.8,
+  "sourceMissingMaps": [
+    "body anisoSpecDir",
+    "gear spec",
+    "head spec"
+  ],
+  "materialRepair": "Missing FBX specular references replaced with conservative metallic/roughness values; all 11 supplied maps connected, solid armor alpha restored.",
+  "runtimeTriangles": 45055,
+  "sourceArchive": "D:/\u5f00\u6e90\u9879\u76ee/apex-legend-pathfinder.zip",
+  "sourceSha256": "8f2ef6d89b8be0a6fe1c3ec3cb85fb115fc89aded0dcc8b6c87859a9a869a041",
+  "runtimeSha256": "281999ab7a25ad684b96d585cbda68bc95f201b5808a57b42bf8c8b61380f0b7",
+  "galleryCard": "halo-5-visualizer",
+  "galleryPosition": 14,
+  "blenderMaster": "D:\\preacherman\\output\\pathfinder-20260913\\ready\\apex-legend-pathfinder.blend",
+  "clipOptimization": {
+    "model": "apex-legend-pathfinder",
+    "channels_before": 435,
+    "animated_channels": 6,
+    "invariant_channels_baked": 429,
+    "loop_seam_max_component_error": 0,
+    "bytes": 14868692
+  },
+  "marketPortrait": {
+    "id": "apex-legend-pathfinder",
+    "name": "Pathfinder",
+    "image": "characters/14-apex-legend-pathfinder.jpg",
+    "width": 4096,
+    "height": 4096,
+    "bytes": 1539226,
+    "sha256": "3e30821cf41dd88fb0c9b1678a9dc6dbd5d553de082e6310cb22683e87b24032",
+    "blenderScene": "D:\\preacherman\\output\\pathfinder-20260913\\scenes\\14-apex-legend-pathfinder.blend",
+    "losslessMaster": "D:\\preacherman\\output\\pathfinder-20260913\\images\\14-apex-legend-pathfinder.png"
+  }
+}

@@ -115,5 +115,14 @@
     "height": 4096,
     "bytes": 1167565,
     "sha256": "82589f7c9330401c28eae548ba7d5825dd1f4555c16417e244cfe9c000c73964"
+  },
+  {
+    "id": "apex-legend-pathfinder",
+    "name": "Pathfinder",
+    "image": "characters/14-apex-legend-pathfinder.jpg",
+    "width": 4096,
+    "height": 4096,
+    "bytes": 1539226,
+    "sha256": "3e30821cf41dd88fb0c9b1678a9dc6dbd5d553de082e6310cb22683e87b24032"
   }
 ]

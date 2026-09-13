@@ -22,7 +22,7 @@ test("the saved model remains persistent while Gallery changes its camera framin
   assert.match(app, /const activeModelId = preferences\.activeModelId/);
   assert.match(app, /const isCompanionActive = activeModelId !== null/);
   assert.match(app, /data-model-active=\{isCompanionActive\}/);
-  assert.match(app, /scene=\{sceneModelId \? \([\s\S]*<CortanaModelStage[\s\S]*modelId=\{sceneModelId\}[\s\S]*variant="persistent"/);
+  assert.match(app, /scene=\{sceneModelId \|\| activeSurfaceType === "market" \? \([\s\S]*<CortanaModelStage[\s\S]*modelId=\{sceneModelId \?\? "cortana"\}[\s\S]*companionVisible=\{sceneModelId !== null\}[\s\S]*variant="persistent"/);
   assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.match(app, /selectedManifest\.surfaceId === manifest\.surfaceId[\s\S]*return homeContent/);
   assert.match(app, /<SettingsScreen/);
@@ -61,7 +61,7 @@ test("an explicit disabled companion survives saving and reload in both themes",
   globalThis.window = { localStorage: { getItem: () => stored, setItem: (_key, value) => { stored = value; } } };
   try {
     for (const appearance of ["light", "dark"]) {
-      for (const activeModelId of ["cortana", "zima", null]) {
+      for (const activeModelId of ["cortana", "zima", "apex-legend-pathfinder", null]) {
         const preferences = { activeModelId, appearance, locale: "en" };
         module.savePreferences(preferences);
         assert.deepEqual(module.readPreferences(), preferences);
