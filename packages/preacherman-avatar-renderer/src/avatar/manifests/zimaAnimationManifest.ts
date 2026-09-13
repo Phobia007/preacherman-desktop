@@ -10,7 +10,7 @@ export const ZIMA_DEFAULT_ACTION_ID = "idle.zima";
 export const zimaAnimationManifest = [
   {
     id: ZIMA_DEFAULT_ACTION_ID,
-    clipName: "zima.idle.v1",
+    clipName: "zima.idle.button.v2",
     category: "idle",
     loop: "repeat",
     fadeIn: 0.35,

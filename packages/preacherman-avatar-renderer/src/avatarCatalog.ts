@@ -54,7 +54,7 @@ const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {
   "kitana-mk11-in-mk9-suit": "female",
   "nier-print-2b": "seated",
   "nier-print-9s": "breathing",
-  "nier-automata-2b": "breathing",
+  "nier-automata-2b": "catwalk_twist",
   "iron-man-mark-1": "breathing",
   "stellar-blade-lily-stargazer-coat": "neutral",
   "miles-variant-1": "standard",
@@ -66,7 +66,7 @@ const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {
   "spartan-armour-mkv-halo-reach": "male",
   "scifi-girl-v01": "breathing",
   "proxima": "ready",
-  "halloween-the-game-michael-myers-samhain": "male"
+  "halloween-the-game-michael-myers-samhain": "zombie"
 };
 
 interface ImportedAvatarProfile {
