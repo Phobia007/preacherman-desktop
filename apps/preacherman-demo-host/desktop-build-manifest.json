@@ -1,58 +1,76 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-character-images-20260913",
+  "buildId": "task-charge-20260913",
   "productVersion": "0.1.0",
-  "sourceTask": "import-13-gallery-portraits-in-alternating-market-rows",
+  "sourceTask": "smooth-task-entry-with-continuously-accelerating-charge",
   "sourceThread": null,
-  "sourceState": "Replaced the five bracelet intro pictures with all 13 Gallery portraits in Gallery order. Rows alternate image-left/text-right then text-left/image-right. Every row uses the original first-row copy and Start Designing CTA. Uses original 4096px JPEGs including corrected Cortana; first loads eagerly, remaining images lazily. Fixed header, styles, model lighting and configurator preserved.",
-  "sourceCommit": "6e5f4dd03b1a7569d35fe89f7f52af0417ad8363",
+  "sourceState": "Task host reveal retains its 1180ms duration. The horizontal charge and vertical aperture each use one accelerating easing segment; removed intentional inward recoil and opacity pulses. Reuses the existing prewarmed iframe and preserves model/assets, other routes, theme tokens and reduced-motion behavior.",
+  "sourceCommit": "e3d24c7ae3320bc7518c40d9bf71dc76de38ead0",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-13T15:35:35.3493367+08:00",
-  "deployedAt": "2026-09-13T15:37:13.8611346+08:00",
-  "verifiedAt": "2026-09-13T15:45:52.6393654+08:00",
+  "builtAt": "2026-09-13T15:59:20.5826328+08:00",
+  "deployedAt": "2026-09-13T16:00:50.5969992+08:00",
+  "verifiedAt": "2026-09-13T16:04:33.6610622+08:00",
   "sizeBytes": 628150784,
-  "sha256": "9D697D9585976E13BFD6C35CB121A4A778B831E1A865E86E7D5CED6E85EA9DA0",
+  "sha256": "BE9823215C1EE8499F4AE33AF06772365C3D191954AA430EB3F3486826F249C8",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-images-before-20260913/preacherman-demo-host.exe",
-  "backupSha256": "9329E96E33E3EA2DBCB5A3EB05463ABB654403A8BD78EDB6DBD27A78463DF3BB",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-images-before-20260913/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-charge-before-20260913/preacherman-demo-host.exe",
+  "backupSha256": "9D697D9585976E13BFD6C35CB121A4A778B831E1A865E86E7D5CED6E85EA9DA0",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-charge-before-20260913/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "0c4fa0b5cfa88ea43094a0be619b25a0f293392e",
-  "previousVerificationCommit": "0c4fa0b5cfa88ea43094a0be619b25a0f293392e",
+  "rollbackBaselineCommit": "32db5b51ab87cf43355bb1e0c09ebb815c0851fb",
+  "previousVerificationCommit": "32db5b51ab87cf43355bb1e0c09ebb815c0851fb",
   "verification": {
-    "status": "passed-with-recorded-preexisting-template-diagnostics",
-    "typescript": "Typecheck and production build passed.",
-    "focusedTests": "19 tests passed: Gallery portrait order and hashes, alternating rows and identical copy, theme synchronization, existing assets, fixed header and profile lens.",
-    "nativeFlow": "Cold launch through canonical shortcut passed. All 13 portraits decoded at 4096x4096; alternating sides, copied CTA and copy checked in both appearances. All 26 row screenshots inspected. Fixed boundary, profile opening and configurator interaction passed; Home, Task, Gallery, Settings and Account smoke-tested. Market is the ledger route. Preferences restored, final normal Home startup verified.",
+    "status": "passed-with-recorded-baseline-diagnostics",
+    "sourceChecks": {
+      "focusedTests": 9,
+      "passed": 9,
+      "typecheck": "passed",
+      "curveChecks": "Both appearances: horizontal line and vertical aperture advance monotonically with increasing velocity; reduced motion passes.",
+      "preexistingTestFailures": [
+        "tauriClient is the only native API boundary and browser preview does not fake success",
+        "Home, Task, Settings, and Gallery share the persistent scene"
+      ],
+      "baselineEvidence": "baseline-tests.log reproduces both failures with the previous committed test; failing production sources were unchanged."
+    },
+    "nativeFlow": "Canonical shortcut cold launch passed. Task first and repeated entries showed monotone aperture progress and constant opacity, retaining the same iframe. Both appearances and reduced motion passed. All core routes including Market with 13 portraits visually checked. Original preferences restored; final normal Home launch verified.",
+    "timing": [
+      {
+        "appearance": "dark",
+        "firstEntryMaxRafGapMs": 91.69999999999982,
+        "firstEntryP95RafGapMs": 37.5,
+        "repeatP95RafGapMs": 4.300000000000182,
+        "repeatMaxRafGapMs": 4.300000000000182
+      },
+      {
+        "appearance": "light",
+        "firstEntryMaxRafGapMs": 129.19999999999982,
+        "firstEntryP95RafGapMs": 33.30000000000018,
+        "repeatP95RafGapMs": 4.299999999999272,
+        "repeatMaxRafGapMs": 4.300000000001091
+      }
+    ],
+    "timingNote": "Host requestAnimationFrame sampling, not GPU presentation timing. Cold first entries overlap initialization and show transient 92–129ms host gaps; repeated entry p95 is 4.3ms. This change removes authored recoil/flicker and changes easing; it does not claim to eliminate cold initialization costs.",
     "unchangedSourceTrees": [
       {
-        "path": "apps/preacherman-demo-host/public/assets/avatars",
-        "gitObject": "e020df441c162900def5ac93a0d2f9540a997954"
+        "path": "apps/preacherman-demo-host/public",
+        "gitObject": "8cd37a5f638688b373a3dce86289f711c6a2c3ce"
       },
       {
-        "path": "apps/preacherman-demo-host/public/gallery-v3",
-        "gitObject": "0c64f5f0f61f2561c258519de01e3719c0961ce5"
+        "path": "apps/preacherman-demo-host/src/App.tsx",
+        "gitObject": "20d3285d0d60e9f7abef2a2e22ecda98b12f7893"
       },
       {
-        "path": "apps/preacherman-demo-host/public/active-theory-gallery",
-        "gitObject": "8e15650bb25402e5dde8c5add2e9e74bdfe6c5c6"
-      },
-      {
-        "path": "apps/preacherman-demo-host/public/market-love/assets",
-        "gitObject": "39aeb1203fbd2fd20ee786246728420a0028bd7b"
+        "path": "apps/preacherman-demo-host/src/surfaces",
+        "gitObject": "7d403390c3cb01c8329e94fa2d1280bcde3b6f07"
       },
       {
         "path": "apps/preacherman-demo-host/src-tauri",
         "gitObject": "dda95a237a35687c1148fe9acadd97933a107a7c"
-      },
-      {
-        "path": "apps/preacherman-demo-host/src/app-shell/AppShell.tsx",
-        "gitObject": "9fcecfdbebe3015751419a86b177028fda1d8995"
       },
       {
         "path": "packages/preacherman-avatar-renderer",
@@ -60,45 +78,40 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-13T15:45:52.6393654+08:00",
-      "NativePid": 27828,
-      "StartedAt": "2026-09-13T15:45:37.4128784+08:00",
-      "WindowHandle": 720918,
+      "SampledAt": "2026-09-13T16:04:33.6610622+08:00",
+      "NativePid": 24988,
+      "StartedAt": "2026-09-13T16:04:17.6121375+08:00",
+      "WindowHandle": 1246880,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        27828,
-        21536,
-        28680,
-        29676,
-        10284,
-        27644,
-        22612,
-        26676,
-        7788,
-        29520,
-        22988
+        24988,
+        25724,
+        19468,
+        29300,
+        18232,
+        17448,
+        24164,
+        7104,
+        24532,
+        29128,
+        29680
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2091.0,
-      "GpuDedicatedBytes": 3414654976.0,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1996.6,
+      "GpuDedicatedBytes": 5614071808.0,
       "MaxGpuEngineUtilization": 10.0,
-      "FreeRamKiB": 18412408,
+      "FreeRamKiB": 18574800,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 26676
+          "OwningProcess": 7104
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
     },
-    "consoleBaselines": [
-      "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration/output/playwright/activation-baseline-native-report.json",
-      "D:/preacherman/output/avatar-cortana-lighting-20260911/desktop-verification/native-final-report.json",
-      "D:/preacherman/output/avatar-prepare-20260911/desktop-verification/native-qualified-report.json",
-      "D:/preacherman/output/avatar-quality-20260911/desktop-verification/native-qualified-report.json"
-    ],
+    "consoleBaseline": "D:/preacherman/output/playwright/market-character-images-20260913/native-report.json",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -128,16 +141,16 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\source-checks.json",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\final-native-home.png",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\dark-overview.jpg",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\light-overview.jpg",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\native-settled-core-report.json",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\native-core-market-settled.png",
-      "D:\\preacherman\\output\\playwright\\market-character-images-20260913\\native-core-workspace-settled.png"
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\curve-check.json",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\source-checks.json",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\baseline-tests.log",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\final-native-home.png",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\dark-motion-overview.jpg",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\light-motion-overview.jpg",
+      "D:\\preacherman\\output\\playwright\\task-charge-20260913\\core-overview.jpg"
     ]
   },
   "releaseAttempts": [
@@ -354,9 +367,18 @@
       "deployedAt": "2026-09-13T15:37:13.8611346+08:00",
       "verifiedAt": "2026-09-13T15:39:40.3020955+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-images-before-20260913"
+    },
+    {
+      "buildId": "task-charge-20260913",
+      "sourceCommit": "e3d24c7ae3320bc7518c40d9bf71dc76de38ead0",
+      "sha256": "BE9823215C1EE8499F4AE33AF06772365C3D191954AA430EB3F3486826F249C8",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-13T16:00:50.5969992+08:00",
+      "verifiedAt": "2026-09-13T16:04:33.6610622+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-charge-before-20260913"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-images-before-20260913/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-charge-before-20260913/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
