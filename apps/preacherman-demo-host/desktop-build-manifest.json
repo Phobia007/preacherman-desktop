@@ -1,479 +1,268 @@
 {
   "schemaVersion": 1,
-  "buildId": "pathfinder-20260913",
+  "buildId": "supplied-motions-20260914",
   "productVersion": "0.1.0",
-  "sourceTask": "import-pathfinder-original-materials-gallery-market-background",
+  "sourceTask": "bind-user-fbx-zombie-button-catwalk-to-michael-zima-2b",
   "sourceThread": null,
-  "sourceState": "Pathfinder added after the 13 retained Gallery characters. Original mechanical geometry, skeleton and source-resolution textures preserved; absent source specular maps replaced with authored PBR scalar settings, original smile display isolated, friendly open-hand greeting animation added. A Blender Cycles 4K portrait extends the alternating Market rows. Existing shared stage lighting, all earlier rows, navigation and normal Home startup preserved.",
-  "sourceCommit": "28cebb8228c467b1596cb22000af17c0825e48a2",
+  "sourceState": "Michael Myers Samhain uses Zombie_Idle.fbx; Zima uses Button_Pushing.fbx; standing 2B uses Catwalk_Idle_To_Twist_R.fbx. Source rotations retargeted to original skeletons, fixed limb lengths and stabilized feet. Default repeating clips include a smooth seam or return. Original mesh, skin, material and texture binary data preserved exactly. Shared stage lighting, Market still images, other avatars, navigation and normal Home startup unchanged.",
+  "sourceCommit": "e5d9576ed02dbf3c9b2ef4b5682b1a4576d1e28e",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-14T00:03:11.7913346+08:00",
-  "deployedAt": "2026-09-14T00:04:06.1039314+08:00",
-  "verifiedAt": "2026-09-14T00:14:12.9001309+08:00",
-  "sizeBytes": 666189824,
-  "sha256": "6DCA28EE931536EC78C8BEF024A9A1506C6F04531113D5BC3C20D1BBA327B07A",
+  "builtAt": "2026-09-14T00:58:45.7622741+08:00",
+  "deployedAt": "2026-09-14T01:00:26.5693755+08:00",
+  "verifiedAt": "2026-09-14T01:04:56.0944026+08:00",
+  "sizeBytes": 666327040,
+  "sha256": "E9741F163CD07836BFDB60E7AFF6F600442492F66463913FC25C722E411A9A77",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-before-20260913/preacherman-demo-host.exe",
-  "backupSha256": "D0BD5FAB1A2150B9CB39C1070E5D905126E7A4DE9558CE7B37C0C7FCC83AC56B",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-before-20260913/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\supplied-motions-before-20260914/preacherman-demo-host.exe",
+  "backupSha256": "6DCA28EE931536EC78C8BEF024A9A1506C6F04531113D5BC3C20D1BBA327B07A",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\supplied-motions-before-20260914/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "8622667899c5b52b259d508e043b2ce63a537391",
-  "previousVerificationCommit": "8622667899c5b52b259d508e043b2ce63a537391",
+  "rollbackBaselineCommit": "3167eb515cbb7adb5ecdc9608cfc507002b56534",
+  "previousVerificationCommit": "3167eb515cbb7adb5ecdc9608cfc507002b56534",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
+      "rendererBuild": "passed",
       "typecheck": "passed",
-      "focusedTests": 43,
-      "passed": 43,
-      "greetingChecks": "Three focused real skinning/default action/asset tests passed after the user requested a distinctive default motion.",
-      "testEvidence": "Initial focused run: 41/43 passed. Corrected stale companion source assertion and animation duration assertion; all four activation/Pathfinder tests pass on rerun. Gallery skinning, clip seam and Market suites passed in initial run.",
-      "assets": "Original 145-bone rig and weights, 11 embedded PNG textures at source resolution, 45,055 triangles after removing only eleven coplanar screen variants, sixteen-channel ten-second friendly greeting, 4096-square Market portrait.",
-      "scope": "Focused model, activation and Market checks; not a full repository test run."
+      "testEvidence": "Focused supplied-motion provenance, preserved buffers, loop seams and real imported-model skinning checks passed. An older test expected only ten assets; it now compares packaged GLBs to the full registered catalog and both default-action tests pass on rerun.",
+      "scope": "Change-scoped tests plus the existing imported-model skinning suite; not the complete repository test suite.",
+      "motions": [
+        {
+          "clip": "halloween-the-game-michael-myers-samhain.idle.zombie.v2",
+          "channels": 52,
+          "duration": 4.0,
+          "runtimeSha256": "77a26cb1aab6b2ebe071a3580075d2739751f05bb9b5dc13741a1c7b42c40521",
+          "runtimeBytes": 32856680,
+          "originalBinarySha256": "c0f2ac9895b66c3823304fd2c966156e2e55830b4afeda81aa9a995ce8b4bcb7",
+          "originalBinaryBytes": 32384520,
+          "originalMeshSkinMaterialImageBuffersUnchanged": true,
+          "loopSeam": 0,
+          "id": "halloween-the-game-michael-myers-samhain",
+          "source": "D:/开源项目/Zombie_Idle.fbx",
+          "sourceSha256": "00b8a7999bfe271d1f99f8d813492057098f44fc75fe8e029101ddf8224136e1",
+          "sourceDuration": 4.0,
+          "sourceFps": 60,
+          "sampleFps": 30,
+          "boneMapping": {
+            "b_pelvis": "pelvis",
+            "b_spine0": "spine_01",
+            "b_spine1": "spine_02",
+            "b_spine3": "spine_05",
+            "b_neck0": "neck_01",
+            "b_head": "head",
+            "b_l_thigh": "thigh_l",
+            "b_l_calf": "calf_l",
+            "b_l_foot": "foot_l",
+            "b_l_toe": "ball_l",
+            "b_l_clav": "clavicle_l",
+            "b_l_upperarm": "upperarm_l",
+            "b_l_forearm": "lowerarm_l",
+            "b_l_hand": "hand_l",
+            "b_l_thumb1": "thumb_01_l",
+            "b_l_thumb2": "thumb_02_l",
+            "b_l_thumb3": "thumb_03_l",
+            "b_l_index1": "index_01_l",
+            "b_l_index2": "index_02_l",
+            "b_l_index3": "index_03_l",
+            "b_l_middle1": "middle_01_l",
+            "b_l_middle2": "middle_02_l",
+            "b_l_middle3": "middle_03_l",
+            "b_l_ring1": "ring_01_l",
+            "b_l_ring2": "ring_02_l",
+            "b_l_ring3": "ring_03_l",
+            "b_l_pinky1": "pinky_01_l",
+            "b_l_pinky2": "pinky_02_l",
+            "b_l_pinky3": "pinky_03_l",
+            "b_r_thigh": "thigh_r",
+            "b_r_calf": "calf_r",
+            "b_r_foot": "foot_r",
+            "b_r_toe": "ball_r",
+            "b_r_clav": "clavicle_r",
+            "b_r_upperarm": "upperarm_r",
+            "b_r_forearm": "lowerarm_r",
+            "b_r_hand": "hand_r",
+            "b_r_thumb1": "thumb_01_r",
+            "b_r_thumb2": "thumb_02_r",
+            "b_r_thumb3": "thumb_03_r",
+            "b_r_index1": "index_01_r",
+            "b_r_index2": "index_02_r",
+            "b_r_index3": "index_03_r",
+            "b_r_middle1": "middle_01_r",
+            "b_r_middle2": "middle_02_r",
+            "b_r_middle3": "middle_03_r",
+            "b_r_ring1": "ring_01_r",
+            "b_r_ring2": "ring_02_r",
+            "b_r_ring3": "ring_03_r",
+            "b_r_pinky1": "pinky_01_r",
+            "b_r_pinky2": "pinky_02_r",
+            "b_r_pinky3": "pinky_03_r"
+          },
+          "footGoalMaxError": 1.067165605037108e-06,
+          "originalGLBSha256": "aa70e8cf6e70d5fe5b993a5b27b6ad69a79664e074982ffa7592e999924ea2c3",
+          "loopMode": "source idle with short seam blend"
+        },
+        {
+          "clip": "zima.idle.button.v2",
+          "channels": 41,
+          "duration": 4.633333333333334,
+          "runtimeSha256": "6af2cf9c47122526a930c41b7b757aa3a37cdb00daafd6f9a893136d4bce00d8",
+          "runtimeBytes": 4563280,
+          "originalBinarySha256": "b7c912529d5c6165383c61fe45cfc25d825f579accd279c052ac8bc91a4b4c1d",
+          "originalBinaryBytes": 4418396,
+          "originalMeshSkinMaterialImageBuffersUnchanged": true,
+          "loopSeam": 0,
+          "id": "zima",
+          "source": "D:/开源项目/Button_Pushing.fbx",
+          "sourceSha256": "85862ccaa121a468b6cfb7164e65ddab4b69124dd4058d5139d096ce4e84de6e",
+          "sourceDuration": 3.2333333333333334,
+          "sourceFps": 60,
+          "sampleFps": 30,
+          "boneMapping": {
+            "b_pelvis": "root.x",
+            "b_spine0": "spine_01.x",
+            "b_spine1": "spine_02.x",
+            "b_spine3": "spine_03.x",
+            "b_neck0": "neck.x",
+            "b_head": "head.x",
+            "b_l_thigh": "thigh_stretch.l",
+            "b_l_calf": "leg_stretch.l",
+            "b_l_foot": "foot.l",
+            "b_l_toe": "toes_01.l",
+            "b_l_clav": "shoulder.l",
+            "b_l_upperarm": "arm_stretch.l",
+            "b_l_forearm": "forearm_stretch.l",
+            "b_l_hand": "hand.l",
+            "b_l_thumb1": "thumb1.l",
+            "b_l_thumb2": "thumb2.l",
+            "b_l_thumb3": "thumb3.l",
+            "b_l_index1": "index1.l",
+            "b_l_index2": "index2.l",
+            "b_l_index3": "index3.l",
+            "b_l_middle1": "middle1.l",
+            "b_l_middle2": "middle2.l",
+            "b_l_middle3": "middle3.l",
+            "b_l_ring1": "ring1.l",
+            "b_l_ring2": "ring2.l",
+            "b_l_ring3": "ring3.l",
+            "b_l_pinky1": "pinky1.l",
+            "b_l_pinky2": "pinky2.l",
+            "b_l_pinky3": "pinky3.l",
+            "b_r_thigh": "thigh_stretch.r",
+            "b_r_calf": "leg_stretch.r",
+            "b_r_foot": "foot.r",
+            "b_r_toe": "toes_01.r",
+            "b_r_clav": "shoulder.r",
+            "b_r_upperarm": "arm_stretch.r",
+            "b_r_forearm": "forearm_stretch.r",
+            "b_r_hand": "hand.r",
+            "b_r_thumb1": "thumb1.r",
+            "b_r_thumb2": "thumb2.r",
+            "b_r_thumb3": "thumb3.r",
+            "b_r_index1": "index1.r",
+            "b_r_index2": "index2.r",
+            "b_r_index3": "index3.r",
+            "b_r_middle1": "middle1.r",
+            "b_r_middle2": "middle2.r",
+            "b_r_middle3": "middle3.r",
+            "b_r_ring1": "ring1.r",
+            "b_r_ring2": "ring2.r",
+            "b_r_ring3": "ring3.r",
+            "b_r_pinky1": "pinky1.r",
+            "b_r_pinky2": "pinky2.r",
+            "b_r_pinky3": "pinky3.r"
+          },
+          "footGoalMaxError": 6.898335815370635e-07,
+          "originalGLBSha256": "0ec7b5319b021d709ee8d4d0138a2aafe173232ad38665db530300fe85705c0f",
+          "loopMode": "preserve source then natural return and pause"
+        },
+        {
+          "clip": "nier-automata-2b.idle.catwalk_twist.v2",
+          "channels": 23,
+          "duration": 5.533333333333333,
+          "runtimeSha256": "a7f2619e5b514efb1d7299cd989b15c1e2070c771ff237628392340e27bb40c0",
+          "runtimeBytes": 12439340,
+          "originalBinarySha256": "a9fb3ed616df6ce9c007b0bc775caea8edc9988913e7ac32470a18a78164a9fe",
+          "originalBinaryBytes": 12354156,
+          "originalMeshSkinMaterialImageBuffersUnchanged": true,
+          "loopSeam": 0,
+          "id": "nier-automata-2b",
+          "source": "D:/开源项目/Catwalk_Idle_To_Twist_R.fbx",
+          "sourceSha256": "15d6a703f5c4fdb6b0fe539e2a3d2ba2479926b21ce10543326e1508f68e89b0",
+          "sourceDuration": 2.1666666666666665,
+          "sourceFps": 60,
+          "sampleFps": 30,
+          "boneMapping": {
+            "b_pelvis": "b_pelvis",
+            "b_spine0": "b_spine0",
+            "b_spine1": "b_spine1",
+            "b_spine3": "b_spine3",
+            "b_neck0": "b_neck0",
+            "b_head": "b_head",
+            "b_l_clav": "b_l_clav",
+            "b_l_upperarm": "b_l_upperarm",
+            "b_l_forearm": "b_l_forearm",
+            "b_l_hand": "b_l_hand",
+            "b_r_clav": "b_r_clav",
+            "b_r_upperarm": "b_r_upperarm",
+            "b_r_forearm": "b_r_forearm",
+            "b_r_hand": "b_r_hand",
+            "b_l_thigh": "b_l_thigh",
+            "b_l_calf": "b_l_calf",
+            "b_l_foot": "b_l_foot",
+            "b_l_toe": "b_l_toe",
+            "b_r_thigh": "b_r_thigh",
+            "b_r_calf": "b_r_calf",
+            "b_r_foot": "b_r_foot",
+            "b_r_toe": "b_r_toe"
+          },
+          "footGoalMaxError": 2.792725684343474e-07,
+          "originalGLBSha256": "09cc655c973aeb627c763713ebaf3d1158bba14b6a70351b9f0ccc167d0d03ac",
+          "loopMode": "preserve source then natural return and pause"
+        }
+      ]
     },
-    "nativeFlow": "Cold launch through canonical shortcut; independent Gallery preview and real Activate button, saved selection across reloads and all six routes in both appearances. Fourteen consecutive model slots and fourteen alternating Market rows; new portrait decoded at 4096x4096. Pathfinder left active as the shared companion, original locale/appearance restored. Normal shortcut restart and Home visually checked.",
+    "nativeFlow": "Cold launch through canonical desktop shortcut. Three character default motions inspected in Gallery and activated as the shared Home companion in both appearances. Core Home, Task, Gallery, Market, Settings and Account navigation inspected. Original selection, locale and appearance restored before final normal shortcut restart; Home visually checked.",
     "resourceSample": {
-      "SampledAt": "2026-09-14T00:14:12.9001309+08:00",
-      "NativePid": 25008,
-      "StartedAt": "2026-09-14T00:13:49.8928415+08:00",
-      "WindowHandle": 2492084,
+      "SampledAt": "2026-09-14T01:04:56.0944026+08:00",
+      "NativePid": 34352,
+      "StartedAt": "2026-09-14T01:04:35.0492328+08:00",
+      "WindowHandle": 2556362,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        25008,
-        27896,
-        6204,
-        23404,
-        19388,
-        28808,
-        29400,
-        24888,
-        30336,
-        20040,
-        31592
+        34352,
+        32244,
+        14024,
+        32320,
+        30856,
+        25508,
+        34228,
+        32916,
+        33220,
+        33740,
+        25400
       ],
-      "NormalizedCpuPercent": 7.98,
-      "WorkingSetMiB": 1951.0,
-      "GpuDedicatedBytes": 5499379712.0,
-      "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 15173336,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1957.8,
+      "GpuDedicatedBytes": 5462761472.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 16415744,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 24888
+          "OwningProcess": 32916
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
     },
-    "consoleBaseline": [
-      "D:/preacherman/output/playwright/account-empty-20260913/baseline-report.json",
-      "D:/preacherman/output/playwright/withdraw-three-models-20260911/native-qualified-report.json",
-      "D:\\preacherman\\output\\pathfinder-20260913/native-baseline-report.json"
-    ],
-    "legacyDiagnosticEvidence": [
-      {
-        "diagnostic": "Connecting to 'https://www.datocms-assets.com/223669/1786215002-ep-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "previousNativeDiagnostics": [
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215135-op-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215135-op-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          }
-        ],
-        "unchangedSourceBlobs": {
-          "apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json": "2d434fe8201150c7e4ae306e4426aa5eb8ac447a",
-          "apps/preacherman-demo-host/src-tauri/tauri.conf.json": "4816190e099bfbc22f51ecf38935238b2405aeb6"
-        }
-      },
-      {
-        "diagnostic": "Connecting to 'https://image.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "previousNativeDiagnostics": [
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://image.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://image.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://image.mux.com/qmEPTzOaDQBZL5258j01i2mMBkGh3G9BI/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://image.mux.com/qmEPTzOaDQBZL5258j01i2mMBkGh3G9BI/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          }
-        ],
-        "unchangedSourceBlobs": {
-          "apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json": "2d434fe8201150c7e4ae306e4426aa5eb8ac447a",
-          "apps/preacherman-demo-host/src-tauri/tauri.conf.json": "4816190e099bfbc22f51ecf38935238b2405aeb6"
-        }
-      },
-      {
-        "diagnostic": "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "previousNativeDiagnostics": [
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": true
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215135-op-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": true
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215135-op-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          }
-        ],
-        "unchangedSourceBlobs": {
-          "apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json": "2d434fe8201150c7e4ae306e4426aa5eb8ac447a",
-          "apps/preacherman-demo-host/src-tauri/tauri.conf.json": "4816190e099bfbc22f51ecf38935238b2405aeb6"
-        }
-      },
-      {
-        "diagnostic": "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "previousNativeDiagnostics": [
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215135-op-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": true
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215135-op-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\active-companion-20260910\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": true
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656901-image-63.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-2.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\remove-sanhua-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786212214-chris-thumb.avif?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-qualified-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          },
-          {
-            "file": "D:\\preacherman\\output\\playwright\\withdraw-three-models-20260911\\native-report.json",
-            "message": "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-            "sameUrl": false
-          }
-        ],
-        "unchangedSourceBlobs": {
-          "apps/preacherman-demo-host/public/gallery-v3/portfolio/_payload.json": "2d434fe8201150c7e4ae306e4426aa5eb8ac447a",
-          "apps/preacherman-demo-host/src-tauri/tauri.conf.json": "4816190e099bfbc22f51ecf38935238b2405aeb6"
-        }
-      }
-    ],
-    "diagnosticComparison": "Restored previous verified executable and matching sidecar and reproduced the legacy Halo 5 thumbnail CSP error before final greeting build; other additional CSP messages exactly match September 11 native baseline. Initial animation artifact remains in source history and the final build includes the user-requested greeting.",
+    "consoleBaseline": "D:/preacherman/output/pathfinder-20260913/native-qualified-report.json",
+    "diagnosticComparison": "Existing hydration/CSP diagnostics compared with the previously verified Pathfinder native report. Only external asset URL paths are normalized within the same CSP message and origin; no new console errors.",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -492,7 +281,6 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "TypeError: _this.initSync is not a function",
       "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
       "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
@@ -502,44 +290,22 @@
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322166826.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Connecting to 'https://www.datocms-assets.com/223669/1786215002-ep-thumb.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Connecting to 'https://image.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Connecting to 'https://www.datocms-assets.com/223669/1786212398-david-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Connecting to 'https://www.datocms-assets.com/223669/1786215014-5p-thumb.png?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
-      "TypeError: _this.initSync is not a function",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322228996.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "TypeError: _this.initSync is not a function"
     ],
     "evidence": [
-      "D:\\preacherman\\output\\pathfinder-20260913\\native-qualified-report.json",
-      "D:\\preacherman\\output\\pathfinder-20260913\\native-report.json",
-      "D:\\preacherman\\output\\pathfinder-20260913\\preview-report.json",
-      "D:\\preacherman\\output\\pathfinder-20260913\\logs\\production-build.log",
-      "D:\\preacherman\\output\\pathfinder-20260913\\logs\\production-greeting-build.log",
-      "D:\\preacherman\\output\\pathfinder-20260913\\logs\\source-tests.log",
-      "D:\\preacherman\\output\\pathfinder-20260913\\logs\\recheck-tests.log",
-      "D:\\preacherman\\output\\pathfinder-20260913\\logs\\typecheck.log",
-      "D:\\preacherman\\output\\pathfinder-20260913\\logs\\greeting-tests.log",
-      "D:\\preacherman\\output\\pathfinder-20260913\\native-baseline-report.json",
-      "D:\\preacherman\\output\\pathfinder-20260913\\diagnostic-baseline-restore.json",
-      "D:\\preacherman\\output\\pathfinder-20260913\\final-resources.json",
-      "D:\\preacherman\\output\\pathfinder-20260913\\final-native-home.png",
-      "D:\\preacherman\\output\\pathfinder-20260913\\native-dark-detail.png",
-      "D:\\preacherman\\output\\pathfinder-20260913\\native-light-detail.png",
-      "D:\\preacherman\\output\\pathfinder-20260913\\native-dark-portrait.png",
-      "D:\\preacherman\\output\\pathfinder-20260913\\native-core-contact.png",
-      "D:\\preacherman\\output\\pathfinder-20260913\\images\\14-apex-legend-pathfinder.png"
+      "D:\\preacherman\\output\\supplied-motions-20260914\\native-report.json",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\preview-report.json",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\logs\\production-build.log",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\logs\\source-tests.log",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\logs\\default-actions-tests.log",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\logs\\typecheck.log",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\final-resources.json",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\final-native-home.png",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\native-core-contact.jpg",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\native-motion-contact.jpg",
+      "D:\\preacherman\\output\\supplied-motions-20260914\\zima-contact.jpg"
     ]
   },
   "releaseAttempts": [
@@ -854,9 +620,18 @@
       "deployedAt": "2026-09-14T00:04:06.1039314+08:00",
       "verifiedAt": "2026-09-14T00:14:12.9001309+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-before-20260913"
+    },
+    {
+      "buildId": "supplied-motions-20260914",
+      "sourceCommit": "e5d9576ed02dbf3c9b2ef4b5682b1a4576d1e28e",
+      "sha256": "E9741F163CD07836BFDB60E7AFF6F600442492F66463913FC25C722E411A9A77",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T01:00:26.5693755+08:00",
+      "verifiedAt": "2026-09-14T01:04:56.0944026+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\supplied-motions-before-20260914"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-before-20260913/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\supplied-motions-before-20260914/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
