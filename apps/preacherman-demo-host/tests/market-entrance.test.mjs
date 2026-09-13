@@ -9,7 +9,7 @@ for(const appearance of ['light','dark']) test(`Market columns enter together fr
  assert.equal(recorded.length,2,'offscreen rows do not allocate animation layers');
  assert.match(recorded[0].frames[0].transform,/-100%/);assert.match(recorded[1].frames[0].transform,/\(100%/);
  assert(recorded.every(a=>a.startTime===42&&a.options.duration===MARKET_PANELS_MS));
- assert.equal(MARKET_LOGO_MS,180);assert.equal(MARKET_PANELS_MS,280);
+ assert.equal(MARKET_LOGO_MS,420);assert.equal(MARKET_PANELS_MS,760);
  await motion.finished;motion.cancel();assert(recorded.every(a=>a.cancelled));
  recorded.length=0;await animateMarketPanels(doc,true).finished;assert.equal(recorded.length,0,'reduced motion reveals content without translation');
 });

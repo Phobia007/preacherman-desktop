@@ -1,5 +1,5 @@
-export const MARKET_LOGO_MS = 180;
-export const MARKET_PANELS_MS = 280;
+export const MARKET_LOGO_MS = 420;
+export const MARKET_PANELS_MS = 760;
 
 /** Animate only the visible columns, then release their compositor layers. */
 export function animateMarketPanels(doc: Document, reducedMotion: boolean) {
