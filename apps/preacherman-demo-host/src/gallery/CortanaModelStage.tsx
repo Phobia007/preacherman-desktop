@@ -7,7 +7,7 @@ import {
   type AvatarCameraFraming,
   type AvatarSceneEnvironment,
 } from "@preacherman/avatar-renderer";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { localAvatarAssetBaseUrl } from "../avatar/avatarAssets";
 import { useAvatarInteractionState } from "../live/LiveCoordinatorContext";
 import {
@@ -18,6 +18,8 @@ import type { ModelId } from "../preferences";
 import { speechMotionRuntime } from "../motion/SpeechMotionRuntime";
 
 interface CortanaModelStageProps {
+  readonly sceneContent?: ReactNode;
+  readonly companionVisible?: boolean;
   readonly ariaLabel: string;
   readonly environment?: AvatarSceneEnvironment;
   readonly isolateCompanion?: boolean;
@@ -31,6 +33,8 @@ interface CortanaModelStageProps {
 }
 
 export function CortanaModelStage({
+  sceneContent,
+  companionVisible = true,
   ariaLabel,
   environment = "transparent",
   isolateCompanion = false,
@@ -101,6 +105,8 @@ export function CortanaModelStage({
       tabIndex={-1}
     >
       <InteractiveAvatarViewport
+        sceneContent={sceneContent}
+        companionVisible={companionVisible}
         actionId={defaultActionId}
         assetBaseUrl={localAvatarAssetBaseUrl(modelId)}
         onError={handleError}
@@ -128,12 +134,12 @@ export function CortanaModelStage({
           type="button"
         />
       ) : null}
-      {loadState === "loading" ? (
+      {companionVisible && loadState === "loading" ? (
         <div aria-label={`Loading ${modelName}`} className="cortana-model-stage__loading" role="status">
           <span />
         </div>
       ) : null}
-      {loadState === "error" ? (
+      {companionVisible && loadState === "error" ? (
         <div className="cortana-model-stage__error" role="alert">
           The local model could not be loaded.
         </div>

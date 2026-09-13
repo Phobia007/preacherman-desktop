@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { ImportedAvatarModelId } from "./avatarCatalog";
 import type { AvatarActionDescriptor } from "./avatar/types/avatarAnimation";
 import type { AvatarMotionRigBinding, AvatarMotionStreamSource } from "./avatar/contracts/AvatarMotionStream";
@@ -44,6 +45,9 @@ export interface AvatarViewportProps {
 }
 
 export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
+  /** Additional meshes share the companion camera and depth buffer. */
+  readonly sceneContent?: ReactNode;
+  readonly companionVisible?: boolean;
   readonly modelId?: AvatarModelId;
   readonly cameraFraming?: AvatarCameraFraming;
   /** Adds a scene-local yaw correction without changing the avatar profile. */

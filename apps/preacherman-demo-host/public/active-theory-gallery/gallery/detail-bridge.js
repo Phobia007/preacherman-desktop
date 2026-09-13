@@ -1,7 +1,10 @@
 // The authored Hydra room remains the rear render. The host mirrors its one video
 // above the companion; closing that mirror never owns or stops the decoder.
 (() => {
-  const listeners = new Set();
+  const listeners = new Set(), railListeners = new Set(), inputListeners = new Set();
+  let railCards = [], contact = false, railSignature = null;
+  const rail = () => state.phase === "closed" && !contact;
+  const syncRail = () => { document.documentElement.dataset.galleryNativeRail = String(rail()); if (warmed && window.World?.NUKE) window.World.NUKE.paused = rail(); };
   let work, video, camera, foreground, savedScroll, exitTimer;
   let switching = false;
   let requestedActive = true, windowVisible = true, warmed = false, paused = false;
@@ -41,7 +44,8 @@
   let state = { phase: "closed", project: "", title: "", smallWindow: true };
   const notify = () => {
     window.document?.documentElement?.setAttribute("data-gallery-detail", state.phase);
-    listeners.forEach(listener => listener({ ...state }));
+    syncRail();
+    listeners.forEach(listener => listener({ ...state, contact }));
   };
   const controller = () => work?.findParent("ViewController").scroll.renderManager.controller;
   const restoreRail = () => {
@@ -53,14 +57,40 @@
     if (state.phase !== "closed" && !event.target?.closest?.("[data-preacherman-chat]")) event.preventDefault();
   };
   window.addEventListener("wheel", preventDetailWheel, { capture: true, passive: false });
+  // Forward only the rail's input. The original chat and detail controls keep ownership.
+  const input = event => {
+    if (!requestedActive || !rail() || event.target?.closest?.('[data-preacherman-chat], input, textarea, button, a')) return;
+    const type = event.type;
+    if (type === "wheel") {
+      event.preventDefault(); event.stopImmediatePropagation();
+      const delta = (event.deltaY || event.deltaX) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
+      inputListeners.forEach(listener => listener({ type: "wheel", delta })); return;
+    }
+    if (type === "keydown") {
+      if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "PageDown", "PageUp", "Home", "End", "Enter"].includes(event.key)) return;
+      event.preventDefault(); event.stopImmediatePropagation(); inputListeners.forEach(listener => listener({ type: "key", key: event.key })); return;
+    }
+    const kind = { pointermove: "move", pointerdown: "down", pointerup: "up", pointercancel: "up", click: "click" }[type];
+    inputListeners.forEach(listener => listener({ type: kind, x: event.clientX / innerWidth * 2 - 1, y: 1 - event.clientY / innerHeight * 2 }));
+    event.stopImmediatePropagation();
+  };
+  const inputEvents = ["wheel", "keydown", "pointermove", "pointerdown", "pointerup", "pointercancel", "click"];
+  inputEvents.forEach(type => window.addEventListener(type, input, { capture: true, passive: false }));
   const api = window.PreachermanGalleryDetail = {
+    subscribeRail(listener) { railListeners.add(listener); listener(railCards); return () => railListeners.delete(listener); },
+    subscribeInput(listener) { inputListeners.add(listener); return () => inputListeners.delete(listener); },
+    setRailCursor(cursor) { if (document.body) document.body.style.cursor = cursor; },
+    previewProject(id) { const project = projects().find(project => project.perma === id); if (project && rail() && work.get?.("WorkItems/videoURL", true) !== project.videoURL) work.set("WorkItems/videoURL", project.videoURL); },
+    openProject(id) { const project = projects().find(project => project.perma === id); if (project && rail()) { work.set("Work/project", project); work.set("WorkItems/videoURL", project.videoURL); work.navigate?.("work/" + project.perma); } },
+    showWork() { work.set("ViewController/contact", false); work.set("Work/project", null); work.fire("ViewController/goToWork"); },
+    toggleContact() { work.set("ViewController/contact", !contact); },
     setActive(active, visible = true) { requestedActive = active; windowVisible = visible; syncActivity(); },
     subscribe(listener) {
       listeners.add(listener);
-      listener({ ...state });
+      listener({ ...state, contact });
       return () => listeners.delete(listener);
     },
-    get video() { return video?.video?.video ?? null; },
+    get video() { return video?.video?.video ?? work?.get?.("Work/video", true)?.video?.video ?? null; },
     get snapshot() { return { ...state }; },
     get isSwitching() { return switching || state.navigationEntry === true; },
     navigate(direction) {
@@ -121,12 +151,22 @@
     },
     attach(instance) {
       work = instance;
+      syncRail();
+      work.bind("ViewController/contact", value => { contact = Boolean(value); notify(); });
       work.startRender(() => {
+        const items = work.get?.("WorkItems/items", true) || projects();
+        const signature = items.map(item => item.perma).join("|");
+        if (signature !== railSignature) {
+          railSignature = signature;
+          railCards = items.map(item => ({ id: item.perma, title: item.title, client: item.clientName || "", thumbnail: new URL(window.PreachermanGalleryRailAssets?.[item.thumbnailURL] || item.thumbnailURL, document.baseURI).href }));
+          railListeners.forEach(listener => listener(railCards));
+        }
         if (state.phase !== "closed") restoreRail();
         if (!warmed) {
           const view = work.findParent("ViewController");
           warmed = view.flag?.("__ready") && view.uniforms?.uVisible?.value >= 0.9999;
         }
+        syncRail();
         syncActivity();
       });
       work.bind("Work/project", data => {
@@ -156,6 +196,7 @@
     document.removeEventListener("visibilitychange", syncActivity);
     pausedMedia.clear();
     window.removeEventListener("wheel", preventDetailWheel, true);
-    listeners.clear();
+    listeners.clear(); railListeners.clear(); inputListeners.clear();
+    inputEvents.forEach(type => window.removeEventListener(type, input, true));
   });
 })();

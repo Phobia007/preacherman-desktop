@@ -35,6 +35,8 @@ import { IntroSplash } from "./intro/IntroSplash";
 import { claimStartupIntro } from "./introSequence";
 import { LiveCoordinatorProvider } from "./live/LiveCoordinatorContext";
 import { SettingsScreen } from "./settings/SettingsScreen";
+import { GalleryOrbitCards } from "./surfaces/gallery/GalleryOrbitCards";
+import type { GalleryDetailBridge } from "./surfaces/gallery/GalleryDetailOverlay";
 import { ActiveTheoryGallerySurface } from "./surfaces/gallery/ActiveTheoryGallerySurface";
 import { GallerySurface } from "./surfaces/gallery/GallerySurface";
 import { MarketSurface } from "./surfaces/market/MarketSurface";
@@ -266,6 +268,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       ? `surface-${activeSurfaceType}`
       : `screen-${route.screenId ?? acceptedScreenId}`;
   const HomeSurface = adapter.resolve(manifest).component;
+  const [galleryBridge, setGalleryBridge] = useState<GalleryDetailBridge>();
   const activeModelId = preferences.activeModelId;
   const isCompanionActive = activeModelId !== null;
   // Only an open card previews its own character; the overview uses the equipped companion.
@@ -389,14 +392,16 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       entering={animateMainEntrance && !showStartupIntro}
       locale={preferences.locale}
       onNavigate={handleSurfaceNavigate}
-      scene={sceneModelId ? (
+      scene={sceneModelId || activeSurfaceType === "market" ? (
         <CortanaModelStage
-          ariaLabel={`Persistent ${avatarModelName(sceneModelId)} companion scene`}
+          ariaLabel={`Persistent ${avatarModelName(sceneModelId ?? "cortana")} companion scene`}
           environment="cinematic"
           isolateCompanion={activeSurfaceType === "market" && galleryDetailOpen}
           cameraFraming={activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
-          modelId={sceneModelId}
-          prefetchModelId={activeSurfaceType === "market" ? adjacentGalleryModel(sceneModelId) : undefined}
+          modelId={sceneModelId ?? "cortana"}
+          companionVisible={sceneModelId !== null}
+          sceneContent={galleryBridge ? <GalleryOrbitCards bridge={galleryBridge} active={activeSurfaceType === "market"} /> : null}
+          prefetchModelId={activeSurfaceType === "market" && sceneModelId ? adjacentGalleryModel(sceneModelId) : undefined}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}
           renderActive={windowActive}
@@ -425,6 +430,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       >
         <ActiveTheoryGallerySurface
           active={activeSurfaceType === "market"}
+          onBridgeChange={setGalleryBridge}
           renderActive={windowActive}
           activeModelId={activeModelId}
           onActivate={activateGalleryModel}

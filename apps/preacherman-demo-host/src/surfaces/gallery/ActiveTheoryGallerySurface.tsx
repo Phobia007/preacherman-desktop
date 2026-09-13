@@ -9,8 +9,9 @@ import "./active-theory-gallery-surface.css";
 
 const gallerySource = "/active-theory-gallery/gallery/work.html";
 
-export function ActiveTheoryGallerySurface({ active = true, renderActive = true, onDetailChange, onPreviewModelChange, activeModelId, onActivate }: {
+export function ActiveTheoryGallerySurface({ active = true, renderActive = true, onBridgeChange, onDetailChange, onPreviewModelChange, activeModelId, onActivate }: {
   readonly active?: boolean;
+  readonly onBridgeChange: (bridge: GalleryDetailBridge | undefined) => void;
   readonly renderActive?: boolean;
   readonly onDetailChange?: (open: boolean) => void;
   readonly onPreviewModelChange: (modelId: ModelId | null) => void;
@@ -31,9 +32,11 @@ export function ActiveTheoryGallerySurface({ active = true, renderActive = true,
     const api = frame?.PreachermanGalleryDetail;
     if (!api) return;
     setBridge(api);
+    onBridgeChange(api);
     setPortal(frameRef.current?.closest(".demo-app-shell") ?? null);
-    return api.subscribe(setDetail);
-  }, [loaded]);
+    const unsubscribe = api.subscribe(setDetail);
+    return () => { unsubscribe(); onBridgeChange(undefined); };
+  }, [loaded, onBridgeChange]);
   useEffect(() => {
     if (!bridge) return;
     const sync = () => bridge.setActive(active, renderActive && !document.hidden);
@@ -56,6 +59,10 @@ export function ActiveTheoryGallerySurface({ active = true, renderActive = true,
       className="active-theory-gallery-surface"
       data-loaded={loaded ? "true" : "false"}
     >
+      {bridge && detail.phase === "closed" && !detail.contact ? <nav className="gallery-orbit-nav" aria-label="Gallery views">
+        <button type="button" onClick={() => bridge.showWork()}>WORK</button>
+        <button type="button" onClick={() => bridge.toggleContact()}>CONTACT</button>
+      </nav> : null}
       {portal && bridge && active && detail.phase !== "closed" ? <GalleryDetailOverlay bridge={bridge} detail={detail} portal={portal} onBack={back} modelId={modelId} activeModelId={activeModelId} onActivate={onActivate} onNavigate={navigation.navigate} switching={navigation.switching} navigationError={navigation.error} /> : null}
       <iframe
         ref={frameRef}

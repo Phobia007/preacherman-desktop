@@ -15,6 +15,7 @@ import type {
 import type { AvatarMotionRigBinding, AvatarMotionStreamSource } from "./avatar/contracts/AvatarMotionStream";
 
 interface InteractiveAvatarSceneProps {
+  readonly companionVisible?: boolean;
   readonly actionId?: string;
   readonly actionRequestKey?: number;
   readonly assetBaseUrl: string;
@@ -140,6 +141,7 @@ function ContextLossListener({
 }
 
 export function InteractiveAvatarScene({
+  companionVisible = true,
   actionId,
   actionRequestKey,
   assetBaseUrl,
@@ -172,7 +174,7 @@ export function InteractiveAvatarScene({
     <>
       {environment === "cinematic" ? <CinematicEnvironment awakened={awakened} isolateCompanion={isolateCompanion} /> : null}
       {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
-      <AvatarModel
+      {companionVisible ? <AvatarModel
         key={`${modelId}:${assetBaseUrl}`}
         actionId={actionId}
         actionRequestKey={actionRequestKey}
@@ -187,7 +189,7 @@ export function InteractiveAvatarScene({
         motionRigBinding={motionRigBinding}
         modelId={modelId}
         rotationOffsetY={rotationOffsetY}
-      />
+      /> : null}
       <CameraRig cameraFraming={cameraFraming} environment={environment} resetKey={resetKey} />
       <AvatarFrameMetrics />
       <ContextLossListener onContextLost={onContextLost} />

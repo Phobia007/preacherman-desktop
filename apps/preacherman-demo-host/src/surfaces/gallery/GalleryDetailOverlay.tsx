@@ -3,7 +3,11 @@ import { createPortal } from "react-dom";
 import type { ModelId } from "../../preferences";
 import { GalleryActivateButton } from "./GalleryActivateButton";
 
+export interface GalleryRailCard { id: string; title: string; client: string; thumbnail: string; }
+export type GalleryRailInput = { type: "wheel"; delta: number } | { type: "key"; key: string } | { type: "move" | "down" | "up" | "click"; x: number; y: number };
+
 export interface GalleryDetailState {
+  contact?: boolean;
   phase: "closed" | "open" | "closing";
   project: string;
   title: string;
@@ -14,6 +18,13 @@ export interface GalleryDetailState {
   hasNext?: boolean;
 }
 export interface GalleryDetailBridge {
+  subscribeRail(listener: (cards: GalleryRailCard[]) => void): () => void;
+  subscribeInput(listener: (input: GalleryRailInput) => void): () => void;
+  setRailCursor(cursor: string): void;
+  openProject(id: string): void;
+  previewProject(id: string): void;
+  showWork(): void;
+  toggleContact(): void;
   video: HTMLVideoElement | null;
   setActive(active: boolean, windowVisible?: boolean): void;
   subscribe(listener: (state: GalleryDetailState) => void): () => void;

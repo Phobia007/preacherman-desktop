@@ -1087,13 +1087,15 @@ html[data-appearance="dark"] #root {
 }
 
 .demo-app-shell[data-active-surface="market"] .demo-app-shell__scene {
-  z-index: 3;
-  background: transparent;
-  mix-blend-mode: screen;
+  z-index: 0;
+  background: var(--demo-theme-home-canvas);
+  mix-blend-mode: normal;
   pointer-events: none;
 }
 
 .demo-app-shell[data-active-surface="market"][data-gallery-detail="true"] .demo-app-shell__scene {
+  z-index: 3;
+  background: transparent;
   mix-blend-mode: normal;
 }
 

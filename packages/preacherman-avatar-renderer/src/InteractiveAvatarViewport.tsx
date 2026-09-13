@@ -26,6 +26,8 @@ function supportsWebGL(): boolean {
 }
 
 export function InteractiveAvatarViewport({
+  sceneContent,
+  companionVisible = true,
   actionId,
   actionRequestKey,
   assetBaseUrl,
@@ -114,7 +116,7 @@ export function InteractiveAvatarViewport({
       className={["preacherman-avatar-viewport", "preacherman-avatar-viewport--interactive", className]
         .filter(Boolean)
         .join(" ")}
-      data-avatar-load-state={loadState}
+      data-avatar-load-state={companionVisible ? loadState : "ready"}
       data-avatar-render-active={rendering}
       data-avatar-environment={environment}
     >
@@ -139,6 +141,7 @@ export function InteractiveAvatarViewport({
         >
           <Suspense fallback={null}>
             <InteractiveAvatarScene
+              companionVisible={companionVisible}
               actionId={actionId}
               actionRequestKey={actionRequestKey}
               assetBaseUrl={assetBaseUrl}
@@ -160,6 +163,7 @@ export function InteractiveAvatarViewport({
               rotationOffsetY={rotationOffsetY}
             />
           </Suspense>
+          <Suspense fallback={null}>{sceneContent}</Suspense>
         </Canvas>
       </AvatarErrorBoundary>
       {debug ? (

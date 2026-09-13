@@ -1,9 +1,14 @@
+@font-face {
+  font-family: nbarchitekt;
+  src: url("/active-theory-gallery/assets/fonts/NBArchitektStd-Regular-export/NBArchitektStd-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
 .active-theory-gallery-surface {
   position: absolute;
   inset: 0;
   overflow: hidden;
   color: var(--demo-theme-text);
-  background: var(--demo-theme-canvas);
+  background: transparent;
 }
 
 .active-theory-gallery-surface__frame {
@@ -13,30 +18,26 @@
   width: 100%;
   height: 100%;
   border: 0;
+  color-scheme: light;
   color: var(--demo-theme-text);
-  background: var(--demo-theme-canvas);
+  background: transparent;
   transform: translate3d(0, 0, 0);
   transform-origin: center;
 }
 
-.demo-app-shell__prewarmed-surface[data-surface="market"][data-active="true"]
-  .active-theory-gallery-surface__frame {
-  animation: active-theory-gallery-arrive 760ms cubic-bezier(.16, 1, .3, 1) 140ms both;
+/* The 3D cards own entry motion; the shared camera must not slide with an iframe. */
+.gallery-orbit-nav {
+  position: absolute; z-index: 2; top: 42px; right: 34px;
+  display: flex; width: 212px; height: 46px; align-items: stretch;
+  border: 1px solid var(--demo-theme-gallery-detail-control-border);
+  border-radius: 999px; background: var(--demo-theme-gallery-detail-control-bg);
 }
-
-@keyframes active-theory-gallery-arrive {
-  0%, 10% {
-    clip-path: inset(0 0 0 18%);
-    opacity: 0;
-    transform: translate3d(12%, 0, 0) scale(.985);
-  }
-
-  100% {
-    clip-path: inset(0);
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
+.gallery-orbit-nav button {
+  flex: 1; padding: 0; border: 0; border-radius: 999px; background: transparent;
+  color: var(--demo-theme-gallery-detail-control-text); font: 14px var(--demo-font-secondary); cursor: pointer;
 }
+.gallery-orbit-nav button:hover { background: var(--demo-theme-gallery-detail-control-hover); }
+.gallery-orbit-nav button:focus-visible { outline: 2px solid var(--demo-theme-focus); outline-offset: 3px; }
 
 .active-theory-gallery-surface__frame:focus-visible {
   outline: 2px solid var(--demo-theme-focus);

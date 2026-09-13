@@ -8,7 +8,7 @@ const bridgeSource = read('public/active-theory-gallery/gallery/detail-bridge.js
 function fixture(projects = []) {
   let observer, timer, render, videoUrl;
   const scroll = {scroll: 4217};
-  const document = {hidden:false,addEventListener(){},removeEventListener(){}};
+  const document = {documentElement:{dataset:{},setAttribute(){}},baseURI:"https://tauri.localhost/active-theory-gallery/",hidden:false,addEventListener(){},removeEventListener(){}};
   const window = {document,addEventListener(){}, CMS_DATA: {projects}};
   const work = {
     startRender(callback) { render = callback; },
@@ -16,7 +16,7 @@ function fixture(projects = []) {
     findParent() { return {scroll:{renderManager:{controller:scroll}}}; },
     set(key, value) { if (key === 'WorkItems/videoURL') videoUrl = value; else {assert.equal(key,'Work/project'); observer(value);} },
   };
-  vm.runInNewContext(bridgeSource, {window,document,Set,Number,Math,setTimeout:fn=>(timer=fn,1),clearTimeout:()=>{timer=null;}});
+  vm.runInNewContext(bridgeSource, {window,document,URL,Set,Number,Math,setTimeout:fn=>(timer=fn,1),clearTimeout:()=>{timer=null;}});
   const api=window.PreachermanGalleryDetail;
   api.attach(work);
   return {api,scroll,videoUrl:()=>videoUrl,enter:project=>observer(project),finish:()=>timer?.(),tick:()=>render?.()};
