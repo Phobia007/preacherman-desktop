@@ -1,165 +1,171 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-market-interaction-20260914",
+  "buildId": "gallery-transition-20260914",
   "productVersion": "0.1.0",
-  "sourceTask": "fix-gallery-card-selection-exit-and-market-early-scroll",
+  "sourceTask": "fix-gallery-retired-style-flash-and-shader-stall",
   "sourceThread": null,
-  "sourceState": "Gallery native orbit owns card navigation across detail open/closing phases; obsolete router callbacks cannot replace a selection or reopen closed details. Duplicate acknowledgements preserve dismissed video state. Transparent chat log whitespace no longer intercepts visible cards, while actual messages and controls retain input. Market retains 420 ms logo / 760 ms panels, bounds the logo font wait and releases scrolling independently of image decode and document font readiness. Retry resets entrance readiness. Existing models, animations, authored assets, theme colors and Home startup preserved.",
-  "sourceCommit": "43fa19da55344a361b14c7f0cd486a8d128141bb",
+  "sourceState": "Native Gallery renders only the authored detail room during entry, lateral navigation and exit. The retired Work orbit draw and noise distortion blend are bypassed. A cancellable two-frame gate prevents displaying a resumed canvas before its new room frame. Exit uses the native 300 ms fade. Stable camera ownership prevents old automatic card selection on return. Avatar final materials compile asynchronously against existing scene lighting before mounting, with disposal deferred until pending compilation settles. Escape consumed by the application navigation cannot also close the detail. Model geometry, textures, animations, lighting, native card layout and default Home startup remain unchanged.",
+  "sourceCommit": "79940ecdd65661ae61457a49b3f1a71544df0b96",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-14T02:33:58.2462733+08:00",
-  "deployedAt": "2026-09-14T02:35:26.7194125+08:00",
-  "verifiedAt": "2026-09-14T02:39:05.8120001+08:00",
-  "sizeBytes": 670041600,
-  "sha256": "2D59A66E5CE9FC2BDA2E20588111E63F789350EFE2B73200463D62BA30106AA0",
+  "builtAt": "2026-09-14T14:01:27.5203199+08:00",
+  "deployedAt": "2026-09-14T14:03:45.7492449+08:00",
+  "verifiedAt": "2026-09-14T14:11:03.8919565+08:00",
+  "sizeBytes": 670042112,
+  "sha256": "9A4750A56264F2D4A6B0F45DA29E84F82798A29108CDAC7FA0D053E2AE40F339",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914/preacherman-demo-host.exe",
-  "backupSha256": "BDFE84DA43F963590298299DC32C4A19311A40B1916F3403CEE405F74410818C",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914/preacherman-demo-host.exe",
+  "backupSha256": "2D59A66E5CE9FC2BDA2E20588111E63F789350EFE2B73200463D62BA30106AA0",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "3d070e4463b9f1bd2e64133e798214d6d1ca22a1",
-  "previousVerificationCommit": "3d070e4463b9f1bd2e64133e798214d6d1ca22a1",
+  "rollbackBaselineCommit": "8c72d02124cb70c857a11ffad0d3dad5aba5d629",
+  "previousVerificationCommit": "8c72d02124cb70c857a11ffad0d3dad5aba5d629",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "testEvidence": "58 focused Gallery/Market/activation/media checks passed; behavioral regressions include stale routes during exit and new selection, duplicate acknowledgements and native/legacy input ownership.",
-      "scope": "Change-scoped checks, not the complete repository suite."
+      "testEvidence": "49 focused checks passed, including execution of shipped Hydra transition bindings, both appearances, cancelled reveal, menu Escape ownership and asynchronous GPU preparation/disposal.",
+      "scope": "Change-scoped tests; not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through canonical shortcut. Real mouse selection of left/right cards, repeated exits, obsolete-route delivery, dismissed-video acknowledgement and cancellation of arrow transitions verified in both appearances. Market scrolled during entrance while image decode/document fonts/logo font promises were deliberately held pending; immediate wheel on reentry also passed. Core Home, Task, Gallery, Market, Settings and Account visually inspected. Preferences restored before final normal shortcut restart.",
-    "gallery": [
+    "nativeFlow": "Cold launch through the canonical shortcut; cold Cortana preparation, real mouse card picks, first/last transition frames, rapid back/reentry, stale routes, lateral arrows and navigation away/back verified in both appearances. Contact and immediate Market wheel scrolling passed. Home, Task, Gallery, Market (ledger route), Settings and Account visually checked. Preferences restored; final normal shortcut restart without debug port.",
+    "transitions": [
       {
         "appearance": "dark",
-        "card": "watson-masters",
-        "realPointer": true,
+        "sampledFrames": 3927,
+        "oldStyleFrames": 0,
+        "p95FrameMs": 10.900000005960464,
+        "maxFrameMs": 160,
+        "rapidExitAndReentry": true,
         "staleRouteIgnored": true,
-        "exitStable": true
-      },
-      {
-        "appearance": "dark",
-        "card": "climatune",
-        "realPointer": true,
-        "staleRouteIgnored": true,
-        "exitStable": true
-      },
-      {
-        "appearance": "dark",
-        "card": "frontier-within",
-        "realPointer": true,
-        "staleRouteIgnored": true,
-        "exitStable": true
-      },
-      {
-        "appearance": "dark",
-        "card": "watson-masters",
-        "realPointer": true,
-        "staleRouteIgnored": true,
-        "exitStable": true
-      },
-      {
-        "appearance": "dark",
-        "cancelInFlightNavigation": true
+        "lateralNavigation": true
       },
       {
         "appearance": "light",
-        "card": "watson-masters",
-        "realPointer": true,
+        "sampledFrames": 3905,
+        "oldStyleFrames": 0,
+        "p95FrameMs": 10.5,
+        "maxFrameMs": 170.3999999910593,
+        "rapidExitAndReentry": true,
         "staleRouteIgnored": true,
-        "exitStable": true
-      },
-      {
-        "appearance": "light",
-        "card": "climatune",
-        "realPointer": true,
-        "staleRouteIgnored": true,
-        "exitStable": true
-      },
-      {
-        "appearance": "light",
-        "card": "frontier-within",
-        "realPointer": true,
-        "staleRouteIgnored": true,
-        "exitStable": true
-      },
-      {
-        "appearance": "light",
-        "card": "watson-masters",
-        "realPointer": true,
-        "staleRouteIgnored": true,
-        "exitStable": true
-      },
-      {
-        "appearance": "light",
-        "cancelInFlightNavigation": true
+        "lateralNavigation": true
       }
     ],
-    "market": [
+    "routes": [
       {
+        "name": "Gallery",
+        "appearance": "dark"
+      },
+      {
+        "name": "Market",
         "appearance": "dark",
-        "firstPanelsMs": 902,
-        "earlyScrollY": 580,
-        "blockedImageDecodeAndFonts": true,
-        "scrollsDuringEntrance": true
+        "wheel": true
       },
       {
-        "appearance": "dark",
-        "reentryWheel": true
+        "name": "Home",
+        "appearance": "dark"
       },
       {
+        "name": "Task",
+        "appearance": "dark"
+      },
+      {
+        "name": "Settings",
+        "appearance": "dark"
+      },
+      {
+        "name": "Account",
+        "appearance": "dark"
+      },
+      {
+        "name": "Gallery",
+        "appearance": "light"
+      },
+      {
+        "name": "Market",
         "appearance": "light",
-        "firstPanelsMs": 875,
-        "earlyScrollY": 580,
-        "blockedImageDecodeAndFonts": true,
-        "scrollsDuringEntrance": true
+        "wheel": true
       },
       {
-        "appearance": "light",
-        "reentryWheel": true
+        "name": "Home",
+        "appearance": "light"
+      },
+      {
+        "name": "Task",
+        "appearance": "light"
+      },
+      {
+        "name": "Settings",
+        "appearance": "light"
+      },
+      {
+        "name": "Account",
+        "appearance": "light"
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-14T02:39:05.8120001+08:00",
-      "NativePid": 33976,
-      "StartedAt": "2026-09-14T02:38:50.1959792+08:00",
-      "WindowHandle": 1837358,
+      "SampledAt": "2026-09-14T14:11:03.8919565+08:00",
+      "NativePid": 25812,
+      "StartedAt": "2026-09-14T14:10:41.7485440+08:00",
+      "WindowHandle": 1968860,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        33976,
-        27832,
-        14812,
-        24684,
-        16748,
-        26384,
-        26700,
-        26776,
-        31944,
-        29272,
-        34372
+        25812,
+        35096,
+        27892,
+        32032,
+        33400,
+        288,
+        30528,
+        13084,
+        26296,
+        28748,
+        26384
       ],
-      "NormalizedCpuPercent": 5.0,
-      "WorkingSetMiB": 1902.2,
-      "GpuDedicatedBytes": 5499322368.0,
-      "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 16683332,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1925.2,
+      "GpuDedicatedBytes": 3228037120.0,
+      "MaxGpuEngineUtilization": 12.0,
+      "FreeRamKiB": 16711248,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 26776
+          "OwningProcess": 13084
         }
       ],
-      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded."
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
+      "SharedProcesses": [
+        {
+          "ProcessId": 28476,
+          "Name": "node.exe",
+          "ExecutablePath": "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\e7fe122ad3cbcd58\\bin\\node.exe",
+          "CreationDate": "2026-09-14T02:42:07.951261+08:00",
+          "Disposition": "Pre-existing Codex Computer Use kernel; preserved, not owned by this task."
+        },
+        {
+          "ProcessId": 33724,
+          "Name": "node.exe",
+          "ExecutablePath": "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\e7fe122ad3cbcd58\\bin\\node.exe",
+          "CreationDate": "2026-09-14T02:42:07.953782+08:00",
+          "Disposition": "Pre-existing Codex Computer Use kernel; preserved, not owned by this task."
+        }
+      ]
+    },
+    "performanceEvidence": {
+      "baseline": "baseline-trace.json / cpu-profile.json: synchronous Three getProgramInfoLog consumed approximately 1302 ms.",
+      "comparableProbe": "fixed-trace.json: entry max 207.4 ms, p95 11.4 ms; exit max 30.3 ms.",
+      "qualification": "Full screenshot runs include screenshot capture and cold texture upload cost; their full maxima and p95 are retained separately. No universal zero-stall claim."
     },
     "consoleBaseline": "D:/preacherman/output/pathfinder-20260913/native-qualified-report.json",
-    "diagnosticComparison": "Known hydration/CSP diagnostics compared with previously verified native baseline; only external asset URL paths normalized within same CSP message and origin. No new console errors.",
     "newErrors": [],
     "observedErrors": [
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/thorne_installation.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
@@ -184,22 +190,22 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/thorne_installation.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\source-checks.log",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\verify.cjs",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\final-native-home.png",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-dark-gallery-cards.png",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-light-gallery-cards.png",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-dark-market-early-scroll.png",
-      "D:\\preacherman\\output\\playwright\\gallery-market-interaction-20260914\\native-light-market-early-scroll.png"
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-dark-frames.json",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-light-frames.json",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\verify.cjs",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\final-native-home.png",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-dark-cortana-ready.png",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-light-cortana-ready.png",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-dark-exit-60.png",
+      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-light-exit-60.png"
     ]
   },
   "releaseAttempts": [
@@ -550,9 +556,18 @@
       "deployedAt": "2026-09-14T02:35:26.7194125+08:00",
       "verifiedAt": "2026-09-14T02:39:05.8120001+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914"
+    },
+    {
+      "buildId": "gallery-transition-20260914",
+      "sourceCommit": "79940ecdd65661ae61457a49b3f1a71544df0b96",
+      "sha256": "9A4750A56264F2D4A6B0F45DA29E84F82798A29108CDAC7FA0D053E2AE40F339",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T14:03:45.7492449+08:00",
+      "verifiedAt": "2026-09-14T14:11:03.8919565+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
