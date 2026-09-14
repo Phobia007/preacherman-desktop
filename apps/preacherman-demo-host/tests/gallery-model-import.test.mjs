@@ -43,9 +43,9 @@ for (const { id } of models) {
     const length = bytes.readUInt32LE(12), offset = 20 + length;
     const gltf = JSON.parse(bytes.toString("utf8", 20, offset));
     assert.equal(gltf.animations.length, 1);
-    assert.ok(gltf.animations[0].channels.length <= 64, "fixed accessory transforms do not need per-frame tracks");
+    assert.ok(gltf.animations[0].channels.length <= gltf.skins[0].joints.length + 1, "tracks remain bounded by the rig, including weighted auxiliary bones");
     assert.equal(gltf.animations[0].name, importedAvatarProfiles[id].actions[0].clipName);
-    assert.match(gltf.animations[0].name, /\.idle\.((female|male|breathing|neutral|standard|weight_shift|ready|greeting|zombie|catwalk_twist|actorcore_talk|happy)\.v2|seated\.v3)$/);
+    assert.match(gltf.animations[0].name, /\.idle\.((female|male|breathing|neutral|standard|weight_shift|ready|greeting|zombie|catwalk_twist|actorcore_talk|happy)\.v[23]|seated\.v3)$/);
     assert.ok(gltf.animations[0].channels.every(channel => channel.target.path !== "scale"), "retargeting preserves authored bone scale");
     assert.ok((gltf.images?.length ?? 0) > 0 || ["iron-man-mark-85", "modural-robot-mecha-chimera-dyan-high-poly-mesh"].includes(id), "authored texture or original untextured PBR material");
     assert.ok((gltf.images ?? []).every(image => image.bufferView !== undefined && !image.uri));

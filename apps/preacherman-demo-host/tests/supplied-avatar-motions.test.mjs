@@ -12,8 +12,8 @@ for(const model of manifest.models)test(`${model.id}: supplied motion preserves 
  const end=20+b.readUInt32LE(12),g=JSON.parse(b.toString('utf8',20,end)),binary=b.subarray(end+8);
  assert.equal(createHash('sha256').update(binary.subarray(0,model.originalBinaryBytes)).digest('hex'),model.originalBinarySha256,'all previous geometry, textures and inverse bind buffers are preserved byte for byte');
  assert.ok(model.footGoalMaxError<0.0001,'leg-length correction keeps foot targets within 0.1 mm');
- assert.equal(model.sourceFps,60);assert.equal(model.sampleFps,30);assert.equal(g.animations.length,1);
- const a=g.animations[0];assert.equal(a.name,model.clip);assert.ok(a.channels.length<=64);
+ assert.equal(model.sourceFps,60);assert.equal(model.sampleFps,60);assert.equal(g.animations.length,1);
+ const a=g.animations[0];assert.equal(a.name,model.clip);assert.ok(a.channels.length<=Object.keys(model.boneMapping).length+model.auxiliaryBones.length+model.distributedSpineBones.length+1);
  assert.ok(a.channels.some(c=>/forearm|lowerarm/.test(g.nodes[c.target.node].name)));
  for(const c of a.channels){
   assert.ok(c.target.path==='rotation'||c.target.path==='translation');

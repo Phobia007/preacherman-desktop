@@ -12,7 +12,7 @@ for(const model of manifest.models)test(`${model.id}: ActorCore motion preserves
  const end=20+b.readUInt32LE(12),g=JSON.parse(b.toString('utf8',20,end)),binary=b.subarray(end+8);
  assert.equal(createHash('sha256').update(binary.subarray(0,model.originalBinaryBytes)).digest('hex'),model.originalBinarySha256,'all previous geometry, textures and inverse bind buffers are preserved byte for byte');
  assert.ok(model.footGoalMaxError<0.0001,'leg-length correction keeps foot targets within 0.1 mm');
- assert.equal(model.sourceFps,60);assert.ok(Math.abs(model.duration-1688/60)<.0001,'complete source talk sequence is retained');assert.equal(model.sampleFps,30);assert.equal(g.animations.length,1);
+ assert.equal(model.sourceFps,60);assert.ok(Math.abs(model.duration-1688/60)<.0001,'complete source talk sequence is retained');assert.equal(model.sampleFps,60);assert.equal(g.animations.length,1);
  if(model.skinWeightCorrection){
   assert.equal(model.id,'the-twins-atomic-heart');
   for(const mesh of g.meshes)for(const primitive of mesh.primitives){
@@ -21,7 +21,7 @@ for(const model of manifest.models)test(`${model.id}: ActorCore motion preserves
    for(let row=0;row<a.count;row++){let total=0;for(let k=0;k<4;k++){const w=binary.readFloatLE(offset+(row*4+k)*4);assert.ok(w>=0&&w<=1);total+=w}assert.ok(Math.abs(total-1)<0.000001)}
   }
  }
- const a=g.animations[0];assert.equal(a.name,model.clip);assert.ok(a.channels.length<=64);
+ const a=g.animations[0];assert.equal(a.name,model.clip);assert.ok(a.channels.length<=Object.keys(model.boneMapping).length+model.auxiliaryBones.length+model.distributedSpineBones.length+1);
  assert.ok(a.channels.some(c=>/forearm|lowerarm|elbow/i.test(g.nodes[c.target.node].name)));
  for(const c of a.channels){
   assert.ok(c.target.path==='rotation'||c.target.path==='translation');

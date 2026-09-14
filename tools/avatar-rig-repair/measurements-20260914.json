@@ -1,0 +1,440 @@
+[
+  {
+    "id": "halloween-the-game-michael-myers-samhain",
+    "before": {
+      "frames": 121,
+      "fps": 30,
+      "maxStepDegrees": 9.470647811889648,
+      "worstSteps": [
+        [
+          9.471,
+          "hand_l"
+        ],
+        [
+          5.215,
+          "upperarm_r"
+        ],
+        [
+          4.674,
+          "hand_r"
+        ],
+        [
+          3.484,
+          "lowerarm_r"
+        ],
+        [
+          3.247,
+          "index_02_r"
+        ],
+        [
+          3.246,
+          "index_03_r"
+        ]
+      ],
+      "entryExitStepDegrees": 1.5384621620178223,
+      "worstFrameEdgeStretchP995": 1.9910894262326415,
+      "worstFrameEdgesOver150Percent": 0.012359166381733119,
+      "waistEdgeStretchP99": 1.3517807203557428
+    },
+    "after": {
+      "frames": 241,
+      "fps": 60,
+      "maxStepDegrees": 4.773754596710205,
+      "worstSteps": [
+        [
+          4.774,
+          "hand_l"
+        ],
+        [
+          2.656,
+          "upperarm_r"
+        ],
+        [
+          2.401,
+          "hand_r"
+        ],
+        [
+          1.789,
+          "lowerarm_r"
+        ],
+        [
+          1.638,
+          "index_03_r"
+        ],
+        [
+          1.637,
+          "index_02_r"
+        ]
+      ],
+      "entryExitStepDegrees": 0.773285984992981,
+      "worstFrameEdgeStretchP995": 1.8631657249051423,
+      "worstFrameEdgesOver150Percent": 0.01042439809525398,
+      "waistEdgeStretchP99": 1.3537169082759941
+    }
+  },
+  {
+    "id": "zima",
+    "before": {
+      "frames": 140,
+      "fps": 30,
+      "maxStepDegrees": 18.365720748901367,
+      "worstSteps": [
+        [
+          18.366,
+          "index1.r"
+        ],
+        [
+          11.101,
+          "index2.r"
+        ],
+        [
+          9.555,
+          "hand.r"
+        ],
+        [
+          7.973,
+          "forearm_stretch.r"
+        ],
+        [
+          7.936,
+          "thumb1.r"
+        ],
+        [
+          7.729,
+          "middle2.r"
+        ]
+      ],
+      "entryExitStepDegrees": 0.2683407664299011,
+      "worstFrameEdgeStretchP995": 2.077249789107373,
+      "worstFrameEdgesOver150Percent": 0.014534485122720417,
+      "waistEdgeStretchP99": 1.143091954566184
+    },
+    "after": {
+      "frames": 279,
+      "fps": 60,
+      "maxStepDegrees": 9.579075813293457,
+      "worstSteps": [
+        [
+          9.579,
+          "index1.r"
+        ],
+        [
+          6.142,
+          "index2.r"
+        ],
+        [
+          4.815,
+          "hand.r"
+        ],
+        [
+          4.097,
+          "thumb1.r"
+        ],
+        [
+          4.072,
+          "middle2.r"
+        ],
+        [
+          4.045,
+          "forearm_stretch.r"
+        ]
+      ],
+      "entryExitStepDegrees": 0.13705608248710632,
+      "worstFrameEdgeStretchP995": 2.0307757306966914,
+      "worstFrameEdgesOver150Percent": 0.012751953928424516,
+      "waistEdgeStretchP99": 1.1411990955361153
+    }
+  },
+  {
+    "id": "nier-automata-2b",
+    "before": {
+      "frames": 167,
+      "fps": 30,
+      "maxStepDegrees": 9.183168411254883,
+      "worstSteps": [
+        [
+          9.183,
+          "b_l_foot"
+        ],
+        [
+          5.789,
+          "b_r_calf"
+        ],
+        [
+          5.305,
+          "b_r_thigh"
+        ],
+        [
+          5.012,
+          "b_l_calf"
+        ],
+        [
+          4.907,
+          "b_l_thigh"
+        ],
+        [
+          3.765,
+          "b_r_foot"
+        ]
+      ],
+      "entryExitStepDegrees": 1.1895804405212402,
+      "worstFrameEdgeStretchP995": 2.8756944777069777,
+      "worstFrameEdgesOver150Percent": 0.020257470597244726,
+      "waistEdgeStretchP99": 1.283025039969324
+    },
+    "after": {
+      "frames": 333,
+      "fps": 60,
+      "maxStepDegrees": 4.627860069274902,
+      "worstSteps": [
+        [
+          4.628,
+          "b_l_foot"
+        ],
+        [
+          4.02,
+          "b_l_calf"
+        ],
+        [
+          3.909,
+          "b_r_calf"
+        ],
+        [
+          3.391,
+          "b_pelvis"
+        ],
+        [
+          3.313,
+          "b_l_forearm"
+        ],
+        [
+          2.917,
+          "b_r_thigh"
+        ]
+      ],
+      "entryExitStepDegrees": 0.03956468030810356,
+      "worstFrameEdgeStretchP995": 1.5040888099979746,
+      "worstFrameEdgesOver150Percent": 0.005655771864023338,
+      "waistEdgeStretchP99": 1.3737079864383601
+    }
+  },
+  {
+    "id": "kitana-mk11-in-mk9-suit",
+    "before": {
+      "frames": 845,
+      "fps": 30,
+      "maxStepDegrees": 21.039987564086914,
+      "worstSteps": [
+        [
+          21.04,
+          "arm right wrist"
+        ],
+        [
+          13.446,
+          "arm right finger 5a"
+        ],
+        [
+          12.939,
+          "arm left wrist"
+        ],
+        [
+          11.42,
+          "arm left elbow"
+        ],
+        [
+          10.607,
+          "arm right shoulder 2"
+        ],
+        [
+          10.452,
+          "leg right knee"
+        ]
+      ],
+      "entryExitStepDegrees": 1.727774739265442,
+      "worstFrameEdgeStretchP995": 4.357624402907629,
+      "worstFrameEdgesOver150Percent": 0.039657142857142856,
+      "waistEdgeStretchP99": 5.8982936576177964
+    },
+    "after": {
+      "frames": 1689,
+      "fps": 60,
+      "maxStepDegrees": 7.439360618591309,
+      "worstSteps": [
+        [
+          7.439,
+          "arm right wrist"
+        ],
+        [
+          7.295,
+          "leg right knee"
+        ],
+        [
+          6.723,
+          "arm right finger 5a"
+        ],
+        [
+          5.71,
+          "arm left elbow"
+        ],
+        [
+          5.378,
+          "arm right shoulder 2"
+        ],
+        [
+          5.221,
+          "arm right finger 4b"
+        ]
+      ],
+      "entryExitStepDegrees": 0.08846931159496307,
+      "worstFrameEdgeStretchP995": 1.3389982409953431,
+      "worstFrameEdgesOver150Percent": 0.002666643427943983,
+      "waistEdgeStretchP99": 1.1636480848768678
+    }
+  },
+  {
+    "id": "stellar-blade-lily-stargazer-coat",
+    "before": {
+      "frames": 845,
+      "fps": 30,
+      "maxStepDegrees": 21.03995132446289,
+      "worstSteps": [
+        [
+          21.04,
+          "Bip001-R-Hand"
+        ],
+        [
+          13.446,
+          "Bip001-R-Finger4"
+        ],
+        [
+          12.939,
+          "Bip001-L-Hand"
+        ],
+        [
+          11.42,
+          "Bip001-L-Forearm"
+        ],
+        [
+          10.607,
+          "Bip001-R-UpperArm"
+        ],
+        [
+          10.441,
+          "Bip001-R-Finger31"
+        ]
+      ],
+      "entryExitStepDegrees": 1.4033005237579346,
+      "worstFrameEdgeStretchP995": 4.191541136396624,
+      "worstFrameEdgesOver150Percent": 0.05328410593007885,
+      "waistEdgeStretchP99": 1.1202889320516036
+    },
+    "after": {
+      "frames": 1689,
+      "fps": 60,
+      "maxStepDegrees": 10.520087242126465,
+      "worstSteps": [
+        [
+          10.52,
+          "Bip001-R-Hand"
+        ],
+        [
+          6.723,
+          "Bip001-R-Finger4"
+        ],
+        [
+          6.47,
+          "Bip001-L-Hand"
+        ],
+        [
+          6.052,
+          "Bip001-R-Calf"
+        ],
+        [
+          5.711,
+          "Bip001-L-Forearm"
+        ],
+        [
+          5.378,
+          "Bip001-R-UpperArm"
+        ]
+      ],
+      "entryExitStepDegrees": 0.09691328555345535,
+      "worstFrameEdgeStretchP995": 1.538997846475495,
+      "worstFrameEdgesOver150Percent": 0.005971101691052464,
+      "waistEdgeStretchP99": 1.1183840199586692
+    }
+  },
+  {
+    "id": "the-twins-atomic-heart",
+    "before": {
+      "frames": 845,
+      "fps": 30,
+      "maxStepDegrees": 21.039913177490234,
+      "worstSteps": [
+        [
+          21.04,
+          "b_r_hand"
+        ],
+        [
+          12.939,
+          "b_l_hand"
+        ],
+        [
+          11.42,
+          "b_l_forearm"
+        ],
+        [
+          10.607,
+          "b_r_upperarm"
+        ],
+        [
+          10.187,
+          "b_r_calf"
+        ],
+        [
+          9.51,
+          "b_r_forearm"
+        ]
+      ],
+      "entryExitStepDegrees": 2.0359747409820557,
+      "worstFrameEdgeStretchP995": 2.0518693776732233,
+      "worstFrameEdgesOver150Percent": 0.02343680699182513,
+      "waistEdgeStretchP99": 1.2555897810436132
+    },
+    "after": {
+      "frames": 1689,
+      "fps": 60,
+      "maxStepDegrees": 10.520011901855469,
+      "worstSteps": [
+        [
+          10.52,
+          "b_r_hand"
+        ],
+        [
+          7.221,
+          "b_r_calf"
+        ],
+        [
+          6.47,
+          "b_l_hand"
+        ],
+        [
+          5.711,
+          "b_l_forearm"
+        ],
+        [
+          5.378,
+          "b_r_upperarm"
+        ],
+        [
+          4.762,
+          "b_r_forearm"
+        ]
+      ],
+      "entryExitStepDegrees": 0.09691328555345535,
+      "worstFrameEdgeStretchP995": 2.07322881347469,
+      "worstFrameEdgesOver150Percent": 0.023222047405844264,
+      "waistEdgeStretchP99": 1.2304258604266713
+    }
+  }
+]

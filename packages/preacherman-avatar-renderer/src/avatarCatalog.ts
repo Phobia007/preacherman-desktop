@@ -69,6 +69,15 @@ const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {
   "halloween-the-game-michael-myers-samhain": "zombie"
 };
 
+const importedIdleVersions: Partial<Record<ImportedAvatarModelId, number>> = {
+  "halloween-the-game-michael-myers-samhain": 3,
+  "nier-automata-2b": 3,
+  "kitana-mk11-in-mk9-suit": 3,
+  "stellar-blade-lily-stargazer-coat": 3,
+  "the-twins-atomic-heart": 3,
+  "nier-print-2b": 3
+};
+
 interface ImportedAvatarProfile {
   readonly avatarId: string;
   readonly defaultActionId: string;
@@ -83,7 +92,7 @@ export const importedAvatarProfiles = importedAvatarModels.reduce((profiles, { i
   profiles[id] = {
   avatarId: id,
   defaultActionId: "idle.default",
-  actions: [{ id: "idle.default", clipName: id === "nier-print-2b" ? "nier-print-2b.idle.seated.v3" : `${id}.idle.${importedIdleMotions[id]}.v2`, category: "idle", loop: "repeat", fadeIn: 0.35, fadeOut: 0.35, timeScale: 1, priority: 10, interruptible: true }],
+  actions: [{ id: "idle.default", clipName: `${id}.idle.${importedIdleMotions[id]}.v${importedIdleVersions[id] ?? 2}`, category: "idle", loop: "repeat", fadeIn: 0.35, fadeOut: 0.35, timeScale: 1, priority: 10, interruptible: true }],
   jawBone: null,
   modelFile: `${id}-runtime.glb`,
   rigId: id,
