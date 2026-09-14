@@ -2540,7 +2540,7 @@
       "loopMode": "preserve source with eased return and matched seam",
       "originalBinaryBuffersPreserved": true,
       "skinWeightCorrection": {
-        "purpose": "Local torso/head attachment and separate rigid accessory weights; authored positions, normals, UVs, textures and inverse bind matrices unchanged. Mechanical arm shells and their trim attach rigidly to the same anatomical segment.",
+        "purpose": "Local torso/head attachment and separate rigid accessory weights; authored positions, normals, UVs, textures unchanged. Arm inverse binds are recalibrated to retain the original rest shape. Mechanical arm shells and their trim attach rigidly to the same anatomical segment.",
         "meshes": [
           {
             "mesh": 0,

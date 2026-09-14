@@ -1,57 +1,133 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-transition-20260914",
+  "buildId": "avatar-rig-repair-20260914",
   "productVersion": "0.1.0",
-  "sourceTask": "fix-gallery-retired-style-flash-and-shader-stall",
+  "sourceTask": "repair-six-assigned-avatar-motions-and-skinning",
   "sourceThread": null,
-  "sourceState": "Native Gallery renders only the authored detail room during entry, lateral navigation and exit. The retired Work orbit draw and noise distortion blend are bypassed. A cancellable two-frame gate prevents displaying a resumed canvas before its new room frame. Exit uses the native 300 ms fade. Stable camera ownership prevents old automatic card selection on return. Avatar final materials compile asynchronously against existing scene lighting before mounting, with disposal deferred until pending compilation settles. Escape consumed by the application navigation cannot also close the detail. Model geometry, textures, animations, lighting, native card layout and default Home startup remain unchanged.",
-  "sourceCommit": "79940ecdd65661ae61457a49b3f1a71544df0b96",
+  "sourceState": "Retarget the same six assigned motions to v3: repair Kitana spine and Lily central trouser helper parenting; drive weighted twist and intermediate spine bones; calibrate palms/fingers; correct local 2B/Twin weights; preserve original 60 FPS source sampling with eased return and matched cycle seams. Authored geometry, UVs, textures, materials, lighting and Pathfinder remain unchanged. Twin arm joint pivots and inverse binds are recalibrated together to preserve the rest mesh.",
+  "sourceCommit": "7375b6690fcc9a48a2c07ce4cc6647a166b54a46",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-14T14:01:27.5203199+08:00",
-  "deployedAt": "2026-09-14T14:03:45.7492449+08:00",
-  "verifiedAt": "2026-09-14T14:11:03.8919565+08:00",
-  "sizeBytes": 670042112,
-  "sha256": "9A4750A56264F2D4A6B0F45DA29E84F82798A29108CDAC7FA0D053E2AE40F339",
+  "builtAt": "2026-09-14T15:40:43.2785916+08:00",
+  "deployedAt": "2026-09-14T15:41:40.2086497+08:00",
+  "verifiedAt": "2026-09-14T15:52:07.6390558+08:00",
+  "sizeBytes": 674762240,
+  "sha256": "9CB2105D8D397818EA1BEF98AB96CEF9CA9DF316127E2FA5EDFE607DA76A984C",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914/preacherman-demo-host.exe",
-  "backupSha256": "2D59A66E5CE9FC2BDA2E20588111E63F789350EFE2B73200463D62BA30106AA0",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914/preacherman-demo-host.exe",
+  "backupSha256": "9A4750A56264F2D4A6B0F45DA29E84F82798A29108CDAC7FA0D053E2AE40F339",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "8c72d02124cb70c857a11ffad0d3dad5aba5d629",
-  "previousVerificationCommit": "8c72d02124cb70c857a11ffad0d3dad5aba5d629",
+  "rollbackBaselineCommit": "51bae9b7a0db45ecd29535174b21ca730be70a57",
+  "previousVerificationCommit": "51bae9b7a0db45ecd29535174b21ca730be70a57",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "testEvidence": "49 focused checks passed, including execution of shipped Hydra transition bindings, both appearances, cancelled reveal, menu Escape ownership and asynchronous GPU preparation/disposal.",
-      "scope": "Change-scoped tests; not the complete repository suite."
+      "testEvidence": "51 focused tests passed, including all imported models, authored accessor fingerprints, normalized skin weights, weighted helpers, whole-cycle Three.js skin deformation, activation, Pathfinder preservation and theme contract.",
+      "scope": "Change-scoped tests, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through the canonical shortcut; cold Cortana preparation, real mouse card picks, first/last transition frames, rapid back/reentry, stale routes, lateral arrows and navigation away/back verified in both appearances. Contact and immediate Market wheel scrolling passed. Home, Task, Gallery, Market (ledger route), Settings and Account visually checked. Preferences restored; final normal shortcut restart without debug port.",
-    "transitions": [
+    "nativeFlow": "Cold launch through canonical shortcut; all six complete default action cycles in Gallery, activation and Home checked in dark and light. Home, Task, Gallery, Market (ledger), Settings and Account visually checked. Original preferences restored and normal final shortcut restart without debug port.",
+    "models": [
       {
+        "id": "halloween-the-game-michael-myers-samhain",
         "appearance": "dark",
-        "sampledFrames": 3927,
-        "oldStyleFrames": 0,
-        "p95FrameMs": 10.900000005960464,
-        "maxFrameMs": 160,
-        "rapidExitAndReentry": true,
-        "staleRouteIgnored": true,
-        "lateralNavigation": true
+        "defaultPlays": true,
+        "observedSeconds": 4.65,
+        "activation": true,
+        "home": true
       },
       {
+        "id": "zima",
+        "appearance": "dark",
+        "defaultPlays": true,
+        "observedSeconds": 5.283333333333334,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "nier-automata-2b",
+        "appearance": "dark",
+        "defaultPlays": true,
+        "observedSeconds": 6.183333333333334,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "kitana-mk11-in-mk9-suit",
+        "appearance": "dark",
+        "defaultPlays": true,
+        "observedSeconds": 28.78333333333333,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "stellar-blade-lily-stargazer-coat",
+        "appearance": "dark",
+        "defaultPlays": true,
+        "observedSeconds": 28.78333333333333,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "the-twins-atomic-heart",
+        "appearance": "dark",
+        "defaultPlays": true,
+        "observedSeconds": 28.78333333333333,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "halloween-the-game-michael-myers-samhain",
         "appearance": "light",
-        "sampledFrames": 3905,
-        "oldStyleFrames": 0,
-        "p95FrameMs": 10.5,
-        "maxFrameMs": 170.3999999910593,
-        "rapidExitAndReentry": true,
-        "staleRouteIgnored": true,
-        "lateralNavigation": true
+        "defaultPlays": true,
+        "observedSeconds": 4.65,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "zima",
+        "appearance": "light",
+        "defaultPlays": true,
+        "observedSeconds": 5.283333333333334,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "nier-automata-2b",
+        "appearance": "light",
+        "defaultPlays": true,
+        "observedSeconds": 6.183333333333334,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "kitana-mk11-in-mk9-suit",
+        "appearance": "light",
+        "defaultPlays": true,
+        "observedSeconds": 28.78333333333333,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "stellar-blade-lily-stargazer-coat",
+        "appearance": "light",
+        "defaultPlays": true,
+        "observedSeconds": 28.78333333333333,
+        "activation": true,
+        "home": true
+      },
+      {
+        "id": "the-twins-atomic-heart",
+        "appearance": "light",
+        "defaultPlays": true,
+        "observedSeconds": 28.78333333333333,
+        "activation": true,
+        "home": true
       }
     ],
     "routes": [
@@ -60,16 +136,15 @@
         "appearance": "dark"
       },
       {
-        "name": "Market",
-        "appearance": "dark",
-        "wheel": true
-      },
-      {
         "name": "Home",
         "appearance": "dark"
       },
       {
         "name": "Task",
+        "appearance": "dark"
+      },
+      {
+        "name": "Market",
         "appearance": "dark"
       },
       {
@@ -85,16 +160,15 @@
         "appearance": "light"
       },
       {
-        "name": "Market",
-        "appearance": "light",
-        "wheel": true
-      },
-      {
         "name": "Home",
         "appearance": "light"
       },
       {
         "name": "Task",
+        "appearance": "light"
+      },
+      {
+        "name": "Market",
         "appearance": "light"
       },
       {
@@ -107,35 +181,35 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-14T14:11:03.8919565+08:00",
-      "NativePid": 25812,
-      "StartedAt": "2026-09-14T14:10:41.7485440+08:00",
-      "WindowHandle": 1968860,
+      "SampledAt": "2026-09-14T15:52:07.6390558+08:00",
+      "NativePid": 30980,
+      "StartedAt": "2026-09-14T15:51:46.5084108+08:00",
+      "WindowHandle": 2427024,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        25812,
-        35096,
-        27892,
-        32032,
-        33400,
-        288,
-        30528,
-        13084,
-        26296,
-        28748,
-        26384
+        30980,
+        33112,
+        29856,
+        9556,
+        21292,
+        30896,
+        27216,
+        32056,
+        11392,
+        34860,
+        33804
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1925.2,
-      "GpuDedicatedBytes": 3228037120.0,
-      "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 16711248,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1938.4,
+      "GpuDedicatedBytes": 3259506688.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 16770048,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 13084
+          "OwningProcess": 32056
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
@@ -156,16 +230,449 @@
         }
       ]
     },
-    "performanceEvidence": {
-      "baseline": "baseline-trace.json / cpu-profile.json: synchronous Three getProgramInfoLog consumed approximately 1302 ms.",
-      "comparableProbe": "fixed-trace.json: entry max 207.4 ms, p95 11.4 ms; exit max 30.3 ms.",
-      "qualification": "Full screenshot runs include screenshot capture and cold texture upload cost; their full maxima and p95 are retained separately. No universal zero-stall claim."
-    },
+    "deformationMeasurements": [
+      {
+        "id": "halloween-the-game-michael-myers-samhain",
+        "before": {
+          "frames": 121,
+          "fps": 30,
+          "maxStepDegrees": 9.470647811889648,
+          "worstSteps": [
+            [
+              9.471,
+              "hand_l"
+            ],
+            [
+              5.215,
+              "upperarm_r"
+            ],
+            [
+              4.674,
+              "hand_r"
+            ],
+            [
+              3.484,
+              "lowerarm_r"
+            ],
+            [
+              3.247,
+              "index_02_r"
+            ],
+            [
+              3.246,
+              "index_03_r"
+            ]
+          ],
+          "entryExitStepDegrees": 1.5384621620178223,
+          "worstFrameEdgeStretchP995": 1.9910894262326415,
+          "worstFrameEdgesOver150Percent": 0.012359166381733119,
+          "waistEdgeStretchP99": 1.3517807203557428
+        },
+        "after": {
+          "frames": 241,
+          "fps": 60,
+          "maxStepDegrees": 4.773754596710205,
+          "worstSteps": [
+            [
+              4.774,
+              "hand_l"
+            ],
+            [
+              2.656,
+              "upperarm_r"
+            ],
+            [
+              2.401,
+              "hand_r"
+            ],
+            [
+              1.789,
+              "lowerarm_r"
+            ],
+            [
+              1.638,
+              "index_03_r"
+            ],
+            [
+              1.637,
+              "index_02_r"
+            ]
+          ],
+          "entryExitStepDegrees": 0.773285984992981,
+          "worstFrameEdgeStretchP995": 1.8631657249051423,
+          "worstFrameEdgesOver150Percent": 0.01042439809525398,
+          "waistEdgeStretchP99": 1.3537169082759941
+        }
+      },
+      {
+        "id": "zima",
+        "before": {
+          "frames": 140,
+          "fps": 30,
+          "maxStepDegrees": 18.365720748901367,
+          "worstSteps": [
+            [
+              18.366,
+              "index1.r"
+            ],
+            [
+              11.101,
+              "index2.r"
+            ],
+            [
+              9.555,
+              "hand.r"
+            ],
+            [
+              7.973,
+              "forearm_stretch.r"
+            ],
+            [
+              7.936,
+              "thumb1.r"
+            ],
+            [
+              7.729,
+              "middle2.r"
+            ]
+          ],
+          "entryExitStepDegrees": 0.2683407664299011,
+          "worstFrameEdgeStretchP995": 2.077249789107373,
+          "worstFrameEdgesOver150Percent": 0.014534485122720417,
+          "waistEdgeStretchP99": 1.143091954566184
+        },
+        "after": {
+          "frames": 279,
+          "fps": 60,
+          "maxStepDegrees": 9.579075813293457,
+          "worstSteps": [
+            [
+              9.579,
+              "index1.r"
+            ],
+            [
+              6.142,
+              "index2.r"
+            ],
+            [
+              4.815,
+              "hand.r"
+            ],
+            [
+              4.097,
+              "thumb1.r"
+            ],
+            [
+              4.072,
+              "middle2.r"
+            ],
+            [
+              4.045,
+              "forearm_stretch.r"
+            ]
+          ],
+          "entryExitStepDegrees": 0.13705608248710632,
+          "worstFrameEdgeStretchP995": 2.0307757306966914,
+          "worstFrameEdgesOver150Percent": 0.012751953928424516,
+          "waistEdgeStretchP99": 1.1411990955361153
+        }
+      },
+      {
+        "id": "nier-automata-2b",
+        "before": {
+          "frames": 167,
+          "fps": 30,
+          "maxStepDegrees": 9.183168411254883,
+          "worstSteps": [
+            [
+              9.183,
+              "b_l_foot"
+            ],
+            [
+              5.789,
+              "b_r_calf"
+            ],
+            [
+              5.305,
+              "b_r_thigh"
+            ],
+            [
+              5.012,
+              "b_l_calf"
+            ],
+            [
+              4.907,
+              "b_l_thigh"
+            ],
+            [
+              3.765,
+              "b_r_foot"
+            ]
+          ],
+          "entryExitStepDegrees": 1.1895804405212402,
+          "worstFrameEdgeStretchP995": 2.8756944777069777,
+          "worstFrameEdgesOver150Percent": 0.020257470597244726,
+          "waistEdgeStretchP99": 1.283025039969324
+        },
+        "after": {
+          "frames": 333,
+          "fps": 60,
+          "maxStepDegrees": 4.627860069274902,
+          "worstSteps": [
+            [
+              4.628,
+              "b_l_foot"
+            ],
+            [
+              4.02,
+              "b_l_calf"
+            ],
+            [
+              3.909,
+              "b_r_calf"
+            ],
+            [
+              3.391,
+              "b_pelvis"
+            ],
+            [
+              3.313,
+              "b_l_forearm"
+            ],
+            [
+              2.917,
+              "b_r_thigh"
+            ]
+          ],
+          "entryExitStepDegrees": 0.03956468030810356,
+          "worstFrameEdgeStretchP995": 1.5040888099979746,
+          "worstFrameEdgesOver150Percent": 0.005655771864023338,
+          "waistEdgeStretchP99": 1.3737079864383601
+        }
+      },
+      {
+        "id": "kitana-mk11-in-mk9-suit",
+        "before": {
+          "frames": 845,
+          "fps": 30,
+          "maxStepDegrees": 21.039987564086914,
+          "worstSteps": [
+            [
+              21.04,
+              "arm right wrist"
+            ],
+            [
+              13.446,
+              "arm right finger 5a"
+            ],
+            [
+              12.939,
+              "arm left wrist"
+            ],
+            [
+              11.42,
+              "arm left elbow"
+            ],
+            [
+              10.607,
+              "arm right shoulder 2"
+            ],
+            [
+              10.452,
+              "leg right knee"
+            ]
+          ],
+          "entryExitStepDegrees": 1.727774739265442,
+          "worstFrameEdgeStretchP995": 4.357624402907629,
+          "worstFrameEdgesOver150Percent": 0.039657142857142856,
+          "waistEdgeStretchP99": 5.8982936576177964
+        },
+        "after": {
+          "frames": 1689,
+          "fps": 60,
+          "maxStepDegrees": 7.439360618591309,
+          "worstSteps": [
+            [
+              7.439,
+              "arm right wrist"
+            ],
+            [
+              7.295,
+              "leg right knee"
+            ],
+            [
+              6.723,
+              "arm right finger 5a"
+            ],
+            [
+              5.71,
+              "arm left elbow"
+            ],
+            [
+              5.378,
+              "arm right shoulder 2"
+            ],
+            [
+              5.221,
+              "arm right finger 4b"
+            ]
+          ],
+          "entryExitStepDegrees": 0.08846931159496307,
+          "worstFrameEdgeStretchP995": 1.3389982409953431,
+          "worstFrameEdgesOver150Percent": 0.002666643427943983,
+          "waistEdgeStretchP99": 1.1636480848768678
+        }
+      },
+      {
+        "id": "stellar-blade-lily-stargazer-coat",
+        "before": {
+          "frames": 845,
+          "fps": 30,
+          "maxStepDegrees": 21.03995132446289,
+          "worstSteps": [
+            [
+              21.04,
+              "Bip001-R-Hand"
+            ],
+            [
+              13.446,
+              "Bip001-R-Finger4"
+            ],
+            [
+              12.939,
+              "Bip001-L-Hand"
+            ],
+            [
+              11.42,
+              "Bip001-L-Forearm"
+            ],
+            [
+              10.607,
+              "Bip001-R-UpperArm"
+            ],
+            [
+              10.441,
+              "Bip001-R-Finger31"
+            ]
+          ],
+          "entryExitStepDegrees": 1.4033005237579346,
+          "worstFrameEdgeStretchP995": 4.191541136396624,
+          "worstFrameEdgesOver150Percent": 0.05328410593007885,
+          "waistEdgeStretchP99": 1.1202889320516036
+        },
+        "after": {
+          "frames": 1689,
+          "fps": 60,
+          "maxStepDegrees": 10.520087242126465,
+          "worstSteps": [
+            [
+              10.52,
+              "Bip001-R-Hand"
+            ],
+            [
+              6.723,
+              "Bip001-R-Finger4"
+            ],
+            [
+              6.47,
+              "Bip001-L-Hand"
+            ],
+            [
+              6.052,
+              "Bip001-R-Calf"
+            ],
+            [
+              5.711,
+              "Bip001-L-Forearm"
+            ],
+            [
+              5.378,
+              "Bip001-R-UpperArm"
+            ]
+          ],
+          "entryExitStepDegrees": 0.09691328555345535,
+          "worstFrameEdgeStretchP995": 1.538997846475495,
+          "worstFrameEdgesOver150Percent": 0.005971101691052464,
+          "waistEdgeStretchP99": 1.1183840199586692
+        }
+      },
+      {
+        "id": "the-twins-atomic-heart",
+        "before": {
+          "frames": 845,
+          "fps": 30,
+          "maxStepDegrees": 21.039913177490234,
+          "worstSteps": [
+            [
+              21.04,
+              "b_r_hand"
+            ],
+            [
+              12.939,
+              "b_l_hand"
+            ],
+            [
+              11.42,
+              "b_l_forearm"
+            ],
+            [
+              10.607,
+              "b_r_upperarm"
+            ],
+            [
+              10.187,
+              "b_r_calf"
+            ],
+            [
+              9.51,
+              "b_r_forearm"
+            ]
+          ],
+          "entryExitStepDegrees": 2.0359747409820557,
+          "worstFrameEdgeStretchP995": 2.0518693776732233,
+          "worstFrameEdgesOver150Percent": 0.02343680699182513,
+          "waistEdgeStretchP99": 1.2555897810436132
+        },
+        "after": {
+          "frames": 1689,
+          "fps": 60,
+          "maxStepDegrees": 10.520087242126465,
+          "worstSteps": [
+            [
+              10.52,
+              "b_r_hand"
+            ],
+            [
+              7.221,
+              "b_r_calf"
+            ],
+            [
+              6.471,
+              "b_l_hand"
+            ],
+            [
+              5.711,
+              "b_l_forearm"
+            ],
+            [
+              5.378,
+              "b_r_upperarm"
+            ],
+            [
+              4.762,
+              "b_r_forearm"
+            ]
+          ],
+          "entryExitStepDegrees": 0.09691328555345535,
+          "worstFrameEdgeStretchP995": 1.2992477290891828,
+          "worstFrameEdgesOver150Percent": 0.0008605504833873418,
+          "waistEdgeStretchP99": 1.2304245077218974
+        }
+      }
+    ],
     "consoleBaseline": "D:/preacherman/output/pathfinder-20260913/native-qualified-report.json",
     "newErrors": [],
     "observedErrors": [
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/climatune%20(2).jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/thorne_installation.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
@@ -190,22 +697,28 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322228996.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/autoneum_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-dark-frames.json",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-light-frames.json",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\source-checks.log",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\verify.cjs",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\final-native-home.png",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-dark-cortana-ready.png",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-light-cortana-ready.png",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-dark-exit-60.png",
-      "D:\\preacherman\\output\\playwright\\gallery-transition-20260914\\native-light-exit-60.png"
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\native-report.json",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\preview-report.json",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\rig-tests.log",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\rig-tests-final.log",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\preview-twin-report.json",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\integration-tests.log",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\typecheck.log",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\production-build.log",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\measurements.json",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\final-resources.json",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\final-native-home.png",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\native-dark-kitana-phase1.png",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\native-dark-lily-phase1.png",
+      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\native-dark-2b-phase1.png"
     ]
   },
   "releaseAttempts": [
@@ -565,9 +1078,18 @@
       "deployedAt": "2026-09-14T14:03:45.7492449+08:00",
       "verifiedAt": "2026-09-14T14:11:03.8919565+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914"
+    },
+    {
+      "buildId": "avatar-rig-repair-20260914",
+      "sourceCommit": "7375b6690fcc9a48a2c07ce4cc6647a166b54a46",
+      "sha256": "9CB2105D8D397818EA1BEF98AB96CEF9CA9DF316127E2FA5EDFE607DA76A984C",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T15:41:40.2086497+08:00",
+      "verifiedAt": "2026-09-14T15:52:07.6390558+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
