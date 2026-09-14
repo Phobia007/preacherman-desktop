@@ -1,133 +1,205 @@
 {
   "schemaVersion": 1,
-  "buildId": "avatar-rig-repair-20260914",
+  "buildId": "gallery-remove-video-20260914",
   "productVersion": "0.1.0",
-  "sourceTask": "repair-six-assigned-avatar-motions-and-skinning",
+  "sourceTask": "remove-foreground-video-window-from-every-gallery-detail",
   "sourceThread": null,
-  "sourceState": "Retarget the same six assigned motions to v3: repair Kitana spine and Lily central trouser helper parenting; drive weighted twist and intermediate spine bones; calibrate palms/fingers; correct local 2B/Twin weights; preserve original 60 FPS source sampling with eased return and matched cycle seams. Authored geometry, UVs, textures, materials, lighting and Pathfinder remain unchanged. Twin arm joint pivots and inverse binds are recalibrated together to preserve the rest mesh.",
-  "sourceCommit": "7375b6690fcc9a48a2c07ce4cc6647a166b54a46",
+  "sourceState": "Removed the foreground canvas video mirror, close button, frame-copy callbacks and unused window styles from the shared Gallery detail overlay. Rear room video playback, character models, lighting, activation, arrows and return controls are preserved.",
+  "sourceCommit": "4260c4433cb2e536633941b9379754c829487876",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-14T15:40:43.2785916+08:00",
-  "deployedAt": "2026-09-14T15:41:40.2086497+08:00",
-  "verifiedAt": "2026-09-14T15:52:07.6390558+08:00",
-  "sizeBytes": 674762240,
-  "sha256": "9CB2105D8D397818EA1BEF98AB96CEF9CA9DF316127E2FA5EDFE607DA76A984C",
+  "builtAt": "2026-09-14T22:47:20.4083978+08:00",
+  "deployedAt": "2026-09-14T22:50:00.6051753+08:00",
+  "verifiedAt": "2026-09-14T23:02:06.8102496+08:00",
+  "sizeBytes": 674761216,
+  "sha256": "809A1AFC99F1825D25EDD90EC79826AB231D5C9C88D86F1E580F22F225DAEF39",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914/preacherman-demo-host.exe",
-  "backupSha256": "9A4750A56264F2D4A6B0F45DA29E84F82798A29108CDAC7FA0D053E2AE40F339",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914/preacherman-demo-host.exe",
+  "backupSha256": "9CB2105D8D397818EA1BEF98AB96CEF9CA9DF316127E2FA5EDFE607DA76A984C",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "51bae9b7a0db45ecd29535174b21ca730be70a57",
-  "previousVerificationCommit": "51bae9b7a0db45ecd29535174b21ca730be70a57",
+  "rollbackBaselineCommit": "239ebed368daa9aa13f5d03c3295d322d9e87c07",
+  "previousVerificationCommit": "239ebed368daa9aa13f5d03c3295d322d9e87c07",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "testEvidence": "51 focused tests passed, including all imported models, authored accessor fingerprints, normalized skin weights, weighted helpers, whole-cycle Three.js skin deformation, activation, Pathfinder preservation and theme contract.",
+      "tests": "26 focused Gallery detail and transition tests passed, including semantic controls for both appearances.",
       "scope": "Change-scoped tests, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through canonical shortcut; all six complete default action cycles in Gallery, activation and Home checked in dark and light. Home, Task, Gallery, Market (ledger), Settings and Account visually checked. Original preferences restored and normal final shortcut restart without debug port.",
-    "models": [
+    "nativeFlow": "Cold launch through canonical shortcut; traversed all 14 occupied Gallery details in dark and light, confirmed no foreground media and continuing rear video playback. Previous/next navigation, back, re-entry and activation checked. Home, Task, Gallery, Market (ledger), Settings and Account visually inspected in both modes. Original preferences restored and shortcut relaunched normally without debug port.",
+    "details": [
       {
-        "id": "halloween-the-game-michael-myers-samhain",
+        "card": "secret-sky",
         "appearance": "dark",
-        "defaultPlays": true,
-        "observedSeconds": 4.65,
-        "activation": true,
-        "home": true
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "zima",
+        "card": "watson-masters",
         "appearance": "dark",
-        "defaultPlays": true,
-        "observedSeconds": 5.283333333333334,
-        "activation": true,
-        "home": true
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "nier-automata-2b",
+        "card": "climatune",
         "appearance": "dark",
-        "defaultPlays": true,
-        "observedSeconds": 6.183333333333334,
-        "activation": true,
-        "home": true
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "kitana-mk11-in-mk9-suit",
+        "card": "eye-of-the-stormers",
         "appearance": "dark",
-        "defaultPlays": true,
-        "observedSeconds": 28.78333333333333,
-        "activation": true,
-        "home": true
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "stellar-blade-lily-stargazer-coat",
+        "card": "bon-iver-viisualiizer",
         "appearance": "dark",
-        "defaultPlays": true,
-        "observedSeconds": 28.78333333333333,
-        "activation": true,
-        "home": true
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "the-twins-atomic-heart",
+        "card": "classic-stories-retold",
         "appearance": "dark",
-        "defaultPlays": true,
-        "observedSeconds": 28.78333333333333,
-        "activation": true,
-        "home": true
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "halloween-the-game-michael-myers-samhain",
-        "appearance": "light",
-        "defaultPlays": true,
-        "observedSeconds": 4.65,
-        "activation": true,
-        "home": true
+        "card": "mastered-from-chaos",
+        "appearance": "dark",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "zima",
-        "appearance": "light",
-        "defaultPlays": true,
-        "observedSeconds": 5.283333333333334,
-        "activation": true,
-        "home": true
+        "card": "emmit-fenn",
+        "appearance": "dark",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "nier-automata-2b",
-        "appearance": "light",
-        "defaultPlays": true,
-        "observedSeconds": 6.183333333333334,
-        "activation": true,
-        "home": true
+        "card": "spacecraft-for-all",
+        "appearance": "dark",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "kitana-mk11-in-mk9-suit",
-        "appearance": "light",
-        "defaultPlays": true,
-        "observedSeconds": 28.78333333333333,
-        "activation": true,
-        "home": true
+        "card": "i-will-what-i-want",
+        "appearance": "dark",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "stellar-blade-lily-stargazer-coat",
-        "appearance": "light",
-        "defaultPlays": true,
-        "observedSeconds": 28.78333333333333,
-        "activation": true,
-        "home": true
+        "card": "acoustic-garage",
+        "appearance": "dark",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       },
       {
-        "id": "the-twins-atomic-heart",
+        "card": "witness-gotham",
+        "appearance": "dark",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "toonami",
+        "appearance": "dark",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "halo-5-visualizer",
+        "appearance": "dark",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "secret-sky",
         "appearance": "light",
-        "defaultPlays": true,
-        "observedSeconds": 28.78333333333333,
-        "activation": true,
-        "home": true
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "watson-masters",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "climatune",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "eye-of-the-stormers",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "bon-iver-viisualiizer",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "classic-stories-retold",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "mastered-from-chaos",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "emmit-fenn",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "spacecraft-for-all",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "i-will-what-i-want",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "acoustic-garage",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "witness-gotham",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "toonami",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
+      },
+      {
+        "card": "halo-5-visualizer",
+        "appearance": "light",
+        "foregroundVideoAbsent": true,
+        "backgroundPlaying": true
       }
     ],
     "routes": [
@@ -181,35 +253,35 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-14T15:52:07.6390558+08:00",
-      "NativePid": 30980,
-      "StartedAt": "2026-09-14T15:51:46.5084108+08:00",
-      "WindowHandle": 2427024,
+      "SampledAt": "2026-09-14T23:02:06.8102496+08:00",
+      "NativePid": 1036,
+      "StartedAt": "2026-09-14T23:01:45.4645865+08:00",
+      "WindowHandle": 14682254,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        30980,
-        33112,
-        29856,
-        9556,
-        21292,
-        30896,
-        27216,
-        32056,
-        11392,
-        34860,
-        33804
+        1036,
+        28300,
+        32604,
+        25852,
+        27680,
+        35376,
+        14056,
+        31540,
+        5764,
+        35204,
+        31524
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1938.4,
-      "GpuDedicatedBytes": 3259506688.0,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 2046.8,
+      "GpuDedicatedBytes": 3397885952.0,
       "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 16770048,
+      "FreeRamKiB": 15126028,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 32056
+          "OwningProcess": 31540
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
@@ -230,447 +302,7 @@
         }
       ]
     },
-    "deformationMeasurements": [
-      {
-        "id": "halloween-the-game-michael-myers-samhain",
-        "before": {
-          "frames": 121,
-          "fps": 30,
-          "maxStepDegrees": 9.470647811889648,
-          "worstSteps": [
-            [
-              9.471,
-              "hand_l"
-            ],
-            [
-              5.215,
-              "upperarm_r"
-            ],
-            [
-              4.674,
-              "hand_r"
-            ],
-            [
-              3.484,
-              "lowerarm_r"
-            ],
-            [
-              3.247,
-              "index_02_r"
-            ],
-            [
-              3.246,
-              "index_03_r"
-            ]
-          ],
-          "entryExitStepDegrees": 1.5384621620178223,
-          "worstFrameEdgeStretchP995": 1.9910894262326415,
-          "worstFrameEdgesOver150Percent": 0.012359166381733119,
-          "waistEdgeStretchP99": 1.3517807203557428
-        },
-        "after": {
-          "frames": 241,
-          "fps": 60,
-          "maxStepDegrees": 4.773754596710205,
-          "worstSteps": [
-            [
-              4.774,
-              "hand_l"
-            ],
-            [
-              2.656,
-              "upperarm_r"
-            ],
-            [
-              2.401,
-              "hand_r"
-            ],
-            [
-              1.789,
-              "lowerarm_r"
-            ],
-            [
-              1.638,
-              "index_03_r"
-            ],
-            [
-              1.637,
-              "index_02_r"
-            ]
-          ],
-          "entryExitStepDegrees": 0.773285984992981,
-          "worstFrameEdgeStretchP995": 1.8631657249051423,
-          "worstFrameEdgesOver150Percent": 0.01042439809525398,
-          "waistEdgeStretchP99": 1.3537169082759941
-        }
-      },
-      {
-        "id": "zima",
-        "before": {
-          "frames": 140,
-          "fps": 30,
-          "maxStepDegrees": 18.365720748901367,
-          "worstSteps": [
-            [
-              18.366,
-              "index1.r"
-            ],
-            [
-              11.101,
-              "index2.r"
-            ],
-            [
-              9.555,
-              "hand.r"
-            ],
-            [
-              7.973,
-              "forearm_stretch.r"
-            ],
-            [
-              7.936,
-              "thumb1.r"
-            ],
-            [
-              7.729,
-              "middle2.r"
-            ]
-          ],
-          "entryExitStepDegrees": 0.2683407664299011,
-          "worstFrameEdgeStretchP995": 2.077249789107373,
-          "worstFrameEdgesOver150Percent": 0.014534485122720417,
-          "waistEdgeStretchP99": 1.143091954566184
-        },
-        "after": {
-          "frames": 279,
-          "fps": 60,
-          "maxStepDegrees": 9.579075813293457,
-          "worstSteps": [
-            [
-              9.579,
-              "index1.r"
-            ],
-            [
-              6.142,
-              "index2.r"
-            ],
-            [
-              4.815,
-              "hand.r"
-            ],
-            [
-              4.097,
-              "thumb1.r"
-            ],
-            [
-              4.072,
-              "middle2.r"
-            ],
-            [
-              4.045,
-              "forearm_stretch.r"
-            ]
-          ],
-          "entryExitStepDegrees": 0.13705608248710632,
-          "worstFrameEdgeStretchP995": 2.0307757306966914,
-          "worstFrameEdgesOver150Percent": 0.012751953928424516,
-          "waistEdgeStretchP99": 1.1411990955361153
-        }
-      },
-      {
-        "id": "nier-automata-2b",
-        "before": {
-          "frames": 167,
-          "fps": 30,
-          "maxStepDegrees": 9.183168411254883,
-          "worstSteps": [
-            [
-              9.183,
-              "b_l_foot"
-            ],
-            [
-              5.789,
-              "b_r_calf"
-            ],
-            [
-              5.305,
-              "b_r_thigh"
-            ],
-            [
-              5.012,
-              "b_l_calf"
-            ],
-            [
-              4.907,
-              "b_l_thigh"
-            ],
-            [
-              3.765,
-              "b_r_foot"
-            ]
-          ],
-          "entryExitStepDegrees": 1.1895804405212402,
-          "worstFrameEdgeStretchP995": 2.8756944777069777,
-          "worstFrameEdgesOver150Percent": 0.020257470597244726,
-          "waistEdgeStretchP99": 1.283025039969324
-        },
-        "after": {
-          "frames": 333,
-          "fps": 60,
-          "maxStepDegrees": 4.627860069274902,
-          "worstSteps": [
-            [
-              4.628,
-              "b_l_foot"
-            ],
-            [
-              4.02,
-              "b_l_calf"
-            ],
-            [
-              3.909,
-              "b_r_calf"
-            ],
-            [
-              3.391,
-              "b_pelvis"
-            ],
-            [
-              3.313,
-              "b_l_forearm"
-            ],
-            [
-              2.917,
-              "b_r_thigh"
-            ]
-          ],
-          "entryExitStepDegrees": 0.03956468030810356,
-          "worstFrameEdgeStretchP995": 1.5040888099979746,
-          "worstFrameEdgesOver150Percent": 0.005655771864023338,
-          "waistEdgeStretchP99": 1.3737079864383601
-        }
-      },
-      {
-        "id": "kitana-mk11-in-mk9-suit",
-        "before": {
-          "frames": 845,
-          "fps": 30,
-          "maxStepDegrees": 21.039987564086914,
-          "worstSteps": [
-            [
-              21.04,
-              "arm right wrist"
-            ],
-            [
-              13.446,
-              "arm right finger 5a"
-            ],
-            [
-              12.939,
-              "arm left wrist"
-            ],
-            [
-              11.42,
-              "arm left elbow"
-            ],
-            [
-              10.607,
-              "arm right shoulder 2"
-            ],
-            [
-              10.452,
-              "leg right knee"
-            ]
-          ],
-          "entryExitStepDegrees": 1.727774739265442,
-          "worstFrameEdgeStretchP995": 4.357624402907629,
-          "worstFrameEdgesOver150Percent": 0.039657142857142856,
-          "waistEdgeStretchP99": 5.8982936576177964
-        },
-        "after": {
-          "frames": 1689,
-          "fps": 60,
-          "maxStepDegrees": 7.439360618591309,
-          "worstSteps": [
-            [
-              7.439,
-              "arm right wrist"
-            ],
-            [
-              7.295,
-              "leg right knee"
-            ],
-            [
-              6.723,
-              "arm right finger 5a"
-            ],
-            [
-              5.71,
-              "arm left elbow"
-            ],
-            [
-              5.378,
-              "arm right shoulder 2"
-            ],
-            [
-              5.221,
-              "arm right finger 4b"
-            ]
-          ],
-          "entryExitStepDegrees": 0.08846931159496307,
-          "worstFrameEdgeStretchP995": 1.3389982409953431,
-          "worstFrameEdgesOver150Percent": 0.002666643427943983,
-          "waistEdgeStretchP99": 1.1636480848768678
-        }
-      },
-      {
-        "id": "stellar-blade-lily-stargazer-coat",
-        "before": {
-          "frames": 845,
-          "fps": 30,
-          "maxStepDegrees": 21.03995132446289,
-          "worstSteps": [
-            [
-              21.04,
-              "Bip001-R-Hand"
-            ],
-            [
-              13.446,
-              "Bip001-R-Finger4"
-            ],
-            [
-              12.939,
-              "Bip001-L-Hand"
-            ],
-            [
-              11.42,
-              "Bip001-L-Forearm"
-            ],
-            [
-              10.607,
-              "Bip001-R-UpperArm"
-            ],
-            [
-              10.441,
-              "Bip001-R-Finger31"
-            ]
-          ],
-          "entryExitStepDegrees": 1.4033005237579346,
-          "worstFrameEdgeStretchP995": 4.191541136396624,
-          "worstFrameEdgesOver150Percent": 0.05328410593007885,
-          "waistEdgeStretchP99": 1.1202889320516036
-        },
-        "after": {
-          "frames": 1689,
-          "fps": 60,
-          "maxStepDegrees": 10.520087242126465,
-          "worstSteps": [
-            [
-              10.52,
-              "Bip001-R-Hand"
-            ],
-            [
-              6.723,
-              "Bip001-R-Finger4"
-            ],
-            [
-              6.47,
-              "Bip001-L-Hand"
-            ],
-            [
-              6.052,
-              "Bip001-R-Calf"
-            ],
-            [
-              5.711,
-              "Bip001-L-Forearm"
-            ],
-            [
-              5.378,
-              "Bip001-R-UpperArm"
-            ]
-          ],
-          "entryExitStepDegrees": 0.09691328555345535,
-          "worstFrameEdgeStretchP995": 1.538997846475495,
-          "worstFrameEdgesOver150Percent": 0.005971101691052464,
-          "waistEdgeStretchP99": 1.1183840199586692
-        }
-      },
-      {
-        "id": "the-twins-atomic-heart",
-        "before": {
-          "frames": 845,
-          "fps": 30,
-          "maxStepDegrees": 21.039913177490234,
-          "worstSteps": [
-            [
-              21.04,
-              "b_r_hand"
-            ],
-            [
-              12.939,
-              "b_l_hand"
-            ],
-            [
-              11.42,
-              "b_l_forearm"
-            ],
-            [
-              10.607,
-              "b_r_upperarm"
-            ],
-            [
-              10.187,
-              "b_r_calf"
-            ],
-            [
-              9.51,
-              "b_r_forearm"
-            ]
-          ],
-          "entryExitStepDegrees": 2.0359747409820557,
-          "worstFrameEdgeStretchP995": 2.0518693776732233,
-          "worstFrameEdgesOver150Percent": 0.02343680699182513,
-          "waistEdgeStretchP99": 1.2555897810436132
-        },
-        "after": {
-          "frames": 1689,
-          "fps": 60,
-          "maxStepDegrees": 10.520087242126465,
-          "worstSteps": [
-            [
-              10.52,
-              "b_r_hand"
-            ],
-            [
-              7.221,
-              "b_r_calf"
-            ],
-            [
-              6.471,
-              "b_l_hand"
-            ],
-            [
-              5.711,
-              "b_l_forearm"
-            ],
-            [
-              5.378,
-              "b_r_upperarm"
-            ],
-            [
-              4.762,
-              "b_r_forearm"
-            ]
-          ],
-          "entryExitStepDegrees": 0.09691328555345535,
-          "worstFrameEdgeStretchP995": 1.2992477290891828,
-          "worstFrameEdgesOver150Percent": 0.0008605504833873418,
-          "waistEdgeStretchP99": 1.2304245077218974
-        }
-      }
-    ],
-    "consoleBaseline": "D:/preacherman/output/pathfinder-20260913/native-qualified-report.json",
+    "consoleBaseline": "D:/preacherman/output/avatar-rig-repair-20260914/native-report.json",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -697,28 +329,17 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516322228996.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516321616422.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/boniver_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/1516323201919.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://storage.googleapis.com/activetheory-v6.appspot.com/media/autoneum_2000Kbps_720p.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\native-report.json",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\preview-report.json",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\rig-tests.log",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\rig-tests-final.log",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\preview-twin-report.json",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\integration-tests.log",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\typecheck.log",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\production-build.log",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\measurements.json",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\final-resources.json",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\final-native-home.png",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\native-dark-kitana-phase1.png",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\native-dark-lily-phase1.png",
-      "D:\\preacherman\\output\\avatar-rig-repair-20260914\\native-dark-2b-phase1.png"
+      "D:\\preacherman\\output\\gallery-remove-video-20260914\\native-report.json",
+      "D:\\preacherman\\output\\gallery-remove-video-20260914\\tests.log",
+      "D:\\preacherman\\output\\gallery-remove-video-20260914\\typecheck.log",
+      "D:\\preacherman\\output\\gallery-remove-video-20260914\\production-build.log",
+      "D:\\preacherman\\output\\gallery-remove-video-20260914\\final-resources.json",
+      "D:\\preacherman\\output\\gallery-remove-video-20260914\\final-native-home.png",
+      "D:\\preacherman\\output\\gallery-remove-video-20260914\\native-dark-bon-iver-viisualiizer.png",
+      "D:\\preacherman\\output\\gallery-remove-video-20260914\\native-light-bon-iver-viisualiizer.png"
     ]
   },
   "releaseAttempts": [
@@ -1087,9 +708,18 @@
       "deployedAt": "2026-09-14T15:41:40.2086497+08:00",
       "verifiedAt": "2026-09-14T15:52:07.6390558+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914"
+    },
+    {
+      "buildId": "gallery-remove-video-20260914",
+      "sourceCommit": "4260c4433cb2e536633941b9379754c829487876",
+      "sha256": "809A1AFC99F1825D25EDD90EC79826AB231D5C9C88D86F1E580F22F225DAEF39",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T22:50:00.6051753+08:00",
+      "verifiedAt": "2026-09-14T23:02:06.8102496+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
