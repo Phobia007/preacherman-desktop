@@ -131,18 +131,14 @@ test('runtime retains the reflection pass and rail, without scroll exit or old c
   assert.doesNotMatch(bridgeSource.slice(bridgeSource.indexOf("    closeWindow()"), bridgeSource.indexOf("    back()")),/\.pause\(|\.play\(/);
 });
 
-test('mirror uses the room video, preserves aspect, and releases frame callbacks',()=>{
+test('detail keeps the character unobstructed and the room owns video playback',()=>{
   const overlay=read('src/surfaces/gallery/GalleryDetailOverlay.tsx');
-  assert.match(overlay,/const video = bridge\.video/);
-  assert.match(overlay,/requestVideoFrameCallback\(draw\)/);
-  assert.match(overlay,/cancelVideoFrameCallback\(callback\)/);
+  assert.doesNotMatch(overlay,/<canvas|<video|gallery-detail__window|Close video window/);
+  assert.doesNotMatch(overlay,/requestVideoFrameCallback|drawImage|\.pause\(|\.play\(/);
   assert.match(overlay,/cancelAnimationFrame\(frame\)/);
-  assert.match(overlay,/Math\.max\(canvas\.width \/ sourceWidth/);
-  assert.match(overlay,/drawSource\(video, video\.videoWidth, video\.videoHeight\)/);
-  assert.match(overlay,/drawSource\(poster, poster\.naturalWidth, poster\.naturalHeight\)/);
-  assert.match(overlay,/poster\.onload = null/);
-  assert.doesNotMatch(overlay,/\.pause\(|\.play\(|<video/);
-  assert.match(overlay,/Close video window/);assert.match(overlay,/Back to Gallery cards/);
+  for (const control of ['Back to Gallery cards', 'Previous character', 'Next character']) assert.ok(overlay.includes(control));
+  assert.match(overlay,/<GalleryActivateButton/);
+  assert.match(bridgeSource,/content\.layers\.video\.position\.set\(0, 0, -\.7\)/);
 });
 
 test('new controls are theme semantic and keyboard accessible in both appearances',()=>{

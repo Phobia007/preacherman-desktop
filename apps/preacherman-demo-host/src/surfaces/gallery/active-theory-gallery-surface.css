@@ -56,7 +56,7 @@
   border: 0;
 }
 
-/* Room → companion → optional video window → persistent desktop chrome. */
+/* Room → companion → detail controls → persistent desktop chrome. */
 .gallery-detail {
   position: absolute;
   inset: 0;
@@ -64,21 +64,6 @@
   pointer-events: none;
   font-family: var(--demo-font-secondary);
 }
-.gallery-detail__window {
-  position: absolute;
-  left: 22%;
-  top: 20%;
-  width: 56%;
-  height: 60%;
-  animation: gallery-detail-window-in 1500ms cubic-bezier(.29, .05, .06, .92) both;
-}
-.gallery-detail__video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  clip-path: polygon(3.5% 0, 96.5% 0, 100% 6%, 100% 94%, 96.5% 100%, 3.5% 100%, 0 94%, 0 6%);
-}
-.gallery-detail__video[data-media-state="loading"] { opacity: 0; }
 .gallery-detail__control {
   display: grid;
   place-items: center;
@@ -97,7 +82,6 @@
 .gallery-detail__control:hover { background: var(--demo-theme-gallery-detail-control-hover); transform: scale(1.06); }
 .gallery-detail__control:focus-visible { outline: 2px solid var(--demo-theme-gallery-detail-control-text); outline-offset: 4px; }
 .gallery-detail__control:disabled { opacity: .5; cursor: default; pointer-events: none; }
-.gallery-detail__close { position: absolute; top: 16px; right: 16px; }
 .gallery-detail__actions {
   position: absolute;
   right: 48px;
@@ -189,10 +173,8 @@
 }
 .gallery-detail__status { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--demo-theme-text); background: var(--demo-theme-surface); padding: 12px 20px; border-radius: 999px; }
 .gallery-detail[data-phase="closing"] { opacity: 0; transition: opacity 300ms ease; }
-@keyframes gallery-detail-window-in { from { opacity: 0; } to { opacity: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .gallery-detail__window { animation: none; }
   .gallery-detail, .gallery-detail__control { transition: none; }
   .gallery-detail__activate, .gallery-detail__back svg { transition: none; }
   .gallery-detail__activate .gallery-detail__activate-label { animation: none; }
@@ -204,7 +186,6 @@
 }
 
 .gallery-detail__content { position: absolute; inset: 0; }
-.gallery-detail[data-navigation-entry="true"] .gallery-detail__window { animation: none; }
 .gallery-detail__step {
   position: absolute;
   top: 50%;
