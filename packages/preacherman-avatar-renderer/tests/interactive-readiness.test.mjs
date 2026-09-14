@@ -89,6 +89,7 @@ for (const cancel of [false,true]) test(`character shader preparation keeps rend
  try{
   h.render(props);await flush();assert.equal(h.render(props),null,'GPU preparation must precede mounting');
   assert.equal(afterFrame,undefined,'loading is not reported ready');
+  await flush(); // Let the asynchronous compile begin before cancelling it.
   if(cancel){h.close();closed=true;await flush();assert.equal(disposed,0,'in-flight shader resources remain owned');}
   finish();await flush();
   if(cancel){assert.equal(disposed,1);assert.equal(firstFrames,0);}
