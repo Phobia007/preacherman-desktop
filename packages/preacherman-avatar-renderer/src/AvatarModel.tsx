@@ -34,6 +34,7 @@ import {
   zimaAnimationManifest,
   zimaMotionStateMap,
 } from "./avatar/manifests/zimaAnimationManifest";
+import { AvatarAnimationError as AnimationLoadError } from "./avatar/types/avatarAnimation";
 import type {
   AvatarActionDescriptor,
   AvatarAnimationDebugSnapshot,
@@ -233,7 +234,14 @@ export function AvatarModel({
       : null,
     [motionRigBinding, root],
   );
-  const { gl, invalidate, size } = useThree();
+  const { gl, camera, scene, invalidate, size } = useThree();
+  const [preparedRoot, setPreparedRoot] = useState<Group | null>(null);
+  const compilation = useRef<Promise<unknown>>();
+  // Shader compilation cannot be cancelled inside Three. Keep its resources
+  // alive until it settles, even if the user selects another character.
+  const afterCompilation = (cleanup: () => void) => {
+    void Promise.resolve(compilation.current).catch(() => undefined).then(cleanup);
+  };
   const drawingBufferSize = useRef(new Vector2());
   const reported = useRef(false);
   const disposeTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -369,7 +377,7 @@ export function AvatarModel({
     invalidate();
     return () => {
       for (const [mesh, material] of bindings.originals) mesh.material = material;
-      for (const material of bindings.clonedMaterials) material.dispose();
+      afterCompilation(() => { for (const material of bindings.clonedMaterials) material.dispose(); });
     };
   }, [bindings, invalidate]);
 
@@ -388,6 +396,21 @@ export function AvatarModel({
 
   useEffect(() => {
     if (!root) return;
+    let current = true;
+    // Compile the final authored materials against the live lights, while the
+    // model is detached. The first visible frame must not block on shader linking.
+    const pending = Promise.resolve().then(() => current ? gl.compileAsync(root, camera, scene) : undefined);
+    compilation.current = pending;
+    void pending.then(() => {
+      if (current) { setPreparedRoot(root); invalidate(); }
+    }).catch(error => {
+      if (current) animationErrorHandler.current(new AnimationLoadError("MODEL_LOAD_FAILED", "Unable to prepare the character materials.", { cause: String(error) }));
+    });
+    return () => { current = false; };
+  }, [bindings, camera, gl, invalidate, root, scene]);
+
+  useEffect(() => {
+    if (!root || preparedRoot !== root) return;
     const removeAfterEffect = addAfterEffect(() => {
       if (reported.current) return;
       reported.current = true;
@@ -400,16 +423,16 @@ export function AvatarModel({
     });
     invalidate();
     return removeAfterEffect;
-  }, [gl, invalidate, onFirstFrame, root]);
+  }, [gl, invalidate, onFirstFrame, preparedRoot, root]);
 
   useEffect(
     () => () => {
       if (!holographic) return;
-      scanlineMap.dispose();
-      irisNormalMap.dispose();
-      for (const controlMap of new Set(Object.values(controlMaps))) {
-        controlMap.dispose();
-      }
+      afterCompilation(() => {
+        scanlineMap.dispose();
+        irisNormalMap.dispose();
+        for (const controlMap of new Set(Object.values(controlMaps))) controlMap.dispose();
+      });
       useTexture.clear([...urls.textures]);
     },
     [
@@ -430,11 +453,11 @@ export function AvatarModel({
       // React StrictMode immediately replays effects in development. Deferring
       // disposal lets that replay keep the in-flight GLB load, while a genuine
       // unmount still releases the controller on the next task.
-      disposeTimer.current = setTimeout(() => controller.dispose(), 0);
+      disposeTimer.current = setTimeout(() => afterCompilation(() => controller.dispose()), 0);
     };
   }, [controller]);
 
-  return root ? (
+  return root && preparedRoot === root ? (
     <group
       position={[0, profile.transform.verticalOffset, 0]}
       rotation={[0, profile.transform.rotationY + rotationOffsetY, 0]}

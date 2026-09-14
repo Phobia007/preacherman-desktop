@@ -115,7 +115,7 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, 
 
   useEffect(() => {
     const escape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !document.querySelector('.demo-app-shell__brand-navigation[data-open="true"]')) onBack();
+      if (!event.defaultPrevented && event.key === "Escape" && !document.querySelector('.demo-app-shell__brand-navigation[data-open="true"]')) onBack();
     };
     window.addEventListener("keydown", escape);
     return () => window.removeEventListener("keydown", escape);

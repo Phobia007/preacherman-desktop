@@ -7,11 +7,32 @@
   const syncRail = () => {
     document.documentElement.dataset.galleryNativeRail = String(rail());
     if (warmed && window.World?.NUKE) window.World.NUKE.paused = rail();
+    if (warmed && work?.detail) work.detail.visible = state.phase !== "closed";
     // Overview previews have bounded per-card decoders; the old decoder serves details only.
     const sharedVideo = video?.video?.video ?? work?.get?.("Work/video", true)?.video?.video;
     if (rail() && sharedVideo && !sharedVideo.paused) sharedVideo.pause();
   };
   let work, video, camera, foreground, savedScroll, exitTimer;
+  let roomFrame = 0, roomRevision = 0;
+  // A resumed WebGL canvas still holds its previous frame. Reveal only after
+  // the selected room has actually rendered; cancelled reveals cannot reopen it.
+  function presentRoom() {
+    const revision = ++roomRevision;
+    window.cancelAnimationFrame?.(roomFrame);
+    document.documentElement.dataset.galleryRoom = "preparing";
+    roomFrame = window.requestAnimationFrame?.(() => {
+      roomFrame = window.requestAnimationFrame?.(() => {
+        if (revision === roomRevision && state.phase === "open") {
+          document.documentElement.dataset.galleryRoom = "visible";
+        }
+      });
+    });
+  }
+  function hideRoom() {
+    ++roomRevision;
+    window.cancelAnimationFrame?.(roomFrame);
+    document.documentElement.dataset.galleryRoom = "hidden";
+  }
   let switching = false;
   // Ownership is stable across open/closing phases; visibility is not ownership.
   document.documentElement.dataset.galleryNavigationOwner = "native";
@@ -54,6 +75,7 @@
   let state = { phase: "closed", project: "", title: "", smallWindow: true };
   const notify = () => {
     window.document?.documentElement?.setAttribute("data-gallery-detail", state.phase);
+    document.documentElement.dataset.galleryContact = String(contact);
     syncRail();
     listeners.forEach(listener => listener({ ...state, contact }));
   };
@@ -193,23 +215,26 @@
           state = { phase: "open", project: data.perma, title: data.title, poster: data.thumbnailURL || "", smallWindow: true, navigationEntry: switching || (state.phase === "open" && state.navigationEntry === true),
             hasPrevious: projects().findIndex(project => project.perma === data.perma) > 0,
             hasNext: projects().findIndex(project => project.perma === data.perma) >= 0 && projects().findIndex(project => project.perma === data.perma) < projects().length - 1 };
+          presentRoom();
           notify();
         } else if (state.phase !== "closed") {
           state.phase = "closing";
+          hideRoom();
           notify();
-          // Restore the rail before the existing camera return transition runs.
+          // Match the native overlay fade; there is no legacy orbit return tween.
           restoreRail();
           exitTimer = setTimeout(() => {
             restoreRail();
             state = { phase: "closed", project: "", title: "", smallWindow: true };
             notify();
-          }, 820);
+          }, window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? 0 : 300);
         }
       });
     },
   };
   window.addEventListener("pagehide", () => {
     clearTimeout(exitTimer);
+    hideRoom();
     document.removeEventListener("visibilitychange", syncActivity);
     pausedMedia.clear();
     window.removeEventListener("wheel", preventDetailWheel, true);

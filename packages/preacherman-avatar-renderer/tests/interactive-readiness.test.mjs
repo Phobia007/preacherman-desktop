@@ -70,3 +70,28 @@ test('changing host callbacks preserves the current model adapter and forwards e
  const props={modelId:'black-widow-aquatic-assassin',assetBaseUrl:'/widow',onAnimationError:()=>first++};
  try{h.render(props);h.render({...props,onAnimationError:()=>latest++});assert.equal(adapters.length,1);adapters[0].options.onError(new Error('current'));assert.equal(first,0);assert.equal(latest,1);}finally{h.close();}
 });
+
+for (const cancel of [false,true]) test(`character shader preparation keeps rendering responsive and handles cancellation=${cancel}`,async()=>{
+ let finish,disposed=0,firstFrames=0,afterFrame;const root={name:'prepared character'};
+ const pending=new Promise(resolve=>{finish=resolve;});
+ const gl={compileAsync(object,camera,scene){assert.equal(object,root);assert.equal(camera,'camera');assert.equal(scene,'scene');return pending;},info:{render:{calls:4,triangles:20}}};
+ class Adapter {getRoot(){return root;}}
+ class Controller {load(){return Promise.resolve();}setState(){return Promise.resolve();}listActions(){return [];}dispose(){disposed++;}}
+ const profile={avatarId:'black-widow-aquatic-assassin',modelFile:'avatar.glb',actions:[],rigId:'widow',defaultActionId:'idle.default',stateMap:{idle:'idle.default'},jawBone:null,transform:{scale:1,verticalOffset:0,rotationY:0}};
+ const h=await componentHarness(join(pkg,'src/AvatarModel.tsx'),'AvatarModel',{
+  importedAvatarProfiles:{'black-widow-aquatic-assassin':profile},avatarUsesHologram:()=>false,
+  useTexture:()=>[],useThree:()=>({gl,camera:'camera',scene:'scene',invalidate(){},size:{width:1,height:1}}),useFrame(){},
+  addAfterEffect:fn=>{afterFrame=fn;return ()=>{};},Vector2:class {},ThreeAvatarAnimationAdapter:Adapter,CortanaAnimationController:Controller,
+ });
+ const props={modelId:'black-widow-aquatic-assassin',assetBaseUrl:'/widow',onAnimationError:e=>assert.fail(String(e)),onFirstFrame:()=>firstFrames++};
+ const flush=()=>new Promise(resolve=>setTimeout(resolve,5));
+ let closed=false;
+ try{
+  h.render(props);await flush();assert.equal(h.render(props),null,'GPU preparation must precede mounting');
+  assert.equal(afterFrame,undefined,'loading is not reported ready');
+  if(cancel){h.close();closed=true;await flush();assert.equal(disposed,0,'in-flight shader resources remain owned');}
+  finish();await flush();
+  if(cancel){assert.equal(disposed,1);assert.equal(firstFrames,0);}
+  else{const tree=h.render(props);assert.equal(find(tree,'primitive').props.object,root);afterFrame();assert.equal(firstFrames,1);}
+ }finally{if(!closed)h.close();finish();await flush();}
+});

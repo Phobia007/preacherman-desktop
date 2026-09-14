@@ -33,7 +33,13 @@
     <style id="preacherman-gallery-native-rail">
       html { color-scheme: light; }
       html[data-gallery-native-rail="true"],html[data-gallery-native-rail="true"] body,html[data-gallery-native-rail="true"] #Stage { background: transparent !important; }
-      html[data-gallery-native-rail="true"] canvas { visibility: hidden !important; }
+      html[data-gallery-navigation-owner="native"],html[data-gallery-navigation-owner="native"] body,html[data-gallery-navigation-owner="native"] #Stage { background: transparent !important; }
+      html[data-gallery-navigation-owner="native"] canvas { opacity: 0; visibility: hidden; transition: opacity 300ms ease, visibility 0s linear 300ms; }
+      html[data-gallery-navigation-owner="native"][data-gallery-contact="true"] canvas,
+      html[data-gallery-navigation-owner="native"][data-gallery-room="visible"] canvas { opacity: 1; visibility: visible; transition: opacity 600ms cubic-bezier(.29,.05,.06,.92); }
+      html[data-gallery-navigation-owner="native"][data-gallery-room="preparing"] canvas,
+      html[data-gallery-native-rail="true"] canvas { opacity: 0; visibility: hidden !important; transition: none; }
+      @media (prefers-reduced-motion: reduce) { html[data-gallery-navigation-owner="native"] canvas { transition: none; } }
       html[data-gallery-native-rail="true"] [data-preacherman-chat] { color: var(--demo-theme-settings-text); }
     </style>
     <script>document.documentElement.dataset.galleryNativeRail="true";</script>
