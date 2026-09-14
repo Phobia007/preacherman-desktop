@@ -404,7 +404,7 @@
     "after": {
       "frames": 1689,
       "fps": 60,
-      "maxStepDegrees": 10.520011901855469,
+      "maxStepDegrees": 10.520087242126465,
       "worstSteps": [
         [
           10.52,
@@ -415,7 +415,7 @@
           "b_r_calf"
         ],
         [
-          6.47,
+          6.471,
           "b_l_hand"
         ],
         [
@@ -432,9 +432,9 @@
         ]
       ],
       "entryExitStepDegrees": 0.09691328555345535,
-      "worstFrameEdgeStretchP995": 2.07322881347469,
-      "worstFrameEdgesOver150Percent": 0.023222047405844264,
-      "waistEdgeStretchP99": 1.2304258604266713
+      "worstFrameEdgeStretchP995": 1.2992477290891828,
+      "worstFrameEdgesOver150Percent": 0.0008605504833873418,
+      "waistEdgeStretchP99": 1.2304245077218974
     }
   }
 ]

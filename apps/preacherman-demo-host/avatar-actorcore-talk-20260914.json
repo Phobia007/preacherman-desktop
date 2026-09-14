@@ -2496,8 +2496,8 @@
       "clip": "the-twins-atomic-heart.idle.actorcore_talk.v3",
       "channels": 23,
       "duration": 28.133333333333333,
-      "runtimeSha256": "47a9310c2f6431839c385f7e612530536df330e993faae42e5ac2d8976a3e414",
-      "runtimeBytes": 37920204,
+      "runtimeSha256": "3e87dbefd09ceb644ef3462fd8be3800294ec33cee9ba8dfc76301e0b611759d",
+      "runtimeBytes": 37922044,
       "originalBinarySha256": "5e19be2d4d622bbab185ea782c2781dcf70d12798cc209e16ff4ba799e67e79b",
       "originalBinaryBytes": 31548640,
       "originalMeshSkinMaterialImageBuffersUnchanged": false,
@@ -2540,19 +2540,19 @@
       "loopMode": "preserve source with eased return and matched seam",
       "originalBinaryBuffersPreserved": true,
       "skinWeightCorrection": {
-        "purpose": "Local torso/head attachment and separate rigid accessory weights; authored positions, normals, UVs, textures and inverse bind matrices unchanged.",
+        "purpose": "Local torso/head attachment and separate rigid accessory weights; authored positions, normals, UVs, textures and inverse bind matrices unchanged. Mechanical arm shells and their trim attach rigidly to the same anatomical segment.",
         "meshes": [
           {
             "mesh": 0,
             "primitive": 0,
-            "correctedVertices": 14767,
+            "correctedVertices": 24190,
             "vertices": 41274,
             "maxWeightSumError": 2.220446049250313e-16
           },
           {
             "mesh": 1,
             "primitive": 0,
-            "correctedVertices": 26232,
+            "correctedVertices": 45072,
             "vertices": 57413,
             "maxWeightSumError": 2.220446049250313e-16
           },
@@ -2622,16 +2622,6 @@
             "type": "SCALAR"
           },
           "viewSha256": "a3bb78ccfa6120b925c452c0ce59984e05113171d95aca66992c09f5327b7682"
-        },
-        {
-          "index": 6,
-          "descriptor": {
-            "bufferView": 9,
-            "componentType": 5126,
-            "count": 22,
-            "type": "MAT4"
-          },
-          "viewSha256": "bafeaea06e96193d97c1ea27f23fc85cb684d6159bd98444095ff4bf3d89e400"
         },
         {
           "index": 7,
@@ -2785,7 +2775,42 @@
         }
       ],
       "sourceArchive": "D:/\u5f00\u6e90\u9879\u76ee/Actorcore-Blender-0913-340614.zip",
-      "archiveMember": "Motion/stand-talk-378997.fbx"
+      "archiveMember": "Motion/stand-talk-378997.fbx",
+      "bindRepair": {
+        "jointPositions": {
+          "b_l_forearm": [
+            0.24443522095680237,
+            1.2398481369018555,
+            -0.05866251140832901
+          ],
+          "b_l_hand": [
+            0.4009239077568054,
+            1.0001320838928223,
+            -0.004427097737789154
+          ],
+          "b_l_upperarm": [
+            0.15999989211559296,
+            1.429999828338623,
+            -0.05000000074505806
+          ],
+          "b_r_forearm": [
+            -0.24912762641906738,
+            1.235865592956543,
+            -0.06162911653518677
+          ],
+          "b_r_hand": [
+            -0.4041197896003723,
+            1.0030016899108887,
+            -0.006421848200261593
+          ],
+          "b_r_upperarm": [
+            -0.15999989211559296,
+            1.429999828338623,
+            -0.05000000074505806
+          ]
+        },
+        "purpose": "Arm pivots follow authored elbow/wrist rings; rest mesh shape is unchanged."
+      }
     }
   ]
 }

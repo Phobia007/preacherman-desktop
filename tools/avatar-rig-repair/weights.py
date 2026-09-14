@@ -50,6 +50,16 @@ for id in ['nier-automata-2b','the-twins-atomic-heart']:
      rows=labels==label;points=pos[rows]
      chosen=names['b_head'] if points[:,1].min()>1.57 else int(np.argmax(weights[rows].sum(0)))
      weights[rows]=0;weights[rows,chosen]=1
+   if id=='the-twins-atomic-heart':
+    # The Twin is built from separate mechanical shells. Heat weights were
+    # bending each forearm shell across elbow and wrist. Attach every welded
+    # arm part (including its trim) to the same anatomical rigid segment.
+    for label in np.unique(labels):
+     rows=labels==label;points=pos[rows];center=points.mean(0)
+     if np.min(abs(points[:,0]))<(.10 if mi==0 else .15) or abs(center[0])<(.17 if mi==0 else .20) or center[1]<.88 or points[:,1].max()>1.51:continue
+     side='l' if center[0]>0 else 'r'
+     part='upperarm' if center[1]>1.285 else 'forearm' if center[1]>1.045 else 'hand'
+     weights[rows]=0;weights[rows,names[f'b_{side}_{part}']]=1
    order=np.argsort(-weights,axis=1,kind='stable')[:,:4];vals=np.take_along_axis(weights,order,axis=1);vals/=vals.sum(1)[:,None]
    changed=np.max(abs(np.take_along_axis(weights,oldj,axis=1)-oldw),axis=1)>1e-5
    at['JOINTS_0']=accessor(order.astype('<u2'),5123);at['WEIGHTS_0']=accessor(vals.astype('<f4'),5126)

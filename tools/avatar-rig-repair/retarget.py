@@ -59,7 +59,7 @@ def node_matrix(n):
  if 'matrix' in n:return Matrix([n['matrix'][i:i+4] for i in range(0,16,4)]).transposed()
  q=n.get('rotation',[0,0,0,1]);return Matrix.LocRotScale(Vector(n.get('translation',[0,0,0])),Quaternion((q[3],*q[:3])),Vector(n.get('scale',[1,1,1])))
 def export_animation(id,key,rig,mapping,samples):
- source=R/'source'/f'{id}.glb';g,buffer=glb_read(source);old_binary=bytes(buffer)
+ source=R/'source'/f'{id}.glb';prepared=R/'rig-input'/f'{id}.glb';g,buffer=glb_read(prepared if prepared.exists() else source);old_binary=bytes(buffer)
  if id in REPARENT:
   child,parent=REPARENT[id];ni={n.get('name'):i for i,n in enumerate(g['nodes'])};sp=ni[child];hip=ni[parent];oldparent=next(n for n in g['nodes'] if sp in n.get('children',[]));oldparent['children'].remove(sp);g['nodes'][hip].setdefault('children',[]).append(sp)
  parents={child:i for i,node in enumerate(g['nodes']) for child in node.get('children',[])};world={}
@@ -118,7 +118,7 @@ def export_animation(id,key,rig,mapping,samples):
  output=R/'exports'/f'{id}-runtime.glb';output.write_bytes(struct.pack('<III',0x46546c67,2,28+len(doc)+len(buffer))+struct.pack('<II',len(doc),0x4e4f534a)+doc+struct.pack('<II',len(buffer),0x004e4942)+buffer)
  return {'clip':name,'channels':len(channels),'duration':samples[-1][1],'runtimeSha256':hashlib.sha256(output.read_bytes()).hexdigest(),'runtimeBytes':output.stat().st_size,'originalBinarySha256':hashlib.sha256(old_binary).hexdigest(),'originalBinaryBytes':len(old_binary),'originalMeshSkinMaterialImageBuffersUnchanged':True,'loopSeam':seam}
 def run(id,key):
- bpy.ops.wm.read_factory_settings(use_empty=True);bpy.ops.import_scene.gltf(filepath=str(R/'source'/f'{id}.glb'))
+ bpy.ops.wm.read_factory_settings(use_empty=True);prepared=R/'rig-input'/f'{id}.glb';bpy.ops.import_scene.gltf(filepath=str(prepared if prepared.exists() else R/'source'/f'{id}.glb'))
  rig=next(o for o in bpy.context.scene.objects if o.type=='ARMATURE');rig.animation_data_clear()
  if id in REPARENT:
   child,parent=REPARENT[id];bpy.context.view_layer.objects.active=rig;bpy.ops.object.mode_set(mode='EDIT');rig.data.edit_bones[child].parent=rig.data.edit_bones[parent];bpy.ops.object.mode_set(mode='OBJECT')
@@ -245,6 +245,8 @@ def run(id,key):
   samples.append((frame,time))
  scene.frame_set(1);bpy.context.view_layer.update();bpy.ops.wm.save_as_mainfile(filepath=str(R/'ready'/f'{id}.blend'),compress=True)
  report=export_animation(id,key,rig,mapping,samples);report.update(id=id,source=data['source'],sourceSha256=hashlib.sha256(Path(data['source']).read_bytes()).hexdigest(),sourceDuration=duration,sourceFps=data['fps'],sampleFps=60,boneMapping=mapping,auxiliaryBones=list(aux),distributedSpineBones=list(gaps),hierarchyRepair=' follows '.join(REPARENT[id]) if id in REPARENT else None,footGoalMaxError=max(errors),originalGLBSha256=hashlib.sha256((R/'source'/f'{id}.glb').read_bytes()).hexdigest(),loopMode='preserve source with eased return and matched seam')
+ if prepared.exists():
+  _,original=glb_read(R/'source'/f'{id}.glb');report.update(originalBinarySha256=hashlib.sha256(original).hexdigest(),originalBinaryBytes=len(original),bindRepair=json.loads((R/'inspection/twin-bind-repair.json').read_text()))
  (R/'inspection'/f'{id}-retarget.json').write_text(json.dumps(report,indent=2));print(json.dumps({k:v for k,v in report.items() if k!='boneMapping'}),flush=True)
 if __name__=='__main__':
  import sys

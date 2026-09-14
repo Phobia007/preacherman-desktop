@@ -29,13 +29,19 @@ for(const record of records)test(`${record.id}: repaired rig preserves authored 
 
 // Exercise the same Three.js linear skinning used by the desktop across the
 // complete cycle, including the previously torn waist, trouser and skirt areas.
-for(const [id,meshIndex,limit,waistOnly] of [['kitana-mk11-in-mk9-suit',null,1.65,true],['stellar-blade-lily-stargazer-coat',2,1.75,false],['nier-automata-2b',0,1.75,false]])test(`${id}: full-cycle skin deformation remains bounded`,{timeout:45000},async()=>{
+for(const [id,meshIndex,limit,waistOnly] of [['kitana-mk11-in-mk9-suit',null,1.65,true],['stellar-blade-lily-stargazer-coat',2,1.75,false],['nier-automata-2b',0,1.75,false],['the-twins-atomic-heart',0,1.8,false]])test(`${id}: full-cycle skin deformation remains bounded`,{timeout:45000},async()=>{
  const bytes=await readFile(new URL(`public/assets/avatars/${id}/${id}-runtime.glb`,root));const end=20+bytes.readUInt32LE(12),g=JSON.parse(bytes.toString('utf8',20,end));
  const bin=bytes.subarray(end+8,end+8+bytes.readUInt32LE(end));g.buffers[0].uri='data:application/octet-stream;base64,'+bin.toString('base64');
  delete g.images;delete g.textures;delete g.materials;for(const m of g.meshes)for(const p of m.primitives)delete p.material;
  globalThis.ProgressEvent??=class ProgressEvent extends Event{};
  const asset=await new GLTFLoader().parseAsync(JSON.stringify(g),'');const mixer=new AnimationMixer(asset.scene);const action=mixer.clipAction(asset.animations[0]).play();
  try{
+  if(id==='the-twins-atomic-heart'){
+   asset.scene.updateMatrixWorld(true);const v=new Vector3(),rest=new Vector3();
+   asset.scene.traverse(m=>{if(!m.isSkinnedMesh)return;m.skeleton.update();const pos=m.geometry.attributes.position;
+    for(let i=0;i<pos.count;i+=37){m.getVertexPosition(i,v);rest.fromBufferAttribute(pos,i);assert.ok(v.distanceTo(rest)<.0001,'corrected pivots and inverse binds preserve the original rest mesh');}
+   });
+  }
   const meshes=[];asset.scene.traverse(m=>{if(m.isSkinnedMesh&&(meshIndex===null||asset.parser.associations.get(m)?.meshes===meshIndex))meshes.push(m)});assert.ok(meshes.length>0);
   const prepared=meshes.map(m=>{
    const pos=m.geometry.attributes.position,idx=m.geometry.index,edges=[],a=new Vector3(),b=new Vector3();
