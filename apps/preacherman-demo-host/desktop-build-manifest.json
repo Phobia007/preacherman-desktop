@@ -1,37 +1,171 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-remove-work-contact-20260915",
+  "buildId": "gallery-detail-avatar-label-20260915",
   "productVersion": "0.1.0",
-  "sourceTask": "remove-gallery-work-contact-switch",
+  "sourceTask": "gallery-metadata-third-segment-preacherman-avatar",
   "sourceThread": null,
-  "sourceState": "Removed the Work / Contact switch from the native Gallery overview and the authored detail scene. The legacy navigation no longer constructs buttons, pill background, accessibility links or interaction handlers. Existing character search, category filters, orbit motion and details remain available.",
-  "sourceCommit": "52705ce94541c59bb026304eee9fb2b077398cc4",
+  "sourceState": "Updated character detail metadata so the third segment reads PREACHERMAN AVATAR. Content before the second slash is preserved. Added the avatar third segment to four entries that previously had only a year and owner. Existing Cortana and ZIMA third segments retained. No typography, colors or other content fields changed.",
+  "sourceCommit": "b560a5a6319f2c5c8e5b4232080da07ac5099e43",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-15T17:55:23.8240763+08:00",
-  "deployedAt": "2026-09-15T17:56:31.5272236+08:00",
-  "verifiedAt": "2026-09-15T17:59:33.0865170+08:00",
+  "builtAt": "2026-09-15T18:13:42.3090347+08:00",
+  "deployedAt": "2026-09-15T18:15:36.7381989+08:00",
+  "verifiedAt": "2026-09-15T18:19:21.9292298+08:00",
   "sizeBytes": 674997760,
-  "sha256": "EF557C0589CA2D7061C4BDF0C71F40A884D4350CD9E033240243DBA27386CBE7",
+  "sha256": "B368B24F2943711EDFCB39401A4EACF08CB18D5F4DEC3D7FA50E8AEF6BB5BB5A",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915/preacherman-demo-host.exe",
-  "backupSha256": "8E7B3FB02CDCCE99FF0E4C02EC1D6E4464A560D9000F5EFCBB8D8854D542AF10",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915/preacherman-demo-host.exe",
+  "backupSha256": "EF557C0589CA2D7061C4BDF0C71F40A884D4350CD9E033240243DBA27386CBE7",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "9d09feac5e29a161622a13000a37aa10609e05a9",
-  "previousVerificationCommit": "9d09feac5e29a161622a13000a37aa10609e05a9",
+  "rollbackBaselineCommit": "ba68bbda7428b7b27ce959223c81a67eb266b0bd",
+  "previousVerificationCommit": "ba68bbda7428b7b27ce959223c81a67eb266b0bd",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "39 focused Gallery orbit, detail, transition and character search tests passed, including omitted legacy navigation and readiness in both appearance modes.",
+      "tests": "24 focused Gallery detail and character search tests passed. Content comparison confirms only detailMeta changed in 12 catalog entries.",
       "scope": "Change-scoped checks, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through the canonical shortcut. Verified absence of Work / Contact in overview, opened character details and return to overview in both appearances. Search, category filtering, card clicks, correct detail routing and original input appearance retained. Home, Task, Gallery, Market, Settings and Account checked in both modes. Original preferences restored; final normal shortcut restart without a debug port.",
+    "nativeFlow": "Cold launch through the canonical shortcut. All fourteen character metadata entries have PREACHERMAN AVATAR as the third segment. Actual Jubilee detail text verified and visually reviewed in both appearance modes. Existing input appearance, search, categories, correct detail routing and absent Work / Contact switch preserved. Home, Task, Gallery, Market, Settings and Account checked in both modes. Original preferences restored; final normal shortcut restart without a debug port.",
+    "metadata": [
+      {
+        "appearance": "dark",
+        "characterMetadata": [
+          {
+            "id": "secret-sky",
+            "meta": "2003 / HALO 4 / preacherman avatar"
+          },
+          {
+            "id": "watson-masters",
+            "meta": "2019 / Alastair Reynolds / preacherman avatar"
+          },
+          {
+            "id": "climatune",
+            "meta": "1989 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "eye-of-the-stormers",
+            "meta": "2001 / Microsoft / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "bon-iver-viisualiizer",
+            "meta": "1993 / Warner Bros. Entertainment / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "classic-stories-retold",
+            "meta": "1975; fully established as Magik in 1983 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "mastered-from-chaos",
+            "meta": "2024 / Riot Games / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "emmit-fenn",
+            "meta": "2017 / Square Enix / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "spacecraft-for-all",
+            "meta": "2024 / SHIFT UP Corporation / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "i-will-what-i-want",
+            "meta": "1963 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "acoustic-garage",
+            "meta": "2023 / Mundfish / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "witness-gotham",
+            "meta": "2010 / Microsoft / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "toonami",
+            "meta": "1978 / Compass International Pictures / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "halo-5-visualizer",
+            "meta": "2019 / Electronic Arts / PREACHERMAN AVATAR"
+          }
+        ],
+        "text": "1989 / Marvel Characters, Inc. / PREACHERMAN AVATAR",
+        "style": {
+          "font": "nbarchitekt, monospace",
+          "color": "rgb(183, 183, 183)"
+        }
+      },
+      {
+        "appearance": "light",
+        "characterMetadata": [
+          {
+            "id": "secret-sky",
+            "meta": "2003 / HALO 4 / preacherman avatar"
+          },
+          {
+            "id": "watson-masters",
+            "meta": "2019 / Alastair Reynolds / preacherman avatar"
+          },
+          {
+            "id": "climatune",
+            "meta": "1989 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "eye-of-the-stormers",
+            "meta": "2001 / Microsoft / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "bon-iver-viisualiizer",
+            "meta": "1993 / Warner Bros. Entertainment / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "classic-stories-retold",
+            "meta": "1975; fully established as Magik in 1983 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "mastered-from-chaos",
+            "meta": "2024 / Riot Games / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "emmit-fenn",
+            "meta": "2017 / Square Enix / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "spacecraft-for-all",
+            "meta": "2024 / SHIFT UP Corporation / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "i-will-what-i-want",
+            "meta": "1963 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "acoustic-garage",
+            "meta": "2023 / Mundfish / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "witness-gotham",
+            "meta": "2010 / Microsoft / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "toonami",
+            "meta": "1978 / Compass International Pictures / PREACHERMAN AVATAR"
+          },
+          {
+            "id": "halo-5-visualizer",
+            "meta": "2019 / Electronic Arts / PREACHERMAN AVATAR"
+          }
+        ],
+        "text": "1989 / Marvel Characters, Inc. / PREACHERMAN AVATAR",
+        "style": {
+          "font": "nbarchitekt, monospace",
+          "color": "rgb(183, 183, 183)"
+        }
+      }
+    ],
     "removedNavigation": [
       {
         "appearance": "dark",
@@ -114,19 +248,19 @@
         "scroll": 1,
         "target": 1,
         "position": {
-          "x": -0.511729244016973,
-          "y": 0.17421555902708433
+          "x": -0.5117292439620305,
+          "y": 0.1742155590836742
         }
       },
       {
         "appearance": "dark",
         "name": "Pathfinder",
         "id": "halo-5-visualizer",
-        "scroll": 13.998064424619699,
+        "scroll": 13.998081958455547,
         "target": 14,
         "position": {
-          "x": -0.5108713122283188,
-          "y": 0.1736190569513186
+          "x": -0.5108790878848323,
+          "y": 0.17362445819624853
         },
         "inputStyle": {
           "font": "nbarchitekt, monospace",
@@ -143,19 +277,19 @@
         "scroll": 1,
         "target": 1,
         "position": {
-          "x": -0.5117292440052692,
-          "y": 0.17421555903914646
+          "x": -0.5117292440381853,
+          "y": 0.1742155590052536
         }
       },
       {
         "appearance": "light",
         "name": "Pathfinder",
         "id": "halo-5-visualizer",
-        "scroll": 13.998159560068185,
+        "scroll": 13.998035761503868,
         "target": 14,
         "position": {
-          "x": -0.5109135006925631,
-          "y": 0.17364836364189168
+          "x": -0.5108586009636609,
+          "y": 0.1736102274559737
         },
         "inputStyle": {
           "font": "nbarchitekt, monospace",
@@ -245,41 +379,41 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-15T17:59:33.0865170+08:00",
-      "NativePid": 34556,
-      "StartedAt": "2026-09-15T17:59:16.7404320+08:00",
-      "WindowHandle": 919366,
+      "SampledAt": "2026-09-15T18:19:21.9292298+08:00",
+      "NativePid": 9668,
+      "StartedAt": "2026-09-15T18:19:04.1937125+08:00",
+      "WindowHandle": 1377976,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        34556,
-        22280,
-        31536,
-        8396,
-        30848,
-        30416,
-        18832,
-        30760,
-        3772,
-        32456,
-        28228
+        9668,
+        6248,
+        20680,
+        32884,
+        33248,
+        29292,
+        9064,
+        28368,
+        33420,
+        12628,
+        14032
       ],
-      "NormalizedCpuPercent": 5.98,
-      "WorkingSetMiB": 1982.5,
-      "GpuDedicatedBytes": 3397275648.0,
-      "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 17178212,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1920.6,
+      "GpuDedicatedBytes": 3222069248.0,
+      "MaxGpuEngineUtilization": 12.0,
+      "FreeRamKiB": 16788440,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 30760
+          "OwningProcess": 28368
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
       "SharedProcesses": []
     },
-    "consoleBaseline": "D:/preacherman/output/gallery-search-original-style-20260915/native-report.json",
+    "consoleBaseline": "D:/preacherman/output/gallery-remove-work-contact-20260915/native-report.json",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -309,17 +443,17 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-report.json",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\preview-report.json",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\tests.log",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\typecheck.log",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\production-build.log",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\final-resources.json",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\final-native-home.png",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-dark-initial.png",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-light-initial.png",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-dark-detail.png",
-      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-light-detail.png"
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-report.json",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\tests.log",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\typecheck.log",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\production-build.log",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\final-resources.json",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\final-native-home.png",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-dark-initial.png",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-light-initial.png",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-dark-jubilee-metadata.png",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-light-jubilee-metadata.png",
+      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\content-changes.json"
     ]
   },
   "releaseAttempts": [
@@ -751,9 +885,18 @@
       "deployedAt": "2026-09-15T17:56:31.5272236+08:00",
       "verifiedAt": "2026-09-15T17:59:33.0865170+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915"
+    },
+    {
+      "buildId": "gallery-detail-avatar-label-20260915",
+      "sourceCommit": "b560a5a6319f2c5c8e5b4232080da07ac5099e43",
+      "sha256": "B368B24F2943711EDFCB39401A4EACF08CB18D5F4DEC3D7FA50E8AEF6BB5BB5A",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T18:15:36.7381989+08:00",
+      "verifiedAt": "2026-09-15T18:19:21.9292298+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
