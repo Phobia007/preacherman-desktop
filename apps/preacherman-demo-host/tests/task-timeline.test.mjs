@@ -144,3 +144,12 @@ test("every packaged entry lets timeline titles reach their own queued click han
     assert.ok(source.includes('if(event.target.closest?.(".task-timeline__name"))return;const route=routeFor(event.target);'), entry);
   }
 });
+
+test("captured navigation links use the same authored queue during first entry", () => {
+  for (const file of ["index.html", "full/index.html", ...["nathan-riley", "casa-di-solare", "the-lookback", "book-of-happiness", "dogelon-mars", "gil-huybrecht", "discoveryland", "griflan"].map(slug => `projects/${slug}/index.html`)]) {
+    const source = read(file);
+    assert.match(source, /aw:useNavigation/, file);
+    assert.match(source, /app\.runWithContext\(\(\)=>useNavigation\(\)\.to\(route\)\)/, file);
+    assert.doesNotMatch(source, /Promise\.resolve\(router\.push\(route\)\)/, file);
+  }
+});
