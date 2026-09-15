@@ -52,11 +52,26 @@ for (const appearance of ["light", "dark"]) test(`Gallery rail preserves input o
 test("Gallery overview shares model camera and depth while keeping theme controls and original packaged covers", () => {
   const css=read("src/styles.css"),surface=read("src/surfaces/gallery/active-theory-gallery-surface.css");
   assert.doesNotMatch(css,/mix-blend-mode:\s*screen/);
-  assert.match(surface,/gallery-orbit-nav[\s\S]*--demo-theme-gallery-detail-control-text/);
+  assert.match(surface,/gallery-detail__control[\s\S]*--demo-theme-gallery-detail-control-text/);
   assert.match(surface,/color-scheme:\s*light/);
   const scene=read("../../packages/preacherman-avatar-renderer/src/InteractiveAvatarViewport.tsx");
   assert.match(scene,/<Canvas[\s\S]*<InteractiveAvatarScene[\s\S]*\{sceneContent\}[\s\S]*<\/Canvas>/);
   const mapping={};vm.runInNewContext(read("public/active-theory-gallery/gallery/rail-assets.js"),{window:mapping});
   assert.equal(Object.keys(mapping.PreachermanGalleryRailAssets).length,29);
   for(const url of Object.values(mapping.PreachermanGalleryRailAssets))assert(fs.statSync(new URL("../public"+url,import.meta.url)).size>1000);
+});
+
+for (const appearance of ["light", "dark"]) test(`Gallery omits legacy navigation visuals and handlers without blocking readiness in ${appearance}`, () => {
+  const runtime=read("public/active-theory-gallery/gallery/assets/js/app.1780406240914.js");
+  const start=runtime.indexOf("function NavUI(");
+  const end=runtime.indexOf("})),Class((function ",start);
+  const constructor=runtime.slice(start,end+1);
+  const values=new Map(),flags=new Map(),created=[];
+  const instance={set:(key,value)=>values.set(key,value),flag:(key,value)=>flags.set(key,value),initClass:(...args)=>created.push(args)};
+  const context={window:{__GALLERY_MODE__:true},document:{documentElement:{dataset:{appearance}}},Inherit(){},GLUIElement(){},Initialization(){},XComponent(){}};
+  vm.runInNewContext(`(${constructor}).call(instance)`,{...context,instance});
+  assert.equal(values.get("ready"),true);
+  assert.equal(flags.get("__ready"),true);
+  assert.deepEqual(created,[],"no GL buttons, background, accessibility links or interaction handlers are constructed");
+  assert.doesNotMatch(read("src/surfaces/gallery/ActiveTheoryGallerySurface.tsx"),/gallery-orbit-nav|>WORK<|>CONTACT</);
 });

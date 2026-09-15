@@ -59,10 +59,6 @@ export function ActiveTheoryGallerySurface({ active = true, renderActive = true,
       className="active-theory-gallery-surface"
       data-loaded={loaded ? "true" : "false"}
     >
-      {bridge && detail.phase === "closed" && !detail.contact ? <nav className="gallery-orbit-nav" aria-label="Gallery views">
-        <button type="button" onClick={() => bridge.showWork()}>WORK</button>
-        <button type="button" onClick={() => bridge.toggleContact()}>CONTACT</button>
-      </nav> : null}
       {portal && bridge && active && detail.phase !== "closed" ? <GalleryDetailOverlay bridge={bridge} detail={detail} portal={portal} onBack={back} modelId={modelId} activeModelId={activeModelId} onActivate={onActivate} onNavigate={navigation.navigate} switching={navigation.switching} navigationError={navigation.error} /> : null}
       <iframe
         ref={frameRef}

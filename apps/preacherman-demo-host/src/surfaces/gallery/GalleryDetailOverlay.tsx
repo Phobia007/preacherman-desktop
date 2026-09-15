@@ -24,8 +24,6 @@ export interface GalleryDetailBridge {
   openProject(id: string): void;
   focusProject(id: string): void;
   previewProject(id: string): void;
-  showWork(): void;
-  toggleContact(): void;
   video: HTMLVideoElement | null;
   setActive(active: boolean, windowVisible?: boolean): void;
   subscribe(listener: (state: GalleryDetailState) => void): () => void;

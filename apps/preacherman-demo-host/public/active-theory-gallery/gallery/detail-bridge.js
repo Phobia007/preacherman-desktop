@@ -127,8 +127,6 @@
       else if (rail()) notify();
     },
     openProject(id) { const project = projects().find(project => project.perma === id); if (project && rail()) { selectedProject = id; work.set("Work/project", project); work.set("WorkItems/videoURL", project.videoURL); work.navigate?.("work/" + project.perma); } },
-    showWork() { selectedProject = null; work.set("ViewController/contact", false); work.set("Work/project", null); work.fire("ViewController/goToWork"); },
-    toggleContact() { work.set("ViewController/contact", !contact); },
     setActive(active, visible = true) { requestedActive = active; windowVisible = visible; syncActivity(); },
     subscribe(listener) {
       listeners.add(listener);

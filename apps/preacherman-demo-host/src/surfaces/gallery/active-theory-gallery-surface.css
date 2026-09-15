@@ -25,20 +25,6 @@
   transform-origin: center;
 }
 
-/* The 3D cards own entry motion; the shared camera must not slide with an iframe. */
-.gallery-orbit-nav {
-  position: absolute; z-index: 2; top: 42px; right: 34px;
-  display: flex; width: 212px; height: 46px; align-items: stretch;
-  border: 1px solid var(--demo-theme-gallery-detail-control-border);
-  border-radius: 999px; background: var(--demo-theme-gallery-detail-control-bg);
-}
-.gallery-orbit-nav button {
-  flex: 1; padding: 0; border: 0; border-radius: 999px; background: transparent;
-  color: var(--demo-theme-gallery-detail-control-text); font: 14px var(--demo-font-secondary); cursor: pointer;
-}
-.gallery-orbit-nav button:hover { background: var(--demo-theme-gallery-detail-control-hover); }
-.gallery-orbit-nav button:focus-visible { outline: 2px solid var(--demo-theme-focus); outline-offset: 3px; }
-
 .active-theory-gallery-surface__frame:focus-visible {
   outline: 2px solid var(--demo-theme-focus);
   outline-offset: -2px;

@@ -92,6 +92,14 @@ scene = replaceOnce(
   "function update(){if(_requestId=null,!_this.destroy||!_video.destroy||!_this.texture)return;let updateTex",
   "guard the copied Gallery video texture frame race",
 );
+
+// Gallery uses the host navigation; do not construct legacy Work / Contact UI.
+scene = replaceOnce(
+  scene,
+  "function NavUI(_params,...restArgs){const _this=this;Inherit(_this,GLUIElement),Inherit(_this,Initialization),Inherit(_this,XComponent),_this.fragName=\"NavUI\",_this.contexts=\"GLUIElement,Initialization\",_this.params=_params,_this.args=arguments,this.isFragment=!0;var _promises=[];!async function(){",
+  "function NavUI(_params,...restArgs){const _this=this;Inherit(_this,GLUIElement),Inherit(_this,Initialization),Inherit(_this,XComponent),_this.fragName=\"NavUI\",_this.contexts=\"GLUIElement,Initialization\",_this.params=_params,_this.args=arguments,this.isFragment=!0;var _promises=[];!async function(){if(window.__GALLERY_MODE__){_this.set(\"ready\",!0),_this.flag?.(\"__ready\",!0);return}",
+  "omit legacy Gallery Work / Contact switch before rendering and event binding",
+);
 fs.writeFileSync(scenePath, scene);
 
 const entryPath = path.join(runtimeRoot, "gallery", "work.html");
