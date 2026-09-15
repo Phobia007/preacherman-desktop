@@ -174,3 +174,11 @@ test("detail sheets ignore cover aspect ratios and keep the composer last", () =
   }
   assert.doesNotMatch(source, /文本对话与规划 · 发送给所选模型 · 不执行本机任务/);
 });
+
+test("timeline details resolve the complete catalog, including non-featured conversations", () => {
+  const detail = fs.readFileSync(new URL("_nuxt/Dr-ZLxUY.js", root), "utf8");
+  const timeline = fs.readFileSync(new URL("task-timeline.js", root), "utf8");
+  assert.ok(timeline.includes('useAsyncData("projects", () => dato.projects())'));
+  assert.ok(detail.includes('$e("projects",()=>p.projects())'), "detail sheets must share the complete timeline catalog");
+  assert.ok(!detail.includes('$e("featured",()=>p.featured())'), "a non-featured title must not mount an empty detail sheet");
+});

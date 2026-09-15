@@ -128,3 +128,19 @@ test("timeline reuses the original rail and clips its hover bounds to visible na
   assert.match(source, /loadTaskCovers/);
   assert.match(source, /folio.selectTitle\(flying, project.slug\)/);
 });
+
+test("title clicks use the authored navigation queue and release the click lock", () => {
+  const source = read("task-timeline.js");
+  assert.match(source, /aw as useNavigation/);
+  assert.match(source, /const \{to: navigate\} = useNavigation\(\)/);
+  assert.match(source, /try \{ await navigate\(taskProjectRoute\(project\)\); \}/);
+  assert.match(source, /finally \{ navigating = false; \}/);
+});
+
+test("every packaged entry lets timeline titles reach their own queued click handler", () => {
+  const entries = ["index.html", "full/index.html", ...["nathan-riley", "casa-di-solare", "the-lookback", "book-of-happiness", "dogelon-mars", "gil-huybrecht", "discoveryland", "griflan"].map(slug => `projects/${slug}/index.html`)];
+  for (const entry of entries) {
+    const source = read(entry);
+    assert.ok(source.includes('if(event.target.closest?.(".task-timeline__name"))return;const route=routeFor(event.target);'), entry);
+  }
+});

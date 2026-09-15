@@ -1,4 +1,4 @@
-import {a0 as useNuxtApp, a1 as withAsyncContext, a2 as useHead, a3 as onMounted, a4 as nextTick, a6 as onUnmounted, a8 as h, ac as useAsyncData, ad as ref, af as computed, aj as navigateTo} from "./_nuxt/D9b8F35K.js";
+import {a0 as useNuxtApp, a1 as withAsyncContext, a2 as useHead, a3 as onMounted, a4 as nextTick, a6 as onUnmounted, a8 as h, ac as useAsyncData, ad as ref, af as computed, aw as useNavigation} from "./_nuxt/D9b8F35K.js";
 import {u as usePrefetch} from "./_nuxt/DXCfcV2M.js";
 import {loadTaskCovers} from "./task-covers.js";
 import {readTaskProjects, taskDisplayTitle, taskIndexProjects, taskProjectRoute} from "./task-metadata.js";
@@ -16,6 +16,7 @@ export default {
   async setup() {
     const nuxt = useNuxtApp();
     const {$folio: folio, $dato: dato, $resize: resize} = nuxt;
+    const {to: navigate} = useNavigation();
     let pending, restore;
     const {data} = ([pending, restore] = withAsyncContext(() => useAsyncData("projects", () => dato.projects())), pending = await pending, restore(), pending);
     useHead(() => ({title: "Index"}));
@@ -91,7 +92,10 @@ export default {
       flying = await folio.text(event.currentTarget, {reveal: false});
       if (disposed) { folio.dropTexts(flying); return; }
       folio.selectTitle(flying, project.slug);
-      await navigateTo(taskProjectRoute(project));
+      // Use the authored navigation queue so a click immediately after All
+      // waits for the current transition instead of being rejected by its guard.
+      try { await navigate(taskProjectRoute(project)); }
+      finally { navigating = false; }
     };
     const rememberColumn = event => {
       view.columns.set(event.currentTarget.dataset.day, event.currentTarget.scrollTop);
