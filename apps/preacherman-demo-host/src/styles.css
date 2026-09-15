@@ -2567,3 +2567,67 @@ body {
     transition-duration: 1ms !important;
   }
 }
+
+
+/* Account inherits the local login composition, with a separate glass stage. */
+.demo-app-shell {
+  --demo-theme-account-canvas: #f7f7f6;
+  --demo-theme-account-surface: #ffffff;
+  --demo-theme-account-text: #202121;
+  --demo-theme-account-muted: #666a6c;
+  --demo-theme-account-border: #d9dddd;
+  --demo-theme-account-border-hover: #8b9598;
+  --demo-theme-account-hover: #f0f2f2;
+  --demo-theme-account-focus: #167b98;
+  --demo-theme-account-error: #a53636;
+  --demo-theme-account-action-hover: #41484a;
+  --demo-theme-account-icon-filter: brightness(0);
+  --demo-theme-account-glass: #aebbc0;
+  --demo-theme-account-frost: #f0f4f4;
+  --demo-theme-account-frost-soft: #c5d1d5;
+  --demo-theme-account-fade-mid: rgb(43 53 59 / 8%);
+  --demo-theme-account-fade-end: rgb(13 22 29 / 88%);
+  --demo-theme-account-brand-text: #edf3f5;
+  --demo-theme-account-profile-text: #172229;
+  --demo-theme-account-brand-shadow: rgb(0 0 0 / 90%);
+  --demo-theme-account-brand-hover: #ffffff;
+  --demo-theme-account-dialog-backdrop: rgb(15 24 29 / 42%);
+}
+.demo-app-shell[data-appearance="dark"] {
+  --demo-theme-account-canvas: #000000;
+  --demo-theme-account-surface: #0f0f0f;
+  --demo-theme-account-text: #ededed;
+  --demo-theme-account-muted: #959a9c;
+  --demo-theme-account-border: #292c2e;
+  --demo-theme-account-border-hover: #596267;
+  --demo-theme-account-hover: #171a1c;
+  --demo-theme-account-focus: #71d6ed;
+  --demo-theme-account-error: #f3aaa4;
+  --demo-theme-account-action-hover: #c8d4d8;
+  --demo-theme-account-icon-filter: brightness(0) invert(1);
+  --demo-theme-account-glass: #11171c;
+  --demo-theme-account-frost: #424d53;
+  --demo-theme-account-frost-soft: #26333b;
+  --demo-theme-account-fade-mid: rgb(0 0 0 / 22%);
+  --demo-theme-account-fade-end: #000000;
+  --demo-theme-account-brand-text: #dce5e8;
+  --demo-theme-account-profile-text: #dce5e8;
+  --demo-theme-account-brand-shadow: rgb(0 0 0 / 90%);
+  --demo-theme-account-brand-hover: #ffffff;
+  --demo-theme-account-dialog-backdrop: rgb(0 0 0 / 64%);
+}
+.demo-app-shell[data-active-surface="account"] .demo-window-controls__button,
+.demo-app-shell[data-active-surface="account"] .demo-app-shell__brand-trigger {
+  color: var(--demo-theme-account-text);
+}
+.demo-app-shell[data-active-surface="account"] .demo-window-controls__button img {
+  filter: var(--demo-theme-account-icon-filter);
+}
+.demo-app-shell[data-active-surface="account"] .demo-window-controls__button:hover {
+  background: var(--demo-theme-account-hover);
+}
+.demo-app-shell[data-active-surface="account"] .demo-window-controls__button:focus-visible {
+  outline-color: var(--demo-theme-account-focus);
+}
+
+.demo-app-shell[data-active-surface="account"] .demo-app-shell__brand-trigger:focus-visible { outline-color: var(--demo-theme-account-focus); }

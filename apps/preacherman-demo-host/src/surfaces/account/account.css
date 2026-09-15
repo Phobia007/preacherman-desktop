@@ -1,0 +1,79 @@
+@font-face {
+  font-family: "Account Harmony";
+  src: url("./assets/harmonyos-sans-sc.woff2") format("woff2");
+  font-display: swap;
+}
+.demo-app-shell__scene { transition: opacity 260ms ease, visibility 0s linear, transform 1050ms cubic-bezier(.22, 1, .36, 1); }
+.demo-app-shell[data-active-surface="account"] .demo-app-shell__scene {
+  transform: translateX(-25%);
+  clip-path: inset(0 25%);
+  animation: account-scene-left 820ms cubic-bezier(.22, 1, .36, 1) both;
+  background: transparent;
+}
+.demo-app-shell[data-active-surface="account"] .demo-app-shell__scene::after { display: none; }
+.demo-app-shell[data-active-surface="account"]:has(.account[data-lens-active="true"]) .demo-app-shell__scene { opacity: 0; transition: none; }
+.account-frost { position: absolute; left: 25%; top: 0; width: 50%; height: 100%; }
+.account {
+  position: absolute; inset: 0; z-index: 2; display: flex; overflow: hidden;
+  color: var(--demo-theme-account-text); font-family: Arial, "Account Harmony", sans-serif;
+}
+.account__visual { position: relative; width: 50%; height: 100%; overflow: hidden; flex-shrink: 0; animation: account-left 820ms cubic-bezier(.22, 1, .36, 1) both; }
+.account__fade { position: absolute; inset: 0; background: linear-gradient(transparent, var(--demo-theme-account-fade-mid) 44%, var(--demo-theme-account-fade-end)); pointer-events: none; }
+.account__mark { position: absolute; top: 50%; left: 50%; width: 184px; height: 184px; transform: translate(-50%, -64%); object-fit: contain; filter: drop-shadow(0 2px 5px var(--demo-theme-account-brand-shadow)); }
+.account__signature {
+  position: absolute; top: calc(50% + 96px); left: 50%; transform: translateX(-50%); z-index: 3;
+  min-height: 48px; padding: 4px 24px; border: 0; background: transparent;
+  color: var(--demo-theme-account-brand-text); text-shadow: 0 1px 4px var(--demo-theme-account-brand-shadow); font: 400 38px/1 "Market Task Signature", cursive; cursor: pointer;
+}
+.account__signature:hover { color: var(--demo-theme-account-brand-hover); }
+.account__signature:disabled { cursor: default; }
+.account__main {
+  box-sizing: border-box; display: flex; align-items: center; justify-content: center; width: 50%; height: 100%;
+  min-width: 0; padding: 80px 40px 64px; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--demo-theme-account-canvas); border-left: 1px solid var(--demo-theme-account-border);
+  animation: account-right 760ms 420ms cubic-bezier(.22, 1, .36, 1) both;
+}
+.account__form { width: 100%; max-width: 418px; flex-shrink: 0; margin: auto; }
+.account__heading { margin-bottom: 24px; text-align: center; }
+.account__heading h1 { margin: 0; font: 600 32px/1.15 "Account Harmony", Arial, sans-serif; letter-spacing: -.02em; }
+.account__heading p { margin: 10px 0 0; color: var(--demo-theme-account-muted); font-size: 16px; line-height: 24px; }
+.account__providers { display: flex; flex-direction: column; gap: 12px; }
+.account__provider {
+  position: relative; width: 100%; min-height: 52px; padding: 12px 48px; border: 1px solid var(--demo-theme-account-border);
+  border-radius: 8px; background: var(--demo-theme-account-surface); color: inherit; font: 600 16px/24px Arial, "Account Harmony", sans-serif; cursor: pointer;
+}
+.account__provider:hover { border-color: var(--demo-theme-account-border-hover); background: var(--demo-theme-account-hover); }
+.account__provider img { position: absolute; top: 50%; left: 20px; width: 18px; height: 18px; transform: translateY(-50%); }
+.account__provider img.account__github { width: 20px; height: 20px; filter: var(--demo-theme-account-icon-filter); }
+.account__divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--demo-theme-account-muted); font-size: 12px; line-height: 16px; }
+.account__divider::before, .account__divider::after { content: ""; height: 1px; flex: 1; background: var(--demo-theme-account-border); }
+.account__email { box-sizing: border-box; width: 100%; height: 52px; padding: 0 16px; border: 1px solid var(--demo-theme-account-border); border-radius: 8px; color: inherit; background: var(--demo-theme-account-surface); font: 400 16px/24px Arial, "Account Harmony", sans-serif; }
+.account__email::placeholder { color: var(--demo-theme-account-muted); opacity: 1; }
+.account__email[aria-invalid="true"] { border-color: var(--demo-theme-account-error); }
+.account__continue { width: 100%; min-height: 48px; margin-top: 16px; padding: 10px 20px; border: 0; border-radius: 8px; background: var(--demo-theme-account-text); color: var(--demo-theme-account-canvas); font: 600 16px/24px Arial, "Account Harmony", sans-serif; cursor: pointer; }
+.account__continue:hover:not(:disabled) { background: var(--demo-theme-account-action-hover); }
+.account__continue:disabled { opacity: .45; cursor: not-allowed; }
+.account button:focus-visible, .account input:focus-visible { outline: 2px solid var(--demo-theme-account-focus); outline-offset: 3px; }
+.account__error, .account__effect-error { color: var(--demo-theme-account-error); font-size: 13px; line-height: 20px; margin: 8px 0 0; }
+.account__effect-error { position: absolute; top: calc(50% + 155px); left: 0; width: 100%; text-align: center; }
+.account__lens, .account__lens canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.account[data-lens-active="true"] .account__visual { background: var(--demo-theme-account-glass); }
+.account[data-lens-active="true"] .account__mark, .account[data-lens-active="true"] .account__fade { visibility: hidden; }
+.account__profile { position: absolute; left: 50%; top: 50%; width: min(80%, 360px); transform: translate(-50%, -50%); text-align: center; color: var(--demo-theme-account-profile-text); font: 400 16px/1.5 "Market Task Profile", sans-serif; animation: account-profile 650ms ease both; }
+.account__profile p { margin: 12px 0; }
+.account__profile p:first-child { font-size: 23px; }
+.account__dialog { width: min(420px, calc(100vw - 72px)); padding: 28px; border: 1px solid var(--demo-theme-account-border); border-radius: 12px; color: var(--demo-theme-account-text); background: var(--demo-theme-account-surface); font-family: Arial, "Account Harmony", sans-serif; }
+.account__dialog::backdrop { background: var(--demo-theme-account-dialog-backdrop); backdrop-filter: blur(6px); }
+.account__dialog h2 { margin: 0 0 12px; font-size: 24px; line-height: 32px; }
+.account__dialog p { color: var(--demo-theme-account-muted); font-size: 15px; line-height: 24px; }
+.account__sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.account[data-lens-active="true"] .account__signature { color: var(--demo-theme-account-profile-text); text-shadow: none; }
+@keyframes account-scene-left { from { transform: translateX(-75%); } to { transform: translateX(-25%); } }
+@keyframes account-left { from { transform: translateX(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes account-right { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes account-profile { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .account__visual, .account__main, .account__profile { animation: none; }
+  .demo-app-shell__scene { transition: none; }
+  .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene { animation: none; }
+}

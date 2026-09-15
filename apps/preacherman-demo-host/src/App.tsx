@@ -39,6 +39,8 @@ import { GalleryOrbitCards } from "./surfaces/gallery/GalleryOrbitCards";
 import type { GalleryDetailBridge } from "./surfaces/gallery/GalleryDetailOverlay";
 import { ActiveTheoryGallerySurface } from "./surfaces/gallery/ActiveTheoryGallerySurface";
 import { GallerySurface } from "./surfaces/gallery/GallerySurface";
+import { AccountSurface } from "./surfaces/account/AccountSurface";
+import { AccountFrost, AccountSceneCapture } from "./surfaces/account/AccountScene";
 import { MarketSurface } from "./surfaces/market/MarketSurface";
 import {
   applyPreferences,
@@ -151,6 +153,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const [workView, setWorkView] = useState("task");
   const [labView, setLabView] = useState("voice");
   const [galleryView, setGalleryView] = useState("characters");
+  const [accountLensActive, setAccountLensActive] = useState(false);
   const [galleryDetailOpen, setGalleryDetailOpen] = useState(false);
   const [galleryPreviewModelId, setGalleryPreviewModelId] = useState<ModelId | null>(null);
   const activateGalleryModel = useCallback((modelId: ModelId) => {
@@ -388,21 +391,23 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       entering={animateMainEntrance && !showStartupIntro}
       locale={preferences.locale}
       onNavigate={handleSurfaceNavigate}
-      scene={sceneModelId || activeSurfaceType === "market" ? (
+      scene={<>
+        {activeSurfaceType === "account" ? <AccountFrost appearance={preferences.appearance} /> : null}
+        {sceneModelId || activeSurfaceType === "market" ? (
         <CortanaModelStage
           ariaLabel={`Persistent ${avatarModelName(sceneModelId ?? "cortana")} companion scene`}
           environment="cinematic"
-          isolateCompanion={activeSurfaceType === "market" && galleryDetailOpen}
-          cameraFraming={activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
+          isolateCompanion={activeSurfaceType === "account" || (activeSurfaceType === "market" && galleryDetailOpen)}
+          cameraFraming={activeSurfaceType === "account" || activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
           modelId={sceneModelId ?? "cortana"}
           companionVisible={sceneModelId !== null}
-          sceneContent={galleryBridge ? <GalleryOrbitCards bridge={galleryBridge} active={activeSurfaceType === "market"} renderActive={windowActive} /> : null}
+          sceneContent={activeSurfaceType === "account" ? <AccountSceneCapture /> : galleryBridge ? <GalleryOrbitCards bridge={galleryBridge} active={activeSurfaceType === "market"} renderActive={windowActive} /> : null}
           prefetchModelId={activeSurfaceType === "market" && sceneModelId ? adjacentGalleryModel(sceneModelId) : undefined}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}
-          renderActive={windowActive}
+          renderActive={windowActive && !accountLensActive}
         />
-      ) : null}
+      ) : null}</>}
     >
       {activeSurfaceType !== "account" ? (
         <PreachermanDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={preachermanServiceRequest} />
@@ -435,7 +440,8 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         />
       </div>
       {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
-      {activeSurfaceType !== "ledger" ? (
+      {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onLensActiveChange={setAccountLensActive} /> : null}
+      {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}
           {visiblePanelSurface && visiblePanelSurface !== "account" && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
