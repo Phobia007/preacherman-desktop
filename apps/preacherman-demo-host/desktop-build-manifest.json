@@ -1,340 +1,1626 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-detail-avatar-label-20260915",
+  "buildId": "market-character-copy-20260915",
   "productVersion": "0.1.0",
-  "sourceTask": "gallery-metadata-third-segment-preacherman-avatar",
+  "sourceTask": "market-character-names-summaries-details",
   "sourceThread": null,
-  "sourceState": "Updated character detail metadata so the third segment reads PREACHERMAN AVATAR. Content before the second slash is preserved. Added the avatar third segment to four entries that previously had only a year and owner. Existing Cortana and ZIMA third segments retained. No typography, colors or other content fields changed.",
-  "sourceCommit": "b560a5a6319f2c5c8e5b4232080da07ac5099e43",
+  "sourceState": "Replaced Market placeholder copy in all fourteen image/text sections with matching Gallery character names, single-sentence English introductions and Details CTA text. Existing fonts, styles, alternating layout, images, links and interaction are unchanged. Updated the reproducible character-section generator and existing import checks.",
+  "sourceCommit": "3170362016e122c3b123a78d35ba726bd53a68f1",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-15T18:13:42.3090347+08:00",
-  "deployedAt": "2026-09-15T18:15:36.7381989+08:00",
-  "verifiedAt": "2026-09-15T18:19:21.9292298+08:00",
-  "sizeBytes": 674997760,
-  "sha256": "B368B24F2943711EDFCB39401A4EACF08CB18D5F4DEC3D7FA50E8AEF6BB5BB5A",
+  "builtAt": "2026-09-15T18:42:42.0574531+08:00",
+  "deployedAt": "2026-09-15T18:43:24.0221595+08:00",
+  "verifiedAt": "2026-09-15T18:46:45.1361598+08:00",
+  "sizeBytes": 674999296,
+  "sha256": "EBF49750CF9B516CF701E430F862A0E9E8E45ADB3A8464D7BD97E24D17D0E29B",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915/preacherman-demo-host.exe",
-  "backupSha256": "EF557C0589CA2D7061C4BDF0C71F40A884D4350CD9E033240243DBA27386CBE7",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-copy-before-20260915/preacherman-demo-host.exe",
+  "backupSha256": "B368B24F2943711EDFCB39401A4EACF08CB18D5F4DEC3D7FA50E8AEF6BB5BB5A",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-copy-before-20260915/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "ba68bbda7428b7b27ce959223c81a67eb266b0bd",
-  "previousVerificationCommit": "ba68bbda7428b7b27ce959223c81a67eb266b0bd",
+  "rollbackBaselineCommit": "11ff204754cf1876fb590abeae7d7651bf222782",
+  "previousVerificationCommit": "11ff204754cf1876fb590abeae7d7651bf222782",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "24 focused Gallery detail and character search tests passed. Content comparison confirms only detailMeta changed in 12 catalog entries.",
+      "tests": "21 focused Market import, entrance and profile lens tests passed. Normalized before/after HTML comparison permits only the requested visible text and corresponding accessibility labels; structure, styles, images and links are identical.",
       "scope": "Change-scoped checks, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through the canonical shortcut. All fourteen character metadata entries have PREACHERMAN AVATAR as the third segment. Actual Jubilee detail text verified and visually reviewed in both appearance modes. Existing input appearance, search, categories, correct detail routing and absent Work / Contact switch preserved. Home, Task, Gallery, Market, Settings and Account checked in both modes. Original preferences restored; final normal shortcut restart without a debug port.",
-    "metadata": [
+    "nativeFlow": "Cold launch through the canonical shortcut. All fourteen Market rows checked in both appearance modes for matching name, summary, CTA label and destination, original Brilliant Cut and Fancy Cut fonts, alternating image sides, loaded 4096-pixel images and one/two-line description wrapping. Native scrolling responds. Representative first, second, longest-name and final rows visually reviewed. Core Home, Task, Gallery, Market, Settings and Account navigation checked in both modes. Original preferences restored; final normal shortcut restart without a debug port.",
+    "market": [
       {
         "appearance": "dark",
-        "characterMetadata": [
+        "characters": [
           {
-            "id": "secret-sky",
-            "meta": "2003 / HALO 4 / preacherman avatar"
+            "id": "cortana",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "watson-masters",
-            "meta": "2019 / Alastair Reynolds / preacherman avatar"
+            "id": "zima",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "climatune",
-            "meta": "1989 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+            "id": "jubilee-midnight-mutant",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "eye-of-the-stormers",
-            "meta": "2001 / Microsoft / PREACHERMAN AVATAR"
+            "id": "halo-mk-v-model",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "bon-iver-viisualiizer",
-            "meta": "1993 / Warner Bros. Entertainment / PREACHERMAN AVATAR"
+            "id": "kitana-mk11-in-mk9-suit",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "classic-stories-retold",
-            "meta": "1975; fully established as Magik in 1983 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+            "id": "punk-magik",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "mastered-from-chaos",
-            "meta": "2024 / Riot Games / PREACHERMAN AVATAR"
+            "id": "clove-t-pose",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "emmit-fenn",
-            "meta": "2017 / Square Enix / PREACHERMAN AVATAR"
+            "id": "nier-automata-2b",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "spacecraft-for-all",
-            "meta": "2024 / SHIFT UP Corporation / PREACHERMAN AVATAR"
+            "id": "stellar-blade-lily-stargazer-coat",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "i-will-what-i-want",
-            "meta": "1963 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+            "id": "iron-man-mark-85",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "acoustic-garage",
-            "meta": "2023 / Mundfish / PREACHERMAN AVATAR"
+            "id": "the-twins-atomic-heart",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "witness-gotham",
-            "meta": "2010 / Microsoft / PREACHERMAN AVATAR"
+            "id": "spartan-armour-mkv-halo-reach",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "toonami",
-            "meta": "1978 / Compass International Pictures / PREACHERMAN AVATAR"
+            "id": "halloween-the-game-michael-myers-samhain",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "halo-5-visualizer",
-            "meta": "2019 / Electronic Arts / PREACHERMAN AVATAR"
+            "id": "apex-legend-pathfinder",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           }
         ],
-        "text": "1989 / Marvel Characters, Inc. / PREACHERMAN AVATAR",
-        "style": {
-          "font": "nbarchitekt, monospace",
-          "color": "rgb(183, 183, 183)"
-        }
+        "wheelScroll": 700
       },
       {
         "appearance": "light",
-        "characterMetadata": [
+        "characters": [
           {
-            "id": "secret-sky",
-            "meta": "2003 / HALO 4 / preacherman avatar"
+            "id": "cortana",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "watson-masters",
-            "meta": "2019 / Alastair Reynolds / preacherman avatar"
+            "id": "zima",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "climatune",
-            "meta": "1989 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+            "id": "jubilee-midnight-mutant",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "eye-of-the-stormers",
-            "meta": "2001 / Microsoft / PREACHERMAN AVATAR"
+            "id": "halo-mk-v-model",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "bon-iver-viisualiizer",
-            "meta": "1993 / Warner Bros. Entertainment / PREACHERMAN AVATAR"
+            "id": "kitana-mk11-in-mk9-suit",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "classic-stories-retold",
-            "meta": "1975; fully established as Magik in 1983 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+            "id": "punk-magik",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "mastered-from-chaos",
-            "meta": "2024 / Riot Games / PREACHERMAN AVATAR"
+            "id": "clove-t-pose",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "emmit-fenn",
-            "meta": "2017 / Square Enix / PREACHERMAN AVATAR"
+            "id": "nier-automata-2b",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "spacecraft-for-all",
-            "meta": "2024 / SHIFT UP Corporation / PREACHERMAN AVATAR"
+            "id": "stellar-blade-lily-stargazer-coat",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "i-will-what-i-want",
-            "meta": "1963 / Marvel Characters, Inc. / PREACHERMAN AVATAR"
+            "id": "iron-man-mark-85",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "acoustic-garage",
-            "meta": "2023 / Mundfish / PREACHERMAN AVATAR"
+            "id": "the-twins-atomic-heart",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "witness-gotham",
-            "meta": "2010 / Microsoft / PREACHERMAN AVATAR"
+            "id": "spartan-armour-mkv-halo-reach",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "toonami",
-            "meta": "1978 / Compass International Pictures / PREACHERMAN AVATAR"
+            "id": "halloween-the-game-michael-myers-samhain",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 1090,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 1090,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 1325.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 0,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           },
           {
-            "id": "halo-5-visualizer",
-            "meta": "2019 / Electronic Arts / PREACHERMAN AVATAR"
+            "id": "apex-legend-pathfinder",
+            "title": {
+              "font": "\"Brilliant Cut\", Almarai, Helvetica, Arial, sans-serif",
+              "size": "22px",
+              "weight": "600",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "33px",
+              "width": 520,
+              "height": 33,
+              "x": 190,
+              "y": 380.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "description": {
+              "font": "\"Fancy Cut\", serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 520,
+              "height": 48,
+              "x": 190,
+              "y": 413.5,
+              "scrollWidth": 520,
+              "clientWidth": 520
+            },
+            "cta": {
+              "font": "\"Fancy Cut\", Almarai, Times, serif",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 48.71875,
+              "height": 44,
+              "x": 425.640625,
+              "y": 475.5,
+              "scrollWidth": 49,
+              "clientWidth": 49
+            },
+            "image": {
+              "font": "\"object-fit: cover;\"",
+              "size": "16px",
+              "weight": "400",
+              "color": "rgb(255, 255, 255)",
+              "lineHeight": "24px",
+              "width": 900,
+              "height": 900,
+              "x": 900,
+              "y": 0,
+              "scrollWidth": 900,
+              "clientWidth": 900
+            },
+            "lines": 2
           }
         ],
-        "text": "1989 / Marvel Characters, Inc. / PREACHERMAN AVATAR",
-        "style": {
-          "font": "nbarchitekt, monospace",
-          "color": "rgb(183, 183, 183)"
-        }
-      }
-    ],
-    "removedNavigation": [
-      {
-        "appearance": "dark",
-        "phase": "overview",
-        "nativeAbsent": true,
-        "authoredAbsent": true,
-        "nav": [
-          {
-            "ready": true,
-            "hasUi": false
-          }
-        ]
-      },
-      {
-        "appearance": "dark",
-        "phase": "detail",
-        "nativeAbsent": true,
-        "authoredAbsent": true,
-        "nav": [
-          {
-            "ready": true,
-            "hasUi": false
-          }
-        ]
-      },
-      {
-        "appearance": "dark",
-        "phase": "returned",
-        "nativeAbsent": true,
-        "authoredAbsent": true,
-        "nav": [
-          {
-            "ready": true,
-            "hasUi": false
-          }
-        ]
-      },
-      {
-        "appearance": "light",
-        "phase": "overview",
-        "nativeAbsent": true,
-        "authoredAbsent": true,
-        "nav": [
-          {
-            "ready": true,
-            "hasUi": false
-          }
-        ]
-      },
-      {
-        "appearance": "light",
-        "phase": "detail",
-        "nativeAbsent": true,
-        "authoredAbsent": true,
-        "nav": [
-          {
-            "ready": true,
-            "hasUi": false
-          }
-        ]
-      },
-      {
-        "appearance": "light",
-        "phase": "returned",
-        "nativeAbsent": true,
-        "authoredAbsent": true,
-        "nav": [
-          {
-            "ready": true,
-            "hasUi": false
-          }
-        ]
-      }
-    ],
-    "search": [
-      {
-        "appearance": "dark",
-        "name": "Cortana",
-        "id": "secret-sky",
-        "scroll": 1,
-        "target": 1,
-        "position": {
-          "x": -0.5117292439620305,
-          "y": 0.1742155590836742
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Pathfinder",
-        "id": "halo-5-visualizer",
-        "scroll": 13.998081958455547,
-        "target": 14,
-        "position": {
-          "x": -0.5108790878848323,
-          "y": 0.17362445819624853
-        },
-        "inputStyle": {
-          "font": "nbarchitekt, monospace",
-          "text": "rgb(255, 255, 255)",
-          "background": "rgba(0, 0, 0, 0.5)",
-          "border": "rgba(255, 255, 255, 0.9)",
-          "placeholder": "rgba(255, 255, 255, 0.48)"
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Cortana",
-        "id": "secret-sky",
-        "scroll": 1,
-        "target": 1,
-        "position": {
-          "x": -0.5117292440381853,
-          "y": 0.1742155590052536
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Pathfinder",
-        "id": "halo-5-visualizer",
-        "scroll": 13.998035761503868,
-        "target": 14,
-        "position": {
-          "x": -0.5108586009636609,
-          "y": 0.1736102274559737
-        },
-        "inputStyle": {
-          "font": "nbarchitekt, monospace",
-          "text": "rgb(255, 255, 255)",
-          "background": "rgba(0, 0, 0, 0.5)",
-          "border": "rgba(255, 255, 255, 0.9)",
-          "placeholder": "rgba(255, 255, 255, 0.52)"
-        }
-      }
-    ],
-    "categories": [
-      {
-        "appearance": "dark",
-        "filteredCount": 6,
-        "allCount": 31,
-        "searchRestoredCatalog": true
-      },
-      {
-        "appearance": "light",
-        "filteredCount": 6,
-        "allCount": 31,
-        "searchRestoredCatalog": true
-      }
-    ],
-    "focusStyles": [
-      {
-        "appearance": "dark",
-        "outline": "none",
-        "shadow": "none",
-        "borderWidth": "2px"
-      },
-      {
-        "appearance": "light",
-        "outline": "none",
-        "shadow": "none",
-        "borderWidth": "2px"
+        "wheelScroll": 700
       }
     ],
     "routes": [
       {
-        "name": "Gallery",
+        "name": "Home",
         "appearance": "dark"
       },
       {
-        "name": "Home",
+        "name": "Market",
         "appearance": "dark"
       },
       {
@@ -342,7 +1628,7 @@
         "appearance": "dark"
       },
       {
-        "name": "Market",
+        "name": "Gallery",
         "appearance": "dark"
       },
       {
@@ -354,11 +1640,11 @@
         "appearance": "dark"
       },
       {
-        "name": "Gallery",
+        "name": "Home",
         "appearance": "light"
       },
       {
-        "name": "Home",
+        "name": "Market",
         "appearance": "light"
       },
       {
@@ -366,7 +1652,7 @@
         "appearance": "light"
       },
       {
-        "name": "Market",
+        "name": "Gallery",
         "appearance": "light"
       },
       {
@@ -379,41 +1665,41 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-15T18:19:21.9292298+08:00",
-      "NativePid": 9668,
-      "StartedAt": "2026-09-15T18:19:04.1937125+08:00",
-      "WindowHandle": 1377976,
+      "SampledAt": "2026-09-15T18:46:45.1361598+08:00",
+      "NativePid": 34024,
+      "StartedAt": "2026-09-15T18:46:28.9296990+08:00",
+      "WindowHandle": 1507994,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        9668,
-        6248,
-        20680,
-        32884,
-        33248,
-        29292,
-        9064,
-        28368,
-        33420,
-        12628,
-        14032
+        34024,
+        10604,
+        3108,
+        32780,
+        33200,
+        6428,
+        14768,
+        9528,
+        11460,
+        5008,
+        28580
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1920.6,
-      "GpuDedicatedBytes": 3222069248.0,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1934.6,
+      "GpuDedicatedBytes": 3184738304.0,
       "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 16788440,
+      "FreeRamKiB": 17216588,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 28368
+          "OwningProcess": 9528
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
       "SharedProcesses": []
     },
-    "consoleBaseline": "D:/preacherman/output/gallery-remove-work-contact-20260915/native-report.json",
+    "consoleBaseline": "D:/preacherman/output/gallery-detail-avatar-label-20260915/native-report.json",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -443,17 +1729,20 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-report.json",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\tests.log",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\typecheck.log",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\production-build.log",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\final-resources.json",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\final-native-home.png",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-dark-initial.png",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-light-initial.png",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-dark-jubilee-metadata.png",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\native-light-jubilee-metadata.png",
-      "D:\\preacherman\\output\\gallery-detail-avatar-label-20260915\\content-changes.json"
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-report.json",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\tests.log",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\typecheck.log",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\production-build.log",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\final-resources.json",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\final-native-home.png",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-dark-market-1.png",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-light-market-1.png",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-dark-market-2.png",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-light-market-2.png",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-dark-market-12.png",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-light-market-12.png",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-dark-market-14.png",
+      "D:\\preacherman\\output\\market-character-copy-20260915\\native-light-market-14.png"
     ]
   },
   "releaseAttempts": [
@@ -894,9 +2183,18 @@
       "deployedAt": "2026-09-15T18:15:36.7381989+08:00",
       "verifiedAt": "2026-09-15T18:19:21.9292298+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915"
+    },
+    {
+      "buildId": "market-character-copy-20260915",
+      "sourceCommit": "3170362016e122c3b123a78d35ba726bd53a68f1",
+      "sha256": "EBF49750CF9B516CF701E430F862A0E9E8E45ADB3A8464D7BD97E24D17D0E29B",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T18:43:24.0221595+08:00",
+      "verifiedAt": "2026-09-15T18:46:45.1361598+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-copy-before-20260915"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-copy-before-20260915/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
