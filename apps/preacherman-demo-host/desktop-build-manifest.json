@@ -1,207 +1,56 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-remove-video-20260914",
+  "buildId": "twin-leg-fix-20260915",
   "productVersion": "0.1.0",
-  "sourceTask": "remove-foreground-video-window-from-every-gallery-detail",
+  "sourceTask": "repair-twin-leg-pivots-and-anatomical-knee-motion",
   "sourceThread": null,
-  "sourceState": "Removed the foreground canvas video mirror, close button, frame-copy callbacks and unused window styles from the shared Gallery detail overlay. Rear room video playback, character models, lighting, activation, arrows and return controls are preserved.",
-  "sourceCommit": "4260c4433cb2e536633941b9379754c829487876",
+  "sourceState": "Aligned Twin knee, ankle and toe pivots with authored anatomy, repainted rigid leg shells, constrained knee hinge direction and corrected sole contact. Original materials, lighting and upper-body ActorCore Talk tracks are retained.",
+  "sourceCommit": "29bab299998173a81e30747575825bbb8d11daba",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-14T22:47:20.4083978+08:00",
-  "deployedAt": "2026-09-14T22:50:00.6051753+08:00",
-  "verifiedAt": "2026-09-14T23:02:06.8102496+08:00",
-  "sizeBytes": 674761216,
-  "sha256": "809A1AFC99F1825D25EDD90EC79826AB231D5C9C88D86F1E580F22F225DAEF39",
+  "builtAt": "2026-09-15T14:37:07.8236764+08:00",
+  "deployedAt": "2026-09-15T14:42:21.1311491+08:00",
+  "verifiedAt": "2026-09-15T14:51:11.4583572+08:00",
+  "sizeBytes": 674996736,
+  "sha256": "76611FAAE91119A5AA30AD6D8FB07BB9AA9C4B786B366BCA9B81CBEB28071023",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914/preacherman-demo-host.exe",
-  "backupSha256": "9CB2105D8D397818EA1BEF98AB96CEF9CA9DF316127E2FA5EDFE607DA76A984C",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915/preacherman-demo-host.exe",
+  "backupSha256": "809A1AFC99F1825D25EDD90EC79826AB231D5C9C88D86F1E580F22F225DAEF39",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "239ebed368daa9aa13f5d03c3295d322d9e87c07",
-  "previousVerificationCommit": "239ebed368daa9aa13f5d03c3295d322d9e87c07",
+  "rollbackBaselineCommit": "f8485aae317691deca29625f00082f789e0c5358",
+  "previousVerificationCommit": "f8485aae317691deca29625f00082f789e0c5358",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "26 focused Gallery detail and transition tests passed, including semantic controls for both appearances.",
+      "tests": "11 focused avatar rig tests passed, including complete-cycle Twin knee direction, separation, limb lengths, unchanged upper-body tracks, rigid shoe weights, original rest geometry, and sole clearance.",
       "scope": "Change-scoped tests, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through canonical shortcut; traversed all 14 occupied Gallery details in dark and light, confirmed no foreground media and continuing rear video playback. Previous/next navigation, back, re-entry and activation checked. Home, Task, Gallery, Market (ledger), Settings and Account visually inspected in both modes. Original preferences restored and shortcut relaunched normally without debug port.",
-    "details": [
+    "nativeFlow": "Cold launch through canonical shortcut with packaged Twin GLB hash verified. Full ActorCore Talk cycle observed on Gallery and Home in dark and light. Activation, back, core Home, Task, Gallery, Market, Settings and Account navigation checked. Original preferences restored; normal shortcut relaunched without debug port.",
+    "models": [
       {
-        "card": "secret-sky",
+        "id": "the-twins-atomic-heart",
         "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
+        "defaultPlays": true,
+        "observedSeconds": 28.78333333333333,
+        "activation": true,
+        "home": true
       },
       {
-        "card": "watson-masters",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "climatune",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "eye-of-the-stormers",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "bon-iver-viisualiizer",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "classic-stories-retold",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "mastered-from-chaos",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "emmit-fenn",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "spacecraft-for-all",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "i-will-what-i-want",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "acoustic-garage",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "witness-gotham",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "toonami",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "halo-5-visualizer",
-        "appearance": "dark",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "secret-sky",
+        "id": "the-twins-atomic-heart",
         "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "watson-masters",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "climatune",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "eye-of-the-stormers",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "bon-iver-viisualiizer",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "classic-stories-retold",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "mastered-from-chaos",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "emmit-fenn",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "spacecraft-for-all",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "i-will-what-i-want",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "acoustic-garage",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "witness-gotham",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "toonami",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
-      },
-      {
-        "card": "halo-5-visualizer",
-        "appearance": "light",
-        "foregroundVideoAbsent": true,
-        "backgroundPlaying": true
+        "defaultPlays": true,
+        "observedSeconds": 28.78333333333333,
+        "activation": true,
+        "home": true
       }
     ],
+    "runtimeAssetSha256": "ff14d32b31e02c8cbb9be20ddffc4438e878c45fdf4bd7fb2e7ec462a5aab7ab",
     "routes": [
       {
         "name": "Gallery",
@@ -253,56 +102,41 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-14T23:02:06.8102496+08:00",
-      "NativePid": 1036,
-      "StartedAt": "2026-09-14T23:01:45.4645865+08:00",
-      "WindowHandle": 14682254,
+      "SampledAt": "2026-09-15T14:51:11.4583572+08:00",
+      "NativePid": 19484,
+      "StartedAt": "2026-09-15T14:50:55.7149294+08:00",
+      "WindowHandle": 459418,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        1036,
-        28300,
-        32604,
-        25852,
-        27680,
-        35376,
-        14056,
-        31540,
-        5764,
-        35204,
-        31524
+        19484,
+        24932,
+        29676,
+        10712,
+        3100,
+        23580,
+        21132,
+        1408,
+        2768,
+        5520,
+        28844
       ],
       "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 2046.8,
-      "GpuDedicatedBytes": 3397885952.0,
-      "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 15126028,
+      "WorkingSetMiB": 2063.9,
+      "GpuDedicatedBytes": 3334144000.0,
+      "MaxGpuEngineUtilization": 12.0,
+      "FreeRamKiB": 15848244,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 31540
+          "OwningProcess": 1408
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
-      "SharedProcesses": [
-        {
-          "ProcessId": 28476,
-          "Name": "node.exe",
-          "ExecutablePath": "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\e7fe122ad3cbcd58\\bin\\node.exe",
-          "CreationDate": "2026-09-14T02:42:07.951261+08:00",
-          "Disposition": "Pre-existing Codex Computer Use kernel; preserved, not owned by this task."
-        },
-        {
-          "ProcessId": 33724,
-          "Name": "node.exe",
-          "ExecutablePath": "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\e7fe122ad3cbcd58\\bin\\node.exe",
-          "CreationDate": "2026-09-14T02:42:07.953782+08:00",
-          "Disposition": "Pre-existing Codex Computer Use kernel; preserved, not owned by this task."
-        }
-      ]
+      "SharedProcesses": []
     },
-    "consoleBaseline": "D:/preacherman/output/avatar-rig-repair-20260914/native-report.json",
+    "consoleBaseline": "D:/preacherman/output/gallery-remove-video-20260914/native-report.json",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -332,14 +166,14 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\gallery-remove-video-20260914\\native-report.json",
-      "D:\\preacherman\\output\\gallery-remove-video-20260914\\tests.log",
-      "D:\\preacherman\\output\\gallery-remove-video-20260914\\typecheck.log",
-      "D:\\preacherman\\output\\gallery-remove-video-20260914\\production-build.log",
-      "D:\\preacherman\\output\\gallery-remove-video-20260914\\final-resources.json",
-      "D:\\preacherman\\output\\gallery-remove-video-20260914\\final-native-home.png",
-      "D:\\preacherman\\output\\gallery-remove-video-20260914\\native-dark-bon-iver-viisualiizer.png",
-      "D:\\preacherman\\output\\gallery-remove-video-20260914\\native-light-bon-iver-viisualiizer.png"
+      "D:\\preacherman\\output\\twin-leg-fix-20260915\\native-report.json",
+      "D:\\preacherman\\output\\twin-leg-fix-20260915\\tests-final.log",
+      "D:\\preacherman\\output\\twin-leg-fix-20260915\\typecheck.log",
+      "D:\\preacherman\\output\\twin-leg-fix-20260915\\production-build.log",
+      "D:\\preacherman\\output\\twin-leg-fix-20260915\\final-resources.json",
+      "D:\\preacherman\\output\\twin-leg-fix-20260915\\final-native-home.png",
+      "D:\\preacherman\\output\\twin-leg-fix-20260915\\native-dark-twin-home.png",
+      "D:\\preacherman\\output\\twin-leg-fix-20260915\\native-light-twin-home.png"
     ]
   },
   "releaseAttempts": [
@@ -717,9 +551,18 @@
       "deployedAt": "2026-09-14T22:50:00.6051753+08:00",
       "verifiedAt": "2026-09-14T23:02:06.8102496+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914"
+    },
+    {
+      "buildId": "twin-leg-fix-20260915",
+      "sourceCommit": "29bab299998173a81e30747575825bbb8d11daba",
+      "sha256": "76611FAAE91119A5AA30AD6D8FB07BB9AA9C4B786B366BCA9B81CBEB28071023",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T14:42:21.1311491+08:00",
+      "verifiedAt": "2026-09-15T14:51:11.4583572+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
