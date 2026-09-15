@@ -1,56 +1,857 @@
 {
   "schemaVersion": 1,
-  "buildId": "twin-leg-fix-20260915",
+  "buildId": "gallery-character-details-20260915",
   "productVersion": "0.1.0",
-  "sourceTask": "repair-twin-leg-pivots-and-anatomical-knee-motion",
+  "sourceTask": "gallery-supplied-character-biographies",
   "sourceThread": null,
-  "sourceState": "Aligned Twin knee, ankle and toe pivots with authored anatomy, repainted rigid leg shells, constrained knee hinge direction and corrected sole contact. Original materials, lighting and upper-body ActorCore Talk tracks are retained.",
-  "sourceCommit": "29bab299998173a81e30747575825bbb8d11daba",
+  "sourceState": "Added the twelve user-supplied Gallery character titles, years, company names and Chinese personality biographies. Dedicated DOM metadata preserves commas and the complete Magik year note. Removed obsolete portfolio links from these details. Cortana, Zima, Market, models, materials and motion remain unchanged.",
+  "sourceCommit": "999008c986ae816f1f4e17fd9cd3eb7ac8dd6e62",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-15T14:37:07.8236764+08:00",
-  "deployedAt": "2026-09-15T14:42:21.1311491+08:00",
-  "verifiedAt": "2026-09-15T14:51:11.4583572+08:00",
-  "sizeBytes": 674996736,
-  "sha256": "76611FAAE91119A5AA30AD6D8FB07BB9AA9C4B786B366BCA9B81CBEB28071023",
+  "builtAt": "2026-09-15T15:35:03.0206351+08:00",
+  "deployedAt": "2026-09-15T15:36:47.5540319+08:00",
+  "verifiedAt": "2026-09-15T15:43:39.0528729+08:00",
+  "sizeBytes": 674997248,
+  "sha256": "C1B1162A5C70DCA59CD04FC3F38EB3A01F3E4FC2A5A1A43D21B83CBEBC24CC6B",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915/preacherman-demo-host.exe",
-  "backupSha256": "809A1AFC99F1825D25EDD90EC79826AB231D5C9C88D86F1E580F22F225DAEF39",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-details-before-20260915/preacherman-demo-host.exe",
+  "backupSha256": "76611FAAE91119A5AA30AD6D8FB07BB9AA9C4B786B366BCA9B81CBEB28071023",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-details-before-20260915/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "f8485aae317691deca29625f00082f789e0c5358",
-  "previousVerificationCommit": "f8485aae317691deca29625f00082f789e0c5358",
+  "rollbackBaselineCommit": "9f7525e4e32ff9b890992a8a6c24eeebecfaf8c9",
+  "previousVerificationCommit": "9f7525e4e32ff9b890992a8a6c24eeebecfaf8c9",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "11 focused avatar rig tests passed, including complete-cycle Twin knee direction, separation, limb lengths, unchanged upper-body tracks, rigid shoe weights, original rest geometry, and sole clearance.",
-      "scope": "Change-scoped tests, not the complete repository suite."
+      "tests": "45 focused Gallery detail and model-import tests passed.",
+      "content": "All twelve titles, complete metadata and descriptions match the supplied content; unrelated CMS fields, other records and Market HTML are unchanged.",
+      "runtime": "JavaScript syntax and the new character-detail patch idempotence passed.",
+      "scope": "Change-scoped checks, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through canonical shortcut with packaged Twin GLB hash verified. Full ActorCore Talk cycle observed on Gallery and Home in dark and light. Activation, back, core Home, Task, Gallery, Market, Settings and Account navigation checked. Original preferences restored; normal shortcut relaunched without debug port.",
-    "models": [
+    "nativeFlow": "Cold launch through the canonical shortcut. All twelve Gallery details checked in both appearances for exact Chinese copy, complete metadata, visible text without horizontal overflow, correct next-character mapping and absent obsolete links. Core Home, Task, Gallery, Market, Settings and Account navigation checked in both modes. Existing Market rows retained. Original preferences restored; canonical shortcut relaunched normally without the debug port.",
+    "details": [
       {
-        "id": "the-twins-atomic-heart",
+        "slug": "climatune",
         "appearance": "dark",
-        "defaultPlays": true,
-        "observedSeconds": 28.78333333333333,
-        "activation": true,
-        "home": true
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Jubilee — 李千欢",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "1989 / Marvel Characters, Inc. / Marvel Entertainment",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "张扬而富有叛逆感，情绪表达鲜明，喜欢以轻松和玩味面对环境。年轻气质之下有很强的适应力，也不愿被既定身份束缚。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
       },
       {
-        "id": "the-twins-atomic-heart",
+        "slug": "eye-of-the-stormers",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Master Chief — 士官长",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2001 / Microsoft / Halo Studios",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "沉默、克制、自律，很少将个人情绪置于任务之前。长期责任塑造了他的稳定与可靠，对同伴的重视通常通过行动而非语言表达。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "bon-iver-viisualiizer",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Kitana — 吉塔娜",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "1993 / Warner Bros. Entertainment / NetherRealm Studios",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "优雅、沉着，有强烈的责任意识和原则感。长期处于权力与家族关系之中，使她习惯控制情绪，也格外重视尊严、忠诚与自己的判断。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "classic-stories-retold",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Magik — 秘客 / 魔剑客",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 700.703125,
+            "bottom": 721.703125,
+            "visible": true
+          },
+          {
+            "text": "1975；以 Magik 身份于 1983 完整确立 / Marvel Characters, Inc. / Marvel Entertainment",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 733.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "疏离、锋利，情绪很少完全暴露，言行中常带着讥诮与反叛。经历使她对亲近关系保持戒备，也形成了很强的个人边界。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "mastered-from-chaos",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Clove",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2024 / Riot Games",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "随性、爱开玩笑，对危险有一种近乎游戏化的态度。好奇心很强，不喜欢循规蹈矩，轻松的外表下始终保留鲜明的自主意识。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "emmit-fenn",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "2B — YoRHa No.2 Type B",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2017 / Square Enix",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "寡言、克制，习惯以纪律和任务要求约束自己的情绪。表面保持距离，实际具有细腻而复杂的情感，对责任与羁绊有很深的执着。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "spacecraft-for-all",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Lily — 莉莉",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2024 / SHIFT UP Corporation",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "活泼、真诚，对未知事物保持明显的好奇心。她比身边的人更容易表达情绪，也有很强的伙伴意识，在紧张环境中仍保留温暖和乐观。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "i-will-what-i-want",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Iron Man — 钢铁侠 / Tony Stark",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "1963 / Marvel Characters, Inc. / Marvel Entertainment",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "聪明、锋芒外露，习惯用幽默和戏谑掩饰压力。强烈的个人主义与责任感长期并存，使他既具有表演欲，也不断反思自己的选择。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "acoustic-garage",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "The Twins — 双生舞伶",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2023 / Mundfish",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "沉默、精准，几乎没有外露的情绪。举止具有舞蹈般的秩序感，却始终伴随明显的压迫感，以高度同步和绝对服从形成独特的双生关系。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "witness-gotham",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Noble Six / SPARTAN-B312 — Noble 6",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2010 / Microsoft / Halo Studios",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "寡言、独立，长期习惯单独行动，对自身经历几乎从不解释。加入团队后逐渐建立信任，其人物核心更多体现在责任、坚持与牺牲。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "toonami",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Michael Myers — 迈克尔·迈尔斯",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "1978 / Compass International Pictures / Trancas International Films",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "沉默、执拗，几乎不显露正常的情绪与动机。他的存在感来自持续、缓慢而不可动摇的行动方式，使人物始终保持难以理解的恐惧感。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "halo-5-visualizer",
+        "appearance": "dark",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Pathfinder — 探路者",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "2019 / Electronic Arts / Respawn Entertainment",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "乐观、热情，对人与世界保持近乎天真的好奇。非常渴望建立联系和找到自身归属，即使身处危险环境，也很少失去友善与积极态度。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "climatune",
         "appearance": "light",
-        "defaultPlays": true,
-        "observedSeconds": 28.78333333333333,
-        "activation": true,
-        "home": true
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Jubilee — 李千欢",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "1989 / Marvel Characters, Inc. / Marvel Entertainment",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "张扬而富有叛逆感，情绪表达鲜明，喜欢以轻松和玩味面对环境。年轻气质之下有很强的适应力，也不愿被既定身份束缚。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "eye-of-the-stormers",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Master Chief — 士官长",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2001 / Microsoft / Halo Studios",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "沉默、克制、自律，很少将个人情绪置于任务之前。长期责任塑造了他的稳定与可靠，对同伴的重视通常通过行动而非语言表达。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "bon-iver-viisualiizer",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Kitana — 吉塔娜",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "1993 / Warner Bros. Entertainment / NetherRealm Studios",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "优雅、沉着，有强烈的责任意识和原则感。长期处于权力与家族关系之中，使她习惯控制情绪，也格外重视尊严、忠诚与自己的判断。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "classic-stories-retold",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Magik — 秘客 / 魔剑客",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 700.703125,
+            "bottom": 721.703125,
+            "visible": true
+          },
+          {
+            "text": "1975；以 Magik 身份于 1983 完整确立 / Marvel Characters, Inc. / Marvel Entertainment",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 733.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "疏离、锋利，情绪很少完全暴露，言行中常带着讥诮与反叛。经历使她对亲近关系保持戒备，也形成了很强的个人边界。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "mastered-from-chaos",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Clove",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2024 / Riot Games",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "随性、爱开玩笑，对危险有一种近乎游戏化的态度。好奇心很强，不喜欢循规蹈矩，轻松的外表下始终保留鲜明的自主意识。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "emmit-fenn",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "2B — YoRHa No.2 Type B",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2017 / Square Enix",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "寡言、克制，习惯以纪律和任务要求约束自己的情绪。表面保持距离，实际具有细腻而复杂的情感，对责任与羁绊有很深的执着。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "spacecraft-for-all",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Lily — 莉莉",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2024 / SHIFT UP Corporation",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "活泼、真诚，对未知事物保持明显的好奇心。她比身边的人更容易表达情绪，也有很强的伙伴意识，在紧张环境中仍保留温暖和乐观。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "i-will-what-i-want",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Iron Man — 钢铁侠 / Tony Stark",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "1963 / Marvel Characters, Inc. / Marvel Entertainment",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "聪明、锋芒外露，习惯用幽默和戏谑掩饰压力。强烈的个人主义与责任感长期并存，使他既具有表演欲，也不断反思自己的选择。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "acoustic-garage",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "The Twins — 双生舞伶",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2023 / Mundfish",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "沉默、精准，几乎没有外露的情绪。举止具有舞蹈般的秩序感，却始终伴随明显的压迫感，以高度同步和绝对服从形成独特的双生关系。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "witness-gotham",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Noble Six / SPARTAN-B312 — Noble 6",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 742.703125,
+            "bottom": 763.703125,
+            "visible": true
+          },
+          {
+            "text": "2010 / Microsoft / Halo Studios",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 775.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "寡言、独立，长期习惯单独行动，对自身经历几乎从不解释。加入团队后逐渐建立信任，其人物核心更多体现在责任、坚持与牺牲。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "toonami",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Michael Myers — 迈克尔·迈尔斯",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "1978 / Compass International Pictures / Trancas International Films",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "沉默、执拗，几乎不显露正常的情绪与动机。他的存在感来自持续、缓慢而不可动摇的行动方式，使人物始终保持难以理解的恐惧感。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
+      },
+      {
+        "slug": "halo-5-visualizer",
+        "appearance": "light",
+        "copyExact": true,
+        "layout": [
+          {
+            "text": "Pathfinder — 探路者",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 721.703125,
+            "bottom": 742.703125,
+            "visible": true
+          },
+          {
+            "text": "2019 / Electronic Arts / Respawn Entertainment",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 754.703125,
+            "bottom": 796.703125,
+            "visible": true
+          },
+          {
+            "text": "乐观、热情，对人与世界保持近乎天真的好奇。非常渴望建立联系和找到自身归属，即使身处危险环境，也很少失去友善与积极态度。",
+            "width": 321.96875,
+            "scrollWidth": 322,
+            "clientWidth": 322,
+            "top": 808.703125,
+            "bottom": 871.703125,
+            "visible": true
+          }
+        ]
       }
     ],
-    "runtimeAssetSha256": "ff14d32b31e02c8cbb9be20ddffc4438e878c45fdf4bd7fb2e7ec462a5aab7ab",
     "routes": [
       {
         "name": "Gallery",
@@ -102,41 +903,41 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-15T14:51:11.4583572+08:00",
-      "NativePid": 19484,
-      "StartedAt": "2026-09-15T14:50:55.7149294+08:00",
-      "WindowHandle": 459418,
+      "SampledAt": "2026-09-15T15:43:39.0528729+08:00",
+      "NativePid": 13144,
+      "StartedAt": "2026-09-15T15:43:23.3536833+08:00",
+      "WindowHandle": 395130,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        19484,
-        24932,
-        29676,
-        10712,
-        3100,
-        23580,
-        21132,
-        1408,
-        2768,
-        5520,
-        28844
+        13144,
+        31788,
+        24324,
+        31840,
+        32252,
+        25540,
+        9804,
+        29100,
+        27992,
+        10872,
+        30260
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 2063.9,
-      "GpuDedicatedBytes": 3334144000.0,
+      "NormalizedCpuPercent": 4.98,
+      "WorkingSetMiB": 2004.1,
+      "GpuDedicatedBytes": 3361034240.0,
       "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 15848244,
+      "FreeRamKiB": 13792704,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 1408
+          "OwningProcess": 29100
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
       "SharedProcesses": []
     },
-    "consoleBaseline": "D:/preacherman/output/gallery-remove-video-20260914/native-report.json",
+    "consoleBaseline": "D:/preacherman/output/twin-leg-fix-20260915/native-report.json",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -166,14 +967,14 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\twin-leg-fix-20260915\\native-report.json",
-      "D:\\preacherman\\output\\twin-leg-fix-20260915\\tests-final.log",
-      "D:\\preacherman\\output\\twin-leg-fix-20260915\\typecheck.log",
-      "D:\\preacherman\\output\\twin-leg-fix-20260915\\production-build.log",
-      "D:\\preacherman\\output\\twin-leg-fix-20260915\\final-resources.json",
-      "D:\\preacherman\\output\\twin-leg-fix-20260915\\final-native-home.png",
-      "D:\\preacherman\\output\\twin-leg-fix-20260915\\native-dark-twin-home.png",
-      "D:\\preacherman\\output\\twin-leg-fix-20260915\\native-light-twin-home.png"
+      "D:\\preacherman\\output\\gallery-character-details-20260915\\native-report.json",
+      "D:\\preacherman\\output\\gallery-character-details-20260915\\tests.log",
+      "D:\\preacherman\\output\\gallery-character-details-20260915\\typecheck.log",
+      "D:\\preacherman\\output\\gallery-character-details-20260915\\production-build.log",
+      "D:\\preacherman\\output\\gallery-character-details-20260915\\final-resources.json",
+      "D:\\preacherman\\output\\gallery-character-details-20260915\\final-native-home.png",
+      "D:\\preacherman\\output\\gallery-character-details-20260915\\native-dark-06.png",
+      "D:\\preacherman\\output\\gallery-character-details-20260915\\native-light-06.png"
     ]
   },
   "releaseAttempts": [
@@ -560,9 +1361,18 @@
       "deployedAt": "2026-09-15T14:42:21.1311491+08:00",
       "verifiedAt": "2026-09-15T14:51:11.4583572+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915"
+    },
+    {
+      "buildId": "gallery-character-details-20260915",
+      "sourceCommit": "999008c986ae816f1f4e17fd9cd3eb7ac8dd6e62",
+      "sha256": "C1B1162A5C70DCA59CD04FC3F38EB3A01F3E4FC2A5A1A43D21B83CBEBC24CC6B",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T15:36:47.5540319+08:00",
+      "verifiedAt": "2026-09-15T15:43:39.0528729+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-details-before-20260915"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-details-before-20260915/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
