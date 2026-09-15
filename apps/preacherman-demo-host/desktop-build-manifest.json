@@ -11,7 +11,7 @@
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
   "builtAt": "2026-09-15T22:02:00.9973899+08:00",
   "deployedAt": "2026-09-15T22:09:41.7665534+08:00",
-  "verifiedAt": "2026-09-15T22:12:57.1138530+08:00",
+  "verifiedAt": "2026-09-15T22:12:57.113853+08:00",
   "sizeBytes": 675368448,
   "sha256": "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
@@ -111,7 +111,7 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-15T22:12:57.1138530+08:00",
+      "SampledAt": "2026-09-15T22:12:57.113853+08:00",
       "NativePid": 34072,
       "StartedAt": "2026-09-15T22:12:40.4189569+08:00",
       "WindowHandle": 918242,
@@ -656,8 +656,17 @@
       "sha256": "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-09-15T22:09:41.7665534+08:00",
-      "verifiedAt": "2026-09-15T22:12:57.1138530+08:00",
+      "verifiedAt": "2026-09-15T22:12:57.113853+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-evomap-before-20260915"
+    },
+    {
+      "buildId": "task-timeline-dialog-20260915",
+      "sourceCommit": "8a4a80008c1ae1cc0239554ac8b604eef244724d",
+      "sha256": "FF5874BEDC76CB94FFB1C6865BB0D5393372D81033FBCC849497CD2006D0B1B0",
+      "status": "rolled-back-after-task-first-entry-check",
+      "reason": "Native first-entry check found the All navigation link still used the legacy raw router call and could be rejected during the startup transition guard. Restore the verified pair while applying the existing navigation queue to captured navigation links.",
+      "rolledBackAt": "2026-09-15T23:38:55.4242735+08:00",
+      "failedArtifact": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-first-entry-20260915"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-evomap-before-20260915/desktop-build-manifest.json",
