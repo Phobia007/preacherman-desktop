@@ -1,63 +1,363 @@
 {
   "schemaVersion": 1,
-  "buildId": "account-evomap-20260915",
+  "buildId": "task-timeline-dialog-20260915",
   "productVersion": "0.1.0",
-  "sourceTask": "account-login-transplant-frosted-avatar-spatial-brand",
+  "sourceTask": "fix-task-all-timeline-conversation-opening",
   "sourceThread": null,
-  "sourceState": "Imported the local EvoMap login composition into Account with bundled source font and provider icons. Left scene enters before right form, selected shared avatar uses portrait framing on the left, neutral frosted glass fades to dark at the bottom, startup PM mark and original signature button retain real spatial lens distortion. Pauses obscured shared avatar rendering while the lens is open. Both appearances, local form validation/status dialog and cleanup are verified. Authentication is intentionally not connected; email is not sent or saved.",
-  "sourceCommit": "6886e20482976f06a78738cf319389c1a18cc825",
+  "sourceState": "Task detail sheets resolve the full projects catalog rather than only eight featured entries. Timeline titles use their authored navigation handler, and captured All/Featured links now use that same queue, so entry and title clicks survive the transition guard. Saved conversation query URLs retain full identity while queued guard ownership uses the resolved pathname. Existing dialog style, messages, input and animation retained.",
+  "sourceCommit": "42583e60cb77955cab95c6a2c430edec61cd813a",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-15T22:02:00.9973899+08:00",
-  "deployedAt": "2026-09-15T22:09:41.7665534+08:00",
-  "verifiedAt": "2026-09-15T22:12:57.113853+08:00",
-  "sizeBytes": 675368448,
-  "sha256": "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
+  "builtAt": "2026-09-16T00:02:46.0506879+08:00",
+  "deployedAt": "2026-09-16T00:03:47.6635312+08:00",
+  "verifiedAt": "2026-09-16T00:08:23.0534112+08:00",
+  "sizeBytes": 675369472,
+  "sha256": "08116D516F57D87DAD27EE5441B29989E62C4F9EE41E9D7616422D650CE02DCE",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-evomap-before-20260915/preacherman-demo-host.exe",
-  "backupSha256": "EBF49750CF9B516CF701E430F862A0E9E8E45ADB3A8464D7BD97E24D17D0E29B",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-evomap-before-20260915/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-dialog-before-20260915/preacherman-demo-host.exe",
+  "backupSha256": "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-dialog-before-20260915/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "f461920e45365ef916a4d61a98477327caaa18a8",
-  "previousVerificationCommit": "f461920e45365ef916a4d61a98477327caaa18a8",
+  "rollbackBaselineCommit": "f26c2e943298923215473423e56643a448b0314d",
+  "previousVerificationCommit": "f26c2e943298923215473423e56643a448b0314d",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "17 focused Account theme, capture boundary, shared model, existing theme contract, Market entrance and spatial lens lifecycle checks passed.",
-      "scope": "Focused source checks plus sequential browser and native interaction verification; not the complete repository suite."
+      "tests": "59 focused conversation, timeline, metadata, transition and theme tests passed.",
+      "scope": "Focused regression, full timeline browser and native interaction checks, plus core native navigation."
     },
-    "nativeFlow": "Cold launch from canonical shortcut into normal Home. Account entered before any reload, then tested in both appearances: authored glass and model, startup PM mark, signature font, field validation, local-only provider/email feedback, spatial distortion, Escape/rapid close/reopen, paused obscured renderer, leave/reenter cleanup. Home, Task, Gallery, Market/Ledger and Settings checked in both modes; native Market images and scrolling verified. Original preferences restored; final normal shortcut restart without debug port.",
-    "account": [
+    "nativeFlow": "Cold canonical shortcut launch into normal Home. Both appearances: every available All timeline title opens matching conversation metadata and an editable composer; alternating mouse and Enter clicks, immediate entry clicks, close/reopen, Featured card mouse entry. No execution messages sent. Home, Account, Gallery, Market/Ledger and Settings visually checked, with Market scrolling. Preferences and unchanged title bookkeeping restored. Final normal shortcut restart without debug port.",
+    "taskTimeline": [
       {
         "appearance": "dark",
-        "headingFont": "\"Account Harmony\", Arial, sans-serif",
-        "signatureFont": "\"Market Task Signature\", cursive",
-        "background": "rgb(0, 0, 0)",
-        "brandColor": "rgb(255, 255, 255)",
-        "sceneTransform": "matrix(1, 0, 0, 1, -450, 0)",
-        "logoWidth": 517,
-        "validation": true,
-        "localDialogs": true,
-        "rapidToggle": true,
-        "sharedRendererPausedWhileLensOpen": true
+        "checks": [
+          {
+            "id": "fivepathways",
+            "title": "Fivepathways",
+            "opacity": "0.995052",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "task-439a9e8c-f450-4bcf-b707-7a53ba5bd67d",
+            "title": "halo",
+            "opacity": "0.993524",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "task-8026a376-d06f-4327-8590-1bf766ebf9a2",
+            "title": "1",
+            "opacity": "0.99327",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "the-lookback",
+            "title": "The Lookback",
+            "opacity": "0.993524",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "dothings",
+            "title": "DoThings",
+            "opacity": "0.992833",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "53-west-53",
+            "title": "53 West 53",
+            "opacity": "0.993524",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "ross-masonr",
+            "title": "Ross Mason®",
+            "opacity": "0.99247",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "vuckotm",
+            "title": "Vucko™",
+            "opacity": "0.993524",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "ingrao",
+            "title": "Ingrao",
+            "opacity": "0.994168",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "111-west-57th-street",
+            "title": "111 West 57th Street",
+            "opacity": "0.994474",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "better-offr",
+            "title": "Better Off®",
+            "opacity": "0.993524",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "techspeed",
+            "title": "Techspeed",
+            "opacity": "0.993184",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "nathan-riley",
+            "title": "Preacherman",
+            "opacity": "0.993184",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "task-6d811565-2df6-481e-884e-c52486c347d1",
+            "title": "kobe",
+            "opacity": "0.993184",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "dogelon-mars",
+            "title": "Dogelon Mars",
+            "opacity": "0.992833",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "discoveryland",
+            "title": "Discoveryland",
+            "opacity": "0.995717",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "griflan",
+            "title": "Griflan",
+            "opacity": "0.992833",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "book-of-happiness",
+            "title": "Book of Happine",
+            "opacity": "0.993851",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "chris-wilcock",
+            "title": "Chris Wilcock",
+            "opacity": "0.993184",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "david-lubofsky",
+            "title": "David Lubofsky",
+            "opacity": "0.993184",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "casa-di-solare",
+            "title": "Casa Di Solare",
+            "opacity": "0.992833",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "gil-huybrecht",
+            "title": "Gil Huybrecht",
+            "opacity": "0.99344",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "energy-park",
+            "title": "Energy Park",
+            "opacity": "0.993184",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "outpost",
+            "title": "Outpost",
+            "opacity": "0.992833",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "mew",
+            "title": "Mew",
+            "opacity": "0.993184",
+            "color": "rgb(244, 244, 244)"
+          },
+          {
+            "id": "primland",
+            "title": "Primland",
+            "opacity": "0.993851",
+            "color": "rgb(244, 244, 244)"
+          }
+        ],
+        "reopen": true,
+        "featured": true
       },
       {
         "appearance": "light",
-        "headingFont": "\"Account Harmony\", Arial, sans-serif",
-        "signatureFont": "\"Market Task Signature\", cursive",
-        "background": "rgb(247, 247, 246)",
-        "brandColor": "rgb(255, 255, 255)",
-        "sceneTransform": "matrix(1, 0, 0, 1, -450, 0)",
-        "logoWidth": 517,
-        "validation": true,
-        "localDialogs": true,
-        "rapidToggle": true,
-        "sharedRendererPausedWhileLensOpen": true
+        "checks": [
+          {
+            "id": "fivepathways",
+            "title": "Fivepathways",
+            "opacity": "0.994768",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "task-439a9e8c-f450-4bcf-b707-7a53ba5bd67d",
+            "title": "halo",
+            "opacity": "0.993098",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "task-8026a376-d06f-4327-8590-1bf766ebf9a2",
+            "title": "1",
+            "opacity": "0.993524",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "the-lookback",
+            "title": "The Lookback",
+            "opacity": "0.993184",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "dothings",
+            "title": "DoThings",
+            "opacity": "0.993184",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "53-west-53",
+            "title": "53 West 53",
+            "opacity": "0.993098",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "ross-masonr",
+            "title": "Ross Mason®",
+            "opacity": "0.994245",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "vuckotm",
+            "title": "Vucko™",
+            "opacity": "0.993524",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "ingrao",
+            "title": "Ingrao",
+            "opacity": "0.992833",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "111-west-57th-street",
+            "title": "111 West 57th Street",
+            "opacity": "0.993184",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "better-offr",
+            "title": "Better Off®",
+            "opacity": "0.993851",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "techspeed",
+            "title": "Techspeed",
+            "opacity": "0.994245",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "nathan-riley",
+            "title": "Preacherman",
+            "opacity": "0.993184",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "task-6d811565-2df6-481e-884e-c52486c347d1",
+            "title": "kobe",
+            "opacity": "0.993851",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "dogelon-mars",
+            "title": "Dogelon Mars",
+            "opacity": "0.993098",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "discoveryland",
+            "title": "Discoveryland",
+            "opacity": "0.993184",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "griflan",
+            "title": "Griflan",
+            "opacity": "0.99247",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "book-of-happiness",
+            "title": "Book of Happine",
+            "opacity": "0.993607",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "chris-wilcock",
+            "title": "Chris Wilcock",
+            "opacity": "0.992833",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "david-lubofsky",
+            "title": "David Lubofsky",
+            "opacity": "0.992833",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "casa-di-solare",
+            "title": "Casa Di Solare",
+            "opacity": "0.99344",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "gil-huybrecht",
+            "title": "Gil Huybrecht",
+            "opacity": "0.992833",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "energy-park",
+            "title": "Energy Park",
+            "opacity": "0.993524",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "outpost",
+            "title": "Outpost",
+            "opacity": "0.993098",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "mew",
+            "title": "Mew",
+            "opacity": "0.992653",
+            "color": "rgb(26, 26, 26)"
+          },
+          {
+            "id": "primland",
+            "title": "Primland",
+            "opacity": "0.994245",
+            "color": "rgb(26, 26, 26)"
+          }
+        ],
+        "reopen": true,
+        "featured": true
       }
     ],
     "routes": [
@@ -67,10 +367,6 @@
       },
       {
         "name": "Account",
-        "appearance": "dark"
-      },
-      {
-        "name": "Task",
         "appearance": "dark"
       },
       {
@@ -91,10 +387,6 @@
       },
       {
         "name": "Account",
-        "appearance": "light"
-      },
-      {
-        "name": "Task",
         "appearance": "light"
       },
       {
@@ -111,41 +403,42 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-15T22:12:57.113853+08:00",
-      "NativePid": 34072,
-      "StartedAt": "2026-09-15T22:12:40.4189569+08:00",
-      "WindowHandle": 918242,
+      "SampledAt": "2026-09-16T00:08:23.0534112+08:00",
+      "NativePid": 5000,
+      "StartedAt": "2026-09-16T00:08:00.8009243+08:00",
+      "WindowHandle": 2098422,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        34072,
-        33468,
-        22700,
-        27672,
-        34876,
-        33276,
-        22460,
-        34712,
-        35452,
-        13536,
-        35156
+        5000,
+        13368,
+        20332,
+        31796,
+        34220,
+        2432,
+        19828,
+        4080,
+        33856,
+        27836,
+        30008
       ],
-      "NormalizedCpuPercent": 5.98,
-      "WorkingSetMiB": 1896.9,
-      "GpuDedicatedBytes": 3259871232.0,
-      "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 15255000,
+      "NormalizedCpuPercent": 5.0,
+      "WorkingSetMiB": 2032.3,
+      "GpuDedicatedBytes": 3345121280.0,
+      "MaxGpuEngineUtilization": 12.0,
+      "FreeRamKiB": 16171552,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 34712
+          "OwningProcess": 4080
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
       "SharedProcesses": []
     },
-    "consoleBaseline": "D:/preacherman/output/market-character-copy-20260915/native-report.json",
+    "consoleBaseline": "D:/preacherman/output/account-evomap-20260915/native-report.json",
+    "historicalConsoleBaseline": "D:/preacherman/output/supplied-motions-20260914/native-report.json",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -172,25 +465,24 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/qmEPTzOaDQBZL5258j01i2mMBkGh3G9BI/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "TypeError: _this.initSync is not a function"
     ],
-    "authentication": "First-page UI only; no external authentication or email persistence.",
     "evidence": [
-      "D:\\preacherman\\output\\account-evomap-20260915\\native-report.json",
-      "D:\\preacherman\\output\\account-evomap-20260915\\source-tests.log",
-      "D:\\preacherman\\output\\account-evomap-20260915\\typecheck.log",
-      "D:\\preacherman\\output\\account-evomap-20260915\\preview-report.json",
-      "D:\\preacherman\\output\\account-evomap-20260915\\production-build.log",
-      "D:\\preacherman\\output\\account-evomap-20260915\\final-resources.json",
-      "D:\\preacherman\\output\\account-evomap-20260915\\final-native-home.png",
-      "D:\\preacherman\\output\\account-evomap-20260915\\native-cold-account.png",
-      "D:\\preacherman\\output\\account-evomap-20260915\\native-dark-account.png",
-      "D:\\preacherman\\output\\account-evomap-20260915\\native-light-account.png",
-      "D:\\preacherman\\output\\account-evomap-20260915\\native-dark-lens.png",
-      "D:\\preacherman\\output\\account-evomap-20260915\\native-light-lens.png",
-      "D:\\preacherman\\output\\account-evomap-20260915\\native-dark-dialog.png",
-      "D:\\preacherman\\output\\account-evomap-20260915\\native-light-dialog.png",
-      "D:\\preacherman\\output\\account-evomap-20260915\\finish-review.md"
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\source-tests.log",
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\typecheck.log",
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\final-native-home.png",
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\native-dark-all-dialog.png",
+      "D:\\preacherman\\output\\playwright\\task-timeline-dialog-20260915\\native-light-all-dialog.png"
     ]
   },
   "releaseAttempts": [
@@ -676,9 +968,18 @@
       "reason": "Native timeline navigation reached saved task halo but the query-bearing route was rejected by the transition guard. Queue ownership compared the complete query URL against only the pathname. Restore the verified pair while correcting queued route identity.",
       "rolledBackAt": "2026-09-15T23:56:19.9503095+08:00",
       "failedArtifact": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-query-route-20260915"
+    },
+    {
+      "buildId": "task-timeline-dialog-20260915",
+      "sourceCommit": "42583e60cb77955cab95c6a2c430edec61cd813a",
+      "sha256": "08116D516F57D87DAD27EE5441B29989E62C4F9EE41E9D7616422D650CE02DCE",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T00:03:47.6635312+08:00",
+      "verifiedAt": "2026-09-16T00:08:23.0534112+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-dialog-before-20260915"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-evomap-before-20260915/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-dialog-before-20260915/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
