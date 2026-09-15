@@ -39,7 +39,7 @@ test("Market mounts only at its route without replacing the shared scene", async
   assert.match(surface, /removeEventListener\("message", onMessage\)/);
 });
 
-test("the long page, fonts and all character Start Designing links remain", async () => {
+test("the long page, fonts and all character Details destinations remain", async () => {
   const html = await text(join(imported, "cartier-love.html"));
   for (const section of ["style", "material", "diamonds", "finish", "closure"]) {
     assert.match(html, new RegExp(`data-od-id="love-${section}"`));
@@ -147,7 +147,7 @@ test("both appearances use white ink on transparent paper without restyling dono
   assert.match(adapter, /themeObserver.disconnect/);
 });
 
-test("all Gallery portraits are packaged in order with alternating sides and identical copy", async () => {
+test("all Gallery portraits are packaged in order with alternating sides and corresponding character copy", async () => {
   const portraits = JSON.parse(await text(join(imported, "characters.json")));
   const html = await text(join(imported, "cartier-love.html"));
   const bindings = await text(join(root, "src/surfaces/gallery/galleryModelBindings.ts"));
@@ -162,7 +162,15 @@ test("all Gallery portraits are packaged in order with alternating sides and ide
     assert.ok(row.includes(`data-character-id="${portrait.id}"`));
     assert.ok(row.includes(`src="${portrait.image}"`));
     assert.equal(row.includes("order--small-up-1"), index % 2 === 1);
-    assert.equal(copy(row), copy(rows[0]));
+    assert.ok(row.includes(`>${portrait.name.toUpperCase()}</h2>`));
+    assert.ok(row.includes(`>${portrait.summary}</div>`));
+    assert.ok(row.includes(`aria-label="${portrait.name}, Details"`));
+    assert.ok(row.includes('>Details</a>'));
+    const neutralCopy = value => copy(value)
+      .replace(/(<h2[^>]*>)[\s\S]*?(<\/h2>)/, "$1TITLE$2")
+      .replace(/(<div class="descriptive-card__description[^>]*>)[\s\S]*?(<\/div>)/, "$1SUMMARY$2")
+      .replace(/aria-label="[^"]*"/g, 'aria-label="LABEL"');
+    assert.equal(neutralCopy(row), neutralCopy(rows[0]));
     assert.ok(row.includes('width="4096" height="4096"'));
     assert.ok(row.includes(index === 0 ? 'loading="eager"' : 'loading="lazy"'));
     const bytes = await readFile(join(imported, portrait.image));
