@@ -1,37 +1,111 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-search-original-style-20260915",
+  "buildId": "gallery-remove-work-contact-20260915",
   "productVersion": "0.1.0",
-  "sourceTask": "gallery-search-original-appearance-and-categories",
+  "sourceTask": "remove-gallery-work-contact-switch",
   "sourceThread": null,
-  "sourceState": "Restored the authored ASK ME ANYTHING placeholder, pill colors, focus border and five original category controls while retaining local character search. Removed added descriptions, statuses and the extra focus outline. Searches can locate characters outside the current category; category changes do not repeat previous searches. Cortana remains the initial upper-left card.",
-  "sourceCommit": "877fbc356481e51e487958b7783ed21675861205",
+  "sourceState": "Removed the Work / Contact switch from the native Gallery overview and the authored detail scene. The legacy navigation no longer constructs buttons, pill background, accessibility links or interaction handlers. Existing character search, category filters, orbit motion and details remain available.",
+  "sourceCommit": "52705ce94541c59bb026304eee9fb2b077398cc4",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-15T17:08:21.2048379+08:00",
-  "deployedAt": "2026-09-15T17:09:13.7812333+08:00",
-  "verifiedAt": "2026-09-15T17:11:54.9758414+08:00",
+  "builtAt": "2026-09-15T17:55:23.8240763+08:00",
+  "deployedAt": "2026-09-15T17:56:31.5272236+08:00",
+  "verifiedAt": "2026-09-15T17:59:33.0865170+08:00",
   "sizeBytes": 674997760,
-  "sha256": "8E7B3FB02CDCCE99FF0E4C02EC1D6E4464A560D9000F5EFCBB8D8854D542AF10",
+  "sha256": "EF557C0589CA2D7061C4BDF0C71F40A884D4350CD9E033240243DBA27386CBE7",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-search-original-style-before-20260915/preacherman-demo-host.exe",
-  "backupSha256": "B913748FE82D5220B6F914D8B019F17CDC1842CB88AD1CE7B3D180C161849AFC",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-search-original-style-before-20260915/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915/preacherman-demo-host.exe",
+  "backupSha256": "8E7B3FB02CDCCE99FF0E4C02EC1D6E4464A560D9000F5EFCBB8D8854D542AF10",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "41e65909fd67b2012740a74612fd2ea03632f0ef",
-  "previousVerificationCommit": "41e65909fd67b2012740a74612fd2ea03632f0ef",
+  "rollbackBaselineCommit": "9d09feac5e29a161622a13000a37aa10609e05a9",
+  "previousVerificationCommit": "9d09feac5e29a161622a13000a37aa10609e05a9",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "58 focused Gallery, search, category preservation, original appearance, input ownership, execution bridge and navigation regressions passed.",
+      "tests": "39 focused Gallery orbit, detail, transition and character search tests passed, including omitted legacy navigation and readiness in both appearance modes.",
       "scope": "Change-scoped checks, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through the canonical shortcut. Original placeholder, font and category controls restored in both appearances. Focus has no extra outline or shadow. No added descriptions or search status text. All fourteen names matched and positioned at the upper left; category filtering and searching outside the active category work. Initial Cortana placement, real card clicks, correct Cortana/Pathfinder detail routing, search during detail exit, clear, Home/End navigation and zero execution requests verified. Home, Task, Gallery, Market, Settings and Account checked in both modes. Original preferences restored; final normal shortcut restart without a debug port.",
+    "nativeFlow": "Cold launch through the canonical shortcut. Verified absence of Work / Contact in overview, opened character details and return to overview in both appearances. Search, category filtering, card clicks, correct detail routing and original input appearance retained. Home, Task, Gallery, Market, Settings and Account checked in both modes. Original preferences restored; final normal shortcut restart without a debug port.",
+    "removedNavigation": [
+      {
+        "appearance": "dark",
+        "phase": "overview",
+        "nativeAbsent": true,
+        "authoredAbsent": true,
+        "nav": [
+          {
+            "ready": true,
+            "hasUi": false
+          }
+        ]
+      },
+      {
+        "appearance": "dark",
+        "phase": "detail",
+        "nativeAbsent": true,
+        "authoredAbsent": true,
+        "nav": [
+          {
+            "ready": true,
+            "hasUi": false
+          }
+        ]
+      },
+      {
+        "appearance": "dark",
+        "phase": "returned",
+        "nativeAbsent": true,
+        "authoredAbsent": true,
+        "nav": [
+          {
+            "ready": true,
+            "hasUi": false
+          }
+        ]
+      },
+      {
+        "appearance": "light",
+        "phase": "overview",
+        "nativeAbsent": true,
+        "authoredAbsent": true,
+        "nav": [
+          {
+            "ready": true,
+            "hasUi": false
+          }
+        ]
+      },
+      {
+        "appearance": "light",
+        "phase": "detail",
+        "nativeAbsent": true,
+        "authoredAbsent": true,
+        "nav": [
+          {
+            "ready": true,
+            "hasUi": false
+          }
+        ]
+      },
+      {
+        "appearance": "light",
+        "phase": "returned",
+        "nativeAbsent": true,
+        "authoredAbsent": true,
+        "nav": [
+          {
+            "ready": true,
+            "hasUi": false
+          }
+        ]
+      }
+    ],
     "search": [
       {
         "appearance": "dark",
@@ -40,151 +114,19 @@
         "scroll": 1,
         "target": 1,
         "position": {
-          "x": -0.5117292440306468,
-          "y": 0.17421555901301214
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "ZIMA",
-        "id": "watson-masters",
-        "scroll": 1.998005576015654,
-        "target": 2,
-        "position": {
-          "x": -0.5108452143651803,
-          "y": 0.17360092912488717
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Jubilee",
-        "id": "climatune",
-        "scroll": 2.9980734528977293,
-        "target": 3,
-        "position": {
-          "x": -0.5108753159697682,
-          "y": 0.17362183807968004
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Master Chief",
-        "id": "eye-of-the-stormers",
-        "scroll": 3.9980047559782417,
-        "target": 4,
-        "position": {
-          "x": -0.5108448506940029,
-          "y": 0.17360067652220273
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Kitana",
-        "id": "bon-iver-viisualiizer",
-        "scroll": 4.9980720053652155,
-        "target": 5,
-        "position": {
-          "x": -0.5108746740384501,
-          "y": 0.1736213921717717
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Magik",
-        "id": "classic-stories-retold",
-        "scroll": 5.99806284226325,
-        "target": 6,
-        "position": {
-          "x": -0.5108706105038868,
-          "y": 0.17361856951325239
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Clove",
-        "id": "mastered-from-chaos",
-        "scroll": 6.998068149330726,
-        "target": 7,
-        "position": {
-          "x": -0.5108729640162538,
-          "y": 0.17362020433369507
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "2B",
-        "id": "emmit-fenn",
-        "scroll": 7.998067964939945,
-        "target": 8,
-        "position": {
-          "x": -0.5108728822450294,
-          "y": 0.1736201475328035
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Lily",
-        "id": "spacecraft-for-all",
-        "scroll": 8.99807885253691,
-        "target": 9,
-        "position": {
-          "x": -0.5108777105213812,
-          "y": 0.1736235014243178
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Iron Man",
-        "id": "i-will-what-i-want",
-        "scroll": 9.998070687318307,
-        "target": 10,
-        "position": {
-          "x": -0.5108740895291612,
-          "y": 0.17362098615175497
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "The Twins",
-        "id": "acoustic-garage",
-        "scroll": 10.998006241818413,
-        "target": 11,
-        "position": {
-          "x": -0.5108455096365572,
-          "y": 0.1736011342170102
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Noble Six / SPARTAN-B312",
-        "id": "witness-gotham",
-        "scroll": 11.998114719707157,
-        "target": 12,
-        "position": {
-          "x": -0.5108936161890555,
-          "y": 0.17363455031287817
-        }
-      },
-      {
-        "appearance": "dark",
-        "name": "Michael Myers",
-        "id": "toonami",
-        "scroll": 12.99806398580119,
-        "target": 13,
-        "position": {
-          "x": -0.5108711176264394,
-          "y": 0.1736189217751149
+          "x": -0.511729244016973,
+          "y": 0.17421555902708433
         }
       },
       {
         "appearance": "dark",
         "name": "Pathfinder",
         "id": "halo-5-visualizer",
-        "scroll": 13.998001932727668,
+        "scroll": 13.998064424619699,
         "target": 14,
         "position": {
-          "x": -0.5108435986333371,
-          "y": 0.17359980685538196
+          "x": -0.5108713122283188,
+          "y": 0.1736190569513186
         },
         "inputStyle": {
           "font": "nbarchitekt, monospace",
@@ -201,151 +143,19 @@
         "scroll": 1,
         "target": 1,
         "position": {
-          "x": -0.5117292439996377,
-          "y": 0.1742155590449431
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "ZIMA",
-        "id": "watson-masters",
-        "scroll": 1.9981572568957033,
-        "target": 2,
-        "position": {
-          "x": -0.5109124793593797,
-          "y": 0.1736476541301257
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Jubilee",
-        "id": "climatune",
-        "scroll": 2.9980050130708995,
-        "target": 3,
-        "position": {
-          "x": -0.5108449647098637,
-          "y": 0.1736007557164184
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Master Chief",
-        "id": "eye-of-the-stormers",
-        "scroll": 3.9980130909729388,
-        "target": 4,
-        "position": {
-          "x": -0.5108485471029424,
-          "y": 0.17360324401881255
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Kitana",
-        "id": "bon-iver-viisualiizer",
-        "scroll": 4.998068063909677,
-        "target": 5,
-        "position": {
-          "x": -0.5108729261348389,
-          "y": 0.17362017802006133
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Magik",
-        "id": "classic-stories-retold",
-        "scroll": 5.998008931516636,
-        "target": 6,
-        "position": {
-          "x": -0.510846702466529,
-          "y": 0.17360196274626866
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Clove",
-        "id": "mastered-from-chaos",
-        "scroll": 6.998007529503994,
-        "target": 7,
-        "position": {
-          "x": -0.5108460807008142,
-          "y": 0.17360153087297656
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "2B",
-        "id": "emmit-fenn",
-        "scroll": 7.998067959681326,
-        "target": 8,
-        "position": {
-          "x": -0.5108728799130058,
-          "y": 0.17362014591290595
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Lily",
-        "id": "spacecraft-for-all",
-        "scroll": 8.99800752694818,
-        "target": 9,
-        "position": {
-          "x": -0.5108460795673596,
-          "y": 0.17360153008568846
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Iron Man",
-        "id": "i-will-what-i-want",
-        "scroll": 9.99806389566186,
-        "target": 10,
-        "position": {
-          "x": -0.5108710776525363,
-          "y": 0.1736188940080816
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "The Twins",
-        "id": "acoustic-garage",
-        "scroll": 10.998113494145514,
-        "target": 11,
-        "position": {
-          "x": -0.5108930727059752,
-          "y": 0.17363417277548174
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Noble Six / SPARTAN-B312",
-        "id": "witness-gotham",
-        "scroll": 11.998110841987227,
-        "target": 12,
-        "position": {
-          "x": -0.5108918965883803,
-          "y": 0.17363335577204564
-        }
-      },
-      {
-        "appearance": "light",
-        "name": "Michael Myers",
-        "id": "toonami",
-        "scroll": 12.998101743604778,
-        "target": 13,
-        "position": {
-          "x": -0.5108878618365648,
-          "y": 0.17363055300179495
+          "x": -0.5117292440052692,
+          "y": 0.17421555903914646
         }
       },
       {
         "appearance": "light",
         "name": "Pathfinder",
         "id": "halo-5-visualizer",
-        "scroll": 13.998097735447391,
+        "scroll": 13.998159560068185,
         "target": 14,
         "position": {
-          "x": -0.5108860843804461,
-          "y": 0.17362931828653794
+          "x": -0.5109135006925631,
+          "y": 0.17364836364189168
         },
         "inputStyle": {
           "font": "nbarchitekt, monospace",
@@ -435,48 +245,43 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-15T17:11:54.9758414+08:00",
-      "NativePid": 31860,
-      "StartedAt": "2026-09-15T17:11:33.0305009+08:00",
-      "WindowHandle": 853818,
+      "SampledAt": "2026-09-15T17:59:33.0865170+08:00",
+      "NativePid": 34556,
+      "StartedAt": "2026-09-15T17:59:16.7404320+08:00",
+      "WindowHandle": 919366,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        31860,
-        29796,
-        27200,
-        13940,
-        29832,
-        3424,
-        32728,
-        32720,
-        23888,
-        3416,
-        29288
+        34556,
+        22280,
+        31536,
+        8396,
+        30848,
+        30416,
+        18832,
+        30760,
+        3772,
+        32456,
+        28228
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 2008.4,
-      "GpuDedicatedBytes": 3362308096.0,
+      "NormalizedCpuPercent": 5.98,
+      "WorkingSetMiB": 1982.5,
+      "GpuDedicatedBytes": 3397275648.0,
       "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 15110244,
+      "FreeRamKiB": 17178212,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 32720
+          "OwningProcess": 30760
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
       "SharedProcesses": []
     },
-    "consoleBaseline": "D:/preacherman/output/gallery-character-search-20260915/native-report.json",
+    "consoleBaseline": "D:/preacherman/output/gallery-search-original-style-20260915/native-report.json",
     "newErrors": [],
     "observedErrors": [
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
@@ -493,21 +298,28 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\native-report.json",
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\preview-report.json",
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\tests.log",
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\typecheck.log",
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\production-build.log",
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\final-resources.json",
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\final-native-home.png",
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\native-dark-original-pill.png",
-      "D:\\preacherman\\output\\gallery-search-original-style-20260915\\native-light-original-pill.png"
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-report.json",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\preview-report.json",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\tests.log",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\typecheck.log",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\production-build.log",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\final-resources.json",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\final-native-home.png",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-dark-initial.png",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-light-initial.png",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-dark-detail.png",
+      "D:\\preacherman\\output\\gallery-remove-work-contact-20260915\\native-light-detail.png"
     ]
   },
   "releaseAttempts": [
@@ -930,9 +742,18 @@
       "deployedAt": "2026-09-15T17:09:13.7812333+08:00",
       "verifiedAt": "2026-09-15T17:11:54.9758414+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-search-original-style-before-20260915"
+    },
+    {
+      "buildId": "gallery-remove-work-contact-20260915",
+      "sourceCommit": "52705ce94541c59bb026304eee9fb2b077398cc4",
+      "sha256": "EF557C0589CA2D7061C4BDF0C71F40A884D4350CD9E033240243DBA27386CBE7",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T17:56:31.5272236+08:00",
+      "verifiedAt": "2026-09-15T17:59:33.0865170+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-search-original-style-before-20260915/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
