@@ -1,927 +1,359 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-english-details-20260915",
+  "buildId": "gallery-character-search-20260915",
   "productVersion": "0.1.0",
-  "sourceTask": "gallery-english-character-biographies",
+  "sourceTask": "gallery-character-search-and-cortana-first",
   "sourceThread": null,
-  "sourceState": "Translated the twelve Gallery character names, personality biographies and Magik year note to English. The original nbarchitekt font, typography, motion, materials and all other CMS fields are retained.",
-  "sourceCommit": "8725d5815478e16a0daa8bc1674b0c95bd585857",
+  "sourceState": "Replaced Gallery chat input with local character search using the original font and pill. Searches rotate the matching character to the upper-left lead card along the shortest existing helix path without opening details; Cortana starts there. Theme-only host bridge prevents execution requests. Search from details completes the existing exit before focusing the newest match.",
+  "sourceCommit": "c6e5c738e922b998d6ad236d16e85611ad7aa00d",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-15T16:03:55.2331906+08:00",
-  "deployedAt": "2026-09-15T16:04:27.8854535+08:00",
-  "verifiedAt": "2026-09-15T16:07:57.2158268+08:00",
-  "sizeBytes": 674997248,
-  "sha256": "CCDEC3AE5BC5164248653BD918A50640BF9A53F88268642079B5EE2969A72350",
+  "builtAt": "2026-09-15T16:44:27.6297808+08:00",
+  "deployedAt": "2026-09-15T16:45:34.9723261+08:00",
+  "verifiedAt": "2026-09-15T16:48:33.1133990+08:00",
+  "sizeBytes": 674997760,
+  "sha256": "B913748FE82D5220B6F914D8B019F17CDC1842CB88AD1CE7B3D180C161849AFC",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-english-details-before-20260915/preacherman-demo-host.exe",
-  "backupSha256": "C1B1162A5C70DCA59CD04FC3F38EB3A01F3E4FC2A5A1A43D21B83CBEBC24CC6B",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-english-details-before-20260915/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-search-before-20260915/preacherman-demo-host.exe",
+  "backupSha256": "CCDEC3AE5BC5164248653BD918A50640BF9A53F88268642079B5EE2969A72350",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-search-before-20260915/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "c266f91cbb66a551294805e85a81d48f008ed2c6",
-  "previousVerificationCommit": "c266f91cbb66a551294805e85a81d48f008ed2c6",
+  "rollbackBaselineCommit": "a8ac3ed92863a36d6fd25eac42fde256e2dff7f4",
+  "previousVerificationCommit": "a8ac3ed92863a36d6fd25eac42fde256e2dff7f4",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "18 focused Gallery detail tests passed.",
-      "content": "All twelve details are English translations of the supplied content. Only detailTitle, detailMeta and description changed; runtime, typography, other CMS fields and Market HTML are unchanged.",
-      "runtime": "No runtime or font code changed; existing nbarchitekt font confirmed on all rendered detail text.",
+      "tests": "57 focused Gallery, search, input ownership, execution bridge and navigation regressions passed.",
       "scope": "Change-scoped checks, not the complete repository suite."
     },
-    "nativeFlow": "Cold launch through the canonical shortcut. All twelve Gallery details checked in both appearances for exact English copy and the original nbarchitekt font, complete metadata, visible text without horizontal overflow, correct next-character mapping and absent obsolete links. Core Home, Task, Gallery, Market, Settings and Account navigation checked in both modes. Existing Market rows retained. Original preferences restored; canonical shortcut relaunched normally without the debug port.",
-    "details": [
+    "nativeFlow": "Cold launch through the canonical shortcut. All fourteen names matched and positioned at the upper left in both appearances. Initial Cortana position, no-result behavior, original nbarchitekt font, real card clicks, correct Cortana/Pathfinder detail routing, search during detail exit, clear, Home/End navigation and zero execution requests verified. Home, Task, Gallery, Market, Settings and Account checked in both modes. Original preferences restored; final normal shortcut restart without a debug port.",
+    "search": [
       {
-        "slug": "climatune",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Jubilee",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 637.703125,
-            "bottom": 658.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1989 / Marvel Characters, Inc. / Marvel Entertainment",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 670.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Bold and rebellious, Jubilee wears her emotions openly and meets the world with humor and a playful spirit. Beneath her youthful energy lies a strong ability to adapt and a determination to define herself on her own terms.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Cortana",
+        "id": "secret-sky",
+        "scroll": 1,
+        "target": 1,
+        "position": {
+          "x": -0.5117292232508767,
+          "y": 0.17421558041542215
+        }
       },
       {
-        "slug": "eye-of-the-stormers",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Master Chief",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2001 / Microsoft / Halo Studios",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Quiet, composed and disciplined, Master Chief rarely places his own feelings ahead of the mission. Years of responsibility have made him steady and dependable. He shows how much his companions matter through actions rather than words.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "ZIMA",
+        "id": "watson-masters",
+        "scroll": 1.9981049309441425,
+        "target": 2,
+        "position": {
+          "x": -0.510889275202881,
+          "y": 0.17363153495548136
+        }
       },
       {
-        "slug": "bon-iver-viisualiizer",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Kitana",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1993 / Warner Bros. Entertainment / NetherRealm Studios",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Graceful and composed, Kitana has a strong sense of duty and principle. A life shaped by power and family has taught her to keep her emotions in check. She places great value on dignity, loyalty and her own judgment.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Jubilee",
+        "id": "climatune",
+        "scroll": 2.998066771728383,
+        "target": 3,
+        "position": {
+          "x": -0.5108723530945215,
+          "y": 0.17361977996894612
+        }
       },
       {
-        "slug": "classic-stories-retold",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Magik",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 637.703125,
-            "bottom": 658.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1975; fully established as Magik in 1983 / Marvel Characters, Inc. / Marvel Entertainment",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 670.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Distant and sharp, Magik rarely reveals the full depth of her emotions. Sarcasm and defiance often color her words and actions. Her experiences have made her guarded about intimacy and fiercely protective of her personal boundaries.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Master Chief",
+        "id": "eye-of-the-stormers",
+        "scroll": 3.99811226792122,
+        "target": 4,
+        "position": {
+          "x": -0.5108925289286901,
+          "y": 0.17363379503416324
+        }
       },
       {
-        "slug": "mastered-from-chaos",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Clove",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 679.703125,
-            "bottom": 700.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2024 / Riot Games",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 712.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Easygoing and quick to joke, Clove approaches danger with an almost playful attitude. Intensely curious and reluctant to follow convention, they retain a strong sense of independence beneath their relaxed exterior.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Kitana",
+        "id": "bon-iver-viisualiizer",
+        "scroll": 4.998013385043518,
+        "target": 5,
+        "position": {
+          "x": -0.5108486775172637,
+          "y": 0.17360333460395214
+        }
       },
       {
-        "slug": "emmit-fenn",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "2B - YoRHa No.2 Type B",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2017 / Square Enix",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Reserved and restrained, 2B keeps her emotions in check through discipline and duty. Beneath her distant exterior lies a sensitive, complex emotional life, with a deep attachment to her responsibilities and the bonds she forms.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Magik",
+        "id": "classic-stories-retold",
+        "scroll": 5.998055757332492,
+        "target": 6,
+        "position": {
+          "x": -0.5108674685566436,
+          "y": 0.1736163870352937
+        }
       },
       {
-        "slug": "spacecraft-for-all",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Lily",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 679.703125,
-            "bottom": 700.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2024 / SHIFT UP Corporation",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 712.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Lively and sincere, Lily is openly curious about the unknown. More expressive than those around her, she has a strong sense of companionship. Even under pressure, she retains her warmth and optimism.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Clove",
+        "id": "mastered-from-chaos",
+        "scroll": 6.998009008893238,
+        "target": 7,
+        "position": {
+          "x": -0.5108467367815543,
+          "y": 0.17360198658121662
+        }
       },
       {
-        "slug": "i-will-what-i-want",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Iron Man / Tony Stark",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 637.703125,
-            "bottom": 658.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1963 / Marvel Characters, Inc. / Marvel Entertainment",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 670.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Brilliant and outspoken, Tony Stark often masks pressure with humor and irreverence. His fierce individualism exists alongside a strong sense of responsibility. He enjoys the spotlight, yet continually questions his own choices.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "2B",
+        "id": "emmit-fenn",
+        "scroll": 7.998020040229374,
+        "target": 8,
+        "position": {
+          "x": -0.5108516289514878,
+          "y": 0.17360538466238024
+        }
       },
       {
-        "slug": "acoustic-garage",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "The Twins",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2023 / Mundfish",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Silent and precise, the Twins reveal almost no emotion. Their movements have the measured order of a dance, yet carry a persistent sense of menace. Their extraordinary synchronization and absolute obedience define their distinctive bond.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Lily",
+        "id": "spacecraft-for-all",
+        "scroll": 8.998001960509725,
+        "target": 9,
+        "position": {
+          "x": -0.5108436109541868,
+          "y": 0.17359981541329017
+        }
       },
       {
-        "slug": "witness-gotham",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Noble Six / SPARTAN-B312",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 679.703125,
-            "bottom": 700.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2010 / Microsoft / Halo Studios",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 712.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Quiet and independent, Noble Six is accustomed to working alone and rarely speaks about the past. Trust develops gradually after joining the team. Duty, perseverance and sacrifice lie at the heart of the character.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Iron Man",
+        "id": "i-will-what-i-want",
+        "scroll": 9.998067944915851,
+        "target": 10,
+        "position": {
+          "x": -0.5108728733650048,
+          "y": 0.17362014136445664
+        }
       },
       {
-        "slug": "toonami",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Michael Myers",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1978 / Compass International Pictures / Trancas International Films",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Silent and relentless, Michael Myers reveals almost no recognizable emotion or motive. His presence is defined by slow, persistent and unwavering action, leaving the terror he inspires unsettlingly difficult to understand.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "The Twins",
+        "id": "acoustic-garage",
+        "scroll": 10.998054387921822,
+        "target": 11,
+        "position": {
+          "x": -0.5108668612641091,
+          "y": 0.1736159651958833
+        }
       },
       {
-        "slug": "halo-5-visualizer",
         "appearance": "dark",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Pathfinder",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2019 / Electronic Arts / Respawn Entertainment",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Optimistic and enthusiastic, Pathfinder approaches people and the world with an almost innocent curiosity. He longs to make connections and discover where he belongs. Even in danger, he rarely loses his friendly, positive outlook.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Noble Six / SPARTAN-B312",
+        "id": "witness-gotham",
+        "scroll": 11.99806948898331,
+        "target": 12,
+        "position": {
+          "x": -0.510873558107713,
+          "y": 0.17362061700880504
+        }
       },
       {
-        "slug": "climatune",
-        "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Jubilee",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 637.703125,
-            "bottom": 658.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1989 / Marvel Characters, Inc. / Marvel Entertainment",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 670.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Bold and rebellious, Jubilee wears her emotions openly and meets the world with humor and a playful spirit. Beneath her youthful energy lies a strong ability to adapt and a determination to define herself on her own terms.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "appearance": "dark",
+        "name": "Michael Myers",
+        "id": "toonami",
+        "scroll": 12.998046202008014,
+        "target": 13,
+        "position": {
+          "x": -0.510863231047958,
+          "y": 0.17361344357560124
+        }
       },
       {
-        "slug": "eye-of-the-stormers",
-        "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Master Chief",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2001 / Microsoft / Halo Studios",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Quiet, composed and disciplined, Master Chief rarely places his own feelings ahead of the mission. Years of responsibility have made him steady and dependable. He shows how much his companions matter through actions rather than words.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "appearance": "dark",
+        "name": "Pathfinder",
+        "id": "halo-5-visualizer",
+        "scroll": 13.99811873855197,
+        "target": 14,
+        "position": {
+          "x": -0.5108953983688284,
+          "y": 0.17363578832973414
+        },
+        "inputStyle": {
+          "font": "nbarchitekt, monospace",
+          "text": "rgb(255, 255, 255)",
+          "background": "rgba(255, 255, 255, 0.07)",
+          "border": "rgb(255, 255, 255)",
+          "placeholder": "rgba(255, 255, 255, 0.48)"
+        }
       },
       {
-        "slug": "bon-iver-viisualiizer",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Kitana",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1993 / Warner Bros. Entertainment / NetherRealm Studios",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Graceful and composed, Kitana has a strong sense of duty and principle. A life shaped by power and family has taught her to keep her emotions in check. She places great value on dignity, loyalty and her own judgment.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Cortana",
+        "id": "secret-sky",
+        "scroll": 1,
+        "target": 1,
+        "position": {
+          "x": -0.5117292398367521,
+          "y": 0.17421556333256885
+        }
       },
       {
-        "slug": "classic-stories-retold",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Magik",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 637.703125,
-            "bottom": 658.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1975; fully established as Magik in 1983 / Marvel Characters, Inc. / Marvel Entertainment",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 670.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Distant and sharp, Magik rarely reveals the full depth of her emotions. Sarcasm and defiance often color her words and actions. Her experiences have made her guarded about intimacy and fiercely protective of her personal boundaries.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "ZIMA",
+        "id": "watson-masters",
+        "scroll": 1.9981155136714495,
+        "target": 2,
+        "position": {
+          "x": -0.5108939682605004,
+          "y": 0.17363479491313874
+        }
       },
       {
-        "slug": "mastered-from-chaos",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Clove",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 679.703125,
-            "bottom": 700.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2024 / Riot Games",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 712.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Easygoing and quick to joke, Clove approaches danger with an almost playful attitude. Intensely curious and reluctant to follow convention, they retain a strong sense of independence beneath their relaxed exterior.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Jubilee",
+        "id": "climatune",
+        "scroll": 2.998105641247566,
+        "target": 3,
+        "position": {
+          "x": -0.5108895902802825,
+          "y": 0.17363175367514205
+        }
       },
       {
-        "slug": "emmit-fenn",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "2B - YoRHa No.2 Type B",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2017 / Square Enix",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Reserved and restrained, 2B keeps her emotions in check through discipline and duty. Beneath her distant exterior lies a sensitive, complex emotional life, with a deep attachment to her responsibilities and the bonds she forms.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Master Chief",
+        "id": "eye-of-the-stormers",
+        "scroll": 3.9980037031092652,
+        "target": 4,
+        "position": {
+          "x": -0.5108443837658324,
+          "y": 0.17360035219903575
+        }
       },
       {
-        "slug": "spacecraft-for-all",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Lily",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 679.703125,
-            "bottom": 700.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2024 / SHIFT UP Corporation",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 712.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Lively and sincere, Lily is openly curious about the unknown. More expressive than those around her, she has a strong sense of companionship. Even under pressure, she retains her warmth and optimism.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Kitana",
+        "id": "bon-iver-viisualiizer",
+        "scroll": 4.998074800194607,
+        "target": 5,
+        "position": {
+          "x": -0.5108759134495653,
+          "y": 0.17362225311056387
+        }
       },
       {
-        "slug": "i-will-what-i-want",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Iron Man / Tony Stark",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 637.703125,
-            "bottom": 658.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1963 / Marvel Characters, Inc. / Marvel Entertainment",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 670.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Brilliant and outspoken, Tony Stark often masks pressure with humor and irreverence. His fierce individualism exists alongside a strong sense of responsibility. He enjoys the spotlight, yet continually questions his own choices.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Magik",
+        "id": "classic-stories-retold",
+        "scroll": 5.998105478385845,
+        "target": 6,
+        "position": {
+          "x": -0.5108895180579696,
+          "y": 0.1736317035052925
+        }
       },
       {
-        "slug": "acoustic-garage",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "The Twins",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2023 / Mundfish",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 712.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Silent and precise, the Twins reveal almost no emotion. Their movements have the measured order of a dance, yet carry a persistent sense of menace. Their extraordinary synchronization and absolute obedience define their distinctive bond.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 724.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Clove",
+        "id": "mastered-from-chaos",
+        "scroll": 6.998013168279703,
+        "target": 7,
+        "position": {
+          "x": -0.5108485813869224,
+          "y": 0.17360326783228938
+        }
       },
       {
-        "slug": "witness-gotham",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Noble Six / SPARTAN-B312",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 679.703125,
-            "bottom": 700.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2010 / Microsoft / Halo Studios",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 712.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Quiet and independent, Noble Six is accustomed to working alone and rarely speaks about the past. Trust develops gradually after joining the team. Duty, perseverance and sacrifice lie at the heart of the character.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "2B",
+        "id": "emmit-fenn",
+        "scroll": 7.998054395500826,
+        "target": 8,
+        "position": {
+          "x": -0.5108668646251706,
+          "y": 0.17361596753055328
+        }
       },
       {
-        "slug": "toonami",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Michael Myers",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "1978 / Compass International Pictures / Trancas International Films",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Silent and relentless, Michael Myers reveals almost no recognizable emotion or motive. His presence is defined by slow, persistent and unwavering action, leaving the terror he inspires unsettlingly difficult to understand.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Lily",
+        "id": "spacecraft-for-all",
+        "scroll": 8.99806668471868,
+        "target": 9,
+        "position": {
+          "x": -0.5108723145089458,
+          "y": 0.17361975316555606
+        }
       },
       {
-        "slug": "halo-5-visualizer",
         "appearance": "light",
-        "copyExact": true,
-        "layout": [
-          {
-            "text": "Pathfinder",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 658.703125,
-            "bottom": 679.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "2019 / Electronic Arts / Respawn Entertainment",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 691.703125,
-            "bottom": 733.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          },
-          {
-            "text": "Optimistic and enthusiastic, Pathfinder approaches people and the world with an almost innocent curiosity. He longs to make connections and discover where he belongs. Even in danger, he rarely loses his friendly, positive outlook.",
-            "width": 321.96875,
-            "scrollWidth": 322,
-            "clientWidth": 322,
-            "top": 745.703125,
-            "bottom": 871.703125,
-            "fontFamily": "nbarchitekt, monospace",
-            "visible": true
-          }
-        ]
+        "name": "Iron Man",
+        "id": "i-will-what-i-want",
+        "scroll": 9.998015877931444,
+        "target": 10,
+        "position": {
+          "x": -0.5108497830615539,
+          "y": 0.17360410251055627
+        }
+      },
+      {
+        "appearance": "light",
+        "name": "The Twins",
+        "id": "acoustic-garage",
+        "scroll": 10.99800893385023,
+        "target": 11,
+        "position": {
+          "x": -0.5108467035014327,
+          "y": 0.17360196346510381
+        }
+      },
+      {
+        "appearance": "light",
+        "name": "Noble Six / SPARTAN-B312",
+        "id": "witness-gotham",
+        "scroll": 11.998063898151266,
+        "target": 12,
+        "position": {
+          "x": -0.510871078756508,
+          "y": 0.17361889477493245
+        }
+      },
+      {
+        "appearance": "light",
+        "name": "Michael Myers",
+        "id": "toonami",
+        "scroll": 12.99805175282962,
+        "target": 13,
+        "position": {
+          "x": -0.5108656926785783,
+          "y": 0.17361515347097647
+        }
+      },
+      {
+        "appearance": "light",
+        "name": "Pathfinder",
+        "id": "halo-5-visualizer",
+        "scroll": 13.9980558303502,
+        "target": 14,
+        "position": {
+          "x": -0.5108675009377939,
+          "y": 0.17361640952800142
+        },
+        "inputStyle": {
+          "font": "nbarchitekt, monospace",
+          "text": "rgb(255, 255, 255)",
+          "background": "rgba(255, 255, 255, 0.08)",
+          "border": "rgb(255, 255, 255)",
+          "placeholder": "rgba(255, 255, 255, 0.52)"
+        }
       }
     ],
     "routes": [
@@ -975,41 +407,41 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-15T16:07:57.2158268+08:00",
-      "NativePid": 1716,
-      "StartedAt": "2026-09-15T16:07:41.4751899+08:00",
-      "WindowHandle": 788280,
+      "SampledAt": "2026-09-15T16:48:33.1133990+08:00",
+      "NativePid": 7848,
+      "StartedAt": "2026-09-15T16:48:12.0416233+08:00",
+      "WindowHandle": 983706,
       "Responding": true,
       "WindowCaptured": true,
       "ProcessIds": [
-        1716,
-        12216,
-        25844,
-        13432,
-        8876,
-        30028,
-        3416,
-        30648,
-        26772,
-        29024,
-        8932
+        7848,
+        22508,
+        29044,
+        21232,
+        31124,
+        23044,
+        32716,
+        26488,
+        28840,
+        31996,
+        26828
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2017.3,
-      "GpuDedicatedBytes": 3397865472.0,
+      "WorkingSetMiB": 2028.1,
+      "GpuDedicatedBytes": 3397898240.0,
       "MaxGpuEngineUtilization": 10.0,
-      "FreeRamKiB": 14627232,
+      "FreeRamKiB": 15433744,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 30648
+          "OwningProcess": 26488
         }
       ],
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time; shared services excluded.",
       "SharedProcesses": []
     },
-    "consoleBaseline": "D:/preacherman/output/gallery-character-details-20260915/native-report.json",
+    "consoleBaseline": "D:/preacherman/output/gallery-english-details-20260915/native-report.json",
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -1039,14 +471,15 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\gallery-english-details-20260915\\native-report.json",
-      "D:\\preacherman\\output\\gallery-english-details-20260915\\tests.log",
-      "D:\\preacherman\\output\\gallery-english-details-20260915\\typecheck.log",
-      "D:\\preacherman\\output\\gallery-english-details-20260915\\production-build.log",
-      "D:\\preacherman\\output\\gallery-english-details-20260915\\final-resources.json",
-      "D:\\preacherman\\output\\gallery-english-details-20260915\\final-native-home.png",
-      "D:\\preacherman\\output\\gallery-english-details-20260915\\native-dark-06.png",
-      "D:\\preacherman\\output\\gallery-english-details-20260915\\native-light-06.png"
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\native-report.json",
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\preview-report.json",
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\tests.log",
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\typecheck.log",
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\production-build.log",
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\final-resources.json",
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\final-native-home.png",
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\native-dark-cortana-search.png",
+      "D:\\preacherman\\output\\gallery-character-search-20260915\\native-light-cortana-search.png"
     ]
   },
   "releaseAttempts": [
@@ -1451,9 +884,18 @@
       "deployedAt": "2026-09-15T16:04:27.8854535+08:00",
       "verifiedAt": "2026-09-15T16:07:57.2158268+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-english-details-before-20260915"
+    },
+    {
+      "buildId": "gallery-character-search-20260915",
+      "sourceCommit": "c6e5c738e922b998d6ad236d16e85611ad7aa00d",
+      "sha256": "B913748FE82D5220B6F914D8B019F17CDC1842CB88AD1CE7B3D180C161849AFC",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T16:45:34.9723261+08:00",
+      "verifiedAt": "2026-09-15T16:48:33.1133990+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-search-before-20260915"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-english-details-before-20260915/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-search-before-20260915/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
