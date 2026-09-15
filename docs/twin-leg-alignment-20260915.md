@@ -1,0 +1,7 @@
+# Twin leg alignment repair
+
+The static-source Twin used knee pivots at x = ±0.13 and ankle pivots at x = ±0.15, outside its authored joint centers (approximately ±0.077 and ±0.067). ActorCore Talk therefore pulled the leg shells inward. The lower-body solve now uses the authored knee, ankle and toe centers, a forward knee hinge plane, a slightly wider stance and sole contact against y = 0. Separate metal leg shells and trim receive rigid segment weights. Positions, normals, UVs, indices and material/image buffers remain unchanged. All upper-body animation tracks are byte-identical to the previous runtime.
+
+Run `python tools/avatar-rig-repair/fix-twin-legs.py INPUT.glb OUTPUT.glb COMPONENT_DIRECTORY` on the pre-repair v3 GLB. Components are welded labels from `components.py`. The input fingerprint, calibrated pivots and unchanged upper-body track hashes are recorded in the Twin entry of `avatar-actorcore-talk-20260914.json`. This is a scoped post-process; regenerating the original six-avatar pipeline must include it for Twin.
+
+Evidence and recoverable input: `D:/preacherman/output/twin-leg-fix-20260915`. Focused Three.js tests check rest-shape preservation, complete-cycle knee separation/forward flexion, constant segment lengths, loop continuity, rigid leg weights and shoe clearance. Blender renders inspect multiple phases. Native Home and Gallery validation uses the original lights and both appearances.

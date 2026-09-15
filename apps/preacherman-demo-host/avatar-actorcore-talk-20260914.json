@@ -2496,8 +2496,8 @@
       "clip": "the-twins-atomic-heart.idle.actorcore_talk.v3",
       "channels": 23,
       "duration": 28.133333333333333,
-      "runtimeSha256": "3e87dbefd09ceb644ef3462fd8be3800294ec33cee9ba8dfc76301e0b611759d",
-      "runtimeBytes": 37922044,
+      "runtimeSha256": "ff14d32b31e02c8cbb9be20ddffc4438e878c45fdf4bd7fb2e7ec462a5aab7ab",
+      "runtimeBytes": 41756208,
       "originalBinarySha256": "5e19be2d4d622bbab185ea782c2781dcf70d12798cc209e16ff4ba799e67e79b",
       "originalBinaryBytes": 31548640,
       "originalMeshSkinMaterialImageBuffersUnchanged": false,
@@ -2540,7 +2540,7 @@
       "loopMode": "preserve source with eased return and matched seam",
       "originalBinaryBuffersPreserved": true,
       "skinWeightCorrection": {
-        "purpose": "Local torso/head attachment and separate rigid accessory weights; authored positions, normals, UVs, textures unchanged. Arm inverse binds are recalibrated to retain the original rest shape. Mechanical arm shells and their trim attach rigidly to the same anatomical segment.",
+        "purpose": "Local torso/head attachment and separate rigid accessory weights; authored positions, normals, UVs, textures unchanged. Arm inverse binds are recalibrated to retain the original rest shape. Mechanical arm shells and their trim attach rigidly to the same anatomical segment. Leg shells now follow anatomical knee/ankle pivots rigidly; foot soles remain above the floor during ActorCore Talk. Leg shells now follow anatomical knee/ankle pivots rigidly; foot soles remain above the floor during ActorCore Talk.",
         "meshes": [
           {
             "mesh": 0,
@@ -2809,7 +2809,226 @@
             -0.05000000074505806
           ]
         },
-        "purpose": "Arm pivots follow authored elbow/wrist rings; rest mesh shape is unchanged."
+        "purpose": "Arm pivots follow authored elbow/wrist rings; rest mesh shape is unchanged.",
+        "legJointPositions": {
+          "b_l_calf": [
+            0.0765,
+            0.535,
+            -0.0575
+          ],
+          "b_l_foot": [
+            0.067,
+            0.074,
+            -0.066
+          ],
+          "b_l_toe": [
+            0.066,
+            0.024,
+            0.076
+          ],
+          "b_r_calf": [
+            -0.0765,
+            0.535,
+            -0.0575
+          ],
+          "b_r_foot": [
+            -0.067,
+            0.074,
+            -0.066
+          ],
+          "b_r_toe": [
+            -0.066,
+            0.024,
+            0.076
+          ]
+        }
+      },
+      "legRepair": {
+        "sourceSha256": "3e87dbefd09ceb644ef3462fd8be3800294ec33cee9ba8dfc76301e0b611759d",
+        "runtimeSha256": "ff14d32b31e02c8cbb9be20ddffc4438e878c45fdf4bd7fb2e7ec462a5aab7ab",
+        "runtimeBytes": 41756208,
+        "clip": "the-twins-atomic-heart.idle.actorcore_talk.v3",
+        "duration": 28.133333206176758,
+        "frames": 1689,
+        "pivots": {
+          "b_l_calf": {
+            "before": [
+              0.12999999523162842,
+              0.5399998426437378,
+              0.009999995119869709
+            ],
+            "after": [
+              0.0765,
+              0.535,
+              -0.0575
+            ]
+          },
+          "b_l_foot": {
+            "before": [
+              0.15000002086162567,
+              0.09999985247850418,
+              -0.019999999552965164
+            ],
+            "after": [
+              0.067,
+              0.074,
+              -0.066
+            ]
+          },
+          "b_l_toe": {
+            "before": [
+              0.15000000596046448,
+              0.03499983996152878,
+              0.12000000476837158
+            ],
+            "after": [
+              0.066,
+              0.024,
+              0.076
+            ]
+          },
+          "b_r_calf": {
+            "before": [
+              -0.12999999523162842,
+              0.5399998426437378,
+              0.009999995119869709
+            ],
+            "after": [
+              -0.0765,
+              0.535,
+              -0.0575
+            ]
+          },
+          "b_r_foot": {
+            "before": [
+              -0.15000002086162567,
+              0.09999985247850418,
+              -0.019999999552965164
+            ],
+            "after": [
+              -0.067,
+              0.074,
+              -0.066
+            ]
+          },
+          "b_r_toe": {
+            "before": [
+              -0.15000000596046448,
+              0.03499983996152878,
+              0.12000000476837158
+            ],
+            "after": [
+              -0.066,
+              0.024,
+              0.076
+            ]
+          }
+        },
+        "paintedShells": [
+          {
+            "mesh": 0,
+            "vertices": 21035
+          },
+          {
+            "mesh": 3,
+            "vertices": 28988
+          }
+        ],
+        "minKneeSeparation": 0.11872506674398549,
+        "maxKneeFlexion": 65.06117730974701,
+        "upperBodyTracksUnchanged": true,
+        "unchangedUpperBodyTracks": [
+          {
+            "bone": "b_pelvis",
+            "path": "rotation",
+            "accessor": 112,
+            "sha256": "c67254627aecfbd80eae4eae9498941ee8cb3e1c2b68c5a895a88cacd922e755"
+          },
+          {
+            "bone": "b_pelvis",
+            "path": "translation",
+            "accessor": 113,
+            "sha256": "0de4eb70ef68ab069ab91bec2f4a5a53d117dc3210d8172747d7a6db5d7031a2"
+          },
+          {
+            "bone": "b_spine0",
+            "path": "rotation",
+            "accessor": 114,
+            "sha256": "df4f83190c40a3e7ab0852e6278e06804fedbbaec1cfeb66e821ca836d78508a"
+          },
+          {
+            "bone": "b_spine1",
+            "path": "rotation",
+            "accessor": 115,
+            "sha256": "ea29e6a3a9d78fc2eb65d38f0e3620c89d2764a644e163d42b07934a7e08786f"
+          },
+          {
+            "bone": "b_spine3",
+            "path": "rotation",
+            "accessor": 116,
+            "sha256": "de92130c39db2df2a83cbb0825029b800f44772affe028077914ae0c5d082cb8"
+          },
+          {
+            "bone": "b_neck0",
+            "path": "rotation",
+            "accessor": 117,
+            "sha256": "9812f393b4b2772f064ea7a6b542d7f3af71d4f0e0cc4c1693f784d576932c71"
+          },
+          {
+            "bone": "b_head",
+            "path": "rotation",
+            "accessor": 118,
+            "sha256": "99f431fa82daed4661c81a329281e5c60855acd5a4f66bc71b1cdae6cc04ba34"
+          },
+          {
+            "bone": "b_l_clav",
+            "path": "rotation",
+            "accessor": 119,
+            "sha256": "afe3f62c794148cfc2653492f66a4e37b1af78b0293abf1e89aee9ad017cac54"
+          },
+          {
+            "bone": "b_l_upperarm",
+            "path": "rotation",
+            "accessor": 120,
+            "sha256": "89fe5840a5b911bb5dffada17a13e889c3abaccfd5386ff8acaf0cdef22ac7e7"
+          },
+          {
+            "bone": "b_l_forearm",
+            "path": "rotation",
+            "accessor": 121,
+            "sha256": "7f91ae5852b14a814a29d0f147c49d0628f6d416e48534a289fbf8b41d78399d"
+          },
+          {
+            "bone": "b_l_hand",
+            "path": "rotation",
+            "accessor": 122,
+            "sha256": "9e591ee17967726ba980b1658f0752774f11446ffaeca59046b07023022f1f1f"
+          },
+          {
+            "bone": "b_r_clav",
+            "path": "rotation",
+            "accessor": 123,
+            "sha256": "44b3089ce31536e18d5888b0d5a8e784edf0c5815f935dd136cbcda647da4943"
+          },
+          {
+            "bone": "b_r_upperarm",
+            "path": "rotation",
+            "accessor": 124,
+            "sha256": "b67eed214baa7ab1f5e8892341278697730fde1357d7823ef3a3f355c92ed026"
+          },
+          {
+            "bone": "b_r_forearm",
+            "path": "rotation",
+            "accessor": 125,
+            "sha256": "e9369a6485f128b33c9a97232cb02d6ac6b5be2f9dc14bd5c6fcc86a40d93546"
+          },
+          {
+            "bone": "b_r_hand",
+            "path": "rotation",
+            "accessor": 126,
+            "sha256": "e7e7e6b75e6a8c7350be91589307015d63027074537f8610b13833cafab9b0d7"
+          }
+        ]
       }
     }
   ]
