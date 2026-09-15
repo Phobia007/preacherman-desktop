@@ -11,6 +11,7 @@ export function GalleryOrbitCards({ bridge, active, renderActive = true }: { bri
   const [center, setCenter] = useState(GALLERY_LEAD_OFFSET);
   const dragged = useRef(false), hovered = useRef<string | null>(null);
   const groups = useRef<(Group | null)[]>([]);
+  const railCards = useRef<GalleryRailCard[]>([]);
   const elapsed = useRef(0), scroll = useRef(GALLERY_LEAD_OFFSET), target = useRef(GALLERY_LEAD_OFFSET), wasVisible = useRef(false);
   const reduced = useRef(false), railVisible = useRef(false);
   const root = useRef<Group>(null), down = useRef<{ x: number; y: number } | null>(null);
@@ -22,11 +23,12 @@ export function GalleryOrbitCards({ bridge, active, renderActive = true }: { bri
     const sync = () => { reduced.current = media.matches; }; sync(); media.addEventListener("change", sync);
     return () => media.removeEventListener("change", sync);
   }, []);
-  useEffect(() => bridge.subscribeRail(setCards), [bridge]);
+  useEffect(() => bridge.subscribeRail(next => { railCards.current = next; setCards(next); }), [bridge]);
   useEffect(() => bridge.subscribe(state => { railVisible.current = state.phase === "closed" && !state.contact; }), [bridge]);
   useEffect(() => {
     if (!active) return;
     return bridge.subscribeInput(input => {
+      const cards = railCards.current;
       if (!railVisible.current || cards.length === 0) return;
       const move = (delta: number) => { target.current += delta; };
       if (input.type === "focus") {

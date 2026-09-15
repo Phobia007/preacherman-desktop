@@ -21,41 +21,27 @@ export function installCharacterSearch(chat, bridge) {
   wrapper.dataset.preachermanChat = "true";
   wrapper.dataset.gallerySearch = "true";
   input.maxLength = 120;
-  input.placeholder = "SEARCH CHARACTERS...";
   input.setAttribute("aria-label", "Search characters");
   input.setAttribute("role", "searchbox");
   input.setAttribute("autocomplete", "off");
   input.setAttribute("spellcheck", "false");
   log.setAttribute("role", "log");
   log.setAttribute("aria-label", "Character information");
-  const status = document.createElement("p");
-  status.id = "gallery-search-status";
-  status.dataset.gallerySearchStatus = "true";
-  status.setAttribute("role", "status");
-  status.setAttribute("aria-live", "polite");
-  status.hidden = true;
-  wrapper.insertBefore(status, input);
-  input.setAttribute("aria-describedby", status.id);
-  let cards = [], searchTimer, composing = false;
-  const previousInit = chat.onInit;
-  chat.onInit = () => {
-    chat.clearChat();
-    void chat.addMessage("FIND A CHARACTER", "var(--demo-theme-settings-text)");
-    void chat.addMessage("TYPE A NAME TO BRING ITS CARD FORWARD.", "var(--demo-theme-settings-muted)");
-  };
-  if (bridge.snapshot.phase === "closed") chat.onInit();
+  let cards = [], searchTimer, composing = false, catalogReady = false;
   const search = () => {
     clearTimeout(searchTimer);
     if (composing) return;
     const query = input.value.trim();
-    status.hidden = !query;
-    status.textContent = "";
     delete wrapper.dataset.searchMatch;
     if (!query) return;
-    const match = findGalleryCharacter(cards, query);
+    // Search all characters even when a category currently shows only a subset.
+    const catalog = window.CMS_DATA?.projects?.map(project => ({ id: project.perma, title: project.title })) || cards;
+    const match = findGalleryCharacter(catalog, query);
     wrapper.dataset.searchState = match ? "matched" : cards.length ? "empty" : "loading";
-    status.textContent = match ? match.title + " — SELECT THE CARD" : cards.length ? "NO CHARACTER FOUND" : "LOADING CHARACTERS...";
-    if (match) { wrapper.dataset.searchMatch = match.id; bridge.focusProject(match.id); }
+    if (match) {
+      if (!cards.some(card => card.id === match.id)) { chat.active = null; chat.fire("clickFilter"); }
+      wrapper.dataset.searchMatch = match.id; bridge.focusProject(match.id);
+    }
   };
   const schedule = event => {
     clearTimeout(searchTimer);
@@ -82,7 +68,14 @@ export function installCharacterSearch(chat, bridge) {
     }
     document.documentElement.dataset.appearance = data.appearance;
   };
-  const unsubscribe = bridge.subscribeRail(value => { cards = value; if (input.value.trim()) search(); });
+  const unsubscribe = bridge.subscribeRail(value => {
+    cards = value;
+    if (!catalogReady && cards.length) { catalogReady = true; if (input.value.trim()) search(); }
+  });
+  const categoryClick = event => {
+    if (event.target?.closest?.("a.home")) clearTimeout(searchTimer);
+  };
+  wrapper.addEventListener("click", categoryClick, true);
   input.addEventListener("input", schedule);
   input.addEventListener("compositionstart", compositionStart);
   input.addEventListener("compositionend", compositionEnd);
@@ -91,7 +84,8 @@ export function installCharacterSearch(chat, bridge) {
   window.addEventListener("message", receive);
   parent.postMessage({ type: "gallery-theme-request" }, origin);
   return () => {
-    clearTimeout(searchTimer); unsubscribe(); status.remove(); chat.onInit = previousInit;
+    clearTimeout(searchTimer); unsubscribe();
+    wrapper.removeEventListener("click", categoryClick, true);
     input.removeEventListener("input", schedule);
     input.removeEventListener("compositionstart", compositionStart);
     input.removeEventListener("compositionend", compositionEnd);

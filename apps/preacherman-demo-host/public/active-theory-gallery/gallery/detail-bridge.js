@@ -78,7 +78,7 @@
     document.documentElement.dataset.galleryContact = String(contact);
     syncRail();
     listeners.forEach(listener => listener({ ...state, contact }));
-    if (rail() && pendingFocus) {
+    if (rail() && pendingFocus && railCards.some(card => card.id === pendingFocus)) {
       const id = pendingFocus; pendingFocus = null;
       inputListeners.forEach(listener => listener({ type: "focus", id }));
     }
@@ -119,8 +119,9 @@
     previewProject(id) { const project = projects().find(project => project.perma === id); if (project && rail() && work.get?.("WorkItems/videoURL", true) !== project.videoURL) work.set("WorkItems/videoURL", project.videoURL); },
     acceptsProjectRoute,
     focusProject(id) {
-      if (!requestedActive || !railCards.some(card => card.id === id)) return;
+      if (!requestedActive || !projects().some(project => project.perma === id)) return;
       pendingFocus = id;
+      if (!railCards.some(card => card.id === id)) window.CMSData?.showProjects(projects().map(project => project.perma));
       if (contact) work.set("ViewController/contact", false);
       if (state.phase === "open") api.back();
       else if (rail()) notify();
@@ -206,6 +207,7 @@
           railSignature = signature;
           railCards = items.map(item => ({ id: item.perma, title: item.title, client: item.clientName || "", thumbnail: new URL(window.PreachermanGalleryRailAssets?.[item.thumbnailURL] || item.thumbnailURL, document.baseURI).href, video: window.PreachermanGalleryRailMedia?.[item.videoURL], logo: window.PreachermanGalleryRailMedia?.[item.projectLogo?.url], color: "#" + (item.color || "ffffff") }));
           railListeners.forEach(listener => listener(railCards));
+          if (pendingFocus) notify();
         }
         if (state.phase !== "closed") restoreRail();
         if (!warmed) {

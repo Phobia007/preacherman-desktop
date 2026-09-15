@@ -41,10 +41,11 @@ function fixture(appearance) {
     remove() { this.removed = true; }
   }
   const wrapper = new Element(), input = new Element(), log = new Element(), styles = {};
+  input.placeholder = "Ask me anything...";
   const document = { createElement: () => new Element(), documentElement: {dataset:{appearance},style:{setProperty:(k,v)=>styles[k]=v}} };
   const window = new Element(), parent = {postMessage: data => posted.push(data)}, posted = [], focused = [];
   let railListener, unsubscribed = false;
-  const chat = {wrapper:{div:wrapper},input:{div:input},messages:{div:log},onInit(){},clearChat(){this.copy=[]},addMessage(text){this.copy.push(text)},set(){}};
+  const chat = {wrapper:{div:wrapper},input:{div:input},messages:{div:log},copy:["What are you looking for?","-> websites","-> installations","-> XR / VR / AI","-> multiplayer","-> games"],onInit(){},clearChat(){throw new Error("Original categories must stay")},addMessage(){throw new Error("Do not add descriptions")},set(){},fire(){}};
   const bridge = {snapshot:{phase:"closed"},subscribeRail(fn){railListener=fn;fn(cards);return ()=>{unsubscribed=true}},focusProject:id=>focused.push(id)};
   const context = {window,document,parent,location:{origin:"https://tauri.localhost"},findGalleryCharacter,
     setTimeout:fn=>{timers.set(++sequence,fn);return sequence},clearTimeout:id=>timers.delete(id)};
@@ -61,21 +62,22 @@ function fixture(appearance) {
 for (const appearance of ["dark", "light"]) test(`character input owns typing, IME and Enter without AI messages (${appearance})`, () => {
   const f=fixture(appearance);
   try {
-    assert.equal(f.input.placeholder,"SEARCH CHARACTERS...");
+    assert.equal(f.input.placeholder,"Ask me anything...");
     assert.equal(f.input.attrs.role,"searchbox");
-    assert.ok(f.chat.copy.includes("FIND A CHARACTER"));
+    assert.ok(f.chat.copy.includes("-> websites"));assert.equal(f.wrapper.status,undefined);
     f.theme();assert.equal(f.styles["--demo-theme-settings-text"],appearance==="dark"?"#eee":"#111");
     f.type("cortana");f.type("pathfinder");f.flush();assert.deepEqual(f.focused,["halo-5-visualizer"]);
-    f.type("unknown");const enter=f.key("Enter");assert.ok(enter.prevented&&enter.stopped);assert.equal(f.wrapper.status.textContent,"NO CHARACTER FOUND");assert.equal(f.focused.length,1);
+    f.type("unknown");const enter=f.key("Enter");assert.ok(enter.prevented&&enter.stopped);assert.equal(f.wrapper.dataset.searchState,"empty");assert.equal(f.focused.length,1);
     f.input.handlers.compositionstart();f.type("科塔娜",true);f.key("Enter",{isComposing:true});f.flush();assert.equal(f.focused.length,1);
     f.input.handlers.compositionend();assert.equal(f.focused.at(-1),"secret-sky");assert.equal(f.input.value,"科塔娜");
-    f.key("Escape");assert.equal(f.input.value,"");assert.equal(f.wrapper.status.hidden,true);
-    f.type("kitana");f.rail([]);assert.equal(f.wrapper.status.textContent,"LOADING CHARACTERS...");f.rail(cards);assert.equal(f.focused.at(-1),"bon-iver-viisualiizer");
+    f.key("Escape");assert.equal(f.input.value,"");assert.equal(f.wrapper.dataset.searchMatch,undefined);
+    f.type("kitana");f.flush();assert.equal(f.focused.at(-1),"bon-iver-viisualiizer");
+    const before=f.focused.length;f.rail(cards.slice(2));assert.equal(f.focused.length,before,"Category changes must not re-run the previous search");
     assert.deepEqual(f.posted.map(x=>x.type),["gallery-theme-request"]);
     f.type("cortana");
   } finally {f.cleanup();}
   const count=f.focused.length;f.flush();assert.equal(f.focused.length,count);assert.ok(f.unsubscribed);
-  assert.ok(f.wrapper.status.removed);assert.deepEqual(Object.keys(f.input.handlers),[]);
+  assert.equal(f.wrapper.status,undefined);assert.deepEqual(Object.keys(f.input.handlers),[]);
 });
 
 test("search from an open detail waits for the existing exit before focusing the latest requested card", async () => {
@@ -92,5 +94,21 @@ test("search from an open detail waits for the existing exit before focusing the
   api.openProject("secret-sky");api.focusProject("emmit-fenn");assert.equal(api.snapshot.phase,"closing");assert.equal(input.length,0);
   api.focusProject("halo-5-visualizer");await new Promise(resolve=>setTimeout(resolve,10));
   assert.equal(api.snapshot.phase,"closed");assert.equal(input.length,1);assert.equal(input[0].id,"halo-5-visualizer");assert.equal(values.get("Work/project"),null);
-  api.focusProject("missing");assert.equal(input.length,1);handlers.pagehide();
+  api.focusProject("missing");assert.equal(input.length,1);
+  // A restored category can exclude the requested character. Publish the full
+  // rail before sending focus, so the native listener sees its current index.
+  values.set("WorkItems/items",[project[2]]);draw();
+  let requested;
+  window.CMSData={showProjects(ids){requested=ids;values.set("WorkItems/items",project)}};
+  api.focusProject("secret-sky");assert.equal(input.length,1);
+  assert.equal(requested.length,project.length);draw();
+  assert.equal(input.length,2);assert.equal(input[1].id,"secret-sky");
+  handlers.pagehide();
+});
+
+test("search styling preserves the authored pill without extra rings, colors or descriptions", () => {
+  const css=read("public/active-theory-gallery/gallery/conversation-bridge.css");
+  const bridge=read("public/active-theory-gallery/gallery/conversation-bridge.js");
+  assert.doesNotMatch(css,/outline:|outline-offset:|\[data-gallery-search\]/);
+  assert.doesNotMatch(bridge,/input\.placeholder\s*=|chat\.onInit\s*=|addMessage\(|createElement\(/);
 });
