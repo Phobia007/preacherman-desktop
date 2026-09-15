@@ -667,6 +667,15 @@
       "reason": "Native first-entry check found the All navigation link still used the legacy raw router call and could be rejected during the startup transition guard. Restore the verified pair while applying the existing navigation queue to captured navigation links.",
       "rolledBackAt": "2026-09-15T23:38:55.4242735+08:00",
       "failedArtifact": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-first-entry-20260915"
+    },
+    {
+      "buildId": "task-timeline-dialog-20260915",
+      "sourceCommit": "6668e979cdf849e3e9da03618a41926f9799275b",
+      "sha256": "C06B5AB507E2F69D4B1510F7CC46EF320284E7CCEFE30B9E733838283128D9BE",
+      "status": "rolled-back-after-query-route-check",
+      "reason": "Native timeline navigation reached saved task halo but the query-bearing route was rejected by the transition guard. Queue ownership compared the complete query URL against only the pathname. Restore the verified pair while correcting queued route identity.",
+      "rolledBackAt": "2026-09-15T23:56:19.9503095+08:00",
+      "failedArtifact": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-query-route-20260915"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-evomap-before-20260915/desktop-build-manifest.json",
