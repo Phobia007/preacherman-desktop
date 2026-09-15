@@ -2,7 +2,7 @@
 // above the companion; closing that mirror never owns or stops the decoder.
 (() => {
   const listeners = new Set(), railListeners = new Set(), inputListeners = new Set();
-  let railCards = [], contact = false, railSignature = null;
+  let railCards = [], contact = false, railSignature = null, pendingFocus = null;
   const rail = () => state.phase === "closed" && !contact;
   const syncRail = () => {
     document.documentElement.dataset.galleryNativeRail = String(rail());
@@ -78,6 +78,10 @@
     document.documentElement.dataset.galleryContact = String(contact);
     syncRail();
     listeners.forEach(listener => listener({ ...state, contact }));
+    if (rail() && pendingFocus) {
+      const id = pendingFocus; pendingFocus = null;
+      inputListeners.forEach(listener => listener({ type: "focus", id }));
+    }
   };
   const controller = () => work?.findParent("ViewController").scroll.renderManager.controller;
   const restoreRail = () => {
@@ -114,6 +118,13 @@
     setRailCursor(cursor) { if (document.body) document.body.style.cursor = cursor; },
     previewProject(id) { const project = projects().find(project => project.perma === id); if (project && rail() && work.get?.("WorkItems/videoURL", true) !== project.videoURL) work.set("WorkItems/videoURL", project.videoURL); },
     acceptsProjectRoute,
+    focusProject(id) {
+      if (!requestedActive || !railCards.some(card => card.id === id)) return;
+      pendingFocus = id;
+      if (contact) work.set("ViewController/contact", false);
+      if (state.phase === "open") api.back();
+      else if (rail()) notify();
+    },
     openProject(id) { const project = projects().find(project => project.perma === id); if (project && rail()) { selectedProject = id; work.set("Work/project", project); work.set("WorkItems/videoURL", project.videoURL); work.navigate?.("work/" + project.perma); } },
     showWork() { selectedProject = null; work.set("ViewController/contact", false); work.set("Work/project", null); work.fire("ViewController/goToWork"); },
     toggleContact() { work.set("ViewController/contact", !contact); },

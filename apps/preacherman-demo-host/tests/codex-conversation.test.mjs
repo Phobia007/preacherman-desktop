@@ -76,7 +76,7 @@ test("invalid messages never spawn Codex",async t=>{
 test("Gallery retains one authored input and fonts have stable primary/secondary names",async()=>{
   const gallery=await readFile(new URL("../public/active-theory-gallery/gallery/conversation-bridge.js",import.meta.url),"utf8");
   assert.doesNotMatch(gallery,/createElement\("(?:button|select)"\)|preacherman-chat-controls|modelKey|local-turn/);
-  assert.match(gallery,/useActive: true/);assert.match(gallery,/event\.isComposing/);assert.match(gallery,/Your draft is kept/);
+  assert.doesNotMatch(gallery,/gallery-execution-request|gallery-provider-request/);assert.match(gallery,/event\.isComposing/);assert.match(gallery,/Search characters/);
   const styles=await readFile(new URL("../src/styles.css",import.meta.url),"utf8");
   assert.match(styles,/--demo-font-primary: "Clash Display"/);assert.match(styles,/--demo-font-secondary: nbarchitekt/);
 });

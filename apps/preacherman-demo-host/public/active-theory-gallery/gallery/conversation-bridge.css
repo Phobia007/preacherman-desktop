@@ -21,3 +21,22 @@
 /* Only painted chat rows own input. The tall transparent log must not cover cards. */
 html[data-gallery-native-rail="true"] [data-preacherman-chat] [role="log"] { pointer-events: none; }
 html[data-gallery-native-rail="true"] [data-preacherman-chat] [role="log"] > * { pointer-events: auto; }
+
+/* Character search keeps the original pill and font in both appearances. */
+[data-gallery-search] { mix-blend-mode: normal !important; }
+[data-gallery-search] textarea {
+  background: var(--demo-theme-settings-surface) !important;
+  border-color: var(--demo-theme-settings-border) !important;
+  caret-color: var(--demo-theme-settings-text);
+}
+[data-gallery-search] textarea:hover { border-color: var(--demo-theme-settings-muted) !important; }
+[data-gallery-search] textarea:focus { border-color: var(--demo-theme-settings-focus) !important; }
+[data-gallery-search] [data-gallery-search-status] {
+  font: 14px/1.5 var(--demo-font-secondary);
+  margin: 0 10px 12px;
+  color: var(--demo-theme-settings-text);
+  overflow-wrap: anywhere;
+}
+[data-gallery-search] [data-gallery-search-status][hidden] { display: none; }
+[data-gallery-search][data-search-state="empty"] [data-gallery-search-status] { color: var(--demo-theme-settings-muted); }
+[data-gallery-search][data-search-state="loading"] [data-gallery-search-status] { color: var(--demo-theme-settings-loading); }

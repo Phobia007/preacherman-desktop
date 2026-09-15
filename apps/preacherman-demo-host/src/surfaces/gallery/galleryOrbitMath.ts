@@ -19,3 +19,13 @@ export function galleryEntryProgress(elapsed: number, reducedMotion: boolean) {
   const t = Math.min(1, Math.max(0, elapsed / 1.85));
   return 1 - Math.pow(1 - t, 3);
 }
+
+// Offset -1 is the upper-left card, clear of the character's silhouette.
+export const GALLERY_LEAD_OFFSET = 1;
+export function galleryFocusScroll(index: number, current: number, count: number) {
+  const destination = index + GALLERY_LEAD_OFFSET;
+  return count > 0 ? destination + Math.round((current - destination) / count) * count : destination;
+}
+export function galleryLeadIndex(scroll: number, count: number) {
+  return ((Math.round(scroll) - GALLERY_LEAD_OFFSET) % count + count) % count;
+}

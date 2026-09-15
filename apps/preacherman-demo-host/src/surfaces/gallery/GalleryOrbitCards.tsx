@@ -3,15 +3,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Group, Mesh, MeshBasicMaterial, Raycaster, Vector2 } from "three";
 import { GalleryOrbitCard } from "./GalleryOrbitCard";
 import type { GalleryDetailBridge, GalleryRailCard } from "./GalleryDetailOverlay";
-import { galleryEntryProgress, galleryOrbitPose } from "./galleryOrbitMath";
+import { galleryEntryProgress, galleryOrbitPose, galleryFocusScroll, galleryLeadIndex, GALLERY_LEAD_OFFSET } from "./galleryOrbitMath";
 
 export function GalleryOrbitCards({ bridge, active, renderActive = true }: { bridge: GalleryDetailBridge; active: boolean; renderActive?: boolean }) {
   const { camera, scene, gl } = useThree();
   const [cards, setCards] = useState<GalleryRailCard[]>([]);
-  const [center, setCenter] = useState(0);
+  const [center, setCenter] = useState(GALLERY_LEAD_OFFSET);
   const dragged = useRef(false), hovered = useRef<string | null>(null);
   const groups = useRef<(Group | null)[]>([]);
-  const elapsed = useRef(0), scroll = useRef(0), target = useRef(0), wasVisible = useRef(false);
+  const elapsed = useRef(0), scroll = useRef(GALLERY_LEAD_OFFSET), target = useRef(GALLERY_LEAD_OFFSET), wasVisible = useRef(false);
   const reduced = useRef(false), railVisible = useRef(false);
   const root = useRef<Group>(null), down = useRef<{ x: number; y: number } | null>(null);
   const raycaster = useMemo(() => new Raycaster(), []);
@@ -22,20 +22,26 @@ export function GalleryOrbitCards({ bridge, active, renderActive = true }: { bri
     const sync = () => { reduced.current = media.matches; }; sync(); media.addEventListener("change", sync);
     return () => media.removeEventListener("change", sync);
   }, []);
-  useEffect(() => bridge.subscribeRail(next => { setCards(next); target.current = Math.min(target.current, Math.max(0, next.length - 1)); }), [bridge]);
+  useEffect(() => bridge.subscribeRail(setCards), [bridge]);
   useEffect(() => bridge.subscribe(state => { railVisible.current = state.phase === "closed" && !state.contact; }), [bridge]);
   useEffect(() => {
     if (!active) return;
     return bridge.subscribeInput(input => {
       if (!railVisible.current || cards.length === 0) return;
       const move = (delta: number) => { target.current += delta; };
+      if (input.type === "focus") {
+        const index = cards.findIndex(card => card.id === input.id);
+        if (index >= 0) target.current = galleryFocusScroll(index, scroll.current, cards.length);
+        down.current = null; dragged.current = false;
+        return;
+      }
       if (input.type === "wheel") { move(input.delta / 620); return; }
       if (input.type === "key") {
         if (["ArrowDown", "ArrowRight", "PageDown"].includes(input.key)) move(1);
         if (["ArrowUp", "ArrowLeft", "PageUp"].includes(input.key)) move(-1);
-        if (input.key === "Home") target.current = 0;
-        if (input.key === "End") target.current = cards.length - 1;
-        if (input.key === "Enter") bridge.openProject(cards[((Math.round(target.current) % cards.length) + cards.length) % cards.length].id);
+        if (input.key === "Home") target.current = galleryFocusScroll(0, scroll.current, cards.length);
+        if (input.key === "End") target.current = galleryFocusScroll(cards.length - 1, scroll.current, cards.length);
+        if (input.key === "Enter") bridge.openProject(cards[galleryLeadIndex(target.current, cards.length)].id);
         return;
       }
       if (input.type === "down") { down.current = { x: input.x, y: input.y }; dragged.current = false; return; }
@@ -81,7 +87,9 @@ export function GalleryOrbitCards({ bridge, active, renderActive = true }: { bri
       if ((face?.material as MeshBasicMaterial | undefined)?.userData.thumbnailReady) readyCovers++;
       if ((face?.material as MeshBasicMaterial | undefined)?.userData.videoPlaying) playingVideos++;
     }
-    const diagnostics = { entry: progress, scroll: scroll.current, target: target.current, count: cards.length, visibleCards, readyCovers, playingVideos };
+    const leadIndex = galleryLeadIndex(target.current, cards.length);
+    const leadPosition = groups.current[leadIndex]?.getWorldPosition(scene.position.clone()).project(camera);
+    const diagnostics = { entry: progress, scroll: scroll.current, target: target.current, count: cards.length, visibleCards, readyCovers, playingVideos, leadProject: cards[leadIndex]?.id, leadPosition: leadPosition ? { x: leadPosition.x, y: leadPosition.y } : null };
     gl.domElement.dataset.galleryOrbit = JSON.stringify(diagnostics);
   });
   useEffect(() => () => { delete gl.domElement.dataset.galleryOrbit; bridge.setRailCursor(""); }, [bridge, gl]);

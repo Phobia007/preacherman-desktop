@@ -6,7 +6,7 @@ import { transform } from "esbuild";
 
 const source = await readFile(new URL("../src/execution/useExecutionFrameBridge.ts", import.meta.url), "utf8");
 const compiled = (await transform(source.replace(/^import .*;$/gm, "").replace("export function", "function"), {loader:"ts", target:"es2022"})).code;
-function fixture() {
+function fixture(executionEnabled = true) {
   let cleanup, effect, observerCallback;
   const handlers = new Map(), posts = [], calls = [];
   const frame = {postMessage:data => posts.push(data)};
@@ -19,7 +19,7 @@ function fixture() {
     preachermanServiceRequest:async(path,init)=>{calls.push({path,init});return path==="/api/settings/execution"?config:{text:"Reply",task:{taskId:"local-task",status:"awaiting-approval"}};},
   };
   vm.runInNewContext(compiled+"\nglobalThis.hook=useExecutionFrameBridge;",context);
-  context.hook({current:{contentWindow:frame}});cleanup=effect();
+  context.hook({current:{contentWindow:frame}}, executionEnabled);cleanup=effect();
   const receive=data=>handlers.get("message")({source:frame,origin:"http://localhost",data});
   return {frame,posts,calls,config,handlers,receive,cleanup,theme:()=>observerCallback()};
 }
@@ -72,4 +72,17 @@ test("foreign frames and invalid operations cannot use the bridge; disposal remo
   f.receive({type:"gallery-execution-request",requestId:"bad",action:"approve",taskId:"../settings"});
   await settled();assert.equal(f.calls.length,0);assert.match(f.posts.at(-1).error,/Invalid task/);
   f.cleanup();assert.equal(f.handlers.size,0);
+});
+
+test("Gallery search receives appearance updates with all execution operations disabled", async () => {
+  const f=fixture(false);
+  try {
+    f.receive({type:"gallery-theme-request"});
+    assert.equal(f.posts.at(-1).type,"gallery-conversation-theme");
+    f.receive({type:"gallery-provider-request"});
+    f.receive({type:"gallery-execution-request",requestId:"forbidden",action:"chat",useActive:true});
+    await settled();assert.equal(f.calls.length,0);
+    assert.equal(f.handlers.has("preacherman-execution-changed"),false);
+    f.theme();assert.equal(f.posts.at(-1).type,"gallery-conversation-theme");
+  } finally {f.cleanup();}
 });

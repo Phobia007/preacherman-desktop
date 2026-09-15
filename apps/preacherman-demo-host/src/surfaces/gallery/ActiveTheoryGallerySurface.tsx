@@ -19,7 +19,7 @@ export function ActiveTheoryGallerySurface({ active = true, renderActive = true,
   readonly onActivate: (modelId: ModelId) => void;
 }) {
   const frameRef = useRef<HTMLIFrameElement>(null);
-  useExecutionFrameBridge(frameRef);
+  useExecutionFrameBridge(frameRef, false);
   const [loaded, setLoaded] = useState(false);
   const [bridge, setBridge] = useState<GalleryDetailBridge>();
   const [detail, setDetail] = useState<GalleryDetailState>({ phase: "closed", project: "", title: "", smallWindow: true });

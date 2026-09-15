@@ -4,9 +4,9 @@ import { preachermanServiceRequest } from "../preacherman/capabilityClient";
 const record = (value: unknown): Record<string, unknown> =>
   typeof value === "object" && value !== null ? value as Record<string, unknown> : {};
 
-// Both authored conversation frames use the host's saved execution configuration.
+// Authored frames share appearance; execution is opt-in for conversation surfaces.
 // Only public connection metadata crosses this boundary; credentials stay in the service.
-export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>) {
+export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>, executionEnabled = true) {
   useEffect(() => {
     const lifetime = new AbortController();
     let revision = 0;
@@ -80,11 +80,12 @@ export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>) 
     const receive = (event: MessageEvent) => {
       if (event.source !== frameRef.current?.contentWindow || (location.origin !== "null" && event.origin !== location.origin)) return;
       const data = record(event.data);
-      if (data.type === "gallery-provider-request") void sendCatalog();
-      if (data.type === "gallery-execution-request") void dispatch(data);
+      if (data.type === "gallery-theme-request") sendTheme();
+      if (executionEnabled && data.type === "gallery-provider-request") void sendCatalog();
+      if (executionEnabled && data.type === "gallery-execution-request") void dispatch(data);
     };
     window.addEventListener("message", receive);
-    window.addEventListener("preacherman-execution-changed", sendCatalog);
+    if (executionEnabled) window.addEventListener("preacherman-execution-changed", sendCatalog);
     const observer = new MutationObserver(sendTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-appearance"] });
     return () => {
@@ -92,5 +93,5 @@ export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>) 
       window.removeEventListener("message", receive);
       window.removeEventListener("preacherman-execution-changed", sendCatalog);
     };
-  }, [frameRef]);
+  }, [frameRef, executionEnabled]);
 }

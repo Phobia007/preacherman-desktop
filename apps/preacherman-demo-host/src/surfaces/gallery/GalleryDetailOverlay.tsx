@@ -4,7 +4,7 @@ import type { ModelId } from "../../preferences";
 import { GalleryActivateButton } from "./GalleryActivateButton";
 
 export interface GalleryRailCard { id: string; title: string; client: string; thumbnail: string; video?: string; logo?: string; color?: string; }
-export type GalleryRailInput = { type: "wheel"; delta: number } | { type: "key"; key: string } | { type: "move" | "down" | "up" | "click"; x: number; y: number };
+export type GalleryRailInput = { type: "focus"; id: string } | { type: "wheel"; delta: number } | { type: "key"; key: string } | { type: "move" | "down" | "up" | "click"; x: number; y: number };
 
 export interface GalleryDetailState {
   contact?: boolean;
@@ -22,6 +22,7 @@ export interface GalleryDetailBridge {
   subscribeInput(listener: (input: GalleryRailInput) => void): () => void;
   setRailCursor(cursor: string): void;
   openProject(id: string): void;
+  focusProject(id: string): void;
   previewProject(id: string): void;
   showWork(): void;
   toggleContact(): void;
