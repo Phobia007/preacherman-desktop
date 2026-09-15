@@ -1667,7 +1667,7 @@
     "resourceSample": {
       "SampledAt": "2026-09-15T18:46:45.1361598+08:00",
       "NativePid": 34024,
-      "StartedAt": "2026-09-15T18:46:28.9296990+08:00",
+      "StartedAt": "2026-09-15T18:46:28.929699+08:00",
       "WindowHandle": 1507994,
       "Responding": true,
       "WindowCaptured": true,
@@ -1974,7 +1974,7 @@
       "sourceCommit": "64553c63449a38960f35a468b92b3cbc1973c40f",
       "sha256": "D7EEE9C7DB5D660E673FC4CEFBDF5C51664445EC99CC72B1709DD4A3FED197A5",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-09-13T16:59:42.3233820+08:00",
+      "deployedAt": "2026-09-13T16:59:42.323382+08:00",
       "verifiedAt": "2026-09-13T17:03:05.8276015+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-orbit-before-20260913"
     },
@@ -2037,7 +2037,7 @@
       "sha256": "EC018D066197D20C0248D25F3B11C77AB5C3487B7C633207106BC1DE4404D115",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-09-13T22:18:32.6995564+08:00",
-      "verifiedAt": "2026-09-13T22:25:36.0321210+08:00",
+      "verifiedAt": "2026-09-13T22:25:36.032121+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-entry-before-20260913"
     },
     {
@@ -2154,7 +2154,7 @@
       "sha256": "B913748FE82D5220B6F914D8B019F17CDC1842CB88AD1CE7B3D180C161849AFC",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-09-15T16:45:34.9723261+08:00",
-      "verifiedAt": "2026-09-15T16:48:33.1133990+08:00",
+      "verifiedAt": "2026-09-15T16:48:33.113399+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-search-before-20260915"
     },
     {
@@ -2172,7 +2172,7 @@
       "sha256": "EF557C0589CA2D7061C4BDF0C71F40A884D4350CD9E033240243DBA27386CBE7",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-09-15T17:56:31.5272236+08:00",
-      "verifiedAt": "2026-09-15T17:59:33.0865170+08:00",
+      "verifiedAt": "2026-09-15T17:59:33.086517+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915"
     },
     {
@@ -2192,6 +2192,15 @@
       "deployedAt": "2026-09-15T18:43:24.0221595+08:00",
       "verifiedAt": "2026-09-15T18:46:45.1361598+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-copy-before-20260915"
+    },
+    {
+      "buildId": "account-evomap-20260915",
+      "sourceCommit": "0eef9d16acbe048b38231b307e8a1a1b8b128958",
+      "sha256": "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
+      "status": "rolled-back-after-hidden-window-verification",
+      "reason": "Hidden/minimized native launch paused the shared renderer (data-avatar-render-active=false) even though WebView2 document.hidden=false. Restored the verified pair; normal visible shortcut launch passed Home, Task, Gallery and Settings. Corrected only verification launcher; runtime source unchanged.",
+      "rolledBackAt": "2026-09-15T22:07:39.863095+08:00",
+      "failedArtifact": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-hidden-launch-20260915"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-copy-before-20260915/desktop-build-manifest.json",

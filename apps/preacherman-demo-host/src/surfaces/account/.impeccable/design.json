@@ -1,0 +1,749 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-15T14:06:40.850Z",
+  "title": "Design System: Preacherman Account",
+  "extensions": {
+    "colorMeta": {
+      "canvas-light": {
+        "role": "neutral",
+        "displayName": "Canvas Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0013 106.42)",
+          "oklch(26.43% 0.0013 106.42)",
+          "oklch(37.86% 0.0013 106.42)",
+          "oklch(49.29% 0.0013 106.42)",
+          "oklch(60.71% 0.0013 106.42)",
+          "oklch(72.14% 0.0013 106.42)",
+          "oklch(83.57% 0.0013 106.42)",
+          "oklch(95.00% 0.0013 106.42)"
+        ]
+      },
+      "surface-light": {
+        "role": "neutral",
+        "displayName": "Surface Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      },
+      "text-light": {
+        "role": "neutral",
+        "displayName": "Text Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0015 197.06)",
+          "oklch(26.43% 0.0015 197.06)",
+          "oklch(37.86% 0.0015 197.06)",
+          "oklch(49.29% 0.0015 197.06)",
+          "oklch(60.71% 0.0015 197.06)",
+          "oklch(72.14% 0.0015 197.06)",
+          "oklch(83.57% 0.0015 197.06)",
+          "oklch(95.00% 0.0015 197.06)"
+        ]
+      },
+      "muted-light": {
+        "role": "neutral",
+        "displayName": "Muted Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0059 228.90)",
+          "oklch(26.43% 0.0059 228.90)",
+          "oklch(37.86% 0.0059 228.90)",
+          "oklch(49.29% 0.0059 228.90)",
+          "oklch(60.71% 0.0059 228.90)",
+          "oklch(72.14% 0.0059 228.90)",
+          "oklch(83.57% 0.0059 228.90)",
+          "oklch(95.00% 0.0059 228.90)"
+        ]
+      },
+      "border-light": {
+        "role": "neutral",
+        "displayName": "Border Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0043 197.08)",
+          "oklch(26.43% 0.0043 197.08)",
+          "oklch(37.86% 0.0043 197.08)",
+          "oklch(49.29% 0.0043 197.08)",
+          "oklch(60.71% 0.0043 197.08)",
+          "oklch(72.14% 0.0043 197.08)",
+          "oklch(83.57% 0.0043 197.08)",
+          "oklch(95.00% 0.0043 197.08)"
+        ]
+      },
+      "border-hover-light": {
+        "role": "neutral",
+        "displayName": "Border Hover Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0124 217.59)",
+          "oklch(26.43% 0.0124 217.59)",
+          "oklch(37.86% 0.0124 217.59)",
+          "oklch(49.29% 0.0124 217.59)",
+          "oklch(60.71% 0.0124 217.59)",
+          "oklch(72.14% 0.0124 217.59)",
+          "oklch(83.57% 0.0124 217.59)",
+          "oklch(95.00% 0.0124 217.59)"
+        ]
+      },
+      "hover-light": {
+        "role": "neutral",
+        "displayName": "Hover Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0021 197.12)",
+          "oklch(26.43% 0.0021 197.12)",
+          "oklch(37.86% 0.0021 197.12)",
+          "oklch(49.29% 0.0021 197.12)",
+          "oklch(60.71% 0.0021 197.12)",
+          "oklch(72.14% 0.0021 197.12)",
+          "oklch(83.57% 0.0021 197.12)",
+          "oklch(95.00% 0.0021 197.12)"
+        ]
+      },
+      "focus-light": {
+        "role": "primary",
+        "displayName": "Focus Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0957 223.23)",
+          "oklch(26.43% 0.0957 223.23)",
+          "oklch(37.86% 0.0957 223.23)",
+          "oklch(49.29% 0.0957 223.23)",
+          "oklch(60.71% 0.0957 223.23)",
+          "oklch(72.14% 0.0957 223.23)",
+          "oklch(83.57% 0.0957 223.23)",
+          "oklch(95.00% 0.0957 223.23)"
+        ]
+      },
+      "error-light": {
+        "role": "neutral",
+        "displayName": "Error Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.1465 24.19)",
+          "oklch(26.43% 0.1465 24.19)",
+          "oklch(37.86% 0.1465 24.19)",
+          "oklch(49.29% 0.1465 24.19)",
+          "oklch(60.71% 0.1465 24.19)",
+          "oklch(72.14% 0.1465 24.19)",
+          "oklch(83.57% 0.1465 24.19)",
+          "oklch(95.00% 0.1465 24.19)"
+        ]
+      },
+      "action-hover-light": {
+        "role": "neutral",
+        "displayName": "Action Hover Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0098 216.73)",
+          "oklch(26.43% 0.0098 216.73)",
+          "oklch(37.86% 0.0098 216.73)",
+          "oklch(49.29% 0.0098 216.73)",
+          "oklch(60.71% 0.0098 216.73)",
+          "oklch(72.14% 0.0098 216.73)",
+          "oklch(83.57% 0.0098 216.73)",
+          "oklch(95.00% 0.0098 216.73)"
+        ]
+      },
+      "glass-light": {
+        "role": "neutral",
+        "displayName": "Glass Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0161 222.73)",
+          "oklch(26.43% 0.0161 222.73)",
+          "oklch(37.86% 0.0161 222.73)",
+          "oklch(49.29% 0.0161 222.73)",
+          "oklch(60.71% 0.0161 222.73)",
+          "oklch(72.14% 0.0161 222.73)",
+          "oklch(83.57% 0.0161 222.73)",
+          "oklch(95.00% 0.0161 222.73)"
+        ]
+      },
+      "frost-light": {
+        "role": "neutral",
+        "displayName": "Frost Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0043 197.09)",
+          "oklch(26.43% 0.0043 197.09)",
+          "oklch(37.86% 0.0043 197.09)",
+          "oklch(49.29% 0.0043 197.09)",
+          "oklch(60.71% 0.0043 197.09)",
+          "oklch(72.14% 0.0043 197.09)",
+          "oklch(83.57% 0.0043 197.09)",
+          "oklch(95.00% 0.0043 197.09)"
+        ]
+      },
+      "frost-soft-light": {
+        "role": "neutral",
+        "displayName": "Frost Soft Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0142 219.64)",
+          "oklch(26.43% 0.0142 219.64)",
+          "oklch(37.86% 0.0142 219.64)",
+          "oklch(49.29% 0.0142 219.64)",
+          "oklch(60.71% 0.0142 219.64)",
+          "oklch(72.14% 0.0142 219.64)",
+          "oklch(83.57% 0.0142 219.64)",
+          "oklch(95.00% 0.0142 219.64)"
+        ]
+      },
+      "fade-mid-light": {
+        "role": "neutral",
+        "displayName": "Fade Mid Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0173 234.41 / 0.08)",
+          "oklch(26.43% 0.0173 234.41 / 0.08)",
+          "oklch(37.86% 0.0173 234.41 / 0.08)",
+          "oklch(49.29% 0.0173 234.41 / 0.08)",
+          "oklch(60.71% 0.0173 234.41 / 0.08)",
+          "oklch(72.14% 0.0173 234.41 / 0.08)",
+          "oklch(83.57% 0.0173 234.41 / 0.08)",
+          "oklch(95.00% 0.0173 234.41 / 0.08)"
+        ]
+      },
+      "fade-end-light": {
+        "role": "neutral",
+        "displayName": "Fade End Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0195 242.35 / 0.88)",
+          "oklch(26.43% 0.0195 242.35 / 0.88)",
+          "oklch(37.86% 0.0195 242.35 / 0.88)",
+          "oklch(49.29% 0.0195 242.35 / 0.88)",
+          "oklch(60.71% 0.0195 242.35 / 0.88)",
+          "oklch(72.14% 0.0195 242.35 / 0.88)",
+          "oklch(83.57% 0.0195 242.35 / 0.88)",
+          "oklch(95.00% 0.0195 242.35 / 0.88)"
+        ]
+      },
+      "brand-text-light": {
+        "role": "neutral",
+        "displayName": "Brand Text Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0069 219.56)",
+          "oklch(26.43% 0.0069 219.56)",
+          "oklch(37.86% 0.0069 219.56)",
+          "oklch(49.29% 0.0069 219.56)",
+          "oklch(60.71% 0.0069 219.56)",
+          "oklch(72.14% 0.0069 219.56)",
+          "oklch(83.57% 0.0069 219.56)",
+          "oklch(95.00% 0.0069 219.56)"
+        ]
+      },
+      "profile-text-light": {
+        "role": "neutral",
+        "displayName": "Profile Text Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0205 236.62)",
+          "oklch(26.43% 0.0205 236.62)",
+          "oklch(37.86% 0.0205 236.62)",
+          "oklch(49.29% 0.0205 236.62)",
+          "oklch(60.71% 0.0205 236.62)",
+          "oklch(72.14% 0.0205 236.62)",
+          "oklch(83.57% 0.0205 236.62)",
+          "oklch(95.00% 0.0205 236.62)"
+        ]
+      },
+      "brand-shadow-light": {
+        "role": "neutral",
+        "displayName": "Brand Shadow Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 0.00 / 0.9)",
+          "oklch(26.43% 0.0000 0.00 / 0.9)",
+          "oklch(37.86% 0.0000 0.00 / 0.9)",
+          "oklch(49.29% 0.0000 0.00 / 0.9)",
+          "oklch(60.71% 0.0000 0.00 / 0.9)",
+          "oklch(72.14% 0.0000 0.00 / 0.9)",
+          "oklch(83.57% 0.0000 0.00 / 0.9)",
+          "oklch(95.00% 0.0000 0.00 / 0.9)"
+        ]
+      },
+      "brand-hover-light": {
+        "role": "neutral",
+        "displayName": "Brand Hover Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      },
+      "dialog-backdrop-light": {
+        "role": "neutral",
+        "displayName": "Dialog Backdrop Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.0166 232.97 / 0.42)",
+          "oklch(26.43% 0.0166 232.97 / 0.42)",
+          "oklch(37.86% 0.0166 232.97 / 0.42)",
+          "oklch(49.29% 0.0166 232.97 / 0.42)",
+          "oklch(60.71% 0.0166 232.97 / 0.42)",
+          "oklch(72.14% 0.0166 232.97 / 0.42)",
+          "oklch(83.57% 0.0166 232.97 / 0.42)",
+          "oklch(95.00% 0.0166 232.97 / 0.42)"
+        ]
+      },
+      "canvas-dark": {
+        "role": "neutral",
+        "displayName": "Canvas Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 0.00)",
+          "oklch(26.43% 0.0000 0.00)",
+          "oklch(37.86% 0.0000 0.00)",
+          "oklch(49.29% 0.0000 0.00)",
+          "oklch(60.71% 0.0000 0.00)",
+          "oklch(72.14% 0.0000 0.00)",
+          "oklch(83.57% 0.0000 0.00)",
+          "oklch(95.00% 0.0000 0.00)"
+        ]
+      },
+      "surface-dark": {
+        "role": "neutral",
+        "displayName": "Surface Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      },
+      "text-dark": {
+        "role": "neutral",
+        "displayName": "Text Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Muted Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0065 223.49)",
+          "oklch(26.43% 0.0065 223.49)",
+          "oklch(37.86% 0.0065 223.49)",
+          "oklch(49.29% 0.0065 223.49)",
+          "oklch(60.71% 0.0065 223.49)",
+          "oklch(72.14% 0.0065 223.49)",
+          "oklch(83.57% 0.0065 223.49)",
+          "oklch(95.00% 0.0065 223.49)"
+        ]
+      },
+      "border-dark": {
+        "role": "neutral",
+        "displayName": "Border Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0056 236.72)",
+          "oklch(26.43% 0.0056 236.72)",
+          "oklch(37.86% 0.0056 236.72)",
+          "oklch(49.29% 0.0056 236.72)",
+          "oklch(60.71% 0.0056 236.72)",
+          "oklch(72.14% 0.0056 236.72)",
+          "oklch(83.57% 0.0056 236.72)",
+          "oklch(95.00% 0.0056 236.72)"
+        ]
+      },
+      "border-hover-dark": {
+        "role": "neutral",
+        "displayName": "Border Hover Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0138 231.89)",
+          "oklch(26.43% 0.0138 231.89)",
+          "oklch(37.86% 0.0138 231.89)",
+          "oklch(49.29% 0.0138 231.89)",
+          "oklch(60.71% 0.0138 231.89)",
+          "oklch(72.14% 0.0138 231.89)",
+          "oklch(83.57% 0.0138 231.89)",
+          "oklch(95.00% 0.0138 231.89)"
+        ]
+      },
+      "hover-dark": {
+        "role": "neutral",
+        "displayName": "Hover Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0060 236.85)",
+          "oklch(26.43% 0.0060 236.85)",
+          "oklch(37.86% 0.0060 236.85)",
+          "oklch(49.29% 0.0060 236.85)",
+          "oklch(60.71% 0.0060 236.85)",
+          "oklch(72.14% 0.0060 236.85)",
+          "oklch(83.57% 0.0060 236.85)",
+          "oklch(95.00% 0.0060 236.85)"
+        ]
+      },
+      "focus-dark": {
+        "role": "primary",
+        "displayName": "Focus Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0996 214.43)",
+          "oklch(26.43% 0.0996 214.43)",
+          "oklch(37.86% 0.0996 214.43)",
+          "oklch(49.29% 0.0996 214.43)",
+          "oklch(60.71% 0.0996 214.43)",
+          "oklch(72.14% 0.0996 214.43)",
+          "oklch(83.57% 0.0996 214.43)",
+          "oklch(95.00% 0.0996 214.43)"
+        ]
+      },
+      "error-dark": {
+        "role": "neutral",
+        "displayName": "Error Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0871 24.41)",
+          "oklch(26.43% 0.0871 24.41)",
+          "oklch(37.86% 0.0871 24.41)",
+          "oklch(49.29% 0.0871 24.41)",
+          "oklch(60.71% 0.0871 24.41)",
+          "oklch(72.14% 0.0871 24.41)",
+          "oklch(83.57% 0.0871 24.41)",
+          "oklch(95.00% 0.0871 24.41)"
+        ]
+      },
+      "action-hover-dark": {
+        "role": "neutral",
+        "displayName": "Action Hover Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0142 219.64)",
+          "oklch(26.43% 0.0142 219.64)",
+          "oklch(37.86% 0.0142 219.64)",
+          "oklch(49.29% 0.0142 219.64)",
+          "oklch(60.71% 0.0142 219.64)",
+          "oklch(72.14% 0.0142 219.64)",
+          "oklch(83.57% 0.0142 219.64)",
+          "oklch(95.00% 0.0142 219.64)"
+        ]
+      },
+      "glass-dark": {
+        "role": "neutral",
+        "displayName": "Glass Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0136 243.63)",
+          "oklch(26.43% 0.0136 243.63)",
+          "oklch(37.86% 0.0136 243.63)",
+          "oklch(49.29% 0.0136 243.63)",
+          "oklch(60.71% 0.0136 243.63)",
+          "oklch(72.14% 0.0136 243.63)",
+          "oklch(83.57% 0.0136 243.63)",
+          "oklch(95.00% 0.0136 243.63)"
+        ]
+      },
+      "frost-dark": {
+        "role": "neutral",
+        "displayName": "Frost Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0173 231.64)",
+          "oklch(26.43% 0.0173 231.64)",
+          "oklch(37.86% 0.0173 231.64)",
+          "oklch(49.29% 0.0173 231.64)",
+          "oklch(60.71% 0.0173 231.64)",
+          "oklch(72.14% 0.0173 231.64)",
+          "oklch(83.57% 0.0173 231.64)",
+          "oklch(95.00% 0.0173 231.64)"
+        ]
+      },
+      "frost-soft-dark": {
+        "role": "neutral",
+        "displayName": "Frost Soft Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0226 235.47)",
+          "oklch(26.43% 0.0226 235.47)",
+          "oklch(37.86% 0.0226 235.47)",
+          "oklch(49.29% 0.0226 235.47)",
+          "oklch(60.71% 0.0226 235.47)",
+          "oklch(72.14% 0.0226 235.47)",
+          "oklch(83.57% 0.0226 235.47)",
+          "oklch(95.00% 0.0226 235.47)"
+        ]
+      },
+      "fade-mid-dark": {
+        "role": "neutral",
+        "displayName": "Fade Mid Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 0.00 / 0.22)",
+          "oklch(26.43% 0.0000 0.00 / 0.22)",
+          "oklch(37.86% 0.0000 0.00 / 0.22)",
+          "oklch(49.29% 0.0000 0.00 / 0.22)",
+          "oklch(60.71% 0.0000 0.00 / 0.22)",
+          "oklch(72.14% 0.0000 0.00 / 0.22)",
+          "oklch(83.57% 0.0000 0.00 / 0.22)",
+          "oklch(95.00% 0.0000 0.00 / 0.22)"
+        ]
+      },
+      "fade-end-dark": {
+        "role": "neutral",
+        "displayName": "Fade End Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 0.00)",
+          "oklch(26.43% 0.0000 0.00)",
+          "oklch(37.86% 0.0000 0.00)",
+          "oklch(49.29% 0.0000 0.00)",
+          "oklch(60.71% 0.0000 0.00)",
+          "oklch(72.14% 0.0000 0.00)",
+          "oklch(83.57% 0.0000 0.00)",
+          "oklch(95.00% 0.0000 0.00)"
+        ]
+      },
+      "brand-text-dark": {
+        "role": "neutral",
+        "displayName": "Brand Text Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0105 219.59)",
+          "oklch(26.43% 0.0105 219.59)",
+          "oklch(37.86% 0.0105 219.59)",
+          "oklch(49.29% 0.0105 219.59)",
+          "oklch(60.71% 0.0105 219.59)",
+          "oklch(72.14% 0.0105 219.59)",
+          "oklch(83.57% 0.0105 219.59)",
+          "oklch(95.00% 0.0105 219.59)"
+        ]
+      },
+      "profile-text-dark": {
+        "role": "neutral",
+        "displayName": "Profile Text Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0105 219.59)",
+          "oklch(26.43% 0.0105 219.59)",
+          "oklch(37.86% 0.0105 219.59)",
+          "oklch(49.29% 0.0105 219.59)",
+          "oklch(60.71% 0.0105 219.59)",
+          "oklch(72.14% 0.0105 219.59)",
+          "oklch(83.57% 0.0105 219.59)",
+          "oklch(95.00% 0.0105 219.59)"
+        ]
+      },
+      "brand-shadow-dark": {
+        "role": "neutral",
+        "displayName": "Brand Shadow Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 0.00 / 0.9)",
+          "oklch(26.43% 0.0000 0.00 / 0.9)",
+          "oklch(37.86% 0.0000 0.00 / 0.9)",
+          "oklch(49.29% 0.0000 0.00 / 0.9)",
+          "oklch(60.71% 0.0000 0.00 / 0.9)",
+          "oklch(72.14% 0.0000 0.00 / 0.9)",
+          "oklch(83.57% 0.0000 0.00 / 0.9)",
+          "oklch(95.00% 0.0000 0.00 / 0.9)"
+        ]
+      },
+      "brand-hover-dark": {
+        "role": "neutral",
+        "displayName": "Brand Hover Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      },
+      "dialog-backdrop-dark": {
+        "role": "neutral",
+        "displayName": "Dialog Backdrop Dark",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 0.00 / 0.64)",
+          "oklch(26.43% 0.0000 0.00 / 0.64)",
+          "oklch(37.86% 0.0000 0.00 / 0.64)",
+          "oklch(49.29% 0.0000 0.00 / 0.64)",
+          "oklch(60.71% 0.0000 0.00 / 0.64)",
+          "oklch(72.14% 0.0000 0.00 / 0.64)",
+          "oklch(83.57% 0.0000 0.00 / 0.64)",
+          "oklch(95.00% 0.0000 0.00 / 0.64)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Donor heading",
+        "purpose": "Centered login heading in bundled HarmonyOS Sans SC."
+      },
+      "body": {
+        "displayName": "Form body",
+        "purpose": "Arial-first subtitle and email field."
+      },
+      "label": {
+        "displayName": "Form action",
+        "purpose": "Provider and Continue labels."
+      },
+      "signature": {
+        "displayName": "Preacherman signature",
+        "purpose": "The existing handwritten profile toggle."
+      },
+      "profile": {
+        "displayName": "Profile copy",
+        "purpose": "Text inside the captured-scene lens."
+      }
+    },
+    "shadows": [
+      {
+        "name": "pm-mark",
+        "value": "drop-shadow(0 2px 5px var(--demo-theme-account-brand-shadow))",
+        "purpose": "White PM mark against the portrait."
+      },
+      {
+        "name": "signature-rest",
+        "value": "0 1px 4px var(--demo-theme-account-brand-shadow)",
+        "purpose": "Resting signature text shadow; removed on profile open."
+      }
+    ],
+    "motion": [
+      {
+        "name": "panel-ease",
+        "value": "cubic-bezier(.22, 1, .36, 1)",
+        "purpose": "Matching panel and shared-scene entrance easing."
+      },
+      {
+        "name": "left-entrance",
+        "value": "820ms",
+        "purpose": "Portrait and shared scene enter first."
+      },
+      {
+        "name": "right-entrance",
+        "value": "760ms 420ms",
+        "purpose": "Right panel duration and delay, respectively."
+      },
+      {
+        "name": "signature-ready",
+        "value": "1280ms",
+        "purpose": "Entrance interaction gate; immediate for an initial reduced-motion preference."
+      },
+      {
+        "name": "profile-fade",
+        "value": "650ms ease",
+        "purpose": "Profile copy fade; removed for reduced motion."
+      },
+      {
+        "name": "lens-open",
+        "value": "850ms",
+        "purpose": "Existing TaskProfileLens opening with imported taskProfileCurve."
+      },
+      {
+        "name": "lens-close",
+        "value": "650ms",
+        "purpose": "Existing TaskProfileLens closing with imported taskProfileCurve."
+      }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Continue (light)",
+      "kind": "button",
+      "refersTo": "button-continue-light",
+      "description": "The enabled action; disabled state reflects empty or invalid email.",
+      "html": "<div class=\"ds-account-light\"><button class=\"ds-account-continue\" type=\"button\">Continue</button></div>",
+      "css": ".ds-account-light{max-width:418px;padding:20px;background:var(--demo-theme-account-canvas,#f7f7f6);color:var(--demo-theme-account-text,#202121);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-light button:focus-visible,.ds-account-light input:focus-visible{outline:2px solid var(--demo-theme-account-focus,#167b98);outline-offset:3px}.ds-account-continue{width:100%;min-height:48px;margin-top:16px;padding:10px 20px;border:0;border-radius:8px;background:var(--demo-theme-account-text,#202121);color:var(--demo-theme-account-canvas,#f7f7f6);font:600 16px/24px Arial,\"Account Harmony\",sans-serif;cursor:pointer}.ds-account-continue:hover:not(:disabled){background:var(--demo-theme-account-action-hover,#41484a)}.ds-account-continue:disabled{opacity:.45;cursor:not-allowed}"
+    },
+    {
+      "name": "Provider (light)",
+      "kind": "button",
+      "refersTo": "button-provider-light",
+      "description": "The existing GitHub provider button; actual activation opens local status feedback.",
+      "html": "<div class=\"ds-account-light\"><button class=\"ds-account-provider\" type=\"button\"><svg viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z\"/></svg>Continue with GitHub</button></div>",
+      "css": ".ds-account-light{max-width:418px;padding:20px;background:var(--demo-theme-account-canvas,#f7f7f6);color:var(--demo-theme-account-text,#202121);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-light button:focus-visible,.ds-account-light input:focus-visible{outline:2px solid var(--demo-theme-account-focus,#167b98);outline-offset:3px}.ds-account-provider{position:relative;width:100%;min-height:52px;padding:12px 48px;border:1px solid var(--demo-theme-account-border,#d9dddd);border-radius:8px;background:var(--demo-theme-account-surface,#ffffff);color:inherit;font:600 16px/24px Arial,\"Account Harmony\",sans-serif;cursor:pointer}.ds-account-provider:hover{border-color:var(--demo-theme-account-border-hover,#8b9598);background:var(--demo-theme-account-hover,#f0f2f2)}.ds-account-provider svg{position:absolute;top:50%;left:20px;width:20px;height:20px;transform:translateY(-50%);color:#000}"
+    },
+    {
+      "name": "Email (light)",
+      "kind": "input",
+      "refersTo": "input-email-light",
+      "description": "Native email field; aria-invalid enables the existing error-border state.",
+      "html": "<div class=\"ds-account-light\"><input class=\"ds-account-email\" type=\"email\" aria-label=\"Email address\" placeholder=\"Email address\" autocomplete=\"email\" required></div>",
+      "css": ".ds-account-light{max-width:418px;padding:20px;background:var(--demo-theme-account-canvas,#f7f7f6);color:var(--demo-theme-account-text,#202121);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-light button:focus-visible,.ds-account-light input:focus-visible{outline:2px solid var(--demo-theme-account-focus,#167b98);outline-offset:3px}.ds-account-email{box-sizing:border-box;width:100%;height:52px;padding:0 16px;border:1px solid var(--demo-theme-account-border,#d9dddd);border-radius:8px;color:inherit;background:var(--demo-theme-account-surface,#ffffff);font:400 16px/24px Arial,\"Account Harmony\",sans-serif}.ds-account-email::placeholder{color:var(--demo-theme-account-muted,#666a6c);opacity:1}.ds-account-email[aria-invalid=true]{border-color:var(--demo-theme-account-error,#a53636)}"
+    },
+    {
+      "name": "Continue (dark)",
+      "kind": "button",
+      "refersTo": "button-continue-dark",
+      "description": "The enabled action; disabled state reflects empty or invalid email.",
+      "html": "<div class=\"ds-account-dark\"><button class=\"ds-account-continue\" type=\"button\">Continue</button></div>",
+      "css": ".ds-account-dark{max-width:418px;padding:20px;background:var(--demo-theme-account-canvas,#000000);color:var(--demo-theme-account-text,#ededed);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-dark button:focus-visible,.ds-account-dark input:focus-visible{outline:2px solid var(--demo-theme-account-focus,#71d6ed);outline-offset:3px}.ds-account-continue{width:100%;min-height:48px;margin-top:16px;padding:10px 20px;border:0;border-radius:8px;background:var(--demo-theme-account-text,#ededed);color:var(--demo-theme-account-canvas,#000000);font:600 16px/24px Arial,\"Account Harmony\",sans-serif;cursor:pointer}.ds-account-continue:hover:not(:disabled){background:var(--demo-theme-account-action-hover,#c8d4d8)}.ds-account-continue:disabled{opacity:.45;cursor:not-allowed}"
+    },
+    {
+      "name": "Provider (dark)",
+      "kind": "button",
+      "refersTo": "button-provider-dark",
+      "description": "The existing GitHub provider button; actual activation opens local status feedback.",
+      "html": "<div class=\"ds-account-dark\"><button class=\"ds-account-provider\" type=\"button\"><svg viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z\"/></svg>Continue with GitHub</button></div>",
+      "css": ".ds-account-dark{max-width:418px;padding:20px;background:var(--demo-theme-account-canvas,#000000);color:var(--demo-theme-account-text,#ededed);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-dark button:focus-visible,.ds-account-dark input:focus-visible{outline:2px solid var(--demo-theme-account-focus,#71d6ed);outline-offset:3px}.ds-account-provider{position:relative;width:100%;min-height:52px;padding:12px 48px;border:1px solid var(--demo-theme-account-border,#292c2e);border-radius:8px;background:var(--demo-theme-account-surface,#0f0f0f);color:inherit;font:600 16px/24px Arial,\"Account Harmony\",sans-serif;cursor:pointer}.ds-account-provider:hover{border-color:var(--demo-theme-account-border-hover,#596267);background:var(--demo-theme-account-hover,#171a1c)}.ds-account-provider svg{position:absolute;top:50%;left:20px;width:20px;height:20px;transform:translateY(-50%);color:#fff}"
+    },
+    {
+      "name": "Email (dark)",
+      "kind": "input",
+      "refersTo": "input-email-dark",
+      "description": "Native email field; aria-invalid enables the existing error-border state.",
+      "html": "<div class=\"ds-account-dark\"><input class=\"ds-account-email\" type=\"email\" aria-label=\"Email address\" placeholder=\"Email address\" autocomplete=\"email\" required></div>",
+      "css": ".ds-account-dark{max-width:418px;padding:20px;background:var(--demo-theme-account-canvas,#000000);color:var(--demo-theme-account-text,#ededed);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-dark button:focus-visible,.ds-account-dark input:focus-visible{outline:2px solid var(--demo-theme-account-focus,#71d6ed);outline-offset:3px}.ds-account-email{box-sizing:border-box;width:100%;height:52px;padding:0 16px;border:1px solid var(--demo-theme-account-border,#292c2e);border-radius:8px;color:inherit;background:var(--demo-theme-account-surface,#0f0f0f);font:400 16px/24px Arial,\"Account Harmony\",sans-serif}.ds-account-email::placeholder{color:var(--demo-theme-account-muted,#959a9c);opacity:1}.ds-account-email[aria-invalid=true]{border-color:var(--demo-theme-account-error,#f3aaa4)}"
+    },
+    {
+      "name": "Preacherman signature",
+      "kind": "custom",
+      "refersTo": "signature",
+      "description": "The profile toggle; the application provides its bundled BrotherSignature font and the actual captured-scene lens.",
+      "html": "<div class=\"ds-account-dark\"><button class=\"ds-account-signature\" type=\"button\" aria-expanded=\"false\">Preacherman</button></div>",
+      "css": ".ds-account-dark{max-width:418px;padding:20px;background:var(--demo-theme-account-canvas,#000000);color:var(--demo-theme-account-text,#ededed);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-dark button:focus-visible,.ds-account-dark input:focus-visible{outline:2px solid var(--demo-theme-account-focus,#71d6ed);outline-offset:3px}.ds-account-signature{min-height:48px;padding:4px 24px;border:0;background:transparent;color:var(--demo-theme-account-brand-text,#dce5e8);text-shadow:0 1px 4px var(--demo-theme-account-brand-shadow,rgb(0 0 0 / 90%));font:400 38px/1 \"Market Task Signature\",cursive;cursor:pointer}.ds-account-signature:hover{color:var(--demo-theme-account-brand-hover,#ffffff)}.ds-account-signature:disabled{cursor:default}"
+    },
+    {
+      "name": "Sign-in feedback",
+      "kind": "card",
+      "refersTo": "dialog-light",
+      "description": "Static native-dialog content preview; the app opens it modally and closes it through a dialog form.",
+      "html": "<div class=\"ds-account-light\"><section class=\"ds-account-dialog\" role=\"dialog\" aria-labelledby=\"ds-account-status\"><h2 id=\"ds-account-status\">Sign-in is coming soon</h2><p>Preacherman account sign-in is not connected yet. Your email has not been sent or saved.</p><button class=\"ds-account-continue\" type=\"button\">Got it</button></section></div>",
+      "css": ".ds-account-light{max-width:418px;padding:20px;background:var(--demo-theme-account-canvas,#f7f7f6);color:var(--demo-theme-account-text,#202121);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-light button:focus-visible,.ds-account-light input:focus-visible{outline:2px solid var(--demo-theme-account-focus,#167b98);outline-offset:3px}.ds-account-continue{width:100%;min-height:48px;margin-top:16px;padding:10px 20px;border:0;border-radius:8px;background:var(--demo-theme-account-text,#202121);color:var(--demo-theme-account-canvas,#f7f7f6);font:600 16px/24px Arial,\"Account Harmony\",sans-serif;cursor:pointer}.ds-account-continue:hover:not(:disabled){background:var(--demo-theme-account-action-hover,#41484a)}.ds-account-continue:disabled{opacity:.45;cursor:not-allowed}.ds-account-dialog{width:min(420px,calc(100vw - 72px));padding:28px;border:1px solid var(--demo-theme-account-border,#d9dddd);border-radius:12px;background:var(--demo-theme-account-surface,#ffffff);color:var(--demo-theme-account-text,#202121);font-family:Arial,\"Account Harmony\",sans-serif}.ds-account-dialog h2{margin:0 0 12px;font-size:24px;line-height:32px}.ds-account-dialog p{color:var(--demo-theme-account-muted,#666a6c);font-size:15px;line-height:24px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Local EvoMap login composition",
+    "overview": "This document describes only the implemented Account surface. Its visual authority is the user-pinned local EvoMap login composition: equal portrait and form panels, the original HarmonyOS/Arial form, a neutral frosted scene, and existing Preacherman brand assets. It does not establish a replacement design system for other routes.\n\nThe left panel shares the currently active companion model with the application. The right panel presents a quiet, centered login form. The signature opens the existing Task profile lens against a captured scene, keeping the portrait and optical distortion part of the same composition. The account flow currently ends with honest local feedback; authentication is not connected.",
+    "keyCharacteristics": [
+      "Equal portrait and form panels on the existing scaled desktop stage.",
+      "Original HarmonyOS/Arial form typography with the packaged handwritten signature.",
+      "Semantic light and dark chrome around unchanged authored companion content.",
+      "Staggered horizontal entrance and the reused Task profile lens."
+    ],
+    "rules": [
+      {
+        "name": "The Appearance Rule",
+        "body": "Use the existing --demo-theme-account-* roles from styles.css, selected by preacherman.preferences and AppShell data-appearance. Preserve both modes for controls, feedback, focus, icons, and the frosted scene.",
+        "section": "colors"
+      },
+      {
+        "name": "The Donor Type Rule",
+        "body": "Preserve the local donor's HarmonyOS/Arial form pairing and the existing signature font. The accepted Arial detector warnings are a deliberate source-fidelity choice.",
+        "section": "typography"
+      },
+      {
+        "name": "The Captured Scene Rule",
+        "body": "The lens distorts the captured companion scene, frost, lower gradient, and PM mark. Keep the form outside the capture and pause the shared companion renderer while the lens obscures it.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** preserve the equal split and the existing 1800 by 1000 desktop scaling behavior.",
+      "**Do** keep the 184px white PM mark and the original 38px signature beneath it.",
+      "**Do** retain the left-first 820ms entrance and the right 760ms entrance delayed by 420ms.",
+      "**Do** use the active shared companion and the existing TaskProfileLens implementation.",
+      "**Do** preserve visible focus, reduced motion, native dialog dismissal, and both appearance modes.",
+      "**Do** keep provider and email actions local until authentication is separately implemented."
+    ],
+    "donts": [
+      "**Don't** replace the pinned HarmonyOS/Arial typography because of a generic font warning.",
+      "**Don't** substitute a decorative CSS ring, unrelated image, or second companion renderer for the lens.",
+      "**Don't** turn this first-page surface into an authentication backend, credential store, or provider redirect.",
+      "**Don't** promote this route's split layout or typography into rules for unrelated surfaces.",
+      "**Don't** reflow the shell into a new mobile layout as an undocumented side effect."
+    ]
+  }
+}
