@@ -20,3 +20,23 @@
 /* Only painted chat rows own input. The tall transparent log must not cover cards. */
 html[data-gallery-native-rail="true"] [data-preacherman-chat] [role="log"] { pointer-events: none; }
 html[data-gallery-native-rail="true"] [data-preacherman-chat] [role="log"] > * { pointer-events: auto; }
+
+/* Align the Gallery sidebar above the unchanged persistent account identity. */
+[data-preacherman-chat] {
+  left: 40px !important;
+  bottom: 94px !important;
+  padding: 0 !important;
+  width: min(370px, calc(100% - 80px)) !important;
+  height: calc(100% - 194px) !important;
+}
+[data-preacherman-chat] [role="log"] {
+  gap: 18px;
+  margin-bottom: 28px !important;
+}
+[data-preacherman-chat] [role="log"] > p,
+[data-preacherman-chat] [role="log"] > a {
+  margin: 0 !important;
+}
+[data-preacherman-chat] [role="log"] > .home:last-of-type + p {
+  margin-bottom: 10px !important;
+}
