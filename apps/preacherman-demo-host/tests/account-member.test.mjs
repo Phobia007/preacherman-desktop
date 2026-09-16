@@ -41,5 +41,10 @@ test('Failed lookup does not fabricate a number and can recover without another 
 for(const mode of ['light','dark'])test(`Persistent account controls have complete ${mode} appearance tokens`,()=>{
  const css=read('src/styles.css');const block=[...css.matchAll(/\.demo-app-shell([^{}]*)\{([^{}]*)\}/g)].filter(m=>mode==='dark'?m[1].trim()==='[data-appearance="dark"]':m[1].trim()==='').map(m=>m[2]).join('\n');
  for(const token of new Set(css.match(/--demo-theme-member-[a-z-]+/g)))assert.match(block,new RegExp(token+':\\s*[^;]+;'),token);
- assert.match(css,/\.demo-account-dock:focus-visible/);assert.match(css,/\.demo-account-dock:hover/);
+ assert.match(css,/\.demo-account-dock:focus-visible \.account-badge__avatar/);
+ assert.match(css,/\.demo-account-dock:hover \{ color: var\(--demo-theme-member-hover\)/);
+ assert.match(block,/--demo-theme-member-surface: transparent;/);
+ const dock=css.match(/\.demo-account-dock \{([^}]+)\}/)[1];
+ assert.match(dock,/padding: 0/);assert.match(dock,/box-shadow: none; backdrop-filter: none/);
+ assert.match(css,/data-menu-hidden="true"\] \{[^}]*pointer-events: none/);
 });

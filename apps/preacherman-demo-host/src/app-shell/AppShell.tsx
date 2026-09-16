@@ -44,6 +44,7 @@ export function AppShell({
   const member = useSyncExternalStore(accountProfile.subscribe, accountProfile.getSnapshot);
   const brandButtonRef = useRef<HTMLButtonElement>(null);
   const [brandNavigationOpen, setBrandNavigationOpen] = useState(false);
+  const accountDockHidden = !!auth.user && brandNavigationOpen;
   const [scale, setScale] = useState(() => {
     if (typeof window === "undefined") return 1;
     return Math.min(window.innerWidth / 1800, window.innerHeight / 1000);
@@ -197,6 +198,7 @@ export function AppShell({
       </div>
       <div className="demo-app-shell__screen-content">{children}</div>
       <button className="demo-account-dock" type="button" aria-label={auth.user ? "Open your account" : "Sign in to Preacherman"}
+        data-menu-hidden={accountDockHidden} aria-hidden={accountDockHidden} tabIndex={accountDockHidden ? -1 : 0}
         onClick={() => { selectBrandDestination("account"); setBrandNavigationOpen(false); }}>
         <AccountBadge user={auth.user} member={member} />
       </button>
