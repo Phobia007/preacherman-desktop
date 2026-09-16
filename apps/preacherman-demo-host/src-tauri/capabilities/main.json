@@ -13,6 +13,15 @@
     "core:window:allow-start-resize-dragging",
     "shell:allow-spawn",
     "core:event:allow-listen",
-    "core:event:allow-unlisten"
+    "core:event:allow-unlisten",
+    "deep-link:allow-get-current",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        {
+          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/authorize?*"
+        }
+      ]
+    }
   ]
 }

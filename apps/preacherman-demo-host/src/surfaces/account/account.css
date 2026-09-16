@@ -80,3 +80,13 @@
   .demo-app-shell__scene { transition: none; }
   .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene { animation: none; transition: none; }
 }
+
+.account__provider:disabled { cursor: wait; opacity: .6; }
+.account__auth-status { margin-top: 16px; color: var(--demo-theme-account-muted); font-size: 14px; line-height: 22px; text-align: center; }
+.account__auth-status p { margin: 0 0 6px; }
+.account__text-action { padding: 4px 8px; border: 0; border-radius: 4px; background: transparent; color: var(--demo-theme-account-text); font: inherit; text-decoration: underline; cursor: pointer; }
+.account__text-action:hover { background: var(--demo-theme-account-hover); }
+.account__identity { margin: 28px 0; }
+.account__identity div { padding: 14px 0; border-bottom: 1px solid var(--demo-theme-account-border); }
+.account__identity dt { color: var(--demo-theme-account-muted); font-size: 13px; line-height: 20px; }
+.account__identity dd { margin: 4px 0 0; color: var(--demo-theme-account-text); font-size: 16px; line-height: 24px; overflow-wrap: anywhere; }

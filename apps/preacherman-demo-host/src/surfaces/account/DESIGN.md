@@ -142,7 +142,7 @@ components:
 
 This document describes only the implemented Account surface. Its visual authority is the user-pinned local EvoMap login composition: equal portrait and form panels, the original HarmonyOS/Arial form, a neutral frosted scene, and existing Preacherman brand assets. It does not establish a replacement design system for other routes.
 
-The left panel shares the currently active companion model with the application. The right panel presents a quiet, centered login form. The signature opens the existing Task profile lens against the live scene, keeping the portrait and optical distortion part of the same composition. The account flow currently ends with honest local feedback; authentication is not connected.
+The left panel shares the currently active companion model with the application. The right panel presents a quiet, centered login form. The signature opens the existing Task profile lens against the live scene, keeping the portrait and optical distortion part of the same composition. GitHub sign-in opens the system browser, returns through the Preacherman desktop protocol, and uses Supabase PKCE. The existing Google and email controls retain honest unavailable feedback. The signed-in account summary uses the same form typography and theme tokens.
 
 **Key Characteristics:**
 

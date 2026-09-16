@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { accountAuth } from "../../auth/accountAuth";
 import type { Appearance } from "../../preferences";
 import markDark from "../../assets/preacherman-mark-dark.png";
 import { TaskProfileLens } from "../market/TaskProfileLens";
@@ -9,6 +10,8 @@ import "../market/market-profile.css";
 import "./account.css";
 
 export function AccountSurface({ appearance }: { appearance: Appearance }) {
+  const auth = useSyncExternalStore(accountAuth.subscribe, accountAuth.getSnapshot);
+  const signingIn = ["restoring", "opening", "waiting", "finishing"].includes(auth.status);
   const panel = useRef<HTMLElement>(null);
   const lensHost = useRef<HTMLDivElement>(null);
   const lens = useRef<TaskProfileLens | null>(null);
@@ -95,16 +98,30 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
           onClick={() => { setEffectError(""); setOpen(value => !value); }}>Preacherman</button>
         {effectError && <p className="account__effect-error" role="status">{effectError}</p>}
       </section>
-      <main className="account__main">
+      <main className="account__main" data-auth-state={auth.status}>
         <form className="account__form" onSubmit={event => { event.preventDefault(); if (valid) showSignInStatus(); }}>
           <header className="account__heading">
-            <h1>Log in to Preacherman</h1>
-            <p>Sign in or create an account to continue.</p>
+            <h1>{auth.user ? "Your account" : "Log in to Preacherman"}</h1>
+            <p>{auth.user ? "Signed in to Preacherman." : "Sign in or create an account to continue."}</p>
           </header>
+          {auth.user ? <>
+            <dl className="account__identity">
+              <div><dt>Name</dt><dd>{auth.user.user_metadata.full_name || auth.user.user_metadata.user_name || "Preacherman member"}</dd></div>
+              <div><dt>Email</dt><dd>{auth.user.email || "Not shared"}</dd></div>
+              <div><dt>Sign-in method</dt><dd>GitHub</dd></div>
+            </dl>
+            <button className="account__continue" type="button" disabled={auth.status === "signing-out"}
+              onClick={() => { void accountAuth.signOut(); }}>{auth.status === "signing-out" ? "Signing out…" : "Sign out"}</button>
+          </> : <>
           <div className="account__providers">
             <button className="account__provider" type="button" onClick={showSignInStatus}><img src={googleIcon} alt="" />Continue with Google</button>
-            <button className="account__provider" type="button" onClick={showSignInStatus}><img className="account__github" src={githubIcon} alt="" />Continue with GitHub</button>
+            <button className="account__provider" type="button" disabled={signingIn} aria-busy={signingIn}
+              onClick={() => { void accountAuth.signIn(); }}><img className="account__github" src={githubIcon} alt="" />Continue with GitHub</button>
           </div>
+          {signingIn && <div className="account__auth-status" role="status" aria-live="polite">
+            <p>{auth.status === "restoring" ? "Checking your account…" : auth.status === "opening" ? "Opening GitHub in your browser…" : auth.status === "finishing" ? "Completing sign-in…" : "Complete sign-in in your browser, then return here."}</p>
+            {["opening", "waiting"].includes(auth.status) && <button className="account__text-action" type="button" onClick={() => accountAuth.cancel()}>Cancel</button>}
+          </div>}
           <div className="account__divider"><span>or</span></div>
           <label className="account__sr-only" htmlFor="account-email">Email address</label>
           <input id="account-email" className="account__email" type="email" name="email" autoComplete="email" required
@@ -113,11 +130,14 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
             onBlur={() => setBlurred(true)} onChange={event => { setEmail(event.target.value); setValid(event.target.validity.valid); }} />
           {blurred && !!email && !valid && <p className="account__error" id="account-email-error">Enter a valid email address.</p>}
           <button className="account__continue" type="submit" disabled={!valid}>Continue</button>
+          </>}
+          {auth.error && <div className="account__auth-status"><p className="account__error" role="alert">{auth.error}</p>
+            <button className="account__text-action" type="button" onClick={() => { void accountAuth.retry(); }}>Check connection</button></div>}
         </form>
       </main>
       <dialog ref={dialog} className="account__dialog" aria-labelledby="account-sign-in-title" aria-describedby="account-sign-in-description">
         <h2 id="account-sign-in-title">Sign-in is coming soon</h2>
-        <p id="account-sign-in-description">Preacherman account sign-in is not connected yet. Your email has not been sent or saved.</p>
+        <p id="account-sign-in-description">Google and email sign-in are not connected yet. You can continue with GitHub. Your email has not been sent or saved.</p>
         <form method="dialog"><button className="account__continue" autoFocus>Got it</button></form>
       </dialog>
     </section>
