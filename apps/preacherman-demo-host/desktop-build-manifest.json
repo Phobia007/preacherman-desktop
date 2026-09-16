@@ -1057,6 +1057,18 @@
       "deployedAt": "2026-09-16T14:54:05.5913739+08:00",
       "verifiedAt": "2026-09-16T15:01:57.3324906+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-before-20260916"
+    },
+    {
+      "buildId": "market-frost-20260916",
+      "sourceCommit": "0dddf0a37640504e8c3b0006a14c4b60db5c588a",
+      "sha256": "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
+      "status": "rolled-back-for-verification-investigation",
+      "at": "2026-09-16T15:35:07.695859+08:00",
+      "reason": "Dark-mode all 14 Market characters and core routes passed. Automated in-place native reload for changing appearance timed out waiting for Home visibility; candidate and matching sidecar preserved. Restored the verified pair while investigating. No source architecture change was reverted.",
+      "restoredSha256": "E173FF9D9E2E308924D613BC46A99E1510418575D2A3D13C57B1E18BC5BDA784",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "evidence": "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-reload-investigation-report.json",
+      "baselineComparison": "D:\\preacherman\\output\\playwright\\market-frost-20260916\\reload-comparison.json"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-before-20260916/desktop-build-manifest.json",
