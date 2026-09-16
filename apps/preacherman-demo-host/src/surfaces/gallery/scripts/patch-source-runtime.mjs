@@ -24,13 +24,14 @@ const scenePath = path.join(runtimeRoot, "_nuxt", "D9b8F35K.js");
 let scene = fs.readFileSync(scenePath, "utf8");
 const taskDialogImport = 'import{installTaskCreateDialog}from"../task-create-dialog.js";';
 if (!scene.includes(taskDialogImport)) scene = taskDialogImport + "\n" + scene;
-scene = replaceExact(
-  scene,
-  'this.llamaRain?.tick(e,this.hole.p)',
-  'this.llamaRain?.tick(e,this.taskCreateDialogOpen?0:this.hole.p)',
-  1,
-  "keep new task lens empty without changing profile decoration",
-);
+// Profile optics stay intact; the template animal rain is no longer loaded or rendered.
+scene = scene.replaceAll("this.llamaRain?.tick(e,this.hole.p)", "this.llamaRain?.tick(e,this.taskCreateDialogOpen?0:this.hole.p)");
+scene = replaceExact(scene, "this.ballScan=0,this.llamaRain=null,this._rainStarted=!1,this.sky=null", "this.ballScan=0,this.sky=null", 1, "remove falling-animal state");
+scene = replaceExact(scene, "this.watchBall(),(window.requestIdleCallback?.bind(window)||(i=>setTimeout(i,3e3)))(()=>{this.llamaRain||this._rainStarted||(this._rainStarted=!0,lr(async()=>{const{Rain:i}=await import(\"./BNIAOxM5.js\");return{Rain:i}},[],import.meta.url).then(({Rain:i})=>{this.llamaRain=new i(this.core),this.llamaRain.ensure()}))})}watchBall()", "this.watchBall()}watchBall()", 1, "remove falling-animal idle preloader");
+scene = replaceExact(scene, "this.syncBall(e),this.hole.p>.01&&!this.llamaRain&&!this._rainStarted&&(this._rainStarted=!0,lr(async()=>{const{Rain:i}=await import(\"./BNIAOxM5.js\");return{Rain:i}},[],import.meta.url).then(({Rain:i})=>{this.llamaRain=new i(this.core)})),this.llamaRain?.tick(e,this.taskCreateDialogOpen?0:this.hole.p),this.rail.sync(e)", "this.syncBall(e),this.rail.sync(e)", 1, "remove falling-animal spawn and animation");
+scene = replaceExact(scene, "Ye(l)?\"\u5173\u95ed\":\"\u7b80\u4ecb\"", "Ye(l)?\"Close\":\"Preacherman\"", 1, "English profile toggle");
+scene = replaceExact(scene, "},\"\u90ae\u4ef6\",40,QF)", "},\"Email\",40,QF)", 1, "English profile email link");
+scene = replaceExact(scene, "zn(\"span\",eB,\"\u5df2\u590d\u5236\")", "zn(\"span\",eB,\"Copied\")", 1, "English profile copy feedback");
 scene = replaceExact(
   scene,
   'Fi(r,_=>{e.openHole(_),f(_)});const{close:p}',
@@ -217,7 +218,7 @@ const fallbackFor=route=>{const url=new URL(route,"http://gallery.local");const 
 const navigate=route=>{const router=document.querySelector("#__nuxt")?.__vue_app__?.config?.globalProperties?.$router;if(!router){location.href=fallbackFor(route);return}Promise.resolve(router.push(route)).catch(()=>{location.href=fallbackFor(route)})};
 document.addEventListener("click",event=>{if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;const route=routeFor(event.target);if(!route)return;event.preventDefault();event.stopImmediatePropagation();navigate(route)},true);
 const normalizeProfileLabel=()=>{const toggle=document.querySelector('[data-od-id="profile-toggle"]');if(toggle?.textContent?.trim()==="简介")toggle.textContent="Preacherman"};
-const profileLines=["一个智能容器","Preacherman 统一管理虚拟人物资产，兼容通用引擎、真实工具完成任务。","在这里管理一位能持续学习、可部署、真正做事的人工智能。","信任你在虚拟世界里的第二身份"];
+const profileLines=["An intelligent home.","One place for your virtual characters, engines, and tools.","AI that keeps learning, goes with you, and gets things done.","Your second identity in the virtual world."];
 const normalizeProfileCopy=()=>{const paragraphs=[...document.querySelectorAll("p")];const biography=paragraphs.find(paragraph=>paragraph.textContent?.includes("Jesper Landberg"));if(biography){biography.replaceChildren(...profileLines.map((line,index)=>{const span=document.createElement("span");span.dataset.galleryProfileLine=String(index+1);span.textContent=line;return span}));biography.dataset.galleryProfileCopy="true"}const honors=paragraphs.find(paragraph=>paragraph.textContent?.includes("Awwwards")&&paragraph.textContent?.includes("74"));if(honors)honors.dataset.galleryProfileHonors="true"};
 const normalizeCards=()=>{for(const card of document.querySelectorAll('[data-gl="card"]')){const title=card.querySelector("[data-title]")?.textContent?.trim()||"项目";card.setAttribute("role","link");card.tabIndex=0;card.setAttribute("aria-label","打开项目："+title)}};
 const syncInterface=()=>{normalizeLinks();normalizeProfileLabel();normalizeProfileCopy();normalizeCards()};
@@ -243,6 +244,8 @@ function collectHtmlFiles(directory) {
 const htmlFiles = collectHtmlFiles(runtimeRoot);
 for (const htmlPath of htmlFiles) {
   let html = fs.readFileSync(htmlPath, "utf8");
+  html = html.replaceAll(">邮件<", ">Email<").replaceAll(">简介</button>", ">Preacherman</button>");
+  html = html.replace(/<link\b[^>]*href="[^"]*\/BNIAOxM5\.js"[^>]*>\n?/g, "");
   const hasOverrides = html.includes('id="gallery-host-overrides"');
   const hasBridge = html.includes('id="gallery-host-bridge"');
   if (hasOverrides !== hasBridge) {

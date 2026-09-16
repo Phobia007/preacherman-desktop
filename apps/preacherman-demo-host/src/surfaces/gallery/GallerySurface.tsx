@@ -193,15 +193,15 @@ export function GallerySurface({ hideProjectCards = false }: GallerySurfaceProps
           {profileOpen ? (
             <div className="gallery-surface__profile" role="region" aria-label="Preacherman profile">
               <p>
-                <span>一个智能容器</span>
-                <span>Preacherman 统一管理虚拟人物资产，兼容通用引擎、真实工具完成任务。</span>
-                <span>在这里管理一位能持续学习、可部署、真正做事的人工智能。</span>
-                <span>信任你在虚拟世界里的第二身份</span>
+                <span>An intelligent home.</span>
+                <span>One place for your virtual characters, engines, and tools.</span>
+                <span>AI that keeps learning, goes with you, and gets things done.</span>
+                <span>Your second identity in the virtual world.</span>
               </p>
               <ul aria-label="Preacherman links">
                 <li><a href="https://www.instagram.com/jesperlandberg222/" rel="noopener" target="_blank">Instagram</a></li>
                 <li><a href="https://www.linkedin.com/in/jesper-landberg-ba2984256/" rel="noopener" target="_blank">LinkedIn</a></li>
-                <li><a href="mailto:jesper@alpacka.studio">邮件</a></li>
+                <li><a href="mailto:jesper@alpacka.studio">Email</a></li>
               </ul>
             </div>
           ) : null}

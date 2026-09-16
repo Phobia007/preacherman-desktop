@@ -84,16 +84,16 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
   );
   assert.match(index, /font-family:"Gallery Brother Signature"/);
   assert.match(index, /toggle\.textContent="Preacherman"/);
-  assert.match(index, /一个智能容器/);
+  assert.match(index, /An intelligent home./);
   assert.match(
     index,
-    /Preacherman 统一管理虚拟人物资产，兼容通用引擎、真实工具完成任务。/,
+    /One place for your virtual characters, engines, and tools./,
   );
   assert.match(
     index,
-    /在这里管理一位能持续学习、可部署、真正做事的人工智能。/,
+    /AI that keeps learning, goes with you, and gets things done./,
   );
-  assert.match(index, /信任你在虚拟世界里的第二身份/);
+  assert.match(index, /Your second identity in the virtual world./);
   assert.match(index, /dataset\.galleryProfileLine/);
   assert.match(index, /dataset\.galleryProfileHonors/);
   assert.match(index, /Nathan Riley/);

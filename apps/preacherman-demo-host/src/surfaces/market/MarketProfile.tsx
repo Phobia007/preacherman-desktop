@@ -76,7 +76,7 @@ export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, 
     <div ref={profileRef} className="market-profile" data-open={open} data-phase={phase}>
       <button ref={toggleRef} disabled={disabled} type="button" className="market-profile__toggle" aria-expanded={open}
         aria-controls="market-profile-content" onClick={() => onOpenChange(!open)}>
-        {open ? "关闭" : "Preacherman"}
+        {open ? "Close" : "Preacherman"}
       </button>
       <div className="market-profile__backdrop" hidden={phase === "closed" || phase === "preparing"} onClick={event => {
         const bounds = event.currentTarget.getBoundingClientRect();
@@ -91,15 +91,15 @@ export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, 
           aria-label="Preacherman profile" onClick={event => event.stopPropagation()}>
           {error && <p className="market-profile__error" role="alert">{error}</p>}
           <p>
-            <span>一个智能容器</span>
-            <span>Preacherman 统一管理虚拟人物资产，兼容通用引擎、真实工具完成任务。</span>
-            <span>在这里管理一位能持续学习、可部署、真正做事的人工智能。</span>
-            <span>信任你在虚拟世界里的第二身份</span>
+            <span>An intelligent home.</span>
+            <span>One place for your virtual characters, engines, and tools.</span>
+            <span>AI that keeps learning, goes with you, and gets things done.</span>
+            <span>Your second identity in the virtual world.</span>
           </p>
           <ul aria-label="Preacherman links">
             <li><a href="https://www.instagram.com/jesperlandberg222/" rel="noopener" target="_blank">Instagram</a></li>
             <li><a href="https://www.linkedin.com/in/jesper-landberg-ba2984256/" rel="noopener" target="_blank">LinkedIn</a></li>
-            <li><a href="mailto:jesper@alpacka.studio">邮件</a></li>
+            <li><a href="mailto:jesper@alpacka.studio">Email</a></li>
           </ul>
         </section>
       </div>
