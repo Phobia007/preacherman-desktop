@@ -1,623 +1,175 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-sidebar-spacing-20260917",
+  "buildId": "desktop-account-sync-20260917",
   "productVersion": "0.1.0",
-  "sourceTask": "gallery-sidebar-alignment-and-spacing",
+  "sourceTask": "desktop-account-dock-and-font-sync",
   "sourceThread": null,
-  "sourceState": "Gallery categories and search share a 40px left edge, with even row spacing, separate heading/search groups and more than 40px clearance above the persistent account. Account component, typography, colors, input styling and interaction logic unchanged.",
-  "sourceCommit": "c83575758600f45e5039ab8105967e51b40b842a",
+  "sourceState": "Hide the account dock whenever navigation opens, for both guests and members; match Account form typography to Clash Display navigation. Desktop fixed logical resolution, scaling, window controls, startup and login backend are unchanged.",
+  "sourceCommit": "cdc6df3150b10e25420f636e3feb4174de54131b",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-17T03:29:41.8858746+08:00",
-  "deployedAt": "2026-09-17T03:30:12.0924947+08:00",
-  "verifiedAt": "2026-09-17T03:32:56.9532039+08:00",
+  "builtAt": "2026-09-17T05:58:35.2854086+08:00",
+  "deployedAt": "2026-09-17T05:59:41.5793636+08:00",
+  "verifiedAt": "2026-09-17T06:01:40.1852303+08:00",
   "sizeBytes": 676091392,
-  "sha256": "506B60543892BBE026054F605B9AEA0664F704EF3FB04FDD89967081D3618312",
+  "sha256": "1325E4EA889F700E74D6AA4F12FFE8A26D7CA3EB9107B3D89E13BB7DA81195D5",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-sidebar-spacing-before-20260917/preacherman-demo-host.exe",
-  "backupSha256": "3CEC7A6B7A06FD11887694703C9DF488E724363FE5D891D8DCA602FADF5F039F",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-sidebar-spacing-before-20260917/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917/preacherman-demo-host.exe",
+  "backupSha256": "506B60543892BBE026054F605B9AEA0664F704EF3FB04FDD89967081D3618312",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "d2d082b6c4f51f613d6aa80817ed34598ca3671b",
-  "previousVerificationCommit": "d2d082b6c4f51f613d6aa80817ed34598ca3671b",
+  "rollbackBaselineCommit": "b2b0c89ba64a9b8a940b3deb2a3dec7153096d61",
+  "previousVerificationCommit": "b2b0c89ba64a9b8a940b3deb2a3dec7153096d61",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "19 focused Gallery search/orbit and account tests passed",
-      "accountSourceUnchanged": true
+      "source_tests_passed": 20,
+      "source_tests_failed": 2,
+      "existing_test_failures": [
+        "app-shell: tauriClient is the only native API boundary (useWindowActivity already imports Tauri)",
+        "app-shell: Home/Task/Settings/Gallery share scene (obsolete conditional expectation for ledger)"
+      ],
+      "baseline_evidence": {
+        "commit": "b2b0c89",
+        "relevant_files_unchanged": [
+          "apps/preacherman-demo-host/src/App.tsx",
+          "apps/preacherman-demo-host/src/app-shell/useWindowActivity.ts",
+          "apps/preacherman-demo-host/tests/app-shell.test.mjs"
+        ]
+      },
+      "desktop_viewport_files_unchanged": true
     },
-    "nativeFlow": "Cold canonical shortcut launch to Home; Gallery category filtering, character search, card click/detail/back and unchanged signed-in account hide/reveal; all six core destinations in both themes. Normal shortcut restart without debug port; preferences restored.",
-    "galleryLayout": [
+    "nativeFlow": "Cold canonical shortcut launch to Home; all six core destinations in both themes; account menu hides/reappears and Account typography; fixed 1800x1000 logical layout and three native window controls retained. Preferences restored, restarted normally without debug port.",
+    "accountPresentation": [
       {
         "appearance": "dark",
-        "layout": {
-          "input": {
-            "x": 40,
-            "y": 848.265625,
-            "width": 200,
-            "height": 47.015625,
-            "right": 240,
-            "bottom": 895.28125
+        "signedIn": "false",
+        "fonts": [
+          {
+            "tag": "H1",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
           },
-          "inputFont": "nbarchitekt, monospace",
-          "inputSize": "14px",
-          "placeholder": "Ask me anything...",
-          "rows": [
-            {
-              "x": 40,
-              "y": 594.265625,
-              "width": 370,
-              "height": 21,
-              "right": 410,
-              "bottom": 615.265625,
-              "text": "What are you looking for?",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 643.265625,
-              "width": 89.265625,
-              "height": 21,
-              "right": 129.265625,
-              "bottom": 664.265625,
-              "text": "-> websites",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 682.265625,
-              "width": 129.828125,
-              "height": 21,
-              "right": 169.828125,
-              "bottom": 703.265625,
-              "text": "-> installations",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 721.265625,
-              "width": 121.71875,
-              "height": 21,
-              "right": 161.71875,
-              "bottom": 742.265625,
-              "text": "-> XR / VR / AI",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 760.265625,
-              "width": 113.609375,
-              "height": 21,
-              "right": 153.609375,
-              "bottom": 781.265625,
-              "text": "-> multiplayer",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 799.265625,
-              "width": 64.921875,
-              "height": 21,
-              "right": 104.921875,
-              "bottom": 820.265625,
-              "text": "-> games",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            }
-          ],
-          "viewport": {
-            "width": 1800,
-            "height": 1000
+          {
+            "tag": "P",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
           },
-          "dock": {
-            "x": 40,
-            "y": 942,
-            "width": 124.90625,
-            "height": 34,
-            "bottom": 24,
-            "background": "rgba(0, 0, 0, 0)"
+          {
+            "tag": "BUTTON",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
           },
-          "rowGaps": [
-            28,
-            18,
-            18,
-            18,
-            18
-          ],
-          "accountGap": 46.71875
-        },
-        "interactions": {
-          "categoryClickable": true,
-          "searchMovesAssociatedCard": true,
-          "cardClickOpensDetail": true,
-          "detailReturn": true,
-          "detailGeometry": [
-            {
-              "x": 40,
-              "y": 598.265625,
-              "bottom": 619.265625,
-              "text": "Cortana"
-            },
-            {
-              "x": 40,
-              "y": 637.265625,
-              "bottom": 658.265625,
-              "text": "2003 / HALO 4 / preacherman avatar"
-            },
-            {
-              "x": 40,
-              "y": 676.265625,
-              "bottom": 781.265625,
-              "text": "Cortana is from the Halo series. An advanced AI created from Dr. Catherine Halsey's neural architecture, she was initially tasked with system infiltration, intelligence analysis, and tactical support."
-            },
-            {
-              "x": 40,
-              "y": 799.265625,
-              "bottom": 820.265625,
-              "text": "Details"
-            }
-          ]
-        },
-        "accountPreserved": true
+          {
+            "tag": "BUTTON",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
+          },
+          {
+            "tag": "INPUT",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
+          },
+          {
+            "tag": "BUTTON",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
+          }
+        ],
+        "dockHiddenWithMenu": true,
+        "dockReturns": true,
+        "liveModel": true
       },
       {
         "appearance": "light",
-        "layout": {
-          "input": {
-            "x": 40,
-            "y": 848.265625,
-            "width": 200,
-            "height": 47.015625,
-            "right": 240,
-            "bottom": 895.28125
+        "signedIn": "false",
+        "fonts": [
+          {
+            "tag": "H1",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
           },
-          "inputFont": "nbarchitekt, monospace",
-          "inputSize": "14px",
-          "placeholder": "Ask me anything...",
-          "rows": [
-            {
-              "x": 40,
-              "y": 594.265625,
-              "width": 370,
-              "height": 21,
-              "right": 410,
-              "bottom": 615.265625,
-              "text": "What are you looking for?",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 643.265625,
-              "width": 89.265625,
-              "height": 21,
-              "right": 129.265625,
-              "bottom": 664.265625,
-              "text": "-> websites",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 682.265625,
-              "width": 129.828125,
-              "height": 21,
-              "right": 169.828125,
-              "bottom": 703.265625,
-              "text": "-> installations",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 721.265625,
-              "width": 121.71875,
-              "height": 21,
-              "right": 161.71875,
-              "bottom": 742.265625,
-              "text": "-> XR / VR / AI",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 760.265625,
-              "width": 113.609375,
-              "height": 21,
-              "right": 153.609375,
-              "bottom": 781.265625,
-              "text": "-> multiplayer",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            },
-            {
-              "x": 40,
-              "y": 799.265625,
-              "width": 64.921875,
-              "height": 21,
-              "right": 104.921875,
-              "bottom": 820.265625,
-              "text": "-> games",
-              "font": "nbarchitekt, monospace",
-              "fontSize": "14px"
-            }
-          ],
-          "viewport": {
-            "width": 1800,
-            "height": 1000
+          {
+            "tag": "P",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
           },
-          "dock": {
-            "x": 40,
-            "y": 942,
-            "width": 124.90625,
-            "height": 34,
-            "bottom": 24,
-            "background": "rgba(0, 0, 0, 0)"
+          {
+            "tag": "BUTTON",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
           },
-          "rowGaps": [
-            28,
-            18,
-            18,
-            18,
-            18
-          ],
-          "accountGap": 46.71875
-        },
-        "interactions": {
-          "categoryClickable": true,
-          "searchMovesAssociatedCard": true,
-          "cardClickOpensDetail": true,
-          "detailReturn": true,
-          "detailGeometry": [
-            {
-              "x": 40,
-              "y": 598.265625,
-              "bottom": 619.265625,
-              "text": "Cortana"
-            },
-            {
-              "x": 40,
-              "y": 637.265625,
-              "bottom": 658.265625,
-              "text": "2003 / HALO 4 / preacherman avatar"
-            },
-            {
-              "x": 40,
-              "y": 676.265625,
-              "bottom": 781.265625,
-              "text": "Cortana is from the Halo series. An advanced AI created from Dr. Catherine Halsey's neural architecture, she was initially tasked with system infiltration, intelligence analysis, and tactical support."
-            },
-            {
-              "x": 40,
-              "y": 799.265625,
-              "bottom": 820.265625,
-              "text": "Details"
-            }
-          ]
-        },
-        "accountPreserved": true
+          {
+            "tag": "BUTTON",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
+          },
+          {
+            "tag": "INPUT",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
+          },
+          {
+            "tag": "BUTTON",
+            "family": "\"Clash Display\", sans-serif",
+            "weight": "300"
+          }
+        ],
+        "dockHiddenWithMenu": true,
+        "dockReturns": true,
+        "liveModel": true
       }
     ],
     "previewVerification": {
-      "native": false,
-      "errors": [
-        "Hydration completed but contains mismatches.",
-        "TypeError: _this.initSync is not a function"
-      ],
-      "consoleDetails": [
-        {
-          "text": "Hydration completed but contains mismatches.",
-          "location": {
-            "url": "http://127.0.0.1:1420/gallery-v3/portfolio/_nuxt/D9b8F35K.js",
-            "line": 3,
-            "column": 29834,
-            "lineNumber": 3,
-            "columnNumber": 29834
-          }
-        },
-        {
-          "text": "Hydration completed but contains mismatches.",
-          "location": {
-            "url": "http://127.0.0.1:1420/gallery-v3/portfolio/_nuxt/D9b8F35K.js",
-            "line": 3,
-            "column": 29834,
-            "lineNumber": 3,
-            "columnNumber": 29834
-          }
-        }
-      ],
       "modes": [
         {
           "appearance": "dark",
-          "layout": {
-            "input": {
-              "x": 40,
-              "y": 848.265625,
-              "width": 200,
-              "height": 47.015625,
-              "right": 240,
-              "bottom": 895.28125
-            },
-            "inputFont": "nbarchitekt, monospace",
-            "inputSize": "14px",
-            "placeholder": "Ask me anything...",
-            "rows": [
-              {
-                "x": 40,
-                "y": 594.265625,
-                "width": 370,
-                "height": 21,
-                "right": 410,
-                "bottom": 615.265625,
-                "text": "What are you looking for?",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 643.265625,
-                "width": 89.265625,
-                "height": 21,
-                "right": 129.265625,
-                "bottom": 664.265625,
-                "text": "-> websites",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 682.265625,
-                "width": 129.828125,
-                "height": 21,
-                "right": 169.828125,
-                "bottom": 703.265625,
-                "text": "-> installations",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 721.265625,
-                "width": 121.71875,
-                "height": 21,
-                "right": 161.71875,
-                "bottom": 742.265625,
-                "text": "-> XR / VR / AI",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 760.265625,
-                "width": 113.609375,
-                "height": 21,
-                "right": 153.609375,
-                "bottom": 781.265625,
-                "text": "-> multiplayer",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 799.265625,
-                "width": 64.921875,
-                "height": 21,
-                "right": 104.921875,
-                "bottom": 820.265625,
-                "text": "-> games",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              }
-            ],
-            "viewport": {
-              "width": 1800,
-              "height": 1000
-            },
-            "dock": {
-              "x": 40,
-              "y": 942,
-              "width": 34,
-              "height": 34,
-              "bottom": 24,
-              "background": "rgba(0, 0, 0, 0)"
-            },
-            "rowGaps": [
-              28,
-              18,
-              18,
-              18,
-              18
-            ],
-            "accountGap": 46.71875
+          "styles": {
+            "background": "rgb(0, 0, 0)",
+            "text": "rgb(237, 237, 237)"
           },
-          "interactions": {
-            "categoryClickable": true,
-            "searchMovesAssociatedCard": true,
-            "cardClickOpensDetail": true,
-            "detailReturn": true,
-            "detailGeometry": [
-              {
-                "x": 40,
-                "y": 598.265625,
-                "bottom": 619.265625,
-                "text": "Cortana"
-              },
-              {
-                "x": 40,
-                "y": 637.265625,
-                "bottom": 658.265625,
-                "text": "2003 / HALO 4 / preacherman avatar"
-              },
-              {
-                "x": 40,
-                "y": 676.265625,
-                "bottom": 781.265625,
-                "text": "Cortana is from the Halo series. An advanced AI created from Dr. Catherine Halsey's neural architecture, she was initially tasked with system infiltration, intelligence analysis, and tactical support."
-              },
-              {
-                "x": 40,
-                "y": 799.265625,
-                "bottom": 820.265625,
-                "text": "Details"
-              }
-            ]
-          },
-          "accountPreserved": true
+          "guestDockHidden": true,
+          "memberDockHidden": true,
+          "loginFontMatchesNavigation": true,
+          "pkceVerified": true,
+          "cancel": true,
+          "denied": true,
+          "callbackAfterNavigation": true,
+          "restart": true,
+          "signOut": true,
+          "liveCompanion": true
         },
         {
           "appearance": "light",
-          "layout": {
-            "input": {
-              "x": 40,
-              "y": 848.265625,
-              "width": 200,
-              "height": 47.015625,
-              "right": 240,
-              "bottom": 895.28125
-            },
-            "inputFont": "nbarchitekt, monospace",
-            "inputSize": "14px",
-            "placeholder": "Ask me anything...",
-            "rows": [
-              {
-                "x": 40,
-                "y": 594.265625,
-                "width": 370,
-                "height": 21,
-                "right": 410,
-                "bottom": 615.265625,
-                "text": "What are you looking for?",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 643.265625,
-                "width": 89.265625,
-                "height": 21,
-                "right": 129.265625,
-                "bottom": 664.265625,
-                "text": "-> websites",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 682.265625,
-                "width": 129.828125,
-                "height": 21,
-                "right": 169.828125,
-                "bottom": 703.265625,
-                "text": "-> installations",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 721.265625,
-                "width": 121.71875,
-                "height": 21,
-                "right": 161.71875,
-                "bottom": 742.265625,
-                "text": "-> XR / VR / AI",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 760.265625,
-                "width": 113.609375,
-                "height": 21,
-                "right": 153.609375,
-                "bottom": 781.265625,
-                "text": "-> multiplayer",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              },
-              {
-                "x": 40,
-                "y": 799.265625,
-                "width": 64.921875,
-                "height": 21,
-                "right": 104.921875,
-                "bottom": 820.265625,
-                "text": "-> games",
-                "font": "nbarchitekt, monospace",
-                "fontSize": "14px"
-              }
-            ],
-            "viewport": {
-              "width": 1800,
-              "height": 1000
-            },
-            "dock": {
-              "x": 40,
-              "y": 942,
-              "width": 34,
-              "height": 34,
-              "bottom": 24,
-              "background": "rgba(0, 0, 0, 0)"
-            },
-            "rowGaps": [
-              28,
-              18,
-              18,
-              18,
-              18
-            ],
-            "accountGap": 46.71875
+          "styles": {
+            "background": "rgb(247, 247, 246)",
+            "text": "rgb(32, 33, 33)"
           },
-          "interactions": {
-            "categoryClickable": true,
-            "searchMovesAssociatedCard": true,
-            "cardClickOpensDetail": true,
-            "detailReturn": true,
-            "detailGeometry": [
-              {
-                "x": 40,
-                "y": 598.265625,
-                "bottom": 619.265625,
-                "text": "Cortana"
-              },
-              {
-                "x": 40,
-                "y": 637.265625,
-                "bottom": 658.265625,
-                "text": "2003 / HALO 4 / preacherman avatar"
-              },
-              {
-                "x": 40,
-                "y": 676.265625,
-                "bottom": 781.265625,
-                "text": "Cortana is from the Halo series. An advanced AI created from Dr. Catherine Halsey's neural architecture, she was initially tasked with system infiltration, intelligence analysis, and tactical support."
-              },
-              {
-                "x": 40,
-                "y": 799.265625,
-                "bottom": 820.265625,
-                "text": "Details"
-              }
-            ]
-          },
-          "accountPreserved": true
+          "guestDockHidden": true,
+          "memberDockHidden": true,
+          "loginFontMatchesNavigation": true,
+          "pkceVerified": true,
+          "cancel": true,
+          "denied": true,
+          "callbackAfterNavigation": true,
+          "restart": true,
+          "signOut": true,
+          "liveCompanion": true
         }
       ],
-      "routes": [],
-      "coldHome": true,
-      "previewLegacyNetwork": [],
+      "errors": [
+        "Hydration completed but contains mismatches."
+      ],
+      "mockedIdentity": true,
+      "profileRequests": 4,
+      "memberNumber": "#00001",
       "newErrors": [],
-      "passed": true,
-      "durationMs": 41870
+      "passed": true
     },
     "routes": [
       {
@@ -670,35 +222,35 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-17T03:32:56.9532039+08:00",
-      "NativePid": 33420,
-      "StartedAt": "2026-09-17T03:32:38.5220064+08:00",
-      "WindowHandle": 1902250,
+      "SampledAt": "2026-09-17T06:01:40.1852303+08:00",
+      "NativePid": 34872,
+      "StartedAt": "2026-09-17T06:01:16.4490598+08:00",
+      "WindowHandle": 2361106,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        33420,
-        9748,
-        19548,
-        15096,
-        36028,
-        30536,
-        19368,
-        36164,
+        34872,
+        28956,
+        21284,
+        38468,
+        34880,
+        38716,
         12636,
-        14556,
-        36312
+        36436,
+        18844,
+        12632,
+        23212
       ],
-      "NormalizedCpuPercent": 5.98,
-      "WorkingSetMiB": 1931.4,
-      "GpuDedicatedBytes": 3231006720.0,
-      "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 16851336,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1829.5,
+      "GpuDedicatedBytes": 3253731328.0,
+      "MaxGpuEngineUtilization": 12.0,
+      "FreeRamKiB": 13438064,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 36164
+          "OwningProcess": 36436
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -706,11 +258,7 @@
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time. Other task services and Codex Computer Use workers preserved."
     },
     "consoleBaselines": [
-      "market-frost-20260916",
-      "market-details-20260916",
-      "task-timeline-dialog-20260915",
-      "market-details-return-20260916",
-      "account-dock-refine-20260917"
+      "gallery-sidebar-spacing-20260917"
     ],
     "newErrors": [],
     "observedErrors": [
@@ -741,14 +289,14 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\gallery-sidebar-spacing-20260917\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\gallery-sidebar-spacing-20260917\\source-tests.log",
-      "D:\\preacherman\\output\\playwright\\gallery-sidebar-spacing-20260917\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\gallery-sidebar-spacing-20260917\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\gallery-sidebar-spacing-20260917\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\gallery-sidebar-spacing-20260917\\native-dark-sidebar.png",
-      "D:\\preacherman\\output\\playwright\\gallery-sidebar-spacing-20260917\\native-light-sidebar.png",
-      "D:\\preacherman\\output\\playwright\\gallery-sidebar-spacing-20260917\\verify.cjs"
+      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\source-checks.json",
+      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\native-dark-account.png",
+      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\native-light-account.png",
+      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\verify-native.cjs"
     ]
   },
   "releaseAttempts": [
@@ -1345,9 +893,18 @@
       "deployedAt": "2026-09-17T03:30:12.0924947+08:00",
       "verifiedAt": "2026-09-17T03:32:56.9532039+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-sidebar-spacing-before-20260917"
+    },
+    {
+      "buildId": "desktop-account-sync-20260917",
+      "sourceCommit": "cdc6df3150b10e25420f636e3feb4174de54131b",
+      "sha256": "1325E4EA889F700E74D6AA4F12FFE8A26D7CA3EB9107B3D89E13BB7DA81195D5",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T05:59:41.5793636+08:00",
+      "verifiedAt": "2026-09-17T06:01:40.1852303+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-sidebar-spacing-before-20260917/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
