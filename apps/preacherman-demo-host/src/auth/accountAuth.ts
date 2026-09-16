@@ -3,6 +3,7 @@ import { invoke, isTauri } from "@tauri-apps/api/core";
 import { getCurrent, onOpenUrl } from "@tauri-apps/plugin-deep-link";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { openLocalSurface } from "../demo/screenRoute";
+import { createProfileController } from "./profileController";
 import { AUTH_STORAGE_KEY, createAccountController } from "./authController";
 
 // Public configuration for the same account service as preachermanai.com.
@@ -56,6 +57,13 @@ export const accountAuth = createAccountController({
   showAccount: () => openLocalSurface("account"), prepareRedirect,
 });
 
+export const accountProfile = createProfileController(accountAuth, async (id, signal) => {
+  const { data, error } = await supabase.from("profiles")
+    .select("display_name, avatar_url, member_number").eq("user_id", id).abortSignal(signal).single();
+  if (error || !data) throw new Error("Account profile unavailable");
+  return data;
+});
+
 // Start independently of the Account surface, so navigation cannot drop a callback.
-export function startAccountAuth() { void accountAuth.start(); }
-if (import.meta.hot) import.meta.hot.dispose(() => accountAuth.dispose());
+export function startAccountAuth() { accountProfile.start(); void accountAuth.start(); }
+if (import.meta.hot) import.meta.hot.dispose(() => { accountProfile.dispose(); accountAuth.dispose(); });

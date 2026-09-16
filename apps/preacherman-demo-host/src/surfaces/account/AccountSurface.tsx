@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { accountAuth } from "../../auth/accountAuth";
+import { accountAuth, accountProfile } from "../../auth/accountAuth";
+import { formatMemberNumber, memberName } from "../../auth/profileController";
 import type { Appearance } from "../../preferences";
 import markDark from "../../assets/preacherman-mark-dark.png";
 import { TaskProfileLens } from "../market/TaskProfileLens";
@@ -11,6 +12,8 @@ import "./account.css";
 
 export function AccountSurface({ appearance }: { appearance: Appearance }) {
   const auth = useSyncExternalStore(accountAuth.subscribe, accountAuth.getSnapshot);
+  const member = useSyncExternalStore(accountProfile.subscribe, accountProfile.getSnapshot);
+  const profile = member.userId === auth.user?.id ? member.profile : null;
   const signingIn = ["restoring", "opening", "waiting", "finishing"].includes(auth.status);
   const panel = useRef<HTMLElement>(null);
   const lensHost = useRef<HTMLDivElement>(null);
@@ -106,10 +109,13 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
           </header>
           {auth.user ? <>
             <dl className="account__identity">
-              <div><dt>Name</dt><dd>{auth.user.user_metadata.full_name || auth.user.user_metadata.user_name || "Preacherman member"}</dd></div>
+              <div><dt>Name</dt><dd>{memberName(auth.user, profile)}</dd></div>
+              <div><dt>Member number</dt><dd>{formatMemberNumber(profile?.member_number) || (member.status === "loading" ? "Loading…" : "—")}</dd></div>
               <div><dt>Email</dt><dd>{auth.user.email || "Not shared"}</dd></div>
               <div><dt>Sign-in method</dt><dd>GitHub</dd></div>
             </dl>
+            {member.status === "error" && <div className="account__auth-status"><p className="account__error" role="alert">Could not load your account details.</p>
+              <button className="account__text-action" type="button" onClick={() => { void accountProfile.retry(); }}>Try again</button></div>}
             <button className="account__continue" type="button" disabled={auth.status === "signing-out"}
               onClick={() => { void accountAuth.signOut(); }}>{auth.status === "signing-out" ? "Signing out…" : "Sign out"}</button>
           </> : <>

@@ -1,6 +1,8 @@
 import { navigationCommand, type SurfaceHostBridge } from "@preacherman/surface-skin";
-import { useEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { type Appearance, type Locale } from "../preferences";
+import { accountAuth, accountProfile } from "../auth/accountAuth";
+import { AccountBadge } from "./AccountBadge";
 import { WindowControls } from "./WindowControls";
 import { WindowResizeHandles } from "./WindowResizeHandles";
 
@@ -38,6 +40,8 @@ export function AppShell({
   sceneHidden = false,
   galleryDetailOpen = false,
 }: AppShellProps) {
+  const auth = useSyncExternalStore(accountAuth.subscribe, accountAuth.getSnapshot);
+  const member = useSyncExternalStore(accountProfile.subscribe, accountProfile.getSnapshot);
   const brandButtonRef = useRef<HTMLButtonElement>(null);
   const [brandNavigationOpen, setBrandNavigationOpen] = useState(false);
   const [scale, setScale] = useState(() => {
@@ -154,12 +158,13 @@ export function AppShell({
               <div className="demo-app-shell__brand-menu-row" key={item.surfaceType} style={{ "--menu-order": index } as CSSProperties}>
                 <button
                   aria-current={activeSurfaceType === item.surfaceType ? "page" : undefined}
-                  className="demo-app-shell__brand-menu-item"
+                  aria-label={item.surfaceType === "account" ? "Account" : undefined}
+                  className={`demo-app-shell__brand-menu-item${item.surfaceType === "account" && auth.user ? " demo-app-shell__brand-menu-item--account" : ""}`}
                   onClick={() => selectBrandDestination(item.surfaceType)}
                   tabIndex={brandNavigationOpen ? 0 : -1}
                   type="button"
                 >
-                  <span className="demo-app-shell__brand-menu-label">{item.label}</span>
+                  <span className="demo-app-shell__brand-menu-label">{item.surfaceType === "account" && auth.user ? <AccountBadge user={auth.user} member={member} /> : item.label}</span>
                   <svg
                     aria-hidden="true"
                     className="demo-app-shell__brand-menu-charge-ring"
@@ -191,6 +196,10 @@ export function AppShell({
         {scene}
       </div>
       <div className="demo-app-shell__screen-content">{children}</div>
+      <button className="demo-account-dock" type="button" aria-label={auth.user ? "Open your account" : "Sign in to Preacherman"}
+        onClick={() => { selectBrandDestination("account"); setBrandNavigationOpen(false); }}>
+        <AccountBadge user={auth.user} member={member} />
+      </button>
       <WindowResizeHandles dispatch={dispatch} />
     </div>
     </div>
