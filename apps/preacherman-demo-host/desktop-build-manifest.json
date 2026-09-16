@@ -10,7 +10,7 @@
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
   "builtAt": "2026-09-16T15:23:32.3405631+08:00",
-  "deployedAt": "2026-09-16T15:35:53.6772880+08:00",
+  "deployedAt": "2026-09-16T15:35:53.677288+08:00",
   "verifiedAt": "2026-09-16T15:44:12.6164618+08:00",
   "sizeBytes": 675372544,
   "sha256": "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
@@ -1084,9 +1084,18 @@
       "sourceCommit": "0dddf0a37640504e8c3b0006a14c4b60db5c588a",
       "sha256": "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-09-16T15:35:53.6772880+08:00",
+      "deployedAt": "2026-09-16T15:35:53.677288+08:00",
       "verifiedAt": "2026-09-16T15:44:12.6164618+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-frost-before-20260916"
+    },
+    {
+      "buildId": "market-details-motion-20260916",
+      "sha256": "73D1CD9BE16D6D643735AD5F9C84639818547882F2655461B7411BC165B41B26",
+      "sourceCommit": "574fc8062e930f87340a9143b8f011b8e10ca1cb",
+      "status": "rolled-back-for-investigation",
+      "reason": "Native core navigation: Gallery rail did not appear after Details interruption tests; all 14 dark Market products passed.",
+      "rolledBackAt": "2026-09-16T16:25:17.2060417+08:00",
+      "evidence": "D:/preacherman/output/playwright/market-details-motion-20260916/native-first-attempt-report.json"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-frost-before-20260916/desktop-build-manifest.json",
