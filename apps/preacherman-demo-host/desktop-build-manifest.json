@@ -1,205 +1,115 @@
 {
   "schemaVersion": 1,
-  "buildId": "account-live-lens-20260916",
+  "buildId": "desktop-github-auth-20260916",
   "productVersion": "0.1.0",
-  "sourceTask": "account-live-companion-profile-lens",
+  "sourceTask": "desktop-github-pkce-sign-in",
   "sourceThread": null,
-  "sourceState": "Account keeps the shared companion animating during profile opening, open and closing. Completed avatar frames refresh the original optical shader; static frost, gradient, logo and crop are cached. Closing stops frame copies and reuses one idle lens instead of destroying its WebGL context. The live/captured handoff has no opacity restart. Resize, appearance changes and unmount release all lens resources. No extra companion renderer; reduced motion still samples live pixels.",
-  "sourceCommit": "f86ea5ddf8334f08f56f438a3fc4f14f7e6dd65a",
+  "sourceState": "Account GitHub button uses the official Supabase PKCE flow in the system browser, scoped opener permissions, temporary nonce-checked loopback callback with strict host/path validation and bounded lifetime; Windows deep-link compatibility remains available. Validates pending callbacks, verifies user identity, restores the SDK session, discards persisted GitHub provider tokens, supports cancellation, timeout, error feedback and local sign-out. Same Supabase project as preachermanai.com; Google/email and account data synchronization remain separate work.",
+  "sourceCommit": "787d6cfd1e1d3e98016895d149ff6c9ace336f7c",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-16T17:33:05.1149440+08:00",
-  "deployedAt": "2026-09-16T17:33:54.8756373+08:00",
-  "verifiedAt": "2026-09-16T17:36:58.5368542+08:00",
-  "sizeBytes": 675373056,
-  "sha256": "F3C56316E9B6C0A0785064932E9EEC2A5A627A65FE1A2DBD16E2EFEDB2D374E7",
+  "builtAt": "2026-09-17T00:31:08.7979511+08:00",
+  "deployedAt": "2026-09-17T00:32:20.6759373+08:00",
+  "verifiedAt": "2026-09-17T00:44:20.0866941+08:00",
+  "sizeBytes": 676089344,
+  "sha256": "26EFE66F4E0E488892F30E3BD13392CFB034760B5AD9E1DD355695D0BBDE9A07",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916/preacherman-demo-host.exe",
-  "backupSha256": "A9FE16EB1289C49E11293CE2E2B1BE1695EC432A6C97B4F51F1AAD5D6CC46ACF",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-github-auth-before-20260916/preacherman-demo-host.exe",
+  "backupSha256": "F3C56316E9B6C0A0785064932E9EEC2A5A627A65FE1A2DBD16E2EFEDB2D374E7",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-github-auth-before-20260916/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "ba681df1f9fc05083cd84ed41925abf28e191a80",
-  "previousVerificationCommit": "ba681df1f9fc05083cd84ed41925abf28e191a80",
+  "rollbackBaselineCommit": "00b908ea653d0493c7cc844ffc2779d073a73d4e",
+  "previousVerificationCommit": "00b908ea653d0493c7cc844ffc2779d073a73d4e",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "16 focused live compositor, theme, lens continuity, reduced-motion, visibility and resource lifecycle tests passed."
+      "tests": "17 focused auth controller, appearance and live companion tests plus 3 native callback validation tests passed."
     },
-    "nativeFlow": "Cold canonical shortcut launch into normal Home. Account live avatar pixels verified independently of shader movement; four close/reopen cycles in both appearances, uninterrupted shared renderer, reused lens context and measured frame timing. Interrupted toggles, reduced motion, login controls and navigation while open checked. Market list and Details logo lens, reverse Details return, Home, Task, Gallery, Market/Ledger, Account and Settings verified. Original preferences restored and final normal shortcut restart without debug port.",
-    "accountLens": [
+    "nativeFlow": "Cold canonical shortcut launch into normal Home; local avatar ready. Account controls and live companion lens, Market lens/Details return and all core navigation verified in both themes. Original preferences restored. Final normal shortcut restart without debug port.",
+    "githubAuth": {
+      "realGitHubRoundTrip": true,
+      "restartRestored": true,
+      "localSignOut": true,
+      "signedInAgain": true,
+      "providerTokensPersisted": false,
+      "sharedSupabaseProject": "gzqmjzybaosxhkfgbxaz",
+      "transport": "temporary nonce-checked 127.0.0.1 callback with PKCE",
+      "nativeModes": [
+        {
+          "appearance": "dark",
+          "serverVerifiedIdentity": true,
+          "style": {
+            "background": "rgb(0, 0, 0)",
+            "text": "rgb(237, 237, 237)"
+          }
+        },
+        {
+          "appearance": "light",
+          "serverVerifiedIdentity": true,
+          "style": {
+            "background": "rgb(247, 247, 246)",
+            "text": "rgb(32, 33, 33)"
+          }
+        }
+      ],
+      "newErrors": [],
+      "checkedAt": "2026-09-16T16:43:26.894Z",
+      "cloudDataSynchronization": "not part of this login change"
+    },
+    "nativeLoopbackVerification": {
+      "modes": [
+        {
+          "appearance": "dark",
+          "wrongNonceRejected": true,
+          "staleStopIgnored": true,
+          "returnPage": true,
+          "listenerClosed": true,
+          "errors": []
+        },
+        {
+          "appearance": "light",
+          "wrongNonceRejected": true,
+          "staleStopIgnored": true,
+          "returnPage": true,
+          "listenerClosed": true,
+          "errors": []
+        }
+      ],
+      "passed": true
+    },
+    "sdkMockVerification": [
       {
         "appearance": "dark",
-        "samples": [
-          {
-            "t": 22751.700000001118,
-            "hash": 1170383764,
-            "phase": "open"
-          },
-          {
-            "t": 23106.099999999627,
-            "hash": 474574730,
-            "phase": "open"
-          },
-          {
-            "t": 23460.099999999627,
-            "hash": -1019049739,
-            "phase": "open"
-          },
-          {
-            "t": 23810.200000001118,
-            "hash": 1964085368,
-            "phase": "open"
-          },
-          {
-            "t": 24164.400000000373,
-            "hash": 608459485,
-            "phase": "open"
-          },
-          {
-            "t": 24518.599999999627,
-            "hash": -1089410737,
-            "phase": "open"
-          }
-        ],
-        "cycles": [
-          {
-            "count": 263,
-            "p95": 4.299999999999272,
-            "max": 4.30000000000291,
-            "live": true,
-            "copies": 1063,
-            "reused": true,
-            "visibility": "hidden",
-            "sceneOpacity": "1"
-          },
-          {
-            "count": 257,
-            "p95": 4.299999999999272,
-            "max": 4.400000000001455,
-            "live": true,
-            "copies": 1545,
-            "reused": true,
-            "visibility": "hidden",
-            "sceneOpacity": "1"
-          },
-          {
-            "count": 263,
-            "p95": 4.299999999999272,
-            "max": 4.30000000000291,
-            "live": true,
-            "copies": 2025,
-            "reused": true,
-            "visibility": "hidden",
-            "sceneOpacity": "1"
-          },
-          {
-            "count": 259,
-            "p95": 4.200000000004366,
-            "max": 4.400000000001455,
-            "live": true,
-            "copies": 2504,
-            "reused": true,
-            "visibility": "hidden",
-            "sceneOpacity": "1"
-          }
-        ],
-        "reducedLiveCopies": 193,
         "styles": {
           "background": "rgb(0, 0, 0)",
           "text": "rgb(237, 237, 237)"
-        }
+        },
+        "pkceVerified": true,
+        "cancel": true,
+        "denied": true,
+        "callbackAfterNavigation": true,
+        "restart": true,
+        "signOut": true,
+        "liveCompanion": true
       },
       {
         "appearance": "light",
-        "samples": [
-          {
-            "t": 9758.800000000745,
-            "hash": -358383268,
-            "phase": "open"
-          },
-          {
-            "t": 10108.900000000373,
-            "hash": 537516940,
-            "phase": "open"
-          },
-          {
-            "t": 10459.199999999255,
-            "hash": -1114060219,
-            "phase": "open"
-          },
-          {
-            "t": 10813.099999999627,
-            "hash": -638270137,
-            "phase": "open"
-          },
-          {
-            "t": 11163.400000000373,
-            "hash": -1848185727,
-            "phase": "open"
-          },
-          {
-            "t": 11517.300000000745,
-            "hash": -1727281682,
-            "phase": "open"
-          },
-          {
-            "t": 11867.5,
-            "hash": -54428806,
-            "phase": "open"
-          }
-        ],
-        "cycles": [
-          {
-            "count": 262,
-            "p95": 4.299999999999272,
-            "max": 4.300000000001091,
-            "live": true,
-            "copies": 1072,
-            "reused": true,
-            "visibility": "hidden",
-            "sceneOpacity": "1"
-          },
-          {
-            "count": 259,
-            "p95": 4.299999999999272,
-            "max": 4.300000000001091,
-            "live": true,
-            "copies": 1550,
-            "reused": true,
-            "visibility": "hidden",
-            "sceneOpacity": "1"
-          },
-          {
-            "count": 263,
-            "p95": 4.299999999999272,
-            "max": 4.30000000000291,
-            "live": true,
-            "copies": 2031,
-            "reused": true,
-            "visibility": "hidden",
-            "sceneOpacity": "1"
-          },
-          {
-            "count": 260,
-            "p95": 4.299999999999272,
-            "max": 4.30000000000291,
-            "live": true,
-            "copies": 2509,
-            "reused": true,
-            "visibility": "hidden",
-            "sceneOpacity": "1"
-          }
-        ],
-        "reducedLiveCopies": 195,
         "styles": {
           "background": "rgb(247, 247, 246)",
           "text": "rgb(32, 33, 33)"
-        }
+        },
+        "pkceVerified": true,
+        "cancel": true,
+        "denied": true,
+        "callbackAfterNavigation": true,
+        "restart": true,
+        "signOut": true,
+        "liveCompanion": true
       }
     ],
     "routes": [
@@ -253,35 +163,35 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-16T17:36:58.5368542+08:00",
-      "NativePid": 27964,
-      "StartedAt": "2026-09-16T17:36:41.4678875+08:00",
-      "WindowHandle": 1312500,
+      "SampledAt": "2026-09-17T00:44:20.0866941+08:00",
+      "NativePid": 33672,
+      "StartedAt": "2026-09-17T00:43:57.1340333+08:00",
+      "WindowHandle": 20317976,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        27964,
-        27928,
-        16304,
-        12868,
-        28100,
-        31684,
-        23520,
-        14316,
-        11096,
-        31640,
-        9608
+        33672,
+        29484,
+        34084,
+        23960,
+        33060,
+        7140,
+        484,
+        34336,
+        14748,
+        26240,
+        19712
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1935.6,
-      "GpuDedicatedBytes": 3179900928.0,
+      "WorkingSetMiB": 1923.1,
+      "GpuDedicatedBytes": 3249872896.0,
       "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 17312268,
+      "FreeRamKiB": 16375032,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 14316
+          "OwningProcess": 34336
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -312,7 +222,7 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
       "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
       "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
@@ -323,20 +233,19 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\source-tests.log",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\typecheck.log",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-dark-account-closed.png",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-light-account-closed.png",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-dark-account-open-a.png",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-dark-account-open-b.png",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-light-account-open-a.png",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-light-account-open-b.png",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-dark-market-lens.png",
-      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-light-market-lens.png"
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\loopback-report.json",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\native-unit-tests.log",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\source-tests.log",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\typecheck.log",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\live-auth-summary.json",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\preview-dark-signed-in.png",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\preview-light-signed-in.png",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\native-dark-account-closed.png",
+      "D:\\preacherman\\output\\playwright\\desktop-github-auth-20260916\\native-light-account-closed.png"
     ]
   },
   "releaseAttempts": [
@@ -897,9 +806,18 @@
       "deployedAt": "2026-09-16T17:33:54.8756373+08:00",
       "verifiedAt": "2026-09-16T17:36:58.5368542+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916"
+    },
+    {
+      "buildId": "desktop-github-auth-20260916",
+      "sourceCommit": "787d6cfd1e1d3e98016895d149ff6c9ace336f7c",
+      "sha256": "26EFE66F4E0E488892F30E3BD13392CFB034760B5AD9E1DD355695D0BBDE9A07",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T00:32:20.6759373+08:00",
+      "verifiedAt": "2026-09-17T00:44:20.0866941+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-github-auth-before-20260916"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-github-auth-before-20260916/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",

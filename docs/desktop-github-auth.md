@@ -5,16 +5,17 @@ Preacherman Desktop uses the same Supabase project as `https://preachermanai.com
 can remain the website URL. Its authorization callback must remain
 `https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/callback`.
 
-Supabase's redirect allowlist additionally needs exactly
-`preacherman://auth/callback`. This is the native desktop return address, not a
-website or a replacement for GitHub's HTTPS callback. New users also require
-Supabase's user signup switch to be enabled.
+Supabase's redirect allowlist needs `http://127.0.0.1:43821/auth/callback**` for
+the temporary desktop return listener and keeps `preacherman://auth/callback`
+for deep-link compatibility. Neither replaces GitHub's HTTPS provider callback.
+New users also require Supabase's user signup switch to be enabled.
 
 ## Implementation
 
 - Account's existing GitHub button starts the official Supabase PKCE flow in the
   system browser. No repository scopes are requested.
-- Tauri registers the `preacherman` protocol for its current executable. The
+- New browser attempts return through a temporary loopback listener (below).
+  Tauri also registers the `preacherman` protocol for its current executable. The
   single-instance plugin forwards the callback to the already-running window and
   brings it forward. Both cold-start and running-window callbacks are supported.
 - The controller initializes independently of the Account page. It validates the
