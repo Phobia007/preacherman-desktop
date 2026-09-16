@@ -1,35 +1,35 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-details-20260916",
+  "buildId": "market-frost-20260916",
   "productVersion": "0.1.0",
-  "sourceTask": "market-character-details-four-views",
+  "sourceTask": "market-fullscreen-translucent-frost-and-header",
   "sourceThread": null,
-  "sourceState": "Every Market Details link opens its own character in an isolated high-quality model viewport. Front, Side, Back and Zoom In preserve the donor typeface. The shared Preacherman logo lens, persistent frosted backdrop and long upper-left return arrow replace the legacy bracelet scene, intro and header. Original lower configurator controls remain for the next requested iteration. Market scroll/focus and active companion identity are preserved.",
-  "sourceCommit": "1aa80c1c5d1eded871da26c5587aa6b2ae8aa7b7",
+  "sourceState": "Market Details uses the same 12px blur and translucent 12% tint as focused Settings across the full desktop. The persistent companion keeps its original model, camera and action; the selected Details avatar uses the original full-window framing. View controls and back arrow are raised. The listing iframe now scrolls beneath a fixed translucent header, retaining the 100px initial content offset and shared logo lens.",
+  "sourceCommit": "0dddf0a37640504e8c3b0006a14c4b60db5c588a",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-16T14:53:09.0647180+08:00",
-  "deployedAt": "2026-09-16T14:54:05.5913739+08:00",
-  "verifiedAt": "2026-09-16T15:01:57.3324906+08:00",
+  "builtAt": "2026-09-16T15:23:32.3405631+08:00",
+  "deployedAt": "2026-09-16T15:35:53.6772880+08:00",
+  "verifiedAt": "2026-09-16T15:44:12.6164618+08:00",
   "sizeBytes": 675372544,
-  "sha256": "E173FF9D9E2E308924D613BC46A99E1510418575D2A3D13C57B1E18BC5BDA784",
+  "sha256": "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-before-20260916/preacherman-demo-host.exe",
-  "backupSha256": "08116D516F57D87DAD27EE5441B29989E62C4F9EE41E9D7616422D650CE02DCE",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-before-20260916/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-frost-before-20260916/preacherman-demo-host.exe",
+  "backupSha256": "E173FF9D9E2E308924D613BC46A99E1510418575D2A3D13C57B1E18BC5BDA784",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-frost-before-20260916/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "418f4f0c2a5753a64ec67cf48c53d1731690757f",
-  "previousVerificationCommit": "418f4f0c2a5753a64ec67cf48c53d1731690757f",
+  "rollbackBaselineCommit": "735f1146e6ef8530079958d9483f56d207ddd885",
+  "previousVerificationCommit": "735f1146e6ef8530079958d9483f56d207ddd885",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
       "tests": "24 focused Market identity, bridge, import, entrance, theme and lens tests passed.",
-      "scope": "14 characters across both appearances, each of four views, logo lens, retained lower controls, return focus and scroll, native core navigation."
+      "scope": "14 characters across both appearances; full-window viewport and frost dimensions, 12px scene blur, raised controls, transparent header scrolling, all four views, logo lens, retained lower controls, return focus/scroll, native core navigation."
     },
     "nativeFlow": "Cold launch through canonical shortcut into normal Home. Both appearances: all 14 products opened using alternating mouse and Enter, every view selected, model capture and shared lens verified, lower controls retained, arrow and Escape returned to unchanged scroll/focus. Earlier product reopened to verify identity and camera reset. Active companion preference unchanged. Home, Task, Gallery, Market/Ledger, Account and Settings visually checked. Preferences restored and final normal shortcut restart without debug port.",
     "marketDetails": [
@@ -38,8 +38,8 @@
         "rows": [
           {
             "id": "cortana",
-            "readyMs": 1091,
-            "returnMs": 36,
+            "readyMs": 1075,
+            "returnMs": 45,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -51,8 +51,8 @@
           },
           {
             "id": "zima",
-            "readyMs": 914,
-            "returnMs": 10,
+            "readyMs": 476,
+            "returnMs": 19,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -64,8 +64,8 @@
           },
           {
             "id": "jubilee-midnight-mutant",
-            "readyMs": 1484,
-            "returnMs": 25,
+            "readyMs": 1014,
+            "returnMs": 27,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -77,8 +77,8 @@
           },
           {
             "id": "halo-mk-v-model",
-            "readyMs": 926,
-            "returnMs": 27,
+            "readyMs": 963,
+            "returnMs": 30,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -90,8 +90,8 @@
           },
           {
             "id": "kitana-mk11-in-mk9-suit",
-            "readyMs": 956,
-            "returnMs": 21,
+            "readyMs": 1035,
+            "returnMs": 30,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -103,8 +103,8 @@
           },
           {
             "id": "punk-magik",
-            "readyMs": 953,
-            "returnMs": 23,
+            "readyMs": 1015,
+            "returnMs": 50,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -116,8 +116,8 @@
           },
           {
             "id": "clove-t-pose",
-            "readyMs": 983,
-            "returnMs": 25,
+            "readyMs": 522,
+            "returnMs": 46,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -129,8 +129,8 @@
           },
           {
             "id": "nier-automata-2b",
-            "readyMs": 951,
-            "returnMs": 27,
+            "readyMs": 1001,
+            "returnMs": 34,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -142,8 +142,8 @@
           },
           {
             "id": "stellar-blade-lily-stargazer-coat",
-            "readyMs": 1931,
-            "returnMs": 35,
+            "readyMs": 966,
+            "returnMs": 30,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -155,8 +155,8 @@
           },
           {
             "id": "iron-man-mark-85",
-            "readyMs": 937,
-            "returnMs": 23,
+            "readyMs": 922,
+            "returnMs": 33,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -168,7 +168,7 @@
           },
           {
             "id": "the-twins-atomic-heart",
-            "readyMs": 1552,
+            "readyMs": 1568,
             "returnMs": 24,
             "views": 4,
             "scrollRestored": true,
@@ -181,8 +181,8 @@
           },
           {
             "id": "spartan-armour-mkv-halo-reach",
-            "readyMs": 1606,
-            "returnMs": 27,
+            "readyMs": 1543,
+            "returnMs": 31,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -194,8 +194,8 @@
           },
           {
             "id": "halloween-the-game-michael-myers-samhain",
-            "readyMs": 1456,
-            "returnMs": 25,
+            "readyMs": 1534,
+            "returnMs": 40,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -207,8 +207,8 @@
           },
           {
             "id": "apex-legend-pathfinder",
-            "readyMs": 964,
-            "returnMs": 31,
+            "readyMs": 1060,
+            "returnMs": 36,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -227,8 +227,8 @@
         "rows": [
           {
             "id": "cortana",
-            "readyMs": 942,
-            "returnMs": 33,
+            "readyMs": 1009,
+            "returnMs": 37,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -240,8 +240,8 @@
           },
           {
             "id": "zima",
-            "readyMs": 421,
-            "returnMs": 9,
+            "readyMs": 485,
+            "returnMs": 20,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -253,59 +253,7 @@
           },
           {
             "id": "jubilee-midnight-mutant",
-            "readyMs": 960,
-            "returnMs": 26,
-            "views": 4,
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "halo-mk-v-model",
-            "readyMs": 913,
-            "returnMs": 24,
-            "views": 4,
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "kitana-mk11-in-mk9-suit",
-            "readyMs": 981,
-            "returnMs": 25,
-            "views": 4,
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "punk-magik",
-            "readyMs": 931,
-            "returnMs": 26,
-            "views": 4,
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "clove-t-pose",
-            "readyMs": 352,
+            "readyMs": 1035,
             "returnMs": 27,
             "views": 4,
             "scrollRestored": true,
@@ -317,8 +265,60 @@
             }
           },
           {
+            "id": "halo-mk-v-model",
+            "readyMs": 940,
+            "returnMs": 27,
+            "views": 4,
+            "scrollRestored": true,
+            "activeCompanionUnchanged": true,
+            "nav": {
+              "font": "\"Market Brilliant Cut\", sans-serif",
+              "size": "9px",
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          {
+            "id": "kitana-mk11-in-mk9-suit",
+            "readyMs": 1035,
+            "returnMs": 30,
+            "views": 4,
+            "scrollRestored": true,
+            "activeCompanionUnchanged": true,
+            "nav": {
+              "font": "\"Market Brilliant Cut\", sans-serif",
+              "size": "9px",
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          {
+            "id": "punk-magik",
+            "readyMs": 1009,
+            "returnMs": 32,
+            "views": 4,
+            "scrollRestored": true,
+            "activeCompanionUnchanged": true,
+            "nav": {
+              "font": "\"Market Brilliant Cut\", sans-serif",
+              "size": "9px",
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          {
+            "id": "clove-t-pose",
+            "readyMs": 513,
+            "returnMs": 31,
+            "views": 4,
+            "scrollRestored": true,
+            "activeCompanionUnchanged": true,
+            "nav": {
+              "font": "\"Market Brilliant Cut\", sans-serif",
+              "size": "9px",
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          {
             "id": "nier-automata-2b",
-            "readyMs": 959,
+            "readyMs": 1046,
             "returnMs": 28,
             "views": 4,
             "scrollRestored": true,
@@ -331,59 +331,7 @@
           },
           {
             "id": "stellar-blade-lily-stargazer-coat",
-            "readyMs": 989,
-            "returnMs": 28,
-            "views": 4,
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "iron-man-mark-85",
-            "readyMs": 397,
-            "returnMs": 24,
-            "views": 4,
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "the-twins-atomic-heart",
-            "readyMs": 867,
-            "returnMs": 23,
-            "views": 4,
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "spartan-armour-mkv-halo-reach",
-            "readyMs": 872,
-            "returnMs": 23,
-            "views": 4,
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "halloween-the-game-michael-myers-samhain",
-            "readyMs": 1505,
+            "readyMs": 997,
             "returnMs": 26,
             "views": 4,
             "scrollRestored": true,
@@ -395,9 +343,61 @@
             }
           },
           {
+            "id": "iron-man-mark-85",
+            "readyMs": 924,
+            "returnMs": 30,
+            "views": 4,
+            "scrollRestored": true,
+            "activeCompanionUnchanged": true,
+            "nav": {
+              "font": "\"Market Brilliant Cut\", sans-serif",
+              "size": "9px",
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          {
+            "id": "the-twins-atomic-heart",
+            "readyMs": 1539,
+            "returnMs": 39,
+            "views": 4,
+            "scrollRestored": true,
+            "activeCompanionUnchanged": true,
+            "nav": {
+              "font": "\"Market Brilliant Cut\", sans-serif",
+              "size": "9px",
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          {
+            "id": "spartan-armour-mkv-halo-reach",
+            "readyMs": 1536,
+            "returnMs": 27,
+            "views": 4,
+            "scrollRestored": true,
+            "activeCompanionUnchanged": true,
+            "nav": {
+              "font": "\"Market Brilliant Cut\", sans-serif",
+              "size": "9px",
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          {
+            "id": "halloween-the-game-michael-myers-samhain",
+            "readyMs": 1664,
+            "returnMs": 35,
+            "views": 4,
+            "scrollRestored": true,
+            "activeCompanionUnchanged": true,
+            "nav": {
+              "font": "\"Market Brilliant Cut\", sans-serif",
+              "size": "9px",
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          {
             "id": "apex-legend-pathfinder",
-            "readyMs": 964,
-            "returnMs": 22,
+            "readyMs": 934,
+            "returnMs": 28,
             "views": 4,
             "scrollRestored": true,
             "activeCompanionUnchanged": true,
@@ -462,58 +462,63 @@
         "appearance": "light"
       }
     ],
-    "taskContentFollowup": {
+    "taskMotionSupplement": {
       "modes": [
         {
-          "appearance": "dark",
-          "readyMs": 2692,
-          "titles": 7
+          "appearance": "light",
+          "task": true,
+          "allOpened": true
         },
         {
-          "appearance": "light",
-          "readyMs": 3308,
-          "titles": 7
+          "appearance": "dark",
+          "task": true,
+          "allOpened": true
         }
       ],
+      "errors": [],
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-09-16T15:01:57.3324906+08:00",
-      "NativePid": 30296,
-      "StartedAt": "2026-09-16T15:01:39.8890383+08:00",
-      "WindowHandle": 591506,
+      "SampledAt": "2026-09-16T15:44:12.6164618+08:00",
+      "NativePid": 7752,
+      "StartedAt": "2026-09-16T15:43:49.7848066+08:00",
+      "WindowHandle": 788206,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        30296,
-        23584,
-        31864,
-        10536,
-        12036,
-        31248,
-        7076,
-        27320,
-        7104,
-        27244,
-        18520
+        7752,
+        29648,
+        31956,
+        17464,
+        18164,
+        352,
+        32612,
+        30808,
+        26464,
+        9112,
+        8916
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1906.9,
-      "GpuDedicatedBytes": 3222032384.0,
+      "WorkingSetMiB": 1911.5,
+      "GpuDedicatedBytes": 3248930816.0,
       "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 17338864,
+      "FreeRamKiB": 16902708,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 27320
+          "OwningProcess": 30808
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
       "ShortcutArguments": "",
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time. Other task services and Codex Computer Use workers preserved."
     },
-    "consoleBaseline": "D:/preacherman/output/playwright/task-timeline-dialog-20260915/native-report.json",
+    "consoleBaseline": "D:/preacherman/output/playwright/market-details-20260916/native-report.json",
+    "consoleBaselines": [
+      "market-details-20260916",
+      "task-timeline-dialog-20260915"
+    ],
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -543,17 +548,21 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
     "braceletRequests": [],
+    "verificationNotes": "An initial automation run timed out after reloading an internal Settings route to change appearance. The verified pair was restored and the candidate preserved before comparison. Final checks use the normal root startup entry for each appearance and passed all 28 product visits. A supplemental Task check waits for authored motion, verifies All navigation in both appearances, and updates its screenshots. No application source changes or rebuilds were made to bypass these checks.",
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\source-tests.log",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\typecheck.log",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\native-dark-01-front.png",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\native-light-01-front.png",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\native-dark-logo-open.png",
-      "D:\\preacherman\\output\\playwright\\market-details-20260916\\native-light-14-front.png"
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\source-tests.log",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\typecheck.log",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-dark-01-front.png",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-light-01-front.png",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-dark-glass-only.png",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-light-glass-only.png",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-dark-header-scrolled.png",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-light-header-scrolled.png",
+      "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-dark-logo-open.png"
     ]
   },
   "releaseAttempts": [
@@ -1069,9 +1078,18 @@
       "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
       "evidence": "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-reload-investigation-report.json",
       "baselineComparison": "D:\\preacherman\\output\\playwright\\market-frost-20260916\\reload-comparison.json"
+    },
+    {
+      "buildId": "market-frost-20260916",
+      "sourceCommit": "0dddf0a37640504e8c3b0006a14c4b60db5c588a",
+      "sha256": "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T15:35:53.6772880+08:00",
+      "verifiedAt": "2026-09-16T15:44:12.6164618+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-frost-before-20260916"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-before-20260916/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-frost-before-20260916/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
