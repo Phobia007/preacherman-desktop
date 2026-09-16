@@ -21,19 +21,32 @@ export function MarketSurface() {
   const openingModel = useRef<ModelId | null>(null);
   const [detailsPhase, setDetailsPhase] = useState<MarketDetailsPhase>("idle");
   const detailsRef = useRef<HTMLElement>(null);
-  const page = selectedModel && detailsPhase !== "exiting" ? "details" : "intro";
+  const detailsPhaseRef = useRef(detailsPhase);
+  detailsPhaseRef.current = detailsPhase;
+  const page = selectedModel && detailsPhase !== "exiting" && detailsPhase !== "returning" ? "details" : "intro";
   const [profileOpen, setProfileOpen] = useState(false);
   const [lensActive, setLensActive] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
-  const closeDetails = useCallback(() => {
+  const finishDetailsClose = useCallback(() => {
     openingModel.current = null;
     setDetailsPhase("idle");
     setSelectedModel(null); setProfileOpen(false); setLensActive(false);
     requestAnimationFrame(() => frameRef.current?.contentDocument?.querySelector<HTMLElement>("[data-market-return-focus]")?.focus({ preventScroll: true }));
   }, []);
-  const showDetailsContent = useCallback(() => setDetailsPhase(current => current === "model" ? "content" : current), []);
-  const finishDetailsEntrance = useCallback(() => setDetailsPhase(current => current === "content" ? "complete" : current), []);
+  const closeDetails = useCallback(() => {
+    const phase = detailsPhaseRef.current;
+    if (["hide-content", "hide-model", "unfrost", "returning"].includes(phase)) return;
+    if (phase === "complete") setDetailsPhase("hide-content");
+    else finishDetailsClose(); // Escape can still cancel an unfinished entrance.
+  }, [finishDetailsClose]);
+  const advanceDetailsReveal = useCallback(() => setDetailsPhase(current => {
+    if (current === "model") return "content";
+    if (current === "content") return "complete";
+    if (current === "hide-content") return "hide-model";
+    if (current === "hide-model") return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "returning" : "unfrost";
+    return current;
+  }), []);
   const captureDetails = useCallback((signal: AbortSignal) => {
     if (!detailsRef.current) return Promise.reject(new Error("Details are not ready."));
     return captureMarketDetails(detailsRef.current, signal);
@@ -56,6 +69,18 @@ export function MarketSurface() {
     }).catch(() => { /* Closing or leaving Market cancels the complete sequence. */ });
     return () => { disposed = true; motion.cancel(); };
   }, [selectedModel]);
+
+  useEffect(() => {
+    if (detailsPhase !== "returning") return;
+    const doc = frameRef.current?.contentDocument;
+    if (!doc) return;
+    let disposed = false;
+    // The exit animation still holds the columns offscreen until this return finishes.
+    const motion = animateMarketPanels(doc, window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    void motion.finished.then(() => { if (!disposed) finishDetailsClose(); })
+      .catch(() => { /* Route changes cancel the return without restoring stale focus. */ });
+    return () => { disposed = true; motion.cancel(); };
+  }, [detailsPhase, finishDetailsClose]);
 
   useEffect(() => {
     let disposed = false;
@@ -140,14 +165,14 @@ export function MarketSurface() {
   return (
     <section ref={surfaceRef} aria-label="Market" className="market-surface" data-entrance={entrance} data-logo-ready={logoReady} data-status={status} data-page={page} data-details-phase={detailsPhase} data-lens-active={lensActive}
       onAnimationEnd={event => {
-        if (event.target === event.currentTarget && event.animationName === "market-details-frost-in") {
-          setDetailsPhase(current => current === "frost" ? "model" : current);
-        }
+        if (event.target !== event.currentTarget) return;
+        if (event.animationName === "market-details-frost-in") setDetailsPhase(current => current === "frost" ? "model" : current);
+        if (event.animationName === "market-details-frost-out") setDetailsPhase(current => current === "unfrost" ? "returning" : current);
       }}>
       <MarketProfile key={`profile-${selectedModel ?? "intro"}`} disabled={entrance !== "complete" || Boolean(selectedModel && detailsPhase !== "complete")} open={profileOpen} onOpenChange={setProfileOpen}
         frameRef={frameRef} captureSource={selectedModel ? captureDetails : undefined} onLensActiveChange={setLensActive} />
       {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}
-        phase={detailsPhase} onModelVisible={showDetailsContent} onEntranceComplete={finishDetailsEntrance} />}
+        phase={detailsPhase} onRevealComplete={advanceDetailsReveal} />}
       <iframe
         className="market-surface__frame"
         key={attempt}

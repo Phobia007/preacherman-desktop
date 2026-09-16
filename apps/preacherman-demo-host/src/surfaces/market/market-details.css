@@ -19,6 +19,10 @@
   filter: blur(12px);
   animation: market-details-scene-blur 320ms ease-out both;
 }
+.market-surface[data-details-phase="unfrost"]::after { animation: market-details-frost-out 320ms ease-in both; }
+.demo-app-shell:has(.market-surface[data-details-phase="unfrost"]) .demo-app-shell__scene { animation: market-details-scene-unblur 320ms ease-in both; }
+@keyframes market-details-frost-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes market-details-scene-unblur { from { filter: blur(12px); } to { filter: blur(0); } }
 @keyframes market-details-frost-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes market-details-scene-blur { from { filter: blur(0); } to { filter: blur(12px); } }
 .market-details__views {
@@ -44,9 +48,9 @@
 .market-details__views, .market-details__back, .market-details__options { opacity: 0; }
 .market-details:not([data-reveal="complete"]) { pointer-events: none; }
 .market-details__views, .market-details__back, .market-details__options { visibility: hidden; }
-.market-details:is([data-reveal="content"], [data-reveal="complete"]) .market-details__model { opacity: 1; }
-.market-details:is([data-reveal="content"], [data-reveal="complete"]) :is(.market-details__views, .market-details__back, .market-details__options) { visibility: visible; }
-.market-details[data-reveal="complete"] :is(.market-details__views, .market-details__back, .market-details__options) { opacity: 1; }
+.market-details:is([data-reveal="content"], [data-reveal="complete"], [data-reveal="hide-content"], [data-reveal="hide-model"]) .market-details__model { opacity: 1; }
+.market-details:is([data-reveal="content"], [data-reveal="complete"], [data-reveal="hide-content"]) :is(.market-details__views, .market-details__back, .market-details__options) { visibility: visible; }
+.market-details:is([data-reveal="complete"], [data-reveal="hide-content"]) :is(.market-details__views, .market-details__back, .market-details__options) { opacity: 1; }
 .market-details__options { position: absolute; bottom: 16px; left: 0; width: 100%; height: 224px; border: 0; background: transparent; }
 .market-details__status { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; color: var(--demo-theme-market-loading); font: 600 12px/20px "Market Brilliant Cut", sans-serif; }
 .market-details__status[role="alert"] { color: var(--demo-theme-market-error); }

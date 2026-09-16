@@ -24,14 +24,13 @@ function DetailsSceneCapture() {
 }
 
 /** The selected product owns this viewport. It never writes the active companion preference. */
-export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, onModelVisible, onEntranceComplete }: {
+export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, onRevealComplete }: {
   modelId: ModelId;
   panelRef: RefObject<HTMLElement>;
   lensActive: boolean;
   onClose: () => void;
   phase: MarketDetailsPhase;
-  onModelVisible: () => void;
-  onEntranceComplete: () => void;
+  onRevealComplete: () => void;
 }) {
   const [view, setView] = useState<MarketView>("Front");
   const [rotation, setRotation] = useState(0);
@@ -43,15 +42,16 @@ export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, o
   const failed = useCallback(() => setStatus("error"), []);
 
   useEffect(() => {
-    if (!panelRef.current || (phase !== "model" && phase !== "content")) return;
+    if (!panelRef.current || !["model", "content", "hide-content", "hide-model"].includes(phase)) return;
     if (phase === "model" && status === "loading") return;
     let disposed = false;
-    const motion = revealMarketDetails(panelRef.current, phase, matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const part = phase === "content" || phase === "hide-content" ? "content" : "model";
+    const motion = revealMarketDetails(panelRef.current, part, matchMedia("(prefers-reduced-motion: reduce)").matches, phase.startsWith("hide-") ? "out" : "in");
     void motion.finished.then(() => {
-      if (!disposed) (phase === "model" ? onModelVisible : onEntranceComplete)();
+      if (!disposed) onRevealComplete();
     }).catch(() => { /* Interrupted entrance must never reveal a stale product. */ });
     return () => { disposed = true; motion.cancel(); };
-  }, [phase, status, panelRef, onModelVisible, onEntranceComplete]);
+  }, [phase, status, panelRef, onRevealComplete]);
 
   useEffect(() => { panelRef.current?.focus({ preventScroll: true }); }, [panelRef]);
   useEffect(() => {
@@ -103,7 +103,7 @@ export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, o
         <svg width="68" height="24" viewBox="0 0 68 24" fill="none" aria-hidden="true"><path d="M66 12H3M12 3L3 12L12 21" stroke="currentColor" strokeWidth="1.25" /></svg>
       </button>
       <div className="market-details__model">
-        {phase !== "exiting" && <InteractiveAvatarViewport key={attempt} modelId={modelId} assetBaseUrl={localAvatarAssetBaseUrl(modelId)}
+        {!["exiting", "unfrost", "returning"].includes(phase) && <InteractiveAvatarViewport key={attempt} modelId={modelId} assetBaseUrl={localAvatarAssetBaseUrl(modelId)}
           actionId={avatarDefaultActionId(modelId)} quality="high" pose="standby" environment="cinematic" isolateCompanion
           cameraFraming={view === "Zoom In" ? "portrait" : "full-body"} rotationOffsetY={rotation}
           renderActive={!lensActive} onReady={ready} onError={failed} sceneContent={<DetailsSceneCapture />} />}

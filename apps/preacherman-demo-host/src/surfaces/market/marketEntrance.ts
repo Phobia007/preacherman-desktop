@@ -30,17 +30,17 @@ export function animateMarketPanels(doc: Document, reducedMotion: boolean, direc
   };
 }
 
-export type MarketDetailsPhase = "idle" | "exiting" | "frost" | "model" | "content" | "complete";
+export type MarketDetailsPhase = "idle" | "exiting" | "frost" | "model" | "content" | "complete" | "hide-content" | "hide-model" | "unfrost" | "returning";
 export const MARKET_MODEL_REVEAL_MS = 1000;
 export const MARKET_DETAILS_CONTENT_MS = 340;
 
 /** Loading finishes before this timeline starts, so every model receives the full fade. */
-export function revealMarketDetails(panel: HTMLElement, part: "model" | "content", reducedMotion: boolean) {
+export function revealMarketDetails(panel: HTMLElement, part: "model" | "content", reducedMotion: boolean, direction: "in" | "out" = "in") {
   const selector = part === "model" ? ".market-details__model" : ".market-details__views, .market-details__back, .market-details__options";
   const animations = reducedMotion ? [] : [...panel.querySelectorAll<HTMLElement>(selector)].map(element =>
-    element.animate([{ opacity: 0 }, { opacity: 1 }], {
+    element.animate(direction === "out" ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 1 }], {
       duration: part === "model" ? MARKET_MODEL_REVEAL_MS : MARKET_DETAILS_CONTENT_MS,
-      easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "both",
+      easing: direction === "out" ? "cubic-bezier(0.8, 0, 0.6, 1)" : "cubic-bezier(0.4, 0, 0.2, 1)", fill: "both",
     }));
   // A cold model can compile shaders inside the readiness callback. Start after
   // its first painted frame, rather than reusing that frame's stale timestamp.

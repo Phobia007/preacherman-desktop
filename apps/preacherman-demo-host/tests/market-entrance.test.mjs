@@ -25,3 +25,22 @@ for(const appearance of ['light','dark']) test(`Details reverses both visible co
  await motion.finished;motion.cancel();assert(recorded.every(a=>a.cancelled));
  recorded.length=0;await animateMarketPanels(doc,true,'out').finished;assert.equal(recorded.length,0);
 });
+import { revealMarketDetails, MARKET_MODEL_REVEAL_MS, MARKET_DETAILS_CONTENT_MS } from '../src/surfaces/market/marketEntrance.ts';
+for (const appearance of ['light', 'dark']) for (const part of ['model', 'content']) test(`Details ${part} fade is reversible and cancellable in ${appearance}`, async () => {
+ const frames = new Map(), animations = [];
+ let serial = 0;
+ const viewport = { requestAnimationFrame(fn) { frames.set(++serial, fn); return serial; }, cancelAnimationFrame(id) { frames.delete(id); } };
+ const flush = () => { const callbacks = [...frames.values()]; frames.clear(); callbacks.forEach(fn => fn()); };
+ const panel = { ownerDocument: { defaultView: viewport, documentElement: { dataset: { appearance } } }, querySelectorAll: () => Array.from({length:part==='content'?3:1}, () => ({ animate(keyframes, options) { const a = { keyframes, options, plays:0, cancelled:false, finished:Promise.resolve(), pause() {}, play() { this.plays++; }, cancel() { this.cancelled=true; } }; animations.push(a); return a; } })) };
+ const entrance = revealMarketDetails(panel, part, false);
+ flush();flush();await entrance.finished;
+ assert(animations.every(a=>a.keyframes[0].opacity===0&&a.keyframes[1].opacity===1&&a.plays===1));
+ entrance.cancel();animations.length=0;
+ const reverse = revealMarketDetails(panel, part, false, 'out');
+ assert(animations.every(a=>a.keyframes[0].opacity===1&&a.keyframes[1].opacity===0&&a.plays===0));
+ assert(animations.every(a=>a.options.duration===(part==='model'?MARKET_MODEL_REVEAL_MS:MARKET_DETAILS_CONTENT_MS)));
+ flush();flush();await reverse.finished;assert(animations.every(a=>a.plays===1));reverse.cancel();assert(animations.every(a=>a.cancelled));
+ animations.length=0;
+ const interrupted=revealMarketDetails(panel,part,false,'out');flush();interrupted.cancel();flush();assert(animations.every(a=>a.plays===0&&a.cancelled),'unmount cancels the queued fade before it can play');
+ animations.length=0;await revealMarketDetails(panel,part,true,'out').finished;assert.equal(animations.length,0);assert.equal(frames.size,0);
+});
