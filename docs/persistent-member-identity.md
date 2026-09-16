@@ -35,3 +35,5 @@ Deployment and native evidence: desktop-build-manifest.json and
 `D:/preacherman/output/playwright/account-member-20260917`.
 
 Native verification passed in both appearances with the real GitHub avatar and #00001. All six core routes, Account lens and Market Details return were visually checked. No new console errors. The CLI-created migration filename is aligned with the applied remote history version 20260916183323; it depends on the existing remote account_foundation migration 20260916132443.
+
+Account dock refinement: transparent unframed identity, 40px left/24px bottom spacing. Signed-in dock hides while navigation is open, is removed from focus/pointer access, and fades back after closing. Rapid toggling and reduced motion verified in light/dark, plus all six native routes. Preview reported only recorded Gallery initSync/hydration baseline diagnostics; all UI assertions passed. Canonical executable and sidecar backed up; final normal shortcut restart and cleanup verified.

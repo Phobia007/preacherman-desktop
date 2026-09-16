@@ -1,38 +1,38 @@
 {
   "schemaVersion": 1,
-  "buildId": "account-member-20260917",
+  "buildId": "account-dock-refine-20260917",
   "productVersion": "0.1.0",
-  "sourceTask": "persistent-member-account-identity",
+  "sourceTask": "account-dock-menu-and-spacing",
   "sourceThread": null,
-  "sourceState": "Persistent bottom-left account badge and signed-in Account navigation identity, circular GitHub avatar, display name and server-assigned immutable member number. Account profile uses per-user RLS; private transactional signup allocator. Existing GitHub member is #00001; legacy email test account remains unnumbered; next registration is #00002. Same Supabase project as website; both appearances verified.",
-  "sourceCommit": "158ecc013c45388b91eeb3de76771009d9512634",
+  "sourceState": "Account identity sits directly on the page without a button background, blur, shadow or hover fill. Left inset 40px and bottom inset 24px. Signed-in dock fades out and leaves keyboard/pointer navigation while the menu is open, then softly returns when closed. Guest icon remains present. Existing account and numbering behavior preserved",
+  "sourceCommit": "f1eb9d2061102c381981f0ed98e86838fb30f99c",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-17T02:43:17.6320448+08:00",
-  "deployedAt": "2026-09-17T02:44:30.1781050+08:00",
-  "verifiedAt": "2026-09-17T02:47:44.2347536+08:00",
+  "builtAt": "2026-09-17T03:10:28.3198814+08:00",
+  "deployedAt": "2026-09-17T03:10:58.2965410+08:00",
+  "verifiedAt": "2026-09-17T03:15:55.6558124+08:00",
   "sizeBytes": 676091392,
-  "sha256": "0D7B6349573918EA2EB75BA6E2DAF57F4F1E514E0CA754585B9998FAD35B6ABB",
+  "sha256": "3CEC7A6B7A06FD11887694703C9DF488E724363FE5D891D8DCA602FADF5F039F",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-member-before-20260917/preacherman-demo-host.exe",
-  "backupSha256": "26EFE66F4E0E488892F30E3BD13392CFB034760B5AD9E1DD355695D0BBDE9A07",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-member-before-20260917/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-dock-refine-before-20260917/preacherman-demo-host.exe",
+  "backupSha256": "0D7B6349573918EA2EB75BA6E2DAF57F4F1E514E0CA754585B9998FAD35B6ABB",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-dock-refine-before-20260917/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "b5350313cac4553eaeddffb90ad1ce837c959d86",
-  "previousVerificationCommit": "b5350313cac4553eaeddffb90ad1ce837c959d86",
+  "rollbackBaselineCommit": "19f35796eda48531de19642f95520d33185a96f2",
+  "previousVerificationCommit": "19f35796eda48531de19642f95520d33185a96f2",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "23 focused account/member/appearance/live-companion tests passed",
+      "tests": "11 focused account/member and light/dark appearance tests passed",
       "baselineFailures": "Two pre-existing app-shell assertions: sole tauriClient native API boundary and obsolete App.tsx ledger condition. Relevant source and tests unchanged from baseline."
     },
     "nativeFlow": "Cold canonical shortcut launch to Home, real persisted GitHub identity/avatar/#00001, dock and menu navigation, both themes and all six core destinations; Account live lens and Market Details return remain working. Final normal shortcut restart without debug port; preferences restored.",
-    "database": {
+    "databasePreviouslyVerified": {
       "project": "gzqmjzybaosxhkfgbxaz",
       "githubMemberNumber": 1,
       "nextMemberNumber": 2,
@@ -41,6 +41,32 @@
       "syntheticUsersRolledBack": true,
       "securityAdvisor": "intentional private counter default-deny INFO; existing leaked password warning only"
     },
+    "dockChecks": [
+      {
+        "appearance": "dark",
+        "background": "rgba(0, 0, 0, 0)",
+        "blur": "none",
+        "shadow": "none",
+        "left": 40,
+        "bottom": 24,
+        "midFadeOpacity": 0.51579,
+        "menuHidesDock": true,
+        "rapidToggle": true,
+        "reducedMotion": true
+      },
+      {
+        "appearance": "light",
+        "background": "rgba(0, 0, 0, 0)",
+        "blur": "none",
+        "shadow": "none",
+        "left": 40,
+        "bottom": 24,
+        "midFadeOpacity": 0.515777,
+        "menuHidesDock": true,
+        "rapidToggle": true,
+        "reducedMotion": true
+      }
+    ],
     "nativeMember": {
       "number": "#00001",
       "realGitHubAvatarLoaded": true,
@@ -78,12 +104,58 @@
         }
       ],
       "errors": [
-        "Hydration completed but contains mismatches."
+        "Hydration completed but contains mismatches.",
+        "TypeError: _this.initSync is not a function"
       ],
       "mockedIdentity": true,
+      "dockChecks": [
+        {
+          "appearance": "dark",
+          "background": "rgba(0, 0, 0, 0)",
+          "blur": "none",
+          "shadow": "none",
+          "left": 40,
+          "bottom": 24,
+          "midFadeOpacity": 0.288244,
+          "menuHidesDock": true,
+          "rapidToggle": true,
+          "reducedMotion": true
+        },
+        {
+          "appearance": "light",
+          "background": "rgba(0, 0, 0, 0)",
+          "blur": "none",
+          "shadow": "none",
+          "left": 40,
+          "bottom": 24,
+          "midFadeOpacity": 0.288451,
+          "menuHidesDock": true,
+          "rapidToggle": true,
+          "reducedMotion": true
+        }
+      ],
+      "errorStacks": [
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)",
+        "TypeError: _this.initSync is not a function\n    at _this.onInit (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:777064)"
+      ],
       "profileRequests": 4,
       "memberNumber": "#00001",
       "newErrors": [],
+      "recognizedBaselineErrors": [
+        "TypeError: _this.initSync is not a function"
+      ],
       "passed": true
     },
     "routes": [
@@ -137,35 +209,35 @@
       }
     ],
     "resourceSample": {
-      "SampledAt": "2026-09-17T02:47:44.2347536+08:00",
-      "NativePid": 34724,
-      "StartedAt": "2026-09-17T02:47:20.4218742+08:00",
-      "WindowHandle": 3867750,
+      "SampledAt": "2026-09-17T03:15:55.6558124+08:00",
+      "NativePid": 33700,
+      "StartedAt": "2026-09-17T03:15:37.2230856+08:00",
+      "WindowHandle": 3933288,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        34724,
-        34156,
-        13440,
-        288,
-        30764,
-        25352,
-        8632,
-        13276,
-        32724,
-        34892,
-        33104
+        33700,
+        19544,
+        1992,
+        36180,
+        30008,
+        18324,
+        14312,
+        6964,
+        10152,
+        28412,
+        31172
       ],
-      "NormalizedCpuPercent": 6.0,
-      "WorkingSetMiB": 1942.3,
-      "GpuDedicatedBytes": 3218100224.0,
-      "MaxGpuEngineUtilization": 13.0,
-      "FreeRamKiB": 16646364,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1959.1,
+      "GpuDedicatedBytes": 3255078912.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 17187792,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 13276
+          "OwningProcess": 6964
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -207,17 +279,15 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\source-tests.log",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\database-report.json",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\verify-database.sql",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\native-dark-member-home.png",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\native-light-member-home.png",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\native-dark-member-navigation.png",
-      "D:\\preacherman\\output\\playwright\\account-member-20260917\\native-light-member-navigation.png"
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\source-tests.log",
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\native-dark-dock-visible.png",
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\native-light-dock-visible.png",
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\native-dark-menu-only.png",
+      "D:\\preacherman\\output\\playwright\\account-dock-refine-20260917\\native-light-menu-only.png"
     ]
   },
   "releaseAttempts": [
@@ -796,9 +866,18 @@
       "deployedAt": "2026-09-17T02:44:30.1781050+08:00",
       "verifiedAt": "2026-09-17T02:47:44.2347536+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-member-before-20260917"
+    },
+    {
+      "buildId": "account-dock-refine-20260917",
+      "sourceCommit": "f1eb9d2061102c381981f0ed98e86838fb30f99c",
+      "sha256": "3CEC7A6B7A06FD11887694703C9DF488E724363FE5D891D8DCA602FADF5F039F",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T03:10:58.2965410+08:00",
+      "verifiedAt": "2026-09-17T03:15:55.6558124+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-dock-refine-before-20260917"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-member-before-20260917/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-dock-refine-before-20260917/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
