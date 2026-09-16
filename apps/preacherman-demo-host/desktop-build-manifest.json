@@ -1,176 +1,140 @@
 {
   "schemaVersion": 1,
-  "buildId": "desktop-account-sync-20260917",
+  "buildId": "profile-cleanup-20260917",
   "productVersion": "0.1.0",
-  "sourceTask": "desktop-account-dock-and-font-sync",
+  "sourceTask": "remove-task-animal-rain-and-english-profile-copy",
   "sourceThread": null,
-  "sourceState": "Hide the account dock whenever navigation opens, for both guests and members; match Account form typography to Clash Display navigation. Desktop fixed logical resolution, scaling, window controls, startup and login backend are unchanged.",
-  "sourceCommit": "cdc6df3150b10e25420f636e3feb4174de54131b",
+  "sourceState": "Remove idle preload, spawn and tick of Task template animal rain. English introduction, Close, Email and Copied labels across Task routes, Market/Details and fallback profile. Account already English; optics, fonts and desktop layout preserved.",
+  "sourceCommit": "ebc3096314b0ecddb1a940463ac237a2c8f56511",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-17T05:58:35.2854086+08:00",
-  "deployedAt": "2026-09-17T05:59:41.5793636+08:00",
-  "verifiedAt": "2026-09-17T06:01:40.1852303+08:00",
-  "sizeBytes": 676091392,
-  "sha256": "1325E4EA889F700E74D6AA4F12FFE8A26D7CA3EB9107B3D89E13BB7DA81195D5",
+  "builtAt": "2026-09-17T06:23:05.9446856+08:00",
+  "deployedAt": "2026-09-17T06:23:40.2613329+08:00",
+  "verifiedAt": "2026-09-17T06:26:36.7025599+08:00",
+  "sizeBytes": 676089344,
+  "sha256": "1E21537FCE7B5F92EF7A37201DD44CDF4D6D155D1D79E96178A768D180D77CB8",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917/preacherman-demo-host.exe",
-  "backupSha256": "506B60543892BBE026054F605B9AEA0664F704EF3FB04FDD89967081D3618312",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\profile-cleanup-before-20260917/preacherman-demo-host.exe",
+  "backupSha256": "1325E4EA889F700E74D6AA4F12FFE8A26D7CA3EB9107B3D89E13BB7DA81195D5",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\profile-cleanup-before-20260917/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "b2b0c89ba64a9b8a940b3deb2a3dec7153096d61",
-  "previousVerificationCommit": "b2b0c89ba64a9b8a940b3deb2a3dec7153096d61",
+  "rollbackBaselineCommit": "56f8d7c7bc0934552ed2775c1e3addc92c33ba59",
+  "previousVerificationCommit": "56f8d7c7bc0934552ed2775c1e3addc92c33ba59",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "source_tests_passed": 20,
-      "source_tests_failed": 2,
-      "existing_test_failures": [
-        "app-shell: tauriClient is the only native API boundary (useWindowActivity already imports Tauri)",
-        "app-shell: Home/Task/Settings/Gallery share scene (obsolete conditional expectation for ledger)"
+      "testsPassed": 18,
+      "testsFailed": 2,
+      "baselineDiagnostics": [
+        "gallery-v3: obsolete globalProperties router regex (runtime already uses Nuxt app router)",
+        "gallery-v3: obsolete cameraFraming conditional in unchanged App.tsx"
       ],
-      "baseline_evidence": {
-        "commit": "b2b0c89",
-        "relevant_files_unchanged": [
-          "apps/preacherman-demo-host/src/App.tsx",
-          "apps/preacherman-demo-host/src/app-shell/useWindowActivity.ts",
-          "apps/preacherman-demo-host/tests/app-shell.test.mjs"
-        ]
-      },
-      "desktop_viewport_files_unchanged": true
+      "sourceBaseline": "56f8d7c"
     },
-    "nativeFlow": "Cold canonical shortcut launch to Home; all six core destinations in both themes; account menu hides/reappears and Account typography; fixed 1800x1000 logical layout and three native window controls retained. Preferences restored, restarted normally without debug port.",
-    "accountPresentation": [
+    "nativeFlow": "Cold shortcut Home, all six core destinations and ten profile open/close checks in both appearances; zero animal-module/model requests. Restored preferences and restarted shortcut normally after verification.",
+    "profiles": [
       {
         "appearance": "dark",
-        "signedIn": "false",
-        "fonts": [
-          {
-            "tag": "H1",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "P",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "BUTTON",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "BUTTON",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "INPUT",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "BUTTON",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          }
+        "surface": "Task surf",
+        "rain": false,
+        "started": false,
+        "hole": 1,
+        "lines": [
+          "An intelligent home.",
+          "One place for your virtual characters, engines, and tools.",
+          "AI that keeps learning, goes with you, and gets things done.",
+          "Your second identity in the virtual world."
         ],
-        "dockHiddenWithMenu": true,
-        "dockReturns": true,
-        "liveModel": true
+        "toggle": "Close",
+        "closed": true
+      },
+      {
+        "appearance": "dark",
+        "surface": "Task timeline",
+        "rain": false,
+        "started": false,
+        "hole": 1,
+        "lines": [
+          "An intelligent home.",
+          "One place for your virtual characters, engines, and tools.",
+          "AI that keeps learning, goes with you, and gets things done.",
+          "Your second identity in the virtual world."
+        ],
+        "toggle": "Close",
+        "closed": true
+      },
+      {
+        "appearance": "dark",
+        "surface": "Market main",
+        "english": true,
+        "closed": true
+      },
+      {
+        "appearance": "dark",
+        "surface": "Market details",
+        "english": true,
+        "closed": true
+      },
+      {
+        "appearance": "dark",
+        "surface": "Account",
+        "english": true,
+        "closed": true
       },
       {
         "appearance": "light",
-        "signedIn": "false",
-        "fonts": [
-          {
-            "tag": "H1",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "P",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "BUTTON",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "BUTTON",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "INPUT",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          },
-          {
-            "tag": "BUTTON",
-            "family": "\"Clash Display\", sans-serif",
-            "weight": "300"
-          }
+        "surface": "Task surf",
+        "rain": false,
+        "started": false,
+        "hole": 1,
+        "lines": [
+          "An intelligent home.",
+          "One place for your virtual characters, engines, and tools.",
+          "AI that keeps learning, goes with you, and gets things done.",
+          "Your second identity in the virtual world."
         ],
-        "dockHiddenWithMenu": true,
-        "dockReturns": true,
-        "liveModel": true
+        "toggle": "Close",
+        "closed": true
+      },
+      {
+        "appearance": "light",
+        "surface": "Task timeline",
+        "rain": false,
+        "started": false,
+        "hole": 1,
+        "lines": [
+          "An intelligent home.",
+          "One place for your virtual characters, engines, and tools.",
+          "AI that keeps learning, goes with you, and gets things done.",
+          "Your second identity in the virtual world."
+        ],
+        "toggle": "Close",
+        "closed": true
+      },
+      {
+        "appearance": "light",
+        "surface": "Market main",
+        "english": true,
+        "closed": true
+      },
+      {
+        "appearance": "light",
+        "surface": "Market details",
+        "english": true,
+        "closed": true
+      },
+      {
+        "appearance": "light",
+        "surface": "Account",
+        "english": true,
+        "closed": true
       }
     ],
-    "previewVerification": {
-      "modes": [
-        {
-          "appearance": "dark",
-          "styles": {
-            "background": "rgb(0, 0, 0)",
-            "text": "rgb(237, 237, 237)"
-          },
-          "guestDockHidden": true,
-          "memberDockHidden": true,
-          "loginFontMatchesNavigation": true,
-          "pkceVerified": true,
-          "cancel": true,
-          "denied": true,
-          "callbackAfterNavigation": true,
-          "restart": true,
-          "signOut": true,
-          "liveCompanion": true
-        },
-        {
-          "appearance": "light",
-          "styles": {
-            "background": "rgb(247, 247, 246)",
-            "text": "rgb(32, 33, 33)"
-          },
-          "guestDockHidden": true,
-          "memberDockHidden": true,
-          "loginFontMatchesNavigation": true,
-          "pkceVerified": true,
-          "cancel": true,
-          "denied": true,
-          "callbackAfterNavigation": true,
-          "restart": true,
-          "signOut": true,
-          "liveCompanion": true
-        }
-      ],
-      "errors": [
-        "Hydration completed but contains mismatches."
-      ],
-      "mockedIdentity": true,
-      "profileRequests": 4,
-      "memberNumber": "#00001",
-      "newErrors": [],
-      "passed": true
-    },
     "routes": [
       {
         "name": "Home",
@@ -221,45 +185,211 @@
         "appearance": "light"
       }
     ],
+    "previewVerification": {
+      "modes": [
+        {
+          "appearance": "dark",
+          "englishProfiles": true,
+          "noAnimalRain": true
+        },
+        {
+          "appearance": "light",
+          "englishProfiles": true,
+          "noAnimalRain": true
+        }
+      ],
+      "routes": [
+        {
+          "name": "Home",
+          "appearance": "dark"
+        },
+        {
+          "name": "Task",
+          "appearance": "dark"
+        },
+        {
+          "name": "Gallery",
+          "appearance": "dark"
+        },
+        {
+          "name": "Market",
+          "appearance": "dark"
+        },
+        {
+          "name": "Account",
+          "appearance": "dark"
+        },
+        {
+          "name": "Settings",
+          "appearance": "dark"
+        },
+        {
+          "name": "Home",
+          "appearance": "light"
+        },
+        {
+          "name": "Task",
+          "appearance": "light"
+        },
+        {
+          "name": "Gallery",
+          "appearance": "light"
+        },
+        {
+          "name": "Market",
+          "appearance": "light"
+        },
+        {
+          "name": "Account",
+          "appearance": "light"
+        },
+        {
+          "name": "Settings",
+          "appearance": "light"
+        }
+      ],
+      "profiles": [
+        {
+          "appearance": "dark",
+          "surface": "Task surf",
+          "rain": false,
+          "started": false,
+          "hole": 1,
+          "lines": [
+            "An intelligent home.",
+            "One place for your virtual characters, engines, and tools.",
+            "AI that keeps learning, goes with you, and gets things done.",
+            "Your second identity in the virtual world."
+          ],
+          "toggle": "Close",
+          "closed": true
+        },
+        {
+          "appearance": "dark",
+          "surface": "Task timeline",
+          "rain": false,
+          "started": false,
+          "hole": 1,
+          "lines": [
+            "An intelligent home.",
+            "One place for your virtual characters, engines, and tools.",
+            "AI that keeps learning, goes with you, and gets things done.",
+            "Your second identity in the virtual world."
+          ],
+          "toggle": "Close",
+          "closed": true
+        },
+        {
+          "appearance": "dark",
+          "surface": "Market main",
+          "english": true,
+          "closed": true
+        },
+        {
+          "appearance": "dark",
+          "surface": "Market details",
+          "english": true,
+          "closed": true
+        },
+        {
+          "appearance": "dark",
+          "surface": "Account",
+          "english": true,
+          "closed": true
+        },
+        {
+          "appearance": "light",
+          "surface": "Task surf",
+          "rain": false,
+          "started": false,
+          "hole": 1,
+          "lines": [
+            "An intelligent home.",
+            "One place for your virtual characters, engines, and tools.",
+            "AI that keeps learning, goes with you, and gets things done.",
+            "Your second identity in the virtual world."
+          ],
+          "toggle": "Close",
+          "closed": true
+        },
+        {
+          "appearance": "light",
+          "surface": "Task timeline",
+          "rain": false,
+          "started": false,
+          "hole": 1,
+          "lines": [
+            "An intelligent home.",
+            "One place for your virtual characters, engines, and tools.",
+            "AI that keeps learning, goes with you, and gets things done.",
+            "Your second identity in the virtual world."
+          ],
+          "toggle": "Close",
+          "closed": true
+        },
+        {
+          "appearance": "light",
+          "surface": "Market main",
+          "english": true,
+          "closed": true
+        },
+        {
+          "appearance": "light",
+          "surface": "Market details",
+          "english": true,
+          "closed": true
+        },
+        {
+          "appearance": "light",
+          "surface": "Account",
+          "english": true,
+          "closed": true
+        }
+      ],
+      "errors": [
+        "Hydration completed but contains mismatches."
+      ],
+      "animalRequests": [],
+      "coldHome": true,
+      "newErrors": [],
+      "passed": true
+    },
     "resourceSample": {
-      "SampledAt": "2026-09-17T06:01:40.1852303+08:00",
-      "NativePid": 34872,
-      "StartedAt": "2026-09-17T06:01:16.4490598+08:00",
-      "WindowHandle": 2361106,
+      "SampledAt": "2026-09-17T06:26:36.7025599+08:00",
+      "NativePid": 24316,
+      "StartedAt": "2026-09-17T06:26:16.9946155+08:00",
+      "WindowHandle": 2492140,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        34872,
-        28956,
-        21284,
-        38468,
-        34880,
-        38716,
-        12636,
-        36436,
-        18844,
-        12632,
-        23212
+        24316,
+        33336,
+        11808,
+        38712,
+        36072,
+        33352,
+        9268,
+        38416,
+        26176,
+        36180,
+        29340
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1829.5,
-      "GpuDedicatedBytes": 3253731328.0,
-      "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 13438064,
+      "NormalizedCpuPercent": 5.99,
+      "WorkingSetMiB": 1918.7,
+      "GpuDedicatedBytes": 3225509888.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 13706556,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 36436
+          "OwningProcess": 38416
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
       "ShortcutArguments": "",
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time. Other task services and Codex Computer Use workers preserved."
     },
-    "consoleBaselines": [
-      "gallery-sidebar-spacing-20260917"
-    ],
     "newErrors": [],
     "observedErrors": [
       "Hydration completed but contains mismatches.",
@@ -288,15 +418,18 @@
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
+    "consoleBaselines": [
+      "desktop-account-sync-20260917"
+    ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\source-checks.json",
-      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\native-dark-account.png",
-      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\native-light-account.png",
-      "D:\\preacherman\\output\\playwright\\desktop-account-sync-20260917\\verify-native.cjs"
+      "D:\\preacherman\\output\\playwright\\profile-cleanup-20260917\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\profile-cleanup-20260917\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\profile-cleanup-20260917\\source-checks.json",
+      "D:\\preacherman\\output\\playwright\\profile-cleanup-20260917\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\profile-cleanup-20260917\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\profile-cleanup-20260917\\native-dark-task-surf-profile.png",
+      "D:\\preacherman\\output\\playwright\\profile-cleanup-20260917\\native-light-task-timeline-profile.png",
+      "D:\\preacherman\\output\\playwright\\profile-cleanup-20260917\\verify.cjs"
     ]
   },
   "releaseAttempts": [
@@ -902,9 +1035,18 @@
       "deployedAt": "2026-09-17T05:59:41.5793636+08:00",
       "verifiedAt": "2026-09-17T06:01:40.1852303+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917"
+    },
+    {
+      "buildId": "profile-cleanup-20260917",
+      "sourceCommit": "ebc3096314b0ecddb1a940463ac237a2c8f56511",
+      "sha256": "1E21537FCE7B5F92EF7A37201DD44CDF4D6D155D1D79E96178A768D180D77CB8",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T06:23:40.2613329+08:00",
+      "verifiedAt": "2026-09-17T06:26:36.7025599+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\profile-cleanup-before-20260917"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\profile-cleanup-before-20260917/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
