@@ -1,443 +1,205 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-details-return-20260916",
+  "buildId": "account-live-lens-20260916",
   "productVersion": "0.1.0",
-  "sourceTask": "market-details-reverse-return-transition",
+  "sourceTask": "account-live-companion-profile-lens",
   "sourceThread": null,
-  "sourceState": "Details returns through the exact reverse sequence: controls fade out over 340ms, selected avatar fades out over 1000ms, fullscreen frost clears over 320ms, then visible Market columns slide back in over 760ms. The original listing scroll, focus and active companion are preserved. Repeated Back/Escape during the return cannot restart it. Reduced motion skips the sequence and unfinished entrances remain cancellable.",
-  "sourceCommit": "b142ecf9bf723d7c2bc16e191cb4e4707dbdb041",
+  "sourceState": "Account keeps the shared companion animating during profile opening, open and closing. Completed avatar frames refresh the original optical shader; static frost, gradient, logo and crop are cached. Closing stops frame copies and reuses one idle lens instead of destroying its WebGL context. The live/captured handoff has no opacity restart. Resize, appearance changes and unmount release all lens resources. No extra companion renderer; reduced motion still samples live pixels.",
+  "sourceCommit": "f86ea5ddf8334f08f56f438a3fc4f14f7e6dd65a",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-16T16:57:53.3425747+08:00",
-  "deployedAt": "2026-09-16T16:58:35.7630331+08:00",
-  "verifiedAt": "2026-09-16T17:05:05.7300339+08:00",
-  "sizeBytes": 675372544,
-  "sha256": "A9FE16EB1289C49E11293CE2E2B1BE1695EC432A6C97B4F51F1AAD5D6CC46ACF",
+  "builtAt": "2026-09-16T17:33:05.1149440+08:00",
+  "deployedAt": "2026-09-16T17:33:54.8756373+08:00",
+  "verifiedAt": "2026-09-16T17:36:58.5368542+08:00",
+  "sizeBytes": 675373056,
+  "sha256": "F3C56316E9B6C0A0785064932E9EEC2A5A627A65FE1A2DBD16E2EFEDB2D374E7",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-return-before-20260916/preacherman-demo-host.exe",
-  "backupSha256": "73D1CD9BE16D6D643735AD5F9C84639818547882F2655461B7411BC165B41B26",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-return-before-20260916/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916/preacherman-demo-host.exe",
+  "backupSha256": "A9FE16EB1289C49E11293CE2E2B1BE1695EC432A6C97B4F51F1AAD5D6CC46ACF",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "8eafeb1323173cfc303af71c56b86f536673d1de",
-  "previousVerificationCommit": "8eafeb1323173cfc303af71c56b86f536673d1de",
+  "rollbackBaselineCommit": "ba681df1f9fc05083cd84ed41925abf28e191a80",
+  "previousVerificationCommit": "ba681df1f9fc05083cd84ed41925abf28e191a80",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "tests": "30 focused Market identity, bridge, import, entrance, reverse exit, theme and lens tests passed.",
-      "scope": "14 characters across both appearances; forward entrance and reverse return, one-second avatar fades, staged glass and controls; full-window viewport and frost dimensions, 12px scene blur, raised controls, transparent header scrolling, all four views, logo lens, retained lower controls, return focus/scroll, native core navigation."
+      "tests": "16 focused live compositor, theme, lens continuity, reduced-motion, visibility and resource lifecycle tests passed."
     },
-    "nativeFlow": "Cold launch through canonical shortcut into normal Home. Both appearances: all 14 products opened using alternating mouse and Enter, all four views checked on first and last characters; intermediate characters returned from alternating camera views, model capture and shared lens verified, lower controls retained, arrow and Escape returned to unchanged scroll/focus. Earlier product reopened to verify identity and camera reset. Active companion preference unchanged. Home, Task, Gallery, Market/Ledger, Account and Settings visually checked. Preferences restored and final normal shortcut restart without debug port.",
-    "marketDetails": [
+    "nativeFlow": "Cold canonical shortcut launch into normal Home. Account live avatar pixels verified independently of shader movement; four close/reopen cycles in both appearances, uninterrupted shared renderer, reused lens context and measured frame timing. Interrupted toggles, reduced motion, login controls and navigation while open checked. Market list and Details logo lens, reverse Details return, Home, Task, Gallery, Market/Ledger, Account and Settings verified. Original preferences restored and final normal shortcut restart without debug port.",
+    "accountLens": [
       {
         "appearance": "dark",
-        "rows": [
+        "samples": [
           {
-            "id": "cortana",
-            "readyMs": 3120,
-            "returnMs": 2905,
-            "views": 4,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 22751.700000001118,
+            "hash": 1170383764,
+            "phase": "open"
           },
           {
-            "id": "zima",
-            "readyMs": 2588,
-            "returnMs": 2907,
-            "views": 1,
-            "returnView": "Side",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 23106.099999999627,
+            "hash": 474574730,
+            "phase": "open"
           },
           {
-            "id": "jubilee-midnight-mutant",
-            "readyMs": 3064,
-            "returnMs": 2900,
-            "views": 1,
-            "returnView": "Back",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 23460.099999999627,
+            "hash": -1019049739,
+            "phase": "open"
           },
           {
-            "id": "halo-mk-v-model",
-            "readyMs": 3024,
-            "returnMs": 2925,
-            "views": 1,
-            "returnView": "Zoom In",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 23810.200000001118,
+            "hash": 1964085368,
+            "phase": "open"
           },
           {
-            "id": "kitana-mk11-in-mk9-suit",
-            "readyMs": 3097,
-            "returnMs": 2917,
-            "views": 1,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 24164.400000000373,
+            "hash": 608459485,
+            "phase": "open"
           },
           {
-            "id": "punk-magik",
-            "readyMs": 3050,
-            "returnMs": 2933,
-            "views": 1,
-            "returnView": "Side",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "clove-t-pose",
-            "readyMs": 3005,
-            "returnMs": 2922,
-            "views": 1,
-            "returnView": "Back",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "nier-automata-2b",
-            "readyMs": 2641,
-            "returnMs": 2920,
-            "views": 1,
-            "returnView": "Zoom In",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "stellar-blade-lily-stargazer-coat",
-            "readyMs": 3095,
-            "returnMs": 2940,
-            "views": 1,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "iron-man-mark-85",
-            "readyMs": 2917,
-            "returnMs": 2914,
-            "views": 1,
-            "returnView": "Side",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "the-twins-atomic-heart",
-            "readyMs": 3042,
-            "returnMs": 2926,
-            "views": 1,
-            "returnView": "Back",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "spartan-armour-mkv-halo-reach",
-            "readyMs": 3075,
-            "returnMs": 2935,
-            "views": 1,
-            "returnView": "Zoom In",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "halloween-the-game-michael-myers-samhain",
-            "readyMs": 3241,
-            "returnMs": 2940,
-            "views": 1,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "apex-legend-pathfinder",
-            "readyMs": 3024,
-            "returnMs": 2912,
-            "views": 4,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 24518.599999999627,
+            "hash": -1089410737,
+            "phase": "open"
           }
         ],
-        "reopen": true,
-        "immediateScroll": true
+        "cycles": [
+          {
+            "count": 263,
+            "p95": 4.299999999999272,
+            "max": 4.30000000000291,
+            "live": true,
+            "copies": 1063,
+            "reused": true,
+            "visibility": "hidden",
+            "sceneOpacity": "1"
+          },
+          {
+            "count": 257,
+            "p95": 4.299999999999272,
+            "max": 4.400000000001455,
+            "live": true,
+            "copies": 1545,
+            "reused": true,
+            "visibility": "hidden",
+            "sceneOpacity": "1"
+          },
+          {
+            "count": 263,
+            "p95": 4.299999999999272,
+            "max": 4.30000000000291,
+            "live": true,
+            "copies": 2025,
+            "reused": true,
+            "visibility": "hidden",
+            "sceneOpacity": "1"
+          },
+          {
+            "count": 259,
+            "p95": 4.200000000004366,
+            "max": 4.400000000001455,
+            "live": true,
+            "copies": 2504,
+            "reused": true,
+            "visibility": "hidden",
+            "sceneOpacity": "1"
+          }
+        ],
+        "reducedLiveCopies": 193,
+        "styles": {
+          "background": "rgb(0, 0, 0)",
+          "text": "rgb(237, 237, 237)"
+        }
       },
       {
         "appearance": "light",
-        "rows": [
+        "samples": [
           {
-            "id": "cortana",
-            "readyMs": 3092,
-            "returnMs": 2904,
-            "views": 4,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 9758.800000000745,
+            "hash": -358383268,
+            "phase": "open"
           },
           {
-            "id": "zima",
-            "readyMs": 2562,
-            "returnMs": 2901,
-            "views": 1,
-            "returnView": "Side",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 10108.900000000373,
+            "hash": 537516940,
+            "phase": "open"
           },
           {
-            "id": "jubilee-midnight-mutant",
-            "readyMs": 3050,
-            "returnMs": 2932,
-            "views": 1,
-            "returnView": "Back",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 10459.199999999255,
+            "hash": -1114060219,
+            "phase": "open"
           },
           {
-            "id": "halo-mk-v-model",
-            "readyMs": 3030,
-            "returnMs": 2913,
-            "views": 1,
-            "returnView": "Zoom In",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 10813.099999999627,
+            "hash": -638270137,
+            "phase": "open"
           },
           {
-            "id": "kitana-mk11-in-mk9-suit",
-            "readyMs": 3027,
-            "returnMs": 2910,
-            "views": 1,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 11163.400000000373,
+            "hash": -1848185727,
+            "phase": "open"
           },
           {
-            "id": "punk-magik",
-            "readyMs": 3104,
-            "returnMs": 2927,
-            "views": 1,
-            "returnView": "Side",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 11517.300000000745,
+            "hash": -1727281682,
+            "phase": "open"
           },
           {
-            "id": "clove-t-pose",
-            "readyMs": 3030,
-            "returnMs": 2913,
-            "views": 1,
-            "returnView": "Back",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "nier-automata-2b",
-            "readyMs": 2539,
-            "returnMs": 2918,
-            "views": 1,
-            "returnView": "Zoom In",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "stellar-blade-lily-stargazer-coat",
-            "readyMs": 3089,
-            "returnMs": 2935,
-            "views": 1,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "iron-man-mark-85",
-            "readyMs": 3016,
-            "returnMs": 2894,
-            "views": 1,
-            "returnView": "Side",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "the-twins-atomic-heart",
-            "readyMs": 3015,
-            "returnMs": 2912,
-            "views": 1,
-            "returnView": "Back",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "spartan-armour-mkv-halo-reach",
-            "readyMs": 3023,
-            "returnMs": 2901,
-            "views": 1,
-            "returnView": "Zoom In",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "halloween-the-game-michael-myers-samhain",
-            "readyMs": 3104,
-            "returnMs": 2902,
-            "views": 1,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
-          },
-          {
-            "id": "apex-legend-pathfinder",
-            "readyMs": 2575,
-            "returnMs": 2923,
-            "views": 4,
-            "returnView": "Front",
-            "scrollRestored": true,
-            "activeCompanionUnchanged": true,
-            "nav": {
-              "font": "\"Market Brilliant Cut\", sans-serif",
-              "size": "9px",
-              "color": "rgb(255, 255, 255)"
-            }
+            "t": 11867.5,
+            "hash": -54428806,
+            "phase": "open"
           }
         ],
-        "reopen": true,
-        "immediateScroll": true
+        "cycles": [
+          {
+            "count": 262,
+            "p95": 4.299999999999272,
+            "max": 4.300000000001091,
+            "live": true,
+            "copies": 1072,
+            "reused": true,
+            "visibility": "hidden",
+            "sceneOpacity": "1"
+          },
+          {
+            "count": 259,
+            "p95": 4.299999999999272,
+            "max": 4.300000000001091,
+            "live": true,
+            "copies": 1550,
+            "reused": true,
+            "visibility": "hidden",
+            "sceneOpacity": "1"
+          },
+          {
+            "count": 263,
+            "p95": 4.299999999999272,
+            "max": 4.30000000000291,
+            "live": true,
+            "copies": 2031,
+            "reused": true,
+            "visibility": "hidden",
+            "sceneOpacity": "1"
+          },
+          {
+            "count": 260,
+            "p95": 4.299999999999272,
+            "max": 4.30000000000291,
+            "live": true,
+            "copies": 2509,
+            "reused": true,
+            "visibility": "hidden",
+            "sceneOpacity": "1"
+          }
+        ],
+        "reducedLiveCopies": 195,
+        "styles": {
+          "background": "rgb(247, 247, 246)",
+          "text": "rgb(32, 33, 33)"
+        }
       }
     ],
     "routes": [
@@ -490,85 +252,47 @@
         "appearance": "light"
       }
     ],
-    "motionReport": "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-report.json",
-    "transitionCount": 28,
-    "returnCount": 28,
-    "interruptions": [
-      {
-        "appearance": "dark",
-        "phase": "exiting",
-        "reopened": "cortana"
-      },
-      {
-        "appearance": "dark",
-        "phase": "model",
-        "reopened": "cortana"
-      },
-      {
-        "appearance": "light",
-        "phase": "exiting",
-        "reopened": "cortana"
-      },
-      {
-        "appearance": "light",
-        "phase": "model",
-        "reopened": "cortana"
-      }
-    ],
-    "reducedMotion": {
-      "modes": [
-        {
-          "appearance": "dark",
-          "passed": true
-        },
-        {
-          "appearance": "light",
-          "passed": true
-        }
-      ],
-      "passed": true
-    },
     "resourceSample": {
-      "SampledAt": "2026-09-16T17:05:05.7300339+08:00",
-      "NativePid": 30076,
-      "StartedAt": "2026-09-16T17:04:47.7527201+08:00",
-      "WindowHandle": 919210,
+      "SampledAt": "2026-09-16T17:36:58.5368542+08:00",
+      "NativePid": 27964,
+      "StartedAt": "2026-09-16T17:36:41.4678875+08:00",
+      "WindowHandle": 1312500,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        30076,
-        21180,
-        28368,
-        26104,
-        21988,
-        26040,
-        30992,
-        448,
-        30144,
-        25504,
-        9024
+        27964,
+        27928,
+        16304,
+        12868,
+        28100,
+        31684,
+        23520,
+        14316,
+        11096,
+        31640,
+        9608
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1912.6,
-      "GpuDedicatedBytes": 3258753024.0,
-      "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 17628860,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1935.6,
+      "GpuDedicatedBytes": 3179900928.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 17312268,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 448
+          "OwningProcess": 14316
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
       "ShortcutArguments": "",
       "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time. Other task services and Codex Computer Use workers preserved."
     },
-    "consoleBaseline": "D:/preacherman/output/playwright/market-details-20260916/native-report.json",
     "consoleBaselines": [
       "market-frost-20260916",
       "market-details-20260916",
-      "task-timeline-dialog-20260915"
+      "task-timeline-dialog-20260915",
+      "market-details-return-20260916"
     ],
     "newErrors": [],
     "observedErrors": [
@@ -598,31 +322,21 @@
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob:\". The action has been blocked."
     ],
-    "braceletRequests": [],
-    "verificationNotes": "All 14 characters in each appearance followed hide-content -> hide-model -> unfrost -> returning -> idle, with measured durations and intermediate opacity/translation samples. Original listing scroll and focus were restored after arrow and Escape returns. Duplicate return requests, reduced motion, interrupted entrances, all camera views, logo lens and core native routes passed.",
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\source-tests.log",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\typecheck.log",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\reduced-motion-report.json",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-dark-return-avatar.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-light-return-avatar.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-dark-return-panels.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-light-return-panels.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-dark-panels-retreat.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-light-panels-retreat.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-dark-model-fade.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-light-model-fade.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-dark-01-front.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-light-01-front.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-dark-glass-only.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-light-glass-only.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-dark-header-scrolled.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-light-header-scrolled.png",
-      "D:\\preacherman\\output\\playwright\\market-details-return-20260916\\native-dark-logo-open.png"
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\source-tests.log",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\typecheck.log",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-dark-account-closed.png",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-light-account-closed.png",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-dark-account-open-a.png",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-dark-account-open-b.png",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-light-account-open-a.png",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-light-account-open-b.png",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-dark-market-lens.png",
+      "D:\\preacherman\\output\\playwright\\account-live-lens-20260916\\native-light-market-lens.png"
     ]
   },
   "releaseAttempts": [
@@ -1174,9 +888,18 @@
       "deployedAt": "2026-09-16T16:58:35.7630331+08:00",
       "verifiedAt": "2026-09-16T17:05:05.7300339+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-return-before-20260916"
+    },
+    {
+      "buildId": "account-live-lens-20260916",
+      "sourceCommit": "f86ea5ddf8334f08f56f438a3fc4f14f7e6dd65a",
+      "sha256": "F3C56316E9B6C0A0785064932E9EEC2A5A627A65FE1A2DBD16E2EFEDB2D374E7",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T17:33:54.8756373+08:00",
+      "verifiedAt": "2026-09-16T17:36:58.5368542+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-return-before-20260916/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
