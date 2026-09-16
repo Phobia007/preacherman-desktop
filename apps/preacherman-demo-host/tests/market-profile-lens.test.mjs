@@ -40,7 +40,7 @@ function harness({ reduced = false, compileFails = false } = {}) {
 test("the generated vertex/fragment and curve are exactly Task's source, not a CSS imitation", async () => {
   const source = await read("public/gallery-v3/portfolio/_nuxt/D9b8F35K.js");
   const shaders = source.match(/const p0=`([\s\S]*?)`,C3=`([\s\S]*?)`,P3=/);
-  const clean = value => value.replace(/\/\/[^\n]*/g, "").replace(/\n\s*\n/g, "\n").trim();
+  const clean = value => value.replaceAll("\r\n", "\n").replace(/\/\/[^\n]*/g, "").replace(/\n\s*\n/g, "\n").trim();
   assert.equal(task.exports.taskProfileVertex, clean(shaders[1]));
   assert.equal(task.exports.taskProfileFragment, clean(shaders[2]));
   assert.equal(JSON.stringify(task.exports.taskProfileCurve), JSON.stringify(runInNewContext(source.match(/pU=(\[\[.*?\]\]),zu=/)[1])));

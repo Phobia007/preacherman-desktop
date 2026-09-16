@@ -2631,3 +2631,13 @@ body {
 }
 
 .demo-app-shell[data-active-surface="account"] .demo-app-shell__brand-trigger:focus-visible { outline-color: var(--demo-theme-account-focus); }
+
+/* Market Details: frosted paper masks the persistent companion in either mode. */
+.demo-app-shell {
+  --demo-theme-market-details-glass: rgb(48 61 72 / 94%);
+  --demo-theme-market-details-solid: #303d48;
+}
+.demo-app-shell[data-appearance="dark"] {
+  --demo-theme-market-details-glass: rgb(13 20 27 / 95%);
+  --demo-theme-market-details-solid: #0d141b;
+}

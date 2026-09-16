@@ -4,11 +4,12 @@ import { TaskProfileLens } from "./TaskProfileLens";
 import "./market-profile.css";
 
 /** Task's original spatial lens, with Market's current image/text viewport as its source. */
-export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, onLensActiveChange }: {
+export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, captureSource, onLensActiveChange }: {
   disabled?: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   frameRef: RefObject<HTMLIFrameElement>;
+  captureSource?: (signal: AbortSignal) => Promise<HTMLCanvasElement>;
   onLensActiveChange: (active: boolean) => void;
 }) {
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -30,7 +31,7 @@ export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, 
     if (!frame) return;
     setPhase("preparing");
     setError("");
-    captureMarketFrame(frame, abort.signal).then(source => {
+    (captureSource ? captureSource(abort.signal) : captureMarketFrame(frame, abort.signal)).then(source => {
       if (abort.signal.aborted || !hostRef.current) return;
       const lens = new TaskProfileLens(hostRef.current, source, (progress, settled) => {
         profileRef.current?.style.setProperty("--market-lens-progress", String(progress));
@@ -54,7 +55,7 @@ export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, 
       console.error("Market profile lens:", reason);
     });
     return () => abort.abort();
-  }, [open, frameRef, onLensActiveChange]);
+  }, [open, frameRef, captureSource, onLensActiveChange]);
 
   useEffect(() => () => lensRef.current?.dispose(), []);
 

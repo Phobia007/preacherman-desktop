@@ -42,6 +42,26 @@
   };
   window.addEventListener("pagehide", cleanup, { once: true });
 
+  // A Details link belongs to its own product, never the activated desktop avatar.
+  const productLink = target => target?.closest?.('a[href^="love-configurator.html"]');
+  const prefetched = new Set();
+  const prefetch = event => {
+    const link = productLink(event.target), modelId = link?.closest("[data-character-id]")?.dataset.characterId;
+    if (parent === window || !modelId || prefetched.has(modelId)) return;
+    prefetched.add(modelId);
+    parent.postMessage({ type: "preacherman.market.prefetch", modelId }, location.origin);
+  };
+  document.addEventListener("pointerover", prefetch);
+  document.addEventListener("focusin", prefetch);
+  document.addEventListener("click", event => {
+    const link = productLink(event.target), modelId = link?.closest("[data-character-id]")?.dataset.characterId;
+    if (parent === window || !modelId || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    document.querySelector("[data-market-return-focus]")?.removeAttribute("data-market-return-focus");
+    link.setAttribute("data-market-return-focus", "");
+    parent.postMessage({ type: "preacherman.market.details", modelId }, location.origin);
+  });
+
   document.addEventListener("DOMContentLoaded", () => {
     const host = document.getElementById("configurator");
     if (!host) {

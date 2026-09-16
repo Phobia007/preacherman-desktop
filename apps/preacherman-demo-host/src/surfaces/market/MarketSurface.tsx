@@ -1,7 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MarketProfile } from "./MarketProfile";
 import { animateMarketPanels, MARKET_LOGO_MS } from "./marketEntrance";
 import "./market-surface.css";
+import { isAvatarModelId, createAvatarAssetUrls, prefetchAvatarModel } from "@preacherman/avatar-renderer";
+import type { ModelId } from "../../preferences";
+import { localAvatarAssetBaseUrl } from "../../avatar/avatarAssets";
+import { galleryModelBindings } from "../gallery/galleryModelBindings";
+const marketModelIds: readonly ModelId[] = Object.values(galleryModelBindings);
+import { MarketDetails, captureMarketDetails } from "./MarketDetails";
 
 /** The imported document owns its layout; the host only supplies the stage. */
 export function MarketSurface() {
@@ -11,14 +17,25 @@ export function MarketSurface() {
   const [logoReady, setLogoReady] = useState(false);
   const [entrance, setEntrance] = useState<"logo" | "panels" | "complete">("logo");
   const [attempt, setAttempt] = useState(0);
-  const [page, setPage] = useState<"intro" | "configurator">("intro");
+  const [selectedModel, setSelectedModel] = useState<ModelId | null>(null);
+  const detailsRef = useRef<HTMLElement>(null);
+  const page = selectedModel ? "details" : "intro";
   const [profileOpen, setProfileOpen] = useState(false);
   const [lensActive, setLensActive] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
+  const closeDetails = useCallback(() => {
+    setSelectedModel(null); setProfileOpen(false); setLensActive(false);
+    requestAnimationFrame(() => frameRef.current?.contentDocument?.querySelector<HTMLElement>("[data-market-return-focus]")?.focus({ preventScroll: true }));
+  }, []);
+  const captureDetails = useCallback((signal: AbortSignal) => {
+    if (!detailsRef.current) return Promise.reject(new Error("Details are not ready."));
+    return captureMarketDetails(detailsRef.current, signal);
+  }, []);
+
   useEffect(() => {
-    frameRef.current?.toggleAttribute("inert", profileOpen || lensActive);
-  }, [profileOpen, lensActive, attempt]);
+    frameRef.current?.toggleAttribute("inert", Boolean(selectedModel) || profileOpen || lensActive);
+  }, [selectedModel, profileOpen, lensActive, attempt]);
 
   useEffect(() => {
     let disposed = false;
@@ -67,9 +84,18 @@ export function MarketSurface() {
     const onMessage = (event: MessageEvent) => {
       if (event.source !== frameRef.current?.contentWindow || event.origin !== window.location.origin) return;
       if (event.data?.type === "preacherman.market.page") {
-        setPage(event.data.page === "configurator" ? "configurator" : "intro");
+        if (event.data.page === "intro") setSelectedModel(null);
         setProfileOpen(false);
         setLensActive(false);
+      }
+      if (event.data?.type === "preacherman.market.details" || event.data?.type === "preacherman.market.prefetch") {
+        const modelId = event.data.modelId;
+        if (!isAvatarModelId(modelId) || !marketModelIds.includes(modelId)) return;
+        if (event.data.type === "preacherman.market.prefetch") {
+          void prefetchAvatarModel(createAvatarAssetUrls(localAvatarAssetBaseUrl(modelId), modelId).model).catch(() => undefined);
+        } else {
+          setSelectedModel(modelId); setProfileOpen(false); setLensActive(false);
+        }
       }
       if (event.data?.type === "preacherman.market.ready") {
         window.clearTimeout(deadline);
@@ -89,14 +115,16 @@ export function MarketSurface() {
 
   return (
     <section ref={surfaceRef} aria-label="Market" className="market-surface" data-entrance={entrance} data-logo-ready={logoReady} data-status={status} data-page={page} data-lens-active={lensActive}>
-      {page === "intro" && <MarketProfile disabled={entrance !== "complete"} open={profileOpen} onOpenChange={setProfileOpen} frameRef={frameRef} onLensActiveChange={setLensActive} />}
+      <MarketProfile key={`profile-${selectedModel ?? "intro"}`} disabled={entrance !== "complete"} open={profileOpen} onOpenChange={setProfileOpen}
+        frameRef={frameRef} captureSource={selectedModel ? captureDetails : undefined} onLensActiveChange={setLensActive} />
+      {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails} />}
       <iframe
         className="market-surface__frame"
         key={attempt}
         ref={frameRef}
         referrerPolicy="no-referrer"
         src="/market-love/cartier-love.html"
-        title="Market — Cartier LOVE experience"
+        title="Market — Preacherman avatars"
         onError={() => setStatus("error")}
       />
       {status !== "ready" && (

@@ -1,3 +1,4 @@
+import { patchMarketDetailsFooter } from "./market-details-footer.mjs";
 import { populateMarketCharacters } from "./market-character-sections.mjs";
 import { cp, mkdir, readFile, writeFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
@@ -49,6 +50,7 @@ for (const page of ["cartier-love.html", "love-configurator.html"]) {
   html = replaceOnce(html, "</head>", '<link rel="stylesheet" href="market-embed.css"><script src="market-embed.js"></script></head>');
   html = replaceOnce(html, "<body>", `<body>\n${contract}`);
   if (page === "cartier-love.html") html = await populateMarketCharacters(html);
+  else html = html.replace('<main id="configurator"', '<main id="configurator" data-market-footer="true"').replace('<title>Design Your LOVE Bracelet | Cartier</title>', '<title>Preacherman product options</title>');
   await writeFile(join(destination, page), html);
 }
 const bundlePath = join(destination, "assets/configurator/app.js");
@@ -73,6 +75,7 @@ bundle = replaceOnce(bundle, "depthWrite:!1,blending:Fx", "depthWrite:!1,transpa
 bundle = replaceOnce(bundle, "gl_FragColor = vec4(color, 1.0 - uFadeValue);",
   "float coverage = clamp(max(max(color.r, color.g), color.b), 0.0, 1.0) * (1.0 - uFadeValue);\n                    gl_FragColor = vec4(color * (1.0 - uFadeValue) / max(coverage, 0.00001), coverage);");
 bundle = replaceOnce(bundle, "depthWrite:!1,blending:Px", "depthWrite:!1,transparent:!0,blending:1/* market: caustics alpha */");
+bundle = patchMarketDetailsFooter(bundle);
 await writeFile(bundlePath, bundle);
 for (const script of ["assets/love-intro.js", "assets/configurator/local-adapter.js"]) {
   const path = join(destination, script);

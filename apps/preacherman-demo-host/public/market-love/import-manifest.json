@@ -6,8 +6,8 @@
   "files": [
     {
       "path": "assets/configurator/app.js",
-      "bytes": 1788679,
-      "sha256": "1aac445e5486fd44101de9fd36131712ea5f7420abbb644caad67c33e3d2c2bd"
+      "bytes": 1789029,
+      "sha256": "a253be3c0c3bbb0215f953729c80f2b09fa0f646a2e6623733254d2ad322234f"
     },
     {
       "path": "assets/configurator/gltf/cartier_box.glb",

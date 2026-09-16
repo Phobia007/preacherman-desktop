@@ -45,7 +45,7 @@ test("the long page, fonts and all character Details destinations remain", async
     assert.match(html, new RegExp(`data-od-id="love-${section}"`));
   }
   assert.doesNotMatch(html, /site-header|search-dialog/);
-  assert.equal((html.match(/href="love-configurator.html"/g) || []).length, JSON.parse(await text(join(imported, "characters.json"))).length);
+  assert.equal((html.match(/href="love-configurator.html\?character=[^"]+"/g) || []).length, JSON.parse(await text(join(imported, "characters.json"))).length);
   assert.match(html, /assets\/fonts\/fonts.css/);
   for (const font of ["BrilliantCutPro-Regular.woff2", "BrilliantCutPro-Medium.woff2", "FancyCutPro-Regular.woff2"]) assert.ok((await stat(join(imported, "assets/fonts", font))).size > 0);
 });
@@ -113,7 +113,8 @@ test("every imported asset is packaged and matches its recorded hash", async () 
 
 test("the 3D bundle changes only paper backings and transparent floor compositing", async () => {
   const manifest = JSON.parse(await text(join(imported, "import-manifest.json")));
-  let bundle = await text(join(imported, "assets/configurator/app.js"));
+  const { unpatchMarketDetailsFooter } = await import("../scripts/market-details-footer.mjs");
+  let bundle = unpatchMarketDetailsFooter(await text(join(imported, "assets/configurator/app.js")));
   assert.equal(bundle.split("gl_FragColor = vec4(0.0);").length, 5);
   for (const fragment of [
     "gl_FragColor = vec4(color, uOpacity);",
@@ -169,7 +170,8 @@ test("all Gallery portraits are packaged in order with alternating sides and cor
     const neutralCopy = value => copy(value)
       .replace(/(<h2[^>]*>)[\s\S]*?(<\/h2>)/, "$1TITLE$2")
       .replace(/(<div class="descriptive-card__description[^>]*>)[\s\S]*?(<\/div>)/, "$1SUMMARY$2")
-      .replace(/aria-label="[^"]*"/g, 'aria-label="LABEL"');
+      .replace(/aria-label="[^"]*"/g, 'aria-label="LABEL"')
+      .replace(/href="love-configurator.html\?character=[^"]+"/g, 'href="DETAILS"');
     assert.equal(neutralCopy(row), neutralCopy(rows[0]));
     assert.ok(row.includes('width="4096" height="4096"'));
     assert.ok(row.includes(index === 0 ? 'loading="eager"' : 'loading="lazy"'));

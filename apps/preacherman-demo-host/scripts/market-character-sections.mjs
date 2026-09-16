@@ -19,6 +19,7 @@ export async function populateMarketCharacters(html) {
       .replaceAll('data-od-id="style-start"', `data-od-id="${sectionId}-start"`)
       .replace(/(<h2\b[^>]*>)[\s\S]*?(<\/h2>)/, (_, open, close) => `${open}${escape(character.name.toUpperCase())}${close}`)
       .replace(/(<div class="descriptive-card__description[^>]*>)[\s\S]*?(<\/div>)/, (_, open, close) => `${open}${escape(character.summary)}${close}`)
+      .replace(/href="love-configurator\.html(?:\?[^"]*)?"/, `href="love-configurator.html?character=${encodeURIComponent(character.id)}"`)
       .replace(/aria-label="[^"]*"/, `aria-label="${escape(character.name)}, Details"`)
       .replace(/(<a\b[^>]*>)[\s\S]*?(<\/a>)/, (_, open, close) => `${open}Details${close}`)
       .replace(/<img\b[^>]*>/, `<img src="${escape(character.image)}" class="component-image descriptive-card__img object-fit--cover" alt="${escape(character.name)}" width="${character.width}" height="${character.height}" loading="${index === 0 ? "eager" : "lazy"}" decoding="async"${index === 0 ? ' fetchpriority="high"' : ''}>`);
