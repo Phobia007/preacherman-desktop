@@ -46,3 +46,23 @@ for a real GitHub authorization round trip in the packaged application.
 
 Native delivery evidence and the explicit live-auth verification result belong
 in `desktop-build-manifest.json` and the corresponding `output/playwright` report.
+
+
+## Browser return transport (2026-09-17)
+
+The browser completed Supabase authorization with the correct deep-link redirect stored,
+but never delivered it to Windows. New attempts use a temporary native listener on
+`127.0.0.1:43821` instead. Add `http://127.0.0.1:43821/auth/callback**` to Supabase Auth's
+redirect allowlist. Keep the existing website Site URL and GitHub HTTPS provider callback.
+
+The listener starts before the browser opens, accepts only the attempt's random nonce,
+and forwards the one-use authorization code to the existing PKCE exchange and server-side
+user verification. It stops on return, cancellation, timeout, shutdown or local sign-out.
+Pending attempts retain their nonce/verifier across a desktop restart. Stale cancellation
+cannot stop a newer attempt. Host/path validation, bounded headers/timeouts and no CORS
+prevent the endpoint from becoming a general local HTTP service. Codes and tokens are not
+logged or reflected in the script-free completion page, which follows the desktop theme.
+
+This is only OAuth return transport. No model, font, page, application asset or production
+UI depends on a local HTTP server. The packaged desktop remains self-contained. The
+existing custom protocol stays registered for compatible callers.

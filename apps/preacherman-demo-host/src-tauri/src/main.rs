@@ -5,8 +5,12 @@ use tauri_plugin_shell::ShellExt;
 use tauri::Manager;
 use tauri_plugin_deep_link::DeepLinkExt;
 
+mod auth_return;
+
 fn main() {
     tauri::Builder::default()
+        .manage(auth_return::AuthReturnServer::default())
+        .invoke_handler(tauri::generate_handler![auth_return::start_auth_return, auth_return::stop_auth_return])
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             if let Some(window) = app.get_webview_window("main") {
                 let _ = window.unminimize();

@@ -3,7 +3,7 @@ import type { SupabaseClient, User } from "@supabase/supabase-js";
 export const DESKTOP_REDIRECT = "preacherman://auth/callback";
 export const AUTH_STORAGE_KEY = "preacherman.account.gzqmjzybaosxhkfgbxaz";
 const PENDING_KEY = `${AUTH_STORAGE_KEY}.pending-until`;
-const LOGIN_TIMEOUT = 5 * 60_000;
+const LOGIN_TIMEOUT = 10 * 60_000;
 
 export type AccountStatus = "restoring" | "signed-out" | "opening" | "waiting" | "finishing" | "signed-in" | "signing-out";
 export interface AccountState { status: AccountStatus; user: User | null; error: string; }
@@ -15,6 +15,7 @@ interface Dependencies {
   listen: (handler: (urls: string[]) => void) => Promise<() => void>;
   currentUrls: () => Promise<string[] | null>;
   showAccount: () => void;
+  prepareRedirect?: (resume: boolean) => Promise<{ url: string; close: (preserveAttempt?: boolean) => Promise<void> }>;
 }
 
 export function parseDesktopCallback(raw: string): { code?: string; error?: string; flowId?: string } | null {
@@ -42,12 +43,14 @@ export function createAccountController(deps: Dependencies) {
   let unsubscribe: (() => void) | undefined;
   let timer: ReturnType<typeof setTimeout> | undefined;
   let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+  let closeReturn: ((preserveAttempt?: boolean) => Promise<void>) | undefined;
+  const releaseReturn = (preserveAttempt = false) => { const close = closeReturn; closeReturn = undefined; void close?.(preserveAttempt).catch(() => {}); };
   let revision = 0;
   let disposed = false;
   const publish = (next: AccountState) => { if (!disposed) { state = next; subscribers.forEach(fn => fn()); } };
   const fail = (error: string) => publish({ status: state.user ? "signed-in" : "signed-out", user: state.user, error });
   const pending = () => Number(deps.storage.getItem(PENDING_KEY)) > Date.now();
-  const clearPending = () => { clearTimeout(timer); deps.storage.removeItem(PENDING_KEY); };
+  const clearPending = () => { clearTimeout(timer); deps.storage.removeItem(PENDING_KEY); releaseReturn(); };
   const clearVerifier = () => {
     // The pinned SDK keeps a bounded verifier ring as well as the current verifier.
     const indexKey = `${AUTH_STORAGE_KEY}-flows-code-verifier`;
@@ -119,12 +122,20 @@ export function createAccountController(deps: Dependencies) {
         else { clearTimeout(refreshTimer); refreshTimer = setTimeout(() => { void verifyUser(); }, 0); }
       });
       unsubscribe = () => data.subscription.unsubscribe();
-      if (pending()) { publish({ status: "waiting", user: null, error: "" }); armTimeout(); }
+      if (pending()) {
+        publish({ status: "waiting", user: null, error: "" }); armTimeout();
+        const current = revision;
+        const prepared = await deps.prepareRedirect?.(true);
+        if (prepared) {
+          if (disposed || current !== revision) { await prepared.close(); return; }
+          closeReturn = prepared.close;
+        }
+      }
       else { clearPending(); clearVerifier(); }
       const urls = await deps.currentUrls();
       if (urls) await receive(urls);
       if (state.status !== "waiting" && state.status !== "finishing") await verifyUser();
-    } catch { fail("Account sign-in is unavailable. Please restart Preacherman and try again."); }
+    } catch { clearPending(); clearVerifier(); fail("Account sign-in is unavailable. Please restart Preacherman and try again."); }
   })();
 
   return {
@@ -138,10 +149,13 @@ export function createAccountController(deps: Dependencies) {
       const current = ++revision;
       publish({ status: "opening", user: null, error: "" });
       try {
-        clearVerifier();
+        clearPending(); clearVerifier();
         deps.storage.setItem(PENDING_KEY, String(Date.now() + LOGIN_TIMEOUT));
         armTimeout();
-        const { data, error } = await deps.auth.signInWithOAuth({ provider: "github", options: { redirectTo: DESKTOP_REDIRECT, skipBrowserRedirect: true } });
+        const prepared = await deps.prepareRedirect?.(false);
+        if (current !== revision || disposed) { await prepared?.close(); return; }
+        closeReturn = prepared?.close;
+        const { data, error } = await deps.auth.signInWithOAuth({ provider: "github", options: { redirectTo: prepared?.url || DESKTOP_REDIRECT, skipBrowserRedirect: true } });
         if (error || !data.url) throw new Error("authorize-failed");
         if (current !== revision || disposed) return;
         const url = new URL(data.url);
@@ -167,6 +181,6 @@ export function createAccountController(deps: Dependencies) {
       } catch { fail("Could not sign out. Check your connection and try again."); }
     },
     retry: verifyUser,
-    dispose() { disposed = true; revision++; clearTimeout(timer); clearTimeout(refreshTimer); unlisten?.(); unsubscribe?.(); subscribers.clear(); },
+    dispose() { releaseReturn(true); disposed = true; revision++; clearTimeout(timer); clearTimeout(refreshTimer); unlisten?.(); unsubscribe?.(); subscribers.clear(); },
   };
 }

@@ -18,7 +18,7 @@ function harness(options={}) {
   signOut:async config=>{calls.signOut.push(config);user=null;authEvent('SIGNED_OUT');return {error:null}},
  };
  const storage={getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
- const controller=exports.createAccountController({auth,storage,desktop:options.desktop!==false,openBrowser:async url=>{calls.opens.push(url);if(options.openFailure)throw Error('failed')},listen:async fn=>{receive=fn;return()=>{calls.unlistened=true}},currentUrls:async()=>options.current||null,showAccount:()=>calls.show++});
+ const controller=exports.createAccountController({auth,storage,desktop:options.desktop!==false,prepareRedirect:options.prepareRedirect,openBrowser:async url=>{calls.opens.push(url);if(options.openFailure)throw Error('failed')},listen:async fn=>{receive=fn;return()=>{calls.unlistened=true}},currentUrls:async()=>options.current||null,showAccount:()=>calls.show++});
  return {controller,calls,values,timers,exports,storage,receive:async url=>{receive([url]);for(let i=0;i<8;i++)await Promise.resolve()},event:(e)=>authEvent(e)};
 }
 test('GitHub sign-in uses PKCE return address, opens once, verifies identity and signs out locally',async()=>{
@@ -59,4 +59,25 @@ test('Restart verifies a saved session; network failure never invents a signed-i
 });
 test('Browser preview does not start a desktop authorization flow',async()=>{
  const h=harness({desktop:false});await h.controller.signIn();assert.equal(h.calls.opens.length,0);assert.match(h.controller.getSnapshot().error,/Desktop/);h.controller.dispose();
+});
+
+test('Prepared loopback redirect is used and closed on success, cancel, expiry and browser failure',async()=>{
+ for(const reason of ['success','cancel','expired','openFailure']){
+  let closed=0;const h=harness({openFailure:reason==='openFailure',prepareRedirect:async resume=>{assert.equal(resume,false);return {url:'http://127.0.0.1:43821/auth/callback?desktop_state=test',close:async()=>{closed++}}}});
+  await h.controller.signIn();assert.match(h.calls.config.options.redirectTo,/^http:\/\/127\.0\.0\.1:43821\//);
+  if(reason==='success')await h.receive('preacherman://auth/callback?code=1234567890123456');
+  if(reason==='cancel')h.controller.cancel();
+  if(reason==='expired')for(const fn of [...h.timers.values()])fn();
+  assert.equal(closed,1,reason);h.controller.dispose();assert.equal(closed,1);
+ }
+});
+test('Cancelling while the return listener starts cannot open a browser or orphan the listener',async()=>{
+ let ready,closed=0;const h=harness({prepareRedirect:()=>new Promise(resolve=>ready=resolve)});
+ await h.controller.start();const attempt=h.controller.signIn();for(let i=0;i<16&&!ready;i++)await Promise.resolve();assert.equal(typeof ready,"function");h.controller.cancel();
+ ready({url:'http://127.0.0.1:43821/auth/callback',close:async()=>closed++});await attempt;
+ assert.equal(h.calls.opens.length,0);assert.equal(closed,1);assert.equal(h.controller.getSnapshot().status,'signed-out');h.controller.dispose();
+});
+test('A pending restart resumes its listener and disposal releases it without deleting the pending attempt',async()=>{
+ let closed=0,resumed=false;const h=harness({prepareRedirect:async resume=>{resumed=resume;return {url:'http://127.0.0.1:43821/auth/callback',close:async()=>closed++}}});
+ h.values.set(h.exports.AUTH_STORAGE_KEY+'.pending-until',String(Date.now()+60_000));await h.controller.start();assert.ok(resumed);assert.equal(h.controller.getSnapshot().status,'waiting');h.controller.dispose();assert.equal(closed,1);assert.ok(h.values.has(h.exports.AUTH_STORAGE_KEY+'.pending-until'));
 });

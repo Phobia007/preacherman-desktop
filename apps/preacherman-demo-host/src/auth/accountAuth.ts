@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { isTauri } from "@tauri-apps/api/core";
+import { invoke, isTauri } from "@tauri-apps/api/core";
 import { getCurrent, onOpenUrl } from "@tauri-apps/plugin-deep-link";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { openLocalSurface } from "../demo/screenRoute";
@@ -31,10 +31,29 @@ const supabase = createClient("https://gzqmjzybaosxhkfgbxaz.supabase.co", "sb_pu
   },
 });
 
+const RETURN_STATE_KEY = `${AUTH_STORAGE_KEY}.return-state`;
+async function prepareRedirect(resume: boolean) {
+  const saved = resume ? localStorage.getItem(RETURN_STATE_KEY) : null;
+  const nonce = saved && /^[a-f0-9-]{36}$/i.test(saved) ? saved : crypto.randomUUID();
+  localStorage.setItem(RETURN_STATE_KEY, nonce);
+  try {
+    const url = await invoke<string>("start_auth_return", { nonce, appearance: document.documentElement.dataset.appearance || "dark" });
+    if (url !== `http://127.0.0.1:43821/auth/callback?desktop_state=${nonce}`) throw new Error("Invalid return address");
+    return { url, close: async (preserveAttempt = false) => {
+      if (!preserveAttempt && localStorage.getItem(RETURN_STATE_KEY) === nonce) localStorage.removeItem(RETURN_STATE_KEY);
+      await invoke("stop_auth_return", { nonce });
+    } };
+  } catch (error) {
+    if (localStorage.getItem(RETURN_STATE_KEY) === nonce) localStorage.removeItem(RETURN_STATE_KEY);
+    await invoke("stop_auth_return", { nonce }).catch(() => {});
+    throw error;
+  }
+}
+
 export const accountAuth = createAccountController({
   auth: supabase.auth, desktop: isTauri(), storage: localStorage,
   openBrowser: url => openUrl(url), listen: onOpenUrl, currentUrls: getCurrent,
-  showAccount: () => openLocalSurface("account"),
+  showAccount: () => openLocalSurface("account"), prepareRedirect,
 });
 
 // Start independently of the Account surface, so navigation cannot drop a callback.
