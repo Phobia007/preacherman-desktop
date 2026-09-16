@@ -109,8 +109,7 @@ export async function captureMarketDetails(panel: HTMLElement, signal: AbortSign
   canvas.width = panel.clientWidth; canvas.height = panel.clientHeight;
   const ctx = canvas.getContext("2d")!;
   const sx = canvas.width / bounds.width, sy = canvas.height / bounds.height;
-  ctx.fillStyle = style.getPropertyValue("--demo-theme-market-details-solid").trim();
-  ctx.fillRect(0, 100, canvas.width, canvas.height - 100);
+  // Keep the live frosted desktop visible through the lens; capture only foreground content.
   window.dispatchEvent(new CustomEvent(CAPTURE_EVENT, { detail: (frame: HTMLCanvasElement) => {
     const box = frame.getBoundingClientRect();
     ctx.drawImage(frame, (box.left - bounds.left) * sx, (box.top - bounds.top) * sy, box.width * sx, box.height * sy);

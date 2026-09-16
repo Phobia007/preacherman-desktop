@@ -97,5 +97,16 @@ export async function captureMarketFrame(frame: HTMLIFrameElement, signal: Abort
     }
   }
   ctx.restore();
+  // Include the same frosted header in the spatial logo snapshot.
+  const source = doc.createElement("canvas");
+  source.width = canvas.width; source.height = canvas.height;
+  source.getContext("2d")!.drawImage(canvas, 0, 0);
+  const header = getComputedStyle(stage, "::before");
+  const height = parseFloat(header.height);
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, canvas.width, height); ctx.clip();
+  ctx.clearRect(0, 0, canvas.width, height);
+  ctx.filter = header.backdropFilter; ctx.drawImage(source, 0, 0); ctx.filter = "none";
+  ctx.fillStyle = header.backgroundColor; ctx.fillRect(0, 0, canvas.width, height);
+  ctx.restore();
   return canvas;
 }

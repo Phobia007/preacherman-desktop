@@ -8,28 +8,29 @@
 
 .market-surface__frame {
   position: absolute;
-  top: var(--market-content-top);
+  top: 0;
   display: block;
   width: 100%;
-  height: calc(100% - var(--market-content-top));
+  height: 100%;
   border: 0;
   background: transparent;
 }
 
-/* The iframe viewport clips every scrolling pixel below this fixed rule. */
+/* Content scrolls behind this fixed glass header; the signature stays sharp. */
 .market-surface[data-page="intro"]::before {
   content: "";
   position: absolute;
-  top: calc(var(--market-content-top) - 1px);
+  top: 0;
+  height: var(--market-content-top);
+  box-sizing: border-box;
+  background: var(--demo-theme-market-header-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   right: 0;
   left: 0;
   z-index: 1;
-  border-top: 1px solid var(--demo-theme-market-border);
+  border-bottom: 1px solid var(--demo-theme-market-border);
   pointer-events: none;
-}
-
-.market-surface[data-page="configurator"] {
-  --market-content-top: 116px;
 }
 
 /* The lens supplies the current page pixels until its closing frame reaches zero. */

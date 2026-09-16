@@ -2632,12 +2632,12 @@ body {
 
 .demo-app-shell[data-active-surface="account"] .demo-app-shell__brand-trigger:focus-visible { outline-color: var(--demo-theme-account-focus); }
 
-/* Market Details: frosted paper masks the persistent companion in either mode. */
+/* Glass stays translucent: the existing desktop provides the image underneath. */
 .demo-app-shell {
-  --demo-theme-market-details-glass: rgb(48 61 72 / 94%);
-  --demo-theme-market-details-solid: #303d48;
+  --demo-theme-market-details-glass: color-mix(in srgb, var(--demo-theme-home-canvas) 12%, transparent);
+  --demo-theme-market-header-glass: rgb(255 255 255 / 6%);
 }
 .demo-app-shell[data-appearance="dark"] {
-  --demo-theme-market-details-glass: rgb(13 20 27 / 95%);
-  --demo-theme-market-details-solid: #0d141b;
+  --demo-theme-market-details-glass: color-mix(in srgb, var(--demo-theme-home-canvas) 12%, transparent);
+  --demo-theme-market-header-glass: rgb(0 0 0 / 12%);
 }

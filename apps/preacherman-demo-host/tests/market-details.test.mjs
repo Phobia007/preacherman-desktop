@@ -55,8 +55,13 @@ test("Details keeps the active companion preference isolated and supplies the ex
   assert.match(surface, /isAvatarModelId\(modelId\).*marketModelIds.includes/);
   assert.match(surface, /modelId=\{selectedModel\}/);
   assert.match(surface, /captureSource=\{selectedModel \? captureDetails : undefined\}/);
-  for (const token of ["glass", "solid"]) assert.equal((tokens.match(new RegExp(`--demo-theme-market-details-${token}:`, "g")) || []).length, 2);
-  assert.match(css, /backdrop-filter: blur\(42px\)/);
+  for (const token of ["glass"]) assert.equal((tokens.match(new RegExp(`--demo-theme-market-details-${token}:`, "g")) || []).length, 2);
+  assert.match(css, /data-page="details"[^}]+inset: 0/);
+  assert.match(css, /:has\(\.market-surface\[data-page="details"\]\) \.demo-app-shell__scene[^}]+filter: blur\(12px\)/);
+  assert.match(css, /\.market-details__model \{ position: absolute; inset: 0;/);
+  assert.doesNotMatch(detail, /market-details-solid|ctx.fillRect/);
+  assert.doesNotMatch(tokens, /market-details-solid/);
+  assert.equal((tokens.match(/--demo-theme-market-details-glass: color-mix\(in srgb, var\(--demo-theme-home-canvas\) 12%, transparent\)/g) || []).length, 2);
   assert.match(css, /BrilliantCutPro-Medium.woff2/);
   assert.match(detail, /cancelAnimationFrame\(frame\)/);
   assert.match(detail, /removeEventListener\(CAPTURE_EVENT/);

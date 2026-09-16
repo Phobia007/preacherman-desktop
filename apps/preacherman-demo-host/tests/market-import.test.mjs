@@ -84,16 +84,15 @@ test("Market uses Task's exact profile copy, destinations and packaged signature
   assert.match(css, /prefers-reduced-motion/);
 });
 
-test("the host fixes the boundary below the signature and clips scrolling to its iframe", async () => {
+test("the full-height page scrolls behind a fixed translucent signature header", async () => {
   const css = await text(join(root, "src/surfaces/market/market-surface.css"));
   const embed = await text(join(imported, "market-embed.css"));
   assert.match(css, /--market-content-top: 100px/);
-  assert.match(css, /top: var\(--market-content-top\)/);
-  assert.match(css, /height: calc\(100% - var\(--market-content-top\)\)/);
-  assert.match(css, /data-page="intro"[^}]+top: calc\(var\(--market-content-top\) - 1px\)[^}]+border-top: 1px solid var\(--demo-theme-market-border\)/);
-  assert.match(css, /data-page="configurator"[^}]+--market-content-top: 116px/);
+  assert.match(css, /\.market-surface__frame[^}]+top: 0[^}]+height: 100%/);
+  assert.match(css, /data-page="intro"[^}]+height: var\(--market-content-top\)[^}]+backdrop-filter: blur\(12px\)[^}]+border-bottom: 1px solid var\(--demo-theme-market-border\)/);
+  assert.match(embed, /#main \{ padding-top: 100px; \}/);
   assert.match(embed, /scrollbar-width: none/);
-  assert.match(embed, /scroll-padding-top: 0/);
+  assert.match(embed, /scroll-padding-top: 100px/);
   assert.doesNotMatch(embed, /overflow(?:-y)?:\s*hidden/);
   const capture = await text(join(root, "src/surfaces/market/captureMarketFrame.ts"));
   assert.match(capture, /!doc.getElementById\("main"\)/);

@@ -81,12 +81,13 @@ svg [stroke="#0D0D0D"], svg [stroke="#0d0d0d"], svg [stroke="#000000"], svg [str
 
 html {
   scrollbar-width: none;
-  scroll-padding-top: 0;
+  scroll-padding-top: 100px;
 }
 
 html::-webkit-scrollbar { width: 0; height: 0; }
 
-/* The host owns the signature and fixed content boundary. */
+/* Initial layout starts below the signature, then scrolls under its glass. */
+#main { padding-top: 100px; }
 
 input { caret-color: var(--demo-theme-market-text, #fff); }
 
