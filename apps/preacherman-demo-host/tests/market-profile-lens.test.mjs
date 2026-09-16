@@ -113,3 +113,28 @@ test("capture is current, local, bounded and abortable; text finishes independen
   assert.match(css, /--demo-theme-market-ink-shadow/);
 });
 
+
+test("live pixels refresh during opening, open and closing without restarting the optical clock", () => {
+ const h=harness(),lens=h.create(); lens.setOpen(true); h.step(300);
+ const progress=h.frames.at(-1).progress;
+ lens.updateSource(); h.step(850);
+ assert.equal(h.frames.at(-1).progress,1); assert.ok(progress>0&&progress<1);
+ lens.setOpen(false); h.step(1100); const closing=h.frames.at(-1).progress;
+ lens.updateSource(); h.step(1500);
+ assert.ok(closing>0&&closing<1); assert.equal(h.frames.at(-1).progress,0);
+ assert.equal(h.raf.size,0); assert.ok(h.resources.every(r=>!r.disposed));
+ lens.updateSource(); assert.equal(h.raf.size,0);
+ lens.setOpen(true); h.step(2350); assert.equal(h.frames.at(-1).progress,1);
+ assert.equal(h.resources.filter(r=>'renders' in r).length,1);
+ lens.dispose(); lens.updateSource(); assert.equal(h.raf.size,0);
+});
+
+test("reduced motion keeps refreshing live avatar pixels, but does not animate the lens or wake hidden/closed views", () => {
+ const h=harness({reduced:true}),lens=h.create(); lens.setOpen(true); h.step(1);
+ const count=h.frames.length; lens.updateSource(); h.step(2);
+ assert.equal(h.frames.length,count+1); assert.equal(h.frames.at(-1).progress,1); assert.equal(h.raf.size,0);
+ h.document.hidden=true; h.listeners.get('visibilitychange')(); lens.updateSource(); assert.equal(h.raf.size,0);
+ h.document.hidden=false; h.listeners.get('visibilitychange')(); h.step(100);
+ lens.setOpen(false); h.step(101); lens.updateSource(); assert.equal(h.raf.size,0);
+ lens.dispose(); assert.ok(h.resources.every(r=>r.disposed));
+});

@@ -31,10 +31,21 @@ test('The Account lens uses only authored scene pixels, and login feedback is lo
  assert.match(scene,/\.detail\(gl\.domElement\)/);
  assert.doesNotMatch(scene,/input|email|html2canvas|document\.body/);
  assert.match(scene,/removeEventListener\(CAPTURE_EVENT/);
+ assert.match(scene,/addAfterEffect/);
+ assert.match(scene,/frameSubscribers.delete\(copy\)/);
  assert.match(surface,/new TaskProfileLens/);
  assert.match(surface,/lens\.current\?\.dispose\(\)/);
  assert.doesNotMatch(surface,/fetch\(|localStorage|sessionStorage|https?:\/\/|evomap/i);
  assert.match(surface,/type="email"[\s\S]*?autoComplete="email" required/);
  assert.match(surface,/Your email has not been sent or saved/);
  assert.match(surface,/\.showModal\(\)/);
+});
+
+test('Account keeps the companion rendering through the lens and reuses its context on close',()=>{
+ const app=read('src/App.tsx');
+ assert.doesNotMatch(app,/accountLensActive|onLensActiveChange=\{setAccount/);
+ assert.match(surface,/settled && progress === 0\) \{ disconnectFrames\(\); setPhase\("closed"\); \}/);
+ assert.match(surface,/source.current!.subscribe\(\(\) => lens.current\?\.updateSource\(\)\)/);
+ assert.match(account,/data-lens-active="false"\] .account__lens \{ visibility: hidden/);
+ assert.match(account,/transition: transform 1050ms/);
 });

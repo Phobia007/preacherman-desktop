@@ -90,6 +90,12 @@ export class TaskProfileLens {
     if (open && this.progress === 0) this.clock = 0;
     this.wake();
   }
+  /** Refresh sampled pixels without restarting the optical transition or its clock. */
+  updateSource() {
+    if (this.disposed) return;
+    this.texture.needsUpdate = true;
+    if (this.target || this.progress) this.wake();
+  }
   private wake = () => {
     if (!this.disposed && !this.request && !document.hidden) this.request = requestAnimationFrame(this.tick);
   };

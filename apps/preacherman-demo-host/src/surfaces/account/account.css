@@ -9,6 +9,8 @@
   clip-path: inset(0 25%);
   animation: account-scene-left 820ms cubic-bezier(.22, 1, .36, 1) both;
   background: transparent;
+  /* The live canvas and its refracted copy hand off on the same frame. */
+  transition: transform 1050ms cubic-bezier(.22, 1, .36, 1);
 }
 .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene::after { display: none; }
 .demo-app-shell[data-active-surface="account"]:has(.account[data-lens-active="true"]) .demo-app-shell__scene { opacity: 0; transition: none; }
@@ -57,6 +59,7 @@
 .account__error, .account__effect-error { color: var(--demo-theme-account-error); font-size: 13px; line-height: 20px; margin: 8px 0 0; }
 .account__effect-error { position: absolute; top: calc(50% + 155px); left: 0; width: 100%; text-align: center; }
 .account__lens, .account__lens canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.account[data-lens-active="false"] .account__lens { visibility: hidden; }
 .account[data-lens-active="true"] .account__visual { background: var(--demo-theme-account-glass); }
 .account[data-lens-active="true"] .account__mark, .account[data-lens-active="true"] .account__fade { visibility: hidden; }
 .account__profile { position: absolute; left: 50%; top: 50%; width: min(80%, 360px); transform: translate(-50%, -50%); text-align: center; color: var(--demo-theme-account-profile-text); font: 400 16px/1.5 "Market Task Profile", sans-serif; animation: account-profile 650ms ease both; }
@@ -75,5 +78,5 @@
 @media (prefers-reduced-motion: reduce) {
   .account__visual, .account__main, .account__profile { animation: none; }
   .demo-app-shell__scene { transition: none; }
-  .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene { animation: none; }
+  .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene { animation: none; transition: none; }
 }

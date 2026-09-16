@@ -142,7 +142,7 @@ components:
 
 This document describes only the implemented Account surface. Its visual authority is the user-pinned local EvoMap login composition: equal portrait and form panels, the original HarmonyOS/Arial form, a neutral frosted scene, and existing Preacherman brand assets. It does not establish a replacement design system for other routes.
 
-The left panel shares the currently active companion model with the application. The right panel presents a quiet, centered login form. The signature opens the existing Task profile lens against a captured scene, keeping the portrait and optical distortion part of the same composition. The account flow currently ends with honest local feedback; authentication is not connected.
+The left panel shares the currently active companion model with the application. The right panel presents a quiet, centered login form. The signature opens the existing Task profile lens against the live scene, keeping the portrait and optical distortion part of the same composition. The account flow currently ends with honest local feedback; authentication is not connected.
 
 **Key Characteristics:**
 
@@ -197,7 +197,7 @@ The form uses flat tonal surfaces and thin borders. Depth is concentrated in the
 
 The PM mark has a restrained drop shadow (`0 2px 5px`) and the resting signature a text shadow (`0 1px 4px`), both using brand-shadow. The opened signature removes its shadow and uses profile-text. The feedback dialog has a semantic dim backdrop with (6px) backdrop blur.
 
-**The Captured Scene Rule.** The lens distorts the captured companion scene, frost, lower gradient, and PM mark. Keep the form outside the capture and pause the shared companion renderer while the lens obscures it.
+**The Live Scene Rule.** The lens distorts the continuously animated shared companion, frost, lower gradient, and PM mark. Keep the form outside the capture. The shared renderer keeps running throughout opening, open, and closing; copy its completed frame without rendering a second companion.
 
 ## Shapes
 
@@ -223,9 +223,9 @@ The native dialog announces "Sign-in is coming soon" and explicitly says the ema
 
 The portrait uses the shared active avatar. The white startup PM mark is (184px square). The signature is a real button with minimum target height (48px), `aria-expanded`, and `aria-controls`. Clicking toggles the profile; Escape closes it and returns focus to the signature.
 
-The lens uses a synchronous capture of the shared model canvas composited with current-theme frost, the lower fade, and the loaded PM mark. It excludes the form and other desktop UI. Existing TaskProfileLens opens over (850ms) and closes over (650ms) using its imported curve. Profile text fades in over (650ms). The shared companion renderer pauses throughout opening, open, and closing phases, then resumes after lens disposal. The lens suspends animation while the document is hidden and honors reduced motion.
+The lens starts from a synchronous capture of the shared model canvas, then samples each completed shared render. Cache current-theme frost, the lower fade, and the loaded PM mark and composite the live model into those layers. It excludes the form and other desktop UI. Existing TaskProfileLens opens over (850ms) and closes over (650ms) using its imported curve. Profile text fades in over (650ms). The shared companion renderer remains active throughout opening, open, and closing. Closing hands off to the live scene immediately, without an opacity restart or context destruction. The lens suspends animation while the document is hidden and honors reduced motion.
 
-Appearance or panel-size changes dispose and reset the captured effect. Returning to the profile captures a fresh frame. A capture or renderer failure leaves "The visual effect is unavailable." status. Closing or unmounting disposes the effect's renderer, texture, geometry, and material.
+Appearance or panel-size changes dispose and reset the captured effect. Returning to the profile reconnects live frame updates. A capture or renderer failure leaves "The visual effect is unavailable." status. Closing disconnects frame copies and retains one idle lens for reuse. Unmounting, appearance changes and size changes dispose the renderer, texture, geometry, and material. Reduced motion still refreshes live pixels without the lens's ambient motion.
 
 ### Inherited navigation and native controls
 

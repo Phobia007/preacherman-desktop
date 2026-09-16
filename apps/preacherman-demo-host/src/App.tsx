@@ -153,7 +153,6 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const [workView, setWorkView] = useState("task");
   const [labView, setLabView] = useState("voice");
   const [galleryView, setGalleryView] = useState("characters");
-  const [accountLensActive, setAccountLensActive] = useState(false);
   const [galleryDetailOpen, setGalleryDetailOpen] = useState(false);
   const [galleryPreviewModelId, setGalleryPreviewModelId] = useState<ModelId | null>(null);
   const activateGalleryModel = useCallback((modelId: ModelId) => {
@@ -405,7 +404,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           prefetchModelId={activeSurfaceType === "market" && sceneModelId ? adjacentGalleryModel(sceneModelId) : undefined}
           variant="persistent"
           wakeEnabled={activeSurfaceType === "home"}
-          renderActive={windowActive && !accountLensActive}
+          renderActive={windowActive}
         />
       ) : null}</>}
     >
@@ -440,7 +439,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         />
       </div>
       {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
-      {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onLensActiveChange={setAccountLensActive} /> : null}
+      {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} /> : null}
       {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}

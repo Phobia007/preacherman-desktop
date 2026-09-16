@@ -8,10 +8,12 @@ import githubIcon from "./assets/github.svg";
 import "../market/market-profile.css";
 import "./account.css";
 
-export function AccountSurface({ appearance, onLensActiveChange }: { appearance: Appearance; onLensActiveChange: (active: boolean) => void }) {
+export function AccountSurface({ appearance }: { appearance: Appearance }) {
   const panel = useRef<HTMLElement>(null);
   const lensHost = useRef<HTMLDivElement>(null);
   const lens = useRef<TaskProfileLens | null>(null);
+  const source = useRef<ReturnType<typeof captureAccountFrame> | null>(null);
+  const stopFrames = useRef<(() => void) | null>(null);
   const toggle = useRef<HTMLButtonElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
@@ -21,7 +23,10 @@ export function AccountSurface({ appearance, onLensActiveChange }: { appearance:
   const [blurred, setBlurred] = useState(false);
   const [motionReady, setMotionReady] = useState(false);
   const [effectError, setEffectError] = useState("");
-  const dispose = () => { lens.current?.dispose(); lens.current = null; };
+  const disconnectFrames = () => { stopFrames.current?.(); stopFrames.current = null; };
+  const dispose = () => {
+    disconnectFrames(); lens.current?.dispose(); lens.current = null; source.current = null;
+  };
 
   useEffect(() => {
     const reduce = matchMedia("(prefers-reduced-motion: reduce)");
@@ -32,21 +37,22 @@ export function AccountSurface({ appearance, onLensActiveChange }: { appearance:
   }, []);
 
   useEffect(() => {
-    // A source frame belongs to exactly one layout and appearance.
+    // Cached frost, logo and crop belong to exactly one layout and appearance.
     const reset = () => { dispose(); setOpen(false); setPhase("closed"); setEffectError(""); };
     reset();
     const resize = new ResizeObserver(reset); resize.observe(panel.current!);
-    return () => resize.disconnect();
+    window.addEventListener("resize", reset);
+    return () => { resize.disconnect(); window.removeEventListener("resize", reset); };
   }, [appearance]);
 
   useEffect(() => {
     if (!open && !lens.current) return;
     if (!lens.current) {
       try {
-        const source = captureAccountFrame(panel.current!);
-        lens.current = new TaskProfileLens(lensHost.current!, source, (progress, settled) => {
+        source.current = captureAccountFrame(panel.current!);
+        lens.current = new TaskProfileLens(lensHost.current!, source.current.canvas, (progress, settled) => {
           if (lensHost.current) lensHost.current.dataset.progress = progress.toFixed(4);
-          if (settled && progress === 0) { dispose(); setPhase("closed"); }
+          if (settled && progress === 0) { disconnectFrames(); setPhase("closed"); }
           else if (settled) setPhase("open");
         });
       } catch {
@@ -56,6 +62,11 @@ export function AccountSurface({ appearance, onLensActiveChange }: { appearance:
     }
     setPhase(open ? "opening" : "closing");
     lens.current.setOpen(open);
+    // Keep one warm lens while Account is mounted. Closing only stops frame copies;
+    // it never restarts the avatar or destroys a WebGL context on the closing frame.
+    if (open && !stopFrames.current) {
+      stopFrames.current = source.current!.subscribe(() => lens.current?.updateSource());
+    }
   }, [open]);
 
   useEffect(() => {
@@ -66,11 +77,6 @@ export function AccountSurface({ appearance, onLensActiveChange }: { appearance:
     window.addEventListener("keydown", close);
     return () => window.removeEventListener("keydown", close);
   }, [open]);
-
-  useEffect(() => {
-    onLensActiveChange(phase !== "closed");
-    return () => onLensActiveChange(false);
-  }, [phase, onLensActiveChange]);
 
   const showSignInStatus = () => dialog.current?.showModal();
   return (
