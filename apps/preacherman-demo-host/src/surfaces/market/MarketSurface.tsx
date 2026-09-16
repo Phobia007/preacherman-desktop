@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MarketProfile } from "./MarketProfile";
-import { animateMarketPanels, MARKET_LOGO_MS } from "./marketEntrance";
+import { animateMarketPanels, MARKET_LOGO_MS, type MarketDetailsPhase } from "./marketEntrance";
 import "./market-surface.css";
 import { isAvatarModelId, createAvatarAssetUrls, prefetchAvatarModel } from "@preacherman/avatar-renderer";
 import type { ModelId } from "../../preferences";
@@ -18,16 +18,22 @@ export function MarketSurface() {
   const [entrance, setEntrance] = useState<"logo" | "panels" | "complete">("logo");
   const [attempt, setAttempt] = useState(0);
   const [selectedModel, setSelectedModel] = useState<ModelId | null>(null);
+  const openingModel = useRef<ModelId | null>(null);
+  const [detailsPhase, setDetailsPhase] = useState<MarketDetailsPhase>("idle");
   const detailsRef = useRef<HTMLElement>(null);
-  const page = selectedModel ? "details" : "intro";
+  const page = selectedModel && detailsPhase !== "exiting" ? "details" : "intro";
   const [profileOpen, setProfileOpen] = useState(false);
   const [lensActive, setLensActive] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   const closeDetails = useCallback(() => {
+    openingModel.current = null;
+    setDetailsPhase("idle");
     setSelectedModel(null); setProfileOpen(false); setLensActive(false);
     requestAnimationFrame(() => frameRef.current?.contentDocument?.querySelector<HTMLElement>("[data-market-return-focus]")?.focus({ preventScroll: true }));
   }, []);
+  const showDetailsContent = useCallback(() => setDetailsPhase(current => current === "model" ? "content" : current), []);
+  const finishDetailsEntrance = useCallback(() => setDetailsPhase(current => current === "content" ? "complete" : current), []);
   const captureDetails = useCallback((signal: AbortSignal) => {
     if (!detailsRef.current) return Promise.reject(new Error("Details are not ready."));
     return captureMarketDetails(detailsRef.current, signal);
@@ -36,6 +42,20 @@ export function MarketSurface() {
   useEffect(() => {
     frameRef.current?.toggleAttribute("inert", Boolean(selectedModel) || profileOpen || lensActive);
   }, [selectedModel, profileOpen, lensActive, attempt]);
+
+  useEffect(() => {
+    if (!selectedModel) return;
+    const doc = frameRef.current?.contentDocument;
+    if (!doc) return;
+    let disposed = false;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const motion = animateMarketPanels(doc, reduced, "out");
+    void motion.finished.then(() => {
+      if (disposed) return;
+      setDetailsPhase(reduced ? "model" : "frost");
+    }).catch(() => { /* Closing or leaving Market cancels the complete sequence. */ });
+    return () => { disposed = true; motion.cancel(); };
+  }, [selectedModel]);
 
   useEffect(() => {
     let disposed = false;
@@ -84,7 +104,7 @@ export function MarketSurface() {
     const onMessage = (event: MessageEvent) => {
       if (event.source !== frameRef.current?.contentWindow || event.origin !== window.location.origin) return;
       if (event.data?.type === "preacherman.market.page") {
-        if (event.data.page === "intro") setSelectedModel(null);
+        if (event.data.page === "intro") closeDetails();
         setProfileOpen(false);
         setLensActive(false);
       }
@@ -94,6 +114,10 @@ export function MarketSurface() {
         if (event.data.type === "preacherman.market.prefetch") {
           void prefetchAvatarModel(createAvatarAssetUrls(localAvatarAssetBaseUrl(modelId), modelId).model).catch(() => undefined);
         } else {
+          if (openingModel.current) return;
+          openingModel.current = modelId;
+          void prefetchAvatarModel(createAvatarAssetUrls(localAvatarAssetBaseUrl(modelId), modelId).model).catch(() => undefined);
+          setDetailsPhase("exiting");
           setSelectedModel(modelId); setProfileOpen(false); setLensActive(false);
         }
       }
@@ -111,13 +135,19 @@ export function MarketSurface() {
       window.clearTimeout(deadline);
       window.removeEventListener("message", onMessage);
     };
-  }, [attempt]);
+  }, [attempt, closeDetails]);
 
   return (
-    <section ref={surfaceRef} aria-label="Market" className="market-surface" data-entrance={entrance} data-logo-ready={logoReady} data-status={status} data-page={page} data-lens-active={lensActive}>
-      <MarketProfile key={`profile-${selectedModel ?? "intro"}`} disabled={entrance !== "complete"} open={profileOpen} onOpenChange={setProfileOpen}
+    <section ref={surfaceRef} aria-label="Market" className="market-surface" data-entrance={entrance} data-logo-ready={logoReady} data-status={status} data-page={page} data-details-phase={detailsPhase} data-lens-active={lensActive}
+      onAnimationEnd={event => {
+        if (event.target === event.currentTarget && event.animationName === "market-details-frost-in") {
+          setDetailsPhase(current => current === "frost" ? "model" : current);
+        }
+      }}>
+      <MarketProfile key={`profile-${selectedModel ?? "intro"}`} disabled={entrance !== "complete" || Boolean(selectedModel && detailsPhase !== "complete")} open={profileOpen} onOpenChange={setProfileOpen}
         frameRef={frameRef} captureSource={selectedModel ? captureDetails : undefined} onLensActiveChange={setLensActive} />
-      {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails} />}
+      {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}
+        phase={detailsPhase} onModelVisible={showDetailsContent} onEntranceComplete={finishDetailsEntrance} />}
       <iframe
         className="market-surface__frame"
         key={attempt}

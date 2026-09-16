@@ -8,7 +8,7 @@
 .market-surface[data-page="details"]::after {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background: var(--demo-theme-market-details-glass);
-
+  animation: market-details-frost-in 320ms ease-out both;
 }
 /* The blur's transparent edge reveals the same canvas as the desktop scene. */
 .demo-app-shell:has(.market-surface[data-page="details"]) {
@@ -17,7 +17,10 @@
 /* Match Settings: blur the live scene, retaining its camera, model and motion. */
 .demo-app-shell:has(.market-surface[data-page="details"]) .demo-app-shell__scene {
   filter: blur(12px);
+  animation: market-details-scene-blur 320ms ease-out both;
 }
+@keyframes market-details-frost-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes market-details-scene-blur { from { filter: blur(0); } to { filter: blur(12px); } }
 .market-details__views {
   position: absolute; z-index: 2; top: 104px; left: 36px; display: flex; align-items: center;
   font: 600 9px/20px "Market Brilliant Cut", sans-serif; letter-spacing: .05em; text-transform: uppercase;
@@ -37,6 +40,13 @@
 .market-details button:focus-visible { outline: 2px solid var(--demo-theme-market-focus); outline-offset: 4px; }
 .market-details__model { position: absolute; inset: 0; }
 .market-details__model .preacherman-avatar-viewport { position: absolute; inset: 0; }
+.market-details__model,
+.market-details__views, .market-details__back, .market-details__options { opacity: 0; }
+.market-details:not([data-reveal="complete"]) { pointer-events: none; }
+.market-details__views, .market-details__back, .market-details__options { visibility: hidden; }
+.market-details:is([data-reveal="content"], [data-reveal="complete"]) .market-details__model { opacity: 1; }
+.market-details:is([data-reveal="content"], [data-reveal="complete"]) :is(.market-details__views, .market-details__back, .market-details__options) { visibility: visible; }
+.market-details[data-reveal="complete"] :is(.market-details__views, .market-details__back, .market-details__options) { opacity: 1; }
 .market-details__options { position: absolute; bottom: 16px; left: 0; width: 100%; height: 224px; border: 0; background: transparent; }
 .market-details__status { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; color: var(--demo-theme-market-loading); font: 600 12px/20px "Market Brilliant Cut", sans-serif; }
 .market-details__status[role="alert"] { color: var(--demo-theme-market-error); }
@@ -47,4 +57,8 @@
 @media (max-width: 700px) {
   .market-details__views { left: 24px; }
   .market-details__back { left: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .market-surface[data-page="details"]::after,
+  .demo-app-shell:has(.market-surface[data-page="details"]) .demo-app-shell__scene { animation: none; }
 }

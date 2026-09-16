@@ -3,6 +3,7 @@ import { useThree } from "@react-three/fiber";
 import { InteractiveAvatarViewport, avatarDefaultActionId, avatarModelName } from "@preacherman/avatar-renderer";
 import { localAvatarAssetBaseUrl } from "../../avatar/avatarAssets";
 import type { ModelId } from "../../preferences";
+import { revealMarketDetails, type MarketDetailsPhase } from "./marketEntrance";
 import "./market-details.css";
 
 export const MARKET_VIEWS = ["Front", "Side", "Back", "Zoom In"] as const;
@@ -23,11 +24,14 @@ function DetailsSceneCapture() {
 }
 
 /** The selected product owns this viewport. It never writes the active companion preference. */
-export function MarketDetails({ modelId, panelRef, lensActive, onClose }: {
+export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, onModelVisible, onEntranceComplete }: {
   modelId: ModelId;
   panelRef: RefObject<HTMLElement>;
   lensActive: boolean;
   onClose: () => void;
+  phase: MarketDetailsPhase;
+  onModelVisible: () => void;
+  onEntranceComplete: () => void;
 }) {
   const [view, setView] = useState<MarketView>("Front");
   const [rotation, setRotation] = useState(0);
@@ -38,10 +42,22 @@ export function MarketDetails({ modelId, panelRef, lensActive, onClose }: {
   const ready = useCallback(() => setStatus("ready"), []);
   const failed = useCallback(() => setStatus("error"), []);
 
+  useEffect(() => {
+    if (!panelRef.current || (phase !== "model" && phase !== "content")) return;
+    if (phase === "model" && status === "loading") return;
+    let disposed = false;
+    const motion = revealMarketDetails(panelRef.current, phase, matchMedia("(prefers-reduced-motion: reduce)").matches);
+    void motion.finished.then(() => {
+      if (!disposed) (phase === "model" ? onModelVisible : onEntranceComplete)();
+    }).catch(() => { /* Interrupted entrance must never reveal a stale product. */ });
+    return () => { disposed = true; motion.cancel(); };
+  }, [phase, status, panelRef, onModelVisible, onEntranceComplete]);
+
   useEffect(() => { panelRef.current?.focus({ preventScroll: true }); }, [panelRef]);
   useEffect(() => {
-    panelRef.current?.toggleAttribute("inert", lensActive);
-  }, [lensActive, panelRef]);
+    panelRef.current?.toggleAttribute("inert", lensActive || phase !== "complete");
+    if (!lensActive && phase === "complete") panelRef.current?.focus({ preventScroll: true });
+  }, [lensActive, phase, panelRef]);
   useEffect(() => {
     const target = view === "Side" ? Math.PI / 2 : view === "Back" ? Math.PI : 0;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -78,7 +94,7 @@ export function MarketDetails({ modelId, panelRef, lensActive, onClose }: {
 
   return (
     <section ref={panelRef} className="market-details" aria-label={`${avatarModelName(modelId)} details`}
-      tabIndex={-1} data-model-id={modelId} data-view={view} data-status={status}>
+      tabIndex={-1} data-model-id={modelId} data-view={view} data-status={status} data-reveal={phase} aria-busy={phase !== "complete"}>
       <nav className="market-details__views" aria-label="Model views">
         {MARKET_VIEWS.map(label => <button key={label} aria-label={label}
           type="button" aria-pressed={view === label} onClick={() => setView(label)}>{label}</button>)}
@@ -87,10 +103,10 @@ export function MarketDetails({ modelId, panelRef, lensActive, onClose }: {
         <svg width="68" height="24" viewBox="0 0 68 24" fill="none" aria-hidden="true"><path d="M66 12H3M12 3L3 12L12 21" stroke="currentColor" strokeWidth="1.25" /></svg>
       </button>
       <div className="market-details__model">
-        <InteractiveAvatarViewport key={attempt} modelId={modelId} assetBaseUrl={localAvatarAssetBaseUrl(modelId)}
+        {phase !== "exiting" && <InteractiveAvatarViewport key={attempt} modelId={modelId} assetBaseUrl={localAvatarAssetBaseUrl(modelId)}
           actionId={avatarDefaultActionId(modelId)} quality="high" pose="standby" environment="cinematic" isolateCompanion
           cameraFraming={view === "Zoom In" ? "portrait" : "full-body"} rotationOffsetY={rotation}
-          renderActive={!lensActive} onReady={ready} onError={failed} sceneContent={<DetailsSceneCapture />} />
+          renderActive={!lensActive} onReady={ready} onError={failed} sceneContent={<DetailsSceneCapture />} />}
         {status === "loading" && <div className="market-details__status" role="status">Loading {avatarModelName(modelId)}…</div>}
         {status === "error" && <div className="market-details__status" role="alert"><p>The model could not be loaded.</p>
           <button type="button" onClick={() => { setStatus("loading"); setAttempt(value => value + 1); }}>Try again</button></div>}
