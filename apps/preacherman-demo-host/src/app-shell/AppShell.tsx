@@ -44,7 +44,7 @@ export function AppShell({
   const member = useSyncExternalStore(accountProfile.subscribe, accountProfile.getSnapshot);
   const brandButtonRef = useRef<HTMLButtonElement>(null);
   const [brandNavigationOpen, setBrandNavigationOpen] = useState(false);
-  const accountDockHidden = !!auth.user && brandNavigationOpen;
+  const accountDockHidden = brandNavigationOpen;
   const [scale, setScale] = useState(() => {
     if (typeof window === "undefined") return 1;
     return Math.min(window.innerWidth / 1800, window.innerHeight / 1000);
