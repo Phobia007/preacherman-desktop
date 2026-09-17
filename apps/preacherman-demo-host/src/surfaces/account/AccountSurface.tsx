@@ -7,6 +7,8 @@ import { TaskProfileLens } from "../market/TaskProfileLens";
 import { captureAccountFrame } from "./AccountScene";
 import googleIcon from "./assets/google.svg";
 import githubIcon from "./assets/github.svg";
+import appleIcon from "./assets/apple.svg";
+import codexIcon from "./assets/codex.svg";
 import "../market/market-profile.css";
 import "./account.css";
 
@@ -22,6 +24,7 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
   const stopFrames = useRef<(() => void) | null>(null);
   const toggle = useRef<HTMLButtonElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
+  const [unavailableProvider, setUnavailableProvider] = useState("Google");
   const [open, setOpen] = useState(false);
   const [phase, setPhase] = useState("closed");
   const [email, setEmail] = useState("");
@@ -84,7 +87,10 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
     return () => window.removeEventListener("keydown", close);
   }, [open]);
 
-  const showSignInStatus = () => dialog.current?.showModal();
+  const showSignInStatus = (provider: "Google" | "Apple" | "Codex" | "Email") => {
+    setUnavailableProvider(provider);
+    dialog.current?.showModal();
+  };
   return (
     <section className="account" aria-label="Account" data-entrance={motionReady ? "complete" : "entering"}
       data-lens-active={phase !== "closed"} data-phase={phase}>
@@ -102,7 +108,7 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
         {effectError && <p className="account__effect-error" role="status">{effectError}</p>}
       </section>
       <main className="account__main" data-auth-state={auth.status}>
-        <form className="account__form" onSubmit={event => { event.preventDefault(); if (valid) showSignInStatus(); }}>
+        <form className="account__form" onSubmit={event => { event.preventDefault(); if (valid) showSignInStatus("Email"); }}>
           <header className="account__heading">
             <h1>{auth.user ? "Your account" : "Log in to Preacherman"}</h1>
             <p>{auth.user ? "Signed in to Preacherman." : "Sign in or create an account to continue."}</p>
@@ -120,9 +126,13 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
               onClick={() => { void accountAuth.signOut(); }}>{auth.status === "signing-out" ? "Signing out…" : "Sign out"}</button>
           </> : <>
           <div className="account__providers">
-            <button className="account__provider" type="button" onClick={showSignInStatus}><img src={googleIcon} alt="" />Continue with Google</button>
+            <button className="account__provider" type="button" onClick={() => showSignInStatus("Google")}><img src={googleIcon} alt="" />Continue with Google</button>
             <button className="account__provider" type="button" disabled={signingIn} aria-busy={signingIn}
               onClick={() => { void accountAuth.signIn(); }}><img className="account__github" src={githubIcon} alt="" />Continue with GitHub</button>
+            <button className="account__provider" type="button" disabled={signingIn}
+              onClick={() => showSignInStatus("Apple")}><img className="account__monochrome" src={appleIcon} alt="" />Continue with Apple</button>
+            <button className="account__provider" type="button" disabled={signingIn}
+              onClick={() => showSignInStatus("Codex")}><img className="account__monochrome" src={codexIcon} alt="" />Continue with Codex</button>
           </div>
           {signingIn && <div className="account__auth-status" role="status" aria-live="polite">
             <p>{auth.status === "restoring" ? "Checking your account…" : auth.status === "opening" ? "Opening GitHub in your browser…" : auth.status === "finishing" ? "Completing sign-in…" : "Complete sign-in in your browser, then return here."}</p>
@@ -143,7 +153,7 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
       </main>
       <dialog ref={dialog} className="account__dialog" aria-labelledby="account-sign-in-title" aria-describedby="account-sign-in-description">
         <h2 id="account-sign-in-title">Sign-in is coming soon</h2>
-        <p id="account-sign-in-description">Google and email sign-in are not connected yet. You can continue with GitHub. Your email has not been sent or saved.</p>
+        <p id="account-sign-in-description">{unavailableProvider} sign-in is not connected yet. You can continue with GitHub.{unavailableProvider === "Email" && " Your email has not been sent or saved."}</p>
         <form method="dialog"><button className="account__continue" autoFocus>Got it</button></form>
       </dialog>
     </section>

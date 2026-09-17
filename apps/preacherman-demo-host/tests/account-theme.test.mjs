@@ -49,3 +49,7 @@ test('Account keeps the companion rendering through the lens and reuses its cont
  assert.match(account,/data-lens-active="false"\] .account__lens \{ visibility: hidden/);
  assert.match(account,/transition: transform 1050ms/);
 });
+
+test("Apple and Codex icons share the existing theme-aware provider treatment", () => {
+  assert.match(account, /\.account__provider img\.account__github, \.account__provider img\.account__monochrome \{[^}]*var\(--demo-theme-account-icon-filter\)/);
+});

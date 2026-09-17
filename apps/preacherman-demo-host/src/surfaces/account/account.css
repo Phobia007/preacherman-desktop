@@ -47,7 +47,7 @@
 }
 .account__provider:hover { border-color: var(--demo-theme-account-border-hover); background: var(--demo-theme-account-hover); }
 .account__provider img { position: absolute; top: 50%; left: 20px; width: 18px; height: 18px; transform: translateY(-50%); }
-.account__provider img.account__github { width: 20px; height: 20px; filter: var(--demo-theme-account-icon-filter); }
+.account__provider img.account__github, .account__provider img.account__monochrome { width: 20px; height: 20px; filter: var(--demo-theme-account-icon-filter); }
 .account__divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--demo-theme-account-muted); font-size: 12px; line-height: 16px; }
 .account__divider::before, .account__divider::after { content: ""; height: 1px; flex: 1; background: var(--demo-theme-account-border); }
 .account__email { box-sizing: border-box; width: 100%; height: 52px; padding: 0 16px; border: 1px solid var(--demo-theme-account-border); border-radius: 8px; color: inherit; background: var(--demo-theme-account-surface); font: 300 16px/24px var(--demo-font-primary); }
