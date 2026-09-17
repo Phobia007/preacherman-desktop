@@ -1,39 +1,215 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-profile-links-20260917",
+  "buildId": "account-providers-20260917",
   "productVersion": "0.1.0",
-  "sourceTask": "remove-market-profile-social-links-both-editions",
+  "sourceTask": "add-apple-codex-account-buttons-both-editions",
   "sourceThread": null,
-  "sourceState": "Remove Instagram, LinkedIn and Email row from the shared Market and model Details profile overlay. Retain English introduction, fonts, lens effects and close behavior.",
-  "sourceCommit": "a3adaf36254390c22858904e52932ce6d53f876a",
+  "sourceState": "Add Apple and Codex Account buttons after GitHub with matching layout, themed bundled icons and provider-specific local not-connected feedback. Actual GitHub authentication is unchanged.",
+  "sourceCommit": "58a988d1ae28196550c4601aa01821b042612da7",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-17T14:41:07.9064579+08:00",
-  "deployedAt": "2026-09-17T14:41:55.8395012+08:00",
-  "verifiedAt": "2026-09-17T14:45:05.5936460+08:00",
-  "sizeBytes": 676089344,
-  "sha256": "0DEEC14A7125AD23824C479D301BB23295E20E22EF3EB9CA3C93DA342C7CAFCE",
+  "builtAt": "2026-09-17T16:27:47.6307970+08:00",
+  "deployedAt": "2026-09-17T16:28:19.9139910+08:00",
+  "verifiedAt": "2026-09-17T16:30:52.6451357+08:00",
+  "sizeBytes": 676090368,
+  "sha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-profile-links-before-20260917/preacherman-demo-host.exe",
-  "backupSha256": "1E21537FCE7B5F92EF7A37201DD44CDF4D6D155D1D79E96178A768D180D77CB8",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-profile-links-before-20260917/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917/preacherman-demo-host.exe",
+  "backupSha256": "0DEEC14A7125AD23824C479D301BB23295E20E22EF3EB9CA3C93DA342C7CAFCE",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "9ca380fc3824ef2ef5f5a967b2a0935910c1ba7c",
-  "previousVerificationCommit": "9ca380fc3824ef2ef5f5a967b2a0935910c1ba7c",
+  "rollbackBaselineCommit": "f16832e89fb5bd0d34fb1e5d8d788bebe6f8fb4a",
+  "previousVerificationCommit": "f16832e89fb5bd0d34fb1e5d8d788bebe6f8fb4a",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "typecheck": "passed",
-      "testsPassed": 10,
-      "testsFailed": 0,
-      "scope": "Market optical lens, live pixels, easing, capture, cleanup and optional Gallery initialization regression tests; JavaScript syntax checks passed",
-      "sourceBaseline": "9ca380f"
+      "desktopExitCode": 0,
+      "testFiles": [
+        "tests/account-theme.test.mjs",
+        "tests/account-auth.test.mjs"
+      ],
+      "typecheck": "passed in both editions",
+      "browserBuild": "passed",
+      "sidecar": "unchanged",
+      "browserExitCode": 0,
+      "focusedTests": {
+        "desktop": 16,
+        "browser": 20
+      },
+      "matchingFiles": [
+        {
+          "File": "src/surfaces/account/AccountSurface.tsx",
+          "Same": true
+        },
+        {
+          "File": "src/surfaces/account/account.css",
+          "Same": true
+        },
+        {
+          "File": "src/surfaces/account/assets/apple.svg",
+          "Same": true
+        },
+        {
+          "File": "src/surfaces/account/assets/codex.svg",
+          "Same": true
+        },
+        {
+          "File": "tests/account-theme.test.mjs",
+          "Same": true
+        },
+        {
+          "File": "tests/account-providers.smoke.cjs",
+          "Same": true
+        }
+      ]
     },
-    "nativeFlow": "Cold launch from canonical shortcut. All six destinations in both appearances. Market main and Details rings open and close with no links. Normal shortcut restart after verification.",
+    "nativeFlow": "Cold launch from canonical shortcut. All six destinations in both appearances. Four Account buttons have matching layouts and working local feedback, focus restoration and theme-aware icons. Existing profile rings still open and close. Normal shortcut restart after verification.",
+    "providers": [
+      {
+        "appearance": "dark",
+        "providers": 4,
+        "matchingLayout": true,
+        "iconsLoaded": true,
+        "localFeedback": true,
+        "focusRestored": true,
+        "hover": {
+          "background": "rgb(23, 26, 28)",
+          "border": "rgb(89, 98, 103)"
+        },
+        "layout": [
+          {
+            "x": 1141.5,
+            "y": 351.390625,
+            "width": 418,
+            "height": 52,
+            "font": "300 16px / 24px \"Clash Display\", sans-serif",
+            "border": "8px",
+            "authoredHeight": 52,
+            "gap": 12,
+            "color": "rgb(237, 237, 237)",
+            "background": "rgb(15, 15, 15)",
+            "iconReady": true,
+            "filter": "none"
+          },
+          {
+            "x": 1141.5,
+            "y": 415.390625,
+            "width": 418,
+            "height": 52,
+            "font": "300 16px / 24px \"Clash Display\", sans-serif",
+            "border": "8px",
+            "authoredHeight": 52,
+            "gap": 12,
+            "color": "rgb(237, 237, 237)",
+            "background": "rgb(15, 15, 15)",
+            "iconReady": true,
+            "filter": "brightness(0) invert(1)"
+          },
+          {
+            "x": 1141.5,
+            "y": 479.390625,
+            "width": 418,
+            "height": 52,
+            "font": "300 16px / 24px \"Clash Display\", sans-serif",
+            "border": "8px",
+            "authoredHeight": 52,
+            "gap": 12,
+            "color": "rgb(237, 237, 237)",
+            "background": "rgb(15, 15, 15)",
+            "iconReady": true,
+            "filter": "brightness(0) invert(1)"
+          },
+          {
+            "x": 1141.5,
+            "y": 543.390625,
+            "width": 418,
+            "height": 52,
+            "font": "300 16px / 24px \"Clash Display\", sans-serif",
+            "border": "8px",
+            "authoredHeight": 52,
+            "gap": 12,
+            "color": "rgb(237, 237, 237)",
+            "background": "rgb(15, 15, 15)",
+            "iconReady": true,
+            "filter": "brightness(0) invert(1)"
+          }
+        ]
+      },
+      {
+        "appearance": "light",
+        "providers": 4,
+        "matchingLayout": true,
+        "iconsLoaded": true,
+        "localFeedback": true,
+        "focusRestored": true,
+        "hover": {
+          "background": "rgb(240, 242, 242)",
+          "border": "rgb(139, 149, 152)"
+        },
+        "layout": [
+          {
+            "x": 1141.5,
+            "y": 351.390625,
+            "width": 418,
+            "height": 52,
+            "font": "300 16px / 24px \"Clash Display\", sans-serif",
+            "border": "8px",
+            "authoredHeight": 52,
+            "gap": 12,
+            "color": "rgb(32, 33, 33)",
+            "background": "rgb(255, 255, 255)",
+            "iconReady": true,
+            "filter": "none"
+          },
+          {
+            "x": 1141.5,
+            "y": 415.390625,
+            "width": 418,
+            "height": 52,
+            "font": "300 16px / 24px \"Clash Display\", sans-serif",
+            "border": "8px",
+            "authoredHeight": 52,
+            "gap": 12,
+            "color": "rgb(32, 33, 33)",
+            "background": "rgb(255, 255, 255)",
+            "iconReady": true,
+            "filter": "brightness(0)"
+          },
+          {
+            "x": 1141.5,
+            "y": 479.390625,
+            "width": 418,
+            "height": 52,
+            "font": "300 16px / 24px \"Clash Display\", sans-serif",
+            "border": "8px",
+            "authoredHeight": 52,
+            "gap": 12,
+            "color": "rgb(32, 33, 33)",
+            "background": "rgb(255, 255, 255)",
+            "iconReady": true,
+            "filter": "brightness(0)"
+          },
+          {
+            "x": 1141.5,
+            "y": 543.390625,
+            "width": 418,
+            "height": 52,
+            "font": "300 16px / 24px \"Clash Display\", sans-serif",
+            "border": "8px",
+            "authoredHeight": 52,
+            "gap": 12,
+            "color": "rgb(32, 33, 33)",
+            "background": "rgb(255, 255, 255)",
+            "iconReady": true,
+            "filter": "brightness(0)"
+          }
+        ]
+      }
+    ],
     "profiles": [
       {
         "appearance": "dark",
@@ -351,6 +527,148 @@
           "closed": true
         }
       ],
+      "providers": [
+        {
+          "appearance": "dark",
+          "providers": 4,
+          "matchingLayout": true,
+          "iconsLoaded": true,
+          "localFeedback": true,
+          "focusRestored": true,
+          "hover": {
+            "background": "rgb(23, 26, 28)",
+            "border": "rgb(89, 98, 103)"
+          },
+          "layout": [
+            {
+              "x": 1236.34130859375,
+              "y": 333.1183166503906,
+              "width": 396.2640380859375,
+              "height": 49.295989990234375,
+              "font": "300 16px / 24px \"Clash Display\", sans-serif",
+              "border": "8px",
+              "authoredHeight": 52,
+              "gap": 12,
+              "color": "rgb(237, 237, 237)",
+              "background": "rgb(15, 15, 15)",
+              "iconReady": true,
+              "filter": "none"
+            },
+            {
+              "x": 1236.34130859375,
+              "y": 393.7903137207031,
+              "width": 396.2640380859375,
+              "height": 49.295989990234375,
+              "font": "300 16px / 24px \"Clash Display\", sans-serif",
+              "border": "8px",
+              "authoredHeight": 52,
+              "gap": 12,
+              "color": "rgb(237, 237, 237)",
+              "background": "rgb(15, 15, 15)",
+              "iconReady": true,
+              "filter": "brightness(0) invert(1)"
+            },
+            {
+              "x": 1236.34130859375,
+              "y": 454.4623107910156,
+              "width": 396.2640380859375,
+              "height": 49.2960205078125,
+              "font": "300 16px / 24px \"Clash Display\", sans-serif",
+              "border": "8px",
+              "authoredHeight": 52,
+              "gap": 12,
+              "color": "rgb(237, 237, 237)",
+              "background": "rgb(15, 15, 15)",
+              "iconReady": true,
+              "filter": "brightness(0) invert(1)"
+            },
+            {
+              "x": 1236.34130859375,
+              "y": 515.1343383789062,
+              "width": 396.2640380859375,
+              "height": 49.29595947265625,
+              "font": "300 16px / 24px \"Clash Display\", sans-serif",
+              "border": "8px",
+              "authoredHeight": 52,
+              "gap": 12,
+              "color": "rgb(237, 237, 237)",
+              "background": "rgb(15, 15, 15)",
+              "iconReady": true,
+              "filter": "brightness(0) invert(1)"
+            }
+          ]
+        },
+        {
+          "appearance": "light",
+          "providers": 4,
+          "matchingLayout": true,
+          "iconsLoaded": true,
+          "localFeedback": true,
+          "focusRestored": true,
+          "hover": {
+            "background": "rgb(240, 242, 242)",
+            "border": "rgb(139, 149, 152)"
+          },
+          "layout": [
+            {
+              "x": 1236.34130859375,
+              "y": 333.1183166503906,
+              "width": 396.2640380859375,
+              "height": 49.295989990234375,
+              "font": "300 16px / 24px \"Clash Display\", sans-serif",
+              "border": "8px",
+              "authoredHeight": 52,
+              "gap": 12,
+              "color": "rgb(32, 33, 33)",
+              "background": "rgb(255, 255, 255)",
+              "iconReady": true,
+              "filter": "none"
+            },
+            {
+              "x": 1236.34130859375,
+              "y": 393.7903137207031,
+              "width": 396.2640380859375,
+              "height": 49.295989990234375,
+              "font": "300 16px / 24px \"Clash Display\", sans-serif",
+              "border": "8px",
+              "authoredHeight": 52,
+              "gap": 12,
+              "color": "rgb(32, 33, 33)",
+              "background": "rgb(255, 255, 255)",
+              "iconReady": true,
+              "filter": "brightness(0)"
+            },
+            {
+              "x": 1236.34130859375,
+              "y": 454.4623107910156,
+              "width": 396.2640380859375,
+              "height": 49.2960205078125,
+              "font": "300 16px / 24px \"Clash Display\", sans-serif",
+              "border": "8px",
+              "authoredHeight": 52,
+              "gap": 12,
+              "color": "rgb(32, 33, 33)",
+              "background": "rgb(255, 255, 255)",
+              "iconReady": true,
+              "filter": "brightness(0)"
+            },
+            {
+              "x": 1236.34130859375,
+              "y": 515.1343383789062,
+              "width": 396.2640380859375,
+              "height": 49.29595947265625,
+              "font": "300 16px / 24px \"Clash Display\", sans-serif",
+              "border": "8px",
+              "authoredHeight": 52,
+              "gap": 12,
+              "color": "rgb(32, 33, 33)",
+              "background": "rgb(255, 255, 255)",
+              "iconReady": true,
+              "filter": "brightness(0)"
+            }
+          ]
+        }
+      ],
       "errors": [
         "Hydration completed but contains mismatches."
       ],
@@ -360,35 +678,35 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-09-17T14:45:05.5936460+08:00",
-      "NativePid": 37788,
-      "StartedAt": "2026-09-17T14:44:46.1208122+08:00",
-      "WindowHandle": 7474282,
+      "SampledAt": "2026-09-17T16:30:52.6451357+08:00",
+      "NativePid": 18460,
+      "StartedAt": "2026-09-17T16:30:34.9482715+08:00",
+      "WindowHandle": 525890,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        37788,
-        38236,
-        12504,
-        30268,
-        40164,
-        44260,
-        20820,
-        36848,
-        36360,
-        31716,
-        39944
+        18460,
+        38540,
+        8704,
+        2724,
+        5784,
+        44740,
+        28524,
+        12212,
+        14260,
+        18940,
+        45540
       ],
-      "NormalizedCpuPercent": 4.0,
-      "WorkingSetMiB": 1919.2,
-      "GpuDedicatedBytes": 3298246656.0,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1953.9,
+      "GpuDedicatedBytes": 3192758272.0,
       "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 13708340,
+      "FreeRamKiB": 19166036,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 36848
+          "OwningProcess": 12212
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -427,13 +745,13 @@
       "profile-cleanup-20260917"
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-profile-links-20260917\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-profile-links-20260917\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\market-profile-links-20260917\\source-checks.json",
-      "D:\\preacherman\\output\\playwright\\market-profile-links-20260917\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-profile-links-20260917\\web-build.log",
-      "D:\\preacherman\\output\\playwright\\market-profile-links-20260917\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\market-profile-links-20260917\\verify.cjs"
+      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\source-checks.json",
+      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\web-build.log",
+      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\verify.cjs"
     ]
   },
   "releaseAttempts": [
@@ -1057,9 +1375,18 @@
       "deployedAt": "2026-09-17T14:41:55.8395012+08:00",
       "verifiedAt": "2026-09-17T14:45:05.5936460+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-profile-links-before-20260917"
+    },
+    {
+      "buildId": "account-providers-20260917",
+      "sourceCommit": "58a988d1ae28196550c4601aa01821b042612da7",
+      "sha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T16:28:19.9139910+08:00",
+      "verifiedAt": "2026-09-17T16:30:52.6451357+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-profile-links-before-20260917/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
