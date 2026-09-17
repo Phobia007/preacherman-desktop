@@ -36,6 +36,8 @@ const scenePath = path.join(
   "app.1780406240914.js",
 );
 let scene = fs.readFileSync(scenePath, "utf8");
+// Fragment helpers can still be promise-backed during initialization.
+scene = scene.replaceAll('_this.initSync&&(', 'typeof _this.initSync==="function"&&(');
 
 const originalSpine = "let batch=_this.createFragment(MeshBatch),meshes=[];for(let i=0;i<40;i++){let mesh=_this.mesh.clone();mesh.position.set(0,0,0),mesh.position.y=-.65*i+4,mesh.rotation.y=.4*i,batch.add(mesh),meshes.push(mesh)}_this.mesh.visible=!1,_this.startRender((_=>{_this.group.position.copy(_this.mesh.position)}));";
 const firstPassReplacement = "let cortanaRoot=new Group;try{let loader=new GLTFLoader,cortanaNodes=await loader.parse(\"/assets/avatars/cortana/cortana-runtime.glb\");for(let i=0;i<cortanaNodes.length;i++)cortanaRoot.add(cortanaNodes[i]);cortanaRoot.position.set(0,-4.82,0),cortanaRoot.rotation.y=-Math.PI/2,cortanaRoot.scale.set(1.06,1.06,1.06),cortanaRoot.traverse?.((node=>{node.frustumCulled=!1})),_this.group.add(cortanaRoot),window.__PREACHERMAN_CORTANA_READY__=!0,parent.postMessage({type:\"preacherman-active-gallery-ready\"},\"*\")}catch(error){console.error(\"[Preacherman Gallery] Cortana could not replace the spine.\",error),parent.postMessage({type:\"preacherman-active-gallery-error\",message:String(error)},\"*\")}_this.mesh.visible=!1,_this.startRender((_=>{_this.group.position.copy(_this.mesh.position)}));";
@@ -76,14 +78,14 @@ scene = replaceOnce(
 scene = replaceExact(
   scene,
   "await _this.initSync(_this.ui.group),await _this.initSync(_this.ui),_this.set(\"ready\",!0)",
-  "_this.initSync&&(await _this.initSync(_this.ui.group),await _this.initSync(_this.ui)),_this.set(\"ready\",!0)",
+  "typeof _this.initSync===\"function\"&&(await _this.initSync(_this.ui.group),await _this.initSync(_this.ui)),_this.set(\"ready\",!0)",
   2,
   "keep the copied contact view local when multiplayer sync is unavailable",
 );
 scene = replaceOnce(
   scene,
   "_this.bitmap.capture.rt.upload(),await _this.initSync(_this.element.group),await _this.initSync(_this.element),_this.set(\"ready\",!0)",
-  "_this.bitmap.capture.rt.upload(),_this.initSync&&(await _this.initSync(_this.element.group),await _this.initSync(_this.element)),_this.set(\"ready\",!0)",
+  "_this.bitmap.capture.rt.upload(),typeof _this.initSync===\"function\"&&(await _this.initSync(_this.element.group),await _this.initSync(_this.element)),_this.set(\"ready\",!0)",
   "keep copied Gallery cards local when multiplayer sync is unavailable",
 );
 scene = replaceOnce(
