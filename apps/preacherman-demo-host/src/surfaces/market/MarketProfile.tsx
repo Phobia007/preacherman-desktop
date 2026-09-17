@@ -96,11 +96,6 @@ export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, 
             <span>AI that keeps learning, goes with you, and gets things done.</span>
             <span>Your second identity in the virtual world.</span>
           </p>
-          <ul aria-label="Preacherman links">
-            <li><a href="https://www.instagram.com/jesperlandberg222/" rel="noopener" target="_blank">Instagram</a></li>
-            <li><a href="https://www.linkedin.com/in/jesper-landberg-ba2984256/" rel="noopener" target="_blank">LinkedIn</a></li>
-            <li><a href="mailto:jesper@alpacka.studio">Email</a></li>
-          </ul>
         </section>
       </div>
     </div>
