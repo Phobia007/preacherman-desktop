@@ -65,3 +65,14 @@ All Demo Host updates must follow [docs/desktop-lightweight-update-contract.md](
 ## Automatic Desktop Restart Authorization
 
 The user explicitly authorized automatic desktop restarts on 2026-09-09. For authorized Demo Host changes, finish the build, deploy the canonical executable and matching sidecar, restart through the canonical shortcut, and complete native verification without asking for a separate restart confirmation each time. This supersedes the earlier handoff request for per-round restart approval. Preserve the backup, rollback, process ownership, and verification contracts above.
+
+## Bounded desktop backup retention
+
+The user requested removal of unnecessary files on 2026-09-19 after old desktop deployment backups grew to approximately 90 GiB. This section adds a retention limit to the existing backup requirements; it does not remove the requirement for a verified matching rollback pair.
+
+- Keep the newest three complete, hash-verified desktop backup sets across the canonical release `deployment-backups` and `backups` directories. Always preserve the rollback pair referenced by the current `desktop-build-manifest.json`.
+- A normal backup contains the desktop executable, matching sidecar, and deployment manifest. Never recursively copy the release directory, its previous backups, or the entire Cargo target tree into a new backup.
+- After a successful deployment and native verification, update the canonical manifest and run `powershell.exe -NoProfile -File D:\preacherman\tools\Prune-DesktopBackups.ps1 -Apply`. Without `-Apply`, the script only reports the proposed cleanup.
+- The pruning script verifies current and retained executable hashes, rejects reparse points and active build processes, and preserves newly created backup entries for one hour. It deletes only older release backup entries; it does not delete source, user assets, the current release, or current release compilation caches.
+- If pruning fails, record the reason and fix the manifest or backup mismatch before the next deployment. Do not bypass its checks or create unlimited additional backup copies.
+- Use existing build targets during ordinary iterations. Remove obsolete alternate/debug targets and temporary verification profiles once they are no longer needed; do not accumulate a separate full target tree for each fix.
