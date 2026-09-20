@@ -44,7 +44,6 @@ export function InteractiveAvatarViewport({
   jawOpen = 0,
   environment = "transparent",
   isolateCompanion = false,
-  awakened = false,
   motionSource,
   motionRigBinding,
   renderActive = true,
@@ -155,7 +154,6 @@ export function InteractiveAvatarViewport({
               jawOpen={jawOpen}
               environment={environment}
               isolateCompanion={isolateCompanion}
-              awakened={awakened}
               motionSource={motionSource}
               motionRigBinding={motionRigBinding}
               modelId={modelId}

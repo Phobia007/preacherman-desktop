@@ -97,6 +97,6 @@ test("voice and model components share explicit four-state avatar control withou
   assert.notEqual(voiceErrorEnd, -1);
   assert.doesNotMatch(voice.slice(voiceErrorStart, voiceErrorEnd), /reportWakeState\(false\)/);
   assert.match(voice, /if \(headless\) return null/);
-  assert.match(model, /preacherman:voice-wake-state/);
-  assert.match(model, /awakened=\{awakened\}/);
+  assert.doesNotMatch(model, /preacherman:voice-wake-state/);
+  assert.doesNotMatch(model, /awakened/);
 });

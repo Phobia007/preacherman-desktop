@@ -403,7 +403,6 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           sceneContent={activeSurfaceType === "account" ? <AccountSceneCapture /> : galleryBridge ? <GalleryOrbitCards bridge={galleryBridge} active={activeSurfaceType === "market"} renderActive={windowActive} /> : null}
           prefetchModelId={activeSurfaceType === "market" && sceneModelId ? adjacentGalleryModel(sceneModelId) : undefined}
           variant="persistent"
-          wakeEnabled={activeSurfaceType === "home"}
           renderActive={windowActive}
         />
       ) : null}</>}

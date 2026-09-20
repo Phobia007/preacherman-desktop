@@ -24,7 +24,6 @@ interface CortanaModelStageProps {
   readonly environment?: AvatarSceneEnvironment;
   readonly isolateCompanion?: boolean;
   readonly variant?: "embedded" | "persistent";
-  readonly wakeEnabled?: boolean;
   readonly renderActive?: boolean;
   readonly modelId?: ModelId;
   readonly prefetchModelId?: ModelId;
@@ -39,7 +38,6 @@ export function CortanaModelStage({
   environment = "transparent",
   isolateCompanion = false,
   variant = "embedded",
-  wakeEnabled = false,
   renderActive = true,
   modelId = "cortana",
   prefetchModelId,
@@ -52,7 +50,6 @@ export function CortanaModelStage({
   const [failedModel, setFailedModel] = useState<ModelId | null>(null);
   const loadState = failedModel === modelId ? "error" : readyModel === modelId ? "ready" : "loading";
   const [jawOpen, setJawOpen] = useState(0);
-  const [awakened, setAwakened] = useState(false);
   const handleError = useCallback(() => setFailedModel(modelId), [modelId]);
   const handleReady = useCallback(() => { setReadyModel(modelId); setFailedModel(null); }, [modelId]);
   const defaultActionId = avatarDefaultActionId(modelId);
@@ -73,33 +70,12 @@ export function CortanaModelStage({
     return () => window.removeEventListener("preacherman:avatar-jaw", applyJawOpen);
   }, []);
 
-  useEffect(() => {
-    if (!wakeEnabled) setAwakened(false);
-  }, [wakeEnabled]);
-
-  useEffect(() => {
-    const syncWakeState = (event: Event) => {
-      setAwakened(Boolean((event as CustomEvent<{ active?: boolean }>).detail?.active));
-    };
-    window.addEventListener("preacherman:voice-wake-state", syncWakeState);
-    return () => window.removeEventListener("preacherman:voice-wake-state", syncWakeState);
-  }, []);
-
-  const toggleWake = () => {
-    const active = !awakened;
-    setAwakened(active);
-    window.dispatchEvent(new CustomEvent("preacherman:voice-wake-request", {
-      detail: { active },
-    }));
-  };
-
   return (
     <section
       aria-label={ariaLabel}
       className={`cortana-model-stage cortana-model-stage--${variant}`}
       data-preacherman-control="avatar.status"
       data-avatar-state={interactionState}
-      data-awake={awakened ? "true" : "false"}
       data-motion-action={defaultActionId}
       data-scene-environment={environment}
       tabIndex={-1}
@@ -116,7 +92,6 @@ export function CortanaModelStage({
         jawOpen={jawOpen}
         environment={environment}
         isolateCompanion={isolateCompanion}
-        awakened={awakened}
         motionSource={speechMotionRuntime}
         motionRigBinding={modelId === "cortana" ? cortanaSpeechMotionBinding : modelId === "zima" ? zimaSpeechMotionBinding : undefined}
         modelId={modelId}
@@ -124,16 +99,6 @@ export function CortanaModelStage({
         renderActive={renderActive}
         rotationOffsetY={rotationOffsetY}
       />
-      {wakeEnabled ? (
-        <button
-          aria-label={awakened ? `Stop talking with ${modelName}` : `Talk with ${modelName}`}
-          aria-pressed={awakened}
-          className="cortana-model-stage__wake-button"
-          data-preacherman-control="voice.wake"
-          onClick={toggleWake}
-          type="button"
-        />
-      ) : null}
       {companionVisible && loadState === "loading" ? (
         <div aria-label={`Loading ${modelName}`} className="cortana-model-stage__loading" role="status">
           <span />

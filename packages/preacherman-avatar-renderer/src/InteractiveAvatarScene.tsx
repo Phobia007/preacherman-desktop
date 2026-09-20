@@ -31,7 +31,6 @@ interface InteractiveAvatarSceneProps {
   readonly jawOpen: number;
   readonly environment: AvatarSceneEnvironment;
   readonly isolateCompanion?: boolean;
-  readonly awakened: boolean;
   readonly motionSource?: AvatarMotionStreamSource;
   readonly motionRigBinding?: AvatarMotionRigBinding;
   readonly modelId: AvatarModelId;
@@ -155,7 +154,6 @@ export function InteractiveAvatarScene({
   jawOpen,
   environment,
   isolateCompanion = false,
-  awakened,
   motionSource,
   motionRigBinding,
   modelId,
@@ -172,7 +170,7 @@ export function InteractiveAvatarScene({
   }, [environment, gl, scene, invalidate, isolateCompanion]);
   return (
     <>
-      {environment === "cinematic" ? <CinematicEnvironment awakened={awakened} isolateCompanion={isolateCompanion} /> : null}
+      {environment === "cinematic" ? <CinematicEnvironment isolateCompanion={isolateCompanion} /> : null}
       {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
       {companionVisible ? <AvatarModel
         key={`${modelId}:${assetBaseUrl}`}

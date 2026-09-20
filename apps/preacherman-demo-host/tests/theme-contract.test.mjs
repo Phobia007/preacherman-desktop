@@ -142,7 +142,7 @@ test("Gallery shares the Home canvas while embedded content and model rendering 
   assert.match(viewport, /alpha:\s*true/);
   assert.match(scene, /setClearAlpha\(environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
   assert.match(viewport, /setClearColor\(0x010409,\s*environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
-  assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment awakened=\{awakened\} isolateCompanion=\{isolateCompanion\} \/>/);
+  assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment isolateCompanion=\{isolateCompanion\} \/>/);
   assert.match(galleryStyles, /var\(--demo-theme-loading\)/);
   assert.match(galleryStyles, /var\(--demo-theme-error\)/);
   assert.match(
@@ -164,6 +164,5 @@ test("live speech and task controls inherit semantic colors in light and dark ap
   assert.match(voiceStyles, /\.preacherman-live__cancel:focus-visible[^\{]*\{[\s\S]*var\(--demo-theme-focus\)/);
   assert.match(taskStyles, /\.ab-task-console__button:focus-visible\s*\{[\s\S]*var\(--demo-theme-focus\)/);
   assert.match(taskStyles, /\.ab-task-console__button--quiet\s*\{[\s\S]*var\(--demo-theme-activate-rest-text\)[\s\S]*var\(--demo-theme-activate-rest-bg\)/);
-  assert.match(styles, /\.cortana-model-stage__wake-button\s*\{[\s\S]*pointer-events:\s*auto/);
-  assert.match(styles, /\.cortana-model-stage__wake-button:focus-visible\s*\{[\s\S]*var\(--demo-theme-focus\)/);
+  assert.doesNotMatch(styles, /cortana-model-stage__wake-button/);
 });

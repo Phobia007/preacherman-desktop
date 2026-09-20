@@ -1,158 +1,94 @@
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
-import {
-  AdditiveBlending,
-  DoubleSide,
-  MathUtils,
-  type MeshBasicMaterial,
-  type ShaderMaterial,
-} from "three";
+import { useEffect, useMemo, useRef } from "react";
+import { AdditiveBlending, DoubleSide } from "three";
+import { platformBreath } from "./platformRingMotion";
 
-const BREATH_CYCLE_SECONDS = 5.6;
 const ENERGY_VERTEX_SHADER = `
-  varying vec2 vEnergyUv;
+  varying vec2 vPlatformPosition;
 
   void main() {
-    vEnergyUv = uv;
+    vPlatformPosition = position.xy;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
 const ENERGY_FRAGMENT_SHADER = `
-  uniform float uActivation;
   uniform float uBreath;
   uniform float uTime;
-  varying vec2 vEnergyUv;
+  varying vec2 vPlatformPosition;
+
+  // Pixel-footprint filtering keeps the silver edges continuous at grazing angles.
+  float filament(float radius, float center, float width, float footprint) {
+    float filteredWidth = sqrt(width * width + footprint * footprint * 0.2);
+    float distance = (radius - center) / filteredWidth;
+    return exp(-distance * distance) * width / filteredWidth;
+  }
 
   void main() {
-    vec2 centered = vEnergyUv - 0.5;
-    float radial = length(centered) * 2.0;
-    float phase = fract(atan(centered.y, centered.x) / 6.28318530718 + 0.5);
-    float sweepCenter = fract(uTime * 0.035);
-    float sweepDistance = abs(phase - sweepCenter);
-    sweepDistance = min(sweepDistance, 1.0 - sweepDistance);
-    float sweep = pow(max(0.0, 1.0 - sweepDistance / 0.075), 4.0);
-    float counterDistance = abs(phase - fract(sweepCenter + 0.5));
-    counterDistance = min(counterDistance, 1.0 - counterDistance);
-    float counterSweep = pow(max(0.0, 1.0 - counterDistance / 0.045), 6.0);
-    float precisionSegments = smoothstep(-0.42, 0.72, sin(phase * 201.06192983));
-    float animatedGrain = 0.96 + 0.04 * sin(phase * 565.48667765 - uTime * 0.42);
-    float fineGrain = mix(animatedGrain, 1.0, uActivation);
-    float bandProfile = smoothstep(0.968, 0.978, radial)
-      * (1.0 - smoothstep(0.994, 1.0, radial));
-    float restingEnergy = 0.06 + uBreath * 0.31;
-    float steadyEnergy = mix(restingEnergy, 0.95, uActivation);
-    float movingEnergy = (1.0 - uActivation) * (0.48 * sweep + 0.10 * counterSweep);
-    float calibratedTrack = mix(0.58, 1.0, precisionSegments);
-    float alpha = clamp(
-      (steadyEnergy * calibratedTrack + movingEnergy) * fineGrain * bandProfile,
-      0.0,
-      0.92
-    );
-    gl_FragColor = vec4(vec3(1.0), alpha);
+    float radius = length(vPlatformPosition);
+    float angle = atan(vPlatformPosition.y, vPlatformPosition.x);
+    float footprint = max(fwidth(radius), 0.0001);
+    float phase = angle - uTime * 0.2617993878;
+    // Periodic, broad light falloff has no seam when the highlight crosses zero.
+    float head = exp(10.0 * (cos(phase) - 1.0));
+    float tail = exp(2.4 * (cos(phase + 0.55) - 1.0));
+    float reflection = exp(3.8 * (cos(phase + 3.141592654) - 1.0));
+    float flow = 0.55 * head + 0.24 * tail + 0.09 * reflection;
+    float breath = 0.62 + 0.38 * uBreath;
+
+    float innerEdge = filament(radius, 0.575, 0.00085, footprint);
+    float outerEdge = filament(radius, 0.612, 0.0007, footprint);
+    float lightChannel = filament(radius, 0.596, 0.0024, footprint);
+    float softShoulder = filament(radius, 0.596, 0.0055, footprint);
+    float lightSpill = filament(radius, 0.596, 0.014, footprint);
+    float grazingReflection = 0.5 + 0.5 * cos(angle - 0.8);
+
+    float edges = innerEdge * (0.13 + grazingReflection * 0.13 + flow * 0.16)
+      + outerEdge * (0.06 + grazingReflection * 0.09 + flow * 0.10);
+    float channel = lightChannel * (0.19 + flow * 0.69)
+      + softShoulder * (0.022 + flow * 0.075);
+    float spill = lightSpill * (0.004 + flow * 0.018);
+    float alpha = clamp((edges + channel + spill) * breath * 3.0, 0.0, 0.85);
+    gl_FragColor = vec4(vec3(0.92, 0.95, 1.0), alpha);
   }
 `;
 
-function BreathingPlatformLight({ awakened }: { readonly awakened: boolean }) {
-  const haloMaterial = useRef<MeshBasicMaterial>(null);
-  const bodyMaterial = useRef<MeshBasicMaterial>(null);
-  const seamMaterial = useRef<MeshBasicMaterial>(null);
-  const energyMaterial = useRef<ShaderMaterial>(null);
-  const activationProgress = useRef(awakened ? 1 : 0);
+function BreathingPlatformLight() {
+  const elapsed = useRef(1.4);
   const energyUniforms = useMemo(() => ({
-    uActivation: { value: awakened ? 1 : 0 },
-    uBreath: { value: 0.42 },
-    uTime: { value: 0 },
+    uBreath: { value: platformBreath(1.4) },
+    uTime: { value: 1.4 },
   }), []);
-  const reduceMotion = useRef(
-    typeof window !== "undefined"
-      && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
+  const reduceMotion = useRef(false);
 
-  useFrame(({ clock, gl }, delta) => {
-    if (document.hidden || gl.domElement.closest('[aria-hidden="true"]')) return;
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncPreference = () => { reduceMotion.current = preference.matches; };
+    syncPreference();
+    preference.addEventListener("change", syncPreference);
+    return () => preference.removeEventListener("change", syncPreference);
+  }, []);
 
-    const target = awakened ? 1 : 0;
-    activationProgress.current = reduceMotion.current
-      ? target
-      : MathUtils.damp(activationProgress.current, target, 8, delta);
-
-    const wave = 0.5 - 0.5 * Math.cos(
-      (clock.getElapsedTime() * Math.PI * 2) / BREATH_CYCLE_SECONDS,
-    );
-    const breath = reduceMotion.current ? 0.42 : wave * wave * (3 - 2 * wave);
-    const progress = activationProgress.current;
-
-    if (haloMaterial.current) {
-      haloMaterial.current.opacity = MathUtils.lerp(0.004 + breath * 0.055, 0.2, progress);
-    }
-    if (bodyMaterial.current) {
-      bodyMaterial.current.opacity = MathUtils.lerp(0.012 + breath * 0.115, 0.42, progress);
-    }
-    if (seamMaterial.current) {
-      seamMaterial.current.opacity = MathUtils.lerp(0.07 + breath * 0.25, 0.94, progress);
-    }
-    if (energyMaterial.current) {
-      energyMaterial.current.uniforms.uActivation.value = progress;
-      energyMaterial.current.uniforms.uBreath.value = breath;
-      energyMaterial.current.uniforms.uTime.value = reduceMotion.current
-        ? 0
-        : clock.getElapsedTime();
-    }
+  useFrame(({ gl }, delta) => {
+    if (reduceMotion.current || document.hidden || gl.domElement.closest('[aria-hidden="true"]')) return;
+    // Keep the phase on pause/resume instead of jumping to the global scene clock.
+    elapsed.current += Math.min(delta, 0.05);
+    energyUniforms.uBreath.value = platformBreath(elapsed.current);
+    energyUniforms.uTime.value = elapsed.current;
   });
 
   return (
     <>
-      <mesh position={[0, 0.011, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.565, 0.625, 128]} />
-        <meshBasicMaterial
-          blending={AdditiveBlending}
-          color="#ffffff"
-          depthWrite={false}
-          opacity={0.04}
-          ref={haloMaterial}
-          side={DoubleSide}
-          toneMapped={false}
-          transparent
-        />
-      </mesh>
-      <mesh position={[0, 0.013, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.578, 0.614, 192]} />
-        <meshBasicMaterial
-          blending={AdditiveBlending}
-          color="#ffffff"
-          depthWrite={false}
-          opacity={0.1}
-          ref={bodyMaterial}
-          side={DoubleSide}
-          toneMapped={false}
-          transparent
-        />
-      </mesh>
-      <mesh position={[0, 0.015, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.587, 0.605, 192]} />
+      <mesh name="companion-platform-ring" position={[0, 0.015, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[0.56, 0.63, 384]} />
         <shaderMaterial
           blending={AdditiveBlending}
           depthWrite={false}
           fragmentShader={ENERGY_FRAGMENT_SHADER}
-          ref={energyMaterial}
           side={DoubleSide}
           toneMapped={false}
           transparent
           uniforms={energyUniforms}
           vertexShader={ENERGY_VERTEX_SHADER}
-        />
-      </mesh>
-      <mesh position={[0, 0.016, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.572, 0.576, 192]} />
-        <meshBasicMaterial
-          blending={AdditiveBlending}
-          color="#ffffff"
-          depthWrite={false}
-          opacity={0.22}
-          ref={seamMaterial}
-          side={DoubleSide}
-          toneMapped={false}
-          transparent
         />
       </mesh>
       <group>
@@ -180,8 +116,7 @@ function BreathingPlatformLight({ awakened }: { readonly awakened: boolean }) {
  * A real, deliberately under-lit 3D room for the persistent companion stage.
  * The geometry stays restrained so Cortana remains the only visual subject.
  */
-export function CinematicEnvironment({ awakened = false, isolateCompanion = false }: {
-  readonly awakened?: boolean;
+export function CinematicEnvironment({ isolateCompanion = false }: {
   readonly isolateCompanion?: boolean;
 }) {
   return (
@@ -199,7 +134,7 @@ export function CinematicEnvironment({ awakened = false, isolateCompanion = fals
         <meshStandardMaterial color="#02070d" metalness={0.08} roughness={0.92} />
       </mesh>
 
-      <BreathingPlatformLight awakened={awakened} />
+      <BreathingPlatformLight />
     </>
   );
 }
