@@ -1,0 +1,11 @@
+# Decorative companion platform
+
+The shared companion platform is now decorative. It has no invisible button, hover/focus target, pointer cursor or click-to-wake action. Voice interaction remains in the existing bottom-right audio dock. Removing the platform activation state does not change the companion model, camera, jaw or speech-motion bindings.
+
+The original black physical base remains. One analytic ring material replaces four stacked glow meshes. Two restrained silver edges enclose a soft light channel, with filtered filaments to reduce aliasing at grazing angles. The continuous highlight completes a lap in 24 seconds. A 7.8-second breathing cycle uses a 3.1-second inhale and a longer exhale, with zero velocity and acceleration at its turns. It never fully extinguishes. The time accumulator freezes for reduced motion and hidden rendering, and clamps the first delta after resuming. System preference changes are handled live and the listener is removed on unmount.
+
+The cinematic 3D stage remains theme-neutral content; page chrome and the unchanged audio control retain the semantic light/dark appearance contract. No new scene lights, post-processing, dependencies or requestAnimationFrame loop were added. The ring uses the existing renderer loop with three fewer glow draw calls.
+
+Validation: TypeScript passed, 17 focused ring/theme/audio tests passed, and four additional existing companion tests passed. Four pre-existing source-regex failures in the companion/voice suites are preserved and recorded against the pre-change baseline. Browser and native verification cover the ring, clicking its former hit area, companion motion, audio settings, both themes and all six core navigation destinations. No new console errors; existing embedded Gallery hydration/initSync diagnostics are recorded by exact baseline message.
+
+Delivery uses the preserved incremental Tauri release cache and unchanged sidecar. The self-contained executable was deployed to the canonical Desktop Demo shortcut target, cold-launched and visually verified, then restarted normally without remote debugging. The manifest records the matching rollback pair, executable hash/timestamp, source commit and resource sample. Evidence: D:/preacherman/output/playwright/platform-ring-20260920/.

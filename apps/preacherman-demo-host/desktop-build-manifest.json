@@ -1,149 +1,100 @@
 {
   "schemaVersion": 1,
-  "buildId": "audio-dock-20260920",
+  "buildId": "platform-ring-20260920",
   "productVersion": "0.1.0",
-  "sourceTask": "desktop-five-bar-microphone-and-audio-device-dock",
+  "sourceTask": "desktop-decorative-companion-platform-ring",
   "sourceThread": null,
-  "sourceState": "Reuse the authored video VoiceMark proportions for a persistent bottom-right, sound-reactive microphone toggle. Add input/output selection and test output under three dots. No speech recognition, recording upload, or AI conversation added.",
-  "sourceCommit": "e38028710b336ef9965d2f4d97c69c599da9dce8",
+  "sourceState": "Remove the invisible platform wake button, cursor/focus behavior and activation-light plumbing. Retain the shared 3D base and companion. Replace layered band meshes with anti-aliased silver filaments, a continuous 24-second light sweep and a 7.8-second asymmetric breath. Respect reduced motion and hidden-render pauses.",
+  "sourceCommit": "44838bcd6ee016e807d6e4571f906495dc664ad7",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-20T17:51:12.0971821+08:00",
-  "deployedAt": "2026-09-20T17:51:46.0411197+08:00",
-  "verifiedAt": "2026-09-20T17:54:42.7573139+08:00",
-  "sizeBytes": 676093952,
-  "sha256": "AE4FCE297569E63BB7557BCEDBC111439A19F4FB57B9AC900B84A27BAC5FFC45",
+  "builtAt": "2026-09-20T18:17:37.0002351+08:00",
+  "deployedAt": "2026-09-20T18:18:15.3839319+08:00",
+  "verifiedAt": "2026-09-20T18:20:52.8972895+08:00",
+  "sizeBytes": 676094464,
+  "sha256": "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920/preacherman-demo-host.exe",
-  "backupSha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920/preacherman-demo-host.exe",
+  "backupSha256": "AE4FCE297569E63BB7557BCEDBC111439A19F4FB57B9AC900B84A27BAC5FFC45",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "3a4ccf9903a24d77aa62a7300f638520e140a1ff",
-  "previousVerificationCommit": "3a4ccf9903a24d77aa62a7300f638520e140a1ff",
+  "rollbackBaselineCommit": "00a2fdc197ac95630b1613fecfcd2ee1f182aaec",
+  "previousVerificationCommit": "00a2fdc197ac95630b1613fecfcd2ee1f182aaec",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "typecheck": "passed",
+      "typecheck": "passed; includes renderer source via TypeScript path mapping",
       "focusedTests": {
-        "passed": 18,
-        "failed": 0,
-        "command": "node --test --test-isolation=none tests/audio-dock.test.mjs tests/theme-contract.test.mjs tests/preferences-and-window.test.mjs"
+        "passed": 17,
+        "failed": 0
       },
-      "recordedBaselineFailures": [
-        {
-          "file": "tests/app-shell.test.mjs",
-          "reason": "Existing useWindowActivity.ts imports Tauri outside tauriClient; identical to HEAD."
-        },
-        {
-          "file": "tests/app-shell.test.mjs",
-          "reason": "Existing App.tsx no longer contains expected activeSurfaceType !== ledger conditional; identical to HEAD."
-        }
-      ]
+      "existingCompanionTests": {
+        "passed": 4,
+        "unchangedBaselineFailures": [
+          "Home, Task, Settings, and Gallery share one persistent companion scene",
+          "Gallery moves the shared Cortana into the accepted close portrait above the original runtime",
+          "the shell owns one persistent avatar while Task mounts the Lookback surface",
+          "voice and model components share explicit four-state avatar control without task cancellation"
+        ]
+      },
+      "designDetector": [],
+      "baselineLog": "D:\\preacherman\\output\\ring-baseline-tests.log"
     },
-    "nativeFlow": "Cold shortcut launch, Home/Task/Gallery/Market/Account/Settings in both appearances, microphone signal/silence and permission failure recovery, real hardware capture and output routing; normal shortcut restart after checks.",
-    "audio": [
+    "nativeFlow": "Cold canonical shortcut launch; decorative ring, no click-to-wake behavior, live companion motion, audio settings, Home/Task/Gallery/Market/Account/Settings in both appearances. Normal shortcut restart after checks.",
+    "ring": [
       {
         "appearance": "dark",
-        "font": "\"Clash Display\", sans-serif",
-        "color": "rgb(162, 170, 174)",
-        "background": "rgba(0, 0, 0, 0)",
-        "right": 34,
-        "bottom": 19,
-        "panel": {
-          "color": "rgb(245, 243, 239)",
-          "background": "rgb(13, 14, 14)",
-          "font": "\"Clash Display\", sans-serif"
-        },
-        "soundReactive": true,
-        "silentStationary": true,
-        "release": true,
-        "permissionError": true
+        "decorative": true,
+        "wakeRequests": 0,
+        "hits": [
+          {
+            "cursor": "auto",
+            "tag": "DIV",
+            "classes": ""
+          },
+          {
+            "cursor": "auto",
+            "tag": "DIV",
+            "classes": ""
+          },
+          {
+            "cursor": "auto",
+            "tag": "DIV",
+            "classes": ""
+          }
+        ],
+        "canvasPointerEvents": "none",
+        "audioSettings": true
       },
       {
         "appearance": "light",
-        "font": "\"Clash Display\", sans-serif",
-        "color": "rgb(167, 175, 179)",
-        "background": "rgba(0, 0, 0, 0)",
-        "right": 34,
-        "bottom": 19,
-        "panel": {
-          "color": "rgb(24, 24, 23)",
-          "background": "rgb(255, 255, 255)",
-          "font": "\"Clash Display\", sans-serif"
-        },
-        "soundReactive": true,
-        "silentStationary": true,
-        "release": true,
-        "permissionError": true
+        "decorative": true,
+        "wakeRequests": 0,
+        "hits": [
+          {
+            "cursor": "auto",
+            "tag": "DIV",
+            "classes": ""
+          },
+          {
+            "cursor": "auto",
+            "tag": "DIV",
+            "classes": ""
+          },
+          {
+            "cursor": "auto",
+            "tag": "DIV",
+            "classes": ""
+          }
+        ],
+        "canvasPointerEvents": "none",
+        "audioSettings": true
       }
     ],
-    "hardware": {
-      "devices": [
-        {
-          "kind": "audioinput",
-          "label": "默认值 - 麦克风 (3- USB Audio Device) (0d8c:0012)",
-          "deviceId": "default"
-        },
-        {
-          "kind": "audioinput",
-          "label": "通信 - 麦克风 (3- USB Audio Device) (0d8c:0012)",
-          "deviceId": "communications"
-        },
-        {
-          "kind": "audioinput",
-          "label": "麦克风 (3- USB Audio Device) (0d8c:0012)",
-          "deviceId": "f28bec2a9a5af66dcb35e9b43e625a464b34888cf3089b8d38ccfda74114afa0"
-        },
-        {
-          "kind": "audiooutput",
-          "label": "默认值 - AG253F (NVIDIA High Definition Audio)",
-          "deviceId": "default"
-        },
-        {
-          "kind": "audiooutput",
-          "label": "通信 - 扬声器 (3- USB Audio Device) (0d8c:0012)",
-          "deviceId": "communications"
-        },
-        {
-          "kind": "audiooutput",
-          "label": "扬声器 (3- USB Audio Device) (0d8c:0012)",
-          "deviceId": "70de281bed81f73009b9bccfb50b859ade6d0ed630f99d181d757d52fc57de5c"
-        },
-        {
-          "kind": "audiooutput",
-          "label": "AG253F (NVIDIA High Definition Audio)",
-          "deviceId": "62737f3d8abbf57eb58f58018978dd20cc1801088466960cfd4ced2d377d86d8"
-        }
-      ],
-      "live": [
-        {
-          "label": "麦克风 (3- USB Audio Device) (0d8c:0012)",
-          "settings": {
-            "autoGainControl": true,
-            "channelCount": 1,
-            "deviceId": "f28bec2a9a5af66dcb35e9b43e625a464b34888cf3089b8d38ccfda74114afa0",
-            "echoCancellation": true,
-            "groupId": "9a52aebcd3819b3fb735978e74a9cfc6af4ea3625ddd80d2125ea39bff56dafa",
-            "latency": 0.01,
-            "noiseSuppression": true,
-            "sampleRate": 48000,
-            "sampleSize": 16,
-            "voiceIsolation": false
-          }
-        }
-      ],
-      "allTracksReleased": true,
-      "sinks": [
-        "70de281bed81f73009b9bccfb50b859ade6d0ed630f99d181d757d52fc57de5c",
-        "70de281bed81f73009b9bccfb50b859ade6d0ed630f99d181d757d52fc57de5c"
-      ],
-      "testTone": true,
-      "passed": true
-    },
     "routes": [
       {
         "name": "Home",
@@ -245,79 +196,97 @@
           "appearance": "light"
         }
       ],
-      "audio": [
+      "ring": [
         {
           "appearance": "dark",
-          "font": "\"Clash Display\", sans-serif",
-          "color": "rgb(162, 170, 174)",
-          "background": "rgba(0, 0, 0, 0)",
-          "right": 34,
-          "bottom": 19,
-          "panel": {
-            "color": "rgb(245, 243, 239)",
-            "background": "rgb(13, 14, 14)",
-            "font": "\"Clash Display\", sans-serif"
-          },
-          "soundReactive": true,
-          "silentStationary": true,
-          "release": true,
-          "permissionError": true
+          "decorative": true,
+          "wakeRequests": 0,
+          "hits": [
+            {
+              "cursor": "auto",
+              "tag": "DIV",
+              "classes": ""
+            },
+            {
+              "cursor": "auto",
+              "tag": "DIV",
+              "classes": ""
+            },
+            {
+              "cursor": "auto",
+              "tag": "DIV",
+              "classes": ""
+            }
+          ],
+          "canvasPointerEvents": "none",
+          "audioSettings": true
         },
         {
           "appearance": "light",
-          "font": "\"Clash Display\", sans-serif",
-          "color": "rgb(167, 175, 179)",
-          "background": "rgba(0, 0, 0, 0)",
-          "right": 34,
-          "bottom": 19,
-          "panel": {
-            "color": "rgb(24, 24, 23)",
-            "background": "rgb(255, 255, 255)",
-            "font": "\"Clash Display\", sans-serif"
-          },
-          "soundReactive": true,
-          "silentStationary": true,
-          "release": true,
-          "permissionError": true
+          "decorative": true,
+          "wakeRequests": 0,
+          "hits": [
+            {
+              "cursor": "auto",
+              "tag": "DIV",
+              "classes": ""
+            },
+            {
+              "cursor": "auto",
+              "tag": "DIV",
+              "classes": ""
+            },
+            {
+              "cursor": "auto",
+              "tag": "DIV",
+              "classes": ""
+            }
+          ],
+          "canvasPointerEvents": "none",
+          "audioSettings": true
         }
       ],
       "errors": [
         "Hydration completed but contains mismatches."
       ],
       "coldHome": true,
+      "consoleBaselines": [
+        "audio-dock-20260920",
+        "account-dock-refine-20260917"
+      ],
       "newErrors": [],
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-09-20T17:54:42.7573139+08:00",
-      "NativePid": 34316,
-      "StartedAt": "2026-09-20T17:54:18.2459247+08:00",
-      "WindowHandle": 332192,
+      "SampledAt": "2026-09-20T18:20:52.8972895+08:00",
+      "NativePid": 33324,
+      "StartedAt": "2026-09-20T18:20:35.2812166+08:00",
+      "WindowHandle": 463300,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        34316,
-        30272,
-        28624,
-        38108,
-        33468,
-        36840,
-        30836,
-        30628,
-        27724,
-        27500,
-        39948
+        33324,
+        26676,
+        38444,
+        22244,
+        31236,
+        39472,
+        36832,
+        36112,
+        26884,
+        18920,
+        37716
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1965.6,
-      "GpuDedicatedBytes": 3250647040.0,
-      "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 15959800,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1913.3,
+      "GpuDedicatedBytes": 3260907520.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 16463928,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 30628
+          "OwningProcess": 36112
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -353,24 +322,18 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "consoleBaselines": [
-      "account-providers-20260917"
+      "audio-dock-20260920",
+      "account-dock-refine-20260917"
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\hardware-report.json",
-      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\source-checks.json",
-      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\verify.cjs",
-      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\hardware.cjs"
-    ],
-    "backupRetention": {
-      "applied": true,
-      "retainedCount": 3,
-      "removedCount": 1,
-      "report": "D:/preacherman/output/playwright/audio-dock-20260920/backup-retention.json"
-    }
+      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\source-checks.json",
+      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\verify.cjs",
+      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\ring.smoke.cjs"
+    ]
   },
   "releaseAttempts": [
     {
@@ -1020,9 +983,18 @@
       "deployedAt": "2026-09-20T17:51:46.0411197+08:00",
       "verifiedAt": "2026-09-20T17:54:42.7573139+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920"
+    },
+    {
+      "buildId": "platform-ring-20260920",
+      "sourceCommit": "44838bcd6ee016e807d6e4571f906495dc664ad7",
+      "sha256": "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-20T18:18:15.3839319+08:00",
+      "verifiedAt": "2026-09-20T18:20:52.8972895+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
