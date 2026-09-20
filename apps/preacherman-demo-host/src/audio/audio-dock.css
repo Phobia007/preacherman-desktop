@@ -42,6 +42,9 @@
 .demo-audio-dock > button:focus-visible { outline: 1px solid var(--audio-focus); outline-offset: 2px; }
 .demo-audio-dock__wave { display: flex; align-items: center; gap: 4px; height: 34px; }
 .demo-audio-dock__wave i { display: block; width: 3px; border-radius: 4px; background: currentColor; transition: height 85ms ease-out; }
+/* Keep the fine glyphs distinct when authored video cards pass behind them. */
+.demo-app-shell:not([data-active-surface="account"]) .demo-audio-dock__wave i { box-shadow: 0 0 0 1px var(--demo-theme-home-canvas); }
+.demo-app-shell:not([data-active-surface="account"]) .demo-audio-dock__options svg { filter: drop-shadow(0 0 1px var(--demo-theme-home-canvas)); }
 .demo-audio-dock[data-state="listening"] .demo-audio-dock__listen { color: var(--audio-active); }
 .demo-audio-dock[data-state="requesting"] .demo-audio-dock__listen { color: var(--audio-loading); }
 .demo-audio-dock[data-state="error"] .demo-audio-dock__listen { color: var(--audio-error); }

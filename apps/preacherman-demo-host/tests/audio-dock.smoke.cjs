@@ -4,6 +4,7 @@ async function verifyAudio(p,appearance,shot){
  assert.equal(await dock.locator('i').count(),5);assert.equal((await dock.innerText()).trim(),'');
  const style=await dock.evaluate(e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return{font:s.fontFamily,color:s.color,background:s.backgroundColor,right:innerWidth-r.right,bottom:innerHeight-r.bottom};});
  assert.match(style.font,/Clash Display/);assert.ok(style.right>=20&&style.bottom>=10);assert.equal(style.background,'rgba(0, 0, 0, 0)');assert.ok(parseFloat(style.color.match(/[\d.]+/)[0])>150,'Home waveform stays visible over the cinematic scene in either appearance');
+ assert.ok(await dock.locator('i').evaluateAll(es=>es.every(e=>getComputedStyle(e).boxShadow!=='none')),'Each glyph has an edge for moving light video backgrounds');
  await settings.click();await p.getByRole('dialog',{name:'Audio settings'}).waitFor();
  assert.equal(await p.locator('#preacherman-audio-input').evaluate(e=>document.activeElement===e),true);
  const panel=await p.locator('.demo-audio-dock__panel').evaluate(e=>({color:getComputedStyle(e).color,background:getComputedStyle(e).backgroundColor,font:getComputedStyle(e.querySelector('select')).fontFamily}));
