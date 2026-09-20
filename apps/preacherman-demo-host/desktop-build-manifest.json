@@ -9,8 +9,8 @@
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-17T16:27:47.6307970+08:00",
-  "deployedAt": "2026-09-17T16:28:19.9139910+08:00",
+  "builtAt": "2026-09-17T16:27:47.630797+08:00",
+  "deployedAt": "2026-09-17T16:28:19.913991+08:00",
   "verifiedAt": "2026-09-17T16:30:52.6451357+08:00",
   "sizeBytes": 676090368,
   "sha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
@@ -1327,7 +1327,7 @@
       "sourceCommit": "158ecc013c45388b91eeb3de76771009d9512634",
       "sha256": "0D7B6349573918EA2EB75BA6E2DAF57F4F1E514E0CA754585B9998FAD35B6ABB",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-09-17T02:44:30.1781050+08:00",
+      "deployedAt": "2026-09-17T02:44:30.178105+08:00",
       "verifiedAt": "2026-09-17T02:47:44.2347536+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-member-before-20260917"
     },
@@ -1336,7 +1336,7 @@
       "sourceCommit": "f1eb9d2061102c381981f0ed98e86838fb30f99c",
       "sha256": "3CEC7A6B7A06FD11887694703C9DF488E724363FE5D891D8DCA602FADF5F039F",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-09-17T03:10:58.2965410+08:00",
+      "deployedAt": "2026-09-17T03:10:58.296541+08:00",
       "verifiedAt": "2026-09-17T03:15:55.6558124+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-dock-refine-before-20260917"
     },
@@ -1373,7 +1373,7 @@
       "sha256": "0DEEC14A7125AD23824C479D301BB23295E20E22EF3EB9CA3C93DA342C7CAFCE",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-09-17T14:41:55.8395012+08:00",
-      "verifiedAt": "2026-09-17T14:45:05.5936460+08:00",
+      "verifiedAt": "2026-09-17T14:45:05.593646+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-profile-links-before-20260917"
     },
     {
@@ -1381,9 +1381,18 @@
       "sourceCommit": "58a988d1ae28196550c4601aa01821b042612da7",
       "sha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-09-17T16:28:19.9139910+08:00",
+      "deployedAt": "2026-09-17T16:28:19.913991+08:00",
       "verifiedAt": "2026-09-17T16:30:52.6451357+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917"
+    },
+    {
+      "buildId": "audio-dock-20260920-attempt1",
+      "sourceCommit": "9305e0decae434fff6d1d4e1c9a065028eba037e",
+      "sha256": "BDEB02F70C9307890FADA79229A0077D4FB9E3AE280FBB3C0917C86677DF6E89",
+      "status": "rolled-back",
+      "reason": "Visual check: waveform lacked contrast over pale moving Gallery cards; add a thin glyph contour without a control background.",
+      "rolledBackAt": "2026-09-20T17:45:00.1714518+08:00",
+      "restoredSha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917/desktop-build-manifest.json",
