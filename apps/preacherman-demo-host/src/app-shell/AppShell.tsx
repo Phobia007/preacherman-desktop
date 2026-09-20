@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, 
 import { type Appearance, type Locale } from "../preferences";
 import { accountAuth, accountProfile } from "../auth/accountAuth";
 import { AccountBadge } from "./AccountBadge";
+import { AudioDock } from "../audio/AudioDock";
 import { WindowControls } from "./WindowControls";
 import { WindowResizeHandles } from "./WindowResizeHandles";
 
@@ -202,6 +203,7 @@ export function AppShell({
         onClick={() => { selectBrandDestination("account"); setBrandNavigationOpen(false); }}>
         <AccountBadge user={auth.user} member={member} />
       </button>
+      <AudioDock />
       <WindowResizeHandles dispatch={dispatch} />
     </div>
     </div>
