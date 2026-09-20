@@ -1,317 +1,149 @@
 {
   "schemaVersion": 1,
-  "buildId": "account-providers-20260917",
+  "buildId": "audio-dock-20260920",
   "productVersion": "0.1.0",
-  "sourceTask": "add-apple-codex-account-buttons-both-editions",
+  "sourceTask": "desktop-five-bar-microphone-and-audio-device-dock",
   "sourceThread": null,
-  "sourceState": "Add Apple and Codex Account buttons after GitHub with matching layout, themed bundled icons and provider-specific local not-connected feedback. Actual GitHub authentication is unchanged.",
-  "sourceCommit": "58a988d1ae28196550c4601aa01821b042612da7",
+  "sourceState": "Reuse the authored video VoiceMark proportions for a persistent bottom-right, sound-reactive microphone toggle. Add input/output selection and test output under three dots. No speech recognition, recording upload, or AI conversation added.",
+  "sourceCommit": "e38028710b336ef9965d2f4d97c69c599da9dce8",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-17T16:27:47.630797+08:00",
-  "deployedAt": "2026-09-17T16:28:19.913991+08:00",
-  "verifiedAt": "2026-09-17T16:30:52.6451357+08:00",
-  "sizeBytes": 676090368,
-  "sha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
+  "builtAt": "2026-09-20T17:51:12.0971821+08:00",
+  "deployedAt": "2026-09-20T17:51:46.0411197+08:00",
+  "verifiedAt": "2026-09-20T17:54:42.7573139+08:00",
+  "sizeBytes": 676093952,
+  "sha256": "AE4FCE297569E63BB7557BCEDBC111439A19F4FB57B9AC900B84A27BAC5FFC45",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917/preacherman-demo-host.exe",
-  "backupSha256": "0DEEC14A7125AD23824C479D301BB23295E20E22EF3EB9CA3C93DA342C7CAFCE",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920/preacherman-demo-host.exe",
+  "backupSha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "f16832e89fb5bd0d34fb1e5d8d788bebe6f8fb4a",
-  "previousVerificationCommit": "f16832e89fb5bd0d34fb1e5d8d788bebe6f8fb4a",
+  "rollbackBaselineCommit": "3a4ccf9903a24d77aa62a7300f638520e140a1ff",
+  "previousVerificationCommit": "3a4ccf9903a24d77aa62a7300f638520e140a1ff",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "desktopExitCode": 0,
-      "testFiles": [
-        "tests/account-theme.test.mjs",
-        "tests/account-auth.test.mjs"
-      ],
-      "typecheck": "passed in both editions",
-      "browserBuild": "passed",
-      "sidecar": "unchanged",
-      "browserExitCode": 0,
+      "typecheck": "passed",
       "focusedTests": {
-        "desktop": 16,
-        "browser": 20
+        "passed": 18,
+        "failed": 0,
+        "command": "node --test --test-isolation=none tests/audio-dock.test.mjs tests/theme-contract.test.mjs tests/preferences-and-window.test.mjs"
       },
-      "matchingFiles": [
+      "recordedBaselineFailures": [
         {
-          "File": "src/surfaces/account/AccountSurface.tsx",
-          "Same": true
+          "file": "tests/app-shell.test.mjs",
+          "reason": "Existing useWindowActivity.ts imports Tauri outside tauriClient; identical to HEAD."
         },
         {
-          "File": "src/surfaces/account/account.css",
-          "Same": true
-        },
-        {
-          "File": "src/surfaces/account/assets/apple.svg",
-          "Same": true
-        },
-        {
-          "File": "src/surfaces/account/assets/codex.svg",
-          "Same": true
-        },
-        {
-          "File": "tests/account-theme.test.mjs",
-          "Same": true
-        },
-        {
-          "File": "tests/account-providers.smoke.cjs",
-          "Same": true
+          "file": "tests/app-shell.test.mjs",
+          "reason": "Existing App.tsx no longer contains expected activeSurfaceType !== ledger conditional; identical to HEAD."
         }
       ]
     },
-    "nativeFlow": "Cold launch from canonical shortcut. All six destinations in both appearances. Four Account buttons have matching layouts and working local feedback, focus restoration and theme-aware icons. Existing profile rings still open and close. Normal shortcut restart after verification.",
-    "providers": [
+    "nativeFlow": "Cold shortcut launch, Home/Task/Gallery/Market/Account/Settings in both appearances, microphone signal/silence and permission failure recovery, real hardware capture and output routing; normal shortcut restart after checks.",
+    "audio": [
       {
         "appearance": "dark",
-        "providers": 4,
-        "matchingLayout": true,
-        "iconsLoaded": true,
-        "localFeedback": true,
-        "focusRestored": true,
-        "hover": {
-          "background": "rgb(23, 26, 28)",
-          "border": "rgb(89, 98, 103)"
+        "font": "\"Clash Display\", sans-serif",
+        "color": "rgb(162, 170, 174)",
+        "background": "rgba(0, 0, 0, 0)",
+        "right": 34,
+        "bottom": 19,
+        "panel": {
+          "color": "rgb(245, 243, 239)",
+          "background": "rgb(13, 14, 14)",
+          "font": "\"Clash Display\", sans-serif"
         },
-        "layout": [
-          {
-            "x": 1141.5,
-            "y": 351.390625,
-            "width": 418,
-            "height": 52,
-            "font": "300 16px / 24px \"Clash Display\", sans-serif",
-            "border": "8px",
-            "authoredHeight": 52,
-            "gap": 12,
-            "color": "rgb(237, 237, 237)",
-            "background": "rgb(15, 15, 15)",
-            "iconReady": true,
-            "filter": "none"
-          },
-          {
-            "x": 1141.5,
-            "y": 415.390625,
-            "width": 418,
-            "height": 52,
-            "font": "300 16px / 24px \"Clash Display\", sans-serif",
-            "border": "8px",
-            "authoredHeight": 52,
-            "gap": 12,
-            "color": "rgb(237, 237, 237)",
-            "background": "rgb(15, 15, 15)",
-            "iconReady": true,
-            "filter": "brightness(0) invert(1)"
-          },
-          {
-            "x": 1141.5,
-            "y": 479.390625,
-            "width": 418,
-            "height": 52,
-            "font": "300 16px / 24px \"Clash Display\", sans-serif",
-            "border": "8px",
-            "authoredHeight": 52,
-            "gap": 12,
-            "color": "rgb(237, 237, 237)",
-            "background": "rgb(15, 15, 15)",
-            "iconReady": true,
-            "filter": "brightness(0) invert(1)"
-          },
-          {
-            "x": 1141.5,
-            "y": 543.390625,
-            "width": 418,
-            "height": 52,
-            "font": "300 16px / 24px \"Clash Display\", sans-serif",
-            "border": "8px",
-            "authoredHeight": 52,
-            "gap": 12,
-            "color": "rgb(237, 237, 237)",
-            "background": "rgb(15, 15, 15)",
-            "iconReady": true,
-            "filter": "brightness(0) invert(1)"
-          }
-        ]
+        "soundReactive": true,
+        "silentStationary": true,
+        "release": true,
+        "permissionError": true
       },
       {
         "appearance": "light",
-        "providers": 4,
-        "matchingLayout": true,
-        "iconsLoaded": true,
-        "localFeedback": true,
-        "focusRestored": true,
-        "hover": {
-          "background": "rgb(240, 242, 242)",
-          "border": "rgb(139, 149, 152)"
+        "font": "\"Clash Display\", sans-serif",
+        "color": "rgb(167, 175, 179)",
+        "background": "rgba(0, 0, 0, 0)",
+        "right": 34,
+        "bottom": 19,
+        "panel": {
+          "color": "rgb(24, 24, 23)",
+          "background": "rgb(255, 255, 255)",
+          "font": "\"Clash Display\", sans-serif"
         },
-        "layout": [
-          {
-            "x": 1141.5,
-            "y": 351.390625,
-            "width": 418,
-            "height": 52,
-            "font": "300 16px / 24px \"Clash Display\", sans-serif",
-            "border": "8px",
-            "authoredHeight": 52,
-            "gap": 12,
-            "color": "rgb(32, 33, 33)",
-            "background": "rgb(255, 255, 255)",
-            "iconReady": true,
-            "filter": "none"
-          },
-          {
-            "x": 1141.5,
-            "y": 415.390625,
-            "width": 418,
-            "height": 52,
-            "font": "300 16px / 24px \"Clash Display\", sans-serif",
-            "border": "8px",
-            "authoredHeight": 52,
-            "gap": 12,
-            "color": "rgb(32, 33, 33)",
-            "background": "rgb(255, 255, 255)",
-            "iconReady": true,
-            "filter": "brightness(0)"
-          },
-          {
-            "x": 1141.5,
-            "y": 479.390625,
-            "width": 418,
-            "height": 52,
-            "font": "300 16px / 24px \"Clash Display\", sans-serif",
-            "border": "8px",
-            "authoredHeight": 52,
-            "gap": 12,
-            "color": "rgb(32, 33, 33)",
-            "background": "rgb(255, 255, 255)",
-            "iconReady": true,
-            "filter": "brightness(0)"
-          },
-          {
-            "x": 1141.5,
-            "y": 543.390625,
-            "width": 418,
-            "height": 52,
-            "font": "300 16px / 24px \"Clash Display\", sans-serif",
-            "border": "8px",
-            "authoredHeight": 52,
-            "gap": 12,
-            "color": "rgb(32, 33, 33)",
-            "background": "rgb(255, 255, 255)",
-            "iconReady": true,
-            "filter": "brightness(0)"
-          }
-        ]
+        "soundReactive": true,
+        "silentStationary": true,
+        "release": true,
+        "permissionError": true
       }
     ],
-    "profiles": [
-      {
-        "appearance": "dark",
-        "surface": "Task surf",
-        "rain": false,
-        "started": false,
-        "hole": 1,
-        "lines": [
-          "An intelligent home.",
-          "One place for your virtual characters, engines, and tools.",
-          "AI that keeps learning, goes with you, and gets things done.",
-          "Your second identity in the virtual world."
-        ],
-        "toggle": "Close",
-        "closed": true
-      },
-      {
-        "appearance": "dark",
-        "surface": "Task timeline",
-        "rain": false,
-        "started": false,
-        "hole": 1,
-        "lines": [
-          "An intelligent home.",
-          "One place for your virtual characters, engines, and tools.",
-          "AI that keeps learning, goes with you, and gets things done.",
-          "Your second identity in the virtual world."
-        ],
-        "toggle": "Close",
-        "closed": true
-      },
-      {
-        "appearance": "dark",
-        "surface": "Market main",
-        "english": true,
-        "noSocialLinks": true,
-        "closed": true
-      },
-      {
-        "appearance": "dark",
-        "surface": "Market details",
-        "english": true,
-        "noSocialLinks": true,
-        "closed": true
-      },
-      {
-        "appearance": "dark",
-        "surface": "Account",
-        "english": true,
-        "closed": true
-      },
-      {
-        "appearance": "light",
-        "surface": "Task surf",
-        "rain": false,
-        "started": false,
-        "hole": 1,
-        "lines": [
-          "An intelligent home.",
-          "One place for your virtual characters, engines, and tools.",
-          "AI that keeps learning, goes with you, and gets things done.",
-          "Your second identity in the virtual world."
-        ],
-        "toggle": "Close",
-        "closed": true
-      },
-      {
-        "appearance": "light",
-        "surface": "Task timeline",
-        "rain": false,
-        "started": false,
-        "hole": 1,
-        "lines": [
-          "An intelligent home.",
-          "One place for your virtual characters, engines, and tools.",
-          "AI that keeps learning, goes with you, and gets things done.",
-          "Your second identity in the virtual world."
-        ],
-        "toggle": "Close",
-        "closed": true
-      },
-      {
-        "appearance": "light",
-        "surface": "Market main",
-        "english": true,
-        "noSocialLinks": true,
-        "closed": true
-      },
-      {
-        "appearance": "light",
-        "surface": "Market details",
-        "english": true,
-        "noSocialLinks": true,
-        "closed": true
-      },
-      {
-        "appearance": "light",
-        "surface": "Account",
-        "english": true,
-        "closed": true
-      }
-    ],
+    "hardware": {
+      "devices": [
+        {
+          "kind": "audioinput",
+          "label": "默认值 - 麦克风 (3- USB Audio Device) (0d8c:0012)",
+          "deviceId": "default"
+        },
+        {
+          "kind": "audioinput",
+          "label": "通信 - 麦克风 (3- USB Audio Device) (0d8c:0012)",
+          "deviceId": "communications"
+        },
+        {
+          "kind": "audioinput",
+          "label": "麦克风 (3- USB Audio Device) (0d8c:0012)",
+          "deviceId": "f28bec2a9a5af66dcb35e9b43e625a464b34888cf3089b8d38ccfda74114afa0"
+        },
+        {
+          "kind": "audiooutput",
+          "label": "默认值 - AG253F (NVIDIA High Definition Audio)",
+          "deviceId": "default"
+        },
+        {
+          "kind": "audiooutput",
+          "label": "通信 - 扬声器 (3- USB Audio Device) (0d8c:0012)",
+          "deviceId": "communications"
+        },
+        {
+          "kind": "audiooutput",
+          "label": "扬声器 (3- USB Audio Device) (0d8c:0012)",
+          "deviceId": "70de281bed81f73009b9bccfb50b859ade6d0ed630f99d181d757d52fc57de5c"
+        },
+        {
+          "kind": "audiooutput",
+          "label": "AG253F (NVIDIA High Definition Audio)",
+          "deviceId": "62737f3d8abbf57eb58f58018978dd20cc1801088466960cfd4ced2d377d86d8"
+        }
+      ],
+      "live": [
+        {
+          "label": "麦克风 (3- USB Audio Device) (0d8c:0012)",
+          "settings": {
+            "autoGainControl": true,
+            "channelCount": 1,
+            "deviceId": "f28bec2a9a5af66dcb35e9b43e625a464b34888cf3089b8d38ccfda74114afa0",
+            "echoCancellation": true,
+            "groupId": "9a52aebcd3819b3fb735978e74a9cfc6af4ea3625ddd80d2125ea39bff56dafa",
+            "latency": 0.01,
+            "noiseSuppression": true,
+            "sampleRate": 48000,
+            "sampleSize": 16,
+            "voiceIsolation": false
+          }
+        }
+      ],
+      "allTracksReleased": true,
+      "sinks": [
+        "70de281bed81f73009b9bccfb50b859ade6d0ed630f99d181d757d52fc57de5c",
+        "70de281bed81f73009b9bccfb50b859ade6d0ed630f99d181d757d52fc57de5c"
+      ],
+      "testTone": true,
+      "passed": true
+    },
     "routes": [
       {
         "name": "Home",
@@ -363,18 +195,6 @@
       }
     ],
     "browserVerification": {
-      "modes": [
-        {
-          "appearance": "dark",
-          "englishProfiles": true,
-          "noAnimalRain": true
-        },
-        {
-          "appearance": "light",
-          "englishProfiles": true,
-          "noAnimalRain": true
-        }
-      ],
       "routes": [
         {
           "name": "Home",
@@ -425,288 +245,79 @@
           "appearance": "light"
         }
       ],
-      "profiles": [
+      "audio": [
         {
           "appearance": "dark",
-          "surface": "Task surf",
-          "rain": false,
-          "started": false,
-          "hole": 1,
-          "lines": [
-            "An intelligent home.",
-            "One place for your virtual characters, engines, and tools.",
-            "AI that keeps learning, goes with you, and gets things done.",
-            "Your second identity in the virtual world."
-          ],
-          "toggle": "Close",
-          "closed": true
-        },
-        {
-          "appearance": "dark",
-          "surface": "Task timeline",
-          "rain": false,
-          "started": false,
-          "hole": 1,
-          "lines": [
-            "An intelligent home.",
-            "One place for your virtual characters, engines, and tools.",
-            "AI that keeps learning, goes with you, and gets things done.",
-            "Your second identity in the virtual world."
-          ],
-          "toggle": "Close",
-          "closed": true
-        },
-        {
-          "appearance": "dark",
-          "surface": "Market main",
-          "english": true,
-          "noSocialLinks": true,
-          "closed": true
-        },
-        {
-          "appearance": "dark",
-          "surface": "Market details",
-          "english": true,
-          "noSocialLinks": true,
-          "closed": true
-        },
-        {
-          "appearance": "dark",
-          "surface": "Account",
-          "english": true,
-          "closed": true
-        },
-        {
-          "appearance": "light",
-          "surface": "Task surf",
-          "rain": false,
-          "started": false,
-          "hole": 1,
-          "lines": [
-            "An intelligent home.",
-            "One place for your virtual characters, engines, and tools.",
-            "AI that keeps learning, goes with you, and gets things done.",
-            "Your second identity in the virtual world."
-          ],
-          "toggle": "Close",
-          "closed": true
-        },
-        {
-          "appearance": "light",
-          "surface": "Task timeline",
-          "rain": false,
-          "started": false,
-          "hole": 1,
-          "lines": [
-            "An intelligent home.",
-            "One place for your virtual characters, engines, and tools.",
-            "AI that keeps learning, goes with you, and gets things done.",
-            "Your second identity in the virtual world."
-          ],
-          "toggle": "Close",
-          "closed": true
-        },
-        {
-          "appearance": "light",
-          "surface": "Market main",
-          "english": true,
-          "noSocialLinks": true,
-          "closed": true
-        },
-        {
-          "appearance": "light",
-          "surface": "Market details",
-          "english": true,
-          "noSocialLinks": true,
-          "closed": true
-        },
-        {
-          "appearance": "light",
-          "surface": "Account",
-          "english": true,
-          "closed": true
-        }
-      ],
-      "providers": [
-        {
-          "appearance": "dark",
-          "providers": 4,
-          "matchingLayout": true,
-          "iconsLoaded": true,
-          "localFeedback": true,
-          "focusRestored": true,
-          "hover": {
-            "background": "rgb(23, 26, 28)",
-            "border": "rgb(89, 98, 103)"
+          "font": "\"Clash Display\", sans-serif",
+          "color": "rgb(162, 170, 174)",
+          "background": "rgba(0, 0, 0, 0)",
+          "right": 34,
+          "bottom": 19,
+          "panel": {
+            "color": "rgb(245, 243, 239)",
+            "background": "rgb(13, 14, 14)",
+            "font": "\"Clash Display\", sans-serif"
           },
-          "layout": [
-            {
-              "x": 1236.34130859375,
-              "y": 333.1183166503906,
-              "width": 396.2640380859375,
-              "height": 49.295989990234375,
-              "font": "300 16px / 24px \"Clash Display\", sans-serif",
-              "border": "8px",
-              "authoredHeight": 52,
-              "gap": 12,
-              "color": "rgb(237, 237, 237)",
-              "background": "rgb(15, 15, 15)",
-              "iconReady": true,
-              "filter": "none"
-            },
-            {
-              "x": 1236.34130859375,
-              "y": 393.7903137207031,
-              "width": 396.2640380859375,
-              "height": 49.295989990234375,
-              "font": "300 16px / 24px \"Clash Display\", sans-serif",
-              "border": "8px",
-              "authoredHeight": 52,
-              "gap": 12,
-              "color": "rgb(237, 237, 237)",
-              "background": "rgb(15, 15, 15)",
-              "iconReady": true,
-              "filter": "brightness(0) invert(1)"
-            },
-            {
-              "x": 1236.34130859375,
-              "y": 454.4623107910156,
-              "width": 396.2640380859375,
-              "height": 49.2960205078125,
-              "font": "300 16px / 24px \"Clash Display\", sans-serif",
-              "border": "8px",
-              "authoredHeight": 52,
-              "gap": 12,
-              "color": "rgb(237, 237, 237)",
-              "background": "rgb(15, 15, 15)",
-              "iconReady": true,
-              "filter": "brightness(0) invert(1)"
-            },
-            {
-              "x": 1236.34130859375,
-              "y": 515.1343383789062,
-              "width": 396.2640380859375,
-              "height": 49.29595947265625,
-              "font": "300 16px / 24px \"Clash Display\", sans-serif",
-              "border": "8px",
-              "authoredHeight": 52,
-              "gap": 12,
-              "color": "rgb(237, 237, 237)",
-              "background": "rgb(15, 15, 15)",
-              "iconReady": true,
-              "filter": "brightness(0) invert(1)"
-            }
-          ]
+          "soundReactive": true,
+          "silentStationary": true,
+          "release": true,
+          "permissionError": true
         },
         {
           "appearance": "light",
-          "providers": 4,
-          "matchingLayout": true,
-          "iconsLoaded": true,
-          "localFeedback": true,
-          "focusRestored": true,
-          "hover": {
-            "background": "rgb(240, 242, 242)",
-            "border": "rgb(139, 149, 152)"
+          "font": "\"Clash Display\", sans-serif",
+          "color": "rgb(167, 175, 179)",
+          "background": "rgba(0, 0, 0, 0)",
+          "right": 34,
+          "bottom": 19,
+          "panel": {
+            "color": "rgb(24, 24, 23)",
+            "background": "rgb(255, 255, 255)",
+            "font": "\"Clash Display\", sans-serif"
           },
-          "layout": [
-            {
-              "x": 1236.34130859375,
-              "y": 333.1183166503906,
-              "width": 396.2640380859375,
-              "height": 49.295989990234375,
-              "font": "300 16px / 24px \"Clash Display\", sans-serif",
-              "border": "8px",
-              "authoredHeight": 52,
-              "gap": 12,
-              "color": "rgb(32, 33, 33)",
-              "background": "rgb(255, 255, 255)",
-              "iconReady": true,
-              "filter": "none"
-            },
-            {
-              "x": 1236.34130859375,
-              "y": 393.7903137207031,
-              "width": 396.2640380859375,
-              "height": 49.295989990234375,
-              "font": "300 16px / 24px \"Clash Display\", sans-serif",
-              "border": "8px",
-              "authoredHeight": 52,
-              "gap": 12,
-              "color": "rgb(32, 33, 33)",
-              "background": "rgb(255, 255, 255)",
-              "iconReady": true,
-              "filter": "brightness(0)"
-            },
-            {
-              "x": 1236.34130859375,
-              "y": 454.4623107910156,
-              "width": 396.2640380859375,
-              "height": 49.2960205078125,
-              "font": "300 16px / 24px \"Clash Display\", sans-serif",
-              "border": "8px",
-              "authoredHeight": 52,
-              "gap": 12,
-              "color": "rgb(32, 33, 33)",
-              "background": "rgb(255, 255, 255)",
-              "iconReady": true,
-              "filter": "brightness(0)"
-            },
-            {
-              "x": 1236.34130859375,
-              "y": 515.1343383789062,
-              "width": 396.2640380859375,
-              "height": 49.29595947265625,
-              "font": "300 16px / 24px \"Clash Display\", sans-serif",
-              "border": "8px",
-              "authoredHeight": 52,
-              "gap": 12,
-              "color": "rgb(32, 33, 33)",
-              "background": "rgb(255, 255, 255)",
-              "iconReady": true,
-              "filter": "brightness(0)"
-            }
-          ]
+          "soundReactive": true,
+          "silentStationary": true,
+          "release": true,
+          "permissionError": true
         }
       ],
       "errors": [
         "Hydration completed but contains mismatches."
       ],
-      "animalRequests": [],
       "coldHome": true,
       "newErrors": [],
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-09-17T16:30:52.6451357+08:00",
-      "NativePid": 18460,
-      "StartedAt": "2026-09-17T16:30:34.9482715+08:00",
-      "WindowHandle": 525890,
+      "SampledAt": "2026-09-20T17:54:42.7573139+08:00",
+      "NativePid": 34316,
+      "StartedAt": "2026-09-20T17:54:18.2459247+08:00",
+      "WindowHandle": 332192,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        18460,
-        38540,
-        8704,
-        2724,
-        5784,
-        44740,
-        28524,
-        12212,
-        14260,
-        18940,
-        45540
+        34316,
+        30272,
+        28624,
+        38108,
+        33468,
+        36840,
+        30836,
+        30628,
+        27724,
+        27500,
+        39948
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1953.9,
-      "GpuDedicatedBytes": 3192758272.0,
-      "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 19166036,
+      "WorkingSetMiB": 1965.6,
+      "GpuDedicatedBytes": 3250647040.0,
+      "MaxGpuEngineUtilization": 12.0,
+      "FreeRamKiB": 15959800,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 12212
+          "OwningProcess": 30628
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -742,17 +353,24 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "consoleBaselines": [
-      "profile-cleanup-20260917"
+      "account-providers-20260917"
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\source-checks.json",
-      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\web-build.log",
-      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\account-providers-20260917\\verify.cjs"
-    ]
+      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\hardware-report.json",
+      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\source-checks.json",
+      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\verify.cjs",
+      "D:\\preacherman\\output\\playwright\\audio-dock-20260920\\hardware.cjs"
+    ],
+    "backupRetention": {
+      "applied": true,
+      "retainedCount": 3,
+      "removedCount": 1,
+      "report": "D:/preacherman/output/playwright/audio-dock-20260920/backup-retention.json"
+    }
   },
   "releaseAttempts": [
     {
@@ -1393,9 +1011,18 @@
       "reason": "Visual check: waveform lacked contrast over pale moving Gallery cards; add a thin glyph contour without a control background.",
       "rolledBackAt": "2026-09-20T17:45:00.1714518+08:00",
       "restoredSha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85"
+    },
+    {
+      "buildId": "audio-dock-20260920",
+      "sourceCommit": "e38028710b336ef9965d2f4d97c69c599da9dce8",
+      "sha256": "AE4FCE297569E63BB7557BCEDBC111439A19F4FB57B9AC900B84A27BAC5FFC45",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-20T17:51:46.0411197+08:00",
+      "verifiedAt": "2026-09-20T17:54:42.7573139+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
