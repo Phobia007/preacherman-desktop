@@ -54,7 +54,7 @@ test("Details keeps the active companion preference isolated and supplies the ex
   assert.doesNotMatch(detail, /localStorage|activeModelId|onActivate|setPreferences/);
   assert.match(surface, /isAvatarModelId\(modelId\).*marketModelIds.includes/);
   assert.match(surface, /modelId=\{selectedModel\}/);
-  assert.match(surface, /captureSource=\{selectedModel \? captureDetails : category.active !== "Discover" \? captureEmptyCategory : undefined\}/);
+  assert.match(surface, /captureSource=\{selectedModel \? captureDetails : category.active === "Search" \? captureSearch : category.active !== "Discover" \? captureEmptyCategory : undefined\}/);
   for (const token of ["glass"]) assert.equal((tokens.match(new RegExp(`--demo-theme-market-details-${token}:`, "g")) || []).length, 2);
   assert.match(css, /data-page="details"[^}]+inset: 0/);
   assert.match(css, /:has\(\.market-surface\[data-page="details"\]\) \.demo-app-shell__scene[^}]+filter: blur\(12px\)/);

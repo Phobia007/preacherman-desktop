@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { MarketProfile } from "./MarketProfile";
+import { MarketSearch } from "./MarketSearch";
+import { captureMarketSearch } from "./captureMarketSearch";
+import { readMarketSearchModels, type MarketSearchItem } from "./marketSearchData";
 import { animateMarketPage, animateMarketFrost, marketCategories, marketCategoryReducer, initialMarketCategory, MARKET_LOGO_MS, type MarketDetailsPhase } from "./marketEntrance";
 import "./market-surface.css";
 import { isAvatarModelId, createAvatarAssetUrls, prefetchAvatarModel } from "@preacherman/avatar-renderer";
@@ -14,6 +17,8 @@ export function MarketSurface() {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const surfaceRef = useRef<HTMLElement>(null);
   const frostRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLElement>(null);
+  const [searchModels, setSearchModels] = useState<MarketSearchItem[]>([]);
   const [category, dispatchCategory] = useReducer(marketCategoryReducer, initialMarketCategory);
   const categoryRef = useRef(category);
   categoryRef.current = category;
@@ -23,6 +28,7 @@ export function MarketSurface() {
   const [attempt, setAttempt] = useState(0);
   const [selectedModel, setSelectedModel] = useState<ModelId | null>(null);
   const openingModel = useRef<ModelId | null>(null);
+  const returnFocusPending = useRef(false);
   const [detailsPhase, setDetailsPhase] = useState<MarketDetailsPhase>("idle");
   const detailsRef = useRef<HTMLElement>(null);
   const detailsPhaseRef = useRef(detailsPhase);
@@ -34,10 +40,20 @@ export function MarketSurface() {
 
   const finishDetailsClose = useCallback(() => {
     openingModel.current = null;
+    returnFocusPending.current = true;
     setDetailsPhase("idle");
     setSelectedModel(null); setProfileOpen(false); setLensActive(false);
-    requestAnimationFrame(() => frameRef.current?.contentDocument?.querySelector<HTMLElement>("[data-market-return-focus]")?.focus({ preventScroll: true }));
   }, []);
+  useEffect(() => {
+    if (selectedModel || !returnFocusPending.current) return;
+    returnFocusPending.current = false;
+    // React must commit the visible, interactive source before restoring focus.
+    const frame = requestAnimationFrame(() => {
+      const root = categoryRef.current.active === "Search" ? searchRef.current : frameRef.current?.contentDocument;
+      root?.querySelector<HTMLElement>("[data-market-return-focus]")?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [selectedModel]);
   const closeDetails = useCallback(() => {
     const phase = detailsPhaseRef.current;
     if (["hide-content", "hide-model", "unfrost", "returning"].includes(phase)) return;
@@ -54,6 +70,13 @@ export function MarketSurface() {
   const captureDetails = useCallback((signal: AbortSignal) => {
     if (!detailsRef.current) return Promise.reject(new Error("Details are not ready."));
     return captureMarketDetails(detailsRef.current, signal);
+  }, []);
+  const captureSearch = useCallback((signal: AbortSignal) => captureMarketSearch(searchRef.current!, signal), []);
+  const openModel = useCallback((modelId: string) => {
+    if (categoryRef.current.phase !== "idle" || openingModel.current || !isAvatarModelId(modelId) || !marketModelIds.includes(modelId)) return;
+    openingModel.current = modelId;
+    void prefetchAvatarModel(createAvatarAssetUrls(localAvatarAssetBaseUrl(modelId), modelId).model).catch(() => undefined);
+    setDetailsPhase("exiting"); setSelectedModel(modelId); setProfileOpen(false); setLensActive(false);
   }, []);
   const captureEmptyCategory = useCallback(async (signal: AbortSignal) => {
     if (signal.aborted) throw new DOMException("Capture cancelled", "AbortError");
@@ -165,15 +188,12 @@ export function MarketSurface() {
         if (event.data.type === "preacherman.market.prefetch") {
           void prefetchAvatarModel(createAvatarAssetUrls(localAvatarAssetBaseUrl(modelId), modelId).model).catch(() => undefined);
         } else {
-          if (openingModel.current) return;
-          openingModel.current = modelId;
-          void prefetchAvatarModel(createAvatarAssetUrls(localAvatarAssetBaseUrl(modelId), modelId).model).catch(() => undefined);
-          setDetailsPhase("exiting");
-          setSelectedModel(modelId); setProfileOpen(false); setLensActive(false);
+          openModel(modelId);
         }
       }
       if (event.data?.type === "preacherman.market.ready") {
         window.clearTimeout(deadline);
+        if (frameRef.current?.contentDocument) setSearchModels(readMarketSearchModels(frameRef.current.contentDocument));
         setStatus("ready");
       }
       if (event.data?.type === "preacherman.market.error") {
@@ -186,7 +206,7 @@ export function MarketSurface() {
       window.clearTimeout(deadline);
       window.removeEventListener("message", onMessage);
     };
-  }, [attempt, closeDetails]);
+  }, [attempt, closeDetails, openModel]);
 
   return (
     <section ref={surfaceRef} aria-label="Market" className="market-surface" data-entrance={entrance} data-logo-ready={logoReady} data-status={status} data-page={page} data-details-phase={detailsPhase} data-lens-active={lensActive} data-category={category.active} data-category-phase={category.phase}
@@ -195,21 +215,20 @@ export function MarketSurface() {
         if (event.animationName === "market-details-frost-in") setDetailsPhase(current => current === "frost" ? "model" : current);
         if (event.animationName === "market-details-frost-out") setDetailsPhase(current => current === "unfrost" ? "returning" : current);
       }}>
-      <div className="market-surface__frost" ref={frostRef} aria-hidden="true">
-        <div className="market-surface__frost-pane" />
-        <div className="market-surface__frost-pane" />
-      </div>
+      <div className="market-surface__frost" ref={frostRef} aria-hidden="true" />
       <MarketProfile key={`profile-${selectedModel ?? category.active}`} disabled={entrance !== "complete" || category.phase !== "idle" || Boolean(selectedModel && detailsPhase !== "complete")} open={profileOpen} onOpenChange={setProfileOpen}
-        frameRef={frameRef} captureSource={selectedModel ? captureDetails : category.active !== "Discover" ? captureEmptyCategory : undefined} onLensActiveChange={setLensActive} />
+        frameRef={frameRef} captureSource={selectedModel ? captureDetails : category.active === "Search" ? captureSearch : category.active !== "Discover" ? captureEmptyCategory : undefined} onLensActiveChange={setLensActive} />
       <ul className="market-surface__categories" aria-label="Market categories" role="list"
         hidden={page !== "intro" || entrance === "logo" || lensActive}>
         {marketCategories.map(label => <li key={label} className={label === "Inventory" ? "market-surface__inventory" : undefined}>
-          <button type="button" aria-pressed={category.active === label} aria-controls={label === "Discover" ? "market-discover-page" : "market-category-page"}
+          <button type="button" aria-pressed={category.active === label} aria-controls={label === "Discover" ? "market-discover-page" : label === "Search" ? "market-search-page" : "market-category-page"}
             disabled={entrance !== "complete" || category.phase !== "idle" || Boolean(selectedModel) || profileOpen}
             onClick={() => dispatchCategory({ type: "select", category: label })}>{label}</button>
         </li>)}
       </ul>
-      <section id="market-category-page" aria-label={category.active} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover"} />
+      <section id="market-category-page" aria-label={category.active} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover" || category.active === "Search"} />
+      <MarketSearch panelRef={searchRef} models={searchModels} active={category.active === "Search"} ready={category.phase === "idle" && !selectedModel}
+        interactive={category.phase === "idle" && !selectedModel && !profileOpen && !lensActive} onOpenModel={openModel} />
       {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}
         phase={detailsPhase} onRevealComplete={advanceDetailsReveal} />}
       <iframe

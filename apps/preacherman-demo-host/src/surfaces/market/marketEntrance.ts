@@ -12,10 +12,10 @@ export function animateMarketPanels(doc: Document, reducedMotion: boolean, direc
   return animateColumns(panels, doc, reducedMotion, direction);
 }
 
-function animateColumns(panels: HTMLElement[], doc: Document, reducedMotion: boolean, direction: "in" | "out", sides?: readonly string[]) {
+function animateColumns(panels: HTMLElement[], doc: Document, reducedMotion: boolean, direction: "in" | "out") {
   const viewport = doc.defaultView!;
-  const animations = reducedMotion ? [] : panels.map((panel, index) => {
-    const from = sides?.[index] ?? (panel.getBoundingClientRect().left < viewport.innerWidth / 2 ? "-100%" : "100%");
+  const animations = reducedMotion ? [] : panels.map(panel => {
+    const from = panel.getBoundingClientRect().left < viewport.innerWidth / 2 ? "-100%" : "100%";
     const frames = [
       { transform: `translate3d(${from}, 0, 0)` },
       { transform: "translate3d(0, 0, 0)" },
@@ -35,10 +35,18 @@ function animateColumns(panels: HTMLElement[], doc: Document, reducedMotion: boo
   };
 }
 
-/** The two glass panes share the existing content's opposite-side motion. */
+/** Reveal one continuous blur through two moving edges; no independently filtered seam. */
 export function animateMarketFrost(layer: HTMLElement, reducedMotion: boolean, direction: "in" | "out" = "in") {
-  // Fixed halves must keep their direction when the desktop stage is scaled.
-  return animateColumns([...layer.querySelectorAll<HTMLElement>(".market-surface__frost-pane")], layer.ownerDocument, reducedMotion, direction, ["-100%", "100%"]);
+  const frames = [
+    { clipPath: "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)" },
+    { clipPath: "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)" },
+  ];
+  const animation = reducedMotion ? undefined : layer.animate(direction === "out" ? frames.reverse() : frames, {
+    duration: MARKET_PANELS_MS,
+    easing: direction === "out" ? "cubic-bezier(0.7, 0, 0.84, 0)" : "cubic-bezier(0.16, 1, 0.3, 1)", fill: "both",
+  });
+  if (animation) animation.startTime = layer.ownerDocument.timeline.currentTime;
+  return { finished: animation?.finished ?? Promise.resolve(), cancel: () => animation?.cancel() };
 }
 
 export function animateMarketPage(doc: Document, layer: HTMLElement, reducedMotion: boolean, direction: "in" | "out" = "in") {

@@ -42,14 +42,17 @@ for (const appearance of ['light', 'dark']) test(`Market category buttons sequen
    assert.equal(marketCategoryReducer(state, { type: 'select', category }), state);
  }
 });
-for (const appearance of ['light', 'dark']) test(`Market frost separates at the center and cancels both panes in ${appearance}`, async () => {
+for (const appearance of ['light', 'dark']) test(`Market uses one seamless blur with opposite reveal edges in ${appearance}`, async () => {
  const recorded = [];
- const layer = { ownerDocument: { documentElement: { dataset: { appearance } }, defaultView: { innerWidth: 1800 }, timeline: { currentTime: 42 } }, querySelectorAll: () => [0, 899.999].map(left => ({ getBoundingClientRect: () => ({left}), animate(frames, options) { const animation = {frames, options, finished:Promise.resolve(),cancel(){this.cancelled=true;}};recorded.push(animation);return animation; } })) };
+ const layer = { ownerDocument: { documentElement: { dataset: { appearance } }, timeline: { currentTime: 42 } }, animate(frames, options) { const animation = {frames, options, finished:Promise.resolve(),cancel(){this.cancelled=true;}};recorded.push(animation);return animation; } };
  const motion = animateMarketFrost(layer, false, 'out');
- assert.match(recorded[0].frames[1].transform, /-100%/); assert.match(recorded[1].frames[1].transform, /\(100%/);
- assert.ok(recorded.every(a => a.startTime === 42 && a.options.duration === MARKET_PANELS_MS));
- await motion.finished; motion.cancel(); assert.ok(recorded.every(a => a.cancelled));
- recorded.length=0; await animateMarketFrost(layer,true).finished; assert.equal(recorded.length,0);
+ assert.equal(recorded.length, 1, 'Only one backdrop is rendered, including across the center');
+ assert.match(recorded[0].frames[0].clipPath, /50%/);
+ assert.doesNotMatch(recorded[0].frames[1].clipPath, /50%/);
+ assert.equal(recorded[0].startTime, 42);assert.equal(recorded[0].options.duration, MARKET_PANELS_MS);
+ await motion.finished;motion.cancel();assert.ok(recorded[0].cancelled, 'Settling removes the clip entirely');
+ recorded.length=0;const enter=animateMarketFrost(layer,false);assert.doesNotMatch(recorded[0].frames[0].clipPath,/50%/);assert.match(recorded[0].frames[1].clipPath,/50%/);enter.cancel();
+ recorded.length=0;await animateMarketFrost(layer,true).finished;assert.equal(recorded.length,0);
 });
 for (const appearance of ['light', 'dark']) for (const part of ['model', 'content']) test(`Details ${part} fade is reversible and cancellable in ${appearance}`, async () => {
  const frames = new Map(), animations = [];

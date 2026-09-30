@@ -17,22 +17,7 @@
 .market-surface__frost {
   position: absolute;
   inset: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow: hidden;
   pointer-events: none;
-}
-
-.market-surface__frost-pane {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Sample beyond each clipped half so the blur stays continuous at the seam. */
-.market-surface__frost-pane::before {
-  content: "";
-  position: absolute;
-  inset: -36px;
   background: var(--demo-theme-market-details-glass);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -73,6 +58,7 @@
 
 /* The lens supplies the current page pixels until its closing frame reaches zero. */
 .market-surface[data-lens-active="true"] .market-surface__frame { opacity: 0; }
+.market-surface[data-lens-active="true"] .market-search { opacity: 0; }
 
 /* Share the signature header's fixed stage, outside the scrolling document. */
 .market-surface__categories {
