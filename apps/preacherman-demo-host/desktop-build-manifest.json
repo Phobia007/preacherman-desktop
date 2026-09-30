@@ -1,1266 +1,1146 @@
-﻿{
-    "schemaVersion":  1,
-    "buildId":  "mac-sync-20260930",
-    "productVersion":  "0.1.0",
-    "sourceTask":  "sync-mac-github-updates-to-local-windows",
-    "sourceThread":  null,
-    "sourceState":  "Desktop main 6623d28 plus Windows-verified guards for optional Gallery initialization in both runtime entry points. Retain Mac viewport/maximized startup and sidecar lifecycle changes; reuse the unchanged verified Windows sidecar.",
-    "sourceCommit":  "2cb527eab9ff990ea361bf3329f84c7bfc2805b1",
-    "sourceWorkspace":  "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
-    "shortcutPath":  "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
-    "executablePath":  "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-    "builtAt":  "2026-09-30T23:36:02.3548390+08:00",
-    "deployedAt":  "2026-09-30T23:43:57.5628888+08:00",
-    "verifiedAt":  "2026-10-01T00:02:18.8537234+08:00",
-    "sizeBytes":  676119040,
-    "sha256":  "B29D722BF2B53E1922DBE87157F5FA02A2F2A06CA190F98569925C631D99CEA2",
-    "sidecarPath":  "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-    "sidecarBuiltAt":  "2026-09-06T14:26:08.9928691+08:00",
-    "sidecarSizeBytes":  93183488,
-    "sidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-    "backupPath":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930/preacherman-demo-host.exe",
-    "backupSha256":  "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2",
-    "sidecarBackupPath":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930/preacherman-service.exe",
-    "sidecarBackupSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-    "rollbackBaselineCommit":  "aeab7a8bb81f5c8abb3753170f10dd7bc61b7240",
-    "previousVerificationCommit":  "aeab7a8bb81f5c8abb3753170f10dd7bc61b7240",
-    "verification":  {
-                         "status":  "passed-with-recorded-baseline-diagnostics",
-                         "sourceChecks":  {
-                                              "typecheck":  "passed",
-                                              "initialFocusedTests":  18,
-                                              "galleryFixFocusedTests":  7,
-                                              "galleryRuntimeSyntax":  "passed"
-                                          },
-                         "nativeFlow":  "Canonical shortcut cold launch; Home/Task/Gallery/Market/Account/Settings in both appearances; audio controls and decorative ring; restore, maximize, minimize and authored close; host and sidecar exited; normal shortcut restart without debug flags.",
-                         "windowControls":  {
-                                                "initialMaximized":  true,
-                                                "restored":  true,
-                                                "restoredSize":  {
-                                                                     "width":  1280,
-                                                                     "height":  800,
-                                                                     "appearance":  "light"
-                                                                 },
-                                                "maximize":  true,
-                                                "minimize":  true,
-                                                "harnessNote":  "Unminimize is intentionally not granted to the renderer; close was dispatched through the authored button while minimized.",
-                                                "closeRequested":  true,
-                                                "passed":  true
-                                            },
-                         "routes":  [
-                                        {
-                                            "name":  "Home",
-                                            "appearance":  "dark",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Task",
-                                            "appearance":  "dark",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Gallery",
-                                            "appearance":  "dark",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Market",
-                                            "appearance":  "dark",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Account",
-                                            "appearance":  "dark",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Settings",
-                                            "appearance":  "dark",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Home",
-                                            "appearance":  "light",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Task",
-                                            "appearance":  "light",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Gallery",
-                                            "appearance":  "light",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Market",
-                                            "appearance":  "light",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Account",
-                                            "appearance":  "light",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        },
-                                        {
-                                            "name":  "Settings",
-                                            "appearance":  "light",
-                                            "bounds":  {
-                                                           "x":  0.0062255859375,
-                                                           "y":  0,
-                                                           "width":  1919.987548828125,
-                                                           "height":  1032,
-                                                           "vw":  1920,
-                                                           "vh":  1032
-                                                       }
-                                        }
-                                    ],
-                         "browserVerification":  {
-                                                     "routes":  [
-                                                                    {
-                                                                        "name":  "Home",
-                                                                        "appearance":  "dark",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Task",
-                                                                        "appearance":  "dark",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Gallery",
-                                                                        "appearance":  "dark",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Market",
-                                                                        "appearance":  "dark",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Account",
-                                                                        "appearance":  "dark",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Settings",
-                                                                        "appearance":  "dark",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Home",
-                                                                        "appearance":  "light",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Task",
-                                                                        "appearance":  "light",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Gallery",
-                                                                        "appearance":  "light",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Market",
-                                                                        "appearance":  "light",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Account",
-                                                                        "appearance":  "light",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    },
-                                                                    {
-                                                                        "name":  "Settings",
-                                                                        "appearance":  "light",
-                                                                        "bounds":  {
-                                                                                       "x":  0,
-                                                                                       "y":  0,
-                                                                                       "width":  1800,
-                                                                                       "height":  1000,
-                                                                                       "vw":  1800,
-                                                                                       "vh":  1000
-                                                                                   }
-                                                                    }
-                                                                ],
-                                                     "ring":  [
-                                                                  {
-                                                                      "appearance":  "dark",
-                                                                      "decorative":  true,
-                                                                      "wakeRequests":  0,
-                                                                      "hits":  [
-                                                                                   {
-                                                                                       "cursor":  "auto",
-                                                                                       "tag":  "DIV",
-                                                                                       "classes":  ""
-                                                                                   },
-                                                                                   {
-                                                                                       "cursor":  "auto",
-                                                                                       "tag":  "DIV",
-                                                                                       "classes":  ""
-                                                                                   },
-                                                                                   {
-                                                                                       "cursor":  "auto",
-                                                                                       "tag":  "DIV",
-                                                                                       "classes":  ""
-                                                                                   }
-                                                                               ],
-                                                                      "canvasPointerEvents":  "none",
-                                                                      "audioSettings":  true
-                                                                  },
-                                                                  {
-                                                                      "appearance":  "light",
-                                                                      "decorative":  true,
-                                                                      "wakeRequests":  0,
-                                                                      "hits":  [
-                                                                                   {
-                                                                                       "cursor":  "auto",
-                                                                                       "tag":  "DIV",
-                                                                                       "classes":  ""
-                                                                                   },
-                                                                                   {
-                                                                                       "cursor":  "auto",
-                                                                                       "tag":  "DIV",
-                                                                                       "classes":  ""
-                                                                                   },
-                                                                                   {
-                                                                                       "cursor":  "auto",
-                                                                                       "tag":  "DIV",
-                                                                                       "classes":  ""
-                                                                                   }
-                                                                               ],
-                                                                      "canvasPointerEvents":  "none",
-                                                                      "audioSettings":  true
-                                                                  }
-                                                              ],
-                                                     "errors":  [
-                                                                    "Hydration completed but contains mismatches."
-                                                                ],
-                                                     "coldHome":  true,
-                                                     "responsive":  [
-                                                                        {
-                                                                            "appearance":  "light",
-                                                                            "width":  2560,
-                                                                            "height":  1080,
-                                                                            "x":  0.005859375,
-                                                                            "y":  0,
-                                                                            "w":  2559.98828125,
-                                                                            "h":  1080
-                                                                        },
-                                                                        {
-                                                                            "appearance":  "light",
-                                                                            "width":  1366,
-                                                                            "height":  768,
-                                                                            "x":  0,
-                                                                            "y":  0.002227783203125,
-                                                                            "w":  1366,
-                                                                            "h":  767.99560546875
-                                                                        },
-                                                                        {
-                                                                            "appearance":  "light",
-                                                                            "width":  1024,
-                                                                            "height":  768,
-                                                                            "x":  0,
-                                                                            "y":  0,
-                                                                            "w":  1024,
-                                                                            "h":  768
-                                                                        },
-                                                                        {
-                                                                            "appearance":  "light",
-                                                                            "width":  768,
-                                                                            "height":  1024,
-                                                                            "x":  0,
-                                                                            "y":  0,
-                                                                            "w":  768,
-                                                                            "h":  1024
-                                                                        },
-                                                                        {
-                                                                            "appearance":  "dark",
-                                                                            "width":  2560,
-                                                                            "height":  1080,
-                                                                            "x":  0.005859375,
-                                                                            "y":  0,
-                                                                            "w":  2559.98828125,
-                                                                            "h":  1080
-                                                                        },
-                                                                        {
-                                                                            "appearance":  "dark",
-                                                                            "width":  1366,
-                                                                            "height":  768,
-                                                                            "x":  0,
-                                                                            "y":  0.002227783203125,
-                                                                            "w":  1366,
-                                                                            "h":  767.99560546875
-                                                                        },
-                                                                        {
-                                                                            "appearance":  "dark",
-                                                                            "width":  1024,
-                                                                            "height":  768,
-                                                                            "x":  0,
-                                                                            "y":  0,
-                                                                            "w":  1024,
-                                                                            "h":  768
-                                                                        },
-                                                                        {
-                                                                            "appearance":  "dark",
-                                                                            "width":  768,
-                                                                            "height":  1024,
-                                                                            "x":  0,
-                                                                            "y":  0,
-                                                                            "w":  768,
-                                                                            "h":  1024
-                                                                        }
-                                                                    ],
-                                                     "consoleBaselines":  [
-                                                                              "audio-dock-20260920",
-                                                                              "account-dock-refine-20260917"
-                                                                          ],
-                                                     "newErrors":  [
-
-                                                                   ],
-                                                     "passed":  true
-                                                 },
-                         "resourceSample":  {
-                                                "SampledAt":  "2026-10-01T00:02:18.8537234+08:00",
-                                                "NativePid":  33004,
-                                                "StartedAt":  "2026-10-01T00:01:56.0607218+08:00",
-                                                "WindowHandle":  4458338,
-                                                "Responding":  true,
-                                                "NativeVisualVerified":  true,
-                                                "ProcessIds":  [
-                                                                   33004,
-                                                                   5836,
-                                                                   23792,
-                                                                   32504,
-                                                                   29184,
-                                                                   25480,
-                                                                   33208,
-                                                                   26876,
-                                                                   32688,
-                                                                   27660,
-                                                                   18848
-                                                               ],
-                                                "NormalizedCpuPercent":  3.99,
-                                                "WorkingSetMiB":  1909.9,
-                                                "GpuDedicatedBytes":  3281039360.0,
-                                                "MaxGpuEngineUtilization":  11.0,
-                                                "FreeRamKiB":  17518436,
-                                                "TemporaryProcesses":  [
-
-                                                                       ],
-                                                "Listeners":  [
-                                                                  {
-                                                                      "LocalPort":  8787,
-                                                                      "OwningProcess":  26876
-                                                                  }
-                                                              ],
-                                                "ShortcutTarget":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
-                                                "ShortcutArguments":  "",
-                                                "OwnershipCheck":  "Canonical executable path, descendant ancestry and creation time. Other task services and Codex Computer Use workers preserved."
-                                            },
-                         "newErrors":  [
-
-                                       ],
-                         "observedErrors":  [
-                                                "Hydration completed but contains mismatches.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=16\u0026w=16\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=32\u0026w=32\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=96\u0026w=96\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=192\u0026w=192\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=57\u0026w=57\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=60\u0026w=60\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=72\u0026w=72\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=76\u0026w=76\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=114\u0026w=114\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=120\u0026w=120\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=144\u0026w=144\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=152\u0026w=152\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786371616-face.png?auto=format\u0026h=180\u0026w=180\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format\u0026fit=max\u0026w=1200\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Connecting to \u0027https://graphql.datocms.com/\u0027 violates the following Content Security Policy directive: \"connect-src \u0027self\u0027 https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-                                                "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document\u0027s Content Security Policy.",
-                                                "Loading media from  \u0027https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4\u0027 violates the following Content Security Policy directive: \"media-src \u0027self\u0027 data: blob: https://storage.googleapis.com\". The action has been blocked.",
-                                                "Loading media from  \u0027https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4\u0027 violates the following Content Security Policy directive: \"media-src \u0027self\u0027 data: blob: https://storage.googleapis.com\". The action has been blocked.",
-                                                "Loading media from  \u0027https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4\u0027 violates the following Content Security Policy directive: \"media-src \u0027self\u0027 data: blob: https://storage.googleapis.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Loading the image \u0027https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg\u0027 violates the following Content Security Policy directive: \"img-src \u0027self\u0027 data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-                                                "Failed to load resource: net::ERR_CONNECTION_CLOSED"
-                                            ],
-                         "consoleBaselines":  [
-                                                  "audio-dock-20260920",
-                                                  "account-dock-refine-20260917"
-                                              ],
-                         "externalServiceLimitations":  [
-                                                            "Saved-session refresh is blocked by the same Supabase network transport failure reproduced on the previous verified executable; account persistence was preserved, live login was not verified."
-                                                        ],
-                         "evidence":  [
-                                          "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\native-report.json",
-                                          "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\preview-report.json",
-                                          "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\auth-baseline.json",
-                                          "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\window-lifecycle.json",
-                                          "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\source-checks.log",
-                                          "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\production-build.log",
-                                          "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\final-resources.json"
-                                      ]
-                     },
-    "releaseAttempts":  [
-                            {
-                                "sourceCommit":  "a4351bc4d261790341a18a233dc594c8c2fbc7a5",
-                                "sha256":  "43CF186EA2F8FBBB5E58935FA81D6D656E318E6C0D29E3915B24ACB1D9774D89",
-                                "deployedAt":  "2026-09-06T15:28:16.5169789+08:00",
-                                "status":  "rolled-back",
-                                "reason":  "Native WebView painted an opaque white iframe canvas because child and host color schemes differed. CSS transparency and functional checks alone were insufficient; visual verification rejected delivery.",
-                                "restoredHostSha256":  "F43E057DDB92124F42ADE63F814F0CF2A5B6EC313D57111EA86876A84B5AD8E7",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "failedArtifactPath":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\preacherman-demo-host-market-rejected-20260906-152809.exe",
-                                "rollbackVerification":  "Canonical shortcut cold launch restored Home, Task, Gallery and Settings; screenshots and runtime check passed, zero exceptions. Native isolated canvas probe confirmed syncing child colorScheme to host removes the white backing.",
-                                "verifiedAt":  "2026-09-06T15:32:16+08:00"
-                            },
-                            {
-                                "sourceCommit":  "14ed7a2",
-                                "sha256":  "3BE77C9989ED68B3FFC128B19D0EB15563CBBC922989EDE99F35A74C3DBC0965",
-                                "deployedAt":  "2026-09-07T18:48:22.8469999+08:00",
-                                "status":  "rolled-back",
-                                "reason":  "Native dual-video and compositing passed, but rail return-position assertion failed after wheel input. One-shot restoration could be overwritten during the return transition; revised to hold saved position through the transition and prevent room wheel default/focus scrolling.",
-                                "restoredAt":  "2026-09-07T18:50:03.866022+08:00",
-                                "restoredHostSha256":  "D4D3494575AC5241CDEFC7BE8FBDBD0C654D972B10B89CEB4EC7B1B5CB08B64C",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "failedArtifactPath":  "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/gallery-detail-rejected-20260907-1849.exe",
-                                "rollbackVerification":  "Canonical shortcut cold start and all core surfaces passed; new errors0. Rollback recorded in7a8c747; corrected sourcebb5a09b deployed only after focused checks and a new production build."
-                            },
-                            {
-                                "sourceCommit":  "69d129e9eeb7a01d8f00608f0de2db9894731191",
-                                "sha256":  "4BFD21B99866FC1BE15FC38DE4A2E24A045E64408AF9D0258135651AE89B3A4C",
-                                "status":  "not-deployed",
-                                "reason":  "Computed-style review found inherited iframe focus rules overriding the transparent controls in light appearance. Candidate was held while the user remained on verified A8E250 release. Specificity corrected in721610d and explicitly checked before final build/deployment.",
-                                "canonicalHostUnchanged":  "A8E2504537B4D6F97CDAE8201CD0611B6CFD29F3F4779AC697CF3E0346E5B630",
-                                "sidecarUnchanged":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E"
-                            },
-                            {
-                                "sourceCommit":  "5f4bb7c025e5a65178bbba9ef6270f6d946a4fd4",
-                                "sha256":  "283849666D42C38DE860D83C761E4AADC50E9D7ECDBD913D3E3B1CA3F04CB39D",
-                                "deployedAt":  "2026-09-08T17:08:36.3098151+08:00",
-                                "status":  "temporarily-restored-for-baseline-comparison",
-                                "reason":  "Candidate passed timeline interactions but emitted an unlisted external-video CSP diagnostic. Paired desktop and sidecar were restored for direct old-version comparison. The exact same 01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/high.mp4 media-src violation was reproduced on the old executable; diagnostic is inherited, not introduced by timeline. Production source and security policy unchanged.",
-                                "restoredAt":  "2026-09-08T17:10:45.7693894+08:00",
-                                "restoredHostSha256":  "A0F77ADBF9F9AB4485EBA05742A2FF4D1B600800EC905479AD8707ECDBB0D5F0",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "candidateBackupDirectory":  "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-timeline-candidate-20260908",
-                                "comparisonEvidence":  "output/playwright/task-timeline-baseline-report.json",
-                                "comparisonConclusion":  "Exact diagnostic inherited; old core navigation passed with no new errors or HTTP failures. Restoration recorded in ac91d33. Same unchanged candidate redeployed at 17:19:44 and final native checks passed."
-                            },
-                            {
-                                "sourceCommit":  "dc708d12e5fd772616b395f9cd23ec1e20846d74",
-                                "sha256":  "5D6F3BCA2A0233B1B24D83BD8D11732B8DD212E473A8DDA761FCBF1A1BEFF25F",
-                                "status":  "rolled-back",
-                                "reason":  "Native visual review rejected the UV diagnostic texture in place of the Microsoft mark. Initial HTML Image.decode checks had passed, unlike the worker texture path. Subsequent worker pixel checks proved Thread.absolutePath prefixes the Gallery base even for root-relative URLs. Fixed with a base-relative packaged RGBA PNG, without changing runtime code or shaders.",
-                                "deployedAt":  "2026-09-08T23:19:04.2809573+08:00",
-                                "restoredAt":  "2026-09-08T23:26:03.7295446+08:00",
-                                "restoredHostSha256":  "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "failedArtifactPath":  "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-svg-rejected-20260908/preacherman-demo-host.exe",
-                                "rollbackVerification":  "Canonical shortcut cold launch restored the matched baseline. Home model, Task, Gallery, Market/Ledger, Settings and Account passed in both appearances, background playback and explicit return passed, zero new diagnostics. Evidence: output/playwright/identity-rollback-native-report.json.",
-                                "correctedSourceCommit":  "6b34ac8ae15560dfd7d540e3a97d991960ce1725"
-                            },
-                            {
-                                "sourceCommit":  "8ba72b6760a5349af5769deaedddfbfea71135f7",
-                                "sha256":  "2F884C5A246B8CC83B421A85447A7239836FCE8CF7D7CD2F03679973ECD2C8A8",
-                                "deployedAt":  "2026-09-09T01:47:46.9556723+08:00",
-                                "status":  "restored-for-console-baseline-comparison",
-                                "reason":  "Both native themes and all activation interactions passed. Two unlisted diagnostics at the final console gate ([nuxt] manifest fetch and _this.initSync) require baseline attribution before delivery.",
-                                "restoredAt":  "2026-09-09T01:50:53.5180489+08:00",
-                                "restoredHostSha256":  "F43A3EB0E422D70BC19C4ADD79383D1996DB7AE07C01F793FEE83295828F28B4",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "failedArtifactPath":  "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-activation-diagnostics-20260909/preacherman-demo-host.exe",
-                                "comparisonEvidence":  "output/playwright/activation-baseline-native-report.json",
-                                "comparisonConclusion":  "Direct paired old-executable test reproduced the exact _this.initSync diagnostic. A separate bounded old-version reload comparison did not reproduce the Nuxt manifest diagnostic; it remains a strict failure in the final candidate test, not allow-listed. Same unchanged candidate redeployed at 2026-09-09T01:59:52.2519714+08:00. Final native interaction checks passed in both themes. Two additional remote-thumbnail CSP messages were attributed using identical legacy portfolio-tree and security-policy Git object hashes and existing packaged fallback textures; raw reports retained. Qualification evidence: output/playwright/activation-native-qualified-report.json."
-                            },
-                            {
-                                "sourceCommit":  "832c3c3",
-                                "sha256":  "D9F3610E958BB35006B759130C9AF9D3CEB6F1067A402A11D6BBBB8CAA04BE51",
-                                "deployedAt":  "2026-09-09T02:56:13.9360219+08:00",
-                                "status":  "rolled-back-pending-native-pointer-diagnosis",
-                                "reason":  "Native cold launch, video, new dimensions and label passed; pointer hold was not charging after 650ms. Restored matching previous pair before diagnosis.",
-                                "restoredAt":  "2026-09-09T02:57:31.6375287+08:00",
-                                "restoredHostSha256":  "2F884C5A246B8CC83B421A85447A7239836FCE8CF7D7CD2F03679973ECD2C8A8",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "failedArtifactPath":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-refinement-first-native-20260909\\preacherman-demo-host.exe",
-                                "evidence":  "output/playwright/refinement-first-native-report.json",
-                                "finalOutcome":  "Same unchanged candidate redeployed; explicit bringToFront before input and event capture; both native themes and all interaction checks passed. First failure cause not conclusively established; raw failure retained. No production activation logic or security policy changes.",
-                                "comparisonEvidence":  "output/playwright/refinement-baseline-native-report.json"
-                            },
-                            {
-                                "deployedAt":  "2026-09-09T16:49:30.870369+08:00",
-                                "reason":  "Both native appearance and interaction flows passed, but the second card retained a remote poster URL blocked by img-src. Native video also used the inherited remote URL. Restore the previous pair while binding the changed card to existing packaged video and cover.",
-                                "restoredHostSha256":  "B1DB8D29EC3FE8F9557204058C04BFEB9AAEB5B4808BD65E0810FAAF22373229",
-                                "sha256":  "0FDBE96A0BC8F06FB5A30FE037E0923ADBDECC560189B06997F41D195AA7631E",
-                                "failedArtifactPath":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-remote-poster-before-fix-20260909\\preacherman-demo-host.exe",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "evidence":  "output/playwright/zima-remote-media-native-failure.json",
-                                "restoredAt":  "2026-09-09T16:52:33.5927274+08:00",
-                                "status":  "resolved-by-packaged-media",
-                                "sourceCommit":  "f037c14d4f23b3d43351cd723095c64cd33f8e17",
-                                "rollbackVerification":  "Restored canonical shortcut Home, Task, Gallery and Settings passed without page errors. Screenshots: output/playwright/zima-rollback-{task,gallery,settings}.png; report: output/playwright/zima-rollback-report.json.",
-                                "correctedSourceCommit":  "0009128ce3e9f852985d53d0631cd143ae60a531",
-                                "finalOutcome":  "Previous pair restored and verified, second-card original media bundled, corrected release rebuilt and redeployed. Final native checks passed in both appearances with zero new diagnostics.",
-                                "finalSha256":  "17DCC9B6161B96FBC50D3CDCD27119A9C0FC1BA2ECC9E8E946CE5E00313ADF5E",
-                                "finalEvidence":  "output/playwright/zima-native-report.json"
-                            },
-                            {
-                                "status":  "resolved-by-baseline-and-source-attribution",
-                                "sourceCommit":  "b3738ce4e89e900cdf4d361c6dbb3150636dc9f9",
-                                "sha256":  "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
-                                "deployedAt":  "2026-09-10T16:41:16.2161607+08:00",
-                                "restoredAt":  "2026-09-10T16:48:37.5336126+08:00",
-                                "restoredHostSha256":  "04FAB5091C0783E65ED49670B93AC86A4B9E329ACB3D3C919DD1715B2B2E6C6B",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "reason":  "Both native themes, ten models and core interactions passed; previously unlisted CSP diagnostics for existing remote Gallery posters and Market thumbnails require baseline attribution. Restore verified pair before comparison. User requested unchanged card media.",
-                                "candidateArtifact":  "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
-                                "evidence":  "D:\\preacherman\\output\\gallery-model-import-20260910\\native-candidate-diagnostics.json",
-                                "comparisonEvidence":  "D:\\preacherman\\output\\gallery-model-import-20260910\\console-comparison.json",
-                                "comparisonConclusion":  "Eight Gallery poster diagnostics reproduced on paired old executable. Four portfolio thumbnail diagnostics separately attributed by identical emitting tree, CSP and packed fallback textures; not claimed as runtime-reproduced. Same candidate redeployed without source changes.",
-                                "redeployedAt":  "2026-09-10T16:58:10.7094634+08:00",
-                                "finalNativeVisibilityPassed":  true
-                            },
-                            {
-                                "status":  "rolled-back-loading-state-desynchronization",
-                                "sourceCommit":  "76b8b6d6bd2c71080d9c2935bc42a58c3a06c8e9",
-                                "sha256":  "94156D6C5620B4DB57D78F01CD2D4C7125928ABCA36044CEC970FAAF2152908B",
-                                "deployedAt":  "2026-09-10T17:58:02.9226713+08:00",
-                                "restoredAt":  "2026-09-10T18:03:14.9881947+08:00",
-                                "restoredHostSha256":  "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "reason":  "Native model and lighting are visible, but returning from Home to the same equipped Gallery character leaves load-state stuck loading. Restore verified pair before fixing the state race.",
-                                "candidateArtifact":  "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\failed-release-1\\preacherman-demo-host.exe",
-                                "evidence":  "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\failed-release-1\\native-report.json",
-                                "candidateSidecar":  "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\failed-release-1\\preacherman-service.exe",
-                                "resolvedBySourceCommit":  "4e3e850b76b4e34b213dd3e96033b715b1470697",
-                                "resolution":  "Replaced prop-driven loading resets with last-rendered identity and ignored stale callbacks; keep adapter stable when callbacks change. Prior-source regression reproduces the readiness failure. Both preview appearances and corrected native release passed."
-                            },
-                            {
-                                "buildId":  "avatar-motion-lighting-20260910",
-                                "sourceCommit":  "4e3e850b76b4e34b213dd3e96033b715b1470697",
-                                "sha256":  "44D6A01D2AC2CD732AA42E655BC41C51265B3E801FDAD8BD46A8D0DD70EBE622",
-                                "status":  "passed",
-                                "deployedAt":  "2026-09-10T18:19:47.8356193+08:00",
-                                "verifiedAt":  "2026-09-10T18:29:25.4694762+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-motion-lighting-before-20260910"
-                            },
-                            {
-                                "buildId":  "active-companion-20260910",
-                                "sourceCommit":  "19c164e2b33d098fabe7261236dd695bf0ee3154",
-                                "sha256":  "09C9D1D2DE450AC52DCBB297262C45BDFF19FC6535A34CAEB3859EACD79D0A6A",
-                                "status":  "passed",
-                                "deployedAt":  "2026-09-10T19:20:54.4502173+08:00",
-                                "verifiedAt":  "2026-09-10T19:24:52.7601775+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\active-companion-before-20260910"
-                            },
-                            {
-                                "buildId":  "remove-sanhua-20260911",
-                                "sourceCommit":  "14338d70a378bfc1c5d963e90719e09a53dcf590",
-                                "sha256":  "EEF5104C57784EC2EADCCDF4C9B625D3449C111FDE20923742770267D8CAF944",
-                                "status":  "passed",
-                                "deployedAt":  "2026-09-11T16:22:33.9597175+08:00",
-                                "verifiedAt":  "2026-09-11T16:26:55.5160249+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\remove-sanhua-before-20260911"
-                            },
-                            {
-                                "buildId":  "withdraw-three-models-20260911",
-                                "sourceCommit":  "ac743f6cb947dec2904d02984dc3c1b50eacaccd",
-                                "sha256":  "3EFE1752C5FF61642D3AA8F8AC7DA62D5CAC27C20CFA359631658024B8531332",
-                                "status":  "passed",
-                                "deployedAt":  "2026-09-11T16:51:42.4398325+08:00",
-                                "verifiedAt":  "2026-09-11T16:57:14.9597977+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdraw-three-models-before-20260911"
-                            },
-                            {
-                                "buildId":  "avatar-intake-20260911",
-                                "sourceCommit":  "aca3fcfeeb902c204e497fb2e8ae01c8cfc26ce5",
-                                "sha256":  "B69E62E7965E825058F3B651C064D70A8226C5DCE2BE9B0E9EF1B34DC9AE2D36",
-                                "status":  "passed",
-                                "deployedAt":  "2026-09-11T18:57:41.8095819+08:00",
-                                "verifiedAt":  "2026-09-11T19:07:33.8221843+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\new-model-batch-before-20260911"
-                            },
-                            {
-                                "buildId":  "avatar-material-quality-20260911",
-                                "sourceCommit":  "d1a08123bb1ba4a1c9a11efbd38b989c7d612acd",
-                                "sha256":  "74D55AC2759AA152DACF27D516F1615316109B7E0E28E58EDE619578F51E700B",
-                                "status":  "passed",
-                                "deployedAt":  "2026-09-11T21:38:04.8603099+08:00",
-                                "verifiedAt":  "2026-09-11T21:44:46.51857+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\model-quality-before-20260911"
-                            },
-                            {
-                                "buildId":  "avatar-cortana-lighting-compaction-20260911",
-                                "sourceCommit":  "591307c767d5fe5ea1ef1e68d72d9c20e83ffe19",
-                                "sha256":  "3FAEB6C6358DCE4477D76E8B8CFC86CEB65EDE1C3D8C03569FCEEE0B3EE310C0",
-                                "status":  "passed-focused-native-check",
-                                "deployedAt":  "2026-09-11T22:28:58.1072115+08:00",
-                                "verifiedAt":  "2026-09-11T22:46:20.6024153+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911"
-                            },
-                            {
-                                "buildId":  "market-fixed-header-20260913",
-                                "sourceCommit":  "d911ceb8b6438fefa0021cb9ea654066809989a4",
-                                "sha256":  "9329E96E33E3EA2DBCB5A3EB05463ABB654403A8BD78EDB6DBD27A78463DF3BB",
-                                "status":  "passed-with-recorded-preexisting-template-diagnostics",
-                                "deployedAt":  "2026-09-13T13:49:12.3708748+08:00",
-                                "verifiedAt":  "2026-09-13T13:51:31.0786038+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20260913"
-                            },
-                            {
-                                "buildId":  "market-character-images-20260913",
-                                "sourceCommit":  "6e5f4dd03b1a7569d35fe89f7f52af0417ad8363",
-                                "sha256":  "9D697D9585976E13BFD6C35CB121A4A778B831E1A865E86E7D5CED6E85EA9DA0",
-                                "status":  "passed-with-recorded-preexisting-template-diagnostics",
-                                "deployedAt":  "2026-09-13T15:37:13.8611346+08:00",
-                                "verifiedAt":  "2026-09-13T15:39:40.3020955+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-images-before-20260913"
-                            },
-                            {
-                                "buildId":  "task-charge-20260913",
-                                "sourceCommit":  "e3d24c7ae3320bc7518c40d9bf71dc76de38ead0",
-                                "sha256":  "BE9823215C1EE8499F4AE33AF06772365C3D191954AA430EB3F3486826F249C8",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-13T16:00:50.5969992+08:00",
-                                "verifiedAt":  "2026-09-13T16:04:33.6610622+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-charge-before-20260913"
-                            },
-                            {
-                                "buildId":  "gallery-orbit-20260913",
-                                "sourceCommit":  "64553c63449a38960f35a468b92b3cbc1973c40f",
-                                "sha256":  "D7EEE9C7DB5D660E673FC4CEFBDF5C51664445EC99CC72B1709DD4A3FED197A5",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-13T16:59:42.323382+08:00",
-                                "verifiedAt":  "2026-09-13T17:03:05.8276015+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-orbit-before-20260913"
-                            },
-                            {
-                                "buildId":  "gallery-type-video-20260913-first-attempt",
-                                "sha256":  "EC87A65C233B0144CAE9CA106F51F5A2EE2334E3417E2897F6C370E78BFC5925",
-                                "status":  "rolled-back-console-error",
-                                "restoredSha256":  "D7EEE9C7DB5D660E673FC4CEFBDF5C51664445EC99CC72B1709DD4A3FED197A5",
-                                "sidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "at":  "2026-09-13T17:44:34.1030057+08:00",
-                                "reason":  "Legacy WorkItem deferred click invoked after destruction; native flow passed but console verification rejected this release.",
-                                "failedPair":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-type-video-20260913-failed-callback",
-                                "verification":  {
-                                                     "routes":  [
-                                                                    "Home",
-                                                                    "Task",
-                                                                    "Gallery",
-                                                                    "Settings"
-                                                                ],
-                                                     "passed":  true
-                                                 },
-                                "evidence":  "D:\\preacherman\\output\\playwright\\gallery-type-video-20260913\\native-failed-callback.json"
-                            },
-                            {
-                                "buildId":  "gallery-type-video-20260913",
-                                "sourceCommit":  "08f2974be774e03e7d690fcbc7b5ec5dcf267d4f",
-                                "sha256":  "9B458FF10A58886FDF39F500C3308CABD90A9445C05D816A1A7BEFD4D7DF5D4E",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-13T17:51:42.8571416+08:00",
-                                "verifiedAt":  "2026-09-13T17:54:27.9684899+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-type-video-before-20260913"
-                            },
-                            {
-                                "buildId":  "account-empty-baseline-comparison",
-                                "status":  "baseline-diagnostic-reproduced-on-previous-release",
-                                "temporaryRollback":  {
-                                                          "Status":  "restored-previous-pair",
-                                                          "FailedSha256":  "38357DFFABC6B29439F4FC9BBF2D27120CDDFAE0741C1F969DE075167939DB6A",
-                                                          "RestoredSha256":  "9B458FF10A58886FDF39F500C3308CABD90A9445C05D816A1A7BEFD4D7DF5D4E",
-                                                          "SidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                                          "FailedPair":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-empty-20260913-failed-callback",
-                                                          "Reason":  "Unchanged Gallery runtime emitted _this.initSync after rapid core navigation. Restore baseline to compare before classifying the diagnostic.",
-                                                          "At":  "2026-09-13T18:04:34.2454734+08:00"
-                                                      },
-                                "evidence":  "D:\\preacherman\\output\\playwright\\account-empty-20260913\\baseline-report.json",
-                                "conclusion":  "The same _this.initSync error occurs on the previous verified executable under identical navigation. Unchanged Gallery runtime; the Account cleanup does not introduce it."
-                            },
-                            {
-                                "buildId":  "account-empty-20260913",
-                                "sourceCommit":  "54d5f66515708c143dbb48a1856f2eea02ba68bd",
-                                "sha256":  "38357DFFABC6B29439F4FC9BBF2D27120CDDFAE0741C1F969DE075167939DB6A",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-13T18:06:16.4169716+08:00",
-                                "verifiedAt":  "2026-09-13T18:07:46.8625899+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-empty-before-20260913"
-                            },
-                            {
-                                "buildId":  "market-entry-20260913",
-                                "sourceCommit":  "90477b16e828549fbb8600592996cb753ff1f565",
-                                "sha256":  "EC018D066197D20C0248D25F3B11C77AB5C3487B7C633207106BC1DE4404D115",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-13T22:18:32.6995564+08:00",
-                                "verifiedAt":  "2026-09-13T22:25:36.032121+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-entry-before-20260913"
-                            },
-                            {
-                                "buildId":  "market-entry-slower-20260913",
-                                "sourceCommit":  "3e17ac37b106b46dd2ee013e20a98590d8d46bd3",
-                                "sha256":  "D0BD5FAB1A2150B9CB39C1070E5D905126E7A4DE9558CE7B37C0C7FCC83AC56B",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-13T22:39:37.1748286+08:00",
-                                "verifiedAt":  "2026-09-13T22:41:33.3811773+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-entry-slower-before-20260913"
-                            },
-                            {
-                                "buildId":  "pathfinder-20260913",
-                                "sourceCommit":  "28cebb8228c467b1596cb22000af17c0825e48a2",
-                                "sha256":  "6DCA28EE931536EC78C8BEF024A9A1506C6F04531113D5BC3C20D1BBA327B07A",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-14T00:04:06.1039314+08:00",
-                                "verifiedAt":  "2026-09-14T00:14:12.9001309+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-before-20260913"
-                            },
-                            {
-                                "buildId":  "supplied-motions-20260914",
-                                "sourceCommit":  "e5d9576ed02dbf3c9b2ef4b5682b1a4576d1e28e",
-                                "sha256":  "E9741F163CD07836BFDB60E7AFF6F600442492F66463913FC25C722E411A9A77",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-14T01:00:26.5693755+08:00",
-                                "verifiedAt":  "2026-09-14T01:04:56.0944026+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\supplied-motions-before-20260914"
-                            },
-                            {
-                                "buildId":  "actorcore-talk-20260914",
-                                "sourceCommit":  "b882bf83f642c8d5b494e0deab1b9679bec5251b",
-                                "sha256":  "DE04AFF0FD6D4A1CC93DF1F1A32ED03031B865EE233B95D81619439D73783576",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-14T01:35:21.9876961+08:00",
-                                "verifiedAt":  "2026-09-14T01:40:24.7694339+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\actorcore-talk-before-20260914"
-                            },
-                            {
-                                "buildId":  "pathfinder-happy-20260914",
-                                "sourceCommit":  "9c9570b24f8fc2a705ab9571112a6185f7f6089b",
-                                "sha256":  "BDFE84DA43F963590298299DC32C4A19311A40B1916F3403CEE405F74410818C",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-14T01:56:00.4130196+08:00",
-                                "verifiedAt":  "2026-09-14T01:58:40.7886248+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-happy-before-20260914"
-                            },
-                            {
-                                "buildId":  "gallery-market-interaction-20260914",
-                                "sourceCommit":  "43fa19da55344a361b14c7f0cd486a8d128141bb",
-                                "sha256":  "2D59A66E5CE9FC2BDA2E20588111E63F789350EFE2B73200463D62BA30106AA0",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-14T02:35:26.7194125+08:00",
-                                "verifiedAt":  "2026-09-14T02:39:05.8120001+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914"
-                            },
-                            {
-                                "buildId":  "gallery-transition-20260914",
-                                "sourceCommit":  "79940ecdd65661ae61457a49b3f1a71544df0b96",
-                                "sha256":  "9A4750A56264F2D4A6B0F45DA29E84F82798A29108CDAC7FA0D053E2AE40F339",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-14T14:03:45.7492449+08:00",
-                                "verifiedAt":  "2026-09-14T14:11:03.8919565+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914"
-                            },
-                            {
-                                "buildId":  "avatar-rig-repair-20260914",
-                                "sourceCommit":  "7375b6690fcc9a48a2c07ce4cc6647a166b54a46",
-                                "sha256":  "9CB2105D8D397818EA1BEF98AB96CEF9CA9DF316127E2FA5EDFE607DA76A984C",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-14T15:41:40.2086497+08:00",
-                                "verifiedAt":  "2026-09-14T15:52:07.6390558+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914"
-                            },
-                            {
-                                "buildId":  "gallery-remove-video-20260914",
-                                "sourceCommit":  "4260c4433cb2e536633941b9379754c829487876",
-                                "sha256":  "809A1AFC99F1825D25EDD90EC79826AB231D5C9C88D86F1E580F22F225DAEF39",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-14T22:50:00.6051753+08:00",
-                                "verifiedAt":  "2026-09-14T23:02:06.8102496+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914"
-                            },
-                            {
-                                "buildId":  "twin-leg-fix-20260915",
-                                "sourceCommit":  "29bab299998173a81e30747575825bbb8d11daba",
-                                "sha256":  "76611FAAE91119A5AA30AD6D8FB07BB9AA9C4B786B366BCA9B81CBEB28071023",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T14:42:21.1311491+08:00",
-                                "verifiedAt":  "2026-09-15T14:51:11.4583572+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915"
-                            },
-                            {
-                                "buildId":  "gallery-character-details-20260915",
-                                "sourceCommit":  "999008c986ae816f1f4e17fd9cd3eb7ac8dd6e62",
-                                "sha256":  "C1B1162A5C70DCA59CD04FC3F38EB3A01F3E4FC2A5A1A43D21B83CBEBC24CC6B",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T15:36:47.5540319+08:00",
-                                "verifiedAt":  "2026-09-15T15:43:39.0528729+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-details-before-20260915"
-                            },
-                            {
-                                "buildId":  "gallery-english-details-20260915",
-                                "sourceCommit":  "8725d5815478e16a0daa8bc1674b0c95bd585857",
-                                "sha256":  "CCDEC3AE5BC5164248653BD918A50640BF9A53F88268642079B5EE2969A72350",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T16:04:27.8854535+08:00",
-                                "verifiedAt":  "2026-09-15T16:07:57.2158268+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-english-details-before-20260915"
-                            },
-                            {
-                                "buildId":  "gallery-character-search-20260915",
-                                "sourceCommit":  "c6e5c738e922b998d6ad236d16e85611ad7aa00d",
-                                "sha256":  "B913748FE82D5220B6F914D8B019F17CDC1842CB88AD1CE7B3D180C161849AFC",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T16:45:34.9723261+08:00",
-                                "verifiedAt":  "2026-09-15T16:48:33.113399+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-search-before-20260915"
-                            },
-                            {
-                                "buildId":  "gallery-search-original-style-20260915",
-                                "sourceCommit":  "877fbc356481e51e487958b7783ed21675861205",
-                                "sha256":  "8E7B3FB02CDCCE99FF0E4C02EC1D6E4464A560D9000F5EFCBB8D8854D542AF10",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T17:09:13.7812333+08:00",
-                                "verifiedAt":  "2026-09-15T17:11:54.9758414+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-search-original-style-before-20260915"
-                            },
-                            {
-                                "buildId":  "gallery-remove-work-contact-20260915",
-                                "sourceCommit":  "52705ce94541c59bb026304eee9fb2b077398cc4",
-                                "sha256":  "EF557C0589CA2D7061C4BDF0C71F40A884D4350CD9E033240243DBA27386CBE7",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T17:56:31.5272236+08:00",
-                                "verifiedAt":  "2026-09-15T17:59:33.086517+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915"
-                            },
-                            {
-                                "buildId":  "gallery-detail-avatar-label-20260915",
-                                "sourceCommit":  "b560a5a6319f2c5c8e5b4232080da07ac5099e43",
-                                "sha256":  "B368B24F2943711EDFCB39401A4EACF08CB18D5F4DEC3D7FA50E8AEF6BB5BB5A",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T18:15:36.7381989+08:00",
-                                "verifiedAt":  "2026-09-15T18:19:21.9292298+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915"
-                            },
-                            {
-                                "buildId":  "market-character-copy-20260915",
-                                "sourceCommit":  "3170362016e122c3b123a78d35ba726bd53a68f1",
-                                "sha256":  "EBF49750CF9B516CF701E430F862A0E9E8E45ADB3A8464D7BD97E24D17D0E29B",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T18:43:24.0221595+08:00",
-                                "verifiedAt":  "2026-09-15T18:46:45.1361598+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-copy-before-20260915"
-                            },
-                            {
-                                "buildId":  "account-evomap-20260915",
-                                "sourceCommit":  "0eef9d16acbe048b38231b307e8a1a1b8b128958",
-                                "sha256":  "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
-                                "status":  "rolled-back-after-hidden-window-verification",
-                                "reason":  "Hidden/minimized native launch paused the shared renderer (data-avatar-render-active=false) even though WebView2 document.hidden=false. Restored the verified pair; normal visible shortcut launch passed Home, Task, Gallery and Settings. Corrected only verification launcher; runtime source unchanged.",
-                                "rolledBackAt":  "2026-09-15T22:07:39.863095+08:00",
-                                "failedArtifact":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-hidden-launch-20260915"
-                            },
-                            {
-                                "buildId":  "account-evomap-20260915",
-                                "sourceCommit":  "6886e20482976f06a78738cf319389c1a18cc825",
-                                "sha256":  "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-15T22:09:41.7665534+08:00",
-                                "verifiedAt":  "2026-09-15T22:12:57.113853+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-evomap-before-20260915"
-                            },
-                            {
-                                "buildId":  "task-timeline-dialog-20260915",
-                                "sourceCommit":  "8a4a80008c1ae1cc0239554ac8b604eef244724d",
-                                "sha256":  "FF5874BEDC76CB94FFB1C6865BB0D5393372D81033FBCC849497CD2006D0B1B0",
-                                "status":  "rolled-back-after-task-first-entry-check",
-                                "reason":  "Native first-entry check found the All navigation link still used the legacy raw router call and could be rejected during the startup transition guard. Restore the verified pair while applying the existing navigation queue to captured navigation links.",
-                                "rolledBackAt":  "2026-09-15T23:38:55.4242735+08:00",
-                                "failedArtifact":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-first-entry-20260915"
-                            },
-                            {
-                                "buildId":  "task-timeline-dialog-20260915",
-                                "sourceCommit":  "6668e979cdf849e3e9da03618a41926f9799275b",
-                                "sha256":  "C06B5AB507E2F69D4B1510F7CC46EF320284E7CCEFE30B9E733838283128D9BE",
-                                "status":  "rolled-back-after-query-route-check",
-                                "reason":  "Native timeline navigation reached saved task halo but the query-bearing route was rejected by the transition guard. Queue ownership compared the complete query URL against only the pathname. Restore the verified pair while correcting queued route identity.",
-                                "rolledBackAt":  "2026-09-15T23:56:19.9503095+08:00",
-                                "failedArtifact":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-query-route-20260915"
-                            },
-                            {
-                                "buildId":  "task-timeline-dialog-20260915",
-                                "sourceCommit":  "42583e60cb77955cab95c6a2c430edec61cd813a",
-                                "sha256":  "08116D516F57D87DAD27EE5441B29989E62C4F9EE41E9D7616422D650CE02DCE",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-16T00:03:47.6635312+08:00",
-                                "verifiedAt":  "2026-09-16T00:08:23.0534112+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-dialog-before-20260915"
-                            },
-                            {
-                                "buildId":  "market-details-20260916",
-                                "sourceCommit":  "1aa80c1c5d1eded871da26c5587aa6b2ae8aa7b7",
-                                "sha256":  "E173FF9D9E2E308924D613BC46A99E1510418575D2A3D13C57B1E18BC5BDA784",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-16T14:54:05.5913739+08:00",
-                                "verifiedAt":  "2026-09-16T15:01:57.3324906+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-before-20260916"
-                            },
-                            {
-                                "buildId":  "market-frost-20260916",
-                                "sourceCommit":  "0dddf0a37640504e8c3b0006a14c4b60db5c588a",
-                                "sha256":  "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
-                                "status":  "rolled-back-for-verification-investigation",
-                                "at":  "2026-09-16T15:35:07.695859+08:00",
-                                "reason":  "Dark-mode all 14 Market characters and core routes passed. Automated in-place native reload for changing appearance timed out waiting for Home visibility; candidate and matching sidecar preserved. Restored the verified pair while investigating. No source architecture change was reverted.",
-                                "restoredSha256":  "E173FF9D9E2E308924D613BC46A99E1510418575D2A3D13C57B1E18BC5BDA784",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "evidence":  "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-reload-investigation-report.json",
-                                "baselineComparison":  "D:\\preacherman\\output\\playwright\\market-frost-20260916\\reload-comparison.json"
-                            },
-                            {
-                                "buildId":  "market-frost-20260916",
-                                "sourceCommit":  "0dddf0a37640504e8c3b0006a14c4b60db5c588a",
-                                "sha256":  "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-16T15:35:53.677288+08:00",
-                                "verifiedAt":  "2026-09-16T15:44:12.6164618+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-frost-before-20260916"
-                            },
-                            {
-                                "buildId":  "market-details-motion-20260916",
-                                "sha256":  "73D1CD9BE16D6D643735AD5F9C84639818547882F2655461B7411BC165B41B26",
-                                "sourceCommit":  "574fc8062e930f87340a9143b8f011b8e10ca1cb",
-                                "status":  "rolled-back-for-investigation",
-                                "reason":  "Native core navigation: Gallery rail did not appear after Details interruption tests; all 14 dark Market products passed.",
-                                "rolledBackAt":  "2026-09-16T16:25:17.2060417+08:00",
-                                "evidence":  "D:/preacherman/output/playwright/market-details-motion-20260916/native-first-attempt-report.json"
-                            },
-                            {
-                                "buildId":  "market-details-motion-20260916",
-                                "sourceCommit":  "574fc8062e930f87340a9143b8f011b8e10ca1cb",
-                                "sha256":  "73D1CD9BE16D6D643735AD5F9C84639818547882F2655461B7411BC165B41B26",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-16T16:27:05.0055591+08:00",
-                                "verifiedAt":  "2026-09-16T16:35:51.7176789+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-motion-before-20260916"
-                            },
-                            {
-                                "buildId":  "market-details-return-20260916",
-                                "sourceCommit":  "b142ecf9bf723d7c2bc16e191cb4e4707dbdb041",
-                                "sha256":  "A9FE16EB1289C49E11293CE2E2B1BE1695EC432A6C97B4F51F1AAD5D6CC46ACF",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-16T16:58:35.7630331+08:00",
-                                "verifiedAt":  "2026-09-16T17:05:05.7300339+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-return-before-20260916"
-                            },
-                            {
-                                "buildId":  "account-live-lens-20260916",
-                                "sourceCommit":  "f86ea5ddf8334f08f56f438a3fc4f14f7e6dd65a",
-                                "sha256":  "F3C56316E9B6C0A0785064932E9EEC2A5A627A65FE1A2DBD16E2EFEDB2D374E7",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-16T17:33:54.8756373+08:00",
-                                "verifiedAt":  "2026-09-16T17:36:58.5368542+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916"
-                            },
-                            {
-                                "buildId":  "desktop-github-auth-20260916",
-                                "sourceCommit":  "787d6cfd1e1d3e98016895d149ff6c9ace336f7c",
-                                "sha256":  "26EFE66F4E0E488892F30E3BD13392CFB034760B5AD9E1DD355695D0BBDE9A07",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-17T00:32:20.6759373+08:00",
-                                "verifiedAt":  "2026-09-17T00:44:20.0866941+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-github-auth-before-20260916"
-                            },
-                            {
-                                "buildId":  "account-member-20260917",
-                                "sourceCommit":  "158ecc013c45388b91eeb3de76771009d9512634",
-                                "sha256":  "0D7B6349573918EA2EB75BA6E2DAF57F4F1E514E0CA754585B9998FAD35B6ABB",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-17T02:44:30.178105+08:00",
-                                "verifiedAt":  "2026-09-17T02:47:44.2347536+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-member-before-20260917"
-                            },
-                            {
-                                "buildId":  "account-dock-refine-20260917",
-                                "sourceCommit":  "f1eb9d2061102c381981f0ed98e86838fb30f99c",
-                                "sha256":  "3CEC7A6B7A06FD11887694703C9DF488E724363FE5D891D8DCA602FADF5F039F",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-17T03:10:58.296541+08:00",
-                                "verifiedAt":  "2026-09-17T03:15:55.6558124+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-dock-refine-before-20260917"
-                            },
-                            {
-                                "buildId":  "gallery-sidebar-spacing-20260917",
-                                "sourceCommit":  "c83575758600f45e5039ab8105967e51b40b842a",
-                                "sha256":  "506B60543892BBE026054F605B9AEA0664F704EF3FB04FDD89967081D3618312",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-17T03:30:12.0924947+08:00",
-                                "verifiedAt":  "2026-09-17T03:32:56.9532039+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-sidebar-spacing-before-20260917"
-                            },
-                            {
-                                "buildId":  "desktop-account-sync-20260917",
-                                "sourceCommit":  "cdc6df3150b10e25420f636e3feb4174de54131b",
-                                "sha256":  "1325E4EA889F700E74D6AA4F12FFE8A26D7CA3EB9107B3D89E13BB7DA81195D5",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-17T05:59:41.5793636+08:00",
-                                "verifiedAt":  "2026-09-17T06:01:40.1852303+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917"
-                            },
-                            {
-                                "buildId":  "profile-cleanup-20260917",
-                                "sourceCommit":  "ebc3096314b0ecddb1a940463ac237a2c8f56511",
-                                "sha256":  "1E21537FCE7B5F92EF7A37201DD44CDF4D6D155D1D79E96178A768D180D77CB8",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-17T06:23:40.2613329+08:00",
-                                "verifiedAt":  "2026-09-17T06:26:36.7025599+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\profile-cleanup-before-20260917"
-                            },
-                            {
-                                "buildId":  "market-profile-links-20260917",
-                                "sourceCommit":  "a3adaf36254390c22858904e52932ce6d53f876a",
-                                "sha256":  "0DEEC14A7125AD23824C479D301BB23295E20E22EF3EB9CA3C93DA342C7CAFCE",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-17T14:41:55.8395012+08:00",
-                                "verifiedAt":  "2026-09-17T14:45:05.593646+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-profile-links-before-20260917"
-                            },
-                            {
-                                "buildId":  "account-providers-20260917",
-                                "sourceCommit":  "58a988d1ae28196550c4601aa01821b042612da7",
-                                "sha256":  "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-17T16:28:19.913991+08:00",
-                                "verifiedAt":  "2026-09-17T16:30:52.6451357+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917"
-                            },
-                            {
-                                "buildId":  "audio-dock-20260920-attempt1",
-                                "sourceCommit":  "9305e0decae434fff6d1d4e1c9a065028eba037e",
-                                "sha256":  "BDEB02F70C9307890FADA79229A0077D4FB9E3AE280FBB3C0917C86677DF6E89",
-                                "status":  "rolled-back",
-                                "reason":  "Visual check: waveform lacked contrast over pale moving Gallery cards; add a thin glyph contour without a control background.",
-                                "rolledBackAt":  "2026-09-20T17:45:00.1714518+08:00",
-                                "restoredSha256":  "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85"
-                            },
-                            {
-                                "buildId":  "audio-dock-20260920",
-                                "sourceCommit":  "e38028710b336ef9965d2f4d97c69c599da9dce8",
-                                "sha256":  "AE4FCE297569E63BB7557BCEDBC111439A19F4FB57B9AC900B84A27BAC5FFC45",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-20T17:51:46.0411197+08:00",
-                                "verifiedAt":  "2026-09-20T17:54:42.7573139+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920"
-                            },
-                            {
-                                "buildId":  "platform-ring-20260920",
-                                "sourceCommit":  "44838bcd6ee016e807d6e4571f906495dc664ad7",
-                                "sha256":  "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-20T18:18:15.3839319+08:00",
-                                "verifiedAt":  "2026-09-20T18:20:52.8972895+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920"
-                            },
-                            {
-                                "buildId":  "mac-sync-20260930-attempt1",
-                                "sourceCommit":  "6623d28a3e1cc653c116db23f4f5e3cdc01ee7fc",
-                                "sha256":  "6D505A31EC43B7E081E38EE31691F0DDE5B2C0943CF379D7EB6822854DA1A17C",
-                                "status":  "rolled-back",
-                                "reason":  "Native pages rendered, but new initSync exception and remote auth transport failure need baseline comparison before final delivery.",
-                                "rolledBackAt":  "2026-09-30T23:25:57.3237635+08:00",
-                                "restoredSha256":  "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2"
-                            },
-                            {
-                                "buildId":  "mac-sync-20260930",
-                                "sourceCommit":  "2cb527eab9ff990ea361bf3329f84c7bfc2805b1",
-                                "sha256":  "B29D722BF2B53E1922DBE87157F5FA02A2F2A06CA190F98569925C631D99CEA2",
-                                "status":  "passed-with-recorded-baseline-diagnostics",
-                                "deployedAt":  "2026-09-30T23:43:57.5628888+08:00",
-                                "verifiedAt":  "2026-10-01T00:02:18.8537234+08:00",
-                                "backup":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930"
-                            },
-                            {
-                                "buildId":  "market-header-20261001-attempt1",
-                                "sourceCommit":  "03e75c0f5704fe8656c17683f19f035c35bfa42e",
-                                "sha256":  "695D58880A216480D3AB82CEB2A55A01F87BF96E9CFB4D7F7CA5E51C88BCB7A7",
-                                "status":  "rolled-back",
-                                "reason":  "Native core-route verification reproduced a Gallery async initSync exception; restored verified pair while repairing the lifecycle race. Market header visual and interactions passed.",
-                                "rolledBackAt":  "2026-10-01T03:16:40.2601181+08:00",
-                                "restoredSha256":  "B29D722BF2B53E1922DBE87157F5FA02A2F2A06CA190F98569925C631D99CEA2"
-                            }
-                        ],
-    "canonicalManifestBackupPath":  "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930/desktop-build-manifest.json",
-    "rollbackHistory":  [
-                            {
-                                "at":  "2026-09-09T11:23:27.161Z",
-                                "sourceCommit":  "6b88841f4434e2365f9491d08cad7dc659c09def",
-                                "failedSha256":  "3822F1BA303E5388BBCD564157FDAE921DE75171068C6F8C10462DED464CE10C",
-                                "restoredSha256":  "BBC4C419504794198370D3C84D293EFF8CBE5DD5DB97CF9A2FFB6D485ABC8A04",
-                                "restoredSidecarSha256":  "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-                                "reason":  "Native minimize verification: WebView2 leaves document.hidden false, so the browser-only visibility gate did not suspend rendering. Restored verified pair while adding an explicit native-window activity signal.",
-                                "evidence":  "output/playwright/avatar-performance-native-visibility-first-attempt.json",
-                                "restoredNativeSmoke":  "output/playwright/avatar-performance-rollback-smoke.json",
-                                "restoredNativeSmokePassed":  true
-                            }
-                        ]
+{
+  "schemaVersion": 1,
+  "buildId": "market-header-20261001",
+  "productVersion": "0.1.0",
+  "sourceTask": "market-fixed-category-header",
+  "sourceThread": null,
+  "sourceState": "Fixed Discover / Browse / Search / Sell | Inventory below the Market header, using the packaged Market Brilliant Cut face and semantic appearance tokens. Header follows the intro line and yields to details/profile overlays. Gallery now rechecks lifecycle methods after each awaited upload; teardown regression reproduced before repair and passed afterward. Existing Windows sidecar reused.",
+  "sourceCommit": "a119d354db9b647a14b54827abc4135695ed53c8",
+  "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
+  "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
+  "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
+  "builtAt": "2026-10-01T03:23:12.2159055+08:00",
+  "deployedAt": "2026-10-01T03:23:28.1330355+08:00",
+  "verifiedAt": "2026-10-01T03:26:09.3709674+08:00",
+  "sizeBytes": 676119040,
+  "sha256": "E63065E8B62E18843E0A411C92E555D77A0E85421B2642DD1705301C0357BD88",
+  "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
+  "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
+  "sidecarSizeBytes": 93183488,
+  "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20261001/preacherman-demo-host.exe",
+  "backupSha256": "B29D722BF2B53E1922DBE87157F5FA02A2F2A06CA190F98569925C631D99CEA2",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20261001/preacherman-service.exe",
+  "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+  "rollbackBaselineCommit": "2cb527eab9ff990ea361bf3329f84c7bfc2805b1",
+  "previousVerificationCommit": "2cb527eab9ff990ea361bf3329f84c7bfc2805b1",
+  "verification": {
+    "status": "passed-with-recorded-baseline-diagnostics",
+    "sourceChecks": {
+      "typecheck": "passed",
+      "focusedTests": 39
+    },
+    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market (internal ledger route), Account and Settings in both appearances. Fixed category labels, loaded packaged font, scroll stability, profile lens and model Details return. Window maximize/restore/minimize and authored close; host and sidecar released; normal Home shortcut restart without debug flags.",
+    "windowControls": {
+      "initialMaximized": true,
+      "restored": true,
+      "restoredSize": {
+        "width": 1280,
+        "height": 800,
+        "appearance": "light"
+      },
+      "maximize": true,
+      "minimize": true,
+      "automationNote": "page.evaluate: Command plugin:window|unminimize not allowed by ACL\n    at invoke (D:\\preacherman\\output\\playwright\\market-header-20261001\\window-lifecycle.cjs:3:260)\n    at D:\\preacherman\\output\\playwright\\market-header-20261001\\window-lifecycle.cjs:3:1132",
+      "restoredFromTaskbarEquivalent": true,
+      "closeRequested": true,
+      "passed": true
+    },
+    "routes": [
+      {
+        "name": "Home",
+        "appearance": "dark",
+        "surface": "home"
+      },
+      {
+        "name": "Task",
+        "appearance": "dark",
+        "surface": "workspace"
+      },
+      {
+        "name": "Gallery",
+        "appearance": "dark",
+        "surface": "market"
+      },
+      {
+        "name": "Market",
+        "appearance": "dark",
+        "surface": "ledger"
+      },
+      {
+        "name": "Account",
+        "appearance": "dark",
+        "surface": "account"
+      },
+      {
+        "name": "Settings",
+        "appearance": "dark",
+        "surface": "settings"
+      },
+      {
+        "name": "Home",
+        "appearance": "light",
+        "surface": "home"
+      },
+      {
+        "name": "Task",
+        "appearance": "light",
+        "surface": "workspace"
+      },
+      {
+        "name": "Gallery",
+        "appearance": "light",
+        "surface": "market"
+      },
+      {
+        "name": "Market",
+        "appearance": "light",
+        "surface": "ledger"
+      },
+      {
+        "name": "Account",
+        "appearance": "light",
+        "surface": "account"
+      },
+      {
+        "name": "Settings",
+        "appearance": "light",
+        "surface": "settings"
+      }
+    ],
+    "marketHeader": [
+      {
+        "appearance": "dark",
+        "initial": {
+          "x": 24.77422332763672,
+          "y": 103.19999694824219,
+          "width": 1870.4514846801758,
+          "height": 61.91999816894531
+        },
+        "scrolled": {
+          "x": 24.77422332763672,
+          "y": 103.19999694824219,
+          "width": 1870.4514846801758,
+          "height": 61.91999816894531
+        },
+        "font": "\"Market Brilliant Cut\", sans-serif",
+        "color": "rgb(255, 255, 255)",
+        "token": "#ffffff",
+        "line": "100px",
+        "top": "100px",
+        "height": "60px",
+        "scale": 1.032,
+        "stageY": 0,
+        "loaded": true,
+        "profileRestored": true,
+        "detailsChecked": true
+      },
+      {
+        "appearance": "light",
+        "initial": {
+          "x": 24.77422332763672,
+          "y": 103.19999694824219,
+          "width": 1870.4514846801758,
+          "height": 61.91999816894531
+        },
+        "scrolled": {
+          "x": 24.77422332763672,
+          "y": 103.19999694824219,
+          "width": 1870.4514846801758,
+          "height": 61.91999816894531
+        },
+        "font": "\"Market Brilliant Cut\", sans-serif",
+        "color": "rgb(255, 255, 255)",
+        "token": "#ffffff",
+        "line": "100px",
+        "top": "100px",
+        "height": "60px",
+        "scale": 1.032,
+        "stageY": 0,
+        "loaded": true,
+        "profileRestored": true,
+        "detailsChecked": true
+      }
+    ],
+    "browserVerification": {
+      "routes": [
+        {
+          "name": "Market",
+          "appearance": "dark",
+          "surface": "ledger"
+        },
+        {
+          "name": "Market",
+          "appearance": "light",
+          "surface": "ledger"
+        }
+      ],
+      "header": [
+        {
+          "appearance": "dark",
+          "initial": {
+            "x": 24.77422332763672,
+            "y": 103.19999694824219,
+            "width": 1870.4514846801758,
+            "height": 61.91999816894531
+          },
+          "scrolled": {
+            "x": 24.77422332763672,
+            "y": 103.19999694824219,
+            "width": 1870.4514846801758,
+            "height": 61.91999816894531
+          },
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "color": "rgb(255, 255, 255)",
+          "token": "#ffffff",
+          "line": "100px",
+          "top": "100px",
+          "height": "60px",
+          "scale": 1.032,
+          "stageY": 0,
+          "loaded": true,
+          "profileRestored": true,
+          "detailsChecked": false
+        },
+        {
+          "appearance": "dark-1024",
+          "initial": {
+            "x": 13.65333366394043,
+            "y": 56.88888931274414,
+            "width": 996.6933460235596,
+            "height": 34.13333511352539
+          },
+          "scrolled": {
+            "x": 13.65333366394043,
+            "y": 56.88888931274414,
+            "width": 996.6933460235596,
+            "height": 34.13333511352539
+          },
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "color": "rgb(255, 255, 255)",
+          "token": "#ffffff",
+          "line": "100px",
+          "top": "100px",
+          "height": "60px",
+          "scale": 0.5688888888888889,
+          "stageY": 0,
+          "loaded": true,
+          "profileRestored": true,
+          "detailsChecked": false
+        },
+        {
+          "appearance": "dark-390",
+          "initial": {
+            "x": 2.5999999046325684,
+            "y": 21.66770362854004,
+            "width": 384.7999939918518,
+            "height": 13.000001907348633
+          },
+          "scrolled": {
+            "x": 2.5999999046325684,
+            "y": 21.66770362854004,
+            "width": 384.7999939918518,
+            "height": 13.000001907348633
+          },
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "color": "rgb(255, 255, 255)",
+          "token": "#ffffff",
+          "line": "100px",
+          "top": "100px",
+          "height": "60px",
+          "scale": 0.21668752883303916,
+          "stageY": 0.00103759765625,
+          "loaded": true,
+          "profileRestored": true,
+          "detailsChecked": false
+        },
+        {
+          "appearance": "light",
+          "initial": {
+            "x": 24.77422332763672,
+            "y": 103.19999694824219,
+            "width": 1870.4514846801758,
+            "height": 61.91999816894531
+          },
+          "scrolled": {
+            "x": 24.77422332763672,
+            "y": 103.19999694824219,
+            "width": 1870.4514846801758,
+            "height": 61.91999816894531
+          },
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "color": "rgb(255, 255, 255)",
+          "token": "#ffffff",
+          "line": "100px",
+          "top": "100px",
+          "height": "60px",
+          "scale": 1.032,
+          "stageY": 0,
+          "loaded": true,
+          "profileRestored": true,
+          "detailsChecked": false
+        },
+        {
+          "appearance": "light-1024",
+          "initial": {
+            "x": 13.65333366394043,
+            "y": 56.88888931274414,
+            "width": 996.6933460235596,
+            "height": 34.13333511352539
+          },
+          "scrolled": {
+            "x": 13.65333366394043,
+            "y": 56.88888931274414,
+            "width": 996.6933460235596,
+            "height": 34.13333511352539
+          },
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "color": "rgb(255, 255, 255)",
+          "token": "#ffffff",
+          "line": "100px",
+          "top": "100px",
+          "height": "60px",
+          "scale": 0.5688888888888889,
+          "stageY": 0,
+          "loaded": true,
+          "profileRestored": true,
+          "detailsChecked": false
+        },
+        {
+          "appearance": "light-390",
+          "initial": {
+            "x": 2.5999999046325684,
+            "y": 21.66770362854004,
+            "width": 384.7999939918518,
+            "height": 13.000001907348633
+          },
+          "scrolled": {
+            "x": 2.5999999046325684,
+            "y": 21.66770362854004,
+            "width": 384.7999939918518,
+            "height": 13.000001907348633
+          },
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "color": "rgb(255, 255, 255)",
+          "token": "#ffffff",
+          "line": "100px",
+          "top": "100px",
+          "height": "60px",
+          "scale": 0.21668752883303916,
+          "stageY": 0.00103759765625,
+          "loaded": true,
+          "profileRestored": true,
+          "detailsChecked": false
+        }
+      ],
+      "errors": [
+        "Hydration completed but contains mismatches."
+      ],
+      "failedRequests": [
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "coldHome": true,
+      "newErrors": [],
+      "passed": true
+    },
+    "resourceSample": {
+      "SampledAt": "2026-10-01T03:26:09.3709674+08:00",
+      "NativePid": 22160,
+      "StartedAt": "2026-10-01T03:25:46.8077845+08:00",
+      "WindowHandle": 4000282,
+      "Responding": true,
+      "NativeVisualVerified": true,
+      "ProcessIds": [
+        22160,
+        34696,
+        35188,
+        36524,
+        4292,
+        35212,
+        31772,
+        37380,
+        40068,
+        41440,
+        26004
+      ],
+      "NormalizedCpuPercent": 5.99,
+      "WorkingSetMiB": 1887.8,
+      "GpuDedicatedBytes": 3382870016,
+      "MaxGpuEngineUtilization": 13,
+      "FreeRamKiB": 15020432,
+      "TemporaryProcesses": [],
+      "Listeners": [],
+      "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
+      "ShortcutArguments": "",
+      "CloseReleasedPair": true,
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time. Pre-existing unrelated Open Design browsers and services preserved."
+    },
+    "newErrors": [],
+    "observedErrors": [
+      "Hydration completed but contains mismatches.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+    ],
+    "evidence": [
+      "D:\\preacherman\\output\\playwright\\market-header-20261001\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20261001\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20261001\\baseline-preview-report.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20261001\\preview-first-console-report.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20261001\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\market-header-20261001\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\market-header-20261001\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\market-header-20261001\\final-resources.json"
+    ]
+  },
+  "releaseAttempts": [
+    {
+      "sourceCommit": "a4351bc4d261790341a18a233dc594c8c2fbc7a5",
+      "sha256": "43CF186EA2F8FBBB5E58935FA81D6D656E318E6C0D29E3915B24ACB1D9774D89",
+      "deployedAt": "2026-09-06T15:28:16.5169789+08:00",
+      "status": "rolled-back",
+      "reason": "Native WebView painted an opaque white iframe canvas because child and host color schemes differed. CSS transparency and functional checks alone were insufficient; visual verification rejected delivery.",
+      "restoredHostSha256": "F43E057DDB92124F42ADE63F814F0CF2A5B6EC313D57111EA86876A84B5AD8E7",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "failedArtifactPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\preacherman-demo-host-market-rejected-20260906-152809.exe",
+      "rollbackVerification": "Canonical shortcut cold launch restored Home, Task, Gallery and Settings; screenshots and runtime check passed, zero exceptions. Native isolated canvas probe confirmed syncing child colorScheme to host removes the white backing.",
+      "verifiedAt": "2026-09-06T15:32:16+08:00"
+    },
+    {
+      "sourceCommit": "14ed7a2",
+      "sha256": "3BE77C9989ED68B3FFC128B19D0EB15563CBBC922989EDE99F35A74C3DBC0965",
+      "deployedAt": "2026-09-07T18:48:22.8469999+08:00",
+      "status": "rolled-back",
+      "reason": "Native dual-video and compositing passed, but rail return-position assertion failed after wheel input. One-shot restoration could be overwritten during the return transition; revised to hold saved position through the transition and prevent room wheel default/focus scrolling.",
+      "restoredAt": "2026-09-07T18:50:03.866022+08:00",
+      "restoredHostSha256": "D4D3494575AC5241CDEFC7BE8FBDBD0C654D972B10B89CEB4EC7B1B5CB08B64C",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "failedArtifactPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/gallery-detail-rejected-20260907-1849.exe",
+      "rollbackVerification": "Canonical shortcut cold start and all core surfaces passed; new errors0. Rollback recorded in7a8c747; corrected sourcebb5a09b deployed only after focused checks and a new production build."
+    },
+    {
+      "sourceCommit": "69d129e9eeb7a01d8f00608f0de2db9894731191",
+      "sha256": "4BFD21B99866FC1BE15FC38DE4A2E24A045E64408AF9D0258135651AE89B3A4C",
+      "status": "not-deployed",
+      "reason": "Computed-style review found inherited iframe focus rules overriding the transparent controls in light appearance. Candidate was held while the user remained on verified A8E250 release. Specificity corrected in721610d and explicitly checked before final build/deployment.",
+      "canonicalHostUnchanged": "A8E2504537B4D6F97CDAE8201CD0611B6CFD29F3F4779AC697CF3E0346E5B630",
+      "sidecarUnchanged": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E"
+    },
+    {
+      "sourceCommit": "5f4bb7c025e5a65178bbba9ef6270f6d946a4fd4",
+      "sha256": "283849666D42C38DE860D83C761E4AADC50E9D7ECDBD913D3E3B1CA3F04CB39D",
+      "deployedAt": "2026-09-08T17:08:36.3098151+08:00",
+      "status": "temporarily-restored-for-baseline-comparison",
+      "reason": "Candidate passed timeline interactions but emitted an unlisted external-video CSP diagnostic. Paired desktop and sidecar were restored for direct old-version comparison. The exact same 01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/high.mp4 media-src violation was reproduced on the old executable; diagnostic is inherited, not introduced by timeline. Production source and security policy unchanged.",
+      "restoredAt": "2026-09-08T17:10:45.7693894+08:00",
+      "restoredHostSha256": "A0F77ADBF9F9AB4485EBA05742A2FF4D1B600800EC905479AD8707ECDBB0D5F0",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "candidateBackupDirectory": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/task-timeline-candidate-20260908",
+      "comparisonEvidence": "output/playwright/task-timeline-baseline-report.json",
+      "comparisonConclusion": "Exact diagnostic inherited; old core navigation passed with no new errors or HTTP failures. Restoration recorded in ac91d33. Same unchanged candidate redeployed at 17:19:44 and final native checks passed."
+    },
+    {
+      "sourceCommit": "dc708d12e5fd772616b395f9cd23ec1e20846d74",
+      "sha256": "5D6F3BCA2A0233B1B24D83BD8D11732B8DD212E473A8DDA761FCBF1A1BEFF25F",
+      "status": "rolled-back",
+      "reason": "Native visual review rejected the UV diagnostic texture in place of the Microsoft mark. Initial HTML Image.decode checks had passed, unlike the worker texture path. Subsequent worker pixel checks proved Thread.absolutePath prefixes the Gallery base even for root-relative URLs. Fixed with a base-relative packaged RGBA PNG, without changing runtime code or shaders.",
+      "deployedAt": "2026-09-08T23:19:04.2809573+08:00",
+      "restoredAt": "2026-09-08T23:26:03.7295446+08:00",
+      "restoredHostSha256": "95F3024CC5812580153DEA0652FE2C20CD251303894FEB90BC20E9C1EA5B6966",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "failedArtifactPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-identity-svg-rejected-20260908/preacherman-demo-host.exe",
+      "rollbackVerification": "Canonical shortcut cold launch restored the matched baseline. Home model, Task, Gallery, Market/Ledger, Settings and Account passed in both appearances, background playback and explicit return passed, zero new diagnostics. Evidence: output/playwright/identity-rollback-native-report.json.",
+      "correctedSourceCommit": "6b34ac8ae15560dfd7d540e3a97d991960ce1725"
+    },
+    {
+      "sourceCommit": "8ba72b6760a5349af5769deaedddfbfea71135f7",
+      "sha256": "2F884C5A246B8CC83B421A85447A7239836FCE8CF7D7CD2F03679973ECD2C8A8",
+      "deployedAt": "2026-09-09T01:47:46.9556723+08:00",
+      "status": "restored-for-console-baseline-comparison",
+      "reason": "Both native themes and all activation interactions passed. Two unlisted diagnostics at the final console gate ([nuxt] manifest fetch and _this.initSync) require baseline attribution before delivery.",
+      "restoredAt": "2026-09-09T01:50:53.5180489+08:00",
+      "restoredHostSha256": "F43A3EB0E422D70BC19C4ADD79383D1996DB7AE07C01F793FEE83295828F28B4",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "failedArtifactPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/deployment-backups/cortana-activation-diagnostics-20260909/preacherman-demo-host.exe",
+      "comparisonEvidence": "output/playwright/activation-baseline-native-report.json",
+      "comparisonConclusion": "Direct paired old-executable test reproduced the exact _this.initSync diagnostic. A separate bounded old-version reload comparison did not reproduce the Nuxt manifest diagnostic; it remains a strict failure in the final candidate test, not allow-listed. Same unchanged candidate redeployed at 2026-09-09T01:59:52.2519714+08:00. Final native interaction checks passed in both themes. Two additional remote-thumbnail CSP messages were attributed using identical legacy portfolio-tree and security-policy Git object hashes and existing packaged fallback textures; raw reports retained. Qualification evidence: output/playwright/activation-native-qualified-report.json."
+    },
+    {
+      "sourceCommit": "832c3c3",
+      "sha256": "D9F3610E958BB35006B759130C9AF9D3CEB6F1067A402A11D6BBBB8CAA04BE51",
+      "deployedAt": "2026-09-09T02:56:13.9360219+08:00",
+      "status": "rolled-back-pending-native-pointer-diagnosis",
+      "reason": "Native cold launch, video, new dimensions and label passed; pointer hold was not charging after 650ms. Restored matching previous pair before diagnosis.",
+      "restoredAt": "2026-09-09T02:57:31.6375287+08:00",
+      "restoredHostSha256": "2F884C5A246B8CC83B421A85447A7239836FCE8CF7D7CD2F03679973ECD2C8A8",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "failedArtifactPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-refinement-first-native-20260909\\preacherman-demo-host.exe",
+      "evidence": "output/playwright/refinement-first-native-report.json",
+      "finalOutcome": "Same unchanged candidate redeployed; explicit bringToFront before input and event capture; both native themes and all interaction checks passed. First failure cause not conclusively established; raw failure retained. No production activation logic or security policy changes.",
+      "comparisonEvidence": "output/playwright/refinement-baseline-native-report.json"
+    },
+    {
+      "deployedAt": "2026-09-09T16:49:30.870369+08:00",
+      "reason": "Both native appearance and interaction flows passed, but the second card retained a remote poster URL blocked by img-src. Native video also used the inherited remote URL. Restore the previous pair while binding the changed card to existing packaged video and cover.",
+      "restoredHostSha256": "B1DB8D29EC3FE8F9557204058C04BFEB9AAEB5B4808BD65E0810FAAF22373229",
+      "sha256": "0FDBE96A0BC8F06FB5A30FE037E0923ADBDECC560189B06997F41D195AA7631E",
+      "failedArtifactPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\zima-remote-poster-before-fix-20260909\\preacherman-demo-host.exe",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "evidence": "output/playwright/zima-remote-media-native-failure.json",
+      "restoredAt": "2026-09-09T16:52:33.5927274+08:00",
+      "status": "resolved-by-packaged-media",
+      "sourceCommit": "f037c14d4f23b3d43351cd723095c64cd33f8e17",
+      "rollbackVerification": "Restored canonical shortcut Home, Task, Gallery and Settings passed without page errors. Screenshots: output/playwright/zima-rollback-{task,gallery,settings}.png; report: output/playwright/zima-rollback-report.json.",
+      "correctedSourceCommit": "0009128ce3e9f852985d53d0631cd143ae60a531",
+      "finalOutcome": "Previous pair restored and verified, second-card original media bundled, corrected release rebuilt and redeployed. Final native checks passed in both appearances with zero new diagnostics.",
+      "finalSha256": "17DCC9B6161B96FBC50D3CDCD27119A9C0FC1BA2ECC9E8E946CE5E00313ADF5E",
+      "finalEvidence": "output/playwright/zima-native-report.json"
+    },
+    {
+      "status": "resolved-by-baseline-and-source-attribution",
+      "sourceCommit": "b3738ce4e89e900cdf4d361c6dbb3150636dc9f9",
+      "sha256": "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
+      "deployedAt": "2026-09-10T16:41:16.2161607+08:00",
+      "restoredAt": "2026-09-10T16:48:37.5336126+08:00",
+      "restoredHostSha256": "04FAB5091C0783E65ED49670B93AC86A4B9E329ACB3D3C919DD1715B2B2E6C6B",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "reason": "Both native themes, ten models and core interactions passed; previously unlisted CSP diagnostics for existing remote Gallery posters and Market thumbnails require baseline attribution. Restore verified pair before comparison. User requested unchanged card media.",
+      "candidateArtifact": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
+      "evidence": "D:\\preacherman\\output\\gallery-model-import-20260910\\native-candidate-diagnostics.json",
+      "comparisonEvidence": "D:\\preacherman\\output\\gallery-model-import-20260910\\console-comparison.json",
+      "comparisonConclusion": "Eight Gallery poster diagnostics reproduced on paired old executable. Four portfolio thumbnail diagnostics separately attributed by identical emitting tree, CSP and packed fallback textures; not claimed as runtime-reproduced. Same candidate redeployed without source changes.",
+      "redeployedAt": "2026-09-10T16:58:10.7094634+08:00",
+      "finalNativeVisibilityPassed": true
+    },
+    {
+      "status": "rolled-back-loading-state-desynchronization",
+      "sourceCommit": "76b8b6d6bd2c71080d9c2935bc42a58c3a06c8e9",
+      "sha256": "94156D6C5620B4DB57D78F01CD2D4C7125928ABCA36044CEC970FAAF2152908B",
+      "deployedAt": "2026-09-10T17:58:02.9226713+08:00",
+      "restoredAt": "2026-09-10T18:03:14.9881947+08:00",
+      "restoredHostSha256": "2F4FE6A87AD3005F790AA29CF506B45072ED9CEF2F45CED93C3FF971B93C930B",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "reason": "Native model and lighting are visible, but returning from Home to the same equipped Gallery character leaves load-state stuck loading. Restore verified pair before fixing the state race.",
+      "candidateArtifact": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\failed-release-1\\preacherman-demo-host.exe",
+      "evidence": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\failed-release-1\\native-report.json",
+      "candidateSidecar": "D:\\preacherman\\output\\avatar-motion-lighting-20260910\\failed-release-1\\preacherman-service.exe",
+      "resolvedBySourceCommit": "4e3e850b76b4e34b213dd3e96033b715b1470697",
+      "resolution": "Replaced prop-driven loading resets with last-rendered identity and ignored stale callbacks; keep adapter stable when callbacks change. Prior-source regression reproduces the readiness failure. Both preview appearances and corrected native release passed."
+    },
+    {
+      "buildId": "avatar-motion-lighting-20260910",
+      "sourceCommit": "4e3e850b76b4e34b213dd3e96033b715b1470697",
+      "sha256": "44D6A01D2AC2CD732AA42E655BC41C51265B3E801FDAD8BD46A8D0DD70EBE622",
+      "status": "passed",
+      "deployedAt": "2026-09-10T18:19:47.8356193+08:00",
+      "verifiedAt": "2026-09-10T18:29:25.4694762+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-motion-lighting-before-20260910"
+    },
+    {
+      "buildId": "active-companion-20260910",
+      "sourceCommit": "19c164e2b33d098fabe7261236dd695bf0ee3154",
+      "sha256": "09C9D1D2DE450AC52DCBB297262C45BDFF19FC6535A34CAEB3859EACD79D0A6A",
+      "status": "passed",
+      "deployedAt": "2026-09-10T19:20:54.4502173+08:00",
+      "verifiedAt": "2026-09-10T19:24:52.7601775+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\active-companion-before-20260910"
+    },
+    {
+      "buildId": "remove-sanhua-20260911",
+      "sourceCommit": "14338d70a378bfc1c5d963e90719e09a53dcf590",
+      "sha256": "EEF5104C57784EC2EADCCDF4C9B625D3449C111FDE20923742770267D8CAF944",
+      "status": "passed",
+      "deployedAt": "2026-09-11T16:22:33.9597175+08:00",
+      "verifiedAt": "2026-09-11T16:26:55.5160249+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\remove-sanhua-before-20260911"
+    },
+    {
+      "buildId": "withdraw-three-models-20260911",
+      "sourceCommit": "ac743f6cb947dec2904d02984dc3c1b50eacaccd",
+      "sha256": "3EFE1752C5FF61642D3AA8F8AC7DA62D5CAC27C20CFA359631658024B8531332",
+      "status": "passed",
+      "deployedAt": "2026-09-11T16:51:42.4398325+08:00",
+      "verifiedAt": "2026-09-11T16:57:14.9597977+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdraw-three-models-before-20260911"
+    },
+    {
+      "buildId": "avatar-intake-20260911",
+      "sourceCommit": "aca3fcfeeb902c204e497fb2e8ae01c8cfc26ce5",
+      "sha256": "B69E62E7965E825058F3B651C064D70A8226C5DCE2BE9B0E9EF1B34DC9AE2D36",
+      "status": "passed",
+      "deployedAt": "2026-09-11T18:57:41.8095819+08:00",
+      "verifiedAt": "2026-09-11T19:07:33.8221843+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\new-model-batch-before-20260911"
+    },
+    {
+      "buildId": "avatar-material-quality-20260911",
+      "sourceCommit": "d1a08123bb1ba4a1c9a11efbd38b989c7d612acd",
+      "sha256": "74D55AC2759AA152DACF27D516F1615316109B7E0E28E58EDE619578F51E700B",
+      "status": "passed",
+      "deployedAt": "2026-09-11T21:38:04.8603099+08:00",
+      "verifiedAt": "2026-09-11T21:44:46.51857+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\model-quality-before-20260911"
+    },
+    {
+      "buildId": "avatar-cortana-lighting-compaction-20260911",
+      "sourceCommit": "591307c767d5fe5ea1ef1e68d72d9c20e83ffe19",
+      "sha256": "3FAEB6C6358DCE4477D76E8B8CFC86CEB65EDE1C3D8C03569FCEEE0B3EE310C0",
+      "status": "passed-focused-native-check",
+      "deployedAt": "2026-09-11T22:28:58.1072115+08:00",
+      "verifiedAt": "2026-09-11T22:46:20.6024153+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lighting-before-20260911"
+    },
+    {
+      "buildId": "market-fixed-header-20260913",
+      "sourceCommit": "d911ceb8b6438fefa0021cb9ea654066809989a4",
+      "sha256": "9329E96E33E3EA2DBCB5A3EB05463ABB654403A8BD78EDB6DBD27A78463DF3BB",
+      "status": "passed-with-recorded-preexisting-template-diagnostics",
+      "deployedAt": "2026-09-13T13:49:12.3708748+08:00",
+      "verifiedAt": "2026-09-13T13:51:31.0786038+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20260913"
+    },
+    {
+      "buildId": "market-character-images-20260913",
+      "sourceCommit": "6e5f4dd03b1a7569d35fe89f7f52af0417ad8363",
+      "sha256": "9D697D9585976E13BFD6C35CB121A4A778B831E1A865E86E7D5CED6E85EA9DA0",
+      "status": "passed-with-recorded-preexisting-template-diagnostics",
+      "deployedAt": "2026-09-13T15:37:13.8611346+08:00",
+      "verifiedAt": "2026-09-13T15:39:40.3020955+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-images-before-20260913"
+    },
+    {
+      "buildId": "task-charge-20260913",
+      "sourceCommit": "e3d24c7ae3320bc7518c40d9bf71dc76de38ead0",
+      "sha256": "BE9823215C1EE8499F4AE33AF06772365C3D191954AA430EB3F3486826F249C8",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-13T16:00:50.5969992+08:00",
+      "verifiedAt": "2026-09-13T16:04:33.6610622+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-charge-before-20260913"
+    },
+    {
+      "buildId": "gallery-orbit-20260913",
+      "sourceCommit": "64553c63449a38960f35a468b92b3cbc1973c40f",
+      "sha256": "D7EEE9C7DB5D660E673FC4CEFBDF5C51664445EC99CC72B1709DD4A3FED197A5",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-13T16:59:42.323382+08:00",
+      "verifiedAt": "2026-09-13T17:03:05.8276015+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-orbit-before-20260913"
+    },
+    {
+      "buildId": "gallery-type-video-20260913-first-attempt",
+      "sha256": "EC87A65C233B0144CAE9CA106F51F5A2EE2334E3417E2897F6C370E78BFC5925",
+      "status": "rolled-back-console-error",
+      "restoredSha256": "D7EEE9C7DB5D660E673FC4CEFBDF5C51664445EC99CC72B1709DD4A3FED197A5",
+      "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "at": "2026-09-13T17:44:34.1030057+08:00",
+      "reason": "Legacy WorkItem deferred click invoked after destruction; native flow passed but console verification rejected this release.",
+      "failedPair": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-type-video-20260913-failed-callback",
+      "verification": {
+        "routes": [
+          "Home",
+          "Task",
+          "Gallery",
+          "Settings"
+        ],
+        "passed": true
+      },
+      "evidence": "D:\\preacherman\\output\\playwright\\gallery-type-video-20260913\\native-failed-callback.json"
+    },
+    {
+      "buildId": "gallery-type-video-20260913",
+      "sourceCommit": "08f2974be774e03e7d690fcbc7b5ec5dcf267d4f",
+      "sha256": "9B458FF10A58886FDF39F500C3308CABD90A9445C05D816A1A7BEFD4D7DF5D4E",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-13T17:51:42.8571416+08:00",
+      "verifiedAt": "2026-09-13T17:54:27.9684899+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-type-video-before-20260913"
+    },
+    {
+      "buildId": "account-empty-baseline-comparison",
+      "status": "baseline-diagnostic-reproduced-on-previous-release",
+      "temporaryRollback": {
+        "Status": "restored-previous-pair",
+        "FailedSha256": "38357DFFABC6B29439F4FC9BBF2D27120CDDFAE0741C1F969DE075167939DB6A",
+        "RestoredSha256": "9B458FF10A58886FDF39F500C3308CABD90A9445C05D816A1A7BEFD4D7DF5D4E",
+        "SidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+        "FailedPair": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-empty-20260913-failed-callback",
+        "Reason": "Unchanged Gallery runtime emitted _this.initSync after rapid core navigation. Restore baseline to compare before classifying the diagnostic.",
+        "At": "2026-09-13T18:04:34.2454734+08:00"
+      },
+      "evidence": "D:\\preacherman\\output\\playwright\\account-empty-20260913\\baseline-report.json",
+      "conclusion": "The same _this.initSync error occurs on the previous verified executable under identical navigation. Unchanged Gallery runtime; the Account cleanup does not introduce it."
+    },
+    {
+      "buildId": "account-empty-20260913",
+      "sourceCommit": "54d5f66515708c143dbb48a1856f2eea02ba68bd",
+      "sha256": "38357DFFABC6B29439F4FC9BBF2D27120CDDFAE0741C1F969DE075167939DB6A",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-13T18:06:16.4169716+08:00",
+      "verifiedAt": "2026-09-13T18:07:46.8625899+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-empty-before-20260913"
+    },
+    {
+      "buildId": "market-entry-20260913",
+      "sourceCommit": "90477b16e828549fbb8600592996cb753ff1f565",
+      "sha256": "EC018D066197D20C0248D25F3B11C77AB5C3487B7C633207106BC1DE4404D115",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-13T22:18:32.6995564+08:00",
+      "verifiedAt": "2026-09-13T22:25:36.032121+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-entry-before-20260913"
+    },
+    {
+      "buildId": "market-entry-slower-20260913",
+      "sourceCommit": "3e17ac37b106b46dd2ee013e20a98590d8d46bd3",
+      "sha256": "D0BD5FAB1A2150B9CB39C1070E5D905126E7A4DE9558CE7B37C0C7FCC83AC56B",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-13T22:39:37.1748286+08:00",
+      "verifiedAt": "2026-09-13T22:41:33.3811773+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-entry-slower-before-20260913"
+    },
+    {
+      "buildId": "pathfinder-20260913",
+      "sourceCommit": "28cebb8228c467b1596cb22000af17c0825e48a2",
+      "sha256": "6DCA28EE931536EC78C8BEF024A9A1506C6F04531113D5BC3C20D1BBA327B07A",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T00:04:06.1039314+08:00",
+      "verifiedAt": "2026-09-14T00:14:12.9001309+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-before-20260913"
+    },
+    {
+      "buildId": "supplied-motions-20260914",
+      "sourceCommit": "e5d9576ed02dbf3c9b2ef4b5682b1a4576d1e28e",
+      "sha256": "E9741F163CD07836BFDB60E7AFF6F600442492F66463913FC25C722E411A9A77",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T01:00:26.5693755+08:00",
+      "verifiedAt": "2026-09-14T01:04:56.0944026+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\supplied-motions-before-20260914"
+    },
+    {
+      "buildId": "actorcore-talk-20260914",
+      "sourceCommit": "b882bf83f642c8d5b494e0deab1b9679bec5251b",
+      "sha256": "DE04AFF0FD6D4A1CC93DF1F1A32ED03031B865EE233B95D81619439D73783576",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T01:35:21.9876961+08:00",
+      "verifiedAt": "2026-09-14T01:40:24.7694339+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\actorcore-talk-before-20260914"
+    },
+    {
+      "buildId": "pathfinder-happy-20260914",
+      "sourceCommit": "9c9570b24f8fc2a705ab9571112a6185f7f6089b",
+      "sha256": "BDFE84DA43F963590298299DC32C4A19311A40B1916F3403CEE405F74410818C",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T01:56:00.4130196+08:00",
+      "verifiedAt": "2026-09-14T01:58:40.7886248+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\pathfinder-happy-before-20260914"
+    },
+    {
+      "buildId": "gallery-market-interaction-20260914",
+      "sourceCommit": "43fa19da55344a361b14c7f0cd486a8d128141bb",
+      "sha256": "2D59A66E5CE9FC2BDA2E20588111E63F789350EFE2B73200463D62BA30106AA0",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T02:35:26.7194125+08:00",
+      "verifiedAt": "2026-09-14T02:39:05.8120001+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-market-interaction-before-20260914"
+    },
+    {
+      "buildId": "gallery-transition-20260914",
+      "sourceCommit": "79940ecdd65661ae61457a49b3f1a71544df0b96",
+      "sha256": "9A4750A56264F2D4A6B0F45DA29E84F82798A29108CDAC7FA0D053E2AE40F339",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T14:03:45.7492449+08:00",
+      "verifiedAt": "2026-09-14T14:11:03.8919565+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-transition-before-20260914"
+    },
+    {
+      "buildId": "avatar-rig-repair-20260914",
+      "sourceCommit": "7375b6690fcc9a48a2c07ce4cc6647a166b54a46",
+      "sha256": "9CB2105D8D397818EA1BEF98AB96CEF9CA9DF316127E2FA5EDFE607DA76A984C",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T15:41:40.2086497+08:00",
+      "verifiedAt": "2026-09-14T15:52:07.6390558+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\avatar-rig-repair-before-20260914"
+    },
+    {
+      "buildId": "gallery-remove-video-20260914",
+      "sourceCommit": "4260c4433cb2e536633941b9379754c829487876",
+      "sha256": "809A1AFC99F1825D25EDD90EC79826AB231D5C9C88D86F1E580F22F225DAEF39",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-14T22:50:00.6051753+08:00",
+      "verifiedAt": "2026-09-14T23:02:06.8102496+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-video-before-20260914"
+    },
+    {
+      "buildId": "twin-leg-fix-20260915",
+      "sourceCommit": "29bab299998173a81e30747575825bbb8d11daba",
+      "sha256": "76611FAAE91119A5AA30AD6D8FB07BB9AA9C4B786B366BCA9B81CBEB28071023",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T14:42:21.1311491+08:00",
+      "verifiedAt": "2026-09-15T14:51:11.4583572+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\twin-leg-fix-before-20260915"
+    },
+    {
+      "buildId": "gallery-character-details-20260915",
+      "sourceCommit": "999008c986ae816f1f4e17fd9cd3eb7ac8dd6e62",
+      "sha256": "C1B1162A5C70DCA59CD04FC3F38EB3A01F3E4FC2A5A1A43D21B83CBEBC24CC6B",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T15:36:47.5540319+08:00",
+      "verifiedAt": "2026-09-15T15:43:39.0528729+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-details-before-20260915"
+    },
+    {
+      "buildId": "gallery-english-details-20260915",
+      "sourceCommit": "8725d5815478e16a0daa8bc1674b0c95bd585857",
+      "sha256": "CCDEC3AE5BC5164248653BD918A50640BF9A53F88268642079B5EE2969A72350",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T16:04:27.8854535+08:00",
+      "verifiedAt": "2026-09-15T16:07:57.2158268+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-english-details-before-20260915"
+    },
+    {
+      "buildId": "gallery-character-search-20260915",
+      "sourceCommit": "c6e5c738e922b998d6ad236d16e85611ad7aa00d",
+      "sha256": "B913748FE82D5220B6F914D8B019F17CDC1842CB88AD1CE7B3D180C161849AFC",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T16:45:34.9723261+08:00",
+      "verifiedAt": "2026-09-15T16:48:33.113399+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-character-search-before-20260915"
+    },
+    {
+      "buildId": "gallery-search-original-style-20260915",
+      "sourceCommit": "877fbc356481e51e487958b7783ed21675861205",
+      "sha256": "8E7B3FB02CDCCE99FF0E4C02EC1D6E4464A560D9000F5EFCBB8D8854D542AF10",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T17:09:13.7812333+08:00",
+      "verifiedAt": "2026-09-15T17:11:54.9758414+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-search-original-style-before-20260915"
+    },
+    {
+      "buildId": "gallery-remove-work-contact-20260915",
+      "sourceCommit": "52705ce94541c59bb026304eee9fb2b077398cc4",
+      "sha256": "EF557C0589CA2D7061C4BDF0C71F40A884D4350CD9E033240243DBA27386CBE7",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T17:56:31.5272236+08:00",
+      "verifiedAt": "2026-09-15T17:59:33.086517+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-remove-work-contact-before-20260915"
+    },
+    {
+      "buildId": "gallery-detail-avatar-label-20260915",
+      "sourceCommit": "b560a5a6319f2c5c8e5b4232080da07ac5099e43",
+      "sha256": "B368B24F2943711EDFCB39401A4EACF08CB18D5F4DEC3D7FA50E8AEF6BB5BB5A",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T18:15:36.7381989+08:00",
+      "verifiedAt": "2026-09-15T18:19:21.9292298+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-detail-avatar-label-before-20260915"
+    },
+    {
+      "buildId": "market-character-copy-20260915",
+      "sourceCommit": "3170362016e122c3b123a78d35ba726bd53a68f1",
+      "sha256": "EBF49750CF9B516CF701E430F862A0E9E8E45ADB3A8464D7BD97E24D17D0E29B",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T18:43:24.0221595+08:00",
+      "verifiedAt": "2026-09-15T18:46:45.1361598+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-character-copy-before-20260915"
+    },
+    {
+      "buildId": "account-evomap-20260915",
+      "sourceCommit": "0eef9d16acbe048b38231b307e8a1a1b8b128958",
+      "sha256": "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
+      "status": "rolled-back-after-hidden-window-verification",
+      "reason": "Hidden/minimized native launch paused the shared renderer (data-avatar-render-active=false) even though WebView2 document.hidden=false. Restored the verified pair; normal visible shortcut launch passed Home, Task, Gallery and Settings. Corrected only verification launcher; runtime source unchanged.",
+      "rolledBackAt": "2026-09-15T22:07:39.863095+08:00",
+      "failedArtifact": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-hidden-launch-20260915"
+    },
+    {
+      "buildId": "account-evomap-20260915",
+      "sourceCommit": "6886e20482976f06a78738cf319389c1a18cc825",
+      "sha256": "F815F7DBD07D344ED686819C76A317768FB5CB844616C68CA69D0FC00524CD17",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-15T22:09:41.7665534+08:00",
+      "verifiedAt": "2026-09-15T22:12:57.113853+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-evomap-before-20260915"
+    },
+    {
+      "buildId": "task-timeline-dialog-20260915",
+      "sourceCommit": "8a4a80008c1ae1cc0239554ac8b604eef244724d",
+      "sha256": "FF5874BEDC76CB94FFB1C6865BB0D5393372D81033FBCC849497CD2006D0B1B0",
+      "status": "rolled-back-after-task-first-entry-check",
+      "reason": "Native first-entry check found the All navigation link still used the legacy raw router call and could be rejected during the startup transition guard. Restore the verified pair while applying the existing navigation queue to captured navigation links.",
+      "rolledBackAt": "2026-09-15T23:38:55.4242735+08:00",
+      "failedArtifact": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-first-entry-20260915"
+    },
+    {
+      "buildId": "task-timeline-dialog-20260915",
+      "sourceCommit": "6668e979cdf849e3e9da03618a41926f9799275b",
+      "sha256": "C06B5AB507E2F69D4B1510F7CC46EF320284E7CCEFE30B9E733838283128D9BE",
+      "status": "rolled-back-after-query-route-check",
+      "reason": "Native timeline navigation reached saved task halo but the query-bearing route was rejected by the transition guard. Queue ownership compared the complete query URL against only the pathname. Restore the verified pair while correcting queued route identity.",
+      "rolledBackAt": "2026-09-15T23:56:19.9503095+08:00",
+      "failedArtifact": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-query-route-20260915"
+    },
+    {
+      "buildId": "task-timeline-dialog-20260915",
+      "sourceCommit": "42583e60cb77955cab95c6a2c430edec61cd813a",
+      "sha256": "08116D516F57D87DAD27EE5441B29989E62C4F9EE41E9D7616422D650CE02DCE",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T00:03:47.6635312+08:00",
+      "verifiedAt": "2026-09-16T00:08:23.0534112+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-timeline-dialog-before-20260915"
+    },
+    {
+      "buildId": "market-details-20260916",
+      "sourceCommit": "1aa80c1c5d1eded871da26c5587aa6b2ae8aa7b7",
+      "sha256": "E173FF9D9E2E308924D613BC46A99E1510418575D2A3D13C57B1E18BC5BDA784",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T14:54:05.5913739+08:00",
+      "verifiedAt": "2026-09-16T15:01:57.3324906+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-before-20260916"
+    },
+    {
+      "buildId": "market-frost-20260916",
+      "sourceCommit": "0dddf0a37640504e8c3b0006a14c4b60db5c588a",
+      "sha256": "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
+      "status": "rolled-back-for-verification-investigation",
+      "at": "2026-09-16T15:35:07.695859+08:00",
+      "reason": "Dark-mode all 14 Market characters and core routes passed. Automated in-place native reload for changing appearance timed out waiting for Home visibility; candidate and matching sidecar preserved. Restored the verified pair while investigating. No source architecture change was reverted.",
+      "restoredSha256": "E173FF9D9E2E308924D613BC46A99E1510418575D2A3D13C57B1E18BC5BDA784",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "evidence": "D:\\preacherman\\output\\playwright\\market-frost-20260916\\native-reload-investigation-report.json",
+      "baselineComparison": "D:\\preacherman\\output\\playwright\\market-frost-20260916\\reload-comparison.json"
+    },
+    {
+      "buildId": "market-frost-20260916",
+      "sourceCommit": "0dddf0a37640504e8c3b0006a14c4b60db5c588a",
+      "sha256": "A238208DACCE96F82DF1518AD018858E184E0DDDB7185DFFAE6825D25C2FD407",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T15:35:53.677288+08:00",
+      "verifiedAt": "2026-09-16T15:44:12.6164618+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-frost-before-20260916"
+    },
+    {
+      "buildId": "market-details-motion-20260916",
+      "sha256": "73D1CD9BE16D6D643735AD5F9C84639818547882F2655461B7411BC165B41B26",
+      "sourceCommit": "574fc8062e930f87340a9143b8f011b8e10ca1cb",
+      "status": "rolled-back-for-investigation",
+      "reason": "Native core navigation: Gallery rail did not appear after Details interruption tests; all 14 dark Market products passed.",
+      "rolledBackAt": "2026-09-16T16:25:17.2060417+08:00",
+      "evidence": "D:/preacherman/output/playwright/market-details-motion-20260916/native-first-attempt-report.json"
+    },
+    {
+      "buildId": "market-details-motion-20260916",
+      "sourceCommit": "574fc8062e930f87340a9143b8f011b8e10ca1cb",
+      "sha256": "73D1CD9BE16D6D643735AD5F9C84639818547882F2655461B7411BC165B41B26",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T16:27:05.0055591+08:00",
+      "verifiedAt": "2026-09-16T16:35:51.7176789+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-motion-before-20260916"
+    },
+    {
+      "buildId": "market-details-return-20260916",
+      "sourceCommit": "b142ecf9bf723d7c2bc16e191cb4e4707dbdb041",
+      "sha256": "A9FE16EB1289C49E11293CE2E2B1BE1695EC432A6C97B4F51F1AAD5D6CC46ACF",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T16:58:35.7630331+08:00",
+      "verifiedAt": "2026-09-16T17:05:05.7300339+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-details-return-before-20260916"
+    },
+    {
+      "buildId": "account-live-lens-20260916",
+      "sourceCommit": "f86ea5ddf8334f08f56f438a3fc4f14f7e6dd65a",
+      "sha256": "F3C56316E9B6C0A0785064932E9EEC2A5A627A65FE1A2DBD16E2EFEDB2D374E7",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-16T17:33:54.8756373+08:00",
+      "verifiedAt": "2026-09-16T17:36:58.5368542+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-live-lens-before-20260916"
+    },
+    {
+      "buildId": "desktop-github-auth-20260916",
+      "sourceCommit": "787d6cfd1e1d3e98016895d149ff6c9ace336f7c",
+      "sha256": "26EFE66F4E0E488892F30E3BD13392CFB034760B5AD9E1DD355695D0BBDE9A07",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T00:32:20.6759373+08:00",
+      "verifiedAt": "2026-09-17T00:44:20.0866941+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-github-auth-before-20260916"
+    },
+    {
+      "buildId": "account-member-20260917",
+      "sourceCommit": "158ecc013c45388b91eeb3de76771009d9512634",
+      "sha256": "0D7B6349573918EA2EB75BA6E2DAF57F4F1E514E0CA754585B9998FAD35B6ABB",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T02:44:30.178105+08:00",
+      "verifiedAt": "2026-09-17T02:47:44.2347536+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-member-before-20260917"
+    },
+    {
+      "buildId": "account-dock-refine-20260917",
+      "sourceCommit": "f1eb9d2061102c381981f0ed98e86838fb30f99c",
+      "sha256": "3CEC7A6B7A06FD11887694703C9DF488E724363FE5D891D8DCA602FADF5F039F",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T03:10:58.296541+08:00",
+      "verifiedAt": "2026-09-17T03:15:55.6558124+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-dock-refine-before-20260917"
+    },
+    {
+      "buildId": "gallery-sidebar-spacing-20260917",
+      "sourceCommit": "c83575758600f45e5039ab8105967e51b40b842a",
+      "sha256": "506B60543892BBE026054F605B9AEA0664F704EF3FB04FDD89967081D3618312",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T03:30:12.0924947+08:00",
+      "verifiedAt": "2026-09-17T03:32:56.9532039+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-sidebar-spacing-before-20260917"
+    },
+    {
+      "buildId": "desktop-account-sync-20260917",
+      "sourceCommit": "cdc6df3150b10e25420f636e3feb4174de54131b",
+      "sha256": "1325E4EA889F700E74D6AA4F12FFE8A26D7CA3EB9107B3D89E13BB7DA81195D5",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T05:59:41.5793636+08:00",
+      "verifiedAt": "2026-09-17T06:01:40.1852303+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-account-sync-before-20260917"
+    },
+    {
+      "buildId": "profile-cleanup-20260917",
+      "sourceCommit": "ebc3096314b0ecddb1a940463ac237a2c8f56511",
+      "sha256": "1E21537FCE7B5F92EF7A37201DD44CDF4D6D155D1D79E96178A768D180D77CB8",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T06:23:40.2613329+08:00",
+      "verifiedAt": "2026-09-17T06:26:36.7025599+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\profile-cleanup-before-20260917"
+    },
+    {
+      "buildId": "market-profile-links-20260917",
+      "sourceCommit": "a3adaf36254390c22858904e52932ce6d53f876a",
+      "sha256": "0DEEC14A7125AD23824C479D301BB23295E20E22EF3EB9CA3C93DA342C7CAFCE",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T14:41:55.8395012+08:00",
+      "verifiedAt": "2026-09-17T14:45:05.593646+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-profile-links-before-20260917"
+    },
+    {
+      "buildId": "account-providers-20260917",
+      "sourceCommit": "58a988d1ae28196550c4601aa01821b042612da7",
+      "sha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-17T16:28:19.913991+08:00",
+      "verifiedAt": "2026-09-17T16:30:52.6451357+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-providers-before-20260917"
+    },
+    {
+      "buildId": "audio-dock-20260920-attempt1",
+      "sourceCommit": "9305e0decae434fff6d1d4e1c9a065028eba037e",
+      "sha256": "BDEB02F70C9307890FADA79229A0077D4FB9E3AE280FBB3C0917C86677DF6E89",
+      "status": "rolled-back",
+      "reason": "Visual check: waveform lacked contrast over pale moving Gallery cards; add a thin glyph contour without a control background.",
+      "rolledBackAt": "2026-09-20T17:45:00.1714518+08:00",
+      "restoredSha256": "F3D132866F65E8C8A9B1C04AF1B828FE2C571C940025CFEC5669BE630AAA9B85"
+    },
+    {
+      "buildId": "audio-dock-20260920",
+      "sourceCommit": "e38028710b336ef9965d2f4d97c69c599da9dce8",
+      "sha256": "AE4FCE297569E63BB7557BCEDBC111439A19F4FB57B9AC900B84A27BAC5FFC45",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-20T17:51:46.0411197+08:00",
+      "verifiedAt": "2026-09-20T17:54:42.7573139+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\audio-dock-before-20260920"
+    },
+    {
+      "buildId": "platform-ring-20260920",
+      "sourceCommit": "44838bcd6ee016e807d6e4571f906495dc664ad7",
+      "sha256": "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-20T18:18:15.3839319+08:00",
+      "verifiedAt": "2026-09-20T18:20:52.8972895+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920"
+    },
+    {
+      "buildId": "mac-sync-20260930-attempt1",
+      "sourceCommit": "6623d28a3e1cc653c116db23f4f5e3cdc01ee7fc",
+      "sha256": "6D505A31EC43B7E081E38EE31691F0DDE5B2C0943CF379D7EB6822854DA1A17C",
+      "status": "rolled-back",
+      "reason": "Native pages rendered, but new initSync exception and remote auth transport failure need baseline comparison before final delivery.",
+      "rolledBackAt": "2026-09-30T23:25:57.3237635+08:00",
+      "restoredSha256": "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2"
+    },
+    {
+      "buildId": "mac-sync-20260930",
+      "sourceCommit": "2cb527eab9ff990ea361bf3329f84c7bfc2805b1",
+      "sha256": "B29D722BF2B53E1922DBE87157F5FA02A2F2A06CA190F98569925C631D99CEA2",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-30T23:43:57.5628888+08:00",
+      "verifiedAt": "2026-10-01T00:02:18.8537234+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930"
+    },
+    {
+      "buildId": "market-header-20261001-attempt1",
+      "sourceCommit": "03e75c0f5704fe8656c17683f19f035c35bfa42e",
+      "sha256": "695D58880A216480D3AB82CEB2A55A01F87BF96E9CFB4D7F7CA5E51C88BCB7A7",
+      "status": "rolled-back",
+      "reason": "Native core-route verification reproduced a Gallery async initSync exception; restored verified pair while repairing the lifecycle race. Market header visual and interactions passed.",
+      "rolledBackAt": "2026-10-01T03:16:40.2601181+08:00",
+      "restoredSha256": "B29D722BF2B53E1922DBE87157F5FA02A2F2A06CA190F98569925C631D99CEA2"
+    },
+    {
+      "buildId": "market-header-20261001",
+      "sourceCommit": "a119d354db9b647a14b54827abc4135695ed53c8",
+      "sha256": "E63065E8B62E18843E0A411C92E555D77A0E85421B2642DD1705301C0357BD88",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-01T03:23:28.1330355+08:00",
+      "verifiedAt": "2026-10-01T03:26:09.3709674+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20261001"
+    }
+  ],
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-header-before-20261001/desktop-build-manifest.json",
+  "rollbackHistory": [
+    {
+      "at": "2026-09-09T11:23:27.161Z",
+      "sourceCommit": "6b88841f4434e2365f9491d08cad7dc659c09def",
+      "failedSha256": "3822F1BA303E5388BBCD564157FDAE921DE75171068C6F8C10462DED464CE10C",
+      "restoredSha256": "BBC4C419504794198370D3C84D293EFF8CBE5DD5DB97CF9A2FFB6D485ABC8A04",
+      "restoredSidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+      "reason": "Native minimize verification: WebView2 leaves document.hidden false, so the browser-only visibility gate did not suspend rendering. Restored verified pair while adding an explicit native-window activity signal.",
+      "evidence": "output/playwright/avatar-performance-native-visibility-first-attempt.json",
+      "restoredNativeSmoke": "output/playwright/avatar-performance-rollback-smoke.json",
+      "restoredNativeSmokePassed": true
+    }
+  ]
 }
