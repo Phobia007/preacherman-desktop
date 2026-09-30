@@ -18,6 +18,9 @@
     "sync:avatar": "node scripts/sync-local-avatar.mjs",
     "build:windows-service": "node scripts/build-windows-sidecar.mjs",
     "build:windows": "npm run build:windows-service && tauri build --bundles nsis",
+    "build:macos-service": "node scripts/build-macos-sidecar.mjs",
+    "build:macos": "npm run build:macos-service && tauri build --bundles app",
+    "verify:macos": "node scripts/verify-macos-bundle.mjs",
     "tauri": "tauri",
     "tauri:dev": "tauri dev"
   },

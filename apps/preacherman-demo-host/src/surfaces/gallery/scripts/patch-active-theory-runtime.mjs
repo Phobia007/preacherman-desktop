@@ -28,6 +28,18 @@ function replaceExact(source, before, after, expectedCount, label) {
   return source.split(before).join(after);
 }
 
+// GPU tier detection can classify desktop WebViews as low-end and force 30 FPS.
+// Let requestAnimationFrame follow the display cadence on every desktop platform.
+// Keep callback-specific polling/effect timing and hidden-window suspension intact.
+const cappedFramePolicy = "_this.capFPS=_=>GPU.lt(2)||GPU.mobileLT(2)?30.001:GPU.lt(3)?Render.REFRESH_RATE>60?60.001:null:Device.mobile&&GPU.mobileLT(3)&&Render.REFRESH_RATE>100?100.001:null";
+const uncappedFramePolicy = "_this.capFPS=_=>null";
+for (const relativePath of ["assets/js/app.1780406240914.js", "gallery/assets/js/app.1780406240914.js"]) {
+  const runtimePath = path.join(runtimeRoot, relativePath);
+  const runtime = fs.readFileSync(runtimePath, "utf8");
+  const updated = replaceOnce(runtime, cappedFramePolicy, uncappedFramePolicy, "remove GPU-tier rendering FPS caps");
+  if (updated !== runtime) fs.writeFileSync(runtimePath, updated);
+}
+
 const scenePath = path.join(
   runtimeRoot,
   "gallery",

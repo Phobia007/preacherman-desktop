@@ -13,8 +13,9 @@
       {
         "label": "main",
         "title": "Preacherman Desktop Demo",
-        "width": 1800,
-        "height": 1000,
+        "width": 1280,
+        "height": 800,
+        "maximized": true,
         "center": true,
         "resizable": true,
         "decorations": false,

@@ -7,6 +7,7 @@ apps/*/src-tauri/target/
 apps/*/src-tauri/target-*/
 apps/*/src-tauri/binaries/
 apps/*/.windows-service-build/
+apps/*/.macos-service-build/
 apps/preacherman-demo-host/public/local-avatar/
 .playwright-cli/
 .runtime-tmp/

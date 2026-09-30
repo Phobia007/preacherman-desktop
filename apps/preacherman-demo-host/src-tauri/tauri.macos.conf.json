@@ -1,0 +1,12 @@
+{
+  "bundle": {
+    "targets": ["app"],
+    "externalBin": ["binaries/preacherman-service"],
+    "macOS": {
+      "minimumSystemVersion": "12.0",
+      "signingIdentity": "-",
+      "entitlements": "Entitlements.macos.plist",
+      "infoPlist": "Info.macos.plist"
+    }
+  }
+}

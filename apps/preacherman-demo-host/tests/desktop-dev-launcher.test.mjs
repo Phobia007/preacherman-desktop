@@ -20,5 +20,5 @@ test("desktop development launcher uses the canonical workspace with isolated ho
   assert.match(runtime, /VITE_PREACHERMAN_SERVICE_PORT: servicePort/);
   assert.equal(JSON.parse(config).build.devUrl, "http://127.0.0.1:1430");
   assert.equal(JSON.parse(manifest).scripts["dev:desktop"], "node scripts/desktop-dev.mjs");
-  assert.match(rust, /cfg\(all\(target_os = "windows", not\(debug_assertions\)\)\)/);
+  assert.match(rust, /cfg\(all\(any\(target_os = "windows", target_os = "macos"\), not\(debug_assertions\)\)\)/);
 });

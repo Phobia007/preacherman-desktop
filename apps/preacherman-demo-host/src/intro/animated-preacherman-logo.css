@@ -10,6 +10,8 @@
 }
 
 .demo-intro-splash__stage {
+  --demo-app-width: calc(100vw / var(--demo-intro-scale, 1));
+  --demo-app-height: calc(100vh / var(--demo-intro-scale, 1));
   position: absolute;
   top: 50%;
   left: 50%;

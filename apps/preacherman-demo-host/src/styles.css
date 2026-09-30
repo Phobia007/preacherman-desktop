@@ -363,6 +363,9 @@ html[data-appearance="dark"] #root {
 }
 
 .demo-app-viewport > .demo-app-shell {
+  /* Preserve authored element proportions while filling any screen aspect. */
+  --demo-app-width: calc(100vw / var(--demo-app-scale, 1));
+  --demo-app-height: calc(100vh / var(--demo-app-scale, 1));
   position: absolute;
   top: 50%;
   left: 50%;

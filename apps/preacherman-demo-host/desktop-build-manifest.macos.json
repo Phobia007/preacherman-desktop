@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "platform": "macOS",
+  "architecture": "arm64",
+  "installedAt": "2026-09-22T10:29:02.249Z",
+  "sourceCommit": "aeab7a8bb81f5c8abb3753170f10dd7bc61b7240",
+  "sourceTask": "01a0c876-15b2-7663-ae8e-e8fea087fad6",
+  "sourceChanges": "Mac build and lifecycle support, shared responsive layout, Gallery GPU-tier FPS caps removed; includes local modifications to sourceCommit.",
+  "installedApp": "/Users/zari/Applications/Preacherman Desktop Demo.app",
+  "desktopEntry": "/Users/zari/Desktop/Preacherman Desktop Demo.app",
+  "artifacts": [
+    {
+      "name": "preacherman-demo-host",
+      "source": {
+        "path": "/Users/zari/Documents/ChatGPT/desktop upgrade/apps/preacherman-demo-host/src-tauri/target/release/bundle/macos/Preacherman Desktop Demo.app/Contents/MacOS/preacherman-demo-host",
+        "sizeBytes": 678894096,
+        "sha256": "fe141a3769203f33f93c717229654c707a4dff4d8431d18348e73237cf9ff215",
+        "modifiedAt": "2026-09-22T10:26:19.902Z"
+      },
+      "installed": {
+        "path": "/Users/zari/Applications/Preacherman Desktop Demo.app/Contents/MacOS/preacherman-demo-host",
+        "sizeBytes": 678894096,
+        "sha256": "fe141a3769203f33f93c717229654c707a4dff4d8431d18348e73237cf9ff215",
+        "modifiedAt": "2026-09-22T10:26:19.902Z"
+      },
+      "hashMatches": true
+    },
+    {
+      "name": "preacherman-service",
+      "source": {
+        "path": "/Users/zari/Documents/ChatGPT/desktop upgrade/apps/preacherman-demo-host/src-tauri/target/release/bundle/macos/Preacherman Desktop Demo.app/Contents/MacOS/preacherman-service",
+        "sizeBytes": 119873392,
+        "sha256": "b2663ab6df5e030608a53bafcacbaaf5c333c5f06a74cc8784469f742aba684e",
+        "modifiedAt": "2026-09-22T10:26:17.670Z"
+      },
+      "installed": {
+        "path": "/Users/zari/Applications/Preacherman Desktop Demo.app/Contents/MacOS/preacherman-service",
+        "sizeBytes": 119873392,
+        "sha256": "b2663ab6df5e030608a53bafcacbaaf5c333c5f06a74cc8784469f742aba684e",
+        "modifiedAt": "2026-09-22T10:26:17.670Z"
+      },
+      "hashMatches": true
+    }
+  ],
+  "signing": "ad-hoc; codesign --verify --deep --strict passed; not notarized",
+  "verification": {
+    "typecheck": "passed",
+    "frontendProductionBuild": "passed",
+    "macosReleaseBuild": "passed",
+    "standaloneSidecarHealth": "passed; AI and voice providers unconfigured",
+    "packagingRegressionTests": "2 passed",
+    "fullTestRun": {
+      "total": 691,
+      "passed": 657,
+      "failed": 33,
+      "skipped": 1,
+      "note": "One Windows-only launcher assertion updated for macOS and separately verified. Remaining failures recorded in output/macos-deployment/tests-initial.log."
+    },
+    "nativeColdLaunch": "passed after FPS update: desktop shortcut, Home and model render",
+    "nativeNavigation": "FPS build: Home, Task, Gallery, Market (ledger route), Settings visually verified; Account verified on prior responsive build.",
+    "serviceExitCleanup": "not yet proven with healthy bundled service: signed service crashed on launch",
+    "responsiveWindow": "passed: maximized and manually narrowed window, model keeps aspect ratio, edge controls visible",
+    "bundledServiceHealth": "failed: Tauri hardened signing omitted Node/V8 JIT entitlement; fix prepared, awaiting explicit user approval",
+    "additionalChecks": "6 theme/packaging tests passed; TypeScript passed",
+    "nativeThemeToggle": "not available: upstream Appearance UI is a placeholder",
+    "nativeConsole": "not inspected",
+    "windowsNative": "not run on this Mac",
+    "approval": "first launch approved by user; JIT entitlement awaiting user approval",
+    "frameRatePolicy": "Both packaged Gallery runtime policies now return null (uncapped); all other runtime bytes equal origin/main.",
+    "frameRateMeasurement": "Native FPS has not been instrumented; no claimed measured FPS improvement.",
+    "fpsChecks": "TypeScript, both runtime JS syntax checks and 6 existing theme/packaging tests passed.",
+    "frameRateNativeSmoke": "Gallery authored cards and character render in updated installed native app; navigation opens and closes successfully."
+  },
+  "limitations": [
+    "Provider credentials not migrated",
+    "External DeepSeek Harness and voice/motion runtimes not migrated",
+    "Cloud sign-in not exercised",
+    "Windows deployment unchanged"
+  ],
+  "rollback": {
+    "path": "output/macos-deployment/backups/20260922-before-fps-unlock",
+    "note": "Prior responsive UI and matching service; shares the existing signed-service defect."
+  },
+  "status": "FPS-unlocked UI installed; bundled local service JIT fix still pending approval",
+  "effectiveBuildOverride": {
+    "bundle": {
+      "macOS": {
+        "entitlements": null
+      }
+    }
+  }
+}
