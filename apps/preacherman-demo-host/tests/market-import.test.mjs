@@ -104,11 +104,16 @@ test("Market categories stay with the host header and yield to details and the p
   const css = await text(join(root, "src/surfaces/market/market-surface.css"));
   const row = surface.match(/<ul className="market-surface__categories"[\s\S]*?<\/ul>/)?.[0];
   assert.ok(row);
-  assert.deepEqual([...row.matchAll(/<li(?: [^>]*)?>(.*?)<\/li>/g)].map(match => match[1]), ["Discover", "Browse", "Search", "Sell", "Inventory"]);
+  const { marketCategories } = await import("../src/surfaces/market/marketEntrance.ts");
+  assert.deepEqual(marketCategories, ["Discover", "Browse", "Search", "Sell", "Inventory"]);
+  assert.match(row, /marketCategories\.map/);
+  assert.match(row, /<button type="button" aria-pressed=\{category.active === label\}/);
   assert.match(row, /hidden=\{page !== "intro" \|\| entrance === "logo" \|\| lensActive\}/);
   assert.match(css, /\.market-surface__categories \{[^}]*position: absolute;[^}]*top: var\(--market-content-top\)/);
   assert.match(css, /\.market-surface__categories\[hidden\] \{ display: none; \}/);
-  assert.match(css, /font: 500 16px\/1\.4 "Market Brilliant Cut"/);
+  assert.match(css, /font: 400 16px\/1\.4 "Market Brilliant Cut"/);
+  assert.match(css, /BrilliantCutPro-Regular\.woff2/);
+  assert.match(css, /button:focus-visible[^}]+--demo-theme-market-focus/);
   const fonts = await text(join(root, "src/surfaces/market/market-details.css"));
   assert.match(fonts, /font-family: "Market Brilliant Cut"/);
   assert.match(fonts, /BrilliantCutPro-Medium\.woff2/);

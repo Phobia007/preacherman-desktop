@@ -26,6 +26,31 @@ for(const appearance of ['light','dark']) test(`Details reverses both visible co
  recorded.length=0;await animateMarketPanels(doc,true,'out').finished;assert.equal(recorded.length,0);
 });
 import { revealMarketDetails, MARKET_MODEL_REVEAL_MS, MARKET_DETAILS_CONTENT_MS } from '../src/surfaces/market/marketEntrance.ts';
+import { marketCategories, marketCategoryReducer, initialMarketCategory, animateMarketFrost } from '../src/surfaces/market/marketEntrance.ts';
+for (const appearance of ['light', 'dark']) test(`Market category buttons sequence exit before entry and reject repeated transitions in ${appearance}`, () => {
+ let state = initialMarketCategory;
+ for (const category of [...marketCategories.slice(1), 'Discover']) {
+   const previous = state.active;
+   state = marketCategoryReducer(state, { type: 'select', category });
+   assert.equal(state.active, previous); assert.equal(state.phase, 'exiting');
+   assert.equal(marketCategoryReducer(state, { type: 'select', category: 'Sell' }), state, 'Rapid clicks do not replace an active transition');
+   assert.equal(marketCategoryReducer(state, { type: 'entered' }), state, 'Stale completion cannot skip exit');
+   state = marketCategoryReducer(state, { type: 'exited' });
+   assert.equal(state.active, category); assert.equal(state.phase, 'entering');
+   state = marketCategoryReducer(state, { type: 'entered' });
+   assert.equal(state.phase, 'idle'); assert.equal(state.next, null);
+   assert.equal(marketCategoryReducer(state, { type: 'select', category }), state);
+ }
+});
+for (const appearance of ['light', 'dark']) test(`Market frost separates at the center and cancels both panes in ${appearance}`, async () => {
+ const recorded = [];
+ const layer = { ownerDocument: { documentElement: { dataset: { appearance } }, defaultView: { innerWidth: 1800 }, timeline: { currentTime: 42 } }, querySelectorAll: () => [0, 899.999].map(left => ({ getBoundingClientRect: () => ({left}), animate(frames, options) { const animation = {frames, options, finished:Promise.resolve(),cancel(){this.cancelled=true;}};recorded.push(animation);return animation; } })) };
+ const motion = animateMarketFrost(layer, false, 'out');
+ assert.match(recorded[0].frames[1].transform, /-100%/); assert.match(recorded[1].frames[1].transform, /\(100%/);
+ assert.ok(recorded.every(a => a.startTime === 42 && a.options.duration === MARKET_PANELS_MS));
+ await motion.finished; motion.cancel(); assert.ok(recorded.every(a => a.cancelled));
+ recorded.length=0; await animateMarketFrost(layer,true).finished; assert.equal(recorded.length,0);
+});
 for (const appearance of ['light', 'dark']) for (const part of ['model', 'content']) test(`Details ${part} fade is reversible and cancellable in ${appearance}`, async () => {
  const frames = new Map(), animations = [];
  let serial = 0;

@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Market Brilliant Cut";
+  src: url("/market-love/assets/fonts/BrilliantCutPro-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .market-surface {
   --market-content-top: 100px;
   position: absolute;
@@ -5,6 +13,36 @@
   background: transparent;
   color: var(--demo-theme-market-text);
 }
+
+.market-surface__frost {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.market-surface__frost-pane {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sample beyond each clipped half so the blur stays continuous at the seam. */
+.market-surface__frost-pane::before {
+  content: "";
+  position: absolute;
+  inset: -36px;
+  background: var(--demo-theme-market-details-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.market-surface[data-entrance="logo"] .market-surface__frost,
+.market-surface[data-page="details"] .market-surface__frost { visibility: hidden; }
+
+.market-surface__category-page { position: absolute; inset: 0; pointer-events: none; }
+.market-surface__frame[hidden] { display: none; }
 
 .market-surface__frame {
   position: absolute;
@@ -52,13 +90,31 @@
   padding: 0;
   list-style: none;
   color: var(--demo-theme-market-text);
-  font: 500 16px/1.4 "Market Brilliant Cut", sans-serif;
+  font: 400 16px/1.4 "Market Brilliant Cut", sans-serif;
   text-shadow: 0 1px 2px var(--demo-theme-market-ink-shadow), 0 2px 5px var(--demo-theme-market-ink-shadow);
   white-space: nowrap;
   pointer-events: none;
 }
 
 .market-surface__categories[hidden] { display: none; }
+
+.market-surface__categories button {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--demo-theme-market-muted);
+  font: inherit;
+  text-shadow: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 160ms ease;
+}
+
+.market-surface__categories button:is([aria-pressed="true"], :hover) { color: var(--demo-theme-market-text); }
+.market-surface__categories button[aria-pressed="true"] { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
+.market-surface__categories button:focus-visible { outline: 2px solid var(--demo-theme-market-focus); outline-offset: 4px; }
+.market-surface__categories button:disabled { cursor: default; }
 
 .market-surface__inventory {
   padding-inline-start: clamp(16px, 2vw, 36px);

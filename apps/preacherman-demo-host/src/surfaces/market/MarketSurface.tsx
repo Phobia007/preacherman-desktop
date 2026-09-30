@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { MarketProfile } from "./MarketProfile";
-import { animateMarketPanels, MARKET_LOGO_MS, type MarketDetailsPhase } from "./marketEntrance";
+import { animateMarketPage, animateMarketFrost, marketCategories, marketCategoryReducer, initialMarketCategory, MARKET_LOGO_MS, type MarketDetailsPhase } from "./marketEntrance";
 import "./market-surface.css";
 import { isAvatarModelId, createAvatarAssetUrls, prefetchAvatarModel } from "@preacherman/avatar-renderer";
 import type { ModelId } from "../../preferences";
@@ -13,6 +13,10 @@ import { MarketDetails, captureMarketDetails } from "./MarketDetails";
 export function MarketSurface() {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const surfaceRef = useRef<HTMLElement>(null);
+  const frostRef = useRef<HTMLDivElement>(null);
+  const [category, dispatchCategory] = useReducer(marketCategoryReducer, initialMarketCategory);
+  const categoryRef = useRef(category);
+  categoryRef.current = category;
   const entranceStarted = useRef(false);
   const [logoReady, setLogoReady] = useState(false);
   const [entrance, setEntrance] = useState<"logo" | "panels" | "complete">("logo");
@@ -51,10 +55,31 @@ export function MarketSurface() {
     if (!detailsRef.current) return Promise.reject(new Error("Details are not ready."));
     return captureMarketDetails(detailsRef.current, signal);
   }, []);
+  const captureEmptyCategory = useCallback(async (signal: AbortSignal) => {
+    if (signal.aborted) throw new DOMException("Capture cancelled", "AbortError");
+    const canvas = document.createElement("canvas");
+    canvas.width = surfaceRef.current!.clientWidth;
+    canvas.height = surfaceRef.current!.clientHeight;
+    return canvas;
+  }, []);
+
+  useLayoutEffect(() => {
+    if (category.phase === "idle" || !frostRef.current || !frameRef.current?.contentDocument) return;
+    let disposed = false;
+    const direction = category.phase === "exiting" ? "out" : "in";
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const motion = category.active === "Discover"
+      ? animateMarketPage(frameRef.current.contentDocument, frostRef.current, reduced, direction)
+      : animateMarketFrost(frostRef.current, reduced, direction);
+    void motion.finished.then(() => {
+      if (!disposed) dispatchCategory({ type: category.phase === "exiting" ? "exited" : "entered" });
+    }).catch(() => { /* Leaving Market cancels the pending category transition. */ });
+    return () => { disposed = true; motion.cancel(); };
+  }, [category]);
 
   useEffect(() => {
-    frameRef.current?.toggleAttribute("inert", Boolean(selectedModel) || profileOpen || lensActive);
-  }, [selectedModel, profileOpen, lensActive, attempt]);
+    frameRef.current?.toggleAttribute("inert", Boolean(selectedModel) || profileOpen || lensActive || category.active !== "Discover" || category.phase !== "idle");
+  }, [selectedModel, profileOpen, lensActive, attempt, category]);
 
   useEffect(() => {
     if (!selectedModel) return;
@@ -62,7 +87,7 @@ export function MarketSurface() {
     if (!doc) return;
     let disposed = false;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const motion = animateMarketPanels(doc, reduced, "out");
+    const motion = animateMarketPage(doc, frostRef.current!, reduced, "out");
     void motion.finished.then(() => {
       if (disposed) return;
       setDetailsPhase(reduced ? "model" : "frost");
@@ -76,7 +101,7 @@ export function MarketSurface() {
     if (!doc) return;
     let disposed = false;
     // The exit animation still holds the columns offscreen until this return finishes.
-    const motion = animateMarketPanels(doc, window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const motion = animateMarketPage(doc, frostRef.current!, window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     void motion.finished.then(() => { if (!disposed) finishDetailsClose(); })
       .catch(() => { /* Route changes cancel the return without restoring stale focus. */ });
     return () => { disposed = true; motion.cancel(); };
@@ -111,11 +136,11 @@ export function MarketSurface() {
     const doc = frameRef.current?.contentDocument;
     if (!doc) return;
     let disposed = false;
-    let motion: ReturnType<typeof animateMarketPanels> | undefined;
+    let motion: ReturnType<typeof animateMarketPage> | undefined;
     // Layout is ready at the embed handshake. Images and fonts load independently
     // while native scrolling remains available throughout the panel animation.
     entranceStarted.current = true;
-    motion = animateMarketPanels(doc, window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    motion = animateMarketPage(doc, frostRef.current!, window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     setEntrance("panels");
     void motion.finished.then(() => {
       if (!disposed) { setEntrance("complete"); motion?.cancel(); }
@@ -134,6 +159,7 @@ export function MarketSurface() {
         setLensActive(false);
       }
       if (event.data?.type === "preacherman.market.details" || event.data?.type === "preacherman.market.prefetch") {
+        if (categoryRef.current.active !== "Discover" || categoryRef.current.phase !== "idle") return;
         const modelId = event.data.modelId;
         if (!isAvatarModelId(modelId) || !marketModelIds.includes(modelId)) return;
         if (event.data.type === "preacherman.market.prefetch") {
@@ -163,26 +189,33 @@ export function MarketSurface() {
   }, [attempt, closeDetails]);
 
   return (
-    <section ref={surfaceRef} aria-label="Market" className="market-surface" data-entrance={entrance} data-logo-ready={logoReady} data-status={status} data-page={page} data-details-phase={detailsPhase} data-lens-active={lensActive}
+    <section ref={surfaceRef} aria-label="Market" className="market-surface" data-entrance={entrance} data-logo-ready={logoReady} data-status={status} data-page={page} data-details-phase={detailsPhase} data-lens-active={lensActive} data-category={category.active} data-category-phase={category.phase}
       onAnimationEnd={event => {
         if (event.target !== event.currentTarget) return;
         if (event.animationName === "market-details-frost-in") setDetailsPhase(current => current === "frost" ? "model" : current);
         if (event.animationName === "market-details-frost-out") setDetailsPhase(current => current === "unfrost" ? "returning" : current);
       }}>
-      <MarketProfile key={`profile-${selectedModel ?? "intro"}`} disabled={entrance !== "complete" || Boolean(selectedModel && detailsPhase !== "complete")} open={profileOpen} onOpenChange={setProfileOpen}
-        frameRef={frameRef} captureSource={selectedModel ? captureDetails : undefined} onLensActiveChange={setLensActive} />
+      <div className="market-surface__frost" ref={frostRef} aria-hidden="true">
+        <div className="market-surface__frost-pane" />
+        <div className="market-surface__frost-pane" />
+      </div>
+      <MarketProfile key={`profile-${selectedModel ?? category.active}`} disabled={entrance !== "complete" || category.phase !== "idle" || Boolean(selectedModel && detailsPhase !== "complete")} open={profileOpen} onOpenChange={setProfileOpen}
+        frameRef={frameRef} captureSource={selectedModel ? captureDetails : category.active !== "Discover" ? captureEmptyCategory : undefined} onLensActiveChange={setLensActive} />
       <ul className="market-surface__categories" aria-label="Market categories" role="list"
         hidden={page !== "intro" || entrance === "logo" || lensActive}>
-        <li>Discover</li>
-        <li>Browse</li>
-        <li>Search</li>
-        <li>Sell</li>
-        <li className="market-surface__inventory">Inventory</li>
+        {marketCategories.map(label => <li key={label} className={label === "Inventory" ? "market-surface__inventory" : undefined}>
+          <button type="button" aria-pressed={category.active === label} aria-controls={label === "Discover" ? "market-discover-page" : "market-category-page"}
+            disabled={entrance !== "complete" || category.phase !== "idle" || Boolean(selectedModel) || profileOpen}
+            onClick={() => dispatchCategory({ type: "select", category: label })}>{label}</button>
+        </li>)}
       </ul>
+      <section id="market-category-page" aria-label={category.active} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover"} />
       {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}
         phase={detailsPhase} onRevealComplete={advanceDetailsReveal} />}
       <iframe
+        id="market-discover-page"
         className="market-surface__frame"
+        hidden={category.active !== "Discover"}
         key={attempt}
         ref={frameRef}
         referrerPolicy="no-referrer"

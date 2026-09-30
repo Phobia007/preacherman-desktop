@@ -9,8 +9,13 @@ export function animateMarketPanels(doc: Document, reducedMotion: boolean, direc
       const bounds = panel.getBoundingClientRect();
       return bounds.bottom > 0 && bounds.top < viewport.innerHeight;
     });
-  const animations = reducedMotion ? [] : panels.map(panel => {
-    const from = panel.getBoundingClientRect().left < viewport.innerWidth / 2 ? "-100%" : "100%";
+  return animateColumns(panels, doc, reducedMotion, direction);
+}
+
+function animateColumns(panels: HTMLElement[], doc: Document, reducedMotion: boolean, direction: "in" | "out", sides?: readonly string[]) {
+  const viewport = doc.defaultView!;
+  const animations = reducedMotion ? [] : panels.map((panel, index) => {
+    const from = sides?.[index] ?? (panel.getBoundingClientRect().left < viewport.innerWidth / 2 ? "-100%" : "100%");
     const frames = [
       { transform: `translate3d(${from}, 0, 0)` },
       { transform: "translate3d(0, 0, 0)" },
@@ -28,6 +33,28 @@ export function animateMarketPanels(doc: Document, reducedMotion: boolean, direc
     finished: Promise.all(animations.map(animation => animation.finished)),
     cancel: () => animations.forEach(animation => animation.cancel()),
   };
+}
+
+/** The two glass panes share the existing content's opposite-side motion. */
+export function animateMarketFrost(layer: HTMLElement, reducedMotion: boolean, direction: "in" | "out" = "in") {
+  // Fixed halves must keep their direction when the desktop stage is scaled.
+  return animateColumns([...layer.querySelectorAll<HTMLElement>(".market-surface__frost-pane")], layer.ownerDocument, reducedMotion, direction, ["-100%", "100%"]);
+}
+
+export function animateMarketPage(doc: Document, layer: HTMLElement, reducedMotion: boolean, direction: "in" | "out" = "in") {
+  const motions = [animateMarketPanels(doc, reducedMotion, direction), animateMarketFrost(layer, reducedMotion, direction)];
+  return { finished: Promise.all(motions.map(motion => motion.finished)), cancel: () => motions.forEach(motion => motion.cancel()) };
+}
+
+export const marketCategories = ["Discover", "Browse", "Search", "Sell", "Inventory"] as const;
+export type MarketCategory = typeof marketCategories[number];
+export type MarketCategoryState = { active: MarketCategory; next: MarketCategory | null; phase: "idle" | "exiting" | "entering" };
+export const initialMarketCategory: MarketCategoryState = { active: "Discover", next: null, phase: "idle" };
+export function marketCategoryReducer(state: MarketCategoryState, action: { type: "select"; category: MarketCategory } | { type: "exited" | "entered" }): MarketCategoryState {
+  if (action.type === "select") return state.phase === "idle" && action.category !== state.active ? { ...state, next: action.category, phase: "exiting" } : state;
+  if (action.type === "exited" && state.phase === "exiting" && state.next) return { active: state.next, next: null, phase: "entering" };
+  if (action.type === "entered" && state.phase === "entering") return { ...state, phase: "idle" };
+  return state;
 }
 
 export type MarketDetailsPhase = "idle" | "exiting" | "frost" | "model" | "content" | "complete" | "hide-content" | "hide-model" | "unfrost" | "returning";
