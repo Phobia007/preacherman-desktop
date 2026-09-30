@@ -18,6 +18,8 @@ export function MarketSurface() {
   const surfaceRef = useRef<HTMLElement>(null);
   const frostRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLElement>(null);
+  const categoriesRef = useRef<HTMLUListElement>(null);
+  const indicatorRef = useRef<HTMLSpanElement>(null);
   const [searchModels, setSearchModels] = useState<MarketSearchItem[]>([]);
   const [category, dispatchCategory] = useReducer(marketCategoryReducer, initialMarketCategory);
   const categoryRef = useRef(category);
@@ -37,6 +39,21 @@ export function MarketSurface() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [lensActive, setLensActive] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+
+  const highlightedCategory = category.next ?? category.active;
+  useLayoutEffect(() => {
+    const row = categoriesRef.current, indicator = indicatorRef.current;
+    if (!row || !indicator || row.hidden) return;
+    const target = [...row.querySelectorAll("button")].find(button => button.textContent === highlightedCategory);
+    if (!target) return;
+    const position = () => {
+      indicator.style.transform = `translate3d(${target.offsetLeft}px,0,0) scaleX(${target.offsetWidth})`;
+    };
+    position();
+    const observer = new ResizeObserver(position);
+    observer.observe(row); observer.observe(target);
+    return () => observer.disconnect();
+  }, [highlightedCategory, page, entrance, lensActive]);
 
   const finishDetailsClose = useCallback(() => {
     openingModel.current = null;
@@ -218,12 +235,13 @@ export function MarketSurface() {
       <div className="market-surface__frost" ref={frostRef} aria-hidden="true" />
       <MarketProfile key={`profile-${selectedModel ?? category.active}`} disabled={entrance !== "complete" || category.phase !== "idle" || Boolean(selectedModel && detailsPhase !== "complete")} open={profileOpen} onOpenChange={setProfileOpen}
         frameRef={frameRef} captureSource={selectedModel ? captureDetails : category.active === "Search" ? captureSearch : category.active !== "Discover" ? captureEmptyCategory : undefined} onLensActiveChange={setLensActive} />
-      <ul className="market-surface__categories" aria-label="Market categories" role="list"
+      <ul className="market-surface__categories" ref={categoriesRef} aria-label="Market categories" role="list"
         hidden={page !== "intro" || entrance === "logo" || lensActive}>
-        {marketCategories.map(label => <li key={label} className={label === "Inventory" ? "market-surface__inventory" : undefined}>
-          <button type="button" aria-pressed={category.active === label} aria-controls={label === "Discover" ? "market-discover-page" : label === "Search" ? "market-search-page" : "market-category-page"}
+        {marketCategories.map(label => <li key={label} className={label === "Search" ? "market-surface__search-category" : undefined}>
+          <button type="button" aria-pressed={highlightedCategory === label} aria-controls={label === "Discover" ? "market-discover-page" : label === "Search" ? "market-search-page" : "market-category-page"}
             disabled={entrance !== "complete" || category.phase !== "idle" || Boolean(selectedModel) || profileOpen}
             onClick={() => dispatchCategory({ type: "select", category: label })}>{label}</button>
+          {label === "Search" && <span ref={indicatorRef} className="market-surface__category-indicator" aria-hidden="true" />}
         </li>)}
       </ul>
       <section id="market-category-page" aria-label={category.active} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover" || category.active === "Search"} />

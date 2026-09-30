@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from "react";
 import { galleryModelBindings } from "../gallery/galleryModelBindings";
 import { cleanSearchQuery, MARKET_SEARCH_HISTORY_KEY, readSearchHistory, rememberSearch, removeSearch, searchMarketModels, type MarketSearchItem } from "./marketSearchData";
+import { MarketSearchPromos } from "./MarketSearchPromos";
 import "./market-search.css";
 
 const galleryModels = new Set<string>(Object.values(galleryModelBindings));
@@ -63,6 +64,7 @@ export function MarketSearch({ panelRef, models: catalog, active, ready, interac
   };
   return <section ref={panelRef} id="market-search-page" className="market-search" aria-label="Search models" hidden={!active}
     data-ready={ready} data-has-query={Boolean(resolvedQuery)}>
+    <MarketSearchPromos models={models} visible={!resolvedQuery} enabled={active && ready && interactive} onChoose={name => { submit(name); inputRef.current?.focus(); setShowHistory(false); }} />
     <div className="market-search__head" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setShowHistory(false); }}
       onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); inputRef.current?.focus(); setShowHistory(false); } }}>
       <form className="market-search__form" role="search" onSubmit={event => { event.preventDefault(); if (!composing) submit(query); }}>

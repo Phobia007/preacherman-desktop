@@ -105,9 +105,11 @@ test("Market categories stay with the host header and yield to details and the p
   const row = surface.match(/<ul className="market-surface__categories"[\s\S]*?<\/ul>/)?.[0];
   assert.ok(row);
   const { marketCategories } = await import("../src/surfaces/market/marketEntrance.ts");
-  assert.deepEqual(marketCategories, ["Discover", "Browse", "Search", "Sell", "Inventory"]);
+  assert.match(surface, /highlightedCategory = category.next \?\? category.active/);
+  assert.match(css, /transition: transform 380ms/);
+  assert.deepEqual(marketCategories, ["Discover", "Browse", "Sell", "Inventory", "Search"]);
   assert.match(row, /marketCategories\.map/);
-  assert.match(row, /<button type="button" aria-pressed=\{category.active === label\}/);
+  assert.match(row, /<button type="button" aria-pressed=\{highlightedCategory === label\}/);
   assert.match(row, /hidden=\{page !== "intro" \|\| entrance === "logo" \|\| lensActive\}/);
   assert.match(css, /\.market-surface__categories \{[^}]*position: absolute;[^}]*top: var\(--market-content-top\)/);
   assert.match(css, /\.market-surface__categories\[hidden\] \{ display: none; \}/);

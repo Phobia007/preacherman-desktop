@@ -54,7 +54,7 @@ export function animateMarketPage(doc: Document, layer: HTMLElement, reducedMoti
   return { finished: Promise.all(motions.map(motion => motion.finished)), cancel: () => motions.forEach(motion => motion.cancel()) };
 }
 
-export const marketCategories = ["Discover", "Browse", "Search", "Sell", "Inventory"] as const;
+export const marketCategories = ["Discover", "Browse", "Sell", "Inventory", "Search"] as const;
 export type MarketCategory = typeof marketCategories[number];
 export type MarketCategoryState = { active: MarketCategory; next: MarketCategory | null; phase: "idle" | "exiting" | "entering" };
 export const initialMarketCategory: MarketCategoryState = { active: "Discover", next: null, phase: "idle" };

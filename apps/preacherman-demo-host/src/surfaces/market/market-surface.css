@@ -98,18 +98,23 @@
 }
 
 .market-surface__categories button:is([aria-pressed="true"], :hover) { color: var(--demo-theme-market-text); }
-.market-surface__categories button[aria-pressed="true"] { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
+.market-surface__category-indicator {
+  position: absolute; top: calc(50% + 13px); left: 0; width: 1px; height: 1px; transform-origin: left center;
+  background: var(--demo-theme-market-text); pointer-events: none;
+  transition: transform 380ms cubic-bezier(.16,1,.3,1);
+}
+@media (prefers-reduced-motion: reduce) { .market-surface__category-indicator { transition: none; } }
 .market-surface__categories button:focus-visible { outline: 2px solid var(--demo-theme-market-focus); outline-offset: 4px; }
 .market-surface__categories button:disabled { cursor: default; }
 
-.market-surface__inventory {
+.market-surface__search-category {
   padding-inline-start: clamp(16px, 2vw, 36px);
   border-inline-start: 1px solid var(--demo-theme-market-border);
 }
 
 @media (max-width: 480px) {
   .market-surface__categories { right: 12px; left: 12px; gap: 12px; font-size: 14px; }
-  .market-surface__inventory { padding-inline-start: 12px; }
+  .market-surface__search-category { padding-inline-start: 12px; }
 }
 
 .market-surface__status {

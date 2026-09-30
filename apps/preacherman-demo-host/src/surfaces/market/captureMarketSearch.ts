@@ -4,7 +4,7 @@ export async function captureMarketSearch(panel: HTMLElement, signal: AbortSigna
   const sx = stage.clientWidth / bounds.width, sy = stage.clientHeight / bounds.height;
   const images = [...panel.querySelectorAll<HTMLImageElement>("img")].filter(image => {
     const box = image.getBoundingClientRect();
-    return box.width > 0 && box.bottom > bounds.top && box.top < bounds.bottom;
+    return box.width > 0 && box.bottom > bounds.top && box.top < bounds.bottom && getComputedStyle(image).visibility !== "hidden" && !image.closest('[data-visible="false"]');
   });
   let timer: ReturnType<typeof setTimeout> | undefined;
   try { await Promise.race([Promise.all(images.map(image => image.decode().catch(() => {}))), new Promise(resolve => { timer = setTimeout(resolve, 1500); })]); }
@@ -18,7 +18,13 @@ export async function captureMarketSearch(panel: HTMLElement, signal: AbortSigna
   for (const image of images) {
     if (!image.complete || !image.naturalWidth) continue;
     const box = image.getBoundingClientRect();
-    ctx.drawImage(image, (box.left - bounds.left) * sx, (box.top - bounds.top) * sy, box.width * sx, box.height * sy);
+    const scale = Math.max(box.width / image.naturalWidth, box.height / image.naturalHeight);
+    const sourceWidth = box.width / scale, sourceHeight = box.height / scale;
+    ctx.save(); ctx.beginPath();
+    ctx.roundRect((box.left - bounds.left) * sx, (box.top - bounds.top) * sy, box.width * sx, box.height * sy, image.closest(".market-search-promos__card") ? 14 : 0); ctx.clip();
+    ctx.drawImage(image, (image.naturalWidth - sourceWidth) / 2, (image.naturalHeight - sourceHeight) / 2, sourceWidth, sourceHeight,
+      (box.left - bounds.left) * sx, (box.top - bounds.top) * sy, box.width * sx, box.height * sy);
+    ctx.restore();
   }
   const form = panel.querySelector<HTMLFormElement>("form")!, field = panel.querySelector<HTMLInputElement>("input")!;
   const box = form.getBoundingClientRect(), style = getComputedStyle(form);
@@ -34,7 +40,7 @@ export async function captureMarketSearch(panel: HTMLElement, signal: AbortSigna
     const parent = node.parentElement, text = node.textContent || "";
     if (!parent || !text.trim() || parent.closest("svg, .market-search__announcement, .market-search__image-error")) continue;
     const ink = getComputedStyle(parent), box = parent.getBoundingClientRect();
-    if (!box.width || box.bottom <= view.top || box.top >= view.bottom || ink.visibility === "hidden") continue;
+    if (!box.width || box.bottom <= view.top || box.top >= view.bottom || ink.visibility === "hidden" || parent.closest('[data-visible="false"], [aria-hidden="true"]')) continue;
     ctx.font = `${ink.fontWeight} ${parseFloat(ink.fontSize)}px ${ink.fontFamily}`; ctx.fillStyle = ink.color; ctx.textBaseline = "alphabetic";
     const { fontBoundingBoxAscent: ascent, fontBoundingBoxDescent: descent } = ctx.measureText("Mg");
     for (let i = 0; i < text.length; i++) {
