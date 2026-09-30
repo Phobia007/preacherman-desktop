@@ -1,199 +1,343 @@
 {
   "schemaVersion": 1,
-  "buildId": "platform-ring-20260920",
+  "buildId": "mac-sync-20260930",
   "productVersion": "0.1.0",
-  "sourceTask": "desktop-decorative-companion-platform-ring",
+  "sourceTask": "sync-mac-github-updates-to-local-windows",
   "sourceThread": null,
-  "sourceState": "Remove the invisible platform wake button, cursor/focus behavior and activation-light plumbing. Retain the shared 3D base and companion. Replace layered band meshes with anti-aliased silver filaments, a continuous 24-second light sweep and a 7.8-second asymmetric breath. Respect reduced motion and hidden-render pauses.",
-  "sourceCommit": "44838bcd6ee016e807d6e4571f906495dc664ad7",
+  "sourceState": "Desktop main 6623d28 plus Windows-verified guards for optional Gallery initialization in both runtime entry points. Retain Mac viewport/maximized startup and sidecar lifecycle changes; reuse the unchanged verified Windows sidecar.",
+  "sourceCommit": "2cb527eab9ff990ea361bf3329f84c7bfc2805b1",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-09-20T18:17:37.0002351+08:00",
-  "deployedAt": "2026-09-20T18:18:15.3839319+08:00",
-  "verifiedAt": "2026-09-20T18:20:52.8972895+08:00",
-  "sizeBytes": 676094464,
-  "sha256": "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2",
+  "builtAt": "2026-09-30T23:36:02.3548390+08:00",
+  "deployedAt": "2026-09-30T23:43:57.5628888+08:00",
+  "verifiedAt": "2026-10-01T00:02:18.8537234+08:00",
+  "sizeBytes": 676119040,
+  "sha256": "B29D722BF2B53E1922DBE87157F5FA02A2F2A06CA190F98569925C631D99CEA2",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920/preacherman-demo-host.exe",
-  "backupSha256": "AE4FCE297569E63BB7557BCEDBC111439A19F4FB57B9AC900B84A27BAC5FFC45",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930/preacherman-demo-host.exe",
+  "backupSha256": "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "00a2fdc197ac95630b1613fecfcd2ee1f182aaec",
-  "previousVerificationCommit": "00a2fdc197ac95630b1613fecfcd2ee1f182aaec",
+  "rollbackBaselineCommit": "aeab7a8bb81f5c8abb3753170f10dd7bc61b7240",
+  "previousVerificationCommit": "aeab7a8bb81f5c8abb3753170f10dd7bc61b7240",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "typecheck": "passed; includes renderer source via TypeScript path mapping",
-      "focusedTests": {
-        "passed": 17,
-        "failed": 0
-      },
-      "existingCompanionTests": {
-        "passed": 4,
-        "unchangedBaselineFailures": [
-          "Home, Task, Settings, and Gallery share one persistent companion scene",
-          "Gallery moves the shared Cortana into the accepted close portrait above the original runtime",
-          "the shell owns one persistent avatar while Task mounts the Lookback surface",
-          "voice and model components share explicit four-state avatar control without task cancellation"
-        ]
-      },
-      "designDetector": [],
-      "baselineLog": "D:\\preacherman\\output\\ring-baseline-tests.log"
+      "typecheck": "passed",
+      "initialFocusedTests": 18,
+      "galleryFixFocusedTests": 7,
+      "galleryRuntimeSyntax": "passed"
     },
-    "nativeFlow": "Cold canonical shortcut launch; decorative ring, no click-to-wake behavior, live companion motion, audio settings, Home/Task/Gallery/Market/Account/Settings in both appearances. Normal shortcut restart after checks.",
-    "ring": [
-      {
-        "appearance": "dark",
-        "decorative": true,
-        "wakeRequests": 0,
-        "hits": [
-          {
-            "cursor": "auto",
-            "tag": "DIV",
-            "classes": ""
-          },
-          {
-            "cursor": "auto",
-            "tag": "DIV",
-            "classes": ""
-          },
-          {
-            "cursor": "auto",
-            "tag": "DIV",
-            "classes": ""
-          }
-        ],
-        "canvasPointerEvents": "none",
-        "audioSettings": true
+    "nativeFlow": "Canonical shortcut cold launch; Home/Task/Gallery/Market/Account/Settings in both appearances; audio controls and decorative ring; restore, maximize, minimize and authored close; host and sidecar exited; normal shortcut restart without debug flags.",
+    "windowControls": {
+      "initialMaximized": true,
+      "restored": true,
+      "restoredSize": {
+        "width": 1280,
+        "height": 800,
+        "appearance": "light"
       },
-      {
-        "appearance": "light",
-        "decorative": true,
-        "wakeRequests": 0,
-        "hits": [
-          {
-            "cursor": "auto",
-            "tag": "DIV",
-            "classes": ""
-          },
-          {
-            "cursor": "auto",
-            "tag": "DIV",
-            "classes": ""
-          },
-          {
-            "cursor": "auto",
-            "tag": "DIV",
-            "classes": ""
-          }
-        ],
-        "canvasPointerEvents": "none",
-        "audioSettings": true
-      }
-    ],
+      "maximize": true,
+      "minimize": true,
+      "harnessNote": "Unminimize is intentionally not granted to the renderer; close was dispatched through the authored button while minimized.",
+      "closeRequested": true,
+      "passed": true
+    },
     "routes": [
       {
         "name": "Home",
-        "appearance": "dark"
+        "appearance": "dark",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Task",
-        "appearance": "dark"
+        "appearance": "dark",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Gallery",
-        "appearance": "dark"
+        "appearance": "dark",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Market",
-        "appearance": "dark"
+        "appearance": "dark",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Account",
-        "appearance": "dark"
+        "appearance": "dark",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Settings",
-        "appearance": "dark"
+        "appearance": "dark",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Home",
-        "appearance": "light"
+        "appearance": "light",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Task",
-        "appearance": "light"
+        "appearance": "light",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Gallery",
-        "appearance": "light"
+        "appearance": "light",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Market",
-        "appearance": "light"
+        "appearance": "light",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Account",
-        "appearance": "light"
+        "appearance": "light",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       },
       {
         "name": "Settings",
-        "appearance": "light"
+        "appearance": "light",
+        "bounds": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "vw": 1920,
+          "vh": 1032
+        }
       }
     ],
     "browserVerification": {
       "routes": [
         {
           "name": "Home",
-          "appearance": "dark"
+          "appearance": "dark",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Task",
-          "appearance": "dark"
+          "appearance": "dark",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Gallery",
-          "appearance": "dark"
+          "appearance": "dark",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Market",
-          "appearance": "dark"
+          "appearance": "dark",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Account",
-          "appearance": "dark"
+          "appearance": "dark",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Settings",
-          "appearance": "dark"
+          "appearance": "dark",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Home",
-          "appearance": "light"
+          "appearance": "light",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Task",
-          "appearance": "light"
+          "appearance": "light",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Gallery",
-          "appearance": "light"
+          "appearance": "light",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Market",
-          "appearance": "light"
+          "appearance": "light",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Account",
-          "appearance": "light"
+          "appearance": "light",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         },
         {
           "name": "Settings",
-          "appearance": "light"
+          "appearance": "light",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1800,
+            "height": 1000,
+            "vw": 1800,
+            "vh": 1000
+          }
         }
       ],
       "ring": [
@@ -250,6 +394,80 @@
         "Hydration completed but contains mismatches."
       ],
       "coldHome": true,
+      "responsive": [
+        {
+          "appearance": "light",
+          "width": 2560,
+          "height": 1080,
+          "x": 0.005859375,
+          "y": 0,
+          "w": 2559.98828125,
+          "h": 1080
+        },
+        {
+          "appearance": "light",
+          "width": 1366,
+          "height": 768,
+          "x": 0,
+          "y": 0.002227783203125,
+          "w": 1366,
+          "h": 767.99560546875
+        },
+        {
+          "appearance": "light",
+          "width": 1024,
+          "height": 768,
+          "x": 0,
+          "y": 0,
+          "w": 1024,
+          "h": 768
+        },
+        {
+          "appearance": "light",
+          "width": 768,
+          "height": 1024,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 1024
+        },
+        {
+          "appearance": "dark",
+          "width": 2560,
+          "height": 1080,
+          "x": 0.005859375,
+          "y": 0,
+          "w": 2559.98828125,
+          "h": 1080
+        },
+        {
+          "appearance": "dark",
+          "width": 1366,
+          "height": 768,
+          "x": 0,
+          "y": 0.002227783203125,
+          "w": 1366,
+          "h": 767.99560546875
+        },
+        {
+          "appearance": "dark",
+          "width": 1024,
+          "height": 768,
+          "x": 0,
+          "y": 0,
+          "w": 1024,
+          "h": 768
+        },
+        {
+          "appearance": "dark",
+          "width": 768,
+          "height": 1024,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 1024
+        }
+      ],
       "consoleBaselines": [
         "audio-dock-20260920",
         "account-dock-refine-20260917"
@@ -258,35 +476,35 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-09-20T18:20:52.8972895+08:00",
-      "NativePid": 33324,
-      "StartedAt": "2026-09-20T18:20:35.2812166+08:00",
-      "WindowHandle": 463300,
+      "SampledAt": "2026-10-01T00:02:18.8537234+08:00",
+      "NativePid": 33004,
+      "StartedAt": "2026-10-01T00:01:56.0607218+08:00",
+      "WindowHandle": 4458338,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        33324,
-        26676,
-        38444,
-        22244,
-        31236,
-        39472,
-        36832,
-        36112,
-        26884,
-        18920,
-        37716
+        33004,
+        5836,
+        23792,
+        32504,
+        29184,
+        25480,
+        33208,
+        26876,
+        32688,
+        27660,
+        18848
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1913.3,
-      "GpuDedicatedBytes": 3260907520.0,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1909.9,
+      "GpuDedicatedBytes": 3281039360.0,
       "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 16463928,
+      "FreeRamKiB": 17518436,
       "TemporaryProcesses": [],
       "Listeners": [
         {
           "LocalPort": 8787,
-          "OwningProcess": 36112
+          "OwningProcess": 26876
         }
       ],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -319,20 +537,24 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "consoleBaselines": [
       "audio-dock-20260920",
       "account-dock-refine-20260917"
     ],
+    "externalServiceLimitations": [
+      "Saved-session refresh is blocked by the same Supabase network transport failure reproduced on the previous verified executable; account persistence was preserved, live login was not verified."
+    ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\source-checks.json",
-      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\verify.cjs",
-      "D:\\preacherman\\output\\playwright\\platform-ring-20260920\\ring.smoke.cjs"
+      "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\auth-baseline.json",
+      "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\mac-sync-20260930\\final-resources.json"
     ]
   },
   "releaseAttempts": [
@@ -1001,9 +1223,18 @@
       "reason": "Native pages rendered, but new initSync exception and remote auth transport failure need baseline comparison before final delivery.",
       "rolledBackAt": "2026-09-30T23:25:57.3237635+08:00",
       "restoredSha256": "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2"
+    },
+    {
+      "buildId": "mac-sync-20260930",
+      "sourceCommit": "2cb527eab9ff990ea361bf3329f84c7bfc2805b1",
+      "sha256": "B29D722BF2B53E1922DBE87157F5FA02A2F2A06CA190F98569925C631D99CEA2",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-09-30T23:43:57.5628888+08:00",
+      "verifiedAt": "2026-10-01T00:02:18.8537234+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\mac-sync-before-20260930/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
