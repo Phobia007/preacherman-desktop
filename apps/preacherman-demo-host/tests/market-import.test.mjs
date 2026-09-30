@@ -68,13 +68,13 @@ test("the unused category/search row and its controller are removed from the doc
   for (const label of ["High Jewelry", "Jewelry", "Watches", "Bags and accessories", "Fragrances", "Home &amp; Stationery", "News", "La Maison"]) assert.ok(!html.includes(`>${label}</a>`));
 });
 
-test("Market uses Task's exact profile copy, destinations and packaged signature font", async () => {
+test("Market uses Task's exact profile copy and packaged signature font without legacy social links", async () => {
   const profile = await text(join(root, "src/surfaces/market/MarketProfile.tsx"));
   const task = await text(join(root, "src/surfaces/gallery/GallerySurface.tsx"));
   const css = await text(join(root, "src/surfaces/market/market-profile.css"));
   for (const match of profile.matchAll(/<span>(.*?)<\/span>|href="([^"]+)"/g)) assert.ok(task.includes(match[1] || match[2]), match[0]);
   assert.equal([...profile.matchAll(/<span>/g)].length, 4);
-  assert.equal([...profile.matchAll(/href=/g)].length, 3);
+  assert.equal([...profile.matchAll(/href=/g)].length, 0);
   assert.match(css, /BrotherSignature-7BWnK.otf/);
   assert.match(css, /top: 48px/);
   assert.match(css, /left: 50%/);
@@ -98,6 +98,34 @@ test("the full-height page scrolls behind a fixed translucent signature header",
   assert.match(capture, /!doc.getElementById\("main"\)/);
   assert.doesNotMatch(capture, /love-header|brand-nav|search-toggle/);
 });
+
+test("Market categories stay with the host header and yield to details and the profile lens", async () => {
+  const surface = await text(join(root, "src/surfaces/market/MarketSurface.tsx"));
+  const css = await text(join(root, "src/surfaces/market/market-surface.css"));
+  const row = surface.match(/<ul className="market-surface__categories"[\s\S]*?<\/ul>/)?.[0];
+  assert.ok(row);
+  assert.deepEqual([...row.matchAll(/<li(?: [^>]*)?>(.*?)<\/li>/g)].map(match => match[1]), ["Discover", "Browse", "Search", "Sell", "Inventory"]);
+  assert.match(row, /hidden=\{page !== "intro" \|\| entrance === "logo" \|\| lensActive\}/);
+  assert.match(css, /\.market-surface__categories \{[^}]*position: absolute;[^}]*top: var\(--market-content-top\)/);
+  assert.match(css, /\.market-surface__categories\[hidden\] \{ display: none; \}/);
+  assert.match(css, /font: 500 16px\/1\.4 "Market Brilliant Cut"/);
+  const fonts = await text(join(root, "src/surfaces/market/market-details.css"));
+  assert.match(fonts, /font-family: "Market Brilliant Cut"/);
+  assert.match(fonts, /BrilliantCutPro-Medium\.woff2/);
+});
+
+for (const appearance of ["light", "dark"]) {
+  test(`Market fixed categories use the ${appearance} text, divider and contrast tokens`, async () => {
+    const styles = await text(join(root, "src/styles.css"));
+    const css = await text(join(root, "src/surfaces/market/market-surface.css"));
+    const selector = appearance === "dark" ? '.demo-app-shell[data-appearance="dark"]' : '.demo-app-shell';
+    const tokens = styles.slice(styles.indexOf(`${selector} {`)).split("}")[0];
+    for (const token of ["text", "border", "ink-shadow"]) {
+      assert.match(tokens, new RegExp(`--demo-theme-market-${token}:`));
+      assert.match(css, new RegExp(`var\\(--demo-theme-market-${token}\\)`));
+    }
+  });
+}
 
 test("every imported asset is packaged and matches its recorded hash", async () => {
   const manifest = JSON.parse(await text(join(imported, "import-manifest.json")));

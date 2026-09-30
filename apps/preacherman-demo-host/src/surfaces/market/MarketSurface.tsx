@@ -171,6 +171,14 @@ export function MarketSurface() {
       }}>
       <MarketProfile key={`profile-${selectedModel ?? "intro"}`} disabled={entrance !== "complete" || Boolean(selectedModel && detailsPhase !== "complete")} open={profileOpen} onOpenChange={setProfileOpen}
         frameRef={frameRef} captureSource={selectedModel ? captureDetails : undefined} onLensActiveChange={setLensActive} />
+      <ul className="market-surface__categories" aria-label="Market categories" role="list"
+        hidden={page !== "intro" || entrance === "logo" || lensActive}>
+        <li>Discover</li>
+        <li>Browse</li>
+        <li>Search</li>
+        <li>Sell</li>
+        <li className="market-surface__inventory">Inventory</li>
+      </ul>
       {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}
         phase={detailsPhase} onRevealComplete={advanceDetailsReveal} />}
       <iframe

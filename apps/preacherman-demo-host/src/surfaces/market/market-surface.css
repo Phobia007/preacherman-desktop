@@ -36,6 +36,40 @@
 /* The lens supplies the current page pixels until its closing frame reaches zero. */
 .market-surface[data-lens-active="true"] .market-surface__frame { opacity: 0; }
 
+/* Share the signature header's fixed stage, outside the scrolling document. */
+.market-surface__categories {
+  position: absolute;
+  top: var(--market-content-top);
+  right: 24px;
+  left: 24px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2vw, 36px);
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--demo-theme-market-text);
+  font: 500 16px/1.4 "Market Brilliant Cut", sans-serif;
+  text-shadow: 0 1px 2px var(--demo-theme-market-ink-shadow), 0 2px 5px var(--demo-theme-market-ink-shadow);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.market-surface__categories[hidden] { display: none; }
+
+.market-surface__inventory {
+  padding-inline-start: clamp(16px, 2vw, 36px);
+  border-inline-start: 1px solid var(--demo-theme-market-border);
+}
+
+@media (max-width: 480px) {
+  .market-surface__categories { right: 12px; left: 12px; gap: 12px; font-size: 14px; }
+  .market-surface__inventory { padding-inline-start: 12px; }
+}
+
 .market-surface__status {
   position: absolute;
   right: 36px;
