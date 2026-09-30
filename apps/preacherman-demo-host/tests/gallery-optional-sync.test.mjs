@@ -2,8 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-test("Gallery initializes local fragments while optional sync is absent or still resolving", async () => {
-  const source = await readFile(new URL("../public/active-theory-gallery/gallery/assets/js/app.1780406240914.js", import.meta.url), "utf8");
+for (const entry of ["assets/js/app.1780406240914.js", "gallery/assets/js/app.1780406240914.js"]) {
+test(`Gallery ${entry} initializes local fragments while optional sync is absent or still resolving`, async () => {
+  const source = await readFile(new URL(`../public/active-theory-gallery/${entry}`, import.meta.url), "utf8");
   const bodies = [...source.matchAll(/_this\.onInit=async function\(\)\{([^{}]*?initSync[^{}]*?)\}/g)].map(match => match[1]);
   assert.equal(bodies.length, 3);
   const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
@@ -21,3 +22,5 @@ test("Gallery initializes local fragments while optional sync is absent or still
     assert.deepEqual(calls, [expected.group, expected]);
   }
 });
+
+}

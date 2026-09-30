@@ -992,6 +992,15 @@
       "deployedAt": "2026-09-20T18:18:15.3839319+08:00",
       "verifiedAt": "2026-09-20T18:20:52.8972895+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920"
+    },
+    {
+      "buildId": "mac-sync-20260930-attempt1",
+      "sourceCommit": "6623d28a3e1cc653c116db23f4f5e3cdc01ee7fc",
+      "sha256": "6D505A31EC43B7E081E38EE31691F0DDE5B2C0943CF379D7EB6822854DA1A17C",
+      "status": "rolled-back",
+      "reason": "Native pages rendered, but new initSync exception and remote auth transport failure need baseline comparison before final delivery.",
+      "rolledBackAt": "2026-09-30T23:25:57.3237635+08:00",
+      "restoredSha256": "9FB8818FFD3CBD2CB5D681B25C1878DB0BFE313682E4EC39D6A66DD62ABB3AF2"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\platform-ring-before-20260920/desktop-build-manifest.json",

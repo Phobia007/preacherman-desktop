@@ -36,7 +36,15 @@ const uncappedFramePolicy = "_this.capFPS=_=>null";
 for (const relativePath of ["assets/js/app.1780406240914.js", "gallery/assets/js/app.1780406240914.js"]) {
   const runtimePath = path.join(runtimeRoot, relativePath);
   const runtime = fs.readFileSync(runtimePath, "utf8");
-  const updated = replaceOnce(runtime, cappedFramePolicy, uncappedFramePolicy, "remove GPU-tier rendering FPS caps");
+  let updated = replaceOnce(runtime, cappedFramePolicy, uncappedFramePolicy, "remove GPU-tier rendering FPS caps");
+  updated = replaceExact(updated,
+    'await _this.initSync(_this.ui.group),await _this.initSync(_this.ui),_this.set("ready",!0)',
+    'typeof _this.initSync==="function"&&(await _this.initSync(_this.ui.group),await _this.initSync(_this.ui)),_this.set("ready",!0)',
+    2, "initialize UI fragments without optional sync");
+  updated = replaceOnce(updated,
+    '_this.bitmap.capture.rt.upload(),await _this.initSync(_this.element.group),await _this.initSync(_this.element),_this.set("ready",!0)',
+    '_this.bitmap.capture.rt.upload(),typeof _this.initSync==="function"&&(await _this.initSync(_this.element.group),await _this.initSync(_this.element)),_this.set("ready",!0)',
+    "initialize media fragments without optional sync");
   if (updated !== runtime) fs.writeFileSync(runtimePath, updated);
 }
 
