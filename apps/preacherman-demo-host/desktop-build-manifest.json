@@ -1,36 +1,36 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-category-20261001",
+  "buildId": "market-search-20261001",
   "productVersion": "0.1.0",
-  "sourceTask": "market-category-buttons-and-split-frost",
+  "sourceTask": "market-search-and-seamless-frost",
   "sourceThread": null,
-  "sourceState": "Regular-weight Market category buttons; Discover retains its content, the remaining categories are empty. Split glass panes blur the background model, move out with the current page and return with the next page. Existing Details and profile lens preserved; unchanged sidecar reused.",
-  "sourceCommit": "63bf7cbdcbdd0ae49edd6f3198b4555c2d38d77d",
+  "sourceState": "One continuous background blur with split reveal, a large oval Search field after entry, existing Gallery/Discover model results with alternating rows, details return, local deletable search history and profile lens capture. Unchanged packaged assets and sidecar reused.",
+  "sourceCommit": "c387fa21ff72ccfdd9abe731840316921cbe4acb",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-01T03:44:51.5458626+08:00",
-  "deployedAt": "2026-10-01T03:45:14.4016152+08:00",
-  "verifiedAt": "2026-10-01T03:48:08.0423632+08:00",
-  "sizeBytes": 676119552,
-  "sha256": "449284BFCF0C6F6AE54A044DFA382814064DD1C3DB1F8242E71669C084972A3D",
+  "builtAt": "2026-10-01T04:11:51.4104590+08:00",
+  "deployedAt": "2026-10-01T04:12:18.0473376+08:00",
+  "verifiedAt": "2026-10-01T04:15:01.6682557+08:00",
+  "sizeBytes": 676123136,
+  "sha256": "7DBE8589E1F3D7D8B3F0412E6C2E12B4AABC387E0DA3C97F3E3D6F0B761BF151",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-category-before-20261001/preacherman-demo-host.exe",
-  "backupSha256": "E63065E8B62E18843E0A411C92E555D77A0E85421B2642DD1705301C0357BD88",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-category-before-20261001/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-search-before-20261001/preacherman-demo-host.exe",
+  "backupSha256": "449284BFCF0C6F6AE54A044DFA382814064DD1C3DB1F8242E71669C084972A3D",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-search-before-20261001/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "a119d354db9b647a14b54827abc4135695ed53c8",
-  "previousVerificationCommit": "a119d354db9b647a14b54827abc4135695ed53c8",
+  "rollbackBaselineCommit": "63bf7cbdcbdd0ae49edd6f3198b4555c2d38d77d",
+  "previousVerificationCommit": "63bf7cbdcbdd0ae49edd6f3198b4555c2d38d77d",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 43
+      "focusedTests": 47
     },
-    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market (internal ledger route), Account and Settings in both appearances. Regular category buttons, opposite-side content/glass transitions, empty pages, reduced motion, scroll stability, profile lens and model Details return. Window maximize/restore/minimize and authored close; host and sidecar released; normal Home shortcut restart without debug flags.",
+    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market (internal ledger route), Account and Settings in both appearances. Regular category buttons, one seamless blur with opposite reveal edges, Search fade timing, live name/related-name results, alternating Discover rows, details focus return, deletable persistent history, keyboard, IME, no-results and reduced motion; scroll stability and profile lens. Window maximize/restore/minimize and authored close; host and sidecar released; normal Home shortcut restart without debug flags.",
     "windowControls": {
       "initialMaximized": true,
       "restored": true,
@@ -41,6 +41,8 @@
       },
       "maximize": true,
       "minimize": true,
+      "restoredAfterMinimize": true,
+      "qualification": "Window restore helper uses ShowWindowAsync; final check waits for native state rather than reading immediately after it returns.",
       "closeRequested": true,
       "passed": true
     },
@@ -169,327 +171,142 @@
           {
             "phase": "exiting",
             "active": "Discover",
-            "frameHidden": false,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Search",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Search",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           },
           {
             "phase": "exiting",
             "active": "Search",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Browse",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Browse",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           },
           {
             "phase": "exiting",
             "active": "Browse",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Sell",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Sell",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           },
           {
             "phase": "exiting",
             "active": "Sell",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Inventory",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Inventory",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           },
           {
             "phase": "exiting",
             "active": "Inventory",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Discover",
-            "frameHidden": false,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Discover",
-            "frameHidden": false,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           }
         ],
         "reducedMotion": false
@@ -500,330 +317,179 @@
           {
             "phase": "exiting",
             "active": "Discover",
-            "frameHidden": false,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Search",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Search",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           },
           {
             "phase": "exiting",
             "active": "Search",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Browse",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Browse",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           },
           {
             "phase": "exiting",
             "active": "Browse",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Sell",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Sell",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           },
           {
             "phase": "exiting",
             "active": "Sell",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Inventory",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Inventory",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           },
           {
             "phase": "exiting",
             "active": "Inventory",
-            "frameHidden": true,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(-100%, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(0px, 0px, 0px)",
-                    "translate3d(100%, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "entering",
             "active": "Discover",
-            "frameHidden": false,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(-100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": [
-                  [
-                    "translate3d(100%, 0px, 0px)",
-                    "translate3d(0px, 0px, 0px)"
-                  ]
-                ]
-              }
+            "searchReady": "false",
+            "clips": [
+              [
+                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+              ]
             ]
           },
           {
             "phase": "idle",
             "active": "Discover",
-            "frameHidden": false,
-            "panes": [
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              },
-              {
-                "blur": "blur(12px)",
-                "keyframes": []
-              }
-            ]
+            "searchReady": "true",
+            "clips": []
           }
         ],
         "reducedMotion": false
+      }
+    ],
+    "marketSearch": [
+      {
+        "appearance": "dark",
+        "form": {
+          "x": 505.9119567871094,
+          "y": 555.2159423828125,
+          "width": 908.1599426269531,
+          "height": 88.75201416015625
+        },
+        "modelDetails": true,
+        "multipleResults": 3,
+        "historyDelete": true,
+        "keyboardHistory": true,
+        "persistence": false,
+        "emptyState": true,
+        "seamlessBackdrop": true
+      },
+      {
+        "appearance": "light",
+        "form": {
+          "x": 505.9119567871094,
+          "y": 555.2159423828125,
+          "width": 908.1599426269531,
+          "height": 88.75201416015625
+        },
+        "modelDetails": true,
+        "multipleResults": 3,
+        "historyDelete": true,
+        "keyboardHistory": true,
+        "persistence": true,
+        "emptyState": true,
+        "seamlessBackdrop": true
       }
     ],
     "browserVerification": {
@@ -842,6 +508,33 @@
       "header": [
         {
           "appearance": "dark",
+          "initial": {
+            "x": 24.77422332763672,
+            "y": 103.19999694824219,
+            "width": 1870.4514846801758,
+            "height": 61.91999816894531
+          },
+          "scrolled": {
+            "x": 24.77422332763672,
+            "y": 103.19999694824219,
+            "width": 1870.4514846801758,
+            "height": 61.91999816894531
+          },
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "weight": "400",
+          "color": "rgb(255, 255, 255)",
+          "token": "#ffffff",
+          "line": "100px",
+          "top": "100px",
+          "height": "60px",
+          "scale": 1.032,
+          "stageY": 0,
+          "loaded": true,
+          "profileRestored": true,
+          "detailsChecked": false
+        },
+        {
+          "appearance": "light",
           "initial": {
             "x": 24.77422332763672,
             "y": 103.19999694824219,
@@ -917,33 +610,6 @@
           "height": "60px",
           "scale": 0.21668752883303916,
           "stageY": 0.00103759765625,
-          "loaded": true,
-          "profileRestored": true,
-          "detailsChecked": false
-        },
-        {
-          "appearance": "light",
-          "initial": {
-            "x": 24.77422332763672,
-            "y": 103.19999694824219,
-            "width": 1870.4514846801758,
-            "height": 61.91999816894531
-          },
-          "scrolled": {
-            "x": 24.77422332763672,
-            "y": 103.19999694824219,
-            "width": 1870.4514846801758,
-            "height": 61.91999816894531
-          },
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "color": "rgb(255, 255, 255)",
-          "token": "#ffffff",
-          "line": "100px",
-          "top": "100px",
-          "height": "60px",
-          "scale": 1.032,
-          "stageY": 0,
           "loaded": true,
           "profileRestored": true,
           "detailsChecked": false
@@ -1034,9 +700,67 @@
         {
           "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
           "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
         }
       ],
       "coldHome": true,
+      "search": [
+        {
+          "appearance": "dark",
+          "form": {
+            "x": 505.9119567871094,
+            "y": 555.2159423828125,
+            "width": 908.1599426269531,
+            "height": 88.75201416015625
+          },
+          "modelDetails": true,
+          "multipleResults": 3,
+          "historyDelete": true,
+          "keyboardHistory": true,
+          "persistence": false,
+          "emptyState": true,
+          "seamlessBackdrop": true
+        },
+        {
+          "appearance": "light",
+          "form": {
+            "x": 505.9119567871094,
+            "y": 555.2159423828125,
+            "width": 908.1599426269531,
+            "height": 88.75201416015625
+          },
+          "modelDetails": true,
+          "multipleResults": 3,
+          "historyDelete": true,
+          "keyboardHistory": true,
+          "persistence": true,
+          "emptyState": true,
+          "seamlessBackdrop": true
+        }
+      ],
       "categories": [
         {
           "appearance": "dark",
@@ -1044,327 +768,288 @@
             {
               "phase": "exiting",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             },
             {
               "phase": "exiting",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Browse",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Browse",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             },
             {
               "phase": "exiting",
               "active": "Browse",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Sell",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Sell",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             },
             {
               "phase": "exiting",
               "active": "Sell",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Inventory",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Inventory",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             },
             {
               "phase": "exiting",
               "active": "Inventory",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
+              "searchReady": "true",
+              "clips": []
+            }
+          ],
+          "reducedMotion": true
+        },
+        {
+          "appearance": "light",
+          "trace": [
+            {
+              "phase": "exiting",
+              "active": "Discover",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
+            },
+            {
+              "phase": "entering",
+              "active": "Search",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "idle",
+              "active": "Search",
+              "searchReady": "true",
+              "clips": []
+            },
+            {
+              "phase": "exiting",
+              "active": "Search",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "entering",
+              "active": "Browse",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "idle",
+              "active": "Browse",
+              "searchReady": "true",
+              "clips": []
+            },
+            {
+              "phase": "exiting",
+              "active": "Browse",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "entering",
+              "active": "Sell",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "idle",
+              "active": "Sell",
+              "searchReady": "true",
+              "clips": []
+            },
+            {
+              "phase": "exiting",
+              "active": "Sell",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "entering",
+              "active": "Inventory",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "idle",
+              "active": "Inventory",
+              "searchReady": "true",
+              "clips": []
+            },
+            {
+              "phase": "exiting",
+              "active": "Inventory",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "entering",
+              "active": "Discover",
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
+              ]
+            },
+            {
+              "phase": "idle",
+              "active": "Discover",
+              "searchReady": "true",
+              "clips": []
             }
           ],
           "reducedMotion": true
@@ -1375,132 +1060,58 @@
             {
               "phase": "exiting",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             },
             {
               "phase": "exiting",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             }
           ],
           "reducedMotion": false
@@ -1511,466 +1122,61 @@
             {
               "phase": "exiting",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             },
             {
               "phase": "exiting",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             }
           ],
           "reducedMotion": false
-        },
-        {
-          "appearance": "light",
-          "trace": [
-            {
-              "phase": "exiting",
-              "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
-            },
-            {
-              "phase": "exiting",
-              "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Browse",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Browse",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
-            },
-            {
-              "phase": "exiting",
-              "active": "Browse",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Sell",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Sell",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
-            },
-            {
-              "phase": "exiting",
-              "active": "Sell",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Inventory",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Inventory",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
-            },
-            {
-              "phase": "exiting",
-              "active": "Inventory",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
-            }
-          ],
-          "reducedMotion": true
         },
         {
           "appearance": "light-1024",
@@ -1978,132 +1184,58 @@
             {
               "phase": "exiting",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             },
             {
               "phase": "exiting",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             }
           ],
           "reducedMotion": false
@@ -2114,165 +1246,99 @@
             {
               "phase": "exiting",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             },
             {
               "phase": "exiting",
               "active": "Search",
-              "frameHidden": true,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(-100%, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(0px, 0px, 0px)",
-                      "translate3d(100%, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "entering",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(-100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": [
-                    [
-                      "translate3d(100%, 0px, 0px)",
-                      "translate3d(0px, 0px, 0px)"
-                    ]
-                  ]
-                }
+              "searchReady": "false",
+              "clips": [
+                [
+                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
+                ]
               ]
             },
             {
               "phase": "idle",
               "active": "Discover",
-              "frameHidden": false,
-              "panes": [
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                },
-                {
-                  "blur": "blur(12px)",
-                  "keyframes": []
-                }
-              ]
+              "searchReady": "true",
+              "clips": []
             }
           ],
           "reducedMotion": false
         }
       ],
       "newErrors": [],
+      "qualification": {
+        "initialResizeRead": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(Math.abs(initial.y - (styles.stageY + 100 * styles.scale)) < 1)\n\n    at header (D:\\preacherman\\output\\playwright\\market-search-20261001\\verify.cjs:43:10)\n    at async D:\\preacherman\\output\\playwright\\market-search-20261001\\verify.cjs:213:58",
+        "note": "Both themes completed the full Search/Details/history/keyboard/IME flow. The first responsive header measurement raced the app resize. A focused run waited for the fixed-stage resize and passed both sizes in both themes; no product-source changes.",
+        "sourceReports": [
+          "preview-main-report.json",
+          "responsive-preview-report.json"
+        ]
+      },
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-01T03:48:08.0423632+08:00",
-      "NativePid": 18124,
-      "StartedAt": "2026-10-01T03:47:51.4724580+08:00",
-      "WindowHandle": 2295104,
+      "SampledAt": "2026-10-01T04:15:01.6682557+08:00",
+      "NativePid": 30012,
+      "StartedAt": "2026-10-01T04:14:45.3165494+08:00",
+      "WindowHandle": 1640370,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        18124,
-        30560,
-        21884,
-        40380,
-        37348,
-        33552,
-        5392,
-        41932,
-        40076,
-        33752,
-        15012
+        30012,
+        40768,
+        37244,
+        38200,
+        21904,
+        26476,
+        3980,
+        21584,
+        39388,
+        26384,
+        28012
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1946.1,
-      "GpuDedicatedBytes": 3310350336,
-      "MaxGpuEngineUtilization": 13,
-      "FreeRamKiB": 14617316,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1916,
+      "GpuDedicatedBytes": 3309703168,
+      "MaxGpuEngineUtilization": 12,
+      "FreeRamKiB": 15591932,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -2296,13 +1362,11 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
@@ -2310,69 +1374,20 @@
       "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
       "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
       "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
-    "consoleQualification": {
-      "rawFailure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   `Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`,\n+   `Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.`\n+ ]\n- []\n\n    at D:\\preacherman\\output\\playwright\\market-category-20261001\\verify.cjs:183:31",
-      "rawNewErrors": [
-        "Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked."
-      ],
-      "comparison": [
-        {
-          "message": "Connecting to 'https://image.mux.com/01CbIdBLVCiUlQLMC8Ct3vq014VS02lwCaq/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "historicalMessage": "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "baseline": "D:/preacherman/output/playwright/withdraw-three-models-20260911/native-qualified-report.json"
-        },
-        {
-          "message": "Connecting to 'https://image.mux.com/pDi8xyrUNS1S8A2ZHFs21rRtUjAMBh02E/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "historicalMessage": "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "baseline": "D:/preacherman/output/playwright/withdraw-three-models-20260911/native-qualified-report.json"
-        },
-        {
-          "message": "Connecting to 'https://www.datocms-assets.com/223669/1786214209-ingrao-thumb.webp?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "historicalMessage": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "baseline": "D:/preacherman/output/playwright/withdraw-three-models-20260911/native-qualified-report.json"
-        },
-        {
-          "message": "Connecting to 'https://image.mux.com/z3nRLshZzvZU01k8IMgQoQNNzICYrh77K/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "historicalMessage": "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "baseline": "D:/preacherman/output/playwright/withdraw-three-models-20260911/native-qualified-report.json"
-        },
-        {
-          "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656706-ny3.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "historicalMessage": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "baseline": "D:/preacherman/output/playwright/withdraw-three-models-20260911/native-qualified-report.json"
-        },
-        {
-          "message": "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "historicalMessage": "Connecting to 'https://image.mux.com/DrMKk9cqmTOu4Y4dJzCjEn5ny37s02001I/thumbnail.jpg' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "baseline": "D:/preacherman/output/playwright/withdraw-three-models-20260911/native-qualified-report.json"
-        },
-        {
-          "message": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "historicalMessage": "Connecting to 'https://www.datocms-assets.com/223669/1785656645-image-84.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-          "baseline": "D:/preacherman/output/playwright/withdraw-three-models-20260911/native-qualified-report.json"
-        }
-      ],
-      "note": "All 12 native route checks, both Market category flows, font/scroll/profile/Details checks passed. Additional connect-src diagnostics match previously verified legacy gallery thumbnail requests. Historical comparison removes only the subsequently added Supabase allow-list token and varying asset paths; no application or CSP changes."
-    },
+    "consoleQualification": null,
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-category-20261001\\native-qualified-report.json",
-      "D:\\preacherman\\output\\playwright\\market-category-20261001\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\market-category-20261001\\source-checks.log",
-      "D:\\preacherman\\output\\playwright\\market-category-20261001\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-category-20261001\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\market-category-20261001\\final-resources.json"
+      "D:\\preacherman\\output\\playwright\\market-search-20261001\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\market-search-20261001\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\market-search-20261001\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\market-search-20261001\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\market-search-20261001\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\market-search-20261001\\final-resources.json"
     ]
   },
   "releaseAttempts": [
@@ -3077,9 +2092,18 @@
       "deployedAt": "2026-10-01T03:45:14.4016152+08:00",
       "verifiedAt": "2026-10-01T03:48:08.0423632+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-category-before-20261001"
+    },
+    {
+      "buildId": "market-search-20261001",
+      "sourceCommit": "c387fa21ff72ccfdd9abe731840316921cbe4acb",
+      "sha256": "7DBE8589E1F3D7D8B3F0412E6C2E12B4AABC387E0DA3C97F3E3D6F0B761BF151",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-01T04:12:18.0473376+08:00",
+      "verifiedAt": "2026-10-01T04:15:01.6682557+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-search-before-20261001"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-category-before-20261001/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-search-before-20261001/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
