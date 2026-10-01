@@ -1,36 +1,36 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-task-promos-20261001",
+  "buildId": "market-drag-promos-20261001",
   "productVersion": "0.1.0",
-  "sourceTask": "market-task-featured-cards-continuous-search-previews",
+  "sourceTask": "market-additive-preview-drag-and-responsive-category-switching",
   "sourceThread": null,
-  "sourceState": "Reuse original Task Featured card shaders, camera and geometry above empty Search. Model images fit the wide curved frames, names follow the surface at bottom left. Continuous right-to-left travel at 48 stage pixels per second; hover continues transport, keyboard focus/manual pause/hidden/reduced motion stop it. Existing navigation underline, search/history/details and packaged assets preserved; sidecar reused.",
-  "sourceCommit": "25425ba73f680d6d156321f76ec0e89e0887150a",
+  "sourceState": "Remove the visible pause button. Pointer drag adds scaled displacement to the existing constant-speed ribbon clock without pausing it, including while held still and after release. Capture survives card movement and pointer exit; drag releases do not activate search. Ordinary clicks and keyboard activation remain available; hidden and reduced-motion states retain their lifecycle behavior. Rapid category clicks remain enabled and target the latest selection immediately. An exiting page keeps moving when the target changes; reversal continues from the painted frost/panel pose with a distance-scaled duration of at most 420 ms per leg. Host and iframe motion use their own document timelines.",
+  "sourceCommit": "6624b4f5ae6a0cc9df474562be745f0d07139cdb",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-01T09:59:44.1982447+08:00",
-  "deployedAt": "2026-10-01T10:00:15.0647633+08:00",
-  "verifiedAt": "2026-10-01T10:03:13.4566423+08:00",
-  "sizeBytes": 676128256,
-  "sha256": "88EB1A1FA2F6BB2F4D37B0E7D661902DA40315DFFADB7DF07E071E8E344A2286",
+  "builtAt": "2026-10-01T10:25:37.2926543+08:00",
+  "deployedAt": "2026-10-01T10:26:07.3028554+08:00",
+  "verifiedAt": "2026-10-01T10:31:07.2857194+08:00",
+  "sizeBytes": 676129280,
+  "sha256": "ED634EC171285AAF8765F39AF014AF21DC9AF3D71158EFFBD1D6BF8216CD0BF6",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-task-promos-before-20261001/preacherman-demo-host.exe",
-  "backupSha256": "CC2B524BDCEEEBC0C246C7165EAF8BCA86FE90A1EE0E8E862DDFFFA99C856F6B",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-task-promos-before-20261001/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-drag-promos-before-20261001/preacherman-demo-host.exe",
+  "backupSha256": "88EB1A1FA2F6BB2F4D37B0E7D661902DA40315DFFADB7DF07E071E8E344A2286",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-drag-promos-before-20261001/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "356b29ffc472563de79064b2a2625fe41b3340ab",
-  "previousVerificationCommit": "356b29ffc472563de79064b2a2625fe41b3340ab",
+  "rollbackBaselineCommit": "25425ba73f680d6d156321f76ec0e89e0887150a",
+  "previousVerificationCommit": "25425ba73f680d6d156321f76ec0e89e0887150a",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 51
+      "focusedTests": 60
     },
-    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market (internal ledger route), Account and Settings in both appearances. Category order and Search divider, navigation underline alignment, original Task curved cards with constant leftward travel, bottom-left names, hover deformation without stopping, pause/resume/focus/reduced motion and card-to-search collapse. Existing live name results, alternating rows, details return, persistent deletable history, keyboard, IME and profile lens. Window maximize/restore/minimize and authored close; host and sidecar released; normal Home shortcut restart without debug flags.",
+    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market (internal ledger route), Account and Settings in both appearances. Category order and Search divider, immediate navigation underline targeting, rapid last-click-wins switching and continuous interrupted animation, original Task curved cards with constant leftward travel, bottom-left names, hover deformation without stopping, additive pointer drag, held-pointer automatic travel, cancellation, click-versus-drag, focus and reduced motion and card-to-search collapse. Existing live name results, alternating rows, details return, persistent deletable history, keyboard and profile lens. Window maximize/restore/minimize and authored close; host and sidecar released; normal Home shortcut restart without debug flags.",
     "windowControls": {
       "initialMaximized": true,
       "restored": true,
@@ -288,6 +288,34 @@
         "reducedMotion": false
       }
     ],
+    "marketRapidNavigation": [
+      {
+        "appearance": "dark",
+        "allButtonsResponsive": true,
+        "lastClickWins": true,
+        "retargetWithoutRestart": true,
+        "reversal": {
+          "before": "polygon(0% 0%, 0% 100%, 36.4807% 100%, 36.4807% 0%, 63.5193% 0%, 63.5193% 100%, 100% 100%, 100% 0%)",
+          "first": "polygon(0% 0%, 0% 100%, 36.4807% 100%, 36.4807% 0%, 63.5193% 0%, 63.5193% 100%, 100% 100%, 100% 0%)"
+        },
+        "settledMs": 428,
+        "indicatorAligned": true,
+        "noStalePage": true
+      },
+      {
+        "appearance": "light",
+        "allButtonsResponsive": true,
+        "lastClickWins": true,
+        "retargetWithoutRestart": true,
+        "reversal": {
+          "before": "polygon(0% 0%, 0% 100%, 9.36305% 100%, 9.36305% 0%, 90.6369% 0%, 90.6369% 100%, 100% 100%, 100% 0%)",
+          "first": "polygon(0% 0%, 0% 100%, 9.36305% 100%, 9.36305% 0%, 90.6369% 0%, 90.6369% 100%, 100% 100%, 100% 0%)"
+        },
+        "settledMs": 535,
+        "indicatorAligned": true,
+        "noStalePage": true
+      }
+    ],
     "marketSearch": [
       {
         "appearance": "dark",
@@ -331,51 +359,18 @@
           "width": 1919.987548828125,
           "height": 452.0159912109375
         },
-        "originalTaskShaders": true,
-        "constantSpeedSamples": [
-          {
-            "time": 14660.5,
-            "distance": 42.61
-          },
-          {
-            "time": 14860.79999999702,
-            "distance": 52.205
-          },
-          {
-            "time": 15062.79999999702,
-            "distance": 62.011
-          },
-          {
-            "time": 15266.70000000298,
-            "distance": 71.813
-          },
-          {
-            "time": 15470.70000000298,
-            "distance": 81.614
-          },
-          {
-            "time": 15670.79999999702,
-            "distance": 91.21
-          },
-          {
-            "time": 15870.89999999851,
-            "distance": 100.814
-          },
-          {
-            "time": 16075.10000000149,
-            "distance": 110.616
-          },
-          {
-            "time": 16279.5,
-            "distance": 120.418
-          }
-        ],
-        "continuousLeft": true,
-        "pause": true,
-        "hoverKeepsMoving": true,
+        "pauseButtonRemoved": true,
+        "rightDrag": true,
+        "leftDrag": true,
+        "outsideRelease": true,
+        "noAccidentalSearch": true,
+        "ordinaryClick": true,
+        "initialRate": 47.96901527983243,
+        "heldRate": 48.198393748331576,
+        "releasedRate": 48.244129468703676,
+        "reducedMotion": true,
         "keyboardFocusPause": true,
-        "chooseModel": true,
-        "reducedMotion": true
+        "pointerRestartsAfterKeyboardFocus": true
       },
       {
         "appearance": "light",
@@ -385,51 +380,18 @@
           "width": 1919.987548828125,
           "height": 452.0159912109375
         },
-        "originalTaskShaders": true,
-        "constantSpeedSamples": [
-          {
-            "time": 14991.19999999553,
-            "distance": 46.205
-          },
-          {
-            "time": 15192.79999999702,
-            "distance": 56.006
-          },
-          {
-            "time": 15397.10000000149,
-            "distance": 65.808
-          },
-          {
-            "time": 15597.19999999553,
-            "distance": 75.408
-          },
-          {
-            "time": 15797.29999999702,
-            "distance": 85.008
-          },
-          {
-            "time": 16001.29999999702,
-            "distance": 94.81
-          },
-          {
-            "time": 16201.79999999702,
-            "distance": 104.414
-          },
-          {
-            "time": 16405.60000000149,
-            "distance": 114.211
-          },
-          {
-            "time": 16606.39999999851,
-            "distance": 123.816
-          }
-        ],
-        "continuousLeft": true,
-        "pause": true,
-        "hoverKeepsMoving": true,
+        "pauseButtonRemoved": true,
+        "rightDrag": true,
+        "leftDrag": true,
+        "outsideRelease": true,
+        "noAccidentalSearch": true,
+        "ordinaryClick": true,
+        "initialRate": 47.959612956908124,
+        "heldRate": 48.00085708209681,
+        "releasedRate": 47.86182940990733,
+        "reducedMotion": true,
         "keyboardFocusPause": true,
-        "chooseModel": true,
-        "reducedMotion": true
+        "pointerRestartsAfterKeyboardFocus": true
       }
     ],
     "marketIndicator": [
@@ -652,11 +614,17 @@
         }
       ],
       "errors": [
-        "Hydration completed but contains mismatches.",
-        "TypeError: Cannot read properties of null (reading 'dimensions')",
-        "TypeError: Cannot read properties of null (reading 'text')"
+        "Hydration completed but contains mismatches."
       ],
       "failedRequests": [
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
+          "error": "net::ERR_ABORTED"
+        },
         {
           "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
           "error": "net::ERR_ABORTED"
@@ -734,51 +702,18 @@
             "width": 1919.987548828125,
             "height": 452.0159912109375
           },
-          "originalTaskShaders": true,
-          "constantSpeedSamples": [
-            {
-              "time": 31502.29999999702,
-              "distance": 39.998
-            },
-            {
-              "time": 31715.69999999553,
-              "distance": 50.4
-            },
-            {
-              "time": 31918.10000000149,
-              "distance": 59.995
-            },
-            {
-              "time": 32132.10000000149,
-              "distance": 70.397
-            },
-            {
-              "time": 32335.60000000149,
-              "distance": 79.997
-            },
-            {
-              "time": 32539.19999999553,
-              "distance": 89.597
-            },
-            {
-              "time": 32741,
-              "distance": 99.197
-            },
-            {
-              "time": 32943.39999999851,
-              "distance": 108.797
-            },
-            {
-              "time": 33148.19999999553,
-              "distance": 119.198
-            }
-          ],
-          "continuousLeft": true,
-          "pause": true,
-          "hoverKeepsMoving": true,
+          "pauseButtonRemoved": true,
+          "rightDrag": true,
+          "leftDrag": true,
+          "outsideRelease": true,
+          "noAccidentalSearch": true,
+          "ordinaryClick": true,
+          "initialRate": 48.05061119404932,
+          "heldRate": 47.90846877657961,
+          "releasedRate": 48.28842422951491,
+          "reducedMotion": true,
           "keyboardFocusPause": true,
-          "chooseModel": true,
-          "reducedMotion": true
+          "pointerRestartsAfterKeyboardFocus": true
         },
         {
           "appearance": "light",
@@ -788,85 +723,18 @@
             "width": 1919.987548828125,
             "height": 452.0159912109375
           },
-          "originalTaskShaders": true,
-          "constantSpeedSamples": [
-            {
-              "time": 75694.39999999851,
-              "distance": 59.198
-            },
-            {
-              "time": 75903,
-              "distance": 69.6
-            },
-            {
-              "time": 76127,
-              "distance": 79.997
-            },
-            {
-              "time": 76335.5,
-              "distance": 90.398
-            },
-            {
-              "time": 76544.80000000447,
-              "distance": 99.994
-            },
-            {
-              "time": 76757.39999999851,
-              "distance": 110.395
-            },
-            {
-              "time": 76958.30000000447,
-              "distance": 119.995
-            },
-            {
-              "time": 77242.80000000447,
-              "distance": 130.397
-            },
-            {
-              "time": 77453,
-              "distance": 143.198
-            }
-          ],
-          "continuousLeft": true,
-          "pause": true,
-          "hoverKeepsMoving": true,
+          "pauseButtonRemoved": true,
+          "rightDrag": true,
+          "leftDrag": true,
+          "outsideRelease": true,
+          "noAccidentalSearch": true,
+          "ordinaryClick": true,
+          "initialRate": 47.83685671608492,
+          "heldRate": 48.051920189415185,
+          "releasedRate": 48.16559139784944,
+          "reducedMotion": true,
           "keyboardFocusPause": true,
-          "chooseModel": true,
-          "reducedMotion": true
-        }
-      ],
-      "search": [
-        {
-          "appearance": "dark",
-          "form": {
-            "x": 505.9119567871094,
-            "y": 641.9039916992188,
-            "width": 908.1599426269531,
-            "height": 88.751953125
-          },
-          "modelDetails": true,
-          "multipleResults": 3,
-          "historyDelete": true,
-          "keyboardHistory": true,
-          "persistence": false,
-          "emptyState": true,
-          "seamlessBackdrop": true
-        },
-        {
-          "appearance": "light",
-          "form": {
-            "x": 505.9119567871094,
-            "y": 641.9039916992188,
-            "width": 908.1599426269531,
-            "height": 88.751953125
-          },
-          "modelDetails": true,
-          "multipleResults": 3,
-          "historyDelete": true,
-          "keyboardHistory": true,
-          "persistence": true,
-          "emptyState": true,
-          "seamlessBackdrop": true
+          "pointerRestartsAfterKeyboardFocus": true
         }
       ],
       "categories": [
@@ -1243,68 +1111,63 @@
           "reducedMotion": false
         }
       ],
-      "errorStacks": [
-        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-        "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
-        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-        "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
-        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-        "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
-        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111"
+      "rapidNavigation": [
+        {
+          "appearance": "dark",
+          "allButtonsResponsive": true,
+          "lastClickWins": true,
+          "retargetWithoutRestart": true,
+          "reversal": {
+            "before": "polygon(0% 0%, 0% 100%, 10.4489% 100%, 10.4489% 0%, 89.5511% 0%, 89.5511% 100%, 100% 100%, 100% 0%)",
+            "first": "polygon(0% 0%, 0% 100%, 10.4489% 100%, 10.4489% 0%, 89.5511% 0%, 89.5511% 100%, 100% 100%, 100% 0%)"
+          },
+          "settledMs": 529,
+          "indicatorAligned": true,
+          "noStalePage": true
+        },
+        {
+          "appearance": "light",
+          "allButtonsResponsive": true,
+          "lastClickWins": true,
+          "retargetWithoutRestart": true,
+          "reversal": {
+            "before": "polygon(0% 0%, 0% 100%, 6.55715% 100%, 6.55715% 0%, 93.4428% 0%, 93.4428% 100%, 100% 100%, 100% 0%)",
+            "first": "polygon(0% 0%, 0% 100%, 6.55715% 100%, 6.55715% 0%, 93.4428% 0%, 93.4428% 100%, 100% 100%, 100% 0%)"
+          },
+          "settledMs": 522,
+          "indicatorAligned": true,
+          "noStalePage": true
+        }
       ],
       "newErrors": [],
-      "qualification": {
-        "legacyAsset": "apps/preacherman-demo-host/public/active-theory-gallery/gallery/assets/js/app.1780406240914.js",
-        "unchangedGitBlob": "bb46ec08b9bd25a8cc9444441ee6ab0c6e60ffcd",
-        "diagnostics": [
-          "TypeError: Cannot read properties of null (reading 'dimensions')",
-          "TypeError: Cannot read properties of null (reading 'text')"
-        ],
-        "stacks": [
-          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-          "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
-          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-          "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
-          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-          "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
-          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
-          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111"
-        ],
-        "basis": "All affected preview interactions and both appearance modes passed. These observed diagnostics originate in unchanged Gallery card-title asynchronous resize/teardown code, not the Market preview renderer. Home-only isolation did not reproduce them, so they are classified by unchanged source identity and exact stack origin, not claimed as reproduced by that isolation. Native flow remains required."
-      },
-      "originalDiagnosticAssertion": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"TypeError: Cannot read properties of null (reading 'dimensions')\",\n+   \"TypeError: Cannot read properties of null (reading 'text')\"\n+ ]\n- []\n\n    at D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\verify.cjs:262:31",
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-01T10:03:13.4566423+08:00",
-      "NativePid": 296,
-      "StartedAt": "2026-10-01T10:02:57.3901173+08:00",
-      "WindowHandle": 2492952,
+      "SampledAt": "2026-10-01T10:31:07.2857194+08:00",
+      "NativePid": 40828,
+      "StartedAt": "2026-10-01T10:30:11.9181484+08:00",
+      "WindowHandle": 18745802,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        296,
-        35496,
-        39020,
-        38728,
-        36320,
-        38260,
-        18832,
-        37380,
-        35332,
-        32928,
-        41456
+        40828,
+        36060,
+        35756,
+        38028,
+        40476,
+        36012,
+        28120,
+        38792,
+        33872,
+        26532,
+        28944,
+        22364
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1839.5,
-      "GpuDedicatedBytes": 3348180992,
+      "NormalizedCpuPercent": 9.76,
+      "WorkingSetMiB": 1905.9,
+      "GpuDedicatedBytes": 3374514176,
       "MaxGpuEngineUtilization": 13,
-      "FreeRamKiB": 14416324,
+      "FreeRamKiB": 14931672,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -1314,6 +1177,12 @@
     },
     "newErrors": [],
     "observedErrors": [
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-4.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
@@ -1330,25 +1199,55 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
-    "consoleQualification": null,
+    "consoleQualification": {
+      "diagnostics": [
+        "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-4.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked."
+      ],
+      "origin": "Unchanged imported Task texture URL; exact CSP log first observed in this run, not claimed to be reproduced on baseline",
+      "evidence": {
+        "sourceTrees": [
+          {
+            "path": "apps/preacherman-demo-host/public/gallery-v3",
+            "baseline": "b767c75a0337912944f7569afaae039c51467b67",
+            "current": "b767c75a0337912944f7569afaae039c51467b67"
+          },
+          {
+            "path": "apps/preacherman-demo-host/public/task-lookback-v3",
+            "baseline": "93d069666d1d4db6020b2909470954ad33e5cf4d",
+            "current": "93d069666d1d4db6020b2909470954ad33e5cf4d"
+          },
+          {
+            "path": "apps/preacherman-demo-host/src-tauri/tauri.conf.json",
+            "baseline": "40b1d12af5b03dffad6ad346925f23dfdcb511b7",
+            "current": "40b1d12af5b03dffad6ad346925f23dfdcb511b7"
+          }
+        ],
+        "errors": [],
+        "localTexture": 2,
+        "frames": [
+          "http://tauri.localhost/__surfaces/workspace",
+          "http://tauri.localhost/gallery-v3/portfolio/",
+          "http://tauri.localhost/work?galleryFrame=1"
+        ],
+        "passed": true
+      },
+      "packagedTexture": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\dist\\gallery-v3\\portfolio\\textures\\223669_1786207957-dogelon-4.ktx2",
+      "packagedTextureBytes": 221902,
+      "visualVerification": "Native Task cards render correctly; native-light-task-settled.jpg. Both Market appearances, rapid navigation and drag assertions passed before the final diagnostic comparison."
+    },
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\source-checks.log",
-      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\final-resources.json"
+      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\final-resources.json"
     ]
   },
   "releaseAttempts": [
@@ -2080,9 +1979,18 @@
       "deployedAt": "2026-10-01T10:00:15.0647633+08:00",
       "verifiedAt": "2026-10-01T10:03:13.4566423+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-task-promos-before-20261001"
+    },
+    {
+      "buildId": "market-drag-promos-20261001",
+      "sourceCommit": "6624b4f5ae6a0cc9df474562be745f0d07139cdb",
+      "sha256": "ED634EC171285AAF8765F39AF014AF21DC9AF3D71158EFFBD1D6BF8216CD0BF6",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-01T10:26:07.3028554+08:00",
+      "verifiedAt": "2026-10-01T10:31:07.2857194+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-drag-promos-before-20261001"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-task-promos-before-20261001/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-drag-promos-before-20261001/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
