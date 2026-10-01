@@ -182,3 +182,48 @@ test("timeline details resolve the complete catalog, including non-featured conv
   assert.ok(detail.includes('$e("projects",()=>p.projects())'), "detail sheets must share the complete timeline catalog");
   assert.ok(!detail.includes('$e("featured",()=>p.featured())'), "a non-featured title must not mount an empty detail sheet");
 });
+
+
+test("conversation roles select opposite sides and preserve legacy user messages", () => {
+  const f = fixture(JSON.stringify([
+    {text:"User", role:"user", files:[]},
+    {text:"Reply", role:"assistant", files:[]},
+    {text:"Legacy", files:[]},
+  ]));
+  const cards = f.find(n => n.props.role === "log").children;
+  assert.deepEqual(Array.from(cards, card => card.props["data-role"]), ["user", "assistant", "user"]);
+  const css = fs.readFileSync(new URL("task-conversation.css", root), "utf8");
+  assert.ok(css.includes('.task-chat__message[data-role="user"] { align-self: flex-end; }'));
+  assert.ok(css.includes('.task-chat__message[data-role="assistant"] { align-self: flex-start; }'));
+});
+
+test("microphone is keyboard accessible and reports missing transcription without sending or clearing the draft", () => {
+  const f = fixture();
+  f.connect();
+  f.input().onInput({target:{value:"保留草稿"}});
+  const mic = f.find(n => n.props["aria-label"] === "语音输入");
+  assert.equal(mic.tag, "button");
+  assert.equal(mic.props.type, "button");
+  assert.notEqual(mic.props.disabled, true);
+  const posted = f.posted.length;
+  mic.props.onClick(); mic.props.onClick();
+  assert.equal(f.input().value, "保留草稿");
+  assert.equal(f.storage.size, 0);
+  assert.equal(f.posted.length, posted);
+  assert.match(f.find(n => n.props.role === "status").children, /语音识别尚未配置/);
+  f.input().onInput({target:{value:"继续编辑"}});
+  assert.equal(f.find(n => n.props.id === "task-voice-status-nathan-riley"), null);
+});
+
+test("text send keeps the user on the right and the returned reply on the left", async () => {
+  const f = fixture();
+  f.connect(); f.input().onInput({target:{value:"你好"}}); f.submit();
+  assert.equal(f.find(n => n.tag === "article").props["data-role"], "user");
+  assert.match(f.find(n => n.props.role === "status").children, /正在请求/);
+  const request = f.posted.find(entry => entry.message.action === "chat").message;
+  f.windowHandlers.message({source:f.context.parent,origin:"app://localhost",data:{type:"gallery-execution-result", requestId:request.requestId, result:{text:"你好，我在。"}}});
+  await new Promise(setImmediate);
+  const reply = f.find(n => n.tag === "article" && n.props["data-role"] === "assistant");
+  assert.equal(reply.children[1].children, "你好，我在。");
+  assert.equal(f.find(n => n.props.role === "status"), null);
+});

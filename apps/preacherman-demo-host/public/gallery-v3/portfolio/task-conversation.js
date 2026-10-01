@@ -52,6 +52,7 @@ export const TaskConversation = {
     const draft = ref("");
     const files = ref([]);
     const error = ref("");
+    const voiceNotice = ref(false);
     const readFailed = ref(false);
     const list = ref(null);
     const input = ref(null);
@@ -132,9 +133,6 @@ export const TaskConversation = {
       } catch (reason) { error.value = reason.message; }
       finally { busy.value = false; scrollToLatest(); }
     };
-    const unavailable = (label, name, explanation, className = "") => element("button", {
-      type:"button", class:"task-chat__tool " + className, disabled:true, title:explanation, "aria-label":label + "，" + explanation,
-    }, [name ? icon(name) : null, label ? element("span", null, label) : null]);
 
     const requestProviders = () => {
       providerState.value = providers.value.length ? "ready" : "loading";
@@ -231,7 +229,7 @@ export const TaskConversation = {
       }}, [
       element("div", {ref:list, class:"task-chat__messages", role:"log", "aria-label":"本机消息记录", "aria-live":"polite", tabindex:0,
         onVnodeMounted:scrollToLatest}, messages.value.map((message, index) => element("article", {
-          key:index, class:"task-chat__message", "aria-label":message.role === "assistant" ? "模型回复" : "你的消息",
+          key:index, class:"task-chat__message", "data-role":message.role === "assistant" ? "assistant" : "user", "aria-label":message.role === "assistant" ? "模型回复" : "你的消息",
         }, [
           element("small", {class:"task-chat__author"}, message.role === "assistant" ? "Preacherman" : "You"),
           message.text ? element("p", null, message.text) : null,
@@ -248,6 +246,7 @@ export const TaskConversation = {
           ...message.files.map((name, index) => element("span", {key:index, class:"task-chat__file"}, [icon("file"), name])),
         ]))),
       error.value || busy.value || contextTrimmed.value ? element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (busy.value ? "正在请求，请稍候…" : "本次仅发送限额内的近期上下文；完整记录仍保留在本机。")) : null,
+      voiceNotice.value ? element("p", {id:`task-voice-status-${task}`, class:"task-chat__status", role:"status"}, "语音识别尚未配置，请先接入识别服务。") : null,
       element("form", {class:"task-chat__composer", onSubmit:event => {event.preventDefault(); send();}}, [
         files.value.length ? element("div", {class:"task-chat__attachments"}, files.value.map((name, index) => element("button", {
           key:index, type:"button", class:"task-chat__attachment", title:"移除 " + name,
@@ -256,7 +255,7 @@ export const TaskConversation = {
         element("textarea", {
           ref:input, class:"task-chat__input", rows:2, maxlength:20000, placeholder:"发送消息…",
           "aria-label":"消息内容", value:draft.value,
-          onInput:event => {draft.value = event.target.value; resize();},
+          onInput:event => {draft.value = event.target.value; voiceNotice.value = false; resize();},
           onKeydown:event => {
             event.stopPropagation();
             if (event.key === "Enter" && !event.shiftKey && !event.isComposing && event.keyCode !== 229) {
@@ -273,7 +272,11 @@ export const TaskConversation = {
           element("button", {type:"button", class:"task-chat__tool task-chat__icon", title:"添加附件（此版本仅记录文件名，不读取或上传）", "aria-label":"添加附件", onClick:() => picker.value?.click()}, [icon("plus")]),
           element("span", {class:"task-chat__spacer"}),
           modelSelector(),
-          unavailable("", "mic", "语音尚未接入", "task-chat__icon"),
+          element("button", {
+            type:"button", class:"task-chat__tool task-chat__icon", title:"语音输入（待配置识别服务）", "aria-label":"语音输入",
+            "aria-describedby":voiceNotice.value ? `task-voice-status-${task}` : undefined,
+            onClick:() => { voiceNotice.value = true; },
+          }, [icon("mic")]),
           element("button", {type:"submit", class:"task-chat__send", "aria-label":"发送消息", title:"发送到所选模型", disabled:busy.value || readFailed.value || !draft.value.trim()}, [icon("up")]),
         ]),
       ]),

@@ -91,6 +91,8 @@
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
+.task-chat__message[data-role="user"] { align-self: flex-end; }
+.task-chat__message[data-role="assistant"] { align-self: flex-start; }
 .task-chat__message p { margin: 0; }
 .task-chat__message:last-child { animation: task-message-enter 220ms cubic-bezier(.16,1,.3,1); }
 .task-chat__composer {
@@ -214,9 +216,9 @@
   flex: none;
   min-height: 1.7rem;
   margin: 0 0 0.8rem;
-  text-align: center;
+  text-align: left;
   font-size: 1.1rem;
-  color: var(--demo-theme-gallery-detail-action-rest-text);
+  color: var(--demo-theme-chat-muted);
 }
 .task-chat__status[role="alert"] { color: var(--demo-theme-chat-error); }
 .task-chat__attachments { display: flex; flex-wrap: wrap; gap: 0.6rem; padding: 0 0.4rem 0.8rem; }
