@@ -1,36 +1,36 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-search-promos-20261001",
+  "buildId": "market-task-promos-20261001",
   "productVersion": "0.1.0",
-  "sourceTask": "market-search-promos-and-sliding-navigation",
+  "sourceTask": "market-task-featured-cards-continuous-search-previews",
   "sourceThread": null,
-  "sourceState": "Reorder categories to Discover Browse Sell Inventory | Search, move the shared underline immediately on accepted click, reserve three automatically cycling model-image campaign slots above empty Search. Pause for hover, focus, manual control, hidden views and reduced motion; card selection enters Search. Existing search/history/details and packaged assets preserved; sidecar reused.",
-  "sourceCommit": "356b29ffc472563de79064b2a2625fe41b3340ab",
+  "sourceState": "Reuse original Task Featured card shaders, camera and geometry above empty Search. Model images fit the wide curved frames, names follow the surface at bottom left. Continuous right-to-left travel at 48 stage pixels per second; hover continues transport, keyboard focus/manual pause/hidden/reduced motion stop it. Existing navigation underline, search/history/details and packaged assets preserved; sidecar reused.",
+  "sourceCommit": "25425ba73f680d6d156321f76ec0e89e0887150a",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-01T05:30:52.3751393+08:00",
-  "deployedAt": "2026-10-01T05:31:14.2051578+08:00",
-  "verifiedAt": "2026-10-01T05:34:14.5239006+08:00",
-  "sizeBytes": 676124160,
-  "sha256": "CC2B524BDCEEEBC0C246C7165EAF8BCA86FE90A1EE0E8E862DDFFFA99C856F6B",
+  "builtAt": "2026-10-01T09:59:44.1982447+08:00",
+  "deployedAt": "2026-10-01T10:00:15.0647633+08:00",
+  "verifiedAt": "2026-10-01T10:03:13.4566423+08:00",
+  "sizeBytes": 676128256,
+  "sha256": "88EB1A1FA2F6BB2F4D37B0E7D661902DA40315DFFADB7DF07E071E8E344A2286",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-search-promos-before-20261001/preacherman-demo-host.exe",
-  "backupSha256": "7DBE8589E1F3D7D8B3F0412E6C2E12B4AABC387E0DA3C97F3E3D6F0B761BF151",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-search-promos-before-20261001/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-task-promos-before-20261001/preacherman-demo-host.exe",
+  "backupSha256": "CC2B524BDCEEEBC0C246C7165EAF8BCA86FE90A1EE0E8E862DDFFFA99C856F6B",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-task-promos-before-20261001/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "c387fa21ff72ccfdd9abe731840316921cbe4acb",
-  "previousVerificationCommit": "c387fa21ff72ccfdd9abe731840316921cbe4acb",
+  "rollbackBaselineCommit": "356b29ffc472563de79064b2a2625fe41b3340ab",
+  "previousVerificationCommit": "356b29ffc472563de79064b2a2625fe41b3340ab",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 49
+      "focusedTests": 51
     },
-    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market (internal ledger route), Account and Settings in both appearances. Category order and Search divider, immediately sliding/scaling underline during content exit, three promo slots with automatic recycling, pause/resume/hover/reduced motion and card-to-search collapse. Existing live name results, alternating rows, details return, persistent deletable history, keyboard, IME and profile lens. Window maximize/restore/minimize and authored close; host and sidecar released; normal Home shortcut restart without debug flags.",
+    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market (internal ledger route), Account and Settings in both appearances. Category order and Search divider, navigation underline alignment, original Task curved cards with constant leftward travel, bottom-left names, hover deformation without stopping, pause/resume/focus/reduced motion and card-to-search collapse. Existing live name results, alternating rows, details return, persistent deletable history, keyboard, IME and profile lens. Window maximize/restore/minimize and authored close; host and sidecar released; normal Home shortcut restart without debug flags.",
     "windowControls": {
       "initialMaximized": true,
       "restored": true,
@@ -207,90 +207,6 @@
           },
           {
             "phase": "entering",
-            "active": "Browse",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Browse",
-            "searchReady": "true",
-            "clips": []
-          },
-          {
-            "phase": "exiting",
-            "active": "Browse",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
-            "active": "Sell",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Sell",
-            "searchReady": "true",
-            "clips": []
-          },
-          {
-            "phase": "exiting",
-            "active": "Sell",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
-            "active": "Inventory",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Inventory",
-            "searchReady": "true",
-            "clips": []
-          },
-          {
-            "phase": "exiting",
-            "active": "Inventory",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
             "active": "Discover",
             "searchReady": "false",
             "clips": [
@@ -353,90 +269,6 @@
           },
           {
             "phase": "entering",
-            "active": "Browse",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Browse",
-            "searchReady": "true",
-            "clips": []
-          },
-          {
-            "phase": "exiting",
-            "active": "Browse",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
-            "active": "Sell",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Sell",
-            "searchReady": "true",
-            "clips": []
-          },
-          {
-            "phase": "exiting",
-            "active": "Sell",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
-            "active": "Inventory",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Inventory",
-            "searchReady": "true",
-            "clips": []
-          },
-          {
-            "phase": "exiting",
-            "active": "Inventory",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
             "active": "Discover",
             "searchReady": "false",
             "clips": [
@@ -461,9 +293,9 @@
         "appearance": "dark",
         "form": {
           "x": 505.9119567871094,
-          "y": 555.2159423828125,
+          "y": 641.9039916992188,
           "width": 908.1599426269531,
-          "height": 88.75201416015625
+          "height": 88.751953125
         },
         "modelDetails": true,
         "multipleResults": 3,
@@ -477,9 +309,9 @@
         "appearance": "light",
         "form": {
           "x": 505.9119567871094,
-          "y": 555.2159423828125,
+          "y": 641.9039916992188,
           "width": 908.1599426269531,
-          "height": 88.75201416015625
+          "height": 88.751953125
         },
         "modelDetails": true,
         "multipleResults": 3,
@@ -494,30 +326,108 @@
       {
         "appearance": "dark",
         "box": {
-          "x": 53.670223236083984,
+          "x": 0.0062255859375,
           "y": 165.1199951171875,
-          "width": 1812.6594886779785,
-          "height": 365.3280029296875
+          "width": 1919.987548828125,
+          "height": 452.0159912109375
         },
-        "threeSlots": true,
-        "autoCycle": true,
+        "originalTaskShaders": true,
+        "constantSpeedSamples": [
+          {
+            "time": 14660.5,
+            "distance": 42.61
+          },
+          {
+            "time": 14860.79999999702,
+            "distance": 52.205
+          },
+          {
+            "time": 15062.79999999702,
+            "distance": 62.011
+          },
+          {
+            "time": 15266.70000000298,
+            "distance": 71.813
+          },
+          {
+            "time": 15470.70000000298,
+            "distance": 81.614
+          },
+          {
+            "time": 15670.79999999702,
+            "distance": 91.21
+          },
+          {
+            "time": 15870.89999999851,
+            "distance": 100.814
+          },
+          {
+            "time": 16075.10000000149,
+            "distance": 110.616
+          },
+          {
+            "time": 16279.5,
+            "distance": 120.418
+          }
+        ],
+        "continuousLeft": true,
         "pause": true,
-        "hover": true,
+        "hoverKeepsMoving": true,
+        "keyboardFocusPause": true,
         "chooseModel": true,
         "reducedMotion": true
       },
       {
         "appearance": "light",
         "box": {
-          "x": 53.670223236083984,
+          "x": 0.0062255859375,
           "y": 165.1199951171875,
-          "width": 1812.6594886779785,
-          "height": 365.3280029296875
+          "width": 1919.987548828125,
+          "height": 452.0159912109375
         },
-        "threeSlots": true,
-        "autoCycle": true,
+        "originalTaskShaders": true,
+        "constantSpeedSamples": [
+          {
+            "time": 14991.19999999553,
+            "distance": 46.205
+          },
+          {
+            "time": 15192.79999999702,
+            "distance": 56.006
+          },
+          {
+            "time": 15397.10000000149,
+            "distance": 65.808
+          },
+          {
+            "time": 15597.19999999553,
+            "distance": 75.408
+          },
+          {
+            "time": 15797.29999999702,
+            "distance": 85.008
+          },
+          {
+            "time": 16001.29999999702,
+            "distance": 94.81
+          },
+          {
+            "time": 16201.79999999702,
+            "distance": 104.414
+          },
+          {
+            "time": 16405.60000000149,
+            "distance": 114.211
+          },
+          {
+            "time": 16606.39999999851,
+            "distance": 123.816
+          }
+        ],
+        "continuousLeft": true,
         "pause": true,
-        "hover": true,
+        "hoverKeepsMoving": true,
+        "keyboardFocusPause": true,
         "chooseModel": true,
         "reducedMotion": true
       }
@@ -526,106 +436,16 @@
       {
         "appearance": "dark",
         "target": "Search",
-        "oldLine": {
-          "x": 707.9581909179688,
-          "y": 147.57598876953125,
-          "width": 76.36798095703125,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 1086.415283203125,
-          "y": 147.57598876953125,
-          "width": 62.285888671875,
-          "height": 1.0319976806640625
-        },
         "settled": {
           "x": 1151.7181396484375,
           "y": 147.57598876953125,
           "width": 59.8560791015625,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "dark",
-        "target": "Browse",
-        "oldLine": {
-          "x": 1151.7181396484375,
-          "y": 147.57598876953125,
-          "width": 59.8560791015625,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 870.0675659179688,
-          "y": 147.57598876953125,
-          "width": 65.136962890625,
-          "height": 1.0319976806640625
-        },
-        "settled": {
-          "x": 821.4782104492188,
-          "y": 147.57598876953125,
-          "width": 66.0479736328125,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "dark",
-        "target": "Sell",
-        "oldLine": {
-          "x": 821.4782104492188,
-          "y": 147.57598876953125,
-          "width": 66.0479736328125,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 908.2796630859375,
-          "y": 147.57598876953125,
-          "width": 35.66748046875,
-          "height": 1.0319976806640625
-        },
-        "settled": {
-          "x": 924.6781616210938,
-          "y": 147.57598876953125,
-          "width": 29.92803955078125,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "dark",
-        "target": "Inventory",
-        "oldLine": {
-          "x": 924.6781616210938,
-          "y": 147.57598876953125,
-          "width": 29.92803955078125,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 983.49951171875,
-          "y": 147.57598876953125,
-          "width": 76.2720947265625,
-          "height": 1.0319976806640625
-        },
-        "settled": {
-          "x": 992.7901611328125,
-          "y": 147.57598876953125,
-          "width": 83.592041015625,
           "height": 1.0319976806640625
         }
       },
       {
         "appearance": "dark",
         "target": "Discover",
-        "oldLine": {
-          "x": 992.7901611328125,
-          "y": 147.57598876953125,
-          "width": 83.592041015625,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 746.7933349609375,
-          "y": 147.57598876953125,
-          "width": 77.35296630859375,
-          "height": 1.0319976806640625
-        },
         "settled": {
           "x": 707.9581909179688,
           "y": 147.57598876953125,
@@ -636,106 +456,16 @@
       {
         "appearance": "light",
         "target": "Search",
-        "oldLine": {
-          "x": 707.9581909179688,
-          "y": 147.57598876953125,
-          "width": 76.36798095703125,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 1086.3973388671875,
-          "y": 147.57598876953125,
-          "width": 62.2864990234375,
-          "height": 1.0319976806640625
-        },
         "settled": {
           "x": 1151.7181396484375,
           "y": 147.57598876953125,
           "width": 59.8560791015625,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "light",
-        "target": "Browse",
-        "oldLine": {
-          "x": 1151.7181396484375,
-          "y": 147.57598876953125,
-          "width": 59.8560791015625,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 870.1284790039062,
-          "y": 147.57598876953125,
-          "width": 65.13580322265625,
-          "height": 1.0319976806640625
-        },
-        "settled": {
-          "x": 821.4782104492188,
-          "y": 147.57598876953125,
-          "width": 66.0479736328125,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "light",
-        "target": "Sell",
-        "oldLine": {
-          "x": 821.4782104492188,
-          "y": 147.57598876953125,
-          "width": 66.0479736328125,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 910.62353515625,
-          "y": 147.57598876953125,
-          "width": 34.84710693359375,
-          "height": 1.0319976806640625
-        },
-        "settled": {
-          "x": 924.6781616210938,
-          "y": 147.57598876953125,
-          "width": 29.92803955078125,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "light",
-        "target": "Inventory",
-        "oldLine": {
-          "x": 924.6781616210938,
-          "y": 147.57598876953125,
-          "width": 29.92803955078125,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 980.1712646484375,
-          "y": 147.57598876953125,
-          "width": 73.64990234375,
-          "height": 1.0319976806640625
-        },
-        "settled": {
-          "x": 992.7901611328125,
-          "y": 147.57598876953125,
-          "width": 83.592041015625,
           "height": 1.0319976806640625
         }
       },
       {
         "appearance": "light",
         "target": "Discover",
-        "oldLine": {
-          "x": 992.7901611328125,
-          "y": 147.57598876953125,
-          "width": 83.592041015625,
-          "height": 1.0319976806640625
-        },
-        "moving": {
-          "x": 753.2805786132812,
-          "y": 147.57598876953125,
-          "width": 77.5174560546875,
-          "height": 1.0319976806640625
-        },
         "settled": {
           "x": 707.9581909179688,
           "y": 147.57598876953125,
@@ -922,7 +652,9 @@
         }
       ],
       "errors": [
-        "Hydration completed but contains mismatches."
+        "Hydration completed but contains mismatches.",
+        "TypeError: Cannot read properties of null (reading 'dimensions')",
+        "TypeError: Cannot read properties of null (reading 'text')"
       ],
       "failedRequests": [
         {
@@ -931,14 +663,6 @@
         },
         {
           "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
@@ -963,106 +687,16 @@
         {
           "appearance": "dark",
           "target": "Search",
-          "oldLine": {
-            "x": 707.9581909179688,
-            "y": 147.57598876953125,
-            "width": 76.36798095703125,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 1099.7923583984375,
-            "y": 147.57598876953125,
-            "width": 61.77490234375,
-            "height": 1.0319976806640625
-          },
           "settled": {
             "x": 1151.7181396484375,
             "y": 147.57598876953125,
             "width": 59.8560791015625,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "dark",
-          "target": "Browse",
-          "oldLine": {
-            "x": 1151.7181396484375,
-            "y": 147.57598876953125,
-            "width": 59.8560791015625,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 892.8637084960938,
-            "y": 147.57598876953125,
-            "width": 64.6934814453125,
-            "height": 1.0319976806640625
-          },
-          "settled": {
-            "x": 821.4782104492188,
-            "y": 147.57598876953125,
-            "width": 66.0479736328125,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "dark",
-          "target": "Sell",
-          "oldLine": {
-            "x": 821.4782104492188,
-            "y": 147.57598876953125,
-            "width": 66.0479736328125,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 894.2460327148438,
-            "y": 147.57598876953125,
-            "width": 40.57049560546875,
-            "height": 1.0319976806640625
-          },
-          "settled": {
-            "x": 924.6781616210938,
-            "y": 147.57598876953125,
-            "width": 29.92803955078125,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "dark",
-          "target": "Inventory",
-          "oldLine": {
-            "x": 924.6781616210938,
-            "y": 147.57598876953125,
-            "width": 29.92803955078125,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 972.7080078125,
-            "y": 147.57598876953125,
-            "width": 67.7572021484375,
-            "height": 1.0319976806640625
-          },
-          "settled": {
-            "x": 992.7901611328125,
-            "y": 147.57598876953125,
-            "width": 83.592041015625,
             "height": 1.0319976806640625
           }
         },
         {
           "appearance": "dark",
           "target": "Discover",
-          "oldLine": {
-            "x": 992.7901611328125,
-            "y": 147.57598876953125,
-            "width": 83.592041015625,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 791.9791259765625,
-            "y": 147.57598876953125,
-            "width": 78.49652099609375,
-            "height": 1.0319976806640625
-          },
           "settled": {
             "x": 707.9581909179688,
             "y": 147.57598876953125,
@@ -1073,106 +707,16 @@
         {
           "appearance": "light",
           "target": "Search",
-          "oldLine": {
-            "x": 707.9581909179688,
-            "y": 147.57598876953125,
-            "width": 76.36798095703125,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 1055.7406005859375,
-            "y": 147.57598876953125,
-            "width": 63.419677734375,
-            "height": 1.0319976806640625
-          },
           "settled": {
             "x": 1151.7181396484375,
             "y": 147.57598876953125,
             "width": 59.8560791015625,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "light",
-          "target": "Browse",
-          "oldLine": {
-            "x": 1151.7181396484375,
-            "y": 147.57598876953125,
-            "width": 59.8560791015625,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 892.8530883789062,
-            "y": 147.57598876953125,
-            "width": 64.70965576171875,
-            "height": 1.0319976806640625
-          },
-          "settled": {
-            "x": 821.4782104492188,
-            "y": 147.57598876953125,
-            "width": 66.0479736328125,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "light",
-          "target": "Sell",
-          "oldLine": {
-            "x": 821.4782104492188,
-            "y": 147.57598876953125,
-            "width": 66.0479736328125,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 894.1936645507812,
-            "y": 147.57598876953125,
-            "width": 40.58660888671875,
-            "height": 1.0319976806640625
-          },
-          "settled": {
-            "x": 924.6781616210938,
-            "y": 147.57598876953125,
-            "width": 29.92803955078125,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "light",
-          "target": "Inventory",
-          "oldLine": {
-            "x": 924.6781616210938,
-            "y": 147.57598876953125,
-            "width": 29.92803955078125,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 972.6982421875,
-            "y": 147.57598876953125,
-            "width": 67.7572021484375,
-            "height": 1.0319976806640625
-          },
-          "settled": {
-            "x": 992.7901611328125,
-            "y": 147.57598876953125,
-            "width": 83.592041015625,
             "height": 1.0319976806640625
           }
         },
         {
           "appearance": "light",
           "target": "Discover",
-          "oldLine": {
-            "x": 992.7901611328125,
-            "y": 147.57598876953125,
-            "width": 83.592041015625,
-            "height": 1.0319976806640625
-          },
-          "moving": {
-            "x": 791.8629760742188,
-            "y": 147.57598876953125,
-            "width": 78.48040771484375,
-            "height": 1.0319976806640625
-          },
           "settled": {
             "x": 707.9581909179688,
             "y": 147.57598876953125,
@@ -1185,30 +729,108 @@
         {
           "appearance": "dark",
           "box": {
-            "x": 53.670223236083984,
+            "x": 0.0062255859375,
             "y": 165.1199951171875,
-            "width": 1812.6594886779785,
-            "height": 365.3280029296875
+            "width": 1919.987548828125,
+            "height": 452.0159912109375
           },
-          "threeSlots": true,
-          "autoCycle": true,
+          "originalTaskShaders": true,
+          "constantSpeedSamples": [
+            {
+              "time": 31502.29999999702,
+              "distance": 39.998
+            },
+            {
+              "time": 31715.69999999553,
+              "distance": 50.4
+            },
+            {
+              "time": 31918.10000000149,
+              "distance": 59.995
+            },
+            {
+              "time": 32132.10000000149,
+              "distance": 70.397
+            },
+            {
+              "time": 32335.60000000149,
+              "distance": 79.997
+            },
+            {
+              "time": 32539.19999999553,
+              "distance": 89.597
+            },
+            {
+              "time": 32741,
+              "distance": 99.197
+            },
+            {
+              "time": 32943.39999999851,
+              "distance": 108.797
+            },
+            {
+              "time": 33148.19999999553,
+              "distance": 119.198
+            }
+          ],
+          "continuousLeft": true,
           "pause": true,
-          "hover": true,
+          "hoverKeepsMoving": true,
+          "keyboardFocusPause": true,
           "chooseModel": true,
           "reducedMotion": true
         },
         {
           "appearance": "light",
           "box": {
-            "x": 53.670223236083984,
+            "x": 0.0062255859375,
             "y": 165.1199951171875,
-            "width": 1812.6594886779785,
-            "height": 365.3280029296875
+            "width": 1919.987548828125,
+            "height": 452.0159912109375
           },
-          "threeSlots": true,
-          "autoCycle": true,
+          "originalTaskShaders": true,
+          "constantSpeedSamples": [
+            {
+              "time": 75694.39999999851,
+              "distance": 59.198
+            },
+            {
+              "time": 75903,
+              "distance": 69.6
+            },
+            {
+              "time": 76127,
+              "distance": 79.997
+            },
+            {
+              "time": 76335.5,
+              "distance": 90.398
+            },
+            {
+              "time": 76544.80000000447,
+              "distance": 99.994
+            },
+            {
+              "time": 76757.39999999851,
+              "distance": 110.395
+            },
+            {
+              "time": 76958.30000000447,
+              "distance": 119.995
+            },
+            {
+              "time": 77242.80000000447,
+              "distance": 130.397
+            },
+            {
+              "time": 77453,
+              "distance": 143.198
+            }
+          ],
+          "continuousLeft": true,
           "pause": true,
-          "hover": true,
+          "hoverKeepsMoving": true,
+          "keyboardFocusPause": true,
           "chooseModel": true,
           "reducedMotion": true
         }
@@ -1218,9 +840,9 @@
           "appearance": "dark",
           "form": {
             "x": 505.9119567871094,
-            "y": 555.2159423828125,
+            "y": 641.9039916992188,
             "width": 908.1599426269531,
-            "height": 88.75201416015625
+            "height": 88.751953125
           },
           "modelDetails": true,
           "multipleResults": 3,
@@ -1234,9 +856,9 @@
           "appearance": "light",
           "form": {
             "x": 505.9119567871094,
-            "y": 555.2159423828125,
+            "y": 641.9039916992188,
             "width": 908.1599426269531,
-            "height": 88.75201416015625
+            "height": 88.751953125
           },
           "modelDetails": true,
           "multipleResults": 3,
@@ -1282,90 +904,6 @@
             {
               "phase": "exiting",
               "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Browse",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Browse",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Browse",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Sell",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Sell",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Sell",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Inventory",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Inventory",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Inventory",
               "searchReady": "false",
               "clips": [
                 [
@@ -1562,90 +1100,6 @@
             },
             {
               "phase": "entering",
-              "active": "Browse",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Browse",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Browse",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Sell",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Sell",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Sell",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Inventory",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Inventory",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Inventory",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
               "active": "Discover",
               "searchReady": "false",
               "clips": [
@@ -1789,66 +1243,68 @@
           "reducedMotion": false
         }
       ],
+      "errorStacks": [
+        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+        "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
+        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+        "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
+        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+        "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
+        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+        "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111"
+      ],
       "newErrors": [],
-      "passed": true,
-      "paintConfirmation": {
-        "themes": [
-          {
-            "theme": "dark",
-            "cycles": 3,
-            "immediateIndicator": true,
-            "transformOnly": true,
-            "sizes": [
-              1920,
-              1024,
-              390
-            ]
-          },
-          {
-            "theme": "light",
-            "cycles": 3,
-            "immediateIndicator": true,
-            "transformOnly": true,
-            "sizes": [
-              1920,
-              1024,
-              390
-            ]
-          }
+      "qualification": {
+        "legacyAsset": "apps/preacherman-demo-host/public/active-theory-gallery/gallery/assets/js/app.1780406240914.js",
+        "unchangedGitBlob": "bb46ec08b9bd25a8cc9444441ee6ab0c6e60ffcd",
+        "diagnostics": [
+          "TypeError: Cannot read properties of null (reading 'dimensions')",
+          "TypeError: Cannot read properties of null (reading 'text')"
         ],
-        "errors": [
-          "Hydration completed but contains mismatches."
+        "stacks": [
+          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+          "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
+          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+          "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
+          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+          "TypeError: Cannot read properties of null (reading 'text')\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778056",
+          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111",
+          "TypeError: Cannot read properties of null (reading 'dimensions')\n    at resize (http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778237)\n    at http://127.0.0.1:1420/active-theory-gallery/gallery/assets/js/app.1780406240914.js:3:778111"
         ],
-        "newErrors": [],
-        "passed": true
+        "basis": "All affected preview interactions and both appearance modes passed. These observed diagnostics originate in unchanged Gallery card-title asynchronous resize/teardown code, not the Market preview renderer. Home-only isolation did not reproduce them, so they are classified by unchanged source identity and exact stack origin, not claimed as reproduced by that isolation. Native flow remains required."
       },
-      "qualification": "Full flow passed before the narrow compositor/scaleX fix; both themes, three complete cycles and responsive containment reconfirmed after it. Initial reduced-motion harness assertion now waits for media state."
+      "originalDiagnosticAssertion": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"TypeError: Cannot read properties of null (reading 'dimensions')\",\n+   \"TypeError: Cannot read properties of null (reading 'text')\"\n+ ]\n- []\n\n    at D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\verify.cjs:262:31",
+      "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-01T05:34:14.5239006+08:00",
-      "NativePid": 37760,
-      "StartedAt": "2026-10-01T05:33:57.8965301+08:00",
-      "WindowHandle": 5310306,
+      "SampledAt": "2026-10-01T10:03:13.4566423+08:00",
+      "NativePid": 296,
+      "StartedAt": "2026-10-01T10:02:57.3901173+08:00",
+      "WindowHandle": 2492952,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        37760,
-        39064,
-        40112,
-        11292,
-        22464,
-        32840,
-        37928,
-        9944,
-        33028,
-        38656,
-        6992
+        296,
+        35496,
+        39020,
+        38728,
+        36320,
+        38260,
+        18832,
+        37380,
+        35332,
+        32928,
+        41456
       ],
       "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1925.8,
-      "GpuDedicatedBytes": 3265007616,
-      "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 14732300,
+      "WorkingSetMiB": 1839.5,
+      "GpuDedicatedBytes": 3348180992,
+      "MaxGpuEngineUtilization": 13,
+      "FreeRamKiB": 14416324,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -1887,12 +1343,12 @@
     ],
     "consoleQualification": null,
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-search-promos-20261001\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-search-promos-20261001\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\market-search-promos-20261001\\source-checks.log",
-      "D:\\preacherman\\output\\playwright\\market-search-promos-20261001\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-search-promos-20261001\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\market-search-promos-20261001\\final-resources.json"
+      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\market-task-promos-20261001\\final-resources.json"
     ]
   },
   "releaseAttempts": [
@@ -2615,9 +2071,18 @@
       "deployedAt": "2026-10-01T05:31:14.2051578+08:00",
       "verifiedAt": "2026-10-01T05:34:14.5239006+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-search-promos-before-20261001"
+    },
+    {
+      "buildId": "market-task-promos-20261001",
+      "sourceCommit": "25425ba73f680d6d156321f76ec0e89e0887150a",
+      "sha256": "88EB1A1FA2F6BB2F4D37B0E7D661902DA40315DFFADB7DF07E071E8E344A2286",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-01T10:00:15.0647633+08:00",
+      "verifiedAt": "2026-10-01T10:03:13.4566423+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-task-promos-before-20261001"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-search-promos-before-20261001/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-task-promos-before-20261001/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
