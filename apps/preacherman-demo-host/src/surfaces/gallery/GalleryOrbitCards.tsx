@@ -1,3 +1,4 @@
+import { registerSurfaceMotion, heldTrack } from "../../app-shell/surfaceMotion";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Group, Mesh, MeshBasicMaterial, Raycaster, Vector2 } from "three";
@@ -14,6 +15,7 @@ export function GalleryOrbitCards({ bridge, active, renderActive = true }: { bri
   const railCards = useRef<GalleryRailCard[]>([]);
   const elapsed = useRef(0), scroll = useRef(GALLERY_LEAD_OFFSET), target = useRef(GALLERY_LEAD_OFFSET), wasVisible = useRef(false);
   const reduced = useRef(false), railVisible = useRef(false);
+  const routeClock = useRef<Animation | null>(null);
   const root = useRef<Group>(null), down = useRef<{ x: number; y: number } | null>(null);
   const raycaster = useMemo(() => new Raycaster(), []);
   const pointer = useMemo(() => new Vector2(), []);
@@ -23,6 +25,12 @@ export function GalleryOrbitCards({ bridge, active, renderActive = true }: { bri
     const sync = () => { reduced.current = media.matches; }; sync(); media.addEventListener("change", sync);
     return () => media.removeEventListener("change", sync);
   }, []);
+  useEffect(() => registerSurfaceMotion("market", () => {
+    if (!root.current?.visible) return { animations: [] };
+    const animation = heldTrack(gl.domElement, [{ "--gallery-route-clock": "0" }, { "--gallery-route-clock": "1" }], Math.max(1, Math.min(1.85, elapsed.current) * 1000));
+    routeClock.current = animation;
+    return { animations: [animation], dispose() { routeClock.current = null; } };
+  }), [gl]);
   useEffect(() => bridge.subscribeRail(next => { railCards.current = next; setCards(next); }), [bridge]);
   useEffect(() => bridge.subscribe(state => { railVisible.current = state.phase === "closed" && !state.contact; }), [bridge]);
   useEffect(() => {
@@ -71,7 +79,9 @@ export function GalleryOrbitCards({ bridge, active, renderActive = true }: { bri
     if (root.current) root.current.visible = visible;
     if (!visible) { wasVisible.current = false; return; }
     if (!wasVisible.current) elapsed.current = 0;
-    wasVisible.current = true; elapsed.current += Math.min(delta, .05);
+    wasVisible.current = true;
+    if (routeClock.current) elapsed.current = Number(routeClock.current.currentTime ?? 0) / 1000;
+    else elapsed.current = Math.min(1.85, elapsed.current + Math.min(delta, .05));
     const progress = galleryEntryProgress(elapsed.current, reduced.current);
     scroll.current = reduced.current ? target.current : scroll.current + (target.current - scroll.current) * (1 - Math.exp(-7 * Math.min(delta, .05)));
     for (let i = 0; i < groups.current.length; i++) {

@@ -10,6 +10,8 @@ import { WindowResizeHandles } from "./WindowResizeHandles";
 
 interface AppShellProps {
   readonly activeSurfaceType: string;
+  readonly navigationPhase?: "idle" | "exiting" | "returning";
+  readonly navigationTarget?: string;
   readonly appearance: Appearance;
   readonly children: ReactNode;
   readonly dispatch: SurfaceHostBridge["execute"];
@@ -32,6 +34,8 @@ const brandNavigationItems = [
 
 export function AppShell({
   activeSurfaceType,
+  navigationPhase = "idle",
+  navigationTarget = activeSurfaceType,
   appearance,
   children,
   dispatch,
@@ -97,6 +101,8 @@ export function AppShell({
     <div
       className={`demo-app-shell${entering ? " demo-host--entering" : ""}`}
       data-active-surface={activeSurfaceType}
+      data-navigation-phase={navigationPhase}
+      data-navigation-target={navigationTarget}
       data-appearance={appearance}
       data-locale={locale}
       data-scene-hidden={sceneHidden ? "true" : "false"}
@@ -151,9 +157,10 @@ export function AppShell({
               <path d="M18 24H62M18 40H62M18 56H62" />
             </svg>
           </button>
+          <div className="demo-app-shell__brand-settings-reveal" aria-hidden={!brandNavigationOpen}>
           <button
             aria-label="Settings"
-            aria-current={activeSurfaceType === "settings" ? "page" : undefined}
+            aria-current={navigationTarget === "settings" ? "page" : undefined}
             aria-hidden={!brandNavigationOpen}
             className="demo-app-shell__brand-settings"
             onClick={() => selectBrandDestination("settings")}
@@ -165,6 +172,7 @@ export function AppShell({
               <circle cx="40" cy="40" r="8" />
             </svg>
           </button>
+          </div>
           <nav
             aria-hidden={!brandNavigationOpen}
             aria-label="Preacherman sections"
@@ -174,7 +182,7 @@ export function AppShell({
             {brandNavigationItems.map((item, index) => (
               <div className="demo-app-shell__brand-menu-row" key={item.surfaceType} style={{ "--menu-order": index } as CSSProperties}>
                 <button
-                  aria-current={activeSurfaceType === item.surfaceType ? "page" : undefined}
+                  aria-current={navigationTarget === item.surfaceType ? "page" : undefined}
                   className="demo-app-shell__brand-menu-item"
                   onClick={() => selectBrandDestination(item.surfaceType)}
                   tabIndex={brandNavigationOpen ? 0 : -1}
@@ -211,7 +219,7 @@ export function AppShell({
       <div aria-hidden={sceneHidden ? "true" : undefined} className="demo-app-shell__scene">
         {scene}
       </div>
-      <div className="demo-app-shell__screen-content">{children}</div>
+      <div className="demo-app-shell__screen-content" ref={element => element?.toggleAttribute("inert", navigationPhase !== "idle")}>{children}</div>
       <button className="demo-account-dock" type="button" aria-label={auth.user ? "Open your account" : "Sign in to Preacherman"}
         data-menu-hidden={accountDockHidden} aria-hidden={accountDockHidden} tabIndex={accountDockHidden ? -1 : 0}
         onClick={() => { selectBrandDestination("account"); setBrandNavigationOpen(false); }}>

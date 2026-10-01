@@ -1,3 +1,5 @@
+import { useSurfaceNavigation } from "./app-shell/useSurfaceNavigation";
+import { routeSurface } from "./app-shell/surfaceNavigation";
 import { avatarModelName } from "@preacherman/avatar-renderer";
 import { adjacentGalleryModel } from "./surfaces/gallery/galleryModelBindings";
 import { useWindowActivity } from "./app-shell/useWindowActivity";
@@ -143,7 +145,8 @@ const tabs = {
 
 export function App({ enteringOnMount = false }: AppProps = {}) {
   const windowActive = useWindowActivity();
-  const [route, setRoute] = useState(currentRoute);
+  const [requestedRoute, setRoute] = useState(currentRoute);
+  const { route, phase: navigationPhase, target: navigationTarget } = useSurfaceNavigation(requestedRoute);
   const activeSurfaceType = route.kind === "surface" && route.surfaceType
     ? route.surfaceType
     : "home";
@@ -388,6 +391,8 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const appShell = (
     <AppShell
       activeSurfaceType={activeSurfaceType}
+      navigationPhase={navigationPhase}
+      navigationTarget={routeSurface(navigationTarget)}
       galleryDetailOpen={activeSurfaceType === "market" && galleryDetailOpen}
       appearance={preferences.appearance}
       dispatch={adapter.dispatch}
@@ -433,6 +438,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       >
         <ActiveTheoryGallerySurface
           active={activeSurfaceType === "market"}
+          navigating={navigationPhase !== "idle"}
           onBridgeChange={setGalleryBridge}
           renderActive={windowActive}
           activeModelId={activeModelId}
@@ -442,7 +448,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         />
       </div>
       {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
-      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} /> : null}
+      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} /> : null}
       {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} /> : null}
       {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>

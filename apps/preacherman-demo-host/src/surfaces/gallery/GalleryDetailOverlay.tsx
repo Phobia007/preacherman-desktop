@@ -33,7 +33,7 @@ export interface GalleryDetailBridge {
   geometry(): { left: number; top: number; width: number; height: number; backBottom: number; backHeight: number } | null;
 }
 
-export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, activeModelId, onActivate, onNavigate, switching, navigationError }: {
+export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, activeModelId, onActivate, onNavigate, switching, navigating = false, navigationError }: {
   bridge: GalleryDetailBridge;
   detail: GalleryDetailState;
   portal: Element;
@@ -43,6 +43,7 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, 
   onActivate: (modelId: ModelId) => void;
   onNavigate: (direction: -1 | 1) => void;
   switching: boolean;
+  navigating?: boolean;
   navigationError: string;
 }) {
   const backRef = useRef<HTMLButtonElement>(null);
@@ -64,6 +65,7 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, 
 
   useEffect(() => {
     const escape = (event: KeyboardEvent) => {
+      if (document.querySelector(".demo-app-shell")?.getAttribute("data-navigation-phase") !== "idle") return;
       if (!event.defaultPrevented && event.key === "Escape" && !document.querySelector('.demo-app-shell__brand-navigation[data-open="true"]')) onBack();
     };
     window.addEventListener("keydown", escape);
@@ -71,7 +73,7 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, 
   }, [onBack]);
 
   return createPortal(
-    <div className="gallery-detail" data-phase={detail.phase} data-project={detail.project} data-switching={switching} data-navigation-entry={detail.navigationEntry}>
+    <div ref={element => element?.toggleAttribute("inert", navigating)} className="gallery-detail" data-phase={detail.phase} data-project={detail.project} data-switching={switching} data-navigation-entry={detail.navigationEntry}>
       <div className="gallery-detail__content">
         <div className="gallery-detail__actions" ref={actionsRef}>
           {modelId ? <GalleryActivateButton

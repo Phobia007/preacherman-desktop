@@ -599,21 +599,38 @@ html[data-appearance="dark"] #root {
   pointer-events: none;
 }
 
-/* Both top controls share the same 48px target and 16px outer inset. */
+/* The gear is the drawer's first staggered child, inside its moving edge. */
+.demo-app-shell__brand-settings-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  transform: translate3d(-100%, 0, 0);
+  pointer-events: none;
+  transition: transform 820ms cubic-bezier(.76, 0, .16, 1);
+}
+.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-settings-reveal {
+  transform: translate3d(0, 0, 0);
+}
 .demo-app-shell__brand-settings {
   right: 16px;
   left: auto;
+  opacity: 0;
+  transform: translate3d(0, -14px, 0);
   visibility: hidden;
   pointer-events: none;
+  transition: color 180ms ease, opacity 160ms ease, transform 240ms ease, visibility 0s linear 820ms;
 }
-
 .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-settings {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
   visibility: visible;
   pointer-events: auto;
+  transition: color 180ms ease, opacity 380ms cubic-bezier(.16, 1, .3, 1) 390ms, transform 460ms cubic-bezier(.16, 1, .3, 1) 390ms, visibility 0s;
 }
 
 /* Reserved destinations share Market's single, continuous translucent backdrop. */
 .demo-frosted-surface {
+  animation: demo-frost-enter 260ms ease-out both;
   position: absolute;
   inset: 0;
   background: var(--demo-theme-market-details-glass);
@@ -2708,3 +2725,14 @@ body {
 .account-badge[data-profile-state="loading"] .account-badge__number { color: var(--demo-theme-member-loading); }
 .account-badge[data-profile-state="error"] .account-badge__number { color: var(--demo-theme-member-error); }
 @media (prefers-reduced-motion: reduce) { .demo-account-dock, .demo-account-dock[data-menu-hidden="true"] { transition: none; } }
+
+@keyframes demo-frost-enter { from { opacity: 0; } to { opacity: 1; } }
+.demo-app-shell[data-navigation-phase="exiting"] .demo-app-shell__screen-content *,
+.demo-app-shell[data-navigation-phase="returning"] .demo-app-shell__screen-content *,
+.demo-app-shell:not([data-navigation-phase="idle"]) .gallery-detail { pointer-events: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .demo-app-shell__brand-settings-reveal,
+  .demo-app-shell__brand-settings,
+  .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-settings { transition: none; }
+  .demo-frosted-surface { animation: none; }
+}

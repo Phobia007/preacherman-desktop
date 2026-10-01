@@ -1,3 +1,5 @@
+import { registerSurfaceMotion } from "../../app-shell/surfaceMotion";
+import { createMarketRouteMotion } from "./marketRouteMotion";
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { MarketProfile } from "./MarketProfile";
 import { MarketSearch } from "./MarketSearch";
@@ -40,6 +42,8 @@ export function MarketSurface() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [lensActive, setLensActive] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+
+  useLayoutEffect(() => registerSurfaceMotion("ledger", () => createMarketRouteMotion(surfaceRef.current!)), []);
 
   const highlightedCategory = category.next ?? category.active;
   useLayoutEffect(() => {

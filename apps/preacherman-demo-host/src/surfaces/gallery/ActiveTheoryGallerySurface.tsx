@@ -1,3 +1,4 @@
+import { registerSurfaceMotion, heldTrack } from "../../app-shell/surfaceMotion";
 import { galleryModelForProject } from "./galleryModelBindings";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { GalleryDetailOverlay, type GalleryDetailBridge, type GalleryDetailState } from "./GalleryDetailOverlay";
@@ -9,8 +10,9 @@ import "./active-theory-gallery-surface.css";
 
 const gallerySource = "/active-theory-gallery/gallery/work.html";
 
-export function ActiveTheoryGallerySurface({ active = true, renderActive = true, onBridgeChange, onDetailChange, onPreviewModelChange, activeModelId, onActivate }: {
+export function ActiveTheoryGallerySurface({ active = true, navigating = false, renderActive = true, onBridgeChange, onDetailChange, onPreviewModelChange, activeModelId, onActivate }: {
   readonly active?: boolean;
+  readonly navigating?: boolean;
   readonly onBridgeChange: (bridge: GalleryDetailBridge | undefined) => void;
   readonly renderActive?: boolean;
   readonly onDetailChange?: (open: boolean) => void;
@@ -50,6 +52,10 @@ export function ActiveTheoryGallerySurface({ active = true, renderActive = true,
     onDetailChange?.(active && detail.phase === "open");
     onPreviewModelChange(active && detail.phase === "open" ? modelId : null);
   }, [active, detail.phase, modelId, onDetailChange, onPreviewModelChange]);
+  useLayoutEffect(() => registerSurfaceMotion("market", () => {
+    const elements = [frameRef.current?.parentElement, document.querySelector(".gallery-detail")].filter((element): element is HTMLElement => element instanceof HTMLElement);
+    return { animations: elements.map(element => heldTrack(element, [{ opacity: 0 }, { opacity: getComputedStyle(element).opacity }], 260, "ease")) };
+  }), []);
   const back = useCallback(() => { navigation.cancel(); bridge?.back(); frameRef.current?.focus({ preventScroll: true }); }, [bridge, navigation.cancel]);
 
   return (
@@ -59,7 +65,7 @@ export function ActiveTheoryGallerySurface({ active = true, renderActive = true,
       className="active-theory-gallery-surface"
       data-loaded={loaded ? "true" : "false"}
     >
-      {portal && bridge && active && detail.phase !== "closed" ? <GalleryDetailOverlay bridge={bridge} detail={detail} portal={portal} onBack={back} modelId={modelId} activeModelId={activeModelId} onActivate={onActivate} onNavigate={navigation.navigate} switching={navigation.switching} navigationError={navigation.error} /> : null}
+      {portal && bridge && active && detail.phase !== "closed" ? <GalleryDetailOverlay bridge={bridge} detail={detail} portal={portal} onBack={back} modelId={modelId} activeModelId={activeModelId} onActivate={onActivate} onNavigate={navigation.navigate} switching={navigation.switching} navigating={navigating} navigationError={navigation.error} /> : null}
       <iframe
         ref={frameRef}
         className="active-theory-gallery-surface__frame"
