@@ -1,5 +1,6 @@
 import { CanvasTexture, Color, LinearFilter, LinearSRGBColorSpace, Mesh, PerspectiveCamera, PlaneGeometry, Scene, ShaderMaterial, Vector2, Vector3, Vector4, WebGLRenderer } from "three";
 import { taskCardFragment, taskCardSettings as settings, taskCardVertex } from "./task-featured-card-source";
+import { bindFeaturedDrag } from "./featuredDrag";
 import type { MarketSearchItem } from "./marketSearchData";
 
 export const FEATURED_SPEED = 48;
@@ -53,6 +54,7 @@ export class TaskFeaturedCards {
   private resizeObserver: ResizeObserver;
   private themeObserver: MutationObserver;
   private cleanups: (() => void)[] = [];
+  private drag: ReturnType<typeof bindFeaturedDrag>;
 
   static async create(host: HTMLDivElement, buttons: HTMLButtonElement[], models: readonly MarketSearchItem[], signal: AbortSignal) {
     const controller = new TaskFeaturedCards(host, buttons, models);
@@ -74,6 +76,7 @@ export class TaskFeaturedCards {
       button.addEventListener("focus", enter); button.addEventListener("blur", leave);
       this.cleanups.push(() => { button.removeEventListener("pointerenter", enter); button.removeEventListener("pointerleave", leave); button.removeEventListener("focus", enter); button.removeEventListener("blur", leave); });
     }
+    this.drag = bindFeaturedDrag(host, delta => { this.distance -= delta; this.draw(); }, () => this.active && this.cards.length > 0);
     this.resize();
   }
   private async load(models: readonly MarketSearchItem[], signal: AbortSignal) {
@@ -139,7 +142,7 @@ export class TaskFeaturedCards {
   }
   setState(active: boolean, running: boolean, reduced: boolean) {
     this.active = active; this.running = running; this.reduced = reduced; this.last = 0;
-    if (!active) { cancelAnimationFrame(this.request); this.request = 0; return; }
+    if (!active) { this.drag.cancel(); cancelAnimationFrame(this.request); this.request = 0; return; }
     this.draw(); this.schedule();
   }
   private hover(index: number) {
@@ -184,7 +187,7 @@ export class TaskFeaturedCards {
   snapshot() { this.draw(); return this.renderer.domElement; }
   dispose() {
     if (this.disposed) return;
-    this.disposed = true; cancelAnimationFrame(this.request); this.resizeObserver.disconnect(); this.themeObserver.disconnect(); this.cleanups.forEach(cleanup => cleanup());
+    this.drag.dispose(); this.disposed = true; cancelAnimationFrame(this.request); this.resizeObserver.disconnect(); this.themeObserver.disconnect(); this.cleanups.forEach(cleanup => cleanup());
     this.cards.forEach(card => { card.image.material.dispose(); card.title.material.dispose(); }); this.textures.forEach(item => item.dispose()); this.geometry.dispose();
     this.renderer.dispose(); this.renderer.forceContextLoss(); this.renderer.domElement.remove();
   }

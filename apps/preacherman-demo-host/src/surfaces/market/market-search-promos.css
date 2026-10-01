@@ -8,9 +8,7 @@
 .market-search-promos__fallback-name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .market-search-promos__status{position:absolute;top:50%;left:0;right:0;margin:0 24px;text-align:center;color:var(--demo-theme-market-muted)}
 .market-search-promos[data-status="error"] .market-search-promos__status{color:var(--demo-theme-market-error)}
-.market-search-promos__pause{position:absolute;right:24px;top:8px;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid var(--demo-theme-market-border);border-radius:50%;background:var(--demo-theme-market-control);color:var(--demo-theme-market-text);cursor:pointer}
-.market-search-promos__pause[hidden]{display:none}
-.market-search-promos__pause:hover{background:var(--demo-theme-market-ink-shadow)}
-.market-search-promos__pause:focus-visible{outline:2px solid var(--demo-theme-market-focus);outline-offset:3px}
 .market-search:not([data-has-query="true"]) .market-search__head{top:calc(60% - 42px)}
 @media(prefers-reduced-motion: reduce){.market-search-promos,.market-search-promos__viewport canvas{transition:none}}
+.market-search-promos__viewport,.market-search .market-search-promos__card{cursor:grab;touch-action:pan-y;user-select:none}
+.market-search-promos__viewport[data-dragging="true"],.market-search .market-search-promos__viewport[data-dragging="true"] .market-search-promos__card{cursor:grabbing}
