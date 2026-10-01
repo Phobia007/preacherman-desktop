@@ -26,14 +26,14 @@ for(const appearance of ['light','dark']) test(`Details reverses both visible co
  recorded.length=0;await animateMarketPanels(doc,true,'out').finished;assert.equal(recorded.length,0);
 });
 import { revealMarketDetails, MARKET_MODEL_REVEAL_MS, MARKET_DETAILS_CONTENT_MS } from '../src/surfaces/market/marketEntrance.ts';
-import { marketCategories, marketCategoryReducer, initialMarketCategory, animateMarketFrost } from '../src/surfaces/market/marketEntrance.ts';
-for (const appearance of ['light', 'dark']) test(`Market category buttons sequence exit before entry and reject repeated transitions in ${appearance}`, () => {
+import { marketCategories, marketCategoryReducer, initialMarketCategory, animateMarketFrost, animateMarketCategory, MARKET_CATEGORY_MS } from '../src/surfaces/market/marketEntrance.ts';
+for (const appearance of ['light', 'dark']) test(`Market category buttons sequence exit before entry and accept the latest destination in ${appearance}`, () => {
  let state = initialMarketCategory;
  for (const category of [...marketCategories.slice(1), 'Discover']) {
    const previous = state.active;
    state = marketCategoryReducer(state, { type: 'select', category });
    assert.equal(state.active, previous); assert.equal(state.phase, 'exiting');
-   assert.equal(marketCategoryReducer(state, { type: 'select', category: 'Sell' }), state, 'Rapid clicks do not replace an active transition');
+   assert.equal(marketCategoryReducer(state, { type: 'select', category }), state, 'Selecting the same destination does not restart motion');
    assert.equal(marketCategoryReducer(state, { type: 'entered' }), state, 'Stale completion cannot skip exit');
    state = marketCategoryReducer(state, { type: 'exited' });
    assert.equal(state.active, category); assert.equal(state.phase, 'entering');
@@ -71,4 +71,41 @@ for (const appearance of ['light', 'dark']) for (const part of ['model', 'conten
  animations.length=0;
  const interrupted=revealMarketDetails(panel,part,false,'out');flush();interrupted.cancel();flush();assert(animations.every(a=>a.plays===0&&a.cancelled),'unmount cancels the queued fade before it can play');
  animations.length=0;await revealMarketDetails(panel,part,true,'out').finished;assert.equal(animations.length,0);assert.equal(frames.size,0);
+});
+
+for (const appearance of ['light', 'dark']) test(`Rapid category changes use the last click and reverse during entry in ${appearance}`, () => {
+ let state = marketCategoryReducer(initialMarketCategory, {type:'select', category:'Search'});
+ state = marketCategoryReducer(state, {type:'select', category:'Browse'});
+ assert.deepEqual(state, {active:'Discover', next:'Browse', phase:'exiting'});
+ state = marketCategoryReducer(state, {type:'select', category:'Discover'});
+ assert.deepEqual(state, {active:'Discover', next:null, phase:'entering'});
+ assert.equal(marketCategoryReducer(state, {type:'exited'}), state, 'Cancelled exit cannot switch pages');
+ state = marketCategoryReducer(state, {type:'select', category:'Sell'});
+ assert.equal(state.phase, 'exiting');
+ assert.equal(marketCategoryReducer(state, {type:'entered'}), state, 'Cancelled entry cannot mark a new exit complete');
+ for (const category of ['Inventory','Browse','Search']) state = marketCategoryReducer(state, {type:'select', category});
+ state = marketCategoryReducer(state, {type:'exited'});
+ assert.deepEqual(state, {active:'Search', next:null, phase:'entering'});
+ state = marketCategoryReducer(state, {type:'entered'});
+ assert.deepEqual(state, {active:'Search', next:null, phase:'idle'});
+});
+
+for (const appearance of ['light', 'dark']) test(`Interrupted category motion preserves its pose and remaining distance in ${appearance}`, async () => {
+ const recorded = [];
+ const animate = (frames,options) => { const a={frames,options,finished:Promise.resolve(),cancel(){this.cancelled=true;}}; recorded.push(a); return a; };
+ const panel={getBoundingClientRect:()=>({left:-200,top:0,bottom:900}),animate};
+ const currentClip='polygon(0% 0%, 0% 100%, 30% 100%, 30% 0%, 70% 0%, 70% 100%, 100% 100%, 100% 0%)';
+ const doc={documentElement:{dataset:{appearance}},defaultView:{innerWidth:1800,innerHeight:900,getComputedStyle:()=>({transform:'matrix(1, 0, 0, 1, -200, 0)',clipPath:currentClip})},timeline:{currentTime:42},querySelectorAll:()=>[panel]};
+ const layer={ownerDocument:{...doc,timeline:{currentTime:8042}},animate};
+ const exit=animateMarketCategory(doc,layer,false,true,'out');
+ assert(recorded.every(a=>a.options.duration===MARKET_CATEGORY_MS));
+ assert.equal(recorded[0].startTime,8042); assert.equal(recorded[1].startTime,42,'Iframe motion uses its own timeline even after delayed route entry');
+ const frame=exit.capture(); exit.cancel(); assert(recorded.every(a=>a.cancelled)); recorded.length=0;
+ const reversal=animateMarketCategory(doc,layer,false,true,'in',frame);
+ assert.equal(recorded[0].frames[0].clipPath,currentClip,'Blur resumes at the visible edge');
+ assert.equal(recorded[1].frames[0].transform,'matrix(1, 0, 0, 1, -200, 0)','Columns resume at the painted position');
+ assert(recorded.every(a=>a.options.duration===MARKET_CATEGORY_MS*0.4));
+ await reversal.finished; reversal.cancel(); assert(recorded.every(a=>a.cancelled)); recorded.length=0;
+ await animateMarketCategory(doc,layer,true,true,'out',frame).finished;
+ assert.equal(recorded.length,0,'Reduced motion allocates no animations');
 });

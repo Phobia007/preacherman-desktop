@@ -3,7 +3,7 @@ import { MarketProfile } from "./MarketProfile";
 import { MarketSearch } from "./MarketSearch";
 import { captureMarketSearch } from "./captureMarketSearch";
 import { readMarketSearchModels, type MarketSearchItem } from "./marketSearchData";
-import { animateMarketPage, animateMarketFrost, marketCategories, marketCategoryReducer, initialMarketCategory, MARKET_LOGO_MS, type MarketDetailsPhase } from "./marketEntrance";
+import { animateMarketPage, animateMarketCategory, type MarketCategoryFrame, marketCategories, marketCategoryReducer, initialMarketCategory, MARKET_LOGO_MS, type MarketDetailsPhase } from "./marketEntrance";
 import "./market-surface.css";
 import { isAvatarModelId, createAvatarAssetUrls, prefetchAvatarModel } from "@preacherman/avatar-renderer";
 import type { ModelId } from "../../preferences";
@@ -23,6 +23,7 @@ export function MarketSurface() {
   const [searchModels, setSearchModels] = useState<MarketSearchItem[]>([]);
   const [category, dispatchCategory] = useReducer(marketCategoryReducer, initialMarketCategory);
   const categoryRef = useRef(category);
+  const categoryMotionFrame = useRef<MarketCategoryFrame | undefined>(undefined);
   categoryRef.current = category;
   const entranceStarted = useRef(false);
   const [logoReady, setLogoReady] = useState(false);
@@ -105,17 +106,25 @@ export function MarketSurface() {
 
   useLayoutEffect(() => {
     if (category.phase === "idle" || !frostRef.current || !frameRef.current?.contentDocument) return;
-    let disposed = false;
+    let disposed = false, completed = false;
     const direction = category.phase === "exiting" ? "out" : "in";
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const motion = category.active === "Discover"
-      ? animateMarketPage(frameRef.current.contentDocument, frostRef.current, reduced, direction)
-      : animateMarketFrost(frostRef.current, reduced, direction);
+    const motion = animateMarketCategory(frameRef.current.contentDocument, frostRef.current, reduced,
+      category.active === "Discover", direction, categoryMotionFrame.current);
+    categoryMotionFrame.current = undefined;
     void motion.finished.then(() => {
-      if (!disposed) dispatchCategory({ type: category.phase === "exiting" ? "exited" : "entered" });
-    }).catch(() => { /* Leaving Market cancels the pending category transition. */ });
-    return () => { disposed = true; motion.cancel(); };
-  }, [category]);
+      if (!disposed) {
+        completed = true;
+        dispatchCategory({ type: category.phase === "exiting" ? "exited" : "entered" });
+      }
+    }).catch(() => { /* Leaving Market or reversing a category cancels this completion. */ });
+    return () => {
+      disposed = true;
+      if (!completed) categoryMotionFrame.current = motion.capture();
+      motion.cancel();
+    };
+    // A new destination during exit updates the reducer without restarting motion.
+  }, [category.active, category.phase]);
 
   useEffect(() => {
     frameRef.current?.toggleAttribute("inert", Boolean(selectedModel) || profileOpen || lensActive || category.active !== "Discover" || category.phase !== "idle");
@@ -239,7 +248,7 @@ export function MarketSurface() {
         hidden={page !== "intro" || entrance === "logo" || lensActive}>
         {marketCategories.map(label => <li key={label} className={label === "Search" ? "market-surface__search-category" : undefined}>
           <button type="button" aria-pressed={highlightedCategory === label} aria-controls={label === "Discover" ? "market-discover-page" : label === "Search" ? "market-search-page" : "market-category-page"}
-            disabled={entrance !== "complete" || category.phase !== "idle" || Boolean(selectedModel) || profileOpen}
+            disabled={entrance !== "complete" || Boolean(selectedModel) || profileOpen}
             onClick={() => dispatchCategory({ type: "select", category: label })}>{label}</button>
           {label === "Search" && <span ref={indicatorRef} className="market-surface__category-indicator" aria-hidden="true" />}
         </li>)}

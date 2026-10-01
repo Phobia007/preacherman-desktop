@@ -54,12 +54,59 @@ export function animateMarketPage(doc: Document, layer: HTMLElement, reducedMoti
   return { finished: Promise.all(motions.map(motion => motion.finished)), cancel: () => motions.forEach(motion => motion.cancel()) };
 }
 
+export const MARKET_CATEGORY_MS = 420;
+const FROST_EMPTY = "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)";
+const FROST_FULL = "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)";
+export type MarketCategoryFrame = { clipPath: string; panels: Map<HTMLElement, string> };
+
+/** Category clicks can reverse the current pose without replaying the page entrance. */
+export function animateMarketCategory(doc: Document, layer: HTMLElement, reducedMotion: boolean, discover: boolean, direction: "in" | "out", from?: MarketCategoryFrame) {
+  const viewport = doc.defaultView!;
+  const panels = discover ? [...doc.querySelectorAll<HTMLElement>(".descriptive-card > .row > .col-12")].filter(panel => {
+    const bounds = panel.getBoundingClientRect();
+    return bounds.bottom > 0 && bounds.top < viewport.innerHeight;
+  }) : [];
+  const clipPath = from?.clipPath ?? (direction === "out" ? FROST_FULL : FROST_EMPTY);
+  const coverage = Math.max(0, Math.min(1, parseFloat(clipPath.split(",")[2]) / 50));
+  const remaining = direction === "out" ? coverage : 1 - coverage;
+  const options: KeyframeAnimationOptions = {
+    duration: Math.max(100, MARKET_CATEGORY_MS * remaining),
+    easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "both",
+  };
+  const animations = reducedMotion ? [] : [layer.animate([
+    { clipPath }, { clipPath: direction === "out" ? FROST_EMPTY : FROST_FULL },
+  ], options), ...panels.map(panel => {
+    const outside = `translate3d(${panel.getBoundingClientRect().left < viewport.innerWidth / 2 ? "-100%" : "100%"}, 0, 0)`;
+    return panel.animate([
+      { transform: from?.panels.get(panel) ?? (direction === "out" ? "translate3d(0, 0, 0)" : outside) },
+      { transform: direction === "out" ? outside : "translate3d(0, 0, 0)" },
+    ], options);
+  })];
+  // The iframe and host have different timeline origins after a delayed route entry.
+  animations.forEach((animation, index) => { animation.startTime = (index === 0 ? layer.ownerDocument : doc).timeline.currentTime; });
+  return {
+    finished: Promise.all(animations.map(animation => animation.finished)),
+    capture: (): MarketCategoryFrame => {
+      const currentClip = layer.ownerDocument.defaultView!.getComputedStyle(layer).clipPath;
+      return {
+        clipPath: currentClip === "none" ? FROST_FULL : currentClip,
+        panels: new Map(panels.map(panel => [panel, viewport.getComputedStyle(panel).transform])),
+      };
+    },
+    cancel: () => animations.forEach(animation => animation.cancel()),
+  };
+}
+
 export const marketCategories = ["Discover", "Browse", "Sell", "Inventory", "Search"] as const;
 export type MarketCategory = typeof marketCategories[number];
 export type MarketCategoryState = { active: MarketCategory; next: MarketCategory | null; phase: "idle" | "exiting" | "entering" };
 export const initialMarketCategory: MarketCategoryState = { active: "Discover", next: null, phase: "idle" };
 export function marketCategoryReducer(state: MarketCategoryState, action: { type: "select"; category: MarketCategory } | { type: "exited" | "entered" }): MarketCategoryState {
-  if (action.type === "select") return state.phase === "idle" && action.category !== state.active ? { ...state, next: action.category, phase: "exiting" } : state;
+  if (action.type === "select") {
+    if (action.category === (state.next ?? state.active)) return state;
+    if (state.phase === "exiting" && action.category === state.active) return { ...state, next: null, phase: "entering" };
+    return { ...state, next: action.category, phase: "exiting" };
+  }
   if (action.type === "exited" && state.phase === "exiting" && state.next) return { active: state.next, next: null, phase: "entering" };
   if (action.type === "entered" && state.phase === "entering") return { ...state, phase: "idle" };
   return state;
