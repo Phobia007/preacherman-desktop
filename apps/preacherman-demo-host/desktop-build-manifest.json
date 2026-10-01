@@ -1,621 +1,671 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-drag-promos-20261001",
+  "buildId": "navigation-asset-extension-20261001",
   "productVersion": "0.1.0",
-  "sourceTask": "market-additive-preview-drag-and-responsive-category-switching",
+  "sourceTask": "main-navigation-asset-extension-settings-gear",
   "sourceThread": null,
-  "sourceState": "Remove the visible pause button. Pointer drag adds scaled displacement to the existing constant-speed ribbon clock without pausing it, including while held still and after release. Capture survives card movement and pointer exit; drag releases do not activate search. Ordinary clicks and keyboard activation remain available; hidden and reduced-motion states retain their lifecycle behavior. Rapid category clicks remain enabled and target the latest selection immediately. An exiting page keeps moving when the target changes; reversal continues from the painted frost/panel pose with a distance-scaled duration of at most 420 ms per leg. Host and iframe motion use their own document timelines.",
-  "sourceCommit": "6624b4f5ae6a0cc9df474562be745f0d07139cdb",
+  "sourceState": "Preserve six-row navigation typography and motion; order Home, Task, Gallery, Market, Asset, Extension. Independent Asset and Extension routes provide empty single-layer Market-style frost over the persistent scene. Settings remains fully functional through a symmetric upper-right gear in the expanded drawer. Account remains on the lower-left person dock. Expanded Account/light drawer preserves readable hamburger foreground.",
+  "sourceCommit": "e23b8162bcc7e237094da7198e8daf92645ac291",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-01T10:25:37.2926543+08:00",
-  "deployedAt": "2026-10-01T10:26:07.3028554+08:00",
-  "verifiedAt": "2026-10-01T10:31:07.2857194+08:00",
+  "builtAt": "2026-10-01T11:12:54.4085986+08:00",
+  "deployedAt": "2026-10-01T11:13:13.5707388+08:00",
+  "verifiedAt": "2026-10-01T11:15:34.9705209+08:00",
   "sizeBytes": 676129280,
-  "sha256": "ED634EC171285AAF8765F39AF014AF21DC9AF3D71158EFFBD1D6BF8216CD0BF6",
+  "sha256": "F6F43D17F26905BA480C496BD47440BD441CA407254AE16F436F92757B97A5BE",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-drag-promos-before-20261001/preacherman-demo-host.exe",
-  "backupSha256": "88EB1A1FA2F6BB2F4D37B0E7D661902DA40315DFFADB7DF07E071E8E344A2286",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-drag-promos-before-20261001/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-asset-extension-before-20261001/preacherman-demo-host.exe",
+  "backupSha256": "ED634EC171285AAF8765F39AF014AF21DC9AF3D71158EFFBD1D6BF8216CD0BF6",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-asset-extension-before-20261001/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "25425ba73f680d6d156321f76ec0e89e0887150a",
-  "previousVerificationCommit": "25425ba73f680d6d156321f76ec0e89e0887150a",
+  "rollbackBaselineCommit": "6624b4f5ae6a0cc9df474562be745f0d07139cdb",
+  "previousVerificationCommit": "6624b4f5ae6a0cc9df474562be745f0d07139cdb",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 60
+      "focusedTests": 45
     },
-    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market (internal ledger route), Account and Settings in both appearances. Category order and Search divider, immediate navigation underline targeting, rapid last-click-wins switching and continuous interrupted animation, original Task curved cards with constant leftward travel, bottom-left names, hover deformation without stopping, additive pointer drag, held-pointer automatic travel, cancellation, click-versus-drag, focus and reduced motion and card-to-search collapse. Existing live name results, alternating rows, details return, persistent deletable history, keyboard and profile lens. Window maximize/restore/minimize and authored close; host and sidecar released; normal Home shortcut restart without debug flags.",
-    "windowControls": {
-      "initialMaximized": true,
-      "restored": true,
-      "restoredSize": {
-        "width": 1280,
-        "height": 800,
-        "appearance": "light"
-      },
-      "maximize": true,
-      "minimize": true,
-      "closeRequested": true,
-      "passed": true
-    },
+    "nativeFlow": "Cold launch from the canonical shortcut. Both appearances: Home, Asset, Extension, Settings gear and Appearance interaction, Account person dock, Task authored cards, Gallery, Market and Search. Verify menu ordering, unchanged typography and drawer duration, symmetric gear/hamburger geometry, keyboard access, hidden gear exclusion, distinct URLs and back/forward history, persistent scene, seamless frost, no frost left on other routes, and window controls. Close host/sidecar and restart normal Home without debug flags.",
     "routes": [
       {
         "name": "Home",
-        "appearance": "dark",
-        "surface": "home"
+        "surface": "home",
+        "appearance": "dark"
       },
       {
-        "name": "Task",
+        "name": "Asset",
+        "surface": "asset",
         "appearance": "dark",
-        "surface": "workspace"
+        "blur": "blur(12px)",
+        "background": "color(srgb 0.00392157 0.0156863 0.0352941 / 0.12)",
+        "children": 0,
+        "text": "",
+        "canvasSame": true,
+        "size": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "top": 0,
+          "right": 1919.9937744140625,
+          "bottom": 1032,
+          "left": 0.0062255859375
+        }
       },
       {
-        "name": "Gallery",
+        "name": "Extension",
+        "surface": "extension",
         "appearance": "dark",
-        "surface": "market"
-      },
-      {
-        "name": "Market",
-        "appearance": "dark",
-        "surface": "ledger"
-      },
-      {
-        "name": "Account",
-        "appearance": "dark",
-        "surface": "account"
+        "blur": "blur(12px)",
+        "background": "color(srgb 0.00392157 0.0156863 0.0352941 / 0.12)",
+        "children": 0,
+        "text": "",
+        "canvasSame": true,
+        "size": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "top": 0,
+          "right": 1919.9937744140625,
+          "bottom": 1032,
+          "left": 0.0062255859375
+        }
       },
       {
         "name": "Settings",
+        "surface": "settings",
         "appearance": "dark",
-        "surface": "settings"
+        "gearEntry": true,
+        "usable": true
+      },
+      {
+        "name": "Account",
+        "surface": "account",
+        "appearance": "dark",
+        "dockEntry": true
+      },
+      {
+        "name": "Task",
+        "surface": "workspace",
+        "appearance": "dark"
+      },
+      {
+        "name": "Gallery",
+        "surface": "market",
+        "appearance": "dark"
+      },
+      {
+        "name": "Market",
+        "surface": "ledger",
+        "appearance": "dark"
       },
       {
         "name": "Home",
-        "appearance": "light",
-        "surface": "home"
+        "surface": "home",
+        "appearance": "light"
       },
       {
-        "name": "Task",
+        "name": "Asset",
+        "surface": "asset",
         "appearance": "light",
-        "surface": "workspace"
+        "blur": "blur(12px)",
+        "background": "color(srgb 0.00392157 0.0156863 0.0352941 / 0.12)",
+        "children": 0,
+        "text": "",
+        "canvasSame": true,
+        "size": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "top": 0,
+          "right": 1919.9937744140625,
+          "bottom": 1032,
+          "left": 0.0062255859375
+        }
       },
       {
-        "name": "Gallery",
+        "name": "Extension",
+        "surface": "extension",
         "appearance": "light",
-        "surface": "market"
-      },
-      {
-        "name": "Market",
-        "appearance": "light",
-        "surface": "ledger"
-      },
-      {
-        "name": "Account",
-        "appearance": "light",
-        "surface": "account"
+        "blur": "blur(12px)",
+        "background": "color(srgb 0.00392157 0.0156863 0.0352941 / 0.12)",
+        "children": 0,
+        "text": "",
+        "canvasSame": true,
+        "size": {
+          "x": 0.0062255859375,
+          "y": 0,
+          "width": 1919.987548828125,
+          "height": 1032,
+          "top": 0,
+          "right": 1919.9937744140625,
+          "bottom": 1032,
+          "left": 0.0062255859375
+        }
       },
       {
         "name": "Settings",
+        "surface": "settings",
         "appearance": "light",
-        "surface": "settings"
-      }
-    ],
-    "marketHeader": [
-      {
-        "appearance": "dark",
-        "initial": {
-          "x": 24.77422332763672,
-          "y": 103.19999694824219,
-          "width": 1870.4514846801758,
-          "height": 61.91999816894531
-        },
-        "scrolled": {
-          "x": 24.77422332763672,
-          "y": 103.19999694824219,
-          "width": 1870.4514846801758,
-          "height": 61.91999816894531
-        },
-        "font": "\"Market Brilliant Cut\", sans-serif",
-        "weight": "400",
-        "color": "rgb(255, 255, 255)",
-        "token": "#ffffff",
-        "line": "100px",
-        "top": "100px",
-        "height": "60px",
-        "scale": 1.032,
-        "stageY": 0,
-        "loaded": true,
-        "profileRestored": true,
-        "detailsChecked": true
+        "gearEntry": true,
+        "usable": true
       },
       {
+        "name": "Account",
+        "surface": "account",
         "appearance": "light",
-        "initial": {
-          "x": 24.77422332763672,
-          "y": 103.19999694824219,
-          "width": 1870.4514846801758,
-          "height": 61.91999816894531
-        },
-        "scrolled": {
-          "x": 24.77422332763672,
-          "y": 103.19999694824219,
-          "width": 1870.4514846801758,
-          "height": 61.91999816894531
-        },
-        "font": "\"Market Brilliant Cut\", sans-serif",
-        "weight": "400",
-        "color": "rgb(255, 255, 255)",
-        "token": "#ffffff",
-        "line": "100px",
-        "top": "100px",
-        "height": "60px",
-        "scale": 1.032,
-        "stageY": 0,
-        "loaded": true,
-        "profileRestored": true,
-        "detailsChecked": true
+        "dockEntry": true
+      },
+      {
+        "name": "Task",
+        "surface": "workspace",
+        "appearance": "light"
+      },
+      {
+        "name": "Gallery",
+        "surface": "market",
+        "appearance": "light"
+      },
+      {
+        "name": "Market",
+        "surface": "ledger",
+        "appearance": "light"
       }
     ],
-    "marketCategories": [
+    "navigation": [
       {
         "appearance": "dark",
-        "trace": [
-          {
-            "phase": "exiting",
-            "active": "Discover",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
-            "active": "Search",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Search",
-            "searchReady": "true",
-            "clips": []
-          },
-          {
-            "phase": "exiting",
-            "active": "Search",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
-            "active": "Discover",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Discover",
-            "searchReady": "true",
-            "clips": []
-          }
+        "left": 16.511999130249023,
+        "right": 16.511993408203125,
+        "topLeft": 6.191999435424805,
+        "topRight": 6.191999435424805,
+        "width": 49.53599548339844,
+        "height": 49.53599548339844,
+        "gearWidth": 49.53599548339844,
+        "gearHeight": 49.53599548339844,
+        "font": "\"Clash Display\", sans-serif",
+        "size": "32px",
+        "weight": "300",
+        "drawerMotion": "0.82s",
+        "gearColor": "rgba(255, 255, 255, 0.68)",
+        "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+        "focusToken": "#ffffff",
+        "svg": 41.279998779296875,
+        "gearSvg": 41.279998779296875,
+        "order": [
+          "Home",
+          "Task",
+          "Gallery",
+          "Market",
+          "Asset",
+          "Extension"
         ],
-        "reducedMotion": false
+        "keyboardGear": true,
+        "hiddenOutsideMenu": true
       },
       {
-        "appearance": "light",
-        "trace": [
-          {
-            "phase": "exiting",
-            "active": "Discover",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
-            "active": "Search",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Search",
-            "searchReady": "true",
-            "clips": []
-          },
-          {
-            "phase": "exiting",
-            "active": "Search",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "entering",
-            "active": "Discover",
-            "searchReady": "false",
-            "clips": [
-              [
-                "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-              ]
-            ]
-          },
-          {
-            "phase": "idle",
-            "active": "Discover",
-            "searchReady": "true",
-            "clips": []
-          }
+        "appearance": "dark-account",
+        "left": 16.511999130249023,
+        "right": 16.511993408203125,
+        "topLeft": 6.191999435424805,
+        "topRight": 6.191999435424805,
+        "width": 49.53599548339844,
+        "height": 49.53599548339844,
+        "gearWidth": 49.53599548339844,
+        "gearHeight": 49.53599548339844,
+        "font": "\"Clash Display\", sans-serif",
+        "size": "32px",
+        "weight": "300",
+        "drawerMotion": "0.82s",
+        "gearColor": "rgba(255, 255, 255, 0.68)",
+        "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+        "focusToken": "#ffffff",
+        "svg": 41.279998779296875,
+        "gearSvg": 41.279998779296875,
+        "order": [
+          "Home",
+          "Task",
+          "Gallery",
+          "Market",
+          "Asset",
+          "Extension"
         ],
-        "reducedMotion": false
-      }
-    ],
-    "marketRapidNavigation": [
-      {
-        "appearance": "dark",
-        "allButtonsResponsive": true,
-        "lastClickWins": true,
-        "retargetWithoutRestart": true,
-        "reversal": {
-          "before": "polygon(0% 0%, 0% 100%, 36.4807% 100%, 36.4807% 0%, 63.5193% 0%, 63.5193% 100%, 100% 100%, 100% 0%)",
-          "first": "polygon(0% 0%, 0% 100%, 36.4807% 100%, 36.4807% 0%, 63.5193% 0%, 63.5193% 100%, 100% 100%, 100% 0%)"
-        },
-        "settledMs": 428,
-        "indicatorAligned": true,
-        "noStalePage": true
+        "keyboardGear": true,
+        "hiddenOutsideMenu": true
       },
       {
         "appearance": "light",
-        "allButtonsResponsive": true,
-        "lastClickWins": true,
-        "retargetWithoutRestart": true,
-        "reversal": {
-          "before": "polygon(0% 0%, 0% 100%, 9.36305% 100%, 9.36305% 0%, 90.6369% 0%, 90.6369% 100%, 100% 100%, 100% 0%)",
-          "first": "polygon(0% 0%, 0% 100%, 9.36305% 100%, 9.36305% 0%, 90.6369% 0%, 90.6369% 100%, 100% 100%, 100% 0%)"
-        },
-        "settledMs": 535,
-        "indicatorAligned": true,
-        "noStalePage": true
-      }
-    ],
-    "marketSearch": [
-      {
-        "appearance": "dark",
-        "form": {
-          "x": 505.9119567871094,
-          "y": 641.9039916992188,
-          "width": 908.1599426269531,
-          "height": 88.751953125
-        },
-        "modelDetails": true,
-        "multipleResults": 3,
-        "historyDelete": true,
-        "keyboardHistory": true,
-        "persistence": false,
-        "emptyState": true,
-        "seamlessBackdrop": true
+        "left": 16.511999130249023,
+        "right": 16.511993408203125,
+        "topLeft": 6.191999435424805,
+        "topRight": 6.191999435424805,
+        "width": 49.53599548339844,
+        "height": 49.53599548339844,
+        "gearWidth": 49.53599548339844,
+        "gearHeight": 49.53599548339844,
+        "font": "\"Clash Display\", sans-serif",
+        "size": "32px",
+        "weight": "300",
+        "drawerMotion": "0.82s",
+        "gearColor": "rgba(255, 255, 255, 0.68)",
+        "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+        "focusToken": "#ffffff",
+        "svg": 41.279998779296875,
+        "gearSvg": 41.279998779296875,
+        "order": [
+          "Home",
+          "Task",
+          "Gallery",
+          "Market",
+          "Asset",
+          "Extension"
+        ],
+        "keyboardGear": true,
+        "hiddenOutsideMenu": true
       },
       {
-        "appearance": "light",
-        "form": {
-          "x": 505.9119567871094,
-          "y": 641.9039916992188,
-          "width": 908.1599426269531,
-          "height": 88.751953125
-        },
-        "modelDetails": true,
-        "multipleResults": 3,
-        "historyDelete": true,
-        "keyboardHistory": true,
-        "persistence": true,
-        "emptyState": true,
-        "seamlessBackdrop": true
-      }
-    ],
-    "marketPromos": [
-      {
-        "appearance": "dark",
-        "box": {
-          "x": 0.0062255859375,
-          "y": 165.1199951171875,
-          "width": 1919.987548828125,
-          "height": 452.0159912109375
-        },
-        "pauseButtonRemoved": true,
-        "rightDrag": true,
-        "leftDrag": true,
-        "outsideRelease": true,
-        "noAccidentalSearch": true,
-        "ordinaryClick": true,
-        "initialRate": 47.96901527983243,
-        "heldRate": 48.198393748331576,
-        "releasedRate": 48.244129468703676,
-        "reducedMotion": true,
-        "keyboardFocusPause": true,
-        "pointerRestartsAfterKeyboardFocus": true
-      },
-      {
-        "appearance": "light",
-        "box": {
-          "x": 0.0062255859375,
-          "y": 165.1199951171875,
-          "width": 1919.987548828125,
-          "height": 452.0159912109375
-        },
-        "pauseButtonRemoved": true,
-        "rightDrag": true,
-        "leftDrag": true,
-        "outsideRelease": true,
-        "noAccidentalSearch": true,
-        "ordinaryClick": true,
-        "initialRate": 47.959612956908124,
-        "heldRate": 48.00085708209681,
-        "releasedRate": 47.86182940990733,
-        "reducedMotion": true,
-        "keyboardFocusPause": true,
-        "pointerRestartsAfterKeyboardFocus": true
-      }
-    ],
-    "marketIndicator": [
-      {
-        "appearance": "dark",
-        "target": "Search",
-        "settled": {
-          "x": 1151.7181396484375,
-          "y": 147.57598876953125,
-          "width": 59.8560791015625,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "dark",
-        "target": "Discover",
-        "settled": {
-          "x": 707.9581909179688,
-          "y": 147.57598876953125,
-          "width": 76.36798095703125,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "light",
-        "target": "Search",
-        "settled": {
-          "x": 1151.7181396484375,
-          "y": 147.57598876953125,
-          "width": 59.8560791015625,
-          "height": 1.0319976806640625
-        }
-      },
-      {
-        "appearance": "light",
-        "target": "Discover",
-        "settled": {
-          "x": 707.9581909179688,
-          "y": 147.57598876953125,
-          "width": 76.36798095703125,
-          "height": 1.0319976806640625
-        }
+        "appearance": "light-account",
+        "left": 16.511999130249023,
+        "right": 16.511993408203125,
+        "topLeft": 6.191999435424805,
+        "topRight": 6.191999435424805,
+        "width": 49.53599548339844,
+        "height": 49.53599548339844,
+        "gearWidth": 49.53599548339844,
+        "gearHeight": 49.53599548339844,
+        "font": "\"Clash Display\", sans-serif",
+        "size": "32px",
+        "weight": "300",
+        "drawerMotion": "0.82s",
+        "gearColor": "rgba(255, 255, 255, 0.68)",
+        "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+        "focusToken": "#ffffff",
+        "svg": 41.279998779296875,
+        "gearSvg": 41.279998779296875,
+        "order": [
+          "Home",
+          "Task",
+          "Gallery",
+          "Market",
+          "Asset",
+          "Extension"
+        ],
+        "keyboardGear": true,
+        "hiddenOutsideMenu": true
       }
     ],
     "browserVerification": {
       "routes": [
         {
-          "name": "Market",
-          "appearance": "dark",
-          "surface": "ledger"
+          "name": "Home",
+          "surface": "home",
+          "appearance": "dark"
         },
         {
-          "name": "Market",
+          "name": "Asset",
+          "surface": "asset",
+          "appearance": "dark",
+          "blur": "blur(12px)",
+          "background": "color(srgb 0.00392157 0.0156863 0.0352941 / 0.12)",
+          "children": 0,
+          "text": "",
+          "canvasSame": true,
+          "size": {
+            "x": 0.0062255859375,
+            "y": 0,
+            "width": 1919.987548828125,
+            "height": 1032,
+            "top": 0,
+            "right": 1919.9937744140625,
+            "bottom": 1032,
+            "left": 0.0062255859375
+          }
+        },
+        {
+          "name": "Extension",
+          "surface": "extension",
+          "appearance": "dark",
+          "blur": "blur(12px)",
+          "background": "color(srgb 0.00392157 0.0156863 0.0352941 / 0.12)",
+          "children": 0,
+          "text": "",
+          "canvasSame": true,
+          "size": {
+            "x": 0.0062255859375,
+            "y": 0,
+            "width": 1919.987548828125,
+            "height": 1032,
+            "top": 0,
+            "right": 1919.9937744140625,
+            "bottom": 1032,
+            "left": 0.0062255859375
+          }
+        },
+        {
+          "name": "Settings",
+          "surface": "settings",
+          "appearance": "dark",
+          "gearEntry": true,
+          "usable": true
+        },
+        {
+          "name": "Account",
+          "surface": "account",
+          "appearance": "dark",
+          "dockEntry": true
+        },
+        {
+          "name": "Home",
+          "surface": "home",
+          "appearance": "light"
+        },
+        {
+          "name": "Asset",
+          "surface": "asset",
           "appearance": "light",
-          "surface": "ledger"
+          "blur": "blur(12px)",
+          "background": "color(srgb 0.00392157 0.0156863 0.0352941 / 0.12)",
+          "children": 0,
+          "text": "",
+          "canvasSame": true,
+          "size": {
+            "x": 0.0062255859375,
+            "y": 0,
+            "width": 1919.987548828125,
+            "height": 1032,
+            "top": 0,
+            "right": 1919.9937744140625,
+            "bottom": 1032,
+            "left": 0.0062255859375
+          }
+        },
+        {
+          "name": "Extension",
+          "surface": "extension",
+          "appearance": "light",
+          "blur": "blur(12px)",
+          "background": "color(srgb 0.00392157 0.0156863 0.0352941 / 0.12)",
+          "children": 0,
+          "text": "",
+          "canvasSame": true,
+          "size": {
+            "x": 0.0062255859375,
+            "y": 0,
+            "width": 1919.987548828125,
+            "height": 1032,
+            "top": 0,
+            "right": 1919.9937744140625,
+            "bottom": 1032,
+            "left": 0.0062255859375
+          }
+        },
+        {
+          "name": "Settings",
+          "surface": "settings",
+          "appearance": "light",
+          "gearEntry": true,
+          "usable": true
+        },
+        {
+          "name": "Account",
+          "surface": "account",
+          "appearance": "light",
+          "dockEntry": true
         }
       ],
-      "header": [
+      "navigation": [
         {
           "appearance": "dark",
-          "initial": {
-            "x": 24.77422332763672,
-            "y": 103.19999694824219,
-            "width": 1870.4514846801758,
-            "height": 61.91999816894531
-          },
-          "scrolled": {
-            "x": 24.77422332763672,
-            "y": 103.19999694824219,
-            "width": 1870.4514846801758,
-            "height": 61.91999816894531
-          },
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "color": "rgb(255, 255, 255)",
-          "token": "#ffffff",
-          "line": "100px",
-          "top": "100px",
-          "height": "60px",
-          "scale": 1.032,
-          "stageY": 0,
-          "loaded": true,
-          "profileRestored": true,
-          "detailsChecked": false
+          "left": 16.511999130249023,
+          "right": 16.511993408203125,
+          "topLeft": 6.191999435424805,
+          "topRight": 6.191999435424805,
+          "width": 49.53599548339844,
+          "height": 49.53599548339844,
+          "gearWidth": 49.53599548339844,
+          "gearHeight": 49.53599548339844,
+          "font": "\"Clash Display\", sans-serif",
+          "size": "32px",
+          "weight": "300",
+          "drawerMotion": "0.82s",
+          "gearColor": "rgba(255, 255, 255, 0.68)",
+          "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+          "focusToken": "#ffffff",
+          "svg": 41.279998779296875,
+          "gearSvg": 41.279998779296875,
+          "order": [
+            "Home",
+            "Task",
+            "Gallery",
+            "Market",
+            "Asset",
+            "Extension"
+          ],
+          "keyboardGear": true,
+          "hiddenOutsideMenu": true
+        },
+        {
+          "appearance": "dark-account",
+          "left": 16.511999130249023,
+          "right": 16.511993408203125,
+          "topLeft": 6.191999435424805,
+          "topRight": 6.191999435424805,
+          "width": 49.53599548339844,
+          "height": 49.53599548339844,
+          "gearWidth": 49.53599548339844,
+          "gearHeight": 49.53599548339844,
+          "font": "\"Clash Display\", sans-serif",
+          "size": "32px",
+          "weight": "300",
+          "drawerMotion": "0.82s",
+          "gearColor": "rgba(255, 255, 255, 0.68)",
+          "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+          "focusToken": "#ffffff",
+          "svg": 41.279998779296875,
+          "gearSvg": 41.279998779296875,
+          "order": [
+            "Home",
+            "Task",
+            "Gallery",
+            "Market",
+            "Asset",
+            "Extension"
+          ],
+          "keyboardGear": true,
+          "hiddenOutsideMenu": true
         },
         {
           "appearance": "dark-1024",
-          "initial": {
-            "x": 13.65333366394043,
-            "y": 56.88888931274414,
-            "width": 996.6933460235596,
-            "height": 34.13333511352539
-          },
-          "scrolled": {
-            "x": 13.65333366394043,
-            "y": 56.88888931274414,
-            "width": 996.6933460235596,
-            "height": 34.13333511352539
-          },
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "color": "rgb(255, 255, 255)",
-          "token": "#ffffff",
-          "line": "100px",
-          "top": "100px",
-          "height": "60px",
-          "scale": 0.5688888888888889,
-          "stageY": 0,
-          "loaded": true,
-          "profileRestored": true,
-          "detailsChecked": false
+          "left": 9.102222442626953,
+          "right": 9.102218627929688,
+          "topLeft": 3.4133334159851074,
+          "topRight": 3.4133334159851074,
+          "width": 27.30666732788086,
+          "height": 27.30666732788086,
+          "gearWidth": 27.306663513183594,
+          "gearHeight": 27.30666732788086,
+          "font": "\"Clash Display\", sans-serif",
+          "size": "32px",
+          "weight": "300",
+          "drawerMotion": "0.82s",
+          "gearColor": "rgba(255, 255, 255, 0.68)",
+          "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+          "focusToken": "#ffffff",
+          "svg": 22.755558013916016,
+          "gearSvg": 22.75555419921875,
+          "order": [
+            "Home",
+            "Task",
+            "Gallery",
+            "Market",
+            "Asset",
+            "Extension"
+          ],
+          "keyboardGear": true,
+          "hiddenOutsideMenu": true
         },
         {
           "appearance": "dark-390",
-          "initial": {
-            "x": 2.5999999046325684,
-            "y": 21.66770362854004,
-            "width": 384.7999939918518,
-            "height": 13.000001907348633
-          },
-          "scrolled": {
-            "x": 2.5999999046325684,
-            "y": 21.66770362854004,
-            "width": 384.7999939918518,
-            "height": 13.000001907348633
-          },
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "color": "rgb(255, 255, 255)",
-          "token": "#ffffff",
-          "line": "100px",
-          "top": "100px",
-          "height": "60px",
-          "scale": 0.21668752883303916,
-          "stageY": 0.00103759765625,
-          "loaded": true,
-          "profileRestored": true,
-          "detailsChecked": false
+          "left": 3.4666666984558105,
+          "right": 3.4666671752929688,
+          "topLeft": 1.2999999523162842,
+          "topRight": 1.2999999523162842,
+          "width": 10.399999618530273,
+          "height": 10.399999618530273,
+          "gearWidth": 10.400001525878906,
+          "gearHeight": 10.399999618530273,
+          "font": "\"Clash Display\", sans-serif",
+          "size": "32px",
+          "weight": "300",
+          "drawerMotion": "0.82s",
+          "gearColor": "rgba(255, 255, 255, 0.68)",
+          "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+          "focusToken": "#ffffff",
+          "svg": 8.666666030883789,
+          "gearSvg": 8.666664123535156,
+          "order": [
+            "Home",
+            "Task",
+            "Gallery",
+            "Market",
+            "Asset",
+            "Extension"
+          ],
+          "keyboardGear": true,
+          "hiddenOutsideMenu": true
         },
         {
           "appearance": "light",
-          "initial": {
-            "x": 24.77422332763672,
-            "y": 103.19999694824219,
-            "width": 1870.4514846801758,
-            "height": 61.91999816894531
-          },
-          "scrolled": {
-            "x": 24.77422332763672,
-            "y": 103.19999694824219,
-            "width": 1870.4514846801758,
-            "height": 61.91999816894531
-          },
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "color": "rgb(255, 255, 255)",
-          "token": "#ffffff",
-          "line": "100px",
-          "top": "100px",
-          "height": "60px",
-          "scale": 1.032,
-          "stageY": 0,
-          "loaded": true,
-          "profileRestored": true,
-          "detailsChecked": false
+          "left": 16.511999130249023,
+          "right": 16.511993408203125,
+          "topLeft": 6.191999435424805,
+          "topRight": 6.191999435424805,
+          "width": 49.53599548339844,
+          "height": 49.53599548339844,
+          "gearWidth": 49.53599548339844,
+          "gearHeight": 49.53599548339844,
+          "font": "\"Clash Display\", sans-serif",
+          "size": "32px",
+          "weight": "300",
+          "drawerMotion": "0.82s",
+          "gearColor": "rgba(255, 255, 255, 0.68)",
+          "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+          "focusToken": "#ffffff",
+          "svg": 41.279998779296875,
+          "gearSvg": 41.279998779296875,
+          "order": [
+            "Home",
+            "Task",
+            "Gallery",
+            "Market",
+            "Asset",
+            "Extension"
+          ],
+          "keyboardGear": true,
+          "hiddenOutsideMenu": true
+        },
+        {
+          "appearance": "light-account",
+          "left": 16.511999130249023,
+          "right": 16.511993408203125,
+          "topLeft": 6.191999435424805,
+          "topRight": 6.191999435424805,
+          "width": 49.53599548339844,
+          "height": 49.53599548339844,
+          "gearWidth": 49.53599548339844,
+          "gearHeight": 49.53599548339844,
+          "font": "\"Clash Display\", sans-serif",
+          "size": "32px",
+          "weight": "300",
+          "drawerMotion": "0.82s",
+          "gearColor": "rgba(255, 255, 255, 0.68)",
+          "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+          "focusToken": "#ffffff",
+          "svg": 41.279998779296875,
+          "gearSvg": 41.279998779296875,
+          "order": [
+            "Home",
+            "Task",
+            "Gallery",
+            "Market",
+            "Asset",
+            "Extension"
+          ],
+          "keyboardGear": true,
+          "hiddenOutsideMenu": true
         },
         {
           "appearance": "light-1024",
-          "initial": {
-            "x": 13.65333366394043,
-            "y": 56.88888931274414,
-            "width": 996.6933460235596,
-            "height": 34.13333511352539
-          },
-          "scrolled": {
-            "x": 13.65333366394043,
-            "y": 56.88888931274414,
-            "width": 996.6933460235596,
-            "height": 34.13333511352539
-          },
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "color": "rgb(255, 255, 255)",
-          "token": "#ffffff",
-          "line": "100px",
-          "top": "100px",
-          "height": "60px",
-          "scale": 0.5688888888888889,
-          "stageY": 0,
-          "loaded": true,
-          "profileRestored": true,
-          "detailsChecked": false
+          "left": 9.102222442626953,
+          "right": 9.102218627929688,
+          "topLeft": 3.4133334159851074,
+          "topRight": 3.4133334159851074,
+          "width": 27.30666732788086,
+          "height": 27.30666732788086,
+          "gearWidth": 27.306663513183594,
+          "gearHeight": 27.30666732788086,
+          "font": "\"Clash Display\", sans-serif",
+          "size": "32px",
+          "weight": "300",
+          "drawerMotion": "0.82s",
+          "gearColor": "rgba(255, 255, 255, 0.68)",
+          "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+          "focusToken": "#ffffff",
+          "svg": 22.755558013916016,
+          "gearSvg": 22.75555419921875,
+          "order": [
+            "Home",
+            "Task",
+            "Gallery",
+            "Market",
+            "Asset",
+            "Extension"
+          ],
+          "keyboardGear": true,
+          "hiddenOutsideMenu": true
         },
         {
           "appearance": "light-390",
-          "initial": {
-            "x": 2.5999999046325684,
-            "y": 21.66770362854004,
-            "width": 384.7999939918518,
-            "height": 13.000001907348633
-          },
-          "scrolled": {
-            "x": 2.5999999046325684,
-            "y": 21.66770362854004,
-            "width": 384.7999939918518,
-            "height": 13.000001907348633
-          },
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "color": "rgb(255, 255, 255)",
-          "token": "#ffffff",
-          "line": "100px",
-          "top": "100px",
-          "height": "60px",
-          "scale": 0.21668752883303916,
-          "stageY": 0.00103759765625,
-          "loaded": true,
-          "profileRestored": true,
-          "detailsChecked": false
+          "left": 3.4666666984558105,
+          "right": 3.4666671752929688,
+          "topLeft": 1.2999999523162842,
+          "topRight": 1.2999999523162842,
+          "width": 10.399999618530273,
+          "height": 10.399999618530273,
+          "gearWidth": 10.400001525878906,
+          "gearHeight": 10.399999618530273,
+          "font": "\"Clash Display\", sans-serif",
+          "size": "32px",
+          "weight": "300",
+          "drawerMotion": "0.82s",
+          "gearColor": "rgba(255, 255, 255, 0.68)",
+          "hamburgerColor": "rgba(255, 255, 255, 0.94)",
+          "focusToken": "#ffffff",
+          "svg": 8.666666030883789,
+          "gearSvg": 8.666664123535156,
+          "order": [
+            "Home",
+            "Task",
+            "Gallery",
+            "Market",
+            "Asset",
+            "Extension"
+          ],
+          "keyboardGear": true,
+          "hiddenOutsideMenu": true
         }
       ],
       "errors": [
         "Hydration completed but contains mismatches."
       ],
+      "errorStacks": [],
       "failedRequests": [
         {
           "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
@@ -636,538 +686,178 @@
         {
           "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
           "error": "net::ERR_ABORTED"
+        }
+      ],
+      "consoleLocations": [
+        {
+          "text": "Hydration completed but contains mismatches.",
+          "location": {
+            "url": "http://127.0.0.1:1420/gallery-v3/portfolio/_nuxt/D9b8F35K.js",
+            "line": 3,
+            "column": 29834,
+            "lineNumber": 3,
+            "columnNumber": 29834
+          }
         },
         {
-          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
-          "error": "net::ERR_ABORTED"
+          "text": "Hydration completed but contains mismatches.",
+          "location": {
+            "url": "http://127.0.0.1:1420/gallery-v3/portfolio/_nuxt/D9b8F35K.js",
+            "line": 3,
+            "column": 29834,
+            "lineNumber": 3,
+            "columnNumber": 29834
+          }
         },
         {
-          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
-          "error": "net::ERR_ABORTED"
+          "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+          "location": {
+            "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
         },
         {
-          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
-          "error": "net::ERR_ABORTED"
+          "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+          "location": {
+            "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Hydration completed but contains mismatches.",
+          "location": {
+            "url": "http://127.0.0.1:1420/gallery-v3/portfolio/_nuxt/D9b8F35K.js",
+            "line": 3,
+            "column": 29834,
+            "lineNumber": 3,
+            "columnNumber": 29834
+          }
+        },
+        {
+          "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+          "location": {
+            "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+          "location": {
+            "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
         }
       ],
       "coldHome": true,
-      "indicator": [
-        {
-          "appearance": "dark",
-          "target": "Search",
-          "settled": {
-            "x": 1151.7181396484375,
-            "y": 147.57598876953125,
-            "width": 59.8560791015625,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "dark",
-          "target": "Discover",
-          "settled": {
-            "x": 707.9581909179688,
-            "y": 147.57598876953125,
-            "width": 76.36798095703125,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "light",
-          "target": "Search",
-          "settled": {
-            "x": 1151.7181396484375,
-            "y": 147.57598876953125,
-            "width": 59.8560791015625,
-            "height": 1.0319976806640625
-          }
-        },
-        {
-          "appearance": "light",
-          "target": "Discover",
-          "settled": {
-            "x": 707.9581909179688,
-            "y": 147.57598876953125,
-            "width": 76.36798095703125,
-            "height": 1.0319976806640625
-          }
-        }
-      ],
-      "promos": [
-        {
-          "appearance": "dark",
-          "box": {
-            "x": 0.0062255859375,
-            "y": 165.1199951171875,
-            "width": 1919.987548828125,
-            "height": 452.0159912109375
-          },
-          "pauseButtonRemoved": true,
-          "rightDrag": true,
-          "leftDrag": true,
-          "outsideRelease": true,
-          "noAccidentalSearch": true,
-          "ordinaryClick": true,
-          "initialRate": 48.05061119404932,
-          "heldRate": 47.90846877657961,
-          "releasedRate": 48.28842422951491,
-          "reducedMotion": true,
-          "keyboardFocusPause": true,
-          "pointerRestartsAfterKeyboardFocus": true
-        },
-        {
-          "appearance": "light",
-          "box": {
-            "x": 0.0062255859375,
-            "y": 165.1199951171875,
-            "width": 1919.987548828125,
-            "height": 452.0159912109375
-          },
-          "pauseButtonRemoved": true,
-          "rightDrag": true,
-          "leftDrag": true,
-          "outsideRelease": true,
-          "noAccidentalSearch": true,
-          "ordinaryClick": true,
-          "initialRate": 47.83685671608492,
-          "heldRate": 48.051920189415185,
-          "releasedRate": 48.16559139784944,
-          "reducedMotion": true,
-          "keyboardFocusPause": true,
-          "pointerRestartsAfterKeyboardFocus": true
-        }
-      ],
-      "categories": [
-        {
-          "appearance": "dark",
-          "trace": [
-            {
-              "phase": "exiting",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Search",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Discover",
-              "searchReady": "true",
-              "clips": []
-            }
-          ],
-          "reducedMotion": true
-        },
-        {
-          "appearance": "dark-1024",
-          "trace": [
-            {
-              "phase": "exiting",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Search",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Discover",
-              "searchReady": "true",
-              "clips": []
-            }
-          ],
-          "reducedMotion": false
-        },
-        {
-          "appearance": "dark-390",
-          "trace": [
-            {
-              "phase": "exiting",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Search",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Discover",
-              "searchReady": "true",
-              "clips": []
-            }
-          ],
-          "reducedMotion": false
-        },
-        {
-          "appearance": "light",
-          "trace": [
-            {
-              "phase": "exiting",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Search",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Discover",
-              "searchReady": "true",
-              "clips": []
-            }
-          ],
-          "reducedMotion": true
-        },
-        {
-          "appearance": "light-1024",
-          "trace": [
-            {
-              "phase": "exiting",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Search",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Discover",
-              "searchReady": "true",
-              "clips": []
-            }
-          ],
-          "reducedMotion": false
-        },
-        {
-          "appearance": "light-390",
-          "trace": [
-            {
-              "phase": "exiting",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Search",
-              "searchReady": "true",
-              "clips": []
-            },
-            {
-              "phase": "exiting",
-              "active": "Search",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "entering",
-              "active": "Discover",
-              "searchReady": "false",
-              "clips": [
-                [
-                  "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 0%)",
-                  "polygon(0% 0%, 0% 100%, 50% 100%, 50% 0%, 50% 0%, 50% 100%, 100% 100%, 100% 0%)"
-                ]
-              ]
-            },
-            {
-              "phase": "idle",
-              "active": "Discover",
-              "searchReady": "true",
-              "clips": []
-            }
-          ],
-          "reducedMotion": false
-        }
-      ],
-      "rapidNavigation": [
-        {
-          "appearance": "dark",
-          "allButtonsResponsive": true,
-          "lastClickWins": true,
-          "retargetWithoutRestart": true,
-          "reversal": {
-            "before": "polygon(0% 0%, 0% 100%, 10.4489% 100%, 10.4489% 0%, 89.5511% 0%, 89.5511% 100%, 100% 100%, 100% 0%)",
-            "first": "polygon(0% 0%, 0% 100%, 10.4489% 100%, 10.4489% 0%, 89.5511% 0%, 89.5511% 100%, 100% 100%, 100% 0%)"
-          },
-          "settledMs": 529,
-          "indicatorAligned": true,
-          "noStalePage": true
-        },
-        {
-          "appearance": "light",
-          "allButtonsResponsive": true,
-          "lastClickWins": true,
-          "retargetWithoutRestart": true,
-          "reversal": {
-            "before": "polygon(0% 0%, 0% 100%, 6.55715% 100%, 6.55715% 0%, 93.4428% 0%, 93.4428% 100%, 100% 100%, 100% 0%)",
-            "first": "polygon(0% 0%, 0% 100%, 6.55715% 100%, 6.55715% 0%, 93.4428% 0%, 93.4428% 100%, 100% 100%, 100% 0%)"
-          },
-          "settledMs": 522,
-          "indicatorAligned": true,
-          "noStalePage": true
-        }
-      ],
+      "httpErrors": [],
       "newErrors": [],
+      "resolvedRegression": {
+        "cause": "New reserved routes were being sent to the existing DOM observation service, which excludes them.",
+        "fix": "Do not mount observation on the intentionally empty Asset and Extension routes.",
+        "confirmation": {
+          "routes": [
+            {
+              "appearance": "dark",
+              "surface": "asset"
+            },
+            {
+              "appearance": "dark",
+              "surface": "extension"
+            },
+            {
+              "appearance": "light",
+              "surface": "asset"
+            },
+            {
+              "appearance": "light",
+              "surface": "extension"
+            }
+          ],
+          "errors": [
+            "Hydration completed but contains mismatches.",
+            "Hydration completed but contains mismatches.",
+            "Hydration completed but contains mismatches.",
+            "Hydration completed but contains mismatches."
+          ],
+          "requests": [
+            {
+              "surface": "home",
+              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
+            },
+            {
+              "surface": "home",
+              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
+            },
+            {
+              "surface": "home",
+              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
+            },
+            {
+              "surface": "home",
+              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
+            },
+            {
+              "surface": "home",
+              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
+            }
+          ],
+          "passed": true
+        }
+      },
+      "previousFailure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Failed to load resource: the server responded with a status of 403 (Forbidden)'\n+ ]\n- []\n\n    at D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\verify.cjs:78:77",
+      "passed": true
+    },
+    "windowControls": {
+      "initialMaximized": true,
+      "restored": true,
+      "restoredSize": {
+        "width": 1280,
+        "height": 800,
+        "appearance": "light"
+      },
+      "maximize": true,
+      "minimize": true,
+      "closeRequested": true,
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-01T10:31:07.2857194+08:00",
-      "NativePid": 40828,
-      "StartedAt": "2026-10-01T10:30:11.9181484+08:00",
-      "WindowHandle": 18745802,
+      "SampledAt": "2026-10-01T11:15:34.9705209+08:00",
+      "NativePid": 40592,
+      "StartedAt": "2026-10-01T11:15:12.5392049+08:00",
+      "WindowHandle": 4786992,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        40828,
-        36060,
-        35756,
-        38028,
-        40476,
-        36012,
-        28120,
-        38792,
-        33872,
-        26532,
-        28944,
-        22364
+        40592,
+        13088,
+        37304,
+        34768,
+        34328,
+        40448,
+        39820,
+        4304,
+        38496,
+        25104,
+        12116,
+        1268
       ],
-      "NormalizedCpuPercent": 9.76,
-      "WorkingSetMiB": 1905.9,
-      "GpuDedicatedBytes": 3374514176,
+      "NormalizedCpuPercent": 10.94,
+      "WorkingSetMiB": 2115.6,
+      "GpuDedicatedBytes": 3284066304,
       "MaxGpuEngineUtilization": 13,
-      "FreeRamKiB": 14931672,
+      "FreeRamKiB": 13245296,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -1177,12 +867,6 @@
     },
     "newErrors": [],
     "observedErrors": [
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-4.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
@@ -1199,55 +883,25 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
-    "consoleQualification": {
-      "diagnostics": [
-        "Connecting to 'https://www.datocms-assets.com/223669/1786207957-dogelon-4.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked."
-      ],
-      "origin": "Unchanged imported Task texture URL; exact CSP log first observed in this run, not claimed to be reproduced on baseline",
-      "evidence": {
-        "sourceTrees": [
-          {
-            "path": "apps/preacherman-demo-host/public/gallery-v3",
-            "baseline": "b767c75a0337912944f7569afaae039c51467b67",
-            "current": "b767c75a0337912944f7569afaae039c51467b67"
-          },
-          {
-            "path": "apps/preacherman-demo-host/public/task-lookback-v3",
-            "baseline": "93d069666d1d4db6020b2909470954ad33e5cf4d",
-            "current": "93d069666d1d4db6020b2909470954ad33e5cf4d"
-          },
-          {
-            "path": "apps/preacherman-demo-host/src-tauri/tauri.conf.json",
-            "baseline": "40b1d12af5b03dffad6ad346925f23dfdcb511b7",
-            "current": "40b1d12af5b03dffad6ad346925f23dfdcb511b7"
-          }
-        ],
-        "errors": [],
-        "localTexture": 2,
-        "frames": [
-          "http://tauri.localhost/__surfaces/workspace",
-          "http://tauri.localhost/gallery-v3/portfolio/",
-          "http://tauri.localhost/work?galleryFrame=1"
-        ],
-        "passed": true
-      },
-      "packagedTexture": "C:\\Users\\Administrator\\.codex\\visualizations\\2026\\08\\20\\01a01e57-8912-7d31-8853-13e23af6f1d1\\preacherman-integration\\apps\\preacherman-demo-host\\dist\\gallery-v3\\portfolio\\textures\\223669_1786207957-dogelon-4.ktx2",
-      "packagedTextureBytes": 221902,
-      "visualVerification": "Native Task cards render correctly; native-light-task-settled.jpg. Both Market appearances, rapid navigation and drag assertions passed before the final diagnostic comparison."
-    },
+    "consoleQualification": null,
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\source-checks.log",
-      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\market-drag-promos-20261001\\final-resources.json"
+      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\final-resources.json"
     ]
   },
   "releaseAttempts": [
@@ -1988,9 +1642,18 @@
       "deployedAt": "2026-10-01T10:26:07.3028554+08:00",
       "verifiedAt": "2026-10-01T10:31:07.2857194+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-drag-promos-before-20261001"
+    },
+    {
+      "buildId": "navigation-asset-extension-20261001",
+      "sourceCommit": "e23b8162bcc7e237094da7198e8daf92645ac291",
+      "sha256": "F6F43D17F26905BA480C496BD47440BD441CA407254AE16F436F92757B97A5BE",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-01T11:13:13.5707388+08:00",
+      "verifiedAt": "2026-10-01T11:15:34.9705209+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-asset-extension-before-20261001"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-drag-promos-before-20261001/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-asset-extension-before-20261001/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
