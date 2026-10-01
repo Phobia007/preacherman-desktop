@@ -45,15 +45,14 @@ for(const appearance of ['light','dark']) test(`Search and seamless frost preser
   assert.match(frost,/\.market-surface__frost \{[^}]+backdrop-filter: blur\(12px\)/);
 });
 
-for (const appearance of ['light', 'dark']) test(`Promotional previews inherit ${appearance} surfaces and stop for hidden or reduced-motion states`, async () => {
+for (const appearance of ['light', 'dark']) test(`Task previews inherit ${appearance} surfaces and stop for hidden or reduced-motion states`, async () => {
   const css = await read('src/surfaces/market/market-search-promos.css');
   const source = await read('src/surfaces/market/MarketSearchPromos.tsx');
   for (const token of ['text', 'border', 'control', 'ink-shadow', 'error']) assert.ok(css.includes(`var(--demo-theme-market-${token})`));
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i);
-  assert.match(source, /visible && onScreen && documentVisible && !reduced && !paused && !hovered && !focused/);
-  assert.match(source, /window.clearInterval\(timer\)/);
+  assert.match(source, /enabled && visible && onScreen && documentVisible/);
+  assert.match(source, /active && !reduced && !paused && !focused/);
+  assert.match(source, /abort.abort\(\); instance\?\.dispose\(\)/);
   assert.match(source, /observer.disconnect\(\)/);
-  assert.match(source, /aria-hidden=\{index === previews.length/);
-  assert.match(source, /tabIndex=\{index === previews.length \? -1 : 0\}/);
   assert.match(css, /prefers-reduced-motion: reduce/);
 });

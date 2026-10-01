@@ -26,6 +26,11 @@ export async function captureMarketSearch(panel: HTMLElement, signal: AbortSigna
       (box.left - bounds.left) * sx, (box.top - bounds.top) * sy, box.width * sx, box.height * sy);
     ctx.restore();
   }
+  const featured = panel.querySelector<HTMLCanvasElement>('.market-search-promos[data-visible="true"][data-status="ready"] canvas');
+  if (featured) {
+    const box = featured.getBoundingClientRect();
+    ctx.drawImage(featured, (box.left - bounds.left) * sx, (box.top - bounds.top) * sy, box.width * sx, box.height * sy);
+  }
   const form = panel.querySelector<HTMLFormElement>("form")!, field = panel.querySelector<HTMLInputElement>("input")!;
   const box = form.getBoundingClientRect(), style = getComputedStyle(form);
   ctx.beginPath(); ctx.roundRect((box.left - bounds.left) * sx, (box.top - bounds.top) * sy, box.width * sx, box.height * sy, box.height * sy / 2);
@@ -38,7 +43,7 @@ export async function captureMarketSearch(panel: HTMLElement, signal: AbortSigna
   let node: Node | null;
   while ((node = walker.nextNode())) {
     const parent = node.parentElement, text = node.textContent || "";
-    if (!parent || !text.trim() || parent.closest("svg, .market-search__announcement, .market-search__image-error")) continue;
+    if (!parent || !text.trim() || parent.closest("svg, .market-search__announcement, .market-search__image-error, .market-search-promos__fallback-name")) continue;
     const ink = getComputedStyle(parent), box = parent.getBoundingClientRect();
     if (!box.width || box.bottom <= view.top || box.top >= view.bottom || ink.visibility === "hidden" || parent.closest('[data-visible="false"], [aria-hidden="true"]')) continue;
     ctx.font = `${ink.fontWeight} ${parseFloat(ink.fontSize)}px ${ink.fontFamily}`; ctx.fillStyle = ink.color; ctx.textBaseline = "alphabetic";
