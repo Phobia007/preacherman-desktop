@@ -111,8 +111,8 @@ test("hamburger opens a click-only, opaque six-item Clash Display navigation dra
     ["Task", "workspace"],
     ["Gallery", "market"],
     ["Market", "ledger"],
-    ["Settings", "settings"],
-    ["Account", "account"],
+    ["Asset", "asset"],
+    ["Extension", "extension"],
   ]) {
     assert.match(shell, new RegExp(`label: "${label}", surfaceType: "${surfaceType}"`));
   }
@@ -186,7 +186,7 @@ test("window controls use the supplied local 80 by 80 SVG paths and bridge comma
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.demo-window-controls__button:hover img,[\s\S]*?transform:\s*none;/);
 });
 
-test("tauriClient is the only native API boundary and browser preview does not fake success", async () => {
+test("native commands, account auth, and window activity stay in dedicated API boundaries", async () => {
   const clientPath = join(sourceRoot, "tauriClient.ts");
   const bridgePath = join(sourceRoot, "demoHostBridge.ts");
   assert.equal(await exists(clientPath), true, "tauriClient must exist");
@@ -206,12 +206,12 @@ test("tauriClient is the only native API boundary and browser preview does not f
   for (const file of await sourceFiles(sourceRoot)) {
     const source = await readFile(file, "utf8");
     if (source.includes("@tauri-apps")) {
-      assert.equal(file, clientPath);
+      assert.ok([clientPath, join(sourceRoot, "auth", "accountAuth.ts"), join(sourceRoot, "app-shell", "useWindowActivity.ts")].includes(file));
     }
   }
 });
 
-test("all eight stable navigation keys have local routes without adding a router", async () => {
+test("all ten stable navigation keys have local routes without adding a router", async () => {
   const route = await readFile(join(sourceRoot, "demo", "screenRoute.ts"), "utf8");
   const bridge = await readFile(join(sourceRoot, "demoHostBridge.ts"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
@@ -219,13 +219,13 @@ test("all eight stable navigation keys have local routes without adding a router
   assert.match(route, /localSurfacePath\s*=\s*["']\/__surfaces["']/);
   assert.match(route, /openLocalSurface/);
   assert.match(bridge, /demo\.navigation\.select/);
-  for (const key of ["home", "workspace", "lab", "market", "test", "ledger", "settings", "account"]) {
+  for (const key of ["home", "workspace", "lab", "market", "test", "ledger", "settings", "account", "asset", "extension"]) {
     assert.match(app + route, new RegExp(`(?:["']${key}["']|\\b${key}:)`));
   }
   assert.doesNotMatch(app + route, /react-router|createBrowserRouter/);
 });
 
-test("Home, Task, Settings, and Gallery share the persistent scene", async () => {
+test("Home, Task, Settings, Gallery, Asset, and Extension share the persistent scene", async () => {
   const shell = await readFile(join(sourceRoot, "app-shell", "AppShell.tsx"), "utf8");
   const app = await readFile(join(sourceRoot, "App.tsx"), "utf8");
   const styles = await readFile(join(sourceRoot, "styles.css"), "utf8");
@@ -237,16 +237,18 @@ test("Home, Task, Settings, and Gallery share the persistent scene", async () =>
   assert.match(app, /activeSurfaceType\s*===\s*["']settings["']/);
   assert.doesNotMatch(app, /ConversationLedgerScreen/);
   assert.match(app, /activeSurfaceType === "ledger"\s*\? null/);
-  assert.match(app, /activeSurfaceType !== "ledger" \? \(/);
+  assert.match(app, /activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface \? \(/);
+  assert.match(app, /isFrostedSurface \? <FrostedSurface name=\{activeSurfaceType === "asset" \? "Asset" : "Extension"\}/);
   assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
   assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s+active=\{activeSurfaceType === "market"\}[\s\S]*onDetailChange=\{setGalleryDetailOpen\}/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(hostRule, /background:\s*transparent/);
   assert.equal(emptyRule, "");
   assert.match(sceneRule, /background:\s*var\(--demo-theme-home-canvas\)/);
-  assert.match(app, /const sceneModelId = activeSurfaceType === "market" && galleryDetailOpen\s*\? galleryPreviewModelId \?\? activeModelId\s*: activeModelId;/);
-  assert.match(app, /scene=\{sceneModelId \? \(/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
+  assert.match(app, /const galleryModelId = galleryDetailOpen \? galleryPreviewModelId : activeModelId;/);
+  assert.match(app, /const sceneModelId = activeSurfaceType === "market" \? galleryModelId : activeModelId;/);
+  assert.match(app, /sceneModelId \|\| activeSurfaceType === "market" \? \(/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "account" \|\| activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.doesNotMatch(app, /sceneHidden=/);
   assert.doesNotMatch(shell, /Math\.max\(window\.innerWidth\s*\/\s*1800/);

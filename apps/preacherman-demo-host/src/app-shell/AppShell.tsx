@@ -2,6 +2,7 @@ import { navigationCommand, type SurfaceHostBridge } from "@preacherman/surface-
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { type Appearance, type Locale } from "../preferences";
 import { accountAuth, accountProfile } from "../auth/accountAuth";
+import type { LocalSurfaceType } from "../demo/screenRoute";
 import { AccountBadge } from "./AccountBadge";
 import { AudioDock } from "../audio/AudioDock";
 import { WindowControls } from "./WindowControls";
@@ -14,7 +15,7 @@ interface AppShellProps {
   readonly dispatch: SurfaceHostBridge["execute"];
   readonly entering: boolean;
   readonly locale: Locale;
-  readonly onNavigate: (surfaceType: typeof brandNavigationItems[number]["surfaceType"]) => void;
+  readonly onNavigate: (surfaceType: LocalSurfaceType) => void;
   readonly scene?: ReactNode;
   readonly sceneHidden?: boolean;
   readonly galleryDetailOpen?: boolean;
@@ -25,8 +26,8 @@ const brandNavigationItems = [
   { label: "Task", surfaceType: "workspace" },
   { label: "Gallery", surfaceType: "market" },
   { label: "Market", surfaceType: "ledger" },
-  { label: "Settings", surfaceType: "settings" },
-  { label: "Account", surfaceType: "account" },
+  { label: "Asset", surfaceType: "asset" },
+  { label: "Extension", surfaceType: "extension" },
 ] as const;
 
 export function AppShell({
@@ -78,7 +79,7 @@ export function AppShell({
     };
   }, [brandNavigationOpen]);
 
-  const selectBrandDestination = (surfaceType: typeof brandNavigationItems[number]["surfaceType"]) => {
+  const selectBrandDestination = (surfaceType: LocalSurfaceType) => {
     onNavigate(surfaceType);
     void dispatch(navigationCommand(surfaceType));
   };
@@ -150,6 +151,20 @@ export function AppShell({
               <path d="M18 24H62M18 40H62M18 56H62" />
             </svg>
           </button>
+          <button
+            aria-label="Settings"
+            aria-current={activeSurfaceType === "settings" ? "page" : undefined}
+            aria-hidden={!brandNavigationOpen}
+            className="demo-app-shell__brand-settings"
+            onClick={() => selectBrandDestination("settings")}
+            tabIndex={brandNavigationOpen ? 0 : -1}
+            type="button"
+          >
+            <svg aria-hidden="true" className="demo-app-shell__brand-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round">
+              <path d="M55.71,33.49L56.56,36.18L61.73,36.56L61.73,43.44L56.56,43.82L55.71,46.51L54.42,49.01L57.80,52.93L52.93,57.80L49.01,54.42L46.51,55.71L43.82,56.56L43.44,61.73L36.56,61.73L36.18,56.56L33.49,55.71L30.99,54.42L27.07,57.80L22.20,52.93L25.58,49.01L24.29,46.51L23.44,43.82L18.27,43.44L18.27,36.56L23.44,36.18L24.29,33.49L25.58,30.99L22.20,27.07L27.07,22.20L30.99,25.58L33.49,24.29L36.18,23.44L36.56,18.27L43.44,18.27L43.82,23.44L46.51,24.29L49.01,25.58L52.93,22.20L57.80,27.07L54.42,30.99Z" />
+              <circle cx="40" cy="40" r="8" />
+            </svg>
+          </button>
           <nav
             aria-hidden={!brandNavigationOpen}
             aria-label="Preacherman sections"
@@ -160,13 +175,12 @@ export function AppShell({
               <div className="demo-app-shell__brand-menu-row" key={item.surfaceType} style={{ "--menu-order": index } as CSSProperties}>
                 <button
                   aria-current={activeSurfaceType === item.surfaceType ? "page" : undefined}
-                  aria-label={item.surfaceType === "account" ? "Account" : undefined}
-                  className={`demo-app-shell__brand-menu-item${item.surfaceType === "account" && auth.user ? " demo-app-shell__brand-menu-item--account" : ""}`}
+                  className="demo-app-shell__brand-menu-item"
                   onClick={() => selectBrandDestination(item.surfaceType)}
                   tabIndex={brandNavigationOpen ? 0 : -1}
                   type="button"
                 >
-                  <span className="demo-app-shell__brand-menu-label">{item.surfaceType === "account" && auth.user ? <AccountBadge user={auth.user} member={member} /> : item.label}</span>
+                  <span className="demo-app-shell__brand-menu-label">{item.label}</span>
                   <svg
                     aria-hidden="true"
                     className="demo-app-shell__brand-menu-charge-ring"

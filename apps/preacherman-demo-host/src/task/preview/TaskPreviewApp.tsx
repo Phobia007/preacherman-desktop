@@ -5,8 +5,9 @@ import { CortanaModelStage } from "../../gallery/CortanaModelStage";
 import { LiveCoordinatorProvider } from "../../live/LiveCoordinatorContext";
 import type { DemoPreferences } from "../../preferences";
 import { TaskSurface } from "../TaskSurface";
+import type { LocalSurfaceType } from "../../demo/screenRoute";
 
-type PreviewSurface = "home" | "workspace" | "market" | "ledger" | "settings" | "account";
+type PreviewSurface = LocalSurfaceType;
 
 interface TaskPreviewAppProps {
   readonly preferences: DemoPreferences;

@@ -41,6 +41,7 @@ import { ActiveTheoryGallerySurface } from "./surfaces/gallery/ActiveTheoryGalle
 import { GallerySurface } from "./surfaces/gallery/GallerySurface";
 import { AccountSurface } from "./surfaces/account/AccountSurface";
 import { AccountFrost, AccountSceneCapture } from "./surfaces/account/AccountScene";
+import { FrostedSurface } from "./surfaces/FrostedSurface";
 import { MarketSurface } from "./surfaces/market/MarketSurface";
 import {
   applyPreferences,
@@ -146,6 +147,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const activeSurfaceType = route.kind === "surface" && route.surfaceType
     ? route.surfaceType
     : "home";
+  const isFrostedSurface = activeSurfaceType === "asset" || activeSurfaceType === "extension";
   const [preferences, setPreferences] = useState(readPreferences);
   const [showStartupIntro, setShowStartupIntro] = useState(startupIntroEnabled);
   const [animateMainEntrance] = useState(showStartupIntro || enteringOnMount);
@@ -278,7 +280,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       ? "home"
       : null;
   const visiblePanelSurface =
-    preachermanPanelSurface === "home" || preachermanPanelSurface === "market" || preachermanPanelSurface === "ledger"
+    preachermanPanelSurface === "home" || preachermanPanelSurface === "market" || preachermanPanelSurface === "ledger" || preachermanPanelSurface === "asset" || preachermanPanelSurface === "extension"
       ? null
       : preachermanPanelSurface;
   const homeContent = (
@@ -327,6 +329,8 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           : activeSurfaceType === "lab"
             ? labContent
         : activeSurfaceType === "market"
+          ? null
+        : activeSurfaceType === "asset" || activeSurfaceType === "extension"
           ? null
         : activeSurfaceType === "settings"
           ? <SettingsScreen
@@ -407,7 +411,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         />
       ) : null}</>}
     >
-      {activeSurfaceType !== "account" ? (
+      {activeSurfaceType !== "account" && !isFrostedSurface ? (
         <PreachermanDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={preachermanServiceRequest} />
       ) : null}
       <div
@@ -438,8 +442,9 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         />
       </div>
       {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
+      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} /> : null}
       {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} /> : null}
-      {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" ? (
+      {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}
           {visiblePanelSurface && visiblePanelSurface !== "account" && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (

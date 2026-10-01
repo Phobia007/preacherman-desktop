@@ -555,6 +555,7 @@ html[data-appearance="dark"] #root {
   transform: translate3d(0, 0, 0);
 }
 
+.demo-app-shell__brand-settings,
 .demo-app-shell__brand-trigger {
   position: absolute;
   top: 6px;
@@ -576,12 +577,16 @@ html[data-appearance="dark"] #root {
   transition: color 180ms ease;
 }
 
+.demo-app-shell__brand-settings:hover,
+.demo-app-shell__brand-settings:focus-visible,
+.demo-app-shell__brand-settings[aria-current="page"],
 .demo-app-shell__brand-trigger:hover,
 .demo-app-shell__brand-trigger:focus-visible,
 .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-trigger {
   color: var(--demo-theme-brand-menu-text-hover);
 }
 
+.demo-app-shell__brand-settings:focus-visible,
 .demo-app-shell__brand-trigger:focus-visible {
   outline: 1px solid var(--demo-theme-brand-menu-focus);
   outline-offset: 2px;
@@ -592,6 +597,29 @@ html[data-appearance="dark"] #root {
   width: 40px;
   height: 40px;
   pointer-events: none;
+}
+
+/* Both top controls share the same 48px target and 16px outer inset. */
+.demo-app-shell__brand-settings {
+  right: 16px;
+  left: auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-settings {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Reserved destinations share Market's single, continuous translucent backdrop. */
+.demo-frosted-surface {
+  position: absolute;
+  inset: 0;
+  background: var(--demo-theme-market-details-glass);
+  color: var(--demo-theme-text);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .demo-app-shell__brand-menu {
@@ -2612,6 +2640,14 @@ body {
 
 .demo-app-shell[data-active-surface="account"] .demo-app-shell__brand-trigger:focus-visible { outline-color: var(--demo-theme-account-focus); }
 
+/* An expanded drawer keeps its own foreground even over the light Account page. */
+.demo-app-shell[data-active-surface="account"] .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-trigger {
+  color: var(--demo-theme-brand-menu-text-hover);
+}
+.demo-app-shell[data-active-surface="account"] .demo-app-shell__brand-navigation[data-open="true"] .demo-app-shell__brand-trigger:focus-visible {
+  outline-color: var(--demo-theme-brand-menu-focus);
+}
+
 /* Glass stays translucent: the existing desktop provides the image underneath. */
 .demo-app-shell {
   --demo-theme-market-details-glass: color-mix(in srgb, var(--demo-theme-home-canvas) 12%, transparent);
@@ -2671,10 +2707,4 @@ body {
 .account-badge__number { color: var(--demo-theme-member-muted); font-size: 11px; font-weight: 400; line-height: 14px; font-variant-numeric: tabular-nums; letter-spacing: .04em; }
 .account-badge[data-profile-state="loading"] .account-badge__number { color: var(--demo-theme-member-loading); }
 .account-badge[data-profile-state="error"] .account-badge__number { color: var(--demo-theme-member-error); }
-.demo-app-shell__brand-menu-item--account { max-width: 234px; padding: 6px 18px; }
-.demo-app-shell__brand-menu-item--account .account-badge__name { font-size: 17px; line-height: 22px; }
-.demo-app-shell__brand-menu-item--account .account-badge__number { font-size: 12px; line-height: 16px; }
-.demo-app-shell__brand-menu-item--account .account-badge__avatar { width: 40px; height: 40px; flex-basis: 40px; }
 @media (prefers-reduced-motion: reduce) { .demo-account-dock, .demo-account-dock[data-menu-hidden="true"] { transition: none; } }
-
-.demo-app-shell__brand-menu-item--account .demo-app-shell__brand-menu-label { display: flex; min-width: 0; max-width: 100%; }
