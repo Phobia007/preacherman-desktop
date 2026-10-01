@@ -107,8 +107,14 @@ test("Market categories stay with the host header and yield to details and the p
   const { marketCategories } = await import("../src/surfaces/market/marketEntrance.ts");
   assert.match(surface, /highlightedCategory = category.next \?\? category.active/);
   assert.match(css, /transition: transform 380ms/);
-  assert.deepEqual(marketCategories, ["Discover", "Browse", "Sell", "Inventory", "Search"]);
+  assert.deepEqual(marketCategories, ["Discover", "Browse", "Brain", "Sell", "Inventory", "Search"]);
   assert.match(row, /marketCategories\.map/);
+  assert.ok(row.includes('data-market-category={label} aria-label={label}'));
+  assert.ok(row.includes('label === "Search" ? <svg'));
+  assert.ok(row.includes('stroke="currentColor"'));
+  assert.ok(row.includes('aria-hidden="true"'));
+  assert.ok(surface.includes('button.dataset.marketCategory === highlightedCategory'));
+  assert.ok(css.includes('.market-surface__search-icon { width: 20px; height: 20px; }'));
   assert.match(row, /<button type="button" aria-pressed=\{highlightedCategory === label\}/);
   assert.match(row, /hidden=\{page !== "intro" \|\| entrance === "logo" \|\| lensActive\}/);
   assert.match(css, /\.market-surface__categories \{[^}]*position: absolute;[^}]*top: var\(--market-content-top\)/);

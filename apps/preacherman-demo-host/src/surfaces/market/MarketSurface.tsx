@@ -49,7 +49,7 @@ export function MarketSurface() {
   useLayoutEffect(() => {
     const row = categoriesRef.current, indicator = indicatorRef.current;
     if (!row || !indicator || row.hidden) return;
-    const target = [...row.querySelectorAll("button")].find(button => button.textContent === highlightedCategory);
+    const target = [...row.querySelectorAll("button")].find(button => button.dataset.marketCategory === highlightedCategory);
     if (!target) return;
     const position = () => {
       indicator.style.transform = `translate3d(${target.offsetLeft}px,0,0) scaleX(${target.offsetWidth})`;
@@ -252,8 +252,13 @@ export function MarketSurface() {
         hidden={page !== "intro" || entrance === "logo" || lensActive}>
         {marketCategories.map(label => <li key={label} className={label === "Search" ? "market-surface__search-category" : undefined}>
           <button type="button" aria-pressed={highlightedCategory === label} aria-controls={label === "Discover" ? "market-discover-page" : label === "Search" ? "market-search-page" : "market-category-page"}
+            data-market-category={label} aria-label={label} title={label === "Search" ? "Search" : undefined}
             disabled={entrance !== "complete" || Boolean(selectedModel) || profileOpen}
-            onClick={() => dispatchCategory({ type: "select", category: label })}>{label}</button>
+            onClick={() => dispatchCategory({ type: "select", category: label })}>
+            {label === "Search" ? <svg className="market-surface__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" />
+            </svg> : label}
+          </button>
           {label === "Search" && <span ref={indicatorRef} className="market-surface__category-indicator" aria-hidden="true" />}
         </li>)}
       </ul>

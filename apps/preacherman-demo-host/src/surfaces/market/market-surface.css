@@ -112,6 +112,15 @@
   border-inline-start: 1px solid var(--demo-theme-market-border);
 }
 
+.market-surface__search-category button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+}
+
+.market-surface__search-icon { width: 20px; height: 20px; }
+
 @media (max-width: 480px) {
   .market-surface__categories { right: 12px; left: 12px; gap: 12px; font-size: 14px; }
   .market-surface__search-category { padding-inline-start: 12px; }
