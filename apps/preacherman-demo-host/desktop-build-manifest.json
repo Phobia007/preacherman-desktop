@@ -1,36 +1,36 @@
 {
   "schemaVersion": 1,
-  "buildId": "navigation-asset-extension-20261001",
+  "buildId": "navigation-reverse-motion-20261001",
   "productVersion": "0.1.0",
-  "sourceTask": "main-navigation-asset-extension-settings-gear",
+  "sourceTask": "main-navigation-reversed-exits-and-staggered-settings-gear",
   "sourceThread": null,
-  "sourceState": "Preserve six-row navigation typography and motion; order Home, Task, Gallery, Market, Asset, Extension. Independent Asset and Extension routes provide empty single-layer Market-style frost over the persistent scene. Settings remains fully functional through a symmetric upper-right gear in the expanded drawer. Account remains on the lower-left person dock. Expanded Account/light drawer preserves readable hamburger foreground.",
-  "sourceCommit": "e23b8162bcc7e237094da7198e8daf92645ac291",
+  "sourceState": "All navigation destinations retain the outgoing page while its entrance is reversed. Last choice wins; returning to the current page reverses continuously. Task aperture, Gallery orbit, Market split-frost and panels, Settings stagger and Execution Mode form, Account panels, and separate Asset/Extension fades preserve their authored motion. Outgoing content and Gallery details are inert. Settings gear follows drawer translation and reveals before the menu labels. Both appearances and reduced motion are preserved",
+  "sourceCommit": "25303d0523cd44274199aeaf4b23f43a2a01ea06",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-01T11:12:54.4085986+08:00",
-  "deployedAt": "2026-10-01T11:13:13.5707388+08:00",
-  "verifiedAt": "2026-10-01T11:15:34.9705209+08:00",
-  "sizeBytes": 676129280,
-  "sha256": "F6F43D17F26905BA480C496BD47440BD441CA407254AE16F436F92757B97A5BE",
+  "builtAt": "2026-10-01T11:37:09.1831130+08:00",
+  "deployedAt": "2026-10-01T11:37:59.0719656+08:00",
+  "verifiedAt": "2026-10-01T11:44:50.8489294+08:00",
+  "sizeBytes": 676130816,
+  "sha256": "69859935E36E4CC85170295258654413B12733372CF269D294C4C619C0DB2BBF",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-asset-extension-before-20261001/preacherman-demo-host.exe",
-  "backupSha256": "ED634EC171285AAF8765F39AF014AF21DC9AF3D71158EFFBD1D6BF8216CD0BF6",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-asset-extension-before-20261001/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-reverse-motion-before-20261001/preacherman-demo-host.exe",
+  "backupSha256": "F6F43D17F26905BA480C496BD47440BD441CA407254AE16F436F92757B97A5BE",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-reverse-motion-before-20261001/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "6624b4f5ae6a0cc9df474562be745f0d07139cdb",
-  "previousVerificationCommit": "6624b4f5ae6a0cc9df474562be745f0d07139cdb",
+  "rollbackBaselineCommit": "e23b8162bcc7e237094da7198e8daf92645ac291",
+  "previousVerificationCommit": "e23b8162bcc7e237094da7198e8daf92645ac291",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 45
+      "focusedTests": 48
     },
-    "nativeFlow": "Cold launch from the canonical shortcut. Both appearances: Home, Asset, Extension, Settings gear and Appearance interaction, Account person dock, Task authored cards, Gallery, Market and Search. Verify menu ordering, unchanged typography and drawer duration, symmetric gear/hamburger geometry, keyboard access, hidden gear exclusion, distinct URLs and back/forward history, persistent scene, seamless frost, no frost left on other routes, and window controls. Close host/sidecar and restart normal Home without debug flags.",
+    "nativeFlow": "Cold launch from the canonical shortcut. Both appearances: Home, Asset, Extension, Settings gear and Appearance interaction, Account person dock, Task authored cards, Gallery, Market and Search. Verify reversed exits for all destinations, rapid last-choice navigation, interruption and return, Gallery portal inert state, Settings Execution Mode exit, reduced motion, gear-first stagger synchronized with the drawer, menu ordering, unchanged typography and drawer duration, symmetric gear/hamburger geometry, keyboard access, hidden gear exclusion, distinct URLs and back/forward history, persistent scene, seamless frost, no frost left on other routes, and window controls. Close host/sidecar and restart normal Home without debug flags.",
     "routes": [
       {
         "name": "Home",
@@ -177,6 +177,118 @@
         "name": "Market",
         "surface": "ledger",
         "appearance": "light"
+      }
+    ],
+    "motion": [
+      {
+        "appearance": "dark",
+        "gear": {
+          "early": {
+            "gear": 0,
+            "row": 0,
+            "drawer": "matrix(1, 0, 0, 1, -285.318, 0)",
+            "reveal": "matrix(1, 0, 0, 1, -285.318, 0)"
+          },
+          "first": {
+            "gear": 0.421749,
+            "row": 0,
+            "drawer": "matrix(1, 0, 0, 1, -92.5788, 0)",
+            "reveal": "matrix(1, 0, 0, 1, -92.5788, 0)"
+          },
+          "complete": {
+            "gear": 1,
+            "row": 1,
+            "drawer": "matrix(1, 0, 0, 1, 0, 0)",
+            "reveal": "matrix(1, 0, 0, 1, 0, 0)"
+          }
+        }
+      },
+      {
+        "appearance": "dark",
+        "taskClip": "inset(25.6973% 0px)",
+        "galleryEntry": 0.9532013649456441,
+        "settingsRows": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "accountTransform": "matrix(1, 0, 0, 1, 103.872, 0)",
+        "marketFrost": "polygon(0% 0%, 0% 100%, 45.6108% 100%, 45.6108% 0%, 54.3892% 0%, 54.3892% 100%, 100% 100%, 100% 0%)",
+        "latestChoice": true,
+        "inPlaceReversal": true,
+        "frostReentry": true
+      },
+      {
+        "appearance": "dark",
+        "galleryPortalInert": true
+      },
+      {
+        "appearance": "light",
+        "gear": {
+          "early": {
+            "gear": 0,
+            "row": 0,
+            "drawer": "matrix(1, 0, 0, 1, -285.32, 0)",
+            "reveal": "matrix(1, 0, 0, 1, -285.32, 0)"
+          },
+          "first": {
+            "gear": 0.465046,
+            "row": 0,
+            "drawer": "matrix(1, 0, 0, 1, -88.172, 0)",
+            "reveal": "matrix(1, 0, 0, 1, -88.172, 0)"
+          },
+          "complete": {
+            "gear": 1,
+            "row": 1,
+            "drawer": "matrix(1, 0, 0, 1, 0, 0)",
+            "reveal": "matrix(1, 0, 0, 1, 0, 0)"
+          }
+        }
+      },
+      {
+        "appearance": "light",
+        "taskClip": "inset(25.2274% 0px)",
+        "galleryEntry": 0.9531897815264045,
+        "settingsRows": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "accountTransform": "matrix(1, 0, 0, 1, 107.94, 0)",
+        "marketFrost": "polygon(0% 0%, 0% 100%, 45.4354% 100%, 45.4354% 0%, 54.5646% 0%, 54.5646% 100%, 100% 100%, 100% 0%)",
+        "latestChoice": true,
+        "inPlaceReversal": true,
+        "frostReentry": true
+      },
+      {
+        "appearance": "light",
+        "galleryPortalInert": true
       }
     ],
     "navigation": [
@@ -682,10 +794,6 @@
         {
           "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
           "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://127.0.0.1:1420/active-theory-gallery/assets/video/reel.mp4",
-          "error": "net::ERR_ABORTED"
         }
       ],
       "consoleLocations": [
@@ -708,116 +816,120 @@
             "lineNumber": 3,
             "columnNumber": 29834
           }
-        },
-        {
-          "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
-          "location": {
-            "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot",
-            "line": 0,
-            "column": 0,
-            "lineNumber": 0,
-            "columnNumber": 0
-          }
-        },
-        {
-          "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
-          "location": {
-            "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot",
-            "line": 0,
-            "column": 0,
-            "lineNumber": 0,
-            "columnNumber": 0
-          }
-        },
-        {
-          "text": "Hydration completed but contains mismatches.",
-          "location": {
-            "url": "http://127.0.0.1:1420/gallery-v3/portfolio/_nuxt/D9b8F35K.js",
-            "line": 3,
-            "column": 29834,
-            "lineNumber": 3,
-            "columnNumber": 29834
-          }
-        },
-        {
-          "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
-          "location": {
-            "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot",
-            "line": 0,
-            "column": 0,
-            "lineNumber": 0,
-            "columnNumber": 0
-          }
-        },
-        {
-          "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
-          "location": {
-            "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot",
-            "line": 0,
-            "column": 0,
-            "lineNumber": 0,
-            "columnNumber": 0
-          }
         }
       ],
       "coldHome": true,
-      "httpErrors": [],
-      "newErrors": [],
-      "resolvedRegression": {
-        "cause": "New reserved routes were being sent to the existing DOM observation service, which excludes them.",
-        "fix": "Do not mount observation on the intentionally empty Asset and Extension routes.",
-        "confirmation": {
-          "routes": [
-            {
-              "appearance": "dark",
-              "surface": "asset"
+      "motion": [
+        {
+          "appearance": "dark",
+          "gear": {
+            "early": {
+              "gear": 0,
+              "row": 0,
+              "drawer": "matrix(1, 0, 0, 1, -286.771, 0)",
+              "reveal": "matrix(1, 0, 0, 1, -286.771, 0)"
             },
-            {
-              "appearance": "dark",
-              "surface": "extension"
+            "first": {
+              "gear": 0.155698,
+              "row": 0,
+              "drawer": "matrix(1, 0, 0, 1, -119.779, 0)",
+              "reveal": "matrix(1, 0, 0, 1, -119.779, 0)"
             },
-            {
-              "appearance": "light",
-              "surface": "asset"
-            },
-            {
-              "appearance": "light",
-              "surface": "extension"
+            "complete": {
+              "gear": 1,
+              "row": 1,
+              "drawer": "matrix(1, 0, 0, 1, 0, 0)",
+              "reveal": "matrix(1, 0, 0, 1, 0, 0)"
             }
+          }
+        },
+        {
+          "appearance": "dark",
+          "taskClip": "inset(24.2403% 0px)",
+          "galleryEntry": 0.9598728082105925,
+          "settingsRows": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
-          "errors": [
-            "Hydration completed but contains mismatches.",
-            "Hydration completed but contains mismatches.",
-            "Hydration completed but contains mismatches.",
-            "Hydration completed but contains mismatches."
-          ],
-          "requests": [
-            {
-              "surface": "home",
-              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
+          "accountTransform": "matrix(1, 0, 0, 1, 85.3509, 0)",
+          "marketFrost": "polygon(0% 0%, 0% 100%, 46.0949% 100%, 46.0949% 0%, 53.9051% 0%, 53.9051% 100%, 100% 100%, 100% 0%)",
+          "latestChoice": true,
+          "inPlaceReversal": true,
+          "frostReentry": true
+        },
+        {
+          "appearance": "light",
+          "gear": {
+            "early": {
+              "gear": 0,
+              "row": 0,
+              "drawer": "matrix(1, 0, 0, 1, -286.771, 0)",
+              "reveal": "matrix(1, 0, 0, 1, -286.771, 0)"
             },
-            {
-              "surface": "home",
-              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
+            "first": {
+              "gear": 0.155713,
+              "row": 0,
+              "drawer": "matrix(1, 0, 0, 1, -119.777, 0)",
+              "reveal": "matrix(1, 0, 0, 1, -119.777, 0)"
             },
-            {
-              "surface": "home",
-              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
-            },
-            {
-              "surface": "home",
-              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
-            },
-            {
-              "surface": "home",
-              "url": "http://127.0.0.1:8787/api/computer-vision/dom-snapshot"
+            "complete": {
+              "gear": 1,
+              "row": 1,
+              "drawer": "matrix(1, 0, 0, 1, 0, 0)",
+              "reveal": "matrix(1, 0, 0, 1, 0, 0)"
             }
+          }
+        },
+        {
+          "appearance": "light",
+          "taskClip": "inset(24.2403% 0px)",
+          "galleryEntry": 0.9566276595536156,
+          "settingsRows": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
-          "passed": true
+          "accountTransform": "matrix(1, 0, 0, 1, 85.3225, 0)",
+          "marketFrost": "polygon(0% 0%, 0% 100%, 46.6644% 100%, 46.6644% 0%, 53.3356% 0%, 53.3356% 100%, 100% 100%, 100% 0%)",
+          "latestChoice": true,
+          "inPlaceReversal": true,
+          "frostReentry": true
         }
-      },
-      "previousFailure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Failed to load resource: the server responded with a status of 403 (Forbidden)'\n+ ]\n- []\n\n    at D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\verify.cjs:78:77",
-      "passed": true
+      ],
+      "newErrors": [],
+      "passed": true,
+      "confirmations": [
+        "preview-dark-report.json",
+        "preview-light-report.json"
+      ],
+      "initialPreviewNote": "Dark flow passed; second-theme reload in initial combined browser run timed out waiting for model, closed and reran each appearance in a fresh browser. Final cold launches passed."
     },
     "windowControls": {
       "initialMaximized": true,
@@ -833,31 +945,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-01T11:15:34.9705209+08:00",
-      "NativePid": 40592,
-      "StartedAt": "2026-10-01T11:15:12.5392049+08:00",
-      "WindowHandle": 4786992,
+      "SampledAt": "2026-10-01T11:44:50.8489294+08:00",
+      "NativePid": 35928,
+      "StartedAt": "2026-10-01T11:44:34.1614316+08:00",
+      "WindowHandle": 5114664,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        40592,
-        13088,
-        37304,
-        34768,
-        34328,
-        40448,
-        39820,
-        4304,
-        38496,
-        25104,
-        12116,
-        1268
+        35928,
+        14296,
+        39772,
+        34824,
+        38668,
+        35828,
+        38792,
+        21916,
+        36520,
+        40516,
+        19144
       ],
-      "NormalizedCpuPercent": 10.94,
-      "WorkingSetMiB": 2115.6,
-      "GpuDedicatedBytes": 3284066304,
-      "MaxGpuEngineUtilization": 13,
-      "FreeRamKiB": 13245296,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1945.3,
+      "GpuDedicatedBytes": 3346554880,
+      "MaxGpuEngineUtilization": 12,
+      "FreeRamKiB": 16248860,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -888,20 +999,20 @@
       "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
       "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
       "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "consoleQualification": null,
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\source-checks.log",
-      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\navigation-asset-extension-20261001\\final-resources.json"
+      "D:\\preacherman\\output\\playwright\\navigation-reverse-motion-20261001\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\navigation-reverse-motion-20261001\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\navigation-reverse-motion-20261001\\source-checks.log",
+      "D:\\preacherman\\output\\playwright\\navigation-reverse-motion-20261001\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\navigation-reverse-motion-20261001\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\navigation-reverse-motion-20261001\\final-resources.json"
     ]
   },
   "releaseAttempts": [
@@ -1651,9 +1762,18 @@
       "deployedAt": "2026-10-01T11:13:13.5707388+08:00",
       "verifiedAt": "2026-10-01T11:15:34.9705209+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-asset-extension-before-20261001"
+    },
+    {
+      "buildId": "navigation-reverse-motion-20261001",
+      "sourceCommit": "25303d0523cd44274199aeaf4b23f43a2a01ea06",
+      "sha256": "69859935E36E4CC85170295258654413B12733372CF269D294C4C619C0DB2BBF",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-01T11:37:59.0719656+08:00",
+      "verifiedAt": "2026-10-01T11:44:50.8489294+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-reverse-motion-before-20261001"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-asset-extension-before-20261001/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\navigation-reverse-motion-before-20261001/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
