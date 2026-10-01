@@ -1,123 +1,195 @@
 {
   "schemaVersion": 1,
-  "buildId": "task-chat-alignment-20261002",
+  "buildId": "market-brain-search-20261002",
   "productVersion": "0.1.0",
-  "sourceTask": "task-assistant-left-user-right-and-enabled-microphone-entry",
+  "sourceTask": "market-brain-category-and-search-magnifier",
   "sourceThread": null,
-  "sourceState": "Task assistant replies align left, user and legacy messages align right, status messages align left using chat theme tokens. Microphone button is enabled and reports unconfigured transcription without recording, uploading, sending or clearing the draft. Existing text send, model integration, typography and authored page layout are preserved.",
-  "sourceCommit": "285767c1db51cbb6eb8fe935ff11a7926ba364d3",
+  "sourceState": "Market header order: Discover, Browse, Brain, Sell, Inventory, separator, icon-only Search. Brain uses the existing empty category and shared frosted entrance/exit flow. Search retains its accessible name, page, and keyboard interaction. The sliding underline targets stable category identities so it also follows the magnifier. Existing fonts, styling, profile, Search content, and other surfaces are unchanged.",
+  "sourceCommit": "097bf8b63a96ab5de6e626c86bd4cfe77c53ac59",
   "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-02T01:27:22.8105006+08:00",
-  "deployedAt": "2026-10-02T01:28:06.0848975+08:00",
-  "verifiedAt": "2026-10-02T01:35:08.4995297+08:00",
+  "builtAt": "2026-10-02T05:00:56.3977837+08:00",
+  "deployedAt": "2026-10-02T05:01:50.7719650+08:00",
+  "verifiedAt": "2026-10-02T05:12:01.7443445+08:00",
   "sizeBytes": 676130816,
-  "sha256": "A0D284785E3109476F79A8D54F8C2B41BF1C05B0461A4247DFC102523AEB70DE",
+  "sha256": "FE91C1FDA4655C44E9D9547D8DD7A15A2DE805BDFCEA8EEF57FBC74CE9FB0764",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-chat-alignment-before-20261002/preacherman-demo-host.exe",
-  "backupSha256": "69859935E36E4CC85170295258654413B12733372CF269D294C4C619C0DB2BBF",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-chat-alignment-before-20261002/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002/preacherman-demo-host.exe",
+  "backupSha256": "A0D284785E3109476F79A8D54F8C2B41BF1C05B0461A4247DFC102523AEB70DE",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "25303d0523cd44274199aeaf4b23f43a2a01ea06",
-  "previousVerificationCommit": "25303d0523cd44274199aeaf4b23f43a2a01ea06",
+  "rollbackBaselineCommit": "285767c1db51cbb6eb8fe935ff11a7926ba364d3",
+  "previousVerificationCommit": "285767c1db51cbb6eb8fe935ff11a7926ba364d3",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 13
+      "focusedTests": 31
     },
-    "nativeFlow": "Cold launch through canonical shortcut; Home model ready and Task first entry ready. Existing kobe conversation verified in both appearances: assistant left, user right, enabled microphone reports missing recognition service, repeated clicks preserve draft and history, zero model requests. Core routes and window controls verified; app then closed and restarted normally without debugging flags.",
-    "taskConversation": [
+    "nativeFlow": "Canonical shortcut cold start and Home model ready. Both appearances: header order, original font and divider, Search magnifier and keyboard access, underline geometry at Brain/Search, Brain empty frosted page and entry/exit phases, rapid last-choice category changes, existing Search page and promotional cards. Core routes and window controls verified; restart normally without debugging flags.",
+    "marketCategories": [
       {
         "appearance": "dark",
-        "task": "task-6d811565-2df6-481e-884e-c52486c347d1",
-        "user": {
-          "x": 1676.640625,
-          "y": 142.578125,
-          "width": 77.984375,
-          "height": 81.625,
-          "top": 142.578125,
-          "right": 1754.625,
-          "bottom": 224.203125,
-          "left": 1676.640625
+        "order": [
+          "Discover",
+          "Browse",
+          "Brain",
+          "Sell",
+          "Inventory",
+          "Search"
+        ],
+        "header": {
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "weight": "400",
+          "fontSize": "16px",
+          "iconWidth": 20,
+          "renderedIconWidth": 20.6400146484375,
+          "iconColor": "rgba(255, 255, 255, 0.68)",
+          "divider": "1px"
         },
-        "assistant": {
-          "x": 973.375,
-          "y": 241.5625,
-          "width": 311.125,
-          "height": 81.625,
-          "top": 241.5625,
-          "right": 1284.5,
-          "bottom": 323.1875,
-          "left": 973.375
+        "brain": {
+          "label": "Brain",
+          "hidden": false,
+          "children": 0,
+          "text": ""
         },
-        "list": {
-          "x": 967.1875,
-          "y": 136.390625,
-          "width": 793.625,
-          "height": 663.25,
-          "top": 136.390625,
-          "right": 1760.8125,
-          "bottom": 799.640625,
-          "left": 967.1875
+        "brainLine": {
+          "button": {
+            "x": 891.460693359375,
+            "width": 45.13385009765625
+          },
+          "line": {
+            "x": 891.6541748046875,
+            "width": 45.40802001953125
+          }
         },
-        "userAlign": "flex-end",
-        "assistantAlign": "flex-start",
-        "color": "rgb(244, 244, 244)",
-        "font": "system-ui, sans-serif",
-        "messages": 2,
-        "microphoneEnabled": true,
-        "draftPreserved": true,
-        "historyPreserved": true
+        "brainMotion": [
+          {
+            "category": "Discover",
+            "phase": "exiting"
+          },
+          {
+            "category": "Brain",
+            "phase": "entering"
+          },
+          {
+            "category": "Brain",
+            "phase": "idle"
+          },
+          {
+            "category": "Brain",
+            "phase": "exiting"
+          },
+          {
+            "category": "Search",
+            "phase": "entering"
+          },
+          {
+            "category": "Search",
+            "phase": "idle"
+          }
+        ],
+        "frost": "blur(12px)",
+        "searchLine": {
+          "button": {
+            "x": 1200.18994140625,
+            "width": 45.407958984375
+          },
+          "line": {
+            "x": 1200.22216796875,
+            "width": 45.407958984375
+          }
+        },
+        "searchKeyboard": true,
+        "rapidSwitch": true
       },
       {
         "appearance": "light",
-        "task": "task-6d811565-2df6-481e-884e-c52486c347d1",
-        "user": {
-          "x": 1676.640625,
-          "y": 142.578125,
-          "width": 77.984375,
-          "height": 81.625,
-          "top": 142.578125,
-          "right": 1754.625,
-          "bottom": 224.203125,
-          "left": 1676.640625
+        "order": [
+          "Discover",
+          "Browse",
+          "Brain",
+          "Sell",
+          "Inventory",
+          "Search"
+        ],
+        "header": {
+          "font": "\"Market Brilliant Cut\", sans-serif",
+          "weight": "400",
+          "fontSize": "16px",
+          "iconWidth": 20,
+          "renderedIconWidth": 20.6400146484375,
+          "iconColor": "rgba(255, 255, 255, 0.68)",
+          "divider": "1px"
         },
-        "assistant": {
-          "x": 973.375,
-          "y": 241.5625,
-          "width": 311.125,
-          "height": 81.625,
-          "top": 241.5625,
-          "right": 1284.5,
-          "bottom": 323.1875,
-          "left": 973.375
+        "brain": {
+          "label": "Brain",
+          "hidden": false,
+          "children": 0,
+          "text": ""
         },
-        "list": {
-          "x": 967.1875,
-          "y": 136.390625,
-          "width": 793.625,
-          "height": 663.25,
-          "top": 136.390625,
-          "right": 1760.8125,
-          "bottom": 799.640625,
-          "left": 967.1875
+        "brainLine": {
+          "button": {
+            "x": 891.460693359375,
+            "width": 45.13385009765625
+          },
+          "line": {
+            "x": 891.6541748046875,
+            "width": 45.40802001953125
+          }
         },
-        "userAlign": "flex-end",
-        "assistantAlign": "flex-start",
-        "color": "rgb(26, 26, 26)",
-        "font": "system-ui, sans-serif",
-        "messages": 2,
-        "microphoneEnabled": true,
-        "draftPreserved": true,
-        "historyPreserved": true
+        "brainMotion": [
+          {
+            "category": "Discover",
+            "phase": "exiting"
+          },
+          {
+            "category": "Brain",
+            "phase": "entering"
+          },
+          {
+            "category": "Brain",
+            "phase": "idle"
+          },
+          {
+            "category": "Brain",
+            "phase": "exiting"
+          },
+          {
+            "category": "Search",
+            "phase": "entering"
+          },
+          {
+            "category": "Search",
+            "phase": "idle"
+          }
+        ],
+        "frost": "blur(12px)",
+        "searchLine": {
+          "button": {
+            "x": 1200.18994140625,
+            "width": 45.407958984375
+          },
+          "line": {
+            "x": 1200.22216796875,
+            "width": 45.407958984375
+          }
+        },
+        "searchKeyboard": true,
+        "rapidSwitch": true
       }
     ],
     "routes": [
+      {
+        "appearance": "dark",
+        "name": "Market",
+        "surface": "ledger",
+        "ready": true
+      },
       {
         "appearance": "dark",
         "name": "Task",
@@ -128,12 +200,6 @@
         "appearance": "dark",
         "name": "Gallery",
         "surface": "market",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Market",
-        "surface": "ledger",
         "ready": true
       },
       {
@@ -168,6 +234,12 @@
       },
       {
         "appearance": "light",
+        "name": "Market",
+        "surface": "ledger",
+        "ready": true
+      },
+      {
+        "appearance": "light",
         "name": "Task",
         "surface": "workspace",
         "ready": true
@@ -176,12 +248,6 @@
         "appearance": "light",
         "name": "Gallery",
         "surface": "market",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Market",
-        "surface": "ledger",
         "ready": true
       },
       {
@@ -219,35 +285,34 @@
       "restore": true,
       "maximize": true,
       "minimize": true,
-      "automationNote": "page.evaluate: Command plugin:window|unminimize not allowed by ACL\n    at invoke (D:\\preacherman\\output\\playwright\\task-chat-alignment-20261002\\window-close.cjs:5:22)\n    at D:\\preacherman\\output\\playwright\\task-chat-alignment-20261002\\window-close.cjs:9:8",
       "closeRequested": true,
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-02T01:35:08.4995297+08:00",
-      "NativePid": 24136,
-      "StartedAt": "2026-10-02T01:34:52.0519844+08:00",
-      "WindowHandle": 6228150,
+      "SampledAt": "2026-10-02T05:12:01.7443445+08:00",
+      "NativePid": 9544,
+      "StartedAt": "2026-10-02T05:11:45.4215410+08:00",
+      "WindowHandle": 461124,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        24136,
-        30504,
-        21268,
-        14360,
-        11492,
-        6028,
-        24628,
-        27928,
-        3496,
-        18988,
-        2656
+        9544,
+        33696,
+        33748,
+        4296,
+        26424,
+        30928,
+        31384,
+        13628,
+        30636,
+        11856,
+        4024
       ],
-      "NormalizedCpuPercent": 4,
-      "WorkingSetMiB": 1895.2,
-      "GpuDedicatedBytes": 3315339264,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1857.4,
+      "GpuDedicatedBytes": 3347030016,
       "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 17313272,
+      "FreeRamKiB": 14605472,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -285,15 +350,19 @@
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "limitations": [
-      "Microphone is an enabled entry only; no speech recognition service has been configured. No recording or transcription is claimed."
+      "Brain is an empty reserved category for future API sales, matching Browse; no API commerce content or service was added."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\task-chat-alignment-20261002\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\task-chat-alignment-20261002\\native-dark-task-conversation.png",
-      "D:\\preacherman\\output\\playwright\\task-chat-alignment-20261002\\native-light-task-conversation.png",
-      "D:\\preacherman\\output\\playwright\\task-chat-alignment-20261002\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\task-chat-alignment-20261002\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\task-chat-alignment-20261002\\final-resources.json"
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-dark-market.png",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-light-market.png",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-dark-brain.png",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-light-brain.png",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-dark-search.png",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-light-search.png",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\final-resources.json"
     ]
   },
   "releaseAttempts": [
@@ -1061,9 +1130,18 @@
       "deployedAt": "2026-10-02T01:28:06.0848975+08:00",
       "verifiedAt": "2026-10-02T01:35:08.4995297+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-chat-alignment-before-20261002"
+    },
+    {
+      "buildId": "market-brain-search-20261002",
+      "sourceCommit": "097bf8b63a96ab5de6e626c86bd4cfe77c53ac59",
+      "sha256": "FE91C1FDA4655C44E9D9547D8DD7A15A2DE805BDFCEA8EEF57FBC74CE9FB0764",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-02T05:01:50.7719650+08:00",
+      "verifiedAt": "2026-10-02T05:12:01.7443445+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-chat-alignment-before-20261002/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
