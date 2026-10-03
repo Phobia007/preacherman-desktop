@@ -21,7 +21,8 @@
   color: var(--demo-theme-gallery-control-hover);
 }
 
-.market-profile__toggle {
+.market-profile__toggle,
+.demo-surface-header__signature {
   position: absolute;
   top: 48px;
   left: 50%;
@@ -34,9 +35,14 @@
   color: inherit;
   text-shadow: 0 1px 2px var(--demo-theme-market-ink-shadow), 0 2px 5px var(--demo-theme-market-ink-shadow);
   font: 400 clamp(28px, 2.2vw, 38px)/1 "Market Task Signature", cursive;
+}
+
+.market-profile__toggle {
   cursor: pointer;
   pointer-events: auto;
 }
+
+.demo-surface-header__signature { display: flex; align-items: center; }
 
 .market-profile[data-open="true"] .market-profile__toggle {
   font: 500 12px/1 "Market Task Profile", sans-serif;

@@ -130,6 +130,24 @@ test("Market categories stay with the host header and yield to details and the p
 });
 
 for (const appearance of ["light", "dark"]) {
+  test(`Asset and Extension reuse the Market signature header in ${appearance}`, async () => {
+    const [surface, header, profile, css, styles] = await Promise.all([
+      text(join(root, "src/surfaces/FrostedSurface.tsx")),
+      text(join(root, "src/surfaces/SurfaceBrandHeader.tsx")),
+      text(join(root, "src/surfaces/market/market-profile.css")),
+      text(join(root, "src/surfaces/market/market-surface.css")),
+      text(join(root, "src/styles.css")),
+    ]);
+    assert.match(surface, /name: "Asset" \| "Extension"/);
+    assert.match(surface, /<SurfaceBrandHeader \/>/);
+    assert.match(header, /className="demo-surface-header__signature">Preacherman<\/span>/);
+    assert.match(profile, /\.market-profile__toggle,\s*\.demo-surface-header__signature\s*\{[^}]*top: 48px;[^}]*left: 50%;[^}]*Market Task Signature/s);
+    assert.match(css, /\.market-surface\[data-page="intro"\]::before,\s*\.demo-surface-header\s*\{[^}]*--demo-theme-market-header-glass[^}]*--demo-theme-market-border/s);
+    const selector = appearance === "dark" ? '.demo-app-shell[data-appearance="dark"]' : '.demo-app-shell';
+    const tokens = styles.split(`${selector} {`).slice(1).map(block => block.split("}")[0]).join("\n");
+    for (const token of ["market-header-glass", "market-border", "gallery-control-hover"]) assert.ok(tokens.includes(`--demo-theme-${token}:`), token);
+    assert.match(styles, /\.demo-frosted-surface\s*\{[^}]*animation: demo-frost-enter 260ms/);
+  });
   test(`Market fixed categories use the ${appearance} text, divider and contrast tokens`, async () => {
     const styles = await text(join(root, "src/styles.css"));
     const css = await text(join(root, "src/surfaces/market/market-surface.css"));

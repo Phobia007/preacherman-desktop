@@ -40,7 +40,8 @@
 }
 
 /* Content scrolls behind this fixed glass header; the signature stays sharp. */
-.market-surface[data-page="intro"]::before {
+.market-surface[data-page="intro"]::before,
+.demo-surface-header {
   content: "";
   position: absolute;
   top: 0;
@@ -54,6 +55,11 @@
   z-index: 1;
   border-bottom: 1px solid var(--demo-theme-market-border);
   pointer-events: none;
+}
+
+.demo-surface-header {
+  --market-content-top: 100px;
+  color: var(--demo-theme-gallery-control-hover);
 }
 
 /* The lens supplies the current page pixels until its closing frame reaches zero. */
