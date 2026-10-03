@@ -97,8 +97,15 @@ export function animateMarketCategory(doc: Document, layer: HTMLElement, reduced
   };
 }
 
-export const marketCategories = ["Discover", "Browse", "Brain", "Sell", "Inventory", "Search"] as const;
+export const marketCategories = ["Discover", "Browse", "Brain", "Studio", "Search"] as const;
 export type MarketCategory = typeof marketCategories[number];
+export const marketCategoryLabels: Record<MarketCategory, string> = {
+  Discover: "Official Collection",
+  Browse: "Craft Market",
+  Brain: "Brain",
+  Studio: "Studio",
+  Search: "Search",
+};
 export type MarketCategoryState = { active: MarketCategory; next: MarketCategory | null; phase: "idle" | "exiting" | "entering" };
 export const initialMarketCategory: MarketCategoryState = { active: "Discover", next: null, phase: "idle" };
 export function marketCategoryReducer(state: MarketCategoryState, action: { type: "select"; category: MarketCategory } | { type: "exited" | "entered" }): MarketCategoryState {

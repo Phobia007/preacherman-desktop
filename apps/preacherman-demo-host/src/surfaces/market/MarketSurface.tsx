@@ -5,7 +5,7 @@ import { MarketProfile } from "./MarketProfile";
 import { MarketSearch } from "./MarketSearch";
 import { captureMarketSearch } from "./captureMarketSearch";
 import { readMarketSearchModels, type MarketSearchItem } from "./marketSearchData";
-import { animateMarketPage, animateMarketCategory, type MarketCategoryFrame, marketCategories, marketCategoryReducer, initialMarketCategory, MARKET_LOGO_MS, type MarketDetailsPhase } from "./marketEntrance";
+import { animateMarketPage, animateMarketCategory, type MarketCategoryFrame, marketCategories, marketCategoryLabels, marketCategoryReducer, initialMarketCategory, MARKET_LOGO_MS, type MarketDetailsPhase } from "./marketEntrance";
 import "./market-surface.css";
 import { isAvatarModelId, createAvatarAssetUrls, prefetchAvatarModel } from "@preacherman/avatar-renderer";
 import type { ModelId } from "../../preferences";
@@ -252,17 +252,17 @@ export function MarketSurface() {
         hidden={page !== "intro" || entrance === "logo" || lensActive}>
         {marketCategories.map(label => <li key={label} className={label === "Search" ? "market-surface__search-category" : undefined}>
           <button type="button" aria-pressed={highlightedCategory === label} aria-controls={label === "Discover" ? "market-discover-page" : label === "Search" ? "market-search-page" : "market-category-page"}
-            data-market-category={label} aria-label={label} title={label === "Search" ? "Search" : undefined}
+            data-market-category={label} aria-label={marketCategoryLabels[label]} title={label === "Search" ? "Search" : undefined}
             disabled={entrance !== "complete" || Boolean(selectedModel) || profileOpen}
             onClick={() => dispatchCategory({ type: "select", category: label })}>
             {label === "Search" ? <svg className="market-surface__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
               <circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" />
-            </svg> : label}
+            </svg> : marketCategoryLabels[label]}
           </button>
           {label === "Search" && <span ref={indicatorRef} className="market-surface__category-indicator" aria-hidden="true" />}
         </li>)}
       </ul>
-      <section id="market-category-page" aria-label={category.active} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover" || category.active === "Search"} />
+      <section id="market-category-page" aria-label={marketCategoryLabels[category.active]} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover" || category.active === "Search"} />
       <MarketSearch panelRef={searchRef} models={searchModels} active={category.active === "Search"} ready={category.phase === "idle" && !selectedModel}
         interactive={category.phase === "idle" && !selectedModel && !profileOpen && !lensActive} onOpenModel={openModel} />
       {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}

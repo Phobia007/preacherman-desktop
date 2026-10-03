@@ -80,10 +80,10 @@ for (const appearance of ['light', 'dark']) test(`Rapid category changes use the
  state = marketCategoryReducer(state, {type:'select', category:'Discover'});
  assert.deepEqual(state, {active:'Discover', next:null, phase:'entering'});
  assert.equal(marketCategoryReducer(state, {type:'exited'}), state, 'Cancelled exit cannot switch pages');
- state = marketCategoryReducer(state, {type:'select', category:'Sell'});
+ state = marketCategoryReducer(state, {type:'select', category:'Studio'});
  assert.equal(state.phase, 'exiting');
  assert.equal(marketCategoryReducer(state, {type:'entered'}), state, 'Cancelled entry cannot mark a new exit complete');
- for (const category of ['Inventory','Browse','Search']) state = marketCategoryReducer(state, {type:'select', category});
+ for (const category of ['Brain','Browse','Studio','Search']) state = marketCategoryReducer(state, {type:'select', category});
  state = marketCategoryReducer(state, {type:'exited'});
  assert.deepEqual(state, {active:'Search', next:null, phase:'entering'});
  state = marketCategoryReducer(state, {type:'entered'});

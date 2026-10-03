@@ -104,12 +104,14 @@ test("Market categories stay with the host header and yield to details and the p
   const css = await text(join(root, "src/surfaces/market/market-surface.css"));
   const row = surface.match(/<ul className="market-surface__categories"[\s\S]*?<\/ul>/)?.[0];
   assert.ok(row);
-  const { marketCategories } = await import("../src/surfaces/market/marketEntrance.ts");
+  const { marketCategories, marketCategoryLabels } = await import("../src/surfaces/market/marketEntrance.ts");
   assert.match(surface, /highlightedCategory = category.next \?\? category.active/);
   assert.match(css, /transition: transform 380ms/);
-  assert.deepEqual(marketCategories, ["Discover", "Browse", "Brain", "Sell", "Inventory", "Search"]);
+  assert.deepEqual(marketCategories, ["Discover", "Browse", "Brain", "Studio", "Search"]);
+  assert.deepEqual(marketCategories.map(category => marketCategoryLabels[category]), ["Official Collection", "Craft Market", "Brain", "Studio", "Search"]);
   assert.match(row, /marketCategories\.map/);
-  assert.ok(row.includes('data-market-category={label} aria-label={label}'));
+  assert.ok(row.includes('data-market-category={label} aria-label={marketCategoryLabels[label]}'));
+  assert.ok(row.includes('</svg> : marketCategoryLabels[label]}'));
   assert.ok(row.includes('label === "Search" ? <svg'));
   assert.ok(row.includes('stroke="currentColor"'));
   assert.ok(row.includes('aria-hidden="true"'));
