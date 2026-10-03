@@ -70,7 +70,7 @@ test("the unused category/search row and its controller are removed from the doc
 
 test("Market uses Task's exact profile copy and packaged signature font without legacy social links", async () => {
   const profile = await text(join(root, "src/surfaces/market/MarketProfile.tsx"));
-  const task = await text(join(root, "src/surfaces/gallery/GallerySurface.tsx"));
+  const task = await text(join(root, "src/surfaces/task/TaskExperienceSurface.tsx"));
   const css = await text(join(root, "src/surfaces/market/market-profile.css"));
   for (const match of profile.matchAll(/<span>(.*?)<\/span>|href="([^"]+)"/g)) assert.ok(task.includes(match[1] || match[2]), match[0]);
   assert.equal([...profile.matchAll(/<span>/g)].length, 4);

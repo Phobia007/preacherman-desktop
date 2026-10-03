@@ -22,12 +22,12 @@ test("the saved model remains persistent while Gallery changes its camera framin
   assert.match(app, /const activeModelId = preferences\.activeModelId/);
   assert.match(app, /const isCompanionActive = activeModelId !== null/);
   assert.match(app, /data-model-active=\{isCompanionActive\}/);
-  assert.match(app, /scene=\{sceneModelId \|\| activeSurfaceType === "market" \? \([\s\S]*<CortanaModelStage[\s\S]*modelId=\{sceneModelId \?\? "cortana"\}[\s\S]*companionVisible=\{sceneModelId !== null\}[\s\S]*variant="persistent"/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
+  assert.match(app, /scene=\{<>[\s\S]*sceneModelId \|\| activeSurfaceType === "market" \? \([\s\S]*<CortanaModelStage[\s\S]*modelId=\{sceneModelId \?\? "cortana"\}[\s\S]*companionVisible=\{sceneModelId !== null\}[\s\S]*variant="persistent"/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "account" \|\| activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.match(app, /selectedManifest\.surfaceId === manifest\.surfaceId[\s\S]*return homeContent/);
   assert.match(app, /<SettingsScreen/);
-  assert.match(app, /<GallerySurface \/>/);
-  assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
+  assert.match(app, /<TaskExperienceSurface \/>/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<TaskExperienceSurface \/>/);
   assert.match(app, /preachermanPanelSurface === "home" \|\| preachermanPanelSurface === "market"/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s/);

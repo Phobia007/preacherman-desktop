@@ -8,5 +8,5 @@
       "@preacherman/surface-skin": ["packages/preacherman-surface-skin/src/index.ts"]
     }
   },
-  "include": ["GallerySurface.tsx"]
+  "include": ["../task/TaskExperienceSurface.tsx"]
 }

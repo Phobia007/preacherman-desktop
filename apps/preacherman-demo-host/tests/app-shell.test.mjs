@@ -48,11 +48,11 @@ test("Demo Host owns one persistent shell outside the changing screen content", 
   assert.match(app, /const appShell\s*=\s*\(\s*<AppShell\b/);
   assert.match(app, /\{appShell\}[\s\S]*\{showStartupIntro\s*\?\s*\(\s*<IntroSplash/);
   assert.match(app, /key=\{contentKey\}/);
-  assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface\s*\/>/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<TaskExperienceSurface\s*\/>/);
   assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s+active=\{activeSurfaceType === "market"\}[\s\S]*onDetailChange=\{setGalleryDetailOpen\}/);
   assert.match(styles, /\.demo-app-shell__prewarmed-surface\[data-active="false"\] \*\s*\{\s*pointer-events:\s*none !important;/);
   assert.doesNotMatch(app, /TaskSurface/);
-  assert.equal((app.match(/<GallerySurface(?:\s+hideProjectCards)?\s*\/>/g) ?? []).length, 1);
+  assert.equal((app.match(/<TaskExperienceSurface(?:\s+hideProjectCards)?\s*\/>/g) ?? []).length, 1);
   assert.doesNotMatch(shell, /key=\{contentKey\}/, "the shell itself must not remount on navigation");
 });
 
@@ -114,7 +114,7 @@ test("hamburger opens a click-only, opaque six-item Clash Display navigation dra
     ["Asset", "asset"],
     ["Extension", "extension"],
   ]) {
-    assert.match(shell, new RegExp(`label: "${label}", surfaceType: "${surfaceType}"`));
+    assert.match(await readFile(join(sourceRoot, "app-shell", "navigationDestinations.ts"), "utf8"), new RegExp(`label: "${label}", surfaceType: "${surfaceType}"`));
   }
   assert.match(styles, /@font-face[\s\S]*ClashDisplay-Light\.ttf/);
   assert.match(styles, /--demo-font-primary:\s*"Clash Display", sans-serif/);
@@ -239,7 +239,7 @@ test("Home, Task, Settings, Gallery, Asset, and Extension share the persistent s
   assert.match(app, /activeSurfaceType === "ledger"\s*\? null/);
   assert.match(app, /activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface \? \(/);
   assert.match(app, /isFrostedSurface \? <FrostedSurface name=\{activeSurfaceType === "asset" \? "Asset" : "Extension"\}/);
-  assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<TaskExperienceSurface \/>/);
   assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s+active=\{activeSurfaceType === "market"\}[\s\S]*onDetailChange=\{setGalleryDetailOpen\}/);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.match(hostRule, /background:\s*transparent/);

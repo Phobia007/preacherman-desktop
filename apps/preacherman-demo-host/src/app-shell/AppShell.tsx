@@ -7,6 +7,7 @@ import { AccountBadge } from "./AccountBadge";
 import { AudioDock } from "../audio/AudioDock";
 import { WindowControls } from "./WindowControls";
 import { WindowResizeHandles } from "./WindowResizeHandles";
+import { brandNavigationItems } from "./navigationDestinations";
 
 interface AppShellProps {
   readonly activeSurfaceType: string;
@@ -22,15 +23,6 @@ interface AppShellProps {
   readonly sceneHidden?: boolean;
   readonly galleryDetailOpen?: boolean;
 }
-
-const brandNavigationItems = [
-  { label: "Home", surfaceType: "home" },
-  { label: "Task", surfaceType: "workspace" },
-  { label: "Gallery", surfaceType: "market" },
-  { label: "Market", surfaceType: "ledger" },
-  { label: "Asset", surfaceType: "asset" },
-  { label: "Extension", surfaceType: "extension" },
-] as const;
 
 export function AppShell({
   activeSurfaceType,

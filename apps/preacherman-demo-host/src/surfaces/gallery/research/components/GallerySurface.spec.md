@@ -2,7 +2,7 @@
 
 ## Overview
 
-- Target: `apps/preacherman-demo-host/src/surfaces/gallery/GallerySurface.tsx`
+- Target: `apps/preacherman-demo-host/src/surfaces/task/TaskExperienceSurface.tsx`
 - Interaction model: source iframe is wheel, pointer, touch, hover, and click driven; wrapper reveal is time driven.
 
 ## DOM structure

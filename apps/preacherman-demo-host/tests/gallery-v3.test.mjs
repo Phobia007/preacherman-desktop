@@ -6,12 +6,13 @@ import { fileURLToPath } from "node:url";
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const galleryRoot = path.join(appRoot, "src", "surfaces", "gallery");
+const taskRoot = path.join(appRoot, "src", "surfaces", "task");
 const runtimeRoot = path.join(appRoot, "public", "gallery-v3", "portfolio");
 
 const read = (...segments) => fs.readFileSync(path.join(...segments), "utf8");
 
 test("Gallery v3 embeds the copied local portfolio without replacement imagery", () => {
-  const component = read(galleryRoot, "GallerySurface.tsx");
+  const component = read(taskRoot, "TaskExperienceSurface.tsx");
   const preview = read(galleryRoot, "preview", "main.tsx");
   assert.match(component, /gallery-v3\/portfolio\/index\.html/);
   assert.doesNotMatch(component, /\.(?:png|jpe?g|webp|avif)["']/i);
@@ -32,11 +33,11 @@ test("Gallery v3 embeds the copied local portfolio without replacement imagery",
   assert.match(component, /setRevealState\("opening"\)/);
   assert.match(preview, /const \[baseReady, setBaseReady\] = useState\(false\)/);
   assert.match(preview, /cortana-model-stage__loading/);
-  assert.match(preview, /baseReady \? <GallerySurface \/> : null/);
+  assert.match(preview, /baseReady \? <TaskExperienceSurface \/> : null/);
 });
 
 test("Gallery v3 reveal uses semantic theme variables and reduced motion", () => {
-  const component = read(galleryRoot, "GallerySurface.tsx");
+  const component = read(taskRoot, "TaskExperienceSurface.tsx");
   const styles = read(galleryRoot, "gallery-surface.css");
   const tauriConfig = JSON.parse(read(appRoot, "src-tauri", "tauri.conf.json"));
   assert.match(styles, /--demo-theme-/);
@@ -100,11 +101,8 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
   assert.match(index, /Casa Di Solare/);
   assert.match(index, /data-od-id="profile-toggle"/);
   assert.match(index, /data-od-id="view-full"/);
-  assert.match(
-    index,
-    /globalProperties\?\.\$router/,
-  );
-  assert.match(index, /router\.push\(route\)/);
+  assert.match(index, /gallery-source-ready/);
+  assert.match(index, /location\.pathname/);
   assert.doesNotMatch(index, /nuxtData\.dataset\.ssr="false"/);
   assert.doesNotMatch(index, /payload\[8\]=false/);
   assert.doesNotMatch(index, /setTimeout\(ready,50\)/);
@@ -141,7 +139,7 @@ test("copied portfolio removes only its backdrop grid and top-left brand", () =>
 });
 
 test("card-free Gallery leaves the Home scene untouched and exposes only the retained controls", () => {
-  const component = read(galleryRoot, "GallerySurface.tsx");
+  const component = read(taskRoot, "TaskExperienceSurface.tsx");
   const styles = read(galleryRoot, "gallery-surface.css");
 
   assert.match(component, /data-featured-empty=\{showEmptyFeatured \? "true" : "false"\}/);
@@ -194,7 +192,7 @@ test("Gallery uses the original Active Theory runtime with a fixed Cortana above
   const entry = read(activeTheoryRoot, "gallery", "work.html");
   const interactionBridge = read(activeTheoryRoot, "gallery", "interaction-bridge.js");
 
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "account" \|\| activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.match(app, /<ActiveTheoryGallerySurface\s+active=\{activeSurfaceType === "market"\}[\s\S]*onDetailChange=\{setGalleryDetailOpen\}/);
   assert.match(component, /active-theory-gallery\/gallery\/work\.html/);
   assert.match(entry, /<base href="\/active-theory-gallery\/">/);
@@ -217,8 +215,8 @@ test("Gallery uses the original Active Theory runtime with a fixed Cortana above
   assert.match(runtime, /const geo=\{location:\{countryCode:"US"\}\}/);
   assert.match(runtime, /server:"",roomKey:_this\.key,playerClass:"ScrollPlayer",maxInRoom:-1/);
   assert.match(runtime, /!_video\.destroy\|\|!_this\.texture/);
-  assert.match(runtime, /_this\.initSync&&\(await _this\.initSync/);
-  assert.match(runtime, /capture\.rt\.upload\(\),_this\.initSync&&/);
+  assert.match(runtime, /typeof _this\.initSync==="function"&&await _this\.initSync/);
+  assert.match(runtime, /capture\.rt\.upload\(\)/);
   assert.doesNotMatch(runtime, /us-central1-at-services\.cloudfunctions\.net\/geo/);
   assert.doesNotMatch(runtime, /wss:\/\/s\.dreamwave\.network\/ws/);
   assert.doesNotMatch(runtime, /for\(let i=0;i<40;i\+\+\)/);

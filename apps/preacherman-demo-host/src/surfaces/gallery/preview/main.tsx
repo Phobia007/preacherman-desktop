@@ -5,7 +5,7 @@ import { CortanaModelStage } from "../../../gallery/CortanaModelStage";
 import { LiveCoordinatorProvider } from "../../../live/LiveCoordinatorContext";
 import type { Appearance } from "../../../preferences";
 import "../../../styles.css";
-import { GallerySurface } from "../GallerySurface";
+import { TaskExperienceSurface } from "../../task/TaskExperienceSurface";
 
 function requestedAppearance(): Appearance {
   return new URLSearchParams(window.location.search).get("appearance") === "light"
@@ -71,7 +71,7 @@ function Preview() {
       )}
     >
       <div className="demo-app-shell__screen-page">
-        {baseReady ? <GallerySurface /> : null}
+        {baseReady ? <TaskExperienceSurface /> : null}
       </div>
     </AppShell>
   );

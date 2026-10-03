@@ -19,9 +19,9 @@ test("Home, Task, Settings, and Gallery share one persistent companion scene", a
   assert.match(app, /variant="persistent"/);
   assert.doesNotMatch(app, /wakeEnabled/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
-  assert.match(app, /sceneModelId \? \(/);
+  assert.match(app, /sceneModelId \|\| activeSurfaceType === "market" \? \(/);
   assert.doesNotMatch(app, /sceneModelId && activeSurfaceType !== "market"/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "account" \|\| activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
   assert.match(app, /<ActiveTheoryGallerySurface\s+active=\{activeSurfaceType === "market"\}[\s\S]*?onDetailChange=\{setGalleryDetailOpen\}/);
   assert.match(shell, /className="demo-app-shell__scene"/);
   assert.match(shell, /data-active-surface=\{activeSurfaceType\}/);
@@ -75,15 +75,15 @@ test("Gallery moves the shared Cortana into the accepted close portrait above th
   ]);
 
   assert.doesNotMatch(styles, /\.demo-app-shell\[data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*scale\(1\.9\)/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
-  assert.match(app, /sceneModelId \? \(/);
+  assert.match(app, /cameraFraming=\{activeSurfaceType === "account" \|\| activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
+  assert.match(app, /sceneModelId \|\| activeSurfaceType === "market" \? \(/);
   assert.doesNotMatch(gallerySurface, /CortanaModelStage/);
-  assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*mix-blend-mode:\s*screen/);
+  assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__scene[\s\S]*mix-blend-mode:\s*normal/);
   assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__scene \*[\s\S]*pointer-events:\s*none !important/);
-  assert.match(galleryStyles, /active-theory-gallery-arrive 760ms cubic-bezier\(\.16, 1, \.3, 1\) 140ms both/);
-  assert.match(galleryStyles, /@keyframes active-theory-gallery-arrive[\s\S]*translate3d\(12%, 0, 0\)[\s\S]*clip-path:\s*inset\(0\)/);
-  assert.match(galleryStyles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*animation:\s*none/);
-  assert.match(styles, /data-active-surface="market"\] \.demo-app-shell__drag-region--right[\s\S]*pointer-events:\s*none/);
+  assert.match(gallerySurface, /registerSurfaceMotion\("market"/);
+  assert.match(gallerySurface, /heldTrack[\s\S]*260, "ease"/);
+  assert.match(await readFile(join(hostRoot, "src/app-shell/surfaceMotion.ts"), "utf8"), /prefers-reduced-motion: reduce/);
+  assert.match(styles, /data-gallery-detail="true"[\s\S]*background:\s*transparent/);
   assert.doesNotMatch(galleryStyles, /cortana-model-stage__interaction-target/);
   assert.match(interactionBridge, /__hoverCallback/);
   assert.match(interactionBridge, /__clickCallback/);

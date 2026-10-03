@@ -6,7 +6,7 @@ const source=name=>readFileSync(new URL('../src/'+name,import.meta.url),'utf8');
 test('Asset and Extension have independent local routes; Settings and Account remain addressable',()=>{
  for(const surfaceType of ['asset','extension','settings','account']) assert.deepEqual(readDemoScreenRoute('/__surfaces/'+surfaceType),{kind:'surface',surfaceType});
  const shell=source('app-shell/AppShell.tsx');
- const items=shell.match(/const brandNavigationItems = \[([\s\S]*?)\] as const/)[1];
+ const items=source('app-shell/navigationDestinations.ts').match(/const brandNavigationItems = \[([\s\S]*?)\] as const/)[1];
  assert.deepEqual([...items.matchAll(/label: "([^"]+)"/g)].map(m=>m[1]),['Home','Task','Gallery','Market','Asset','Extension']);
  assert.match(shell,/aria-label="Settings"[\s\S]*?tabIndex=\{brandNavigationOpen \? 0 : -1\}/);
  assert.match(shell,/demo-account-dock[\s\S]*?selectBrandDestination\("account"\)/);

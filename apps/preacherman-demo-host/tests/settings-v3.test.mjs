@@ -102,9 +102,9 @@ test("selected preference doubles above a frosted body without changing shared c
   assert.doesNotMatch(css, /__chrome[^}]*filter/);
 });
 
-test("configuration components and reference artwork remain recoverable for the redesign", async () => {
+test("deferred configuration components remain available after legacy artwork retirement", async () => {
   for (const file of ["AIProvidersSettings.tsx", "NativeAgentSettings.tsx", "McpSettings.tsx", "AgentAccessSettings.tsx", "PluginSettings.tsx"]) {
     assert.ok((await readFile(join(hostRoot, "src", "settings", file), "utf8")).length > 100);
   }
-  assert.ok((await readFile(join(hostRoot, "public", "settings-v3-local", "index.html"), "utf8")).length > 100_000);
+
 });

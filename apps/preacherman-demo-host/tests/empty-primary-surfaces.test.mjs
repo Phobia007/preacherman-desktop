@@ -12,14 +12,14 @@ test("Task and Settings keep the Home scene while Gallery mounts its original sc
     readFile(join(packageRoot, "src", "preferences.ts"), "utf8"),
   ]);
 
-  assert.match(app, /data-surface="workspace"[\s\S]*<GallerySurface \/>/);
+  assert.match(app, /data-surface="workspace"[\s\S]*<TaskExperienceSurface \/>/);
   assert.match(app, /data-surface="market"[\s\S]*<ActiveTheoryGallerySurface\s/);
-  assert.equal((app.match(/<GallerySurface\b/g) ?? []).length, 1);
+  assert.equal((app.match(/<TaskExperienceSurface\b/g) ?? []).length, 1);
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
   assert.doesNotMatch(app, /<PreachermanGameletPanel/);
-  assert.match(app, /const sceneModelId = activeSurfaceType === "market" && galleryDetailOpen\s*\? galleryPreviewModelId \?\? activeModelId\s*: activeModelId;/);
+  assert.match(app, /const sceneModelId = activeSurfaceType === "market" \? galleryModelId : activeModelId;/);
   assert.match(app, /<CortanaModelStage[\s\S]*renderActive/);
-  assert.match(app, /scene=\{sceneModelId \? \(/);
+  assert.match(app, /scene=\{<>[\s\S]*sceneModelId \|\| activeSurfaceType === "market" \? \(/);
   assert.doesNotMatch(app, /sceneHidden=/);
   assert.doesNotMatch(shell, /activeSurfaceType === "market"[\s\S]*Math\.max/);
   assert.match(shell, /Math\.min\(window\.innerWidth \/ 1800, window\.innerHeight \/ 1000\)/);

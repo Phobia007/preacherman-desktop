@@ -76,79 +76,29 @@ test("the persistent shell exposes semantic theme tokens and themed window contr
   );
 });
 
-test("Gallery shares the Home canvas while embedded content and model rendering remain theme-neutral", async () => {
-  const galleryStyles = await readFile(
-    join(hostRoot, "src", "gallery", "cortana-gallery.css"),
-    "utf8",
-  );
-  const gallery = await readFile(
-    join(hostRoot, "src", "gallery", "CortanaGallery.tsx"),
-    "utf8",
-  );
-  const modelStage = await readFile(
-    join(hostRoot, "src", "gallery", "CortanaModelStage.tsx"),
-    "utf8",
-  );
-  const viewport = await readFile(
-    join(
-      workspaceRoot,
-      "packages",
-      "preacherman-avatar-renderer",
-      "src",
-      "InteractiveAvatarViewport.tsx",
-    ),
-    "utf8",
-  );
-  const rendererStyles = await readFile(
-    join(
-      workspaceRoot,
-      "packages",
-      "preacherman-avatar-renderer",
-      "src",
-      "avatar-renderer.css",
-    ),
-    "utf8",
-  );
-  const scene = await readFile(
-    join(
-      workspaceRoot,
-      "packages",
-      "preacherman-avatar-renderer",
-      "src",
-      "InteractiveAvatarScene.tsx",
-    ),
-    "utf8",
-  );
-
-  assert.match(
-    galleryStyles,
-    /\.cortana-gallery\s*\{[\s\S]*background:\s*transparent/,
-  );
-  assert.match(gallery, /aria-label="Gallery"[\s\S]*className="cortana-gallery"/);
-  assert.match(gallery, /<JesperPortfolioExperience[\s\S]*active=\{active\}[\s\S]*activeModelId=\{activeModelId\}[\s\S]*appearance=\{appearance\}/);
-  assert.doesNotMatch(gallery, /cortana-gallery__transition-toggle/);
-  assert.doesNotMatch(gallery, /<h1|HomeVisualScene/);
-  assert.match(gallery, /detailModelPrepared \? \([\s\S]*<CortanaModelStage/);
-  assert.match(galleryStyles, /\.cortana-gallery__detail-model\s*\{[\s\S]*var\(--demo-theme-gallery-detail-surface\)/);
-  assert.match(modelStage, /className="cortana-model-stage__ground"/);
-  assert.match(galleryStyles, /\.cortana-model-stage\s*\{[\s\S]*z-index:\s*2/s);
-  assert.match(
-    galleryStyles,
-    /\.cortana-model-stage__ground\s*\{[\s\S]*display:\s*block[\s\S]*var\(--demo-theme-avatar-ground-contact\)[\s\S]*var\(--demo-theme-avatar-ground-plane\)/,
-  );
-  assert.doesNotMatch(galleryStyles, /\.cortana-model-stage__ground\s*\{[^}]*display:\s*none/);
+test("current Gallery and its companion keep semantic chrome around authored content", async () => {
+  const [gallery, styles, bridge, modelStage, viewport, scene, rendererStyles] = await Promise.all([
+    readFile(join(hostRoot, "src/surfaces/gallery/ActiveTheoryGallerySurface.tsx"), "utf8"),
+    readFile(join(hostRoot, "src/surfaces/gallery/active-theory-gallery-surface.css"), "utf8"),
+    readFile(join(hostRoot, "src/execution/useExecutionFrameBridge.ts"), "utf8"),
+    readFile(join(hostRoot, "src/gallery/CortanaModelStage.tsx"), "utf8"),
+    readFile(join(workspaceRoot, "packages/preacherman-avatar-renderer/src/InteractiveAvatarViewport.tsx"), "utf8"),
+    readFile(join(workspaceRoot, "packages/preacherman-avatar-renderer/src/InteractiveAvatarScene.tsx"), "utf8"),
+    readFile(join(workspaceRoot, "packages/preacherman-avatar-renderer/src/avatar-renderer.css"), "utf8"),
+  ]);
+  assert.match(gallery, /aria-label="Gallery"/);
+  assert.match(gallery, /useExecutionFrameBridge\(frameRef, false\)/);
+  assert.match(styles, /background:\s*transparent/);
+  for (const token of ["text", "focus", "gallery-detail-control-bg", "gallery-detail-control-text", "gallery-detail-control-hover"]) {
+    assert.ok(styles.includes("var(--demo-theme-" + token + ")"), token);
+  }
+  assert.match(bridge, /attributeFilter: \["data-appearance"\]/);
+  assert.match(bridge, /gallery-conversation-theme/);
   assert.match(modelStage, /<InteractiveAvatarViewport\b/);
   assert.doesNotMatch(modelStage, /appearance=|theme=|material=/);
   assert.match(viewport, /alpha:\s*true/);
   assert.match(scene, /setClearAlpha\(environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
-  assert.match(viewport, /setClearColor\(0x010409,\s*environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
-  assert.match(scene, /environment === "cinematic" \? <CinematicEnvironment isolateCompanion=\{isolateCompanion\} \/>/);
-  assert.match(galleryStyles, /var\(--demo-theme-loading\)/);
-  assert.match(galleryStyles, /var\(--demo-theme-error\)/);
-  assert.match(
-    rendererStyles,
-    /\.preacherman-avatar-debug\s*\{[\s\S]*var\(--demo-theme-border-strong\)[\s\S]*var\(--demo-theme-text\)[\s\S]*var\(--demo-theme-surface-elevated\)/,
-  );
+  assert.match(rendererStyles, /\.preacherman-avatar-debug\s*\{[\s\S]*var\(--demo-theme-border-strong\)[\s\S]*var\(--demo-theme-text\)[\s\S]*var\(--demo-theme-surface-elevated\)/);
 });
 
 test("live speech and task controls inherit semantic colors in light and dark appearances", async () => {

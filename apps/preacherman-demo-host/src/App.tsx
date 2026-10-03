@@ -40,7 +40,7 @@ import { SettingsScreen } from "./settings/SettingsScreen";
 import { GalleryOrbitCards } from "./surfaces/gallery/GalleryOrbitCards";
 import type { GalleryDetailBridge } from "./surfaces/gallery/GalleryDetailOverlay";
 import { ActiveTheoryGallerySurface } from "./surfaces/gallery/ActiveTheoryGallerySurface";
-import { GallerySurface } from "./surfaces/gallery/GallerySurface";
+import { TaskExperienceSurface } from "./surfaces/task/TaskExperienceSurface";
 import { AccountSurface } from "./surfaces/account/AccountSurface";
 import { AccountFrost, AccountSceneCapture } from "./surfaces/account/AccountScene";
 import { FrostedSurface } from "./surfaces/FrostedSurface";
@@ -427,7 +427,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       >
         <span aria-hidden="true" className="demo-app-shell__surface-reveal-line" />
         <div className="demo-app-shell__surface-reveal-mask">
-          <GallerySurface />
+          <TaskExperienceSurface />
         </div>
       </div>
       <div
