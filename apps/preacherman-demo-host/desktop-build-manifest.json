@@ -1,36 +1,145 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-brain-search-20261002",
+  "buildId": "desktop-source-cleanup-20261004",
   "productVersion": "0.1.0",
-  "sourceTask": "market-brain-category-and-search-magnifier",
+  "sourceTask": "desktop-source-and-release-consolidation-and-obsolete-code-cleanup",
   "sourceThread": null,
-  "sourceState": "Market header order: Discover, Browse, Brain, Sell, Inventory, separator, icon-only Search. Brain uses the existing empty category and shared frosted entrance/exit flow. Search retains its accessible name, page, and keyboard interaction. The sliding underline targets stable category identities so it also follows the magnifier. Existing fonts, styling, profile, Search content, and other surfaces are unchanged.",
-  "sourceCommit": "097bf8b63a96ab5de6e626c86bd4cfe77c53ac59",
-  "sourceWorkspace": "C:/Users/Administrator/.codex/visualizations/2026/08/20/01a01e57-8912-7d31-8853-13e23af6f1d1/preacherman-integration",
+  "sourceState": "Canonical source and Windows release entry consolidated in D:/preacherman. Retired obsolete public prototypes and unused page components. Renamed the active Task component and centralized destination labels while preserving route identities, preferences, motion, authored content, and deferred management modules. Sidecar reused unchanged.",
+  "sourceCommit": "263566bf9903210cfa1e8424fa3e6c7e6715b0e0",
+  "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-02T05:00:56.3977837+08:00",
-  "deployedAt": "2026-10-02T05:01:50.7719650+08:00",
-  "verifiedAt": "2026-10-02T05:12:01.7443445+08:00",
-  "sizeBytes": 676130816,
-  "sha256": "FE91C1FDA4655C44E9D9547D8DD7A15A2DE805BDFCEA8EEF57FBC74CE9FB0764",
+  "builtAt": "2026-10-04T01:03:07.3674373+08:00",
+  "deployedAt": "2026-10-04T01:03:55.5890508+08:00",
+  "verifiedAt": "2026-10-04T01:07:48.3262124+08:00",
+  "sizeBytes": 596244480,
+  "sha256": "9EF41785F4A12FB1CAF35CB3F90FECA35D03C470D57656EDBE38C52301EEF369",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002/preacherman-demo-host.exe",
-  "backupSha256": "A0D284785E3109476F79A8D54F8C2B41BF1C05B0461A4247DFC102523AEB70DE",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-source-cleanup-before-20261004/preacherman-demo-host.exe",
+  "backupSha256": "FE91C1FDA4655C44E9D9547D8DD7A15A2DE805BDFCEA8EEF57FBC74CE9FB0764",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-source-cleanup-before-20261004/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "285767c1db51cbb6eb8fe935ff11a7926ba364d3",
-  "previousVerificationCommit": "285767c1db51cbb6eb8fe935ff11a7926ba364d3",
+  "rollbackBaselineCommit": "097bf8b63a96ab5de6e626c86bd4cfe77c53ac59",
+  "previousVerificationCommit": "097bf8b63a96ab5de6e626c86bd4cfe77c53ac59",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 31
+      "focusedTests": 61,
+      "focusedFailures": 0,
+      "rendererBuild": "passed",
+      "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold start and Home model ready. Both appearances: header order, original font and divider, Search magnifier and keyboard access, underline geometry at Brain/Search, Brain empty frosted page and entry/exit phases, rapid last-choice category changes, existing Search page and promotional cards. Core routes and window controls verified; restart normally without debugging flags.",
+    "nativeFlow": "Cold launch through canonical shortcut: Home and model ready before navigation. Both appearances: Task iframe and authored cards ready on first entry; Gallery orbit covers ready; Market discover, search, category motion and rapid switching; Settings appearance control; Account, Asset and Extension; all navigation labels unchanged. Maximize, restore, minimize and close exercised. Finally restarted via shortcut without debug flags.",
+    "navigation": [
+      "Home",
+      "Task",
+      "Gallery",
+      "Market",
+      "Asset",
+      "Extension"
+    ],
+    "routes": [
+      {
+        "appearance": "dark",
+        "name": "Market",
+        "surface": "ledger",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Task",
+        "surface": "workspace",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Gallery",
+        "surface": "market",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Settings",
+        "surface": "settings",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Account",
+        "surface": "account",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Asset",
+        "surface": "asset",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Extension",
+        "surface": "extension",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Home",
+        "surface": "home",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Market",
+        "surface": "ledger",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Task",
+        "surface": "workspace",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Gallery",
+        "surface": "market",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Settings",
+        "surface": "settings",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Account",
+        "surface": "account",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Asset",
+        "surface": "asset",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Extension",
+        "surface": "extension",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Home",
+        "surface": "home",
+        "ready": true
+      }
+    ],
     "marketCategories": [
       {
         "appearance": "dark",
@@ -183,104 +292,6 @@
         "rapidSwitch": true
       }
     ],
-    "routes": [
-      {
-        "appearance": "dark",
-        "name": "Market",
-        "surface": "ledger",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Task",
-        "surface": "workspace",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Gallery",
-        "surface": "market",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Settings",
-        "surface": "settings",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Account",
-        "surface": "account",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Asset",
-        "surface": "asset",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Extension",
-        "surface": "extension",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Home",
-        "surface": "home",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Market",
-        "surface": "ledger",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Task",
-        "surface": "workspace",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Gallery",
-        "surface": "market",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Settings",
-        "surface": "settings",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Account",
-        "surface": "account",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Asset",
-        "surface": "asset",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Extension",
-        "surface": "extension",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Home",
-        "surface": "home",
-        "ready": true
-      }
-    ],
     "windowControls": {
       "restore": true,
       "maximize": true,
@@ -289,30 +300,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-02T05:12:01.7443445+08:00",
-      "NativePid": 9544,
-      "StartedAt": "2026-10-02T05:11:45.4215410+08:00",
-      "WindowHandle": 461124,
+      "SampledAt": "2026-10-04T01:07:48.3262124+08:00",
+      "NativePid": 30660,
+      "StartedAt": "2026-10-04T01:07:26.2701871+08:00",
+      "WindowHandle": 395310,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        9544,
-        33696,
-        33748,
-        4296,
-        26424,
-        30928,
-        31384,
-        13628,
-        30636,
-        11856,
-        4024
+        30660,
+        30712,
+        4180,
+        22480,
+        5788,
+        30436,
+        27932,
+        29980,
+        17744,
+        9324,
+        8324
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1857.4,
-      "GpuDedicatedBytes": 3347030016,
-      "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 14605472,
+      "NormalizedCpuPercent": 4.0,
+      "WorkingSetMiB": 1903.1,
+      "GpuDedicatedBytes": 3299414016.0,
+      "MaxGpuEngineUtilization": 13.0,
+      "FreeRamKiB": 17692840,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -349,20 +360,42 @@
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
+    "visualReview": {
+      "reviewed": [
+        "Home",
+        "Task",
+        "Gallery",
+        "Market",
+        "Settings",
+        "Account",
+        "Asset",
+        "Extension"
+      ],
+      "appearances": [
+        "dark",
+        "light"
+      ],
+      "blankOrMissingAuthoredContent": false,
+      "preservedReservedPages": [
+        "Asset",
+        "Extension"
+      ]
+    },
     "limitations": [
-      "Brain is an empty reserved category for future API sales, matching Browse; no API commerce content or service was added."
+      "Account authentication is not an end-to-end login test. Its connection-check message is also present in the previous verified release screenshot.",
+      "Existing blocked legacy remote media/image CSP diagnostics remain; no new console error was introduced.",
+      "Task business lifecycle and deferred management integration remain out of scope.",
+      "The former C-drive source worktree remains on disk because it contains local runtime state and verification evidence requiring separate disposition; it is no longer the release source."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-dark-market.png",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-light-market.png",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-dark-brain.png",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-light-brain.png",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-dark-search.png",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\native-light-search.png",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\market-brain-search-20261002\\final-resources.json"
+      "D:\\preacherman\\output\\playwright\\desktop-source-cleanup-20261004\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\desktop-source-cleanup-20261004\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\desktop-source-cleanup-20261004\\final-resources.json",
+      "D:\\preacherman\\output\\desktop-cleanup-20261004\\production-build.log",
+      "D:\\preacherman\\output\\desktop-cleanup-20261004\\focused-tests-final.log",
+      "D:\\preacherman\\output\\desktop-cleanup-20261004\\typecheck-final.log",
+      "D:\\preacherman\\output\\desktop-cleanup-20261004\\artifact-cleanup-result.json",
+      "D:\\preacherman\\output\\desktop-cleanup-20261004\\retired-pages.json"
     ]
   },
   "releaseAttempts": [
@@ -1139,9 +1172,18 @@
       "deployedAt": "2026-10-02T05:01:50.7719650+08:00",
       "verifiedAt": "2026-10-02T05:12:01.7443445+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002"
+    },
+    {
+      "buildId": "desktop-source-cleanup-20261004",
+      "sourceCommit": "263566bf9903210cfa1e8424fa3e6c7e6715b0e0",
+      "sha256": "9EF41785F4A12FB1CAF35CB3F90FECA35D03C470D57656EDBE38C52301EEF369",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-04T01:03:55.5890508+08:00",
+      "verifiedAt": "2026-10-04T01:07:48.3262124+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-source-cleanup-before-20261004"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\desktop-source-cleanup-before-20261004/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1154,5 +1196,32 @@
       "restoredNativeSmoke": "output/playwright/avatar-performance-rollback-smoke.json",
       "restoredNativeSmokePassed": true
     }
-  ]
+  ],
+  "cleanup": {
+    "artifactDeletedBytes": 8671362580,
+    "artifactDeletedFiles": 4479,
+    "retiredPageBytes": 339264261,
+    "retiredPageFiles": 1749,
+    "preservationCommit": "5ec8cd611ea58067fcfa1e9e845242c3cd279496",
+    "preservationBranch": "codex/pre-cleanup-d-source-20261004",
+    "buildCache": "E:/CodexStorage/build-cache/preacherman-integration-01a01e57/target",
+    "sidecarRebuilt": false,
+    "measurement": "Logical file lengths; rebuild outputs, source preservation and deployment backups affect net disk change. Worktree and nested directory totals are not added twice.",
+    "backupRetention": {
+      "applied": true,
+      "completePairsKept": 3,
+      "deletedBytes": 769401880,
+      "evidence": "D:/preacherman/output/playwright/desktop-source-cleanup-20261004/backup-retention.json"
+    },
+    "workspaceBeforeBytes": 72352169116,
+    "workspaceAfterBytes": 64023174331,
+    "workspaceNetReductionBytes": 8328994785,
+    "inventoryLimitations": [
+      {
+        "path": "D:\\preacherman\\output\\gallery-model-import-20260910\\tmp\\tmpr6ihcejq",
+        "error": "[WinError 5] 拒绝访问。: 'D:\\\\preacherman\\\\output\\\\gallery-model-import-20260910\\\\tmp\\\\tmpr6ihcejq'"
+      }
+    ],
+    "oldWorktreePhysicalRetirement": "deferred: 6 different or unique local state files and independent runtime data; old worktree is no longer a release source"
+  }
 }
