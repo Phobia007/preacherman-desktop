@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "market-studio-20261004",
+  "buildId": "asset-extension-header-20261004",
   "productVersion": "0.1.0",
-  "sourceTask": "market-official-collection-craft-market-and-studio",
+  "sourceTask": "reuse-market-signature-and-divider-on-asset-and-extension",
   "sourceThread": null,
-  "sourceState": "Market labels are Official Collection, Craft Market, Brain, Studio, and icon-only Search. Studio replaces Sell and Inventory using the existing blank frosted category and reversible motion. Existing category identities, fonts, content, search and rapid switching preserved. Sidecar unchanged.",
-  "sourceCommit": "c4ac1594c4494356aa3324c825baef2bb1527a5d",
+  "sourceState": "Asset and Extension reuse the Market signature font, position, glass header and divider styles through SurfaceBrandHeader. Existing frost entrance and reverse exit preserved. Market profile remains interactive; new destination headers are visual only. Sidecar unchanged.",
+  "sourceCommit": "4ce3b34f78fd9a526c604349fcdb9a5ff6d204b6",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-04T03:52:19.1232295+08:00",
-  "deployedAt": "2026-10-04T03:52:47.7995365+08:00",
-  "verifiedAt": "2026-10-04T03:55:49.0881109+08:00",
+  "builtAt": "2026-10-04T05:59:54.2850693+08:00",
+  "deployedAt": "2026-10-04T06:00:16.3365500+08:00",
+  "verifiedAt": "2026-10-04T06:02:24.9302896+08:00",
   "sizeBytes": 596244480,
-  "sha256": "2623F12488F40A4529C73FE5F6C5051354CBA2ACF1843E51DC3D74F333C71708",
+  "sha256": "98B2AAC5669D32FD31C32CCF5B0A5CCFD2696751AAF11A48A1EB67ADEA599283",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-studio-before-20261004/preacherman-demo-host.exe",
-  "backupSha256": "9EF41785F4A12FB1CAF35CB3F90FECA35D03C470D57656EDBE38C52301EEF369",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-studio-before-20261004/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004/preacherman-demo-host.exe",
+  "backupSha256": "2623F12488F40A4529C73FE5F6C5051354CBA2ACF1843E51DC3D74F333C71708",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "263566bf9903210cfa1e8424fa3e6c7e6715b0e0",
-  "previousVerificationCommit": "263566bf9903210cfa1e8424fa3e6c7e6715b0e0",
+  "rollbackBaselineCommit": "c4ac1594c4494356aa3324c825baef2bb1527a5d",
+  "previousVerificationCommit": "c4ac1594c4494356aa3324c825baef2bb1527a5d",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 31,
+      "focusedTests": 33,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Both appearances: new Market labels, Studio blank frost entry and exit, underline movement, rapid switching, Search keyboard access and content. Home, Task, Gallery, Settings, Account, Asset and Extension smoke-tested. Window controls exercised, preferences restored, final normal shortcut restart without debug flags.",
+    "nativeFlow": "Canonical shortcut cold launch. Both appearances: Asset and Extension signature header geometry, typography, glass, divider and existing motion compared with Market. Home, Task, Gallery, Settings, Account, Asset and Extension smoke-tested. Window controls exercised, preferences restored, final normal shortcut restart without debug flags.",
     "navigation": [
       "Home",
       "Task",
@@ -140,154 +140,114 @@
         "ready": true
       }
     ],
-    "marketCategories": [
+    "signatureHeaders": [
       {
         "appearance": "dark",
-        "order": [
-          "Official Collection",
-          "Craft Market",
-          "Brain",
-          "Studio",
-          "Search"
-        ],
-        "header": {
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "fontSize": "16px",
-          "iconWidth": 20,
-          "renderedIconWidth": 20.6400146484375,
-          "iconColor": "rgba(255, 255, 255, 0.68)",
-          "divider": "1px"
+        "reference": {
+          "fontFamily": "\"Market Task Signature\", cursive",
+          "fontSize": "38px",
+          "fontWeight": "400",
+          "color": "rgba(245, 250, 252, 0.96)",
+          "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
+          "markY": 49.53599548339844,
+          "markHeight": 45.407997131347656,
+          "markCenter": 959.991943359375,
+          "headerHeight": "100px",
+          "border": "1px solid rgba(255, 255, 255, 0.28)",
+          "background": "rgba(0, 0, 0, 0.12)"
         },
-        "studio": {
-          "label": "Studio",
-          "hidden": false,
-          "children": 0,
-          "text": ""
-        },
-        "studioLine": {
-          "button": {
-            "x": 1083.8641357421875,
-            "width": 56.4375
+        "headers": [
+          {
+            "page": "Asset",
+            "text": "Preacherman",
+            "fontFamily": "\"Market Task Signature\", cursive",
+            "fontSize": "38px",
+            "fontWeight": "400",
+            "color": "rgba(245, 250, 252, 0.96)",
+            "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
+            "markY": 49.53599548339844,
+            "markHeight": 45.407997131347656,
+            "markCenter": 959.991943359375,
+            "headerHeight": "100px",
+            "border": "1px solid rgba(255, 255, 255, 0.28)",
+            "background": "rgba(0, 0, 0, 0.12)",
+            "frost": "blur(12px)",
+            "animation": "demo-frost-enter",
+            "pointerEvents": "none"
           },
-          "line": {
-            "x": 1083.606201171875,
-            "width": 56.760009765625
+          {
+            "page": "Extension",
+            "text": "Preacherman",
+            "fontFamily": "\"Market Task Signature\", cursive",
+            "fontSize": "38px",
+            "fontWeight": "400",
+            "color": "rgba(245, 250, 252, 0.96)",
+            "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
+            "markY": 49.53599548339844,
+            "markHeight": 45.407997131347656,
+            "markCenter": 959.991943359375,
+            "headerHeight": "100px",
+            "border": "1px solid rgba(255, 255, 255, 0.28)",
+            "background": "rgba(0, 0, 0, 0.12)",
+            "frost": "blur(12px)",
+            "animation": "demo-frost-enter",
+            "pointerEvents": "none"
           }
-        },
-        "studioMotion": [
-          {
-            "category": "Browse",
-            "phase": "exiting"
-          },
-          {
-            "category": "Studio",
-            "phase": "entering"
-          },
-          {
-            "category": "Studio",
-            "phase": "idle"
-          },
-          {
-            "category": "Studio",
-            "phase": "exiting"
-          },
-          {
-            "category": "Search",
-            "phase": "entering"
-          },
-          {
-            "category": "Search",
-            "phase": "idle"
-          }
-        ],
-        "frost": "blur(12px)",
-        "searchLine": {
-          "button": {
-            "x": 1215.6376953125,
-            "width": 45.407958984375
-          },
-          "line": {
-            "x": 1215.7021484375,
-            "width": 45.407958984375
-          }
-        },
-        "searchKeyboard": true,
-        "rapidSwitch": true
+        ]
       },
       {
         "appearance": "light",
-        "order": [
-          "Official Collection",
-          "Craft Market",
-          "Brain",
-          "Studio",
-          "Search"
-        ],
-        "header": {
-          "font": "\"Market Brilliant Cut\", sans-serif",
-          "weight": "400",
-          "fontSize": "16px",
-          "iconWidth": 20,
-          "renderedIconWidth": 20.6400146484375,
-          "iconColor": "rgba(255, 255, 255, 0.68)",
-          "divider": "1px"
+        "reference": {
+          "fontFamily": "\"Market Task Signature\", cursive",
+          "fontSize": "38px",
+          "fontWeight": "400",
+          "color": "rgba(245, 250, 252, 0.96)",
+          "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
+          "markY": 49.53599548339844,
+          "markHeight": 45.407997131347656,
+          "markCenter": 959.991943359375,
+          "headerHeight": "100px",
+          "border": "1px solid rgba(255, 255, 255, 0.28)",
+          "background": "rgba(255, 255, 255, 0.06)"
         },
-        "studio": {
-          "label": "Studio",
-          "hidden": false,
-          "children": 0,
-          "text": ""
-        },
-        "studioLine": {
-          "button": {
-            "x": 1083.8641357421875,
-            "width": 56.4375
+        "headers": [
+          {
+            "page": "Asset",
+            "text": "Preacherman",
+            "fontFamily": "\"Market Task Signature\", cursive",
+            "fontSize": "38px",
+            "fontWeight": "400",
+            "color": "rgba(245, 250, 252, 0.96)",
+            "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
+            "markY": 49.53599548339844,
+            "markHeight": 45.407997131347656,
+            "markCenter": 959.991943359375,
+            "headerHeight": "100px",
+            "border": "1px solid rgba(255, 255, 255, 0.28)",
+            "background": "rgba(255, 255, 255, 0.06)",
+            "frost": "blur(12px)",
+            "animation": "demo-frost-enter",
+            "pointerEvents": "none"
           },
-          "line": {
-            "x": 1083.606201171875,
-            "width": 56.760009765625
+          {
+            "page": "Extension",
+            "text": "Preacherman",
+            "fontFamily": "\"Market Task Signature\", cursive",
+            "fontSize": "38px",
+            "fontWeight": "400",
+            "color": "rgba(245, 250, 252, 0.96)",
+            "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
+            "markY": 49.53599548339844,
+            "markHeight": 45.407997131347656,
+            "markCenter": 959.991943359375,
+            "headerHeight": "100px",
+            "border": "1px solid rgba(255, 255, 255, 0.28)",
+            "background": "rgba(255, 255, 255, 0.06)",
+            "frost": "blur(12px)",
+            "animation": "demo-frost-enter",
+            "pointerEvents": "none"
           }
-        },
-        "studioMotion": [
-          {
-            "category": "Browse",
-            "phase": "exiting"
-          },
-          {
-            "category": "Studio",
-            "phase": "entering"
-          },
-          {
-            "category": "Studio",
-            "phase": "idle"
-          },
-          {
-            "category": "Studio",
-            "phase": "exiting"
-          },
-          {
-            "category": "Search",
-            "phase": "entering"
-          },
-          {
-            "category": "Search",
-            "phase": "idle"
-          }
-        ],
-        "frost": "blur(12px)",
-        "searchLine": {
-          "button": {
-            "x": 1215.6376953125,
-            "width": 45.407958984375
-          },
-          "line": {
-            "x": 1215.7021484375,
-            "width": 45.407958984375
-          }
-        },
-        "searchKeyboard": true,
-        "rapidSwitch": true
+        ]
       }
     ],
     "windowControls": {
@@ -298,30 +258,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-04T03:55:49.0881109+08:00",
-      "NativePid": 31564,
-      "StartedAt": "2026-10-04T03:55:26.4249598+08:00",
-      "WindowHandle": 919666,
+      "SampledAt": "2026-10-04T06:02:24.9302896+08:00",
+      "NativePid": 32000,
+      "StartedAt": "2026-10-04T06:02:02.4971394+08:00",
+      "WindowHandle": 8455880,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        31564,
-        26612,
-        31224,
-        31836,
-        31904,
-        6920,
-        29352,
-        28320,
-        13044,
-        19160,
-        32000
+        32000,
+        22192,
+        33260,
+        9092,
+        32760,
+        31116,
+        28656,
+        17724,
+        33760,
+        31372,
+        28392
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1890.4,
-      "GpuDedicatedBytes": 3282546688.0,
-      "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 17343056,
+      "NormalizedCpuPercent": 6.98,
+      "WorkingSetMiB": 1884.8,
+      "GpuDedicatedBytes": 3300249600.0,
+      "MaxGpuEngineUtilization": 13.0,
+      "FreeRamKiB": 16077704,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -331,6 +291,7 @@
     },
     "newErrors": [],
     "observedErrors": [
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
@@ -355,8 +316,7 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "visualReview": {
       "reviewed": [
@@ -364,7 +324,6 @@
         "Task",
         "Gallery",
         "Market",
-        "Studio",
         "Settings",
         "Account",
         "Asset",
@@ -380,10 +339,10 @@
       "Existing legacy remote asset CSP diagnostics remain; no new errors. Account login and Task business lifecycle are outside this navigation-label change."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\market-studio-20261004\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\market-studio-20261004\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\market-studio-20261004\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\market-studio-20261004\\production-build.log"
+      "D:\\preacherman\\output\\playwright\\asset-extension-header-20261004\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\asset-extension-header-20261004\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\asset-extension-header-20261004\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\asset-extension-header-20261004\\production-build.log"
     ]
   },
   "releaseAttempts": [
@@ -1178,9 +1137,18 @@
       "deployedAt": "2026-10-04T03:52:47.7995365+08:00",
       "verifiedAt": "2026-10-04T03:55:49.0881109+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-studio-before-20261004"
+    },
+    {
+      "buildId": "asset-extension-header-20261004",
+      "sourceCommit": "4ce3b34f78fd9a526c604349fcdb9a5ff6d204b6",
+      "sha256": "98B2AAC5669D32FD31C32CCF5B0A5CCFD2696751AAF11A48A1EB67ADEA599283",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-04T06:00:16.3365500+08:00",
+      "verifiedAt": "2026-10-04T06:02:24.9302896+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-studio-before-20261004/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
