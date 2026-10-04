@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "asset-extension-header-20261004",
+  "buildId": "account-home-transition-20261004",
   "productVersion": "0.1.0",
-  "sourceTask": "reuse-market-signature-and-divider-on-asset-and-extension",
+  "sourceTask": "continuous-home-companion-account-entrance-and-reverse-exit",
   "sourceThread": null,
-  "sourceState": "Asset and Extension reuse the Market signature font, position, glass header and divider styles through SurfaceBrandHeader. Existing frost entrance and reverse exit preserved. Market profile remains interactive; new destination headers are visual only. Sidecar unchanged.",
-  "sourceCommit": "4ce3b34f78fd9a526c604349fcdb9a5ff6d204b6",
+  "sourceState": "Account keeps the shared Home companion canvas, moves continuously from the center to the existing left portrait, fades in lighting and branding, then slides in the unchanged login panel. All layers reverse on exit. The camera restores Home framing during the outgoing-page handoff. Sidecar unchanged.",
+  "sourceCommit": "0f09ee69bbf78d122ac50c43702f3ec676943dc5",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-04T05:59:54.2850693+08:00",
-  "deployedAt": "2026-10-04T06:00:16.3365500+08:00",
-  "verifiedAt": "2026-10-04T06:02:24.9302896+08:00",
+  "builtAt": "2026-10-04T12:02:23.2369363+08:00",
+  "deployedAt": "2026-10-04T12:03:03.7532923+08:00",
+  "verifiedAt": "2026-10-04T12:05:19.4347320+08:00",
   "sizeBytes": 596244480,
-  "sha256": "98B2AAC5669D32FD31C32CCF5B0A5CCFD2696751AAF11A48A1EB67ADEA599283",
+  "sha256": "82D4573B37D46EDFEE691C128273D267F6A3D3583EE259F30E5D8368BC0400EE",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004/preacherman-demo-host.exe",
-  "backupSha256": "2623F12488F40A4529C73FE5F6C5051354CBA2ACF1843E51DC3D74F333C71708",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-transition-before-20261004/preacherman-demo-host.exe",
+  "backupSha256": "98B2AAC5669D32FD31C32CCF5B0A5CCFD2696751AAF11A48A1EB67ADEA599283",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-transition-before-20261004/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "c4ac1594c4494356aa3324c825baef2bb1527a5d",
-  "previousVerificationCommit": "c4ac1594c4494356aa3324c825baef2bb1527a5d",
+  "rollbackBaselineCommit": "4ce3b34f78fd9a526c604349fcdb9a5ff6d204b6",
+  "previousVerificationCommit": "4ce3b34f78fd9a526c604349fcdb9a5ff6d204b6",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 33,
+      "focusedTests": 21,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Both appearances: Asset and Extension signature header geometry, typography, glass, divider and existing motion compared with Market. Home, Task, Gallery, Settings, Account, Asset and Extension smoke-tested. Window controls exercised, preferences restored, final normal shortcut restart without debug flags.",
+    "nativeFlow": "Canonical shortcut cold launch. Both appearances: actual Account entrance frames, shared canvas identity, progressive light/branding and unchanged final composition. Reverse exit and rapid navigation checked. Home, Task, Gallery, Settings, Account, Asset and Extension smoke-tested. Window controls exercised, preferences restored, final normal shortcut restart without debug flags.",
     "navigation": [
       "Home",
       "Task",
@@ -140,116 +140,122 @@
         "ready": true
       }
     ],
-    "signatureHeaders": [
+    "accountMotion": [
       {
+        "from": "settings",
         "appearance": "dark",
-        "reference": {
-          "fontFamily": "\"Market Task Signature\", cursive",
-          "fontSize": "38px",
-          "fontWeight": "400",
-          "color": "rgba(245, 250, 252, 0.96)",
-          "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
-          "markY": 49.53599548339844,
-          "markHeight": 45.407997131347656,
-          "markCenter": 959.991943359375,
-          "headerHeight": "100px",
-          "border": "1px solid rgba(255, 255, 255, 0.28)",
-          "background": "rgba(0, 0, 0, 0.12)"
+        "model": "Persistent Pathfinder companion scene",
+        "selection": "apex-legend-pathfinder",
+        "frames": 332,
+        "first": {
+          "t": 379.09999999403954,
+          "phase": "idle",
+          "width": 1860,
+          "x": 0,
+          "clip": "inset(0px 0%)",
+          "frost": 0,
+          "brand": 0,
+          "panelX": 1919.9776611328125,
+          "canvasPreserved": true
         },
-        "headers": [
-          {
-            "page": "Asset",
-            "text": "Preacherman",
-            "fontFamily": "\"Market Task Signature\", cursive",
-            "fontSize": "38px",
-            "fontWeight": "400",
-            "color": "rgba(245, 250, 252, 0.96)",
-            "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
-            "markY": 49.53599548339844,
-            "markHeight": 45.407997131347656,
-            "markCenter": 959.991943359375,
-            "headerHeight": "100px",
-            "border": "1px solid rgba(255, 255, 255, 0.28)",
-            "background": "rgba(0, 0, 0, 0.12)",
-            "frost": "blur(12px)",
-            "animation": "demo-frost-enter",
-            "pointerEvents": "none"
-          },
-          {
-            "page": "Extension",
-            "text": "Preacherman",
-            "fontFamily": "\"Market Task Signature\", cursive",
-            "fontSize": "38px",
-            "fontWeight": "400",
-            "color": "rgba(245, 250, 252, 0.96)",
-            "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
-            "markY": 49.53599548339844,
-            "markHeight": 45.407997131347656,
-            "markCenter": 959.991943359375,
-            "headerHeight": "100px",
-            "border": "1px solid rgba(255, 255, 255, 0.28)",
-            "background": "rgba(0, 0, 0, 0.12)",
-            "frost": "blur(12px)",
-            "animation": "demo-frost-enter",
-            "pointerEvents": "none"
-          }
-        ]
+        "last": {
+          "t": 1763.5999999940395,
+          "phase": "idle",
+          "width": 1860,
+          "x": -465.113,
+          "clip": "inset(0px 25%)",
+          "frost": 1,
+          "brand": 1,
+          "panelX": 959.991943359375,
+          "canvasPreserved": true
+        }
       },
       {
+        "from": "settings",
         "appearance": "light",
-        "reference": {
-          "fontFamily": "\"Market Task Signature\", cursive",
-          "fontSize": "38px",
-          "fontWeight": "400",
-          "color": "rgba(245, 250, 252, 0.96)",
-          "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
-          "markY": 49.53599548339844,
-          "markHeight": 45.407997131347656,
-          "markCenter": 959.991943359375,
-          "headerHeight": "100px",
-          "border": "1px solid rgba(255, 255, 255, 0.28)",
-          "background": "rgba(255, 255, 255, 0.06)"
+        "model": "Persistent Pathfinder companion scene",
+        "selection": "apex-legend-pathfinder",
+        "frames": 335,
+        "first": {
+          "t": 870.7999999970198,
+          "phase": "idle",
+          "width": 1860,
+          "x": 0,
+          "clip": "inset(0px 0%)",
+          "frost": 0,
+          "brand": 0,
+          "panelX": 1919.9776611328125,
+          "canvasPreserved": true
         },
-        "headers": [
-          {
-            "page": "Asset",
-            "text": "Preacherman",
-            "fontFamily": "\"Market Task Signature\", cursive",
-            "fontSize": "38px",
-            "fontWeight": "400",
-            "color": "rgba(245, 250, 252, 0.96)",
-            "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
-            "markY": 49.53599548339844,
-            "markHeight": 45.407997131347656,
-            "markCenter": 959.991943359375,
-            "headerHeight": "100px",
-            "border": "1px solid rgba(255, 255, 255, 0.28)",
-            "background": "rgba(255, 255, 255, 0.06)",
-            "frost": "blur(12px)",
-            "animation": "demo-frost-enter",
-            "pointerEvents": "none"
-          },
-          {
-            "page": "Extension",
-            "text": "Preacherman",
-            "fontFamily": "\"Market Task Signature\", cursive",
-            "fontSize": "38px",
-            "fontWeight": "400",
-            "color": "rgba(245, 250, 252, 0.96)",
-            "shadow": "rgba(0, 0, 0, 0.95) 0px 1px 2px, rgba(0, 0, 0, 0.95) 0px 2px 5px",
-            "markY": 49.53599548339844,
-            "markHeight": 45.407997131347656,
-            "markCenter": 959.991943359375,
-            "headerHeight": "100px",
-            "border": "1px solid rgba(255, 255, 255, 0.28)",
-            "background": "rgba(255, 255, 255, 0.06)",
-            "frost": "blur(12px)",
-            "animation": "demo-frost-enter",
-            "pointerEvents": "none"
-          }
-        ]
+        "last": {
+          "t": 2268.0999999940395,
+          "phase": "idle",
+          "width": 1860,
+          "x": -465.113,
+          "clip": "inset(0px 25%)",
+          "frost": 1,
+          "brand": 1,
+          "panelX": 959.991943359375,
+          "canvasPreserved": true
+        }
       }
     ],
+    "reverseMotion": {
+      "passed": true,
+      "frames": 291,
+      "first": {
+        "t": 0,
+        "phase": "idle",
+        "width": 1860,
+        "x": -465.113,
+        "clip": "inset(0px 25%)",
+        "frost": 1,
+        "brand": 1,
+        "panelX": 959.991943359375,
+        "canvasPreserved": true
+      },
+      "last": {
+        "t": 1207,
+        "phase": "exiting",
+        "width": 1860,
+        "x": 0,
+        "clip": "inset(0px 0%)",
+        "frost": 0,
+        "brand": 0,
+        "panelX": 1919.9776611328125,
+        "canvasPreserved": true
+      },
+      "fromTask": {
+        "from": "workspace",
+        "appearance": "light",
+        "model": "Persistent Pathfinder companion scene",
+        "selection": "apex-legend-pathfinder",
+        "frames": 392,
+        "first": {
+          "t": 235.79999999701977,
+          "phase": "idle",
+          "width": 1860,
+          "x": 0,
+          "clip": "inset(0px 0%)",
+          "frost": 0,
+          "brand": 0,
+          "panelX": 1919.9776611328125,
+          "canvasPreserved": true
+        },
+        "last": {
+          "t": 1861.2999999970198,
+          "phase": "idle",
+          "width": 1860,
+          "x": -465.113,
+          "clip": "inset(0px 25%)",
+          "frost": 1,
+          "brand": 1,
+          "panelX": 959.991943359375,
+          "canvasPreserved": true
+        }
+      },
+      "rapidReturn": true
+    },
     "windowControls": {
       "restore": true,
       "maximize": true,
@@ -258,30 +264,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-04T06:02:24.9302896+08:00",
-      "NativePid": 32000,
-      "StartedAt": "2026-10-04T06:02:02.4971394+08:00",
-      "WindowHandle": 8455880,
+      "SampledAt": "2026-10-04T12:05:19.4347320+08:00",
+      "NativePid": 38240,
+      "StartedAt": "2026-10-04T12:04:56.9210576+08:00",
+      "WindowHandle": 1706016,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        32000,
-        22192,
-        33260,
-        9092,
-        32760,
-        31116,
-        28656,
-        17724,
-        33760,
-        31372,
-        28392
+        38240,
+        41856,
+        27812,
+        30420,
+        38520,
+        30484,
+        35820,
+        40936,
+        37328,
+        10264,
+        39888
       ],
-      "NormalizedCpuPercent": 6.98,
-      "WorkingSetMiB": 1884.8,
-      "GpuDedicatedBytes": 3300249600.0,
-      "MaxGpuEngineUtilization": 13.0,
-      "FreeRamKiB": 16077704,
+      "NormalizedCpuPercent": 4,
+      "WorkingSetMiB": 1867.8,
+      "GpuDedicatedBytes": 3254935552,
+      "MaxGpuEngineUtilization": 12,
+      "FreeRamKiB": 15902664,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -336,13 +342,13 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "Existing legacy remote asset CSP diagnostics remain; no new errors. Account login and Task business lifecycle are outside this navigation-label change."
+      "Existing legacy remote asset CSP diagnostics remain; no new errors. Account authentication and Task business lifecycle were not changed."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\asset-extension-header-20261004\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\asset-extension-header-20261004\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\asset-extension-header-20261004\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\asset-extension-header-20261004\\production-build.log"
+      "D:\\preacherman\\output\\playwright\\account-home-transition-20261004\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\account-home-transition-20261004\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\account-home-transition-20261004\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\account-home-transition-20261004\\production-build.log"
     ]
   },
   "releaseAttempts": [
@@ -1146,9 +1152,18 @@
       "deployedAt": "2026-10-04T06:00:16.3365500+08:00",
       "verifiedAt": "2026-10-04T06:02:24.9302896+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004"
+    },
+    {
+      "buildId": "account-home-transition-20261004",
+      "sourceCommit": "0f09ee69bbf78d122ac50c43702f3ec676943dc5",
+      "sha256": "82D4573B37D46EDFEE691C128273D267F6A3D3583EE259F30E5D8368BC0400EE",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-04T12:03:03.7532923+08:00",
+      "verifiedAt": "2026-10-04T12:05:19.4347320+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-transition-before-20261004"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-transition-before-20261004/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
