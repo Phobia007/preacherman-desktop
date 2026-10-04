@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "task-view-icon-20261004",
+  "buildId": "drawer-social-20261004",
   "productVersion": "0.1.0",
-  "sourceTask": "replace-task-featured-full-labels-with-bottom-center-morphing-icon",
+  "sourceTask": "add-aligned-social-entry-points-inside-left-navigation-drawer",
   "sourceThread": null,
-  "sourceState": "Replace Featured/All text links with one centered bottom icon using the existing Task navigation queue. Five lines morph into an open book; mouse, keyboard, rapid switching, both themes and reduced motion supported. No other page behavior changed. Sidecar unchanged.",
-  "sourceCommit": "93d1824ad64bada57618dbb39327352e286cd0ca",
+  "sourceState": "Add plus and friends icons to the bottom left and right of the expanded navigation drawer, aligned to the top hamburger and settings controls. Main menu slides left while the reserved friends list slides in from the right. Add-friend entry, back, repeat toggle, Escape, keyboard access, theme and reduced-motion states included. Real friend relationships remain unconnected; no backend changes.",
+  "sourceCommit": "106eac060a2533f9142d166456a238a55c232f1e",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-04T13:27:05.2127984+08:00",
-  "deployedAt": "2026-10-04T13:27:44.1411172+08:00",
-  "verifiedAt": "2026-10-04T13:29:42.4418769+08:00",
-  "sizeBytes": 596247040,
-  "sha256": "41334B30E0DE92E0B015091B60A2A8088536A0681B1D12004A922E9AEF763B4D",
+  "builtAt": "2026-10-04T21:28:14.5384724+08:00",
+  "deployedAt": "2026-10-04T21:28:47.4241472+08:00",
+  "verifiedAt": "2026-10-04T21:32:35.9105852+08:00",
+  "sizeBytes": 596248064,
+  "sha256": "A4D3491E58DAA64C7E33189DF6ED7DDA9004EC74940A45BD2BAACE330D4AD40D",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-view-icon-before-20261004/preacherman-demo-host.exe",
-  "backupSha256": "8C2C6283DEBB92F22A24A7176AC8DFDC937FC9331B20E6B3A57CF6CDB24030BA",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-view-icon-before-20261004/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-social-before-20261004/preacherman-demo-host.exe",
+  "backupSha256": "41334B30E0DE92E0B015091B60A2A8088536A0681B1D12004A922E9AEF763B4D",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-social-before-20261004/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "87ecde0825a406a786395bb75f74641f2898ab7a",
-  "previousVerificationCommit": "87ecde0825a406a786395bb75f74641f2898ab7a",
+  "rollbackBaselineCommit": "93d1824ad64bada57618dbb39327352e286cd0ca",
+  "previousVerificationCommit": "93d1824ad64bada57618dbb39327352e286cd0ca",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 17,
+      "focusedTests": 14,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Both appearances: bottom-center icon, no old text links, line-to-book morph, mouse and keyboard toggles, rapid toggles and unchanged canvas identity. All core navigation paths and window controls verified, preferences restored, final normal shortcut restart without debug flags.",
+    "nativeFlow": "Canonical shortcut cold launch. Both appearances on Home and Account: aligned four corner controls, continuous horizontal menu-to-friends transition, placeholder add-friend entry, back, repeat clicks, keyboard, Escape and reopening default menu. All core navigation paths and window controls verified, preferences restored, final normal shortcut restart without debug flags.",
     "navigation": [
       "Home",
       "Task",
@@ -140,48 +140,158 @@
         "ready": true
       }
     ],
-    "taskIcons": [
+    "drawerSocial": [
       {
         "appearance": "dark",
-        "x": 906,
-        "width": 48,
-        "y": 902,
-        "height": 48,
-        "viewport": 1860,
-        "viewportHeight": 1000,
-        "color": "rgba(255, 255, 255, 0.68)",
-        "count": 1,
-        "oldLabels": 0,
-        "morph": {
-          "start": "path(\"M 4 8 C 8 8 12 8 16 8 C 20 8 24 8 28 8\")",
-          "during": "path(\"M 4 7.2278 C 8 5.6834 12 5.6834 16 8.7722 C 20 5.6834 24 5.6834 28 7.2278\")",
-          "end": "path(\"M 4 7 C 8 5 12 5 16 9 C 20 5 24 5 28 7\")"
+        "context": "home",
+        "boxes": {
+          ".demo-app-shell__brand-trigger": {
+            "x": 41.28622245788574,
+            "y": 30.959997177124023,
+            "width": 49.53599548339844,
+            "height": 49.53599548339844
+          },
+          ".demo-app-shell__brand-settings": {
+            "x": 255.94220733642578,
+            "y": 30.959997177124023,
+            "width": 49.53599548339844,
+            "height": 49.53599548339844
+          },
+          ".demo-drawer-social-actions__add": {
+            "x": 41.28622245788574,
+            "y": 1001.0399780273438,
+            "width": 49.53599548339844,
+            "height": 49.5360107421875
+          },
+          ".demo-drawer-social-actions__friends": {
+            "x": 255.94220733642578,
+            "y": 1001.0399780273438,
+            "width": 49.53599548339844,
+            "height": 49.5360107421875
+          }
         },
-        "click": true,
+        "midTransition": {
+          "menuShift": -209.76221466064453,
+          "friendsOffset": 80.796
+        },
+        "sameSurface": true,
         "keyboard": true,
         "rapidToggle": true,
-        "canvasReused": true
+        "reopenMenu": true
+      },
+      {
+        "appearance": "dark",
+        "context": "account",
+        "boxes": {
+          ".demo-app-shell__brand-trigger": {
+            "x": 41.28622245788574,
+            "y": 30.959997177124023,
+            "width": 49.53599548339844,
+            "height": 49.53599548339844
+          },
+          ".demo-app-shell__brand-settings": {
+            "x": 255.94220733642578,
+            "y": 30.959997177124023,
+            "width": 49.53599548339844,
+            "height": 49.53599548339844
+          },
+          ".demo-drawer-social-actions__add": {
+            "x": 41.28622245788574,
+            "y": 1001.0399780273438,
+            "width": 49.53599548339844,
+            "height": 49.5360107421875
+          },
+          ".demo-drawer-social-actions__friends": {
+            "x": 255.94220733642578,
+            "y": 1001.0399780273438,
+            "width": 49.53599548339844,
+            "height": 49.5360107421875
+          }
+        },
+        "midTransition": {
+          "menuShift": -200.9634780883789,
+          "friendsOffset": 84.7538
+        },
+        "sameSurface": true,
+        "keyboard": true,
+        "rapidToggle": true,
+        "reopenMenu": true
       },
       {
         "appearance": "light",
-        "x": 906,
-        "width": 48,
-        "y": 902,
-        "height": 48,
-        "viewport": 1860,
-        "viewportHeight": 1000,
-        "color": "rgba(255, 255, 255, 0.68)",
-        "count": 1,
-        "oldLabels": 0,
-        "morph": {
-          "start": "path(\"M 4 8 C 8 8 12 8 16 8 C 20 8 24 8 28 8\")",
-          "during": "path(\"M 4 7.24664 C 8 5.73991 12 5.73991 16 8.75336 C 20 5.73991 24 5.73991 28 7.24664\")",
-          "end": "path(\"M 4 7 C 8 5 12 5 16 9 C 20 5 24 5 28 7\")"
+        "context": "home",
+        "boxes": {
+          ".demo-app-shell__brand-trigger": {
+            "x": 41.28622245788574,
+            "y": 30.959997177124023,
+            "width": 49.53599548339844,
+            "height": 49.53599548339844
+          },
+          ".demo-app-shell__brand-settings": {
+            "x": 255.94220733642578,
+            "y": 30.959997177124023,
+            "width": 49.53599548339844,
+            "height": 49.53599548339844
+          },
+          ".demo-drawer-social-actions__add": {
+            "x": 41.28622245788574,
+            "y": 1001.0399780273438,
+            "width": 49.53599548339844,
+            "height": 49.5360107421875
+          },
+          ".demo-drawer-social-actions__friends": {
+            "x": 255.94220733642578,
+            "y": 1001.0399780273438,
+            "width": 49.53599548339844,
+            "height": 49.5360107421875
+          }
         },
-        "click": true,
+        "midTransition": {
+          "menuShift": -221.6426010131836,
+          "friendsOffset": 57.1515
+        },
+        "sameSurface": true,
         "keyboard": true,
         "rapidToggle": true,
-        "canvasReused": true
+        "reopenMenu": true
+      },
+      {
+        "appearance": "light",
+        "context": "account",
+        "boxes": {
+          ".demo-app-shell__brand-trigger": {
+            "x": 41.28622245788574,
+            "y": 30.959997177124023,
+            "width": 49.53599548339844,
+            "height": 49.53599548339844
+          },
+          ".demo-app-shell__brand-settings": {
+            "x": 255.94220733642578,
+            "y": 30.959997177124023,
+            "width": 49.53599548339844,
+            "height": 49.53599548339844
+          },
+          ".demo-drawer-social-actions__add": {
+            "x": 41.28622245788574,
+            "y": 1001.0399780273438,
+            "width": 49.53599548339844,
+            "height": 49.5360107421875
+          },
+          ".demo-drawer-social-actions__friends": {
+            "x": 255.94220733642578,
+            "y": 1001.0399780273438,
+            "width": 49.53599548339844,
+            "height": 49.5360107421875
+          }
+        },
+        "midTransition": {
+          "menuShift": -209.7195816040039,
+          "friendsOffset": 76.872
+        },
+        "sameSurface": true,
+        "keyboard": true,
+        "rapidToggle": true,
+        "reopenMenu": true
       }
     ],
     "windowControls": {
@@ -192,30 +302,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-04T13:29:42.4418769+08:00",
-      "NativePid": 41596,
-      "StartedAt": "2026-10-04T13:29:19.9031873+08:00",
-      "WindowHandle": 1378450,
+      "SampledAt": "2026-10-04T21:32:35.9105852+08:00",
+      "NativePid": 35716,
+      "StartedAt": "2026-10-04T21:32:13.5341765+08:00",
+      "WindowHandle": 3345064,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        41596,
-        9036,
-        41924,
-        36080,
-        31264,
-        38796,
-        41028,
-        1976,
-        30116,
-        7392,
-        13044
+        35716,
+        37440,
+        40744,
+        18216,
+        39980,
+        35312,
+        39512,
+        39684,
+        3080,
+        41980,
+        7172
       ],
-      "NormalizedCpuPercent": 5,
-      "WorkingSetMiB": 1878.2,
-      "GpuDedicatedBytes": 3304353792,
-      "MaxGpuEngineUtilization": 11,
-      "FreeRamKiB": 17504340,
+      "NormalizedCpuPercent": 4,
+      "WorkingSetMiB": 1902.5,
+      "GpuDedicatedBytes": 3341733888,
+      "MaxGpuEngineUtilization": 13,
+      "FreeRamKiB": 16332020,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -225,6 +335,7 @@
     },
     "newErrors": [],
     "observedErrors": [
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
@@ -249,8 +360,7 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "visualReview": {
       "reviewed": [
@@ -273,11 +383,11 @@
       "Existing legacy remote asset CSP diagnostics remain; no new errors. Account authentication and Task business lifecycle were not changed."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\preview-report.json"
+      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\preview-report.json"
     ]
   },
   "releaseAttempts": [
@@ -1118,9 +1228,18 @@
       "deployedAt": "2026-10-04T13:27:44.1411172+08:00",
       "verifiedAt": "2026-10-04T13:29:42.4418769+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-view-icon-before-20261004"
+    },
+    {
+      "buildId": "drawer-social-20261004",
+      "sourceCommit": "106eac060a2533f9142d166456a238a55c232f1e",
+      "sha256": "A4D3491E58DAA64C7E33189DF6ED7DDA9004EC74940A45BD2BAACE330D4AD40D",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-04T21:28:47.4241472+08:00",
+      "verifiedAt": "2026-10-04T21:32:35.9105852+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-social-before-20261004"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-view-icon-before-20261004/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-social-before-20261004/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
