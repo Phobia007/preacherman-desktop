@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "drawer-social-20261004",
+  "buildId": "drawer-boundary-20261004",
   "productVersion": "0.1.0",
-  "sourceTask": "add-aligned-social-entry-points-inside-left-navigation-drawer",
+  "sourceTask": "inline-friend-search-footer-return-navigation-hover-buffer-and-compact-audio-controls",
   "sourceThread": null,
-  "sourceState": "Add plus and friends icons to the bottom left and right of the expanded navigation drawer, aligned to the top hamburger and settings controls. Main menu slides left while the reserved friends list slides in from the right. Add-friend entry, back, repeat toggle, Escape, keyboard access, theme and reduced-motion states included. Real friend relationships remain unconnected; no backend changes.",
-  "sourceCommit": "106eac060a2533f9142d166456a238a55c232f1e",
+  "sourceState": "Bottom plus reveals an inline friend search over the right footer icon, with clear, Enter/arrow submit, draft retention and Escape close. Real friend APIs intentionally deferred by user; submit reports not connected without fabricated results. Friends heading back arrow removed; footer people icon becomes a left return arrow. Left drawer remains open within the left third of the window. Audio options use vertical dots, a 28px button, zero gap and 18px right inset. No account, audio or backend behavior changes.",
+  "sourceCommit": "350395000e85ec46bee991b8a6a4747b50a91255",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-04T21:28:14.5384724+08:00",
-  "deployedAt": "2026-10-04T21:28:47.4241472+08:00",
-  "verifiedAt": "2026-10-04T21:32:35.9105852+08:00",
-  "sizeBytes": 596248064,
-  "sha256": "A4D3491E58DAA64C7E33189DF6ED7DDA9004EC74940A45BD2BAACE330D4AD40D",
+  "builtAt": "2026-10-04T22:18:07.4399781+08:00",
+  "deployedAt": "2026-10-04T22:19:26.6967325+08:00",
+  "verifiedAt": "2026-10-04T22:22:44.9687378+08:00",
+  "sizeBytes": 596249088,
+  "sha256": "D44401B02F003DAB9EA678AF08BBB60462F097BD8536EA2B142BC1AB955B6811",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-social-before-20261004/preacherman-demo-host.exe",
-  "backupSha256": "41334B30E0DE92E0B015091B60A2A8088536A0681B1D12004A922E9AEF763B4D",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-social-before-20261004/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-boundary-before-20261004/preacherman-demo-host.exe",
+  "backupSha256": "A4D3491E58DAA64C7E33189DF6ED7DDA9004EC74940A45BD2BAACE330D4AD40D",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-boundary-before-20261004/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "93d1824ad64bada57618dbb39327352e286cd0ca",
-  "previousVerificationCommit": "93d1824ad64bada57618dbb39327352e286cd0ca",
+  "rollbackBaselineCommit": "106eac060a2533f9142d166456a238a55c232f1e",
+  "previousVerificationCommit": "106eac060a2533f9142d166456a238a55c232f1e",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 14,
+      "focusedTests": 22,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Both appearances on Home and Account: aligned four corner controls, continuous horizontal menu-to-friends transition, placeholder add-friend entry, back, repeat clicks, keyboard, Escape and reopening default menu. All core navigation paths and window controls verified, preferences restored, final normal shortcut restart without debug flags.",
+    "nativeFlow": "Canonical shortcut cold launch. Inline friend search, clear, Enter/arrow submission, Escape, draft preservation, aligned corners and footer return icon checked in both modes. Directory, friends and inline search stay open through the left third, close beyond it, and preserve outside-click/Escape on Home and Account. Restored-window boundary checked. Compact vertical audio options and settings interaction checked. Core navigation, window controls, normal shortcut restart and process cleanup completed.",
     "navigation": [
       "Home",
       "Task",
@@ -140,192 +140,334 @@
         "ready": true
       }
     ],
-    "drawerSocial": [
+    "boundary": [
       {
         "appearance": "dark",
         "context": "home",
-        "boxes": {
-          ".demo-app-shell__brand-trigger": {
-            "x": 41.28622245788574,
-            "y": 30.959997177124023,
-            "width": 49.53599548339844,
-            "height": 49.53599548339844
+        "width": 1920,
+        "checks": [
+          {
+            "view": "menu",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           },
-          ".demo-app-shell__brand-settings": {
-            "x": 255.94220733642578,
-            "y": 30.959997177124023,
-            "width": 49.53599548339844,
-            "height": 49.53599548339844
+          {
+            "view": "friends",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           },
-          ".demo-drawer-social-actions__add": {
-            "x": 41.28622245788574,
-            "y": 1001.0399780273438,
-            "width": 49.53599548339844,
-            "height": 49.5360107421875
-          },
-          ".demo-drawer-social-actions__friends": {
-            "x": 255.94220733642578,
-            "y": 1001.0399780273438,
-            "width": 49.53599548339844,
-            "height": 49.5360107421875
+          {
+            "view": "search",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           }
-        },
-        "midTransition": {
-          "menuShift": -209.76221466064453,
-          "friendsOffset": 80.796
-        },
-        "sameSurface": true,
-        "keyboard": true,
-        "rapidToggle": true,
-        "reopenMenu": true
+        ],
+        "outsideClick": true,
+        "escape": true
       },
       {
         "appearance": "dark",
         "context": "account",
-        "boxes": {
-          ".demo-app-shell__brand-trigger": {
-            "x": 41.28622245788574,
-            "y": 30.959997177124023,
-            "width": 49.53599548339844,
-            "height": 49.53599548339844
+        "width": 1920,
+        "checks": [
+          {
+            "view": "menu",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           },
-          ".demo-app-shell__brand-settings": {
-            "x": 255.94220733642578,
-            "y": 30.959997177124023,
-            "width": 49.53599548339844,
-            "height": 49.53599548339844
+          {
+            "view": "friends",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           },
-          ".demo-drawer-social-actions__add": {
-            "x": 41.28622245788574,
-            "y": 1001.0399780273438,
-            "width": 49.53599548339844,
-            "height": 49.5360107421875
-          },
-          ".demo-drawer-social-actions__friends": {
-            "x": 255.94220733642578,
-            "y": 1001.0399780273438,
-            "width": 49.53599548339844,
-            "height": 49.5360107421875
+          {
+            "view": "search",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           }
-        },
-        "midTransition": {
-          "menuShift": -200.9634780883789,
-          "friendsOffset": 84.7538
-        },
-        "sameSurface": true,
-        "keyboard": true,
-        "rapidToggle": true,
-        "reopenMenu": true
+        ],
+        "outsideClick": true,
+        "escape": true
       },
       {
         "appearance": "light",
         "context": "home",
-        "boxes": {
-          ".demo-app-shell__brand-trigger": {
-            "x": 41.28622245788574,
-            "y": 30.959997177124023,
-            "width": 49.53599548339844,
-            "height": 49.53599548339844
+        "width": 1920,
+        "checks": [
+          {
+            "view": "menu",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           },
-          ".demo-app-shell__brand-settings": {
-            "x": 255.94220733642578,
-            "y": 30.959997177124023,
-            "width": 49.53599548339844,
-            "height": 49.53599548339844
+          {
+            "view": "friends",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           },
-          ".demo-drawer-social-actions__add": {
-            "x": 41.28622245788574,
-            "y": 1001.0399780273438,
-            "width": 49.53599548339844,
-            "height": 49.5360107421875
-          },
-          ".demo-drawer-social-actions__friends": {
-            "x": 255.94220733642578,
-            "y": 1001.0399780273438,
-            "width": 49.53599548339844,
-            "height": 49.5360107421875
+          {
+            "view": "search",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           }
-        },
-        "midTransition": {
-          "menuShift": -221.6426010131836,
-          "friendsOffset": 57.1515
-        },
-        "sameSurface": true,
-        "keyboard": true,
-        "rapidToggle": true,
-        "reopenMenu": true
+        ],
+        "outsideClick": true,
+        "escape": true
       },
       {
         "appearance": "light",
         "context": "account",
-        "boxes": {
-          ".demo-app-shell__brand-trigger": {
-            "x": 41.28622245788574,
-            "y": 30.959997177124023,
-            "width": 49.53599548339844,
-            "height": 49.53599548339844
+        "width": 1920,
+        "checks": [
+          {
+            "view": "menu",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           },
-          ".demo-app-shell__brand-settings": {
-            "x": 255.94220733642578,
-            "y": 30.959997177124023,
-            "width": 49.53599548339844,
-            "height": 49.53599548339844
+          {
+            "view": "friends",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           },
-          ".demo-drawer-social-actions__add": {
-            "x": 41.28622245788574,
-            "y": 1001.0399780273438,
-            "width": 49.53599548339844,
-            "height": 49.5360107421875
-          },
-          ".demo-drawer-social-actions__friends": {
-            "x": 255.94220733642578,
-            "y": 1001.0399780273438,
-            "width": 49.53599548339844,
-            "height": 49.5360107421875
+          {
+            "view": "search",
+            "drawerEdge": 297.2159729003906,
+            "threshold": 640,
+            "insideStayedOpen": true,
+            "beyondClosed": true
           }
+        ],
+        "outsideClick": true,
+        "escape": true
+      }
+    ],
+    "audioLayout": [
+      {
+        "appearance": "dark",
+        "width": 72,
+        "right": 18,
+        "height": 44,
+        "gap": 0,
+        "buttonWidth": 28,
+        "color": "rgb(162, 170, 174)",
+        "dots": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 6,
+            "y": 11
+          },
+          {
+            "x": 6,
+            "y": 18
+          }
+        ],
+        "panel": {
+          "color": "rgb(245, 243, 239)",
+          "background": "rgb(13, 14, 14)"
         },
-        "midTransition": {
-          "menuShift": -209.7195816040039,
-          "friendsOffset": 76.872
+        "settingsOpened": true,
+        "escapeClosed": true
+      },
+      {
+        "appearance": "dark",
+        "width": 72,
+        "right": 18,
+        "height": 44,
+        "gap": 0,
+        "buttonWidth": 28,
+        "color": "rgb(149, 154, 156)",
+        "dots": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 6,
+            "y": 11
+          },
+          {
+            "x": 6,
+            "y": 18
+          }
+        ],
+        "panel": {
+          "color": "rgb(245, 243, 239)",
+          "background": "rgb(13, 14, 14)"
         },
-        "sameSurface": true,
-        "keyboard": true,
-        "rapidToggle": true,
-        "reopenMenu": true
+        "settingsOpened": true,
+        "escapeClosed": true
+      },
+      {
+        "appearance": "light",
+        "width": 72,
+        "right": 18,
+        "height": 44,
+        "gap": 0,
+        "buttonWidth": 28,
+        "color": "rgb(167, 175, 179)",
+        "dots": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 6,
+            "y": 11
+          },
+          {
+            "x": 6,
+            "y": 18
+          }
+        ],
+        "panel": {
+          "color": "rgb(24, 24, 23)",
+          "background": "rgb(255, 255, 255)"
+        },
+        "settingsOpened": true,
+        "escapeClosed": true
+      },
+      {
+        "appearance": "light",
+        "width": 72,
+        "right": 18,
+        "height": 44,
+        "gap": 0,
+        "buttonWidth": 28,
+        "color": "rgb(102, 106, 108)",
+        "dots": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 6,
+            "y": 11
+          },
+          {
+            "x": 6,
+            "y": 18
+          }
+        ],
+        "panel": {
+          "color": "rgb(24, 24, 23)",
+          "background": "rgb(255, 255, 255)"
+        },
+        "settingsOpened": true,
+        "escapeClosed": true
+      }
+    ],
+    "friendSearch": [
+      {
+        "appearance": "dark",
+        "alignedCorners": true,
+        "inlineSearch": true,
+        "clear": true,
+        "enter": true,
+        "arrowSubmit": true,
+        "unconnectedNotice": true,
+        "escape": true,
+        "draftRetained": true,
+        "footerBack": true
+      },
+      {
+        "appearance": "light",
+        "alignedCorners": true,
+        "inlineSearch": true,
+        "clear": true,
+        "enter": true,
+        "arrowSubmit": true,
+        "unconnectedNotice": true,
+        "escape": true,
+        "draftRetained": true,
+        "footerBack": true
       }
     ],
     "windowControls": {
       "restore": true,
+      "resizedBoundary": {
+        "appearance": "restored",
+        "context": "window",
+        "width": 1280,
+        "checks": [
+          {
+            "view": "menu",
+            "drawerEdge": 204.8000030517578,
+            "threshold": 426.6666666666667,
+            "insideStayedOpen": true,
+            "beyondClosed": true
+          },
+          {
+            "view": "friends",
+            "drawerEdge": 204.8000030517578,
+            "threshold": 426.6666666666667,
+            "insideStayedOpen": true,
+            "beyondClosed": true
+          },
+          {
+            "view": "search",
+            "drawerEdge": 204.8000030517578,
+            "threshold": 426.6666666666667,
+            "insideStayedOpen": true,
+            "beyondClosed": true
+          }
+        ],
+        "outsideClick": true,
+        "escape": true
+      },
       "maximize": true,
       "minimize": true,
       "closeRequested": true,
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-04T21:32:35.9105852+08:00",
-      "NativePid": 35716,
-      "StartedAt": "2026-10-04T21:32:13.5341765+08:00",
-      "WindowHandle": 3345064,
+      "SampledAt": "2026-10-04T22:22:44.9687378+08:00",
+      "NativePid": 36392,
+      "StartedAt": "2026-10-04T22:22:22.9332861+08:00",
+      "WindowHandle": 2754712,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        35716,
-        37440,
-        40744,
-        18216,
-        39980,
-        35312,
-        39512,
-        39684,
-        3080,
-        41980,
-        7172
+        36392,
+        2568,
+        35404,
+        29912,
+        41172,
+        40940,
+        33924,
+        39728,
+        38260,
+        30360,
+        32560
       ],
       "NormalizedCpuPercent": 4,
-      "WorkingSetMiB": 1902.5,
-      "GpuDedicatedBytes": 3341733888,
-      "MaxGpuEngineUtilization": 13,
-      "FreeRamKiB": 16332020,
+      "WorkingSetMiB": 1911.2,
+      "GpuDedicatedBytes": 3337314304,
+      "MaxGpuEngineUtilization": 12,
+      "FreeRamKiB": 16558932,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -380,14 +522,14 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "Existing legacy remote asset CSP diagnostics remain; no new errors. Account authentication and Task business lifecycle were not changed."
+      "Friend search and add APIs are not connected, as confirmed by the user. Existing legacy remote asset CSP diagnostics remain; no new errors. Account authentication and Task business lifecycle were not changed."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\drawer-social-20261004\\preview-report.json"
+      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\production-build-final.log",
+      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1237,9 +1379,18 @@
       "deployedAt": "2026-10-04T21:28:47.4241472+08:00",
       "verifiedAt": "2026-10-04T21:32:35.9105852+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-social-before-20261004"
+    },
+    {
+      "buildId": "drawer-boundary-20261004",
+      "sourceCommit": "350395000e85ec46bee991b8a6a4747b50a91255",
+      "sha256": "D44401B02F003DAB9EA678AF08BBB60462F097BD8536EA2B142BC1AB955B6811",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-04T22:19:26.6967325+08:00",
+      "verifiedAt": "2026-10-04T22:22:44.9687378+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-boundary-before-20261004"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-social-before-20261004/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-boundary-before-20261004/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
