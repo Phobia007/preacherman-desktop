@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "account-home-backdrop-20261004",
+  "buildId": "task-view-icon-20261004",
   "productVersion": "0.1.0",
-  "sourceTask": "preserve-full-home-backdrop-during-account-panel-motion",
+  "sourceTask": "replace-task-featured-full-labels-with-bottom-center-morphing-icon",
   "sourceThread": null,
-  "sourceState": "Keep the Home scene container full-screen with its semantic Home background. Move only the shared companion layer without premature half-screen clipping, keep Account lighting anchored to the left, and let the existing right panel cover the empty Home space. Entrance, reverse exit, branding, login and final composition preserved. Sidecar unchanged.",
-  "sourceCommit": "87ecde0825a406a786395bb75f74641f2898ab7a",
+  "sourceState": "Replace Featured/All text links with one centered bottom icon using the existing Task navigation queue. Five lines morph into an open book; mouse, keyboard, rapid switching, both themes and reduced motion supported. No other page behavior changed. Sidecar unchanged.",
+  "sourceCommit": "93d1824ad64bada57618dbb39327352e286cd0ca",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-04T12:21:35.0640233+08:00",
-  "deployedAt": "2026-10-04T12:22:13.5831072+08:00",
-  "verifiedAt": "2026-10-04T12:24:12.8611801+08:00",
-  "sizeBytes": 596244480,
-  "sha256": "8C2C6283DEBB92F22A24A7176AC8DFDC937FC9331B20E6B3A57CF6CDB24030BA",
+  "builtAt": "2026-10-04T13:27:05.2127984+08:00",
+  "deployedAt": "2026-10-04T13:27:44.1411172+08:00",
+  "verifiedAt": "2026-10-04T13:29:42.4418769+08:00",
+  "sizeBytes": 596247040,
+  "sha256": "41334B30E0DE92E0B015091B60A2A8088536A0681B1D12004A922E9AEF763B4D",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-backdrop-before-20261004/preacherman-demo-host.exe",
-  "backupSha256": "82D4573B37D46EDFEE691C128273D267F6A3D3583EE259F30E5D8368BC0400EE",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-backdrop-before-20261004/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-view-icon-before-20261004/preacherman-demo-host.exe",
+  "backupSha256": "8C2C6283DEBB92F22A24A7176AC8DFDC937FC9331B20E6B3A57CF6CDB24030BA",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-view-icon-before-20261004/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "0f09ee69bbf78d122ac50c43702f3ec676943dc5",
-  "previousVerificationCommit": "0f09ee69bbf78d122ac50c43702f3ec676943dc5",
+  "rollbackBaselineCommit": "87ecde0825a406a786395bb75f74641f2898ab7a",
+  "previousVerificationCommit": "87ecde0825a406a786395bb75f74641f2898ab7a",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 23,
+      "focusedTests": 17,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Both appearances: full-screen Home backdrop throughout actual entrance/exit frames, shared canvas identity, intermediate screenshots and pixel probes in the formerly exposed gray strip, plus unchanged final composition. Reverse exit and rapid navigation checked. Home, Task, Gallery, Settings, Account, Asset and Extension smoke-tested. Window controls exercised, preferences restored, final normal shortcut restart without debug flags.",
+    "nativeFlow": "Canonical shortcut cold launch. Both appearances: bottom-center icon, no old text links, line-to-book morph, mouse and keyboard toggles, rapid toggles and unchanged canvas identity. All core navigation paths and window controls verified, preferences restored, final normal shortcut restart without debug flags.",
     "navigation": [
       "Home",
       "Task",
@@ -140,182 +140,50 @@
         "ready": true
       }
     ],
-    "accountMotion": [
+    "taskIcons": [
       {
-        "from": "settings",
         "appearance": "dark",
-        "model": "Persistent Pathfinder companion scene",
-        "selection": "apex-legend-pathfinder",
-        "midpoint": {
-          "x": 1586.6929473876953,
-          "y": 309.59999999999997,
-          "gap": 233.42074584960938,
-          "backdrop": "rgb(1, 4, 9)",
-          "sceneBounds": {
-            "x": 0.0062255859375,
-            "width": 1919.987548828125
-          },
-          "panelLeft": 1703.4033203125,
-          "modelRight": 1469.9825744628906
+        "x": 906,
+        "width": 48,
+        "y": 902,
+        "height": 48,
+        "viewport": 1860,
+        "viewportHeight": 1000,
+        "color": "rgba(255, 255, 255, 0.68)",
+        "count": 1,
+        "oldLabels": 0,
+        "morph": {
+          "start": "path(\"M 4 8 C 8 8 12 8 16 8 C 20 8 24 8 28 8\")",
+          "during": "path(\"M 4 7.2278 C 8 5.6834 12 5.6834 16 8.7722 C 20 5.6834 24 5.6834 28 7.2278\")",
+          "end": "path(\"M 4 7 C 8 5 12 5 16 9 C 20 5 24 5 28 7\")"
         },
-        "frames": 325,
-        "first": {
-          "t": 392.69999998807907,
-          "phase": "idle",
-          "width": 1860,
-          "x": 0,
-          "clip": "none",
-          "backdropTransform": "none",
-          "backdropClip": "none",
-          "backdrop": "rgb(1, 4, 9)",
-          "homeColor": "#010409",
-          "modelHeight": 1000,
-          "canvasHeight": 1032,
-          "backdropWidth": 1919.987548828125,
-          "shellWidth": 1919.987548828125,
-          "frost": 0,
-          "brand": 0,
-          "panelX": 1919.9776611328125,
-          "canvasPreserved": true
-        },
-        "last": {
-          "t": 1768.3999999910593,
-          "phase": "idle",
-          "width": 1860,
-          "x": -465.113,
-          "clip": "none",
-          "backdropTransform": "none",
-          "backdropClip": "none",
-          "backdrop": "rgb(1, 4, 9)",
-          "homeColor": "#010409",
-          "modelHeight": 1000,
-          "canvasHeight": 1032,
-          "backdropWidth": 1919.987548828125,
-          "shellWidth": 1919.987548828125,
-          "frost": 1,
-          "brand": 1,
-          "panelX": 959.991943359375,
-          "canvasPreserved": true
-        }
+        "click": true,
+        "keyboard": true,
+        "rapidToggle": true,
+        "canvasReused": true
       },
       {
-        "from": "settings",
         "appearance": "light",
-        "model": "Persistent Pathfinder companion scene",
-        "selection": "apex-legend-pathfinder",
-        "midpoint": {
-          "x": 1586.6929473876953,
-          "y": 309.59999999999997,
-          "gap": 233.42074584960938,
-          "backdrop": "rgb(1, 4, 9)",
-          "sceneBounds": {
-            "x": 0.0062255859375,
-            "width": 1919.987548828125
-          },
-          "panelLeft": 1703.4033203125,
-          "modelRight": 1469.9825744628906
+        "x": 906,
+        "width": 48,
+        "y": 902,
+        "height": 48,
+        "viewport": 1860,
+        "viewportHeight": 1000,
+        "color": "rgba(255, 255, 255, 0.68)",
+        "count": 1,
+        "oldLabels": 0,
+        "morph": {
+          "start": "path(\"M 4 8 C 8 8 12 8 16 8 C 20 8 24 8 28 8\")",
+          "during": "path(\"M 4 7.24664 C 8 5.73991 12 5.73991 16 8.75336 C 20 5.73991 24 5.73991 28 7.24664\")",
+          "end": "path(\"M 4 7 C 8 5 12 5 16 9 C 20 5 24 5 28 7\")"
         },
-        "frames": 338,
-        "first": {
-          "t": 863.5,
-          "phase": "idle",
-          "width": 1860,
-          "x": 0,
-          "clip": "none",
-          "backdropTransform": "none",
-          "backdropClip": "none",
-          "backdrop": "rgb(1, 4, 9)",
-          "homeColor": "#010409",
-          "modelHeight": 1000,
-          "canvasHeight": 1032,
-          "backdropWidth": 1919.987548828125,
-          "shellWidth": 1919.987548828125,
-          "frost": 0,
-          "brand": 0,
-          "panelX": 1919.9776611328125,
-          "canvasPreserved": true
-        },
-        "last": {
-          "t": 2273.6000000089407,
-          "phase": "idle",
-          "width": 1860,
-          "x": -465.113,
-          "clip": "none",
-          "backdropTransform": "none",
-          "backdropClip": "none",
-          "backdrop": "rgb(1, 4, 9)",
-          "homeColor": "#010409",
-          "modelHeight": 1000,
-          "canvasHeight": 1032,
-          "backdropWidth": 1919.987548828125,
-          "shellWidth": 1919.987548828125,
-          "frost": 1,
-          "brand": 1,
-          "panelX": 959.991943359375,
-          "canvasPreserved": true
-        }
+        "click": true,
+        "keyboard": true,
+        "rapidToggle": true,
+        "canvasReused": true
       }
     ],
-    "reverseMotion": {
-      "passed": true,
-      "frames": 291,
-      "rapidReturn": true
-    },
-    "backdropPixels": {
-      "passed": true,
-      "checks": [
-        {
-          "appearance": "dark",
-          "expected": [
-            1,
-            4,
-            9
-          ],
-          "observed": [
-            1,
-            3,
-            9
-          ],
-          "probe": {
-            "x": 1586.6929473876953,
-            "y": 309.59999999999997,
-            "gap": 233.42074584960938,
-            "backdrop": "rgb(1, 4, 9)",
-            "sceneBounds": {
-              "x": 0.0062255859375,
-              "width": 1919.987548828125
-            },
-            "panelLeft": 1703.4033203125,
-            "modelRight": 1469.9825744628906
-          }
-        },
-        {
-          "appearance": "light",
-          "expected": [
-            1,
-            4,
-            9
-          ],
-          "observed": [
-            1,
-            3,
-            9
-          ],
-          "probe": {
-            "x": 1586.6929473876953,
-            "y": 309.59999999999997,
-            "gap": 233.42074584960938,
-            "backdrop": "rgb(1, 4, 9)",
-            "sceneBounds": {
-              "x": 0.0062255859375,
-              "width": 1919.987548828125
-            },
-            "panelLeft": 1703.4033203125,
-            "modelRight": 1469.9825744628906
-          }
-        }
-      ]
-    },
     "windowControls": {
       "restore": true,
       "maximize": true,
@@ -324,30 +192,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-04T12:24:12.8611801+08:00",
-      "NativePid": 36968,
-      "StartedAt": "2026-10-04T12:23:55.2945253+08:00",
-      "WindowHandle": 1116266,
+      "SampledAt": "2026-10-04T13:29:42.4418769+08:00",
+      "NativePid": 41596,
+      "StartedAt": "2026-10-04T13:29:19.9031873+08:00",
+      "WindowHandle": 1378450,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        36968,
-        37840,
-        24788,
-        41788,
-        39496,
-        30768,
-        30744,
-        36580,
-        8860,
-        31936,
-        37700
+        41596,
+        9036,
+        41924,
+        36080,
+        31264,
+        38796,
+        41028,
+        1976,
+        30116,
+        7392,
+        13044
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1916.3,
-      "GpuDedicatedBytes": 3310006272,
-      "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 17651156,
+      "NormalizedCpuPercent": 5,
+      "WorkingSetMiB": 1878.2,
+      "GpuDedicatedBytes": 3304353792,
+      "MaxGpuEngineUtilization": 11,
+      "FreeRamKiB": 17504340,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -405,11 +273,11 @@
       "Existing legacy remote asset CSP diagnostics remain; no new errors. Account authentication and Task business lifecycle were not changed."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\account-home-backdrop-20261004\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\account-home-backdrop-20261004\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\account-home-backdrop-20261004\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\account-home-backdrop-20261004\\production-build-corrected.log",
-      "D:\\preacherman\\output\\playwright\\account-home-backdrop-20261004\\backdrop-pixels.json"
+      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\task-view-icon-20261004\\preview-report.json"
     ]
   },
   "releaseAttempts": [
@@ -1241,9 +1109,18 @@
       "deployedAt": "2026-10-04T12:22:13.5831072+08:00",
       "verifiedAt": "2026-10-04T12:24:12.8611801+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-backdrop-before-20261004"
+    },
+    {
+      "buildId": "task-view-icon-20261004",
+      "sourceCommit": "93d1824ad64bada57618dbb39327352e286cd0ca",
+      "sha256": "41334B30E0DE92E0B015091B60A2A8088536A0681B1D12004A922E9AEF763B4D",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-04T13:27:44.1411172+08:00",
+      "verifiedAt": "2026-10-04T13:29:42.4418769+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-view-icon-before-20261004"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-backdrop-before-20261004/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-view-icon-before-20261004/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
