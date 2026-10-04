@@ -20,11 +20,24 @@ for(const appearance of ['light','dark'])test(`Account defines every glass, form
 test('Account entry preserves a single shared model and does not replace the selected avatar',()=>{
  const app=read('src/App.tsx');
  assert.equal((app.match(/<CortanaModelStage\b/g)||[]).length,1);
- assert.match(app,/cameraFraming=\{activeSurfaceType === "account"/);
+ assert.match(app,/cameraFraming=\{!accountHomeHandoff && \(activeSurfaceType === "account"/);
  assert.match(app,/isolateCompanion=\{activeSurfaceType === "account"/);
  assert.match(app,/sceneContent=\{activeSurfaceType === "account" \? <AccountSceneCapture/);
- assert.match(account,/account-left 820ms/);assert.match(account,/account-right 760ms 420ms/);
+ assert.match(account,/from \{ transform: translateX\(0\); clip-path: inset\(0 0%\); \}/);
+ assert.match(account,/account-right 760ms 420ms/);
  assert.match(account,/@media \(prefers-reduced-motion: reduce\)/);
+});
+
+for (const appearance of ['light', 'dark']) test(`Account blends the existing Home scene and reverses all layers in ${appearance}`, () => {
+ const motion = read('src/app-shell/surfaceMotion.ts');
+ const app = read('src/App.tsx');
+ assert.match(app, /accountHomeHandoff = navigationPhase === "exiting"[\s\S]*?activeSurfaceType === "account" \|\| routeSurface\(navigationTarget\) === "account"/);
+ assert.doesNotMatch(account, /translateX\(-75%\)|translateX\(-100%\)/);
+ for (const name of ['account-scene-left', 'account-light', 'account-brand', 'account-vignette', 'account-right']) {
+  assert.ok(motion.includes(`"${name}"`), `${name} must reverse with page navigation`);
+ }
+ assert.match(account, /\.account__mark, \.account__signature \{ animation: account-brand 600ms 420ms/);
+ assert.match(account, /prefers-reduced-motion: reduce[\s\S]*\.account-frost, \.account__fade, \.account__mark, \.account__signature, \.account__main/);
 });
 test('The Account lens uses only authored scene pixels, and login feedback is local',()=>{
  assert.match(scene,/gl\.render\(scene, camera\)/);

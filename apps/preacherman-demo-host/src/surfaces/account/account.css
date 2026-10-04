@@ -7,19 +7,21 @@
 .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene {
   transform: translateX(-25%);
   clip-path: inset(0 25%);
-  animation: account-scene-left 820ms cubic-bezier(.22, 1, .36, 1) both;
+  animation: account-scene-left 1050ms cubic-bezier(.22, 1, .36, 1) both;
   background: transparent;
   /* The live canvas and its refracted copy hand off on the same frame. */
   transition: transform 1050ms cubic-bezier(.22, 1, .36, 1);
 }
-.demo-app-shell[data-active-surface="account"] .demo-app-shell__scene::after { display: none; }
+.demo-app-shell[data-active-surface="account"] .demo-app-shell__scene::after { animation: account-vignette 820ms ease both; }
 .demo-app-shell[data-active-surface="account"]:has(.account[data-lens-active="true"]) .demo-app-shell__scene { opacity: 0; transition: none; }
-.account-frost { position: absolute; left: 25%; top: 0; width: 50%; height: 100%; }
+.account-frost { position: absolute; left: 25%; top: 0; width: 50%; height: 100%; animation: account-light 1050ms ease both; }
 .account {
   position: absolute; inset: 0; z-index: 2; display: flex; overflow: hidden;
   color: var(--demo-theme-account-text); font-family: Arial, "Account Harmony", sans-serif;
 }
-.account__visual { position: relative; width: 50%; height: 100%; overflow: hidden; flex-shrink: 0; animation: account-left 820ms cubic-bezier(.22, 1, .36, 1) both; }
+.account__visual { position: relative; width: 50%; height: 100%; overflow: hidden; flex-shrink: 0; }
+.account__fade { animation: account-light 1050ms ease both; }
+.account__mark, .account__signature { animation: account-brand 600ms 420ms ease both; }
 .account__fade { position: absolute; inset: 0; background: linear-gradient(transparent, var(--demo-theme-account-fade-mid) 44%, var(--demo-theme-account-fade-end)); pointer-events: none; }
 .account__mark { position: absolute; top: 50%; left: 50%; width: 184px; height: 184px; transform: translate(-50%, -64%); object-fit: contain; filter: drop-shadow(0 2px 5px var(--demo-theme-account-brand-shadow)); }
 .account__signature {
@@ -72,12 +74,18 @@
 .account__dialog p { color: var(--demo-theme-account-muted); font-size: 15px; line-height: 24px; }
 .account__sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .account[data-lens-active="true"] .account__signature { color: var(--demo-theme-account-profile-text); text-shadow: none; }
-@keyframes account-scene-left { from { transform: translateX(-75%); } to { transform: translateX(-25%); } }
-@keyframes account-left { from { transform: translateX(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes account-scene-left {
+  from { transform: translateX(0); clip-path: inset(0 0%); }
+  to { transform: translateX(-25%); clip-path: inset(0 25%); }
+}
+@keyframes account-light { from { opacity: 0; } to { opacity: 1; } }
+@keyframes account-brand { from { opacity: 0; } to { opacity: 1; } }
+@keyframes account-vignette { from { opacity: 1; } to { opacity: 0; } }
 @keyframes account-right { from { transform: translateX(100%); } to { transform: none; } }
 @keyframes account-profile { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .account__visual, .account__main, .account__profile { animation: none; }
+  .account-frost, .account__fade, .account__mark, .account__signature, .account__main, .account__profile { animation: none; }
+  .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene::after { animation: none; opacity: 0; }
   .demo-app-shell__scene { transition: none; }
   .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene { animation: none; transition: none; }
 }

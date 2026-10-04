@@ -19,7 +19,7 @@ export function heldTrack(element: Element, frames: Keyframe[], duration: number
 const entranceNames: Partial<Record<LocalSurfaceType, string[]>> = {
   workspace: ["demo-surface-unfold", "demo-surface-line-sweep"],
   settings: ["settings-menu-arrive", "execution-mode-arrive"],
-  account: ["account-scene-left", "account-left", "account-right", "account-profile"],
+  account: ["account-scene-left", "account-light", "account-brand", "account-vignette", "account-right", "account-profile"],
   asset: ["demo-frost-enter"], extension: ["demo-frost-enter"],
 };
 

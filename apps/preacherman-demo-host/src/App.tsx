@@ -151,6 +151,10 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
     ? route.surfaceType
     : "home";
   const isFrostedSurface = activeSurfaceType === "asset" || activeSurfaceType === "extension";
+  // Reveal Home's framing beneath the outgoing page before Account takes over.
+  // The shared camera also returns there while Account retraces its entrance.
+  const accountHomeHandoff = navigationPhase === "exiting"
+    && (activeSurfaceType === "account" || routeSurface(navigationTarget) === "account");
   const [preferences, setPreferences] = useState(readPreferences);
   const [showStartupIntro, setShowStartupIntro] = useState(startupIntroEnabled);
   const [animateMainEntrance] = useState(showStartupIntro || enteringOnMount);
@@ -406,7 +410,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           ariaLabel={`Persistent ${avatarModelName(sceneModelId ?? "cortana")} companion scene`}
           environment="cinematic"
           isolateCompanion={activeSurfaceType === "account" || (activeSurfaceType === "market" && galleryDetailOpen)}
-          cameraFraming={activeSurfaceType === "account" || activeSurfaceType === "market" || activeSurfaceType === "settings" ? "portrait" : "full-body"}
+          cameraFraming={!accountHomeHandoff && (activeSurfaceType === "account" || activeSurfaceType === "market" || activeSurfaceType === "settings") ? "portrait" : "full-body"}
           modelId={sceneModelId ?? "cortana"}
           companionVisible={sceneModelId !== null}
           sceneContent={activeSurfaceType === "account" ? <AccountSceneCapture /> : galleryBridge ? <GalleryOrbitCards bridge={galleryBridge} active={activeSurfaceType === "market"} renderActive={windowActive} /> : null}

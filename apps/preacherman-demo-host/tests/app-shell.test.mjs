@@ -248,7 +248,7 @@ test("Home, Task, Settings, Gallery, Asset, and Extension share the persistent s
   assert.match(app, /const galleryModelId = galleryDetailOpen \? galleryPreviewModelId : activeModelId;/);
   assert.match(app, /const sceneModelId = activeSurfaceType === "market" \? galleryModelId : activeModelId;/);
   assert.match(app, /sceneModelId \|\| activeSurfaceType === "market" \? \(/);
-  assert.match(app, /cameraFraming=\{activeSurfaceType === "account" \|\| activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"\}/);
+  assert.match(app, /cameraFraming=\{!accountHomeHandoff && \(activeSurfaceType === "account" \|\| activeSurfaceType === "market" \|\| activeSurfaceType === "settings"\) \? "portrait" : "full-body"\}/);
   assert.equal((app.match(/<CortanaModelStage\b/g) ?? []).length, 1);
   assert.doesNotMatch(app, /sceneHidden=/);
   assert.doesNotMatch(shell, /Math\.max\(window\.innerWidth\s*\/\s*1800/);
