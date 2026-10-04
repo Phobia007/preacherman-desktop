@@ -3,7 +3,7 @@ async function verifyAudio(p,appearance,shot){
  const dock=p.locator('.demo-audio-dock'), settings=p.getByRole('button',{name:'Audio settings',exact:true});
  assert.equal(await dock.locator('i').count(),5);assert.equal((await dock.innerText()).trim(),'');
  const style=await dock.evaluate(e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return{font:s.fontFamily,color:s.color,background:s.backgroundColor,right:innerWidth-r.right,bottom:innerHeight-r.bottom};});
- assert.match(style.font,/Clash Display/);assert.ok(style.right>=20&&style.bottom>=10);assert.equal(style.background,'rgba(0, 0, 0, 0)');assert.ok(parseFloat(style.color.match(/[\d.]+/)[0])>150,'Home waveform stays visible over the cinematic scene in either appearance');
+ assert.match(style.font,/Clash Display/);assert.ok(style.right>=10&&style.bottom>=10);assert.equal(style.background,'rgba(0, 0, 0, 0)');assert.ok(parseFloat(style.color.match(/[\d.]+/)[0])>150,'Home waveform stays visible over the cinematic scene in either appearance');
  assert.ok(await dock.locator('i').evaluateAll(es=>es.every(e=>getComputedStyle(e).boxShadow!=='none')),'Each glyph has an edge for moving light video backgrounds');
  await settings.click();await p.getByRole('dialog',{name:'Audio settings'}).waitFor();
  assert.equal(await p.locator('#preacherman-audio-input').evaluate(e=>document.activeElement===e),true);
@@ -35,3 +35,14 @@ async function verifyAudio(p,appearance,shot){
  return {appearance,...style,panel,soundReactive:true,silentStationary:true,release:true,permissionError:true};
 }
 module.exports=verifyAudio;
+module.exports.verifyLayout=async function(p,appearance,shot){
+ const dock=p.locator('.demo-audio-dock'),settings=dock.locator('.demo-audio-dock__options');
+ const layout=await dock.evaluate(e=>{const s=getComputedStyle(e),button=e.querySelector('.demo-audio-dock__options');return {width:parseFloat(s.width),right:parseFloat(s.right),height:parseFloat(s.height),gap:parseFloat(s.gap),buttonWidth:parseFloat(getComputedStyle(button).width),color:s.color,dots:[...button.querySelectorAll('circle')].map(c=>({x:c.cx.baseVal.value,y:c.cy.baseVal.value}))};});
+ assert.equal(layout.width,72);assert.equal(layout.right,18);assert.equal(layout.gap,0);assert.equal(layout.height,44);assert.equal(layout.buttonWidth,28);
+ assert.equal(new Set(layout.dots.map(d=>d.x)).size,1);assert.deepEqual(layout.dots.map(d=>d.y),[4,11,18]);
+ assert.equal(await dock.getAttribute('data-state'),'idle');await shot(p,appearance+'-compact');
+ await settings.click();await p.getByRole('dialog',{name:'Audio settings'}).waitFor();
+ const panel=await p.locator('.demo-audio-dock__panel').evaluate(e=>({color:getComputedStyle(e).color,background:getComputedStyle(e).backgroundColor}));assert.notEqual(panel.color,panel.background);
+ await p.keyboard.press('Escape');assert.equal(await settings.getAttribute('aria-expanded'),'false');assert.equal(await dock.getAttribute('data-state'),'idle');
+ return {appearance,...layout,panel,settingsOpened:true,escapeClosed:true};
+};

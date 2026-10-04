@@ -176,8 +176,8 @@ export function AudioDock() {
     </button>
     <button ref={optionsButton} type="button" className="demo-audio-dock__options" aria-label="Audio settings"
       aria-expanded={open} aria-controls="preacherman-audio-settings" aria-haspopup="dialog" onClick={() => setOpen(value => !value)}>
-      <svg width="22" height="12" viewBox="0 0 22 12" fill="currentColor" aria-hidden="true">
-        <circle cx="4" cy="6" r="1.5" /><circle cx="11" cy="6" r="1.5" /><circle cx="18" cy="6" r="1.5" />
+      <svg width="12" height="22" viewBox="0 0 12 22" fill="currentColor" aria-hidden="true">
+        <circle cx="6" cy="4" r="1.5" /><circle cx="6" cy="11" r="1.5" /><circle cx="6" cy="18" r="1.5" />
       </svg>
     </button>
     {open && <section className="demo-audio-dock__panel" id="preacherman-audio-settings" role="dialog" aria-label="Audio settings">

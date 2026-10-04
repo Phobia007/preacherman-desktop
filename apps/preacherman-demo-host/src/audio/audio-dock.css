@@ -6,12 +6,12 @@
   --audio-loading: var(--demo-theme-member-loading);
   --audio-error: var(--demo-theme-member-error);
   position: absolute;
-  right: 34px;
+  right: 18px;
   bottom: 19px;
   z-index: 21;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0;
   height: 44px;
   font-family: var(--demo-font-primary);
   color: var(--audio-rest);
@@ -39,6 +39,7 @@
   transition: color 160ms ease;
 }
 .demo-audio-dock > button:hover { color: var(--audio-hover); }
+.demo-audio-dock > .demo-audio-dock__options { width: 28px; }
 .demo-audio-dock > button:focus-visible { outline: 1px solid var(--audio-focus); outline-offset: 2px; }
 .demo-audio-dock__wave { display: flex; align-items: center; gap: 4px; height: 34px; }
 .demo-audio-dock__wave i { display: block; width: 3px; border-radius: 4px; background: currentColor; transition: height 85ms ease-out; }
