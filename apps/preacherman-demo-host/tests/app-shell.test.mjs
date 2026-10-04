@@ -91,7 +91,7 @@ test("hamburger opens a click-only, opaque six-item Clash Display navigation dra
   assert.match(shell, /className="demo-app-shell__brand-backdrop"[\s\S]*onClick=\{closeBrandNavigation\}/);
   assert.match(shell, /event\.key !== "Escape"/);
   assert.doesNotMatch(shell, /onMouseEnter|onMouseLeave|brandNavigationPinned|window.setTimeout/);
-  assert.match(shell, /onClick=\{\(\) => setBrandNavigationOpen\(\(open\) => !open\)\}/);
+  assert.match(shell, /onClick=\{\(\) => \{ if \(!brandNavigationOpen\) setDrawerView\("menu"\); setBrandNavigationOpen\(\(open\) => !open\); \}\}/);
   assert.match(shell, /onNavigate\(surfaceType\);[\s\S]*dispatch\(navigationCommand\(surfaceType\)\)/);
   const selectDestination = shell.match(/const selectBrandDestination =[^]*?\n  };/)?.[0] ?? "";
   assert.ok(selectDestination);

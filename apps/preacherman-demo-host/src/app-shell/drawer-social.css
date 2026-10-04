@@ -1,0 +1,57 @@
+/* The two bottom controls share the top hamburger/gear's exact inset and size. */
+.demo-drawer-pages, .demo-drawer-social-clip {
+  position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none;
+}
+.demo-drawer-pages .demo-app-shell__brand-menu {
+  transform: translate3d(0, 0, 0);
+  transition: transform 560ms cubic-bezier(.22, 1, .36, 1), visibility 0s linear 820ms;
+}
+.demo-drawer-pages:not([data-view="menu"]) .demo-app-shell__brand-menu { transform: translate3d(-288px, 0, 0); pointer-events: none; }
+.demo-drawer-social {
+  position: absolute; inset: 72px 0; padding: 22px 24px; box-sizing: border-box;
+  display: flex; flex-direction: column; overflow: auto; scrollbar-width: thin;
+  scrollbar-color: var(--demo-theme-brand-menu-edge) transparent;
+  color: var(--demo-theme-brand-menu-text); font-family: var(--demo-font-primary);
+  transform: translate3d(100%, 0, 0); visibility: hidden; pointer-events: none;
+  transition: transform 560ms cubic-bezier(.22, 1, .36, 1), opacity 160ms ease, visibility 0s linear 560ms;
+}
+.demo-drawer-social[data-visible="true"] { transform: translate3d(0, 0, 0); visibility: visible; pointer-events: auto; transition-delay: 0s; }
+.demo-app-shell__brand-navigation[data-open="false"] .demo-drawer-social { opacity: 0; }
+.demo-drawer-social__heading { display: flex; align-items: center; gap: 8px; }
+.demo-drawer-social__heading h2 { margin: 0; font: 300 28px/1.2 var(--demo-font-primary); letter-spacing: .018em; }
+.demo-drawer-social__heading button, .demo-drawer-social-actions button {
+  display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; padding: 0;
+  border: 0; background: transparent; color: var(--demo-theme-brand-menu-text); cursor: pointer;
+  transition: color 180ms ease;
+}
+.demo-drawer-social__heading svg { width: 24px; height: 24px; }
+.demo-drawer-social__empty { margin: auto 0; padding: 40px 12px; text-align: center; }
+.demo-drawer-social__empty > svg { width: 34px; height: 34px; opacity: .6; }
+.demo-drawer-social__empty p { margin: 18px 0 0; font-size: 14px; font-weight: 300; line-height: 1.65; }
+.demo-drawer-social-reveal {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  transform: translate3d(-100%, 0, 0); transition: transform 820ms cubic-bezier(.76, 0, .16, 1);
+}
+.demo-app-shell__brand-navigation[data-open="true"] .demo-drawer-social-reveal { transform: translate3d(0, 0, 0); }
+.demo-drawer-social-actions {
+  position: absolute; left: 16px; right: 16px; bottom: 6px;
+  display: flex; justify-content: space-between; opacity: 0; visibility: hidden; transform: translateY(14px);
+  transition: opacity 160ms ease, transform 240ms ease, visibility 0s linear 820ms;
+}
+.demo-app-shell__brand-navigation[data-open="true"] .demo-drawer-social-actions {
+  opacity: 1; visibility: visible; transform: translateY(0);
+  transition: opacity 380ms cubic-bezier(.16, 1, .3, 1) 600ms, transform 460ms cubic-bezier(.16, 1, .3, 1) 600ms, visibility 0s;
+}
+.demo-app-shell__brand-navigation[data-open="true"] .demo-drawer-social-actions button { pointer-events: auto; }
+.demo-drawer-social-actions svg { width: 28px; height: 28px; }
+.demo-drawer-social button:hover, .demo-drawer-social-actions button:hover,
+.demo-drawer-social button:focus-visible, .demo-drawer-social-actions button:focus-visible,
+.demo-drawer-social-actions button[aria-expanded="true"] { color: var(--demo-theme-brand-menu-text-hover); }
+.demo-drawer-social button:focus-visible, .demo-drawer-social-actions button:focus-visible {
+  outline: 1px solid var(--demo-theme-brand-menu-focus); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-drawer-pages .demo-app-shell__brand-menu, .demo-drawer-social,
+  .demo-drawer-social-reveal, .demo-drawer-social-actions,
+  .demo-app-shell__brand-navigation[data-open="true"] .demo-drawer-social-actions { transition: none; }
+}

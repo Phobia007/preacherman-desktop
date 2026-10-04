@@ -8,6 +8,7 @@ import { AudioDock } from "../audio/AudioDock";
 import { WindowControls } from "./WindowControls";
 import { WindowResizeHandles } from "./WindowResizeHandles";
 import { brandNavigationItems } from "./navigationDestinations";
+import { DrawerSocial, type DrawerView } from "./DrawerSocial";
 
 interface AppShellProps {
   readonly activeSurfaceType: string;
@@ -42,6 +43,7 @@ export function AppShell({
   const member = useSyncExternalStore(accountProfile.subscribe, accountProfile.getSnapshot);
   const brandButtonRef = useRef<HTMLButtonElement>(null);
   const [brandNavigationOpen, setBrandNavigationOpen] = useState(false);
+  const [drawerView, setDrawerView] = useState<DrawerView>("menu");
   const accountDockHidden = brandNavigationOpen;
   const [scale, setScale] = useState(() => {
     if (typeof window === "undefined") return 1;
@@ -141,7 +143,7 @@ export function AppShell({
             aria-expanded={brandNavigationOpen}
             aria-label={brandNavigationOpen ? "Close Preacherman navigation" : "Open Preacherman navigation"}
             className="demo-app-shell__brand-trigger"
-            onClick={() => setBrandNavigationOpen((open) => !open)}
+            onClick={() => { if (!brandNavigationOpen) setDrawerView("menu"); setBrandNavigationOpen((open) => !open); }}
             ref={brandButtonRef}
             type="button"
           >
@@ -165,8 +167,10 @@ export function AppShell({
             </svg>
           </button>
           </div>
+          <div className="demo-drawer-pages" data-view={drawerView}>
           <nav
-            aria-hidden={!brandNavigationOpen}
+            aria-hidden={!brandNavigationOpen || drawerView !== "menu"}
+            ref={element => element?.toggleAttribute("inert", !brandNavigationOpen || drawerView !== "menu")}
             aria-label="Preacherman sections"
             className="demo-app-shell__brand-menu"
             id="preacherman-brand-navigation"
@@ -177,7 +181,7 @@ export function AppShell({
                   aria-current={navigationTarget === item.surfaceType ? "page" : undefined}
                   className="demo-app-shell__brand-menu-item"
                   onClick={() => selectBrandDestination(item.surfaceType)}
-                  tabIndex={brandNavigationOpen ? 0 : -1}
+                  tabIndex={brandNavigationOpen && drawerView === "menu" ? 0 : -1}
                   type="button"
                 >
                   <span className="demo-app-shell__brand-menu-label">{item.label}</span>
@@ -205,6 +209,8 @@ export function AppShell({
               </div>
             ))}
           </nav>
+          </div>
+          <DrawerSocial open={brandNavigationOpen} view={drawerView} onViewChange={setDrawerView} locale={locale} />
         </div>
         <WindowControls dispatch={dispatch} locale={locale} />
       </header>
