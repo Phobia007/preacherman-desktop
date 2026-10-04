@@ -10,6 +10,7 @@
   transition: none;
 }
 .demo-app-shell[data-active-surface="account"] .cortana-model-stage--persistent {
+  position: absolute;
   transform: translateX(-25%);
   animation: account-scene-left 1050ms cubic-bezier(.22, 1, .36, 1) both;
 }

@@ -69,6 +69,7 @@ for (const appearance of ['light', 'dark']) test(`Account keeps the entire Home 
  assert.doesNotMatch(backdrop, /transform:|clip-path:|animation:/);
  const movement = account.match(/@keyframes account-scene-left \{([\s\S]+?)\n\}/)[1];
  assert.doesNotMatch(movement, /clip-path/);
+ assert.match(account, /\.cortana-model-stage--persistent \{\s*position: absolute;/);
  assert.match(account, /\.account-frost \{[^}]*left: 0;/);
 });
 
