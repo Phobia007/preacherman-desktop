@@ -19,12 +19,11 @@
 .demo-app-shell__brand-navigation[data-open="false"] .demo-drawer-social { opacity: 0; }
 .demo-drawer-social__heading { display: flex; align-items: center; gap: 8px; }
 .demo-drawer-social__heading h2 { margin: 0; font: 300 28px/1.2 var(--demo-font-primary); letter-spacing: .018em; }
-.demo-drawer-social__heading button, .demo-drawer-social-actions button {
+.demo-drawer-social-actions button {
   display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; padding: 0;
   border: 0; background: transparent; color: var(--demo-theme-brand-menu-text); cursor: pointer;
   transition: color 180ms ease;
 }
-.demo-drawer-social__heading svg { width: 24px; height: 24px; }
 .demo-drawer-social__empty { margin: auto 0; padding: 40px 12px; text-align: center; }
 .demo-drawer-social__empty > svg { width: 34px; height: 34px; opacity: .6; }
 .demo-drawer-social__empty p { margin: 18px 0 0; font-size: 14px; font-weight: 300; line-height: 1.65; }
@@ -44,6 +43,41 @@
 }
 .demo-app-shell__brand-navigation[data-open="true"] .demo-drawer-social-actions button { pointer-events: auto; }
 .demo-drawer-social-actions svg { width: 28px; height: 28px; }
+.demo-drawer-social-actions__add { position: relative; z-index: 2; }
+.demo-drawer-social-actions__friends { position: relative; }
+.demo-drawer-social-actions__people, .demo-drawer-social-actions__back {
+  grid-area: 1 / 1; display: grid; transition: opacity 220ms ease, transform 320ms ease;
+}
+.demo-drawer-social-actions__back { opacity: 0; transform: translateX(5px); }
+.demo-drawer-social-actions__friends[data-back="true"] .demo-drawer-social-actions__people { opacity: 0; transform: translateX(-5px); }
+.demo-drawer-social-actions__friends[data-back="true"] .demo-drawer-social-actions__back { opacity: 1; transform: translateX(0); }
+.demo-drawer-social-actions[data-search-open="true"] > .demo-drawer-social-actions__friends { visibility: hidden; pointer-events: none; }
+.demo-drawer-friend-search {
+  position: absolute; inset: 0; z-index: 1; box-sizing: border-box;
+  display: flex; align-items: center; padding: 0 3px 0 48px; border-radius: 6px;
+  border: 1px solid var(--demo-theme-brand-menu-edge); background: var(--demo-theme-brand-menu-surface);
+  color: var(--demo-theme-brand-menu-text); pointer-events: none; visibility: hidden; opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 420ms cubic-bezier(.22, 1, .36, 1), opacity 180ms ease, visibility 0s linear 420ms;
+}
+.demo-drawer-social-actions[data-search-open="true"] .demo-drawer-friend-search {
+  clip-path: inset(0); opacity: 1; visibility: visible; pointer-events: auto; transition-delay: 0s;
+}
+.demo-drawer-friend-search:focus-within { border-color: var(--demo-theme-brand-menu-focus); }
+.demo-drawer-friend-search input {
+  width: 0; min-width: 0; flex: 1; height: 100%; padding: 0 4px; border: 0; outline: none;
+  background: transparent; color: var(--demo-theme-brand-menu-text-hover); font: 300 14px/1.4 var(--demo-font-primary);
+}
+.demo-drawer-friend-search input::placeholder { color: var(--demo-theme-brand-menu-text); opacity: 1; }
+.demo-drawer-friend-search button { width: 30px; height: 40px; }
+.demo-drawer-friend-search button svg { width: 22px; height: 22px; }
+.demo-drawer-friend-search button:disabled { opacity: .4; cursor: default; }
+.demo-drawer-friend-search__notice {
+  position: absolute; left: 0; right: 0; bottom: 100%; margin: 0 0 10px; padding: 10px 12px;
+  border: 1px solid var(--demo-theme-brand-menu-edge); border-radius: 6px;
+  background: var(--demo-theme-brand-menu-surface); color: var(--demo-theme-brand-menu-text);
+  font: 300 13px/1.5 var(--demo-font-primary);
+}
 .demo-drawer-social button:hover, .demo-drawer-social-actions button:hover,
 .demo-drawer-social button:focus-visible, .demo-drawer-social-actions button:focus-visible,
 .demo-drawer-social-actions button[aria-expanded="true"] { color: var(--demo-theme-brand-menu-text-hover); }
@@ -52,6 +86,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .demo-drawer-pages .demo-app-shell__brand-menu, .demo-drawer-social,
-  .demo-drawer-social-reveal, .demo-drawer-social-actions,
+  .demo-drawer-social-reveal, .demo-drawer-social-actions, .demo-drawer-friend-search,
+  .demo-drawer-social-actions__people, .demo-drawer-social-actions__back,
   .demo-app-shell__brand-navigation[data-open="true"] .demo-drawer-social-actions { transition: none; }
 }
