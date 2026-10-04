@@ -23,7 +23,7 @@ test('Account entry preserves a single shared model and does not replace the sel
  assert.match(app,/cameraFraming=\{!accountHomeHandoff && \(activeSurfaceType === "account"/);
  assert.match(app,/isolateCompanion=\{activeSurfaceType === "account"/);
  assert.match(app,/sceneContent=\{activeSurfaceType === "account" \? <AccountSceneCapture/);
- assert.match(account,/from \{ transform: translateX\(0\); clip-path: inset\(0 0%\); \}/);
+ assert.match(account,/from \{ transform: translateX\(0\); \}/);
  assert.match(account,/account-right 760ms 420ms/);
  assert.match(account,/@media \(prefers-reduced-motion: reduce\)/);
 });
@@ -60,7 +60,16 @@ test('Account keeps the companion rendering through the lens and reuses its cont
  assert.match(surface,/settled && progress === 0\) \{ disconnectFrames\(\); setPhase\("closed"\); \}/);
  assert.match(surface,/source.current!.subscribe\(\(\) => lens.current\?\.updateSource\(\)\)/);
  assert.match(account,/data-lens-active="false"\] .account__lens \{ visibility: hidden/);
- assert.match(account,/transition: transform 1050ms/);
+ assert.match(account,/\.cortana-model-stage--persistent \{[^}]*account-scene-left 1050ms/);
+});
+
+for (const appearance of ['light', 'dark']) test(`Account keeps the entire Home backdrop beneath the sliding panel in ${appearance}`, () => {
+ const backdrop = account.match(/data-active-surface="account"\] \.demo-app-shell__scene \{([^}]+)\}/)[1];
+ assert.match(backdrop, /background: var\(--demo-theme-home-canvas\)/);
+ assert.doesNotMatch(backdrop, /transform:|clip-path:|animation:/);
+ const movement = account.match(/@keyframes account-scene-left \{([\s\S]+?)\n\}/)[1];
+ assert.doesNotMatch(movement, /clip-path/);
+ assert.match(account, /\.account-frost \{[^}]*left: 0;/);
 });
 
 test("Apple and Codex icons share the existing theme-aware provider treatment", () => {

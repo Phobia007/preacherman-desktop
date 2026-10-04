@@ -3,18 +3,19 @@
   src: url("./assets/harmonyos-sans-sc.woff2") format("woff2");
   font-display: swap;
 }
-.demo-app-shell__scene { transition: opacity 260ms ease, visibility 0s linear, transform 1050ms cubic-bezier(.22, 1, .36, 1); }
 .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene {
-  transform: translateX(-25%);
-  clip-path: inset(0 25%);
-  animation: account-scene-left 1050ms cubic-bezier(.22, 1, .36, 1) both;
-  background: transparent;
+  /* Home stays full-screen beneath the moving login panel, including mid-motion. */
+  background: var(--demo-theme-home-canvas);
   /* The live canvas and its refracted copy hand off on the same frame. */
-  transition: transform 1050ms cubic-bezier(.22, 1, .36, 1);
+  transition: none;
+}
+.demo-app-shell[data-active-surface="account"] .cortana-model-stage--persistent {
+  transform: translateX(-25%);
+  animation: account-scene-left 1050ms cubic-bezier(.22, 1, .36, 1) both;
 }
 .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene::after { animation: account-vignette 820ms ease both; }
 .demo-app-shell[data-active-surface="account"]:has(.account[data-lens-active="true"]) .demo-app-shell__scene { opacity: 0; transition: none; }
-.account-frost { position: absolute; left: 25%; top: 0; width: 50%; height: 100%; animation: account-light 1050ms ease both; }
+.account-frost { position: absolute; left: 0; top: 0; width: 50%; height: 100%; animation: account-light 1050ms ease both; }
 .account {
   position: absolute; inset: 0; z-index: 2; display: flex; overflow: hidden;
   color: var(--demo-theme-account-text); font-family: Arial, "Account Harmony", sans-serif;
@@ -75,8 +76,8 @@
 .account__sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .account[data-lens-active="true"] .account__signature { color: var(--demo-theme-account-profile-text); text-shadow: none; }
 @keyframes account-scene-left {
-  from { transform: translateX(0); clip-path: inset(0 0%); }
-  to { transform: translateX(-25%); clip-path: inset(0 25%); }
+  from { transform: translateX(0); }
+  to { transform: translateX(-25%); }
 }
 @keyframes account-light { from { opacity: 0; } to { opacity: 1; } }
 @keyframes account-brand { from { opacity: 0; } to { opacity: 1; } }
@@ -87,7 +88,7 @@
   .account-frost, .account__fade, .account__mark, .account__signature, .account__main, .account__profile { animation: none; }
   .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene::after { animation: none; opacity: 0; }
   .demo-app-shell__scene { transition: none; }
-  .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene { animation: none; transition: none; }
+  .demo-app-shell[data-active-surface="account"] .cortana-model-stage--persistent { animation: none; }
 }
 
 .account__provider:disabled { cursor: wait; opacity: .6; }
