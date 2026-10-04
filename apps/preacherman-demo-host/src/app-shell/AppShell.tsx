@@ -70,10 +70,17 @@ export function AppShell({
       event.preventDefault();
       closeBrandNavigation();
     };
+    const closeBeyondSidebar = (event: PointerEvent) => {
+      if (event.pointerType === "mouse" && event.clientX > window.innerWidth / 3) {
+        closeBrandNavigation();
+      }
+    };
 
     document.addEventListener("keydown", closeOnEscape);
+    document.addEventListener("pointermove", closeBeyondSidebar, { passive: true });
     return () => {
       document.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener("pointermove", closeBeyondSidebar);
     };
   }, [brandNavigationOpen]);
 
@@ -124,11 +131,6 @@ export function AppShell({
         <div
           className="demo-app-shell__brand-navigation"
           data-open={brandNavigationOpen ? "true" : "false"}
-          onPointerLeave={(event) => {
-            if (brandNavigationOpen && event.pointerType === "mouse") {
-              closeBrandNavigation();
-            }
-          }}
           onBlur={(event) => {
             if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
               setBrandNavigationOpen(false);

@@ -96,8 +96,11 @@ test("hamburger opens a click-only, opaque six-item Clash Display navigation dra
   const selectDestination = shell.match(/const selectBrandDestination =[^]*?\n  };/)?.[0] ?? "";
   assert.ok(selectDestination);
   assert.doesNotMatch(selectDestination, /closeBrandNavigation|setBrandNavigationOpen/);
-  assert.match(shell, /onPointerLeave=\{\(event\) => \{\s*if \(brandNavigationOpen && event.pointerType === "mouse"\) \{\s*closeBrandNavigation\(\)/);
-  assert.ok(shell.indexOf('className="demo-app-shell__brand-backdrop"') < shell.indexOf('className="demo-app-shell__brand-navigation"'), "outside backdrop must not enlarge the panel's pointer-leave boundary");
+  assert.doesNotMatch(shell, /onPointerLeave/);
+  assert.match(shell, /event.pointerType === "mouse" && event.clientX > window.innerWidth \/ 3/);
+  assert.match(shell, /document.addEventListener\("pointermove", closeBeyondSidebar, \{ passive: true \}\)/);
+  assert.match(shell, /document.removeEventListener\("pointermove", closeBeyondSidebar\)/);
+  assert.ok(shell.indexOf('className="demo-app-shell__brand-backdrop"') < shell.indexOf('className="demo-app-shell__brand-navigation"'), "outside-click backdrop stays below the drawer controls");
   assert.match(styles, /\.demo-app-shell__brand-navigation\[data-open="true"\]\s*\{\s*pointer-events: auto/);
   assert.match(styles, /\.demo-app-shell__brand-backdrop\[data-open="true"\]/);
   assert.match(styles, /--demo-theme-brand-menu-corner-radius:\s*8px/);
