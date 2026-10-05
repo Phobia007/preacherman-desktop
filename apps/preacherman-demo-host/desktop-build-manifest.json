@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "drawer-boundary-20261004",
+  "buildId": "asset-characters-20261006",
   "productVersion": "0.1.0",
-  "sourceTask": "inline-friend-search-footer-return-navigation-hover-buffer-and-compact-audio-controls",
+  "sourceTask": "asset-local-character-collection-and-mapped-english-details",
   "sourceThread": null,
-  "sourceState": "Bottom plus reveals an inline friend search over the right footer icon, with clear, Enter/arrow submit, draft retention and Escape close. Real friend APIs intentionally deferred by user; submit reports not connected without fabricated results. Friends heading back arrow removed; footer people icon becomes a left return arrow. Left drawer remains open within the left third of the window. Audio options use vertical dots, a 28px button, zero gap and 18px right inset. No account, audio or backend behavior changes.",
-  "sourceCommit": "350395000e85ec46bee991b8a6a4747b50a91255",
+  "sourceState": "Asset now contains the eleven supplied NieR character cards mapped by stable id to local English details. Card hover, noise, English text and artwork, detail composition, scrolling parallax and thumbnail selection preserved. Promotional external card and original site chrome omitted. Asset frost/header and page transition preserved; no external navigation or runtime dependency on reference servers. Extension unchanged.",
+  "sourceCommit": "bee0bf92a3205a7d0d4a77d783416d1e45a45ff5",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-04T22:18:07.4399781+08:00",
-  "deployedAt": "2026-10-04T22:19:26.6967325+08:00",
-  "verifiedAt": "2026-10-04T22:22:44.9687378+08:00",
-  "sizeBytes": 596249088,
-  "sha256": "D44401B02F003DAB9EA678AF08BBB60462F097BD8536EA2B142BC1AB955B6811",
+  "builtAt": "2026-10-06T02:28:44.2054177+08:00",
+  "deployedAt": "2026-10-06T02:29:12.5883524+08:00",
+  "verifiedAt": "2026-10-06T02:31:28.7958384+08:00",
+  "sizeBytes": 611517952,
+  "sha256": "9EDACDC30DDDEAA9AB667D7C1229FCDB4121F4B50E6A3B75CBE7443664131940",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-boundary-before-20261004/preacherman-demo-host.exe",
-  "backupSha256": "A4D3491E58DAA64C7E33189DF6ED7DDA9004EC74940A45BD2BAACE330D4AD40D",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-boundary-before-20261004/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-characters-before-20261006/preacherman-demo-host.exe",
+  "backupSha256": "D44401B02F003DAB9EA678AF08BBB60462F097BD8536EA2B142BC1AB955B6811",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-characters-before-20261006/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "106eac060a2533f9142d166456a238a55c232f1e",
-  "previousVerificationCommit": "106eac060a2533f9142d166456a238a55c232f1e",
+  "rollbackBaselineCommit": "350395000e85ec46bee991b8a6a4747b50a91255",
+  "previousVerificationCommit": "350395000e85ec46bee991b8a6a4747b50a91255",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 22,
+      "focusedTests": 15,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Inline friend search, clear, Enter/arrow submission, Escape, draft preservation, aligned corners and footer return icon checked in both modes. Directory, friends and inline search stay open through the left third, close beyond it, and preserve outside-click/Escape on Home and Account. Restored-window boundary checked. Compact vertical audio options and settings interaction checked. Core navigation, window controls, normal shortcut restart and process cleanup completed.",
+    "nativeFlow": "Canonical shortcut cold launch. All eleven cards map to local English details and return to the collection; second appearance checks cards, details, textures and selected thumb. Shared frost and header, core navigation, window controls, normal restart and cleanup checked.",
     "navigation": [
       "Home",
       "Task",
@@ -140,303 +140,49 @@
         "ready": true
       }
     ],
-    "boundary": [
+    "assets": [
       {
         "appearance": "dark",
-        "context": "home",
-        "width": 1920,
-        "checks": [
-          {
-            "view": "menu",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "friends",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "search",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          }
+        "cards": 11,
+        "mappedDetails": [
+          "id01",
+          "id02",
+          "id03",
+          "id04",
+          "id05",
+          "id06",
+          "id07",
+          "id08",
+          "id09",
+          "id10",
+          "id11"
         ],
-        "outsideClick": true,
-        "escape": true
-      },
-      {
-        "appearance": "dark",
-        "context": "account",
-        "width": 1920,
-        "checks": [
-          {
-            "view": "menu",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "friends",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "search",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          }
-        ],
-        "outsideClick": true,
-        "escape": true
+        "internalOnly": true,
+        "thumbnailSwitch": true,
+        "escapeBack": true,
+        "returnFocus": true,
+        "glass": "blur(12px)"
       },
       {
         "appearance": "light",
-        "context": "home",
-        "width": 1920,
-        "checks": [
-          {
-            "view": "menu",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "friends",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "search",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          }
+        "cards": 11,
+        "mappedDetails": [
+          "id01"
         ],
-        "outsideClick": true,
-        "escape": true
-      },
-      {
-        "appearance": "light",
-        "context": "account",
-        "width": 1920,
-        "checks": [
-          {
-            "view": "menu",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "friends",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "search",
-            "drawerEdge": 297.2159729003906,
-            "threshold": 640,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          }
-        ],
-        "outsideClick": true,
-        "escape": true
-      }
-    ],
-    "audioLayout": [
-      {
-        "appearance": "dark",
-        "width": 72,
-        "right": 18,
-        "height": 44,
-        "gap": 0,
-        "buttonWidth": 28,
-        "color": "rgb(162, 170, 174)",
-        "dots": [
-          {
-            "x": 6,
-            "y": 4
-          },
-          {
-            "x": 6,
-            "y": 11
-          },
-          {
-            "x": 6,
-            "y": 18
-          }
-        ],
-        "panel": {
-          "color": "rgb(245, 243, 239)",
-          "background": "rgb(13, 14, 14)"
-        },
-        "settingsOpened": true,
-        "escapeClosed": true
-      },
-      {
-        "appearance": "dark",
-        "width": 72,
-        "right": 18,
-        "height": 44,
-        "gap": 0,
-        "buttonWidth": 28,
-        "color": "rgb(149, 154, 156)",
-        "dots": [
-          {
-            "x": 6,
-            "y": 4
-          },
-          {
-            "x": 6,
-            "y": 11
-          },
-          {
-            "x": 6,
-            "y": 18
-          }
-        ],
-        "panel": {
-          "color": "rgb(245, 243, 239)",
-          "background": "rgb(13, 14, 14)"
-        },
-        "settingsOpened": true,
-        "escapeClosed": true
-      },
-      {
-        "appearance": "light",
-        "width": 72,
-        "right": 18,
-        "height": 44,
-        "gap": 0,
-        "buttonWidth": 28,
-        "color": "rgb(167, 175, 179)",
-        "dots": [
-          {
-            "x": 6,
-            "y": 4
-          },
-          {
-            "x": 6,
-            "y": 11
-          },
-          {
-            "x": 6,
-            "y": 18
-          }
-        ],
-        "panel": {
-          "color": "rgb(24, 24, 23)",
-          "background": "rgb(255, 255, 255)"
-        },
-        "settingsOpened": true,
-        "escapeClosed": true
-      },
-      {
-        "appearance": "light",
-        "width": 72,
-        "right": 18,
-        "height": 44,
-        "gap": 0,
-        "buttonWidth": 28,
-        "color": "rgb(102, 106, 108)",
-        "dots": [
-          {
-            "x": 6,
-            "y": 4
-          },
-          {
-            "x": 6,
-            "y": 11
-          },
-          {
-            "x": 6,
-            "y": 18
-          }
-        ],
-        "panel": {
-          "color": "rgb(24, 24, 23)",
-          "background": "rgb(255, 255, 255)"
-        },
-        "settingsOpened": true,
-        "escapeClosed": true
-      }
-    ],
-    "friendSearch": [
-      {
-        "appearance": "dark",
-        "alignedCorners": true,
-        "inlineSearch": true,
-        "clear": true,
-        "enter": true,
-        "arrowSubmit": true,
-        "unconnectedNotice": true,
-        "escape": true,
-        "draftRetained": true,
-        "footerBack": true
-      },
-      {
-        "appearance": "light",
-        "alignedCorners": true,
-        "inlineSearch": true,
-        "clear": true,
-        "enter": true,
-        "arrowSubmit": true,
-        "unconnectedNotice": true,
-        "escape": true,
-        "draftRetained": true,
-        "footerBack": true
+        "internalOnly": true,
+        "thumbnailSwitch": true,
+        "escapeBack": true,
+        "returnFocus": true,
+        "glass": "blur(12px)"
       }
     ],
     "windowControls": {
       "restore": true,
-      "resizedBoundary": {
-        "appearance": "restored",
-        "context": "window",
-        "width": 1280,
-        "checks": [
-          {
-            "view": "menu",
-            "drawerEdge": 204.8000030517578,
-            "threshold": 426.6666666666667,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "friends",
-            "drawerEdge": 204.8000030517578,
-            "threshold": 426.6666666666667,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          },
-          {
-            "view": "search",
-            "drawerEdge": 204.8000030517578,
-            "threshold": 426.6666666666667,
-            "insideStayedOpen": true,
-            "beyondClosed": true
-          }
-        ],
-        "outsideClick": true,
-        "escape": true
+      "resizedAsset": {
+        "cards": 11,
+        "windowWidth": 1280,
+        "left": 0,
+        "right": 1280
       },
       "maximize": true,
       "minimize": true,
@@ -444,30 +190,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-04T22:22:44.9687378+08:00",
-      "NativePid": 36392,
-      "StartedAt": "2026-10-04T22:22:22.9332861+08:00",
-      "WindowHandle": 2754712,
+      "SampledAt": "2026-10-06T02:31:28.7958384+08:00",
+      "NativePid": 34660,
+      "StartedAt": "2026-10-06T02:31:06.5805814+08:00",
+      "WindowHandle": 5507490,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        36392,
-        2568,
-        35404,
-        29912,
-        41172,
-        40940,
-        33924,
-        39728,
-        38260,
-        30360,
-        32560
+        34660,
+        30304,
+        26708,
+        34092,
+        1712,
+        31160,
+        32756,
+        6892,
+        29832,
+        31100,
+        26220
       ],
       "NormalizedCpuPercent": 4,
-      "WorkingSetMiB": 1911.2,
-      "GpuDedicatedBytes": 3337314304,
-      "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 16558932,
+      "WorkingSetMiB": 1928,
+      "GpuDedicatedBytes": 3329343488,
+      "MaxGpuEngineUtilization": 13,
+      "FreeRamKiB": 17387536,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -477,6 +223,15 @@
     },
     "newErrors": [],
     "observedErrors": [
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
@@ -493,16 +248,7 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "visualReview": {
       "reviewed": [
@@ -522,14 +268,14 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "Friend search and add APIs are not connected, as confirmed by the user. Existing legacy remote asset CSP diagnostics remain; no new errors. Account authentication and Task business lifecycle were not changed."
+      "NieR artwork and English character copy remain temporary placeholders from the user-supplied local references. Original promotional external-link card is intentionally omitted because it has no matching character detail. Existing baseline legacy diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\production-build-final.log",
-      "D:\\preacherman\\output\\playwright\\drawer-boundary-20261004\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\production-build-final.log",
+      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1388,9 +1134,18 @@
       "deployedAt": "2026-10-04T22:19:26.6967325+08:00",
       "verifiedAt": "2026-10-04T22:22:44.9687378+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-boundary-before-20261004"
+    },
+    {
+      "buildId": "asset-characters-20261006",
+      "sourceCommit": "bee0bf92a3205a7d0d4a77d783416d1e45a45ff5",
+      "sha256": "9EDACDC30DDDEAA9AB667D7C1229FCDB4121F4B50E6A3B75CBE7443664131940",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-06T02:29:12.5883524+08:00",
+      "verifiedAt": "2026-10-06T02:31:28.7958384+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-characters-before-20261006"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\drawer-boundary-before-20261004/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-characters-before-20261006/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
