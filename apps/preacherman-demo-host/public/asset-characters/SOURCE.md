@@ -43,7 +43,15 @@ Use case: background-extraction. Edit target: the supplied Cortana artwork. Remo
 
 ### Master Chief
 
-Use case: background-extraction. Edit target: the supplied Master Chief artwork. Remove ONLY the surrounding background and floor to actual transparent alpha. Keep the exact green helmet and armored upper torso close-up, including shoulder armor, gold visor, scratches, original perspective and lighting. Do not invent a full body. Preserve original character identity, proportions, pose, design, colors, lighting and every authored detail. No repainting, restyling, additions, text, shadows outside the silhouette, solid background or drawn checkerboard. Output a tightly framed clean transparent PNG character cutout for a premium dark glass character gallery.
+Replaced on 2026-10-06 with the user's selected option 2, Combat Evolved Mark V. Only the Asset detail artwork changes; the Gallery model, collection card and thumbnail stay unchanged.
+
+Source page: https://www.haloinfinitenews.com/armor-customizations/cde17344-28e7-4ab0-a381-8945437105b5
+
+Original image: https://static.wixstatic.com/media/ee59cf_0ef911c504ad44a3b8b48e3697a26f68~mv2.png
+
+Processing: built-in imagegen, background-extraction mode. Packaged output: `cutouts/halo-mk-v-model.png`, 1116 x 1410 RGBA. Original and native verification evidence: `D:/preacherman/output/playwright/master-chief-mark-v-20261006/`.
+
+Prompt: Use case: background-extraction. Edit target: the supplied selected Combat Evolved Mark V Master Chief render. Remove ONLY the surrounding industrial hangar, floor, blue lights and cropped 'K V' text to real transparent alpha. Crop at his waist just BELOW the complete belt pouches, making a centered waist-up portrait. Keep the helmet fully intact with a small top margin and BOTH shoulder outlines fully visible; arms naturally end at the horizontal waist crop. Preserve the exact original Mark V armor, helmet design, gold visor reflections, green colors, original stance, proportions, scratches, materials and lighting; do not redesign or repaint the character, do not change to Mark VI. Output a high-resolution tightly framed transparent PNG cutout, no text, no added shadows, no solid background and no drawn checkerboard. This image will be displayed on both black and white UI backgrounds.
 
 ### Noble Six
 
