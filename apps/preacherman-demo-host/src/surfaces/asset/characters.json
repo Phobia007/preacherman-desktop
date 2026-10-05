@@ -1,221 +1,198 @@
 [
   {
-    "id": "id01",
-    "name": "2B",
-    "designation": "Official designation: YoRHa No. 2 Type B",
-    "tagline": "A blade of quiet resolve.",
+    "id": "cortana",
+    "label": "Cortana",
+    "name": "Cortana",
+    "designation": "Halo",
     "paragraphs": [
-      "An all-purpose combat android deployed to Earth as a member of the automated infantry squad YoRHa. She excels at close-range combat with a variety of weapons, while her accompanying Pod provides support for ranged attacks.",
-      "Her combat visor means her eyes are rarely seen. YoRHa members have no names; they are known only by their designations.",
-      "Although regulations forbid emotions, individual personalities vary. Even among her fellow soldiers, 2B is particularly calm and composed."
+      "An advanced AI from Halo, Cortana brings keen intelligence and tactical insight to every mission."
     ],
-    "voice": "Yui Ishikawa",
+    "cardImage": "/market-love/characters/01-cortana.jpg",
+    "image": "/asset-characters/details/cortana.jpg",
+    "imageWidth": 5120,
+    "imageHeight": 2880,
+    "detailSource": "CortanaHalo4.jpg"
+  },
+  {
+    "id": "zima",
+    "label": "ZIMA",
+    "name": "ZIMA",
+    "designation": "Zima Blue",
+    "paragraphs": [
+      "Once a humble cleaning robot, Zima became a visionary artist devoted to his signature shade of blue."
+    ],
+    "cardImage": "/market-love/characters/02-zima.jpg",
+    "image": "/asset-characters/details/zima.jpg",
+    "imageWidth": 1920,
+    "imageHeight": 1080,
+    "detailSource": "wallhaven-6kggjq.jpg"
+  },
+  {
+    "id": "jubilee-midnight-mutant",
+    "label": "Jubilee",
+    "name": "Jubilee",
+    "designation": "Midnight Mutant",
+    "paragraphs": [
+      "Bold and playful, Jubilee meets the world with rebellious energy and a resolve to define herself."
+    ],
+    "cardImage": "/market-love/characters/03-jubilee-midnight-mutant.jpg",
+    "image": "/asset-characters/details/jubilee-midnight-mutant.webp",
+    "imageWidth": 683,
+    "imageHeight": 683,
+    "detailSource": "482c9e8c37e20af6393c25c323ff1a23490cc77c43506c6fc6ac1e99d0ad0524.webp"
+  },
+  {
+    "id": "halo-mk-v-model",
+    "label": "Master Chief",
+    "name": "Master Chief",
+    "designation": "Halo MK V",
+    "paragraphs": [
+      "Quiet and disciplined, Master Chief puts duty first and shows his loyalty through decisive action."
+    ],
+    "cardImage": "/market-love/characters/04-halo-mk-v-model.jpg",
+    "image": "/asset-characters/details/halo-mk-v-model.webp",
+    "imageWidth": 1920,
+    "imageHeight": 1080,
+    "detailSource": "1920px-HCEV_MasterChief_PK_Screenshot_2.webp"
+  },
+  {
+    "id": "kitana-mk11-in-mk9-suit",
+    "label": "Kitana",
+    "name": "Kitana",
+    "designation": "MK11 / MK9 Suit",
+    "paragraphs": [
+      "Graceful and composed, Kitana balances a steadfast sense of duty with dignity and fierce loyalty."
+    ],
+    "cardImage": "/market-love/characters/05-kitana-mk11-in-mk9-suit.jpg",
+    "image": "/asset-characters/details/kitana-mk11-in-mk9-suit.jpg",
+    "imageWidth": 518,
+    "imageHeight": 800,
+    "detailSource": "10548629-mortal-kombat-render-kitana-cutout.jpg"
+  },
+  {
+    "id": "punk-magik",
+    "label": "Magik",
+    "name": "Magik",
+    "designation": "Punk Magik",
+    "paragraphs": [
+      "Sharp and defiant, Magik hides her emotions behind dry wit and fiercely guarded personal boundaries."
+    ],
+    "cardImage": "/market-love/characters/06-punk-magik.jpg",
+    "image": "/asset-characters/details/punk-magik.webp",
+    "imageWidth": 683,
+    "imageHeight": 683,
+    "detailSource": "0114b8f506e6283644a931585e3dcd49a61f869e33098ef30119fc528cdd5a32.webp"
+  },
+  {
+    "id": "clove-t-pose",
+    "label": "Clove",
+    "name": "Clove",
+    "designation": "VALORANT",
+    "paragraphs": [
+      "Curious and independent, Clove faces danger with playful humor and little regard for convention."
+    ],
+    "cardImage": "/market-love/characters/07-clove-t-pose.jpg",
+    "image": "/asset-characters/details/clove-t-pose.png",
+    "imageWidth": 827,
+    "imageHeight": 1117,
+    "detailSource": "clove_render_valorant__by_pavseh_diefvdq-414w-2x.png"
+  },
+  {
+    "id": "nier-automata-2b",
     "label": "2B",
-    "cardImage": "/asset-characters/id01-card.png",
-    "cardName": "/asset-characters/id01-name.png",
-    "cardAlt": "ヨルハ二号B型",
-    "image": "/asset-characters/id01-image.png",
-    "background": "/asset-characters/id01-background.png",
-    "thumbnail": "/asset-characters/id01-thumbnail.png",
+    "name": "2B",
+    "designation": "NieR:Automata",
+    "paragraphs": [
+      "Reserved and disciplined, 2B conceals deep emotion beneath her unwavering commitment to duty."
+    ],
+    "cardImage": "/market-love/characters/08-nier-automata-2b.jpg",
+    "image": "/asset-characters/details/nier-automata-2b.png",
     "imageWidth": 1532,
-    "imageHeight": 1458
+    "imageHeight": 1458,
+    "detailSource": "id01_image.png"
   },
   {
-    "id": "id02",
-    "name": "9S",
-    "designation": "Official designation: YoRHa No. 9 Type S",
-    "tagline": "A fleeting kindness, and a soul.",
+    "id": "stellar-blade-lily-stargazer-coat",
+    "label": "Lily",
+    "name": "Lily",
+    "designation": "Stargazer Coat",
     "paragraphs": [
-      "A YoRHa unit specializing in reconnaissance, particularly gathering information through hacking. Although he has offensive capabilities, combat is not his strong suit.",
-      "Among the members of YoRHa, he stands out for his expressive emotions and gentle personality."
+      "Warm and curious, Lily brings sincere optimism and a strong sense of companionship to every challenge."
     ],
-    "voice": "Natsuki Hanae",
-    "label": "9S",
-    "cardImage": "/asset-characters/id02-card.png",
-    "cardName": "/asset-characters/id02-name.png",
-    "cardAlt": "ヨルハ九号S型",
-    "image": "/asset-characters/id02-image.png",
-    "background": "/asset-characters/id02-background.png",
-    "thumbnail": "/asset-characters/id02-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1449
+    "cardImage": "/market-love/characters/09-stellar-blade-lily-stargazer-coat.jpg",
+    "image": "/market-love/characters/09-stellar-blade-lily-stargazer-coat.jpg",
+    "imageWidth": 4096,
+    "imageHeight": 4096,
+    "detailSource": "Existing Gallery model portrait"
   },
   {
-    "id": "id03",
-    "name": "A2",
-    "designation": "Official designation: YoRHa Type A No. 2",
-    "tagline": "A vortex of the past and hatred.",
+    "id": "iron-man-mark-85",
+    "label": "Iron Man",
+    "name": "Iron Man",
+    "designation": "Mark 85",
     "paragraphs": [
-      "The Type A is a YoRHa prototype specializing in close-range combat, no longer in active service. These units were used to develop the production models that followed, including 2B and 9S.",
-      "A2 is a woman of few words who always operates alone."
+      "Brilliant and outspoken, Tony Stark balances sharp humor and fierce independence with a sense of duty."
     ],
-    "voice": "Ayaka Suwa",
-    "label": "A2",
-    "cardImage": "/asset-characters/id03-card.png",
-    "cardName": "/asset-characters/id03-name.png",
-    "cardAlt": "ヨルハA型二号",
-    "image": "/asset-characters/id03-image.png",
-    "background": "/asset-characters/id03-background.png",
-    "thumbnail": "/asset-characters/id03-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1524
+    "cardImage": "/market-love/characters/10-iron-man-mark-85.jpg",
+    "image": "/market-love/characters/10-iron-man-mark-85.jpg",
+    "imageWidth": 4096,
+    "imageHeight": 4096,
+    "detailSource": "Existing Gallery model portrait"
   },
   {
-    "id": "id04",
-    "name": "Pod 042 / 153",
-    "designation": "Pod 042 / 153",
+    "id": "the-twins-atomic-heart",
+    "label": "The Twins",
+    "name": "The Twins",
+    "designation": "Atomic Heart",
     "paragraphs": [
-      "Support units issued as standard equipment to YoRHa soldiers. Primarily equipped with weapons for ranged attacks, they also assist with movement.",
-      "Pods communicate with Command and exchange tactical information between units. Pod 042 accompanies 2B, while Pod 153 accompanies 9S."
+      "Silent and precise, the Twins unite graceful movement with perfect synchrony and an air of menace."
     ],
-    "voice": "042 — Hiroki Yasumoto / 153 — Kaoru Akiyama",
-    "label": "Pod 042 / 153",
-    "cardImage": "/asset-characters/id04-card.png",
-    "cardName": "/asset-characters/id04-name.png",
-    "cardAlt": "ポッド042／153",
-    "image": "/asset-characters/id04-image.png",
-    "background": "/asset-characters/id04-background.png",
-    "thumbnail": "/asset-characters/id04-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1144
+    "cardImage": "/market-love/characters/11-the-twins-atomic-heart.jpg",
+    "image": "/asset-characters/details/the-twins-atomic-heart.jpg",
+    "imageWidth": 2500,
+    "imageHeight": 2500,
+    "detailSource": "twin_wp_both.jpg"
   },
   {
-    "id": "id05",
-    "name": "YoRHa Commander",
-    "designation": "Commander",
+    "id": "spartan-armour-mkv-halo-reach",
+    "label": "Noble Six",
+    "name": "Noble Six",
+    "designation": "Halo: Reach",
     "paragraphs": [
-      "The officer in charge of the Bunker, a base in satellite orbit, and commander of the entire YoRHa force.",
-      "Her position demands a stern demeanor, but she seems concerned about 2B and 9S. She also appears to share a history with the YoRHa prototype A2."
+      "Quiet and independent, Noble Six earns trust through perseverance, loyalty and a willingness to sacrifice."
     ],
-    "voice": "Chiaki Kanou",
-    "label": "YoRHa Commander",
-    "cardImage": "/asset-characters/id05-card.png",
-    "cardName": "/asset-characters/id05-name.png",
-    "cardAlt": "ヨルハ部隊司令官",
-    "image": "/asset-characters/id05-image.png",
-    "background": "/asset-characters/id05-background.png",
-    "thumbnail": "/asset-characters/id05-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1512
+    "cardImage": "/market-love/characters/12-spartan-armour-mkv-halo-reach.jpg",
+    "image": "/asset-characters/details/spartan-armour-mkv-halo-reach.webp",
+    "imageWidth": 700,
+    "imageHeight": 700,
+    "detailSource": "B312.webp"
   },
   {
-    "id": "id06",
-    "name": "Operator 6O / 21O",
-    "designation": "Operator 6O / 21O",
+    "id": "halloween-the-game-michael-myers-samhain",
+    "label": "Michael Myers",
+    "name": "Michael Myers",
+    "designation": "Samhain",
     "paragraphs": [
-      "Communications operators stationed in the Bunker. They relay orders to YoRHa soldiers on the ground and analyze incoming information.",
-      "Personalities vary between units: 6O, who supports 2B, is cheerful, while 21O, assigned to 9S, is reserved and composed."
+      "Silent and relentless, Michael Myers inspires dread through slow, unwavering pursuit and unreadable intent."
     ],
-    "voice": "6O — Keiko Isobe / 21O — Meari Hatsumi",
-    "label": "Operator 6O / 21O",
-    "cardImage": "/asset-characters/id06-card.png",
-    "cardName": "/asset-characters/id06-name.png",
-    "cardAlt": "オペレーター6O／21O",
-    "image": "/asset-characters/id06-image.png",
-    "background": "/asset-characters/id06-background.png",
-    "thumbnail": "/asset-characters/id06-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1492
+    "cardImage": "/market-love/characters/13-halloween-the-game-michael-myers-samhain.jpg",
+    "image": "/asset-characters/details/halloween-the-game-michael-myers-samhain.png",
+    "imageWidth": 1672,
+    "imageHeight": 941,
+    "detailSource": "66078b56-6b37-4382-bd94-4851664020c0.png"
   },
   {
-    "id": "id07",
-    "name": "Adam",
-    "designation": "Adam",
+    "id": "apex-legend-pathfinder",
+    "label": "Pathfinder",
+    "name": "Pathfinder",
+    "designation": "Apex Legends",
     "paragraphs": [
-      "A mysterious, highly intelligent young man who wears glasses. Usually composed, he can be mercilessly cruel in pursuit of his goals."
+      "Friendly and curious, Pathfinder faces danger with optimism while searching for connection and belonging."
     ],
-    "voice": "Daisuke Namikawa",
-    "second": {
-      "name": "Eve",
-      "designation": "Eve",
-      "paragraphs": [
-        "Adam’s younger twin brother. In contrast to his brother, he is hot-tempered and gives little thought to things. He adores Adam."
-      ],
-      "voice": "Tatsuhisa Suzuki"
-    },
-    "label": "Adam / Eve",
-    "cardImage": "/asset-characters/id07-card.png",
-    "cardName": "/asset-characters/id07-name.png",
-    "cardAlt": "アダム／イヴ",
-    "image": "/asset-characters/id07-image.png",
-    "background": "/asset-characters/id07-background.png",
-    "thumbnail": "/asset-characters/id07-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1722
-  },
-  {
-    "id": "id08",
-    "name": "Pascal",
-    "designation": "Pascal",
-    "paragraphs": [
-      "Despite being a machine lifeform, Pascal is a pacifist who dislikes conflict. Together with like-minded machines, he searches for a path to peace.",
-      "He is highly intelligent and takes an interest in the history of both humanity and machine lifeforms."
-    ],
-    "voice": "Aoi Yuki",
-    "label": "Pascal",
-    "cardImage": "/asset-characters/id08-card.png",
-    "cardName": "/asset-characters/id08-name.png",
-    "cardAlt": "パスカル",
-    "image": "/asset-characters/id08-image.png",
-    "background": "/asset-characters/id08-background.png",
-    "thumbnail": "/asset-characters/id08-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1379
-  },
-  {
-    "id": "id09",
-    "name": "Devola / Popola",
-    "designation": "Devola / Popola",
-    "paragraphs": [
-      "Older-model androids living at the Resistance camp. They know that units of their own model once ran out of control, and they carry a sense of guilt over it.",
-      "Unusually for androids, their model is capable of consuming alcohol."
-    ],
-    "voice": "Ryoko Shiraishi",
-    "label": "Devola / Popola",
-    "cardImage": "/asset-characters/id09-card.png",
-    "cardName": "/asset-characters/id09-name.png",
-    "cardAlt": "デポル／ポポル",
-    "image": "/asset-characters/id09-image.png",
-    "background": "/asset-characters/id09-background.png",
-    "thumbnail": "/asset-characters/id09-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1885
-  },
-  {
-    "id": "id10",
-    "name": "Emil",
-    "designation": "Emil",
-    "paragraphs": [
-      "A character who also appeared in the previous game. After many long years, most of his memories have been lost."
-    ],
-    "voice": "Mai Kadowaki",
-    "label": "Emil",
-    "cardImage": "/asset-characters/id10-card.png",
-    "cardName": "/asset-characters/id10-name.png",
-    "cardAlt": "エミール",
-    "image": "/asset-characters/id10-image.png",
-    "background": "/asset-characters/id10-background.png",
-    "thumbnail": "/asset-characters/id10-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1232
-  },
-  {
-    "id": "id11",
-    "name": "Anemone",
-    "designation": "Anemone",
-    "paragraphs": [
-      "The leader of the Resistance, who descended to Earth long before YoRHa and continues to fight across the land.",
-      "Strong-willed and caring toward her comrades, she is a natural leader. She provides the protagonists with a wealth of useful information."
-    ],
-    "voice": "Meari Hatsumi",
-    "label": "Anemone",
-    "cardImage": "/asset-characters/id11-card.png",
-    "cardName": "/asset-characters/id11-name.png",
-    "cardAlt": "アネモネ",
-    "image": "/asset-characters/id11-image.png",
-    "background": "/asset-characters/id11-background.png",
-    "thumbnail": "/asset-characters/id11-thumbnail.png",
-    "imageWidth": 1532,
-    "imageHeight": 1860
+    "cardImage": "/market-love/characters/14-apex-legend-pathfinder.jpg",
+    "image": "/asset-characters/details/apex-legend-pathfinder.webp",
+    "imageWidth": 767,
+    "imageHeight": 767,
+    "detailSource": "Pathfinder.webp"
   }
 ]

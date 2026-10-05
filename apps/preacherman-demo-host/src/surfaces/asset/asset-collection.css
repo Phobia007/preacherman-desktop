@@ -14,7 +14,7 @@
 .asset-collection__scroll[hidden] { display: none; }
 .asset-collection__grid { display: flex; flex-wrap: wrap; width: min(1220px, 100%); margin: auto; padding-top: 60px; }
 .asset-card {
-  display: block; position: relative; width: calc(25% - 20px); margin: -20px 0 0 20px; padding: 0;
+  display: block; position: relative; width: calc(25% - 20px); margin: 0 0 24px 20px; padding: 0;
   border: 0; background: transparent; isolation: isolate; text-align: center;
   opacity: 0; transform: translateY(25px); transition: opacity 850ms cubic-bezier(.33, 1, .68, 1), transform 850ms cubic-bezier(.33, 1, .68, 1);
 }
@@ -24,14 +24,14 @@
 .asset-card:nth-child(4n+4) { transition-delay: 150ms; }
 .asset-card__image { display: block; position: relative; margin: 0 10px; overflow: hidden; z-index: 2; }
 .asset-card__image > span { display: block; transform-origin: center bottom; transition: transform 500ms cubic-bezier(.34, 1.56, .64, 1); }
-.asset-card img { width: 100%; }
+.asset-card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; filter: brightness(1.12); }
 .asset-card__image::before, .asset-card__image::after {
   content: ""; position: absolute; top: 25%; left: 0; right: 0; bottom: 1px;
   background: url("/asset-characters/noise.png") 0 0 / 758px 508px; z-index: -1;
 }
 .asset-card__image::after { opacity: 0; transform: scaleY(-1); animation: asset-character-noise 500ms steps(5) infinite; }
 .asset-card__name { display: block; position: relative; z-index: 2; }
-.asset-card__name > span { display: block; margin: auto; padding: 10px 25px; max-width: 251px; }
+.asset-card__name > span { display: block; margin: auto; padding: 14px 25px; max-width: 251px; min-height: 55px; font: 400 18px/1.5 "Asset Character Serif", serif; }
 .asset-card__name::before, .asset-card__name::after {
   content: ""; position: absolute; top: 50%; margin-top: -8px; width: 15px; height: 16px;
   background: url("/asset-characters/character_deco.png") no-repeat 0 0 / 30px 16px;
@@ -58,11 +58,9 @@
 }
 .asset-details__back svg { width: 24px; height: 24px; }
 .asset-details__back:hover { border-color: var(--demo-theme-market-border); }
-.asset-detail { isolation: isolate; }
+.asset-detail { isolation: isolate; animation: asset-detail-arrive 450ms ease both; }
 .asset-detail__text { position: relative; z-index: 2; }
 .asset-detail__summary { position: relative; color: var(--demo-theme-market-text); }
-.asset-detail:is(:nth-child(7), :nth-child(9), :nth-child(11)) .asset-detail__summary { max-width: 82%; }
-.asset-detail__summary[data-secondary="true"] { margin-top: 45px !important; }
 .asset-detail__name { margin: 0; font-size: 64px; line-height: 1; font-weight: 400; letter-spacing: 6px; }
 .asset-detail__name[data-long="true"] { font-size: 42px; line-height: 1.4; letter-spacing: 2px; overflow-wrap: anywhere; }
 .asset-detail__formal { margin: 26px 0 0; font-size: 22px; line-height: 1.5; letter-spacing: .2px; }
@@ -91,7 +89,7 @@
 .asset-details__index button { flex: 0 0 auto; position: relative; isolation: isolate; display: block; padding: 0 0 5px; border: 0; background: transparent; }
 .asset-details__thumb { position: relative; display: block; margin: 0 5px; overflow: hidden; z-index: 2; }
 .asset-details__thumb::before { content: ""; position: absolute; inset: 20% 0 0; background: url("/asset-characters/noise.png") 0 0 / 758px 508px; opacity: .4; z-index: -1; }
-.asset-details__thumb img { width: 100%; filter: brightness(.5); transition: filter 250ms; }
+.asset-details__thumb img { width: 100%; aspect-ratio: 1; object-fit: cover; filter: brightness(.5); transition: filter 250ms; }
 .asset-details__thumb-frame { position: absolute; top: calc(20% - 6px); inset-inline: 0; bottom: 0; border: 1px solid var(--demo-theme-market-border); background: var(--demo-theme-market-control); }
 .asset-details__index button:is(:hover, :focus-visible, [aria-current]) img { filter: brightness(1); }
 .asset-details__index button[aria-current] .asset-details__thumb-frame { border-color: var(--demo-theme-market-focus); }
@@ -114,7 +112,7 @@
 @media (max-width: 768px) {
   .asset-collection__scroll { padding: 20px 20px 70px; }
   .asset-collection__grid { padding-top: 20px; }
-  .asset-card { width: calc(50% - 10px); margin: -10px 0 0 10px; }
+  .asset-card { width: calc(50% - 10px); margin: 0 0 18px 10px; }
   .asset-card__image { margin: 0 5px; }
   .asset-card__name > span { padding: 5px 15px; }
   .asset-card__frame { top: calc(25% - 10px); }
