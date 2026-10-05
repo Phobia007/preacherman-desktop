@@ -1,83 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "asset-layout-fonts-20261006",
+  "buildId": "master-chief-mark-v-20261006",
   "productVersion": "0.1.0",
-  "sourceTask": "asset-detail-heading-layout-and-market-asset-default-font",
+  "sourceTask": "replace-master-chief-detail-with-user-selected-mark-v-image",
   "sourceThread": null,
-  "sourceState": "Asset detail names and source subtitles replace the generic CHARACTER heading at top left. Description aligns to the top of the right column, preserving space below. Market and Asset use the shared Clash Display default font, including iframe, shadow-root options and canvas promotional labels. Handwritten Preacherman brand signatures are preserved. Existing models, glass, routes and motion retained.",
-  "sourceCommit": "bee5d53c4b559b2980445e3c8cb4a4e4bbf023df",
+  "sourceState": "Replaced only Master Chief Asset detail artwork with the user-selected Combat Evolved Mark V image. Removed the source background and cropped to a transparent upper-body portrait using built-in imagegen. Existing Gallery model, card, thumbnail, labels, layout, theme and motion remain unchanged.",
+  "sourceCommit": "cca611b6bfd7e2743da2d2ed136a1a7ab0ce8503",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-06T06:31:33.3624841+08:00",
-  "deployedAt": "2026-10-06T06:32:14.0797022+08:00",
-  "verifiedAt": "2026-10-06T06:36:18.1448036+08:00",
-  "sizeBytes": 638363648,
-  "sha256": "6C99BAD0128295609CA37D533CBEB13CF676D0FC3F53E2CB72B2804E73C13A8E",
+  "builtAt": "2026-10-06T07:52:46.4316498+08:00",
+  "deployedAt": "2026-10-06T07:53:19.4195899+08:00",
+  "verifiedAt": "2026-10-06T07:55:59.4355434+08:00",
+  "sizeBytes": 638529024,
+  "sha256": "5C050652D2ABE6EC4AA945251D0BBA8500FE52A101BDA3B9930112457BA79BA0",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-layout-fonts-before-20261006/preacherman-demo-host.exe",
-  "backupSha256": "7B07C426876E89911AD4C986FB2E2095387942C111665E3FBBB229DB0C3CB5A6",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-layout-fonts-before-20261006/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\master-chief-mark-v-before-20261006/preacherman-demo-host.exe",
+  "backupSha256": "6C99BAD0128295609CA37D533CBEB13CF676D0FC3F53E2CB72B2804E73C13A8E",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\master-chief-mark-v-before-20261006/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "e06d7af2df0ce5c0fab25d774eb3efaeda29105f",
-  "previousVerificationCommit": "e06d7af2df0ce5c0fab25d774eb3efaeda29105f",
+  "rollbackBaselineCommit": "bee5d53c4b559b2980445e3c8cb4a4e4bbf023df",
+  "previousVerificationCommit": "bee5d53c4b559b2980445e3c8cb4a4e4bbf023df",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 36,
+      "focusedTests": 6,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Asset header and description positions, default font, independent details and return focus verified. Market discovery, Search and shadow-root detail options use the default font; both appearance modes checked. Shared frost and header, core navigation, window controls, normal restart and cleanup checked.",
-    "marketFonts": [
-      {
-        "appearance": "dark",
-        "discovery": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "categories": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "options": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "views": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "promos": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "search": [
-          "\"Clash Display\", sans-serif"
-        ]
-      },
-      {
-        "appearance": "light",
-        "discovery": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "categories": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "options": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "views": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "promos": [
-          "\"Clash Display\", sans-serif"
-        ],
-        "search": [
-          "\"Clash Display\", sans-serif"
-        ]
-      }
-    ],
+    "nativeFlow": "Canonical shortcut cold launch; selected Master Chief detail decoded at 1116 x 1410 with transparent alpha in light and dark modes. Character selection and back interaction, core routes, window controls, normal restart and resource cleanup verified.",
     "navigation": [
       "Home",
       "Task",
@@ -189,9 +145,7 @@
         "appearance": "dark",
         "cards": 14,
         "mappedDetails": [
-          "clove-t-pose",
-          "stellar-blade-lily-stargazer-coat",
-          "apex-legend-pathfinder"
+          "halo-mk-v-model"
         ],
         "transparentArtwork": true,
         "waistUpCards": true,
@@ -209,9 +163,7 @@
         "appearance": "light",
         "cards": 14,
         "mappedDetails": [
-          "clove-t-pose",
-          "stellar-blade-lily-stargazer-coat",
-          "apex-legend-pathfinder"
+          "halo-mk-v-model"
         ],
         "transparentArtwork": true,
         "waistUpCards": true,
@@ -240,30 +192,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-06T06:36:18.1448036+08:00",
-      "NativePid": 23988,
-      "StartedAt": "2026-10-06T06:36:00.0698754+08:00",
-      "WindowHandle": 788906,
+      "SampledAt": "2026-10-06T07:55:59.4355434+08:00",
+      "NativePid": 33864,
+      "StartedAt": "2026-10-06T07:55:37.5333415+08:00",
+      "WindowHandle": 1575244,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        23988,
-        32236,
-        29872,
-        32668,
-        16056,
-        31584,
-        26812,
-        31900,
-        5728,
-        11452,
-        25456
+        33864,
+        15660,
+        33444,
+        26516,
+        24084,
+        33784,
+        31728,
+        9004,
+        32796,
+        24416,
+        10188
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1918.7,
-      "GpuDedicatedBytes": 3308892160.0,
-      "MaxGpuEngineUtilization": 14.0,
-      "FreeRamKiB": 16597408,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1911.9,
+      "GpuDedicatedBytes": 3318788096,
+      "MaxGpuEngineUtilization": 12,
+      "FreeRamKiB": 17728640,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -321,11 +273,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\production-build-final.log",
-      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\master-chief-mark-v-20261006\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\master-chief-mark-v-20261006\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\master-chief-mark-v-20261006\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\master-chief-mark-v-20261006\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\master-chief-mark-v-20261006\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1220,9 +1172,18 @@
       "deployedAt": "2026-10-06T06:32:14.0797022+08:00",
       "verifiedAt": "2026-10-06T06:36:18.1448036+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-layout-fonts-before-20261006"
+    },
+    {
+      "buildId": "master-chief-mark-v-20261006",
+      "sourceCommit": "cca611b6bfd7e2743da2d2ed136a1a7ab0ce8503",
+      "sha256": "5C050652D2ABE6EC4AA945251D0BBA8500FE52A101BDA3B9930112457BA79BA0",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-06T07:53:19.4195899+08:00",
+      "verifiedAt": "2026-10-06T07:55:59.4355434+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\master-chief-mark-v-before-20261006"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-layout-fonts-before-20261006/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\master-chief-mark-v-before-20261006/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
