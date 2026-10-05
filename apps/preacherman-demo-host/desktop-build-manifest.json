@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "asset-characters-20261006",
+  "buildId": "asset-model-details-20261006",
   "productVersion": "0.1.0",
-  "sourceTask": "asset-local-character-collection-and-mapped-english-details",
+  "sourceTask": "asset-gallery-model-cards-and-isolated-character-details",
   "sourceThread": null,
-  "sourceState": "Asset now contains the eleven supplied NieR character cards mapped by stable id to local English details. Card hover, noise, English text and artwork, detail composition, scrolling parallax and thumbnail selection preserved. Promotional external card and original site chrome omitted. Asset frost/header and page transition preserved; no external navigation or runtime dependency on reference servers. Extension unchanged.",
-  "sourceCommit": "bee0bf92a3205a7d0d4a77d783416d1e45a45ff5",
+  "sourceState": "Asset cards now match all fourteen current Gallery model IDs using existing model portraits with larger portrait framing. Exactly one selected character detail is mounted; scrolling cannot reveal other characters. Twelve supplied local images are mapped to their matching characters; Lily and Iron Man retain existing model portraits. Card frame, hover, internal thumbnails, return focus, shared frost/header and page motion preserved. No external navigation. Extension unchanged.",
+  "sourceCommit": "1c7341936f525c57b0f7cb415c7dffbdb03b3292",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-06T02:28:44.2054177+08:00",
-  "deployedAt": "2026-10-06T02:29:12.5883524+08:00",
-  "verifiedAt": "2026-10-06T02:31:28.7958384+08:00",
-  "sizeBytes": 611517952,
-  "sha256": "9EDACDC30DDDEAA9AB667D7C1229FCDB4121F4B50E6A3B75CBE7443664131940",
+  "builtAt": "2026-10-06T04:48:44.7815681+08:00",
+  "deployedAt": "2026-10-06T04:49:36.4792443+08:00",
+  "verifiedAt": "2026-10-06T04:55:16.4545421+08:00",
+  "sizeBytes": 618079232,
+  "sha256": "D101581B67244B11970F65A75A91512290E5D3D2DC1FD50C97A96DB47B60899C",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-characters-before-20261006/preacherman-demo-host.exe",
-  "backupSha256": "D44401B02F003DAB9EA678AF08BBB60462F097BD8536EA2B142BC1AB955B6811",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-characters-before-20261006/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-model-details-before-20261006/preacherman-demo-host.exe",
+  "backupSha256": "9EDACDC30DDDEAA9AB667D7C1229FCDB4121F4B50E6A3B75CBE7443664131940",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-model-details-before-20261006/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "350395000e85ec46bee991b8a6a4747b50a91255",
-  "previousVerificationCommit": "350395000e85ec46bee991b8a6a4747b50a91255",
+  "rollbackBaselineCommit": "bee0bf92a3205a7d0d4a77d783416d1e45a45ff5",
+  "previousVerificationCommit": "bee0bf92a3205a7d0d4a77d783416d1e45a45ff5",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 15,
+      "focusedTests": 9,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. All eleven cards map to local English details and return to the collection; second appearance checks cards, details, textures and selected thumb. Shared frost and header, core navigation, window controls, normal restart and cleanup checked.",
+    "nativeFlow": "Canonical shortcut cold launch. All fourteen Gallery model cards map to their own isolated local details. Scrolling, image mapping, thumbnail selection and return focus verified; both appearance modes checked. Shared frost and header, core navigation, window controls, normal restart and cleanup checked.",
     "navigation": [
       "Home",
       "Task",
@@ -143,20 +143,24 @@
     "assets": [
       {
         "appearance": "dark",
-        "cards": 11,
+        "cards": 14,
         "mappedDetails": [
-          "id01",
-          "id02",
-          "id03",
-          "id04",
-          "id05",
-          "id06",
-          "id07",
-          "id08",
-          "id09",
-          "id10",
-          "id11"
+          "cortana",
+          "zima",
+          "jubilee-midnight-mutant",
+          "halo-mk-v-model",
+          "kitana-mk11-in-mk9-suit",
+          "punk-magik",
+          "clove-t-pose",
+          "nier-automata-2b",
+          "stellar-blade-lily-stargazer-coat",
+          "iron-man-mark-85",
+          "the-twins-atomic-heart",
+          "spartan-armour-mkv-halo-reach",
+          "halloween-the-game-michael-myers-samhain",
+          "apex-legend-pathfinder"
         ],
+        "isolatedDetails": true,
         "internalOnly": true,
         "thumbnailSwitch": true,
         "escapeBack": true,
@@ -165,10 +169,11 @@
       },
       {
         "appearance": "light",
-        "cards": 11,
+        "cards": 14,
         "mappedDetails": [
-          "id01"
+          "cortana"
         ],
+        "isolatedDetails": true,
         "internalOnly": true,
         "thumbnailSwitch": true,
         "escapeBack": true,
@@ -179,7 +184,7 @@
     "windowControls": {
       "restore": true,
       "resizedAsset": {
-        "cards": 11,
+        "cards": 14,
         "windowWidth": 1280,
         "left": 0,
         "right": 1280
@@ -190,30 +195,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-06T02:31:28.7958384+08:00",
-      "NativePid": 34660,
-      "StartedAt": "2026-10-06T02:31:06.5805814+08:00",
-      "WindowHandle": 5507490,
+      "SampledAt": "2026-10-06T04:55:16.4545421+08:00",
+      "NativePid": 20348,
+      "StartedAt": "2026-10-06T04:54:54.2669167+08:00",
+      "WindowHandle": 45746476,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        34660,
-        30304,
-        26708,
-        34092,
-        1712,
-        31160,
-        32756,
-        6892,
-        29832,
-        31100,
-        26220
+        20348,
+        33576,
+        23824,
+        27904,
+        33404,
+        26104,
+        31052,
+        29652,
+        33560,
+        29564,
+        28612
       ],
-      "NormalizedCpuPercent": 4,
-      "WorkingSetMiB": 1928,
-      "GpuDedicatedBytes": 3329343488,
-      "MaxGpuEngineUtilization": 13,
-      "FreeRamKiB": 17387536,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1968.0,
+      "GpuDedicatedBytes": 3337539584.0,
+      "MaxGpuEngineUtilization": 12.0,
+      "FreeRamKiB": 17103492,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -223,15 +228,6 @@
     },
     "newErrors": [],
     "observedErrors": [
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
@@ -248,7 +244,16 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "visualReview": {
       "reviewed": [
@@ -268,14 +273,14 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "NieR artwork and English character copy remain temporary placeholders from the user-supplied local references. Original promotional external-link card is intentionally omitted because it has no matching character detail. Existing baseline legacy diagnostics remain; no new errors."
+      "No matching supplied detail image exists for Lily or Iron Man; their existing model portraits are used. Existing baseline legacy diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\production-build-final.log",
-      "D:\\preacherman\\output\\playwright\\asset-characters-20261006\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\production-build-final.log",
+      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1143,9 +1148,18 @@
       "deployedAt": "2026-10-06T02:29:12.5883524+08:00",
       "verifiedAt": "2026-10-06T02:31:28.7958384+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-characters-before-20261006"
+    },
+    {
+      "buildId": "asset-model-details-20261006",
+      "sourceCommit": "1c7341936f525c57b0f7cb415c7dffbdb03b3292",
+      "sha256": "D101581B67244B11970F65A75A91512290E5D3D2DC1FD50C97A96DB47B60899C",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-06T04:49:36.4792443+08:00",
+      "verifiedAt": "2026-10-06T04:55:16.4545421+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-model-details-before-20261006"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-characters-before-20261006/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-model-details-before-20261006/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
