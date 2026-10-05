@@ -1,34 +1,34 @@
 {
   "schemaVersion": 1,
-  "buildId": "asset-model-details-20261006",
+  "buildId": "asset-cutouts-20261006",
   "productVersion": "0.1.0",
-  "sourceTask": "asset-gallery-model-cards-and-isolated-character-details",
+  "sourceTask": "asset-transparent-waist-up-portraits-and-background-extracted-details",
   "sourceThread": null,
-  "sourceState": "Asset cards now match all fourteen current Gallery model IDs using existing model portraits with larger portrait framing. Exactly one selected character detail is mounted; scrolling cannot reveal other characters. Twelve supplied local images are mapped to their matching characters; Lily and Iron Man retain existing model portraits. Card frame, hover, internal thumbnails, return focus, shared frost/header and page motion preserved. No external navigation. Extension unchanged.",
-  "sourceCommit": "1c7341936f525c57b0f7cb415c7dffbdb03b3292",
+  "sourceState": "Fourteen Gallery cards use newly rendered transparent waist-up portraits with original model materials. Colored studio rectangles and podiums removed. Seven supplied detail artworks have transparent backgrounds extracted using built-in imagegen; existing transparent artwork retained. Lily, Iron Man and scene-only Zima use large transparent model busts. Detail composition centers the artwork with bounded height. Existing independent detail selection, frame, glass, header, navigation and theme behavior preserved",
+  "sourceCommit": "e06d7af2df0ce5c0fab25d774eb3efaeda29105f",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-06T04:48:44.7815681+08:00",
-  "deployedAt": "2026-10-06T04:49:36.4792443+08:00",
-  "verifiedAt": "2026-10-06T04:55:16.4545421+08:00",
-  "sizeBytes": 618079232,
-  "sha256": "D101581B67244B11970F65A75A91512290E5D3D2DC1FD50C97A96DB47B60899C",
+  "builtAt": "2026-10-06T05:41:08.1568870+08:00",
+  "deployedAt": "2026-10-06T05:41:45.0165270+08:00",
+  "verifiedAt": "2026-10-06T05:44:50.6682533+08:00",
+  "sizeBytes": 638363648,
+  "sha256": "7B07C426876E89911AD4C986FB2E2095387942C111665E3FBBB229DB0C3CB5A6",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-model-details-before-20261006/preacherman-demo-host.exe",
-  "backupSha256": "9EDACDC30DDDEAA9AB667D7C1229FCDB4121F4B50E6A3B75CBE7443664131940",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-model-details-before-20261006/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006/preacherman-demo-host.exe",
+  "backupSha256": "D101581B67244B11970F65A75A91512290E5D3D2DC1FD50C97A96DB47B60899C",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "bee0bf92a3205a7d0d4a77d783416d1e45a45ff5",
-  "previousVerificationCommit": "bee0bf92a3205a7d0d4a77d783416d1e45a45ff5",
+  "rollbackBaselineCommit": "1c7341936f525c57b0f7cb415c7dffbdb03b3292",
+  "previousVerificationCommit": "1c7341936f525c57b0f7cb415c7dffbdb03b3292",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 9,
+      "focusedTests": 10,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
@@ -160,6 +160,8 @@
           "halloween-the-game-michael-myers-samhain",
           "apex-legend-pathfinder"
         ],
+        "transparentArtwork": true,
+        "waistUpCards": true,
         "isolatedDetails": true,
         "internalOnly": true,
         "thumbnailSwitch": true,
@@ -173,6 +175,8 @@
         "mappedDetails": [
           "cortana"
         ],
+        "transparentArtwork": true,
+        "waistUpCards": true,
         "isolatedDetails": true,
         "internalOnly": true,
         "thumbnailSwitch": true,
@@ -195,30 +199,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-06T04:55:16.4545421+08:00",
-      "NativePid": 20348,
-      "StartedAt": "2026-10-06T04:54:54.2669167+08:00",
-      "WindowHandle": 45746476,
+      "SampledAt": "2026-10-06T05:44:50.6682533+08:00",
+      "NativePid": 34496,
+      "StartedAt": "2026-10-06T05:44:28.4503184+08:00",
+      "WindowHandle": 723406,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        20348,
-        33576,
-        23824,
-        27904,
-        33404,
-        26104,
-        31052,
-        29652,
-        33560,
-        29564,
-        28612
+        34496,
+        33376,
+        34440,
+        27344,
+        23636,
+        21452,
+        24872,
+        33608,
+        6248,
+        4136,
+        33708
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1968.0,
-      "GpuDedicatedBytes": 3337539584.0,
-      "MaxGpuEngineUtilization": 12.0,
-      "FreeRamKiB": 17103492,
+      "NormalizedCpuPercent": 4.0,
+      "WorkingSetMiB": 1900.3,
+      "GpuDedicatedBytes": 3297726464.0,
+      "MaxGpuEngineUtilization": 11.0,
+      "FreeRamKiB": 17152512,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -273,14 +277,14 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "No matching supplied detail image exists for Lily or Iron Man; their existing model portraits are used. Existing baseline legacy diagnostics remain; no new errors."
+      "Lily, Iron Man and Zima details use the actual Gallery model bust renders. Seven opaque supplied detail artworks were processed with built-in imagegen to remove backgrounds. Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\production-build-final.log",
-      "D:\\preacherman\\output\\playwright\\asset-model-details-20261006\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\production-build-final.log",
+      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1157,9 +1161,18 @@
       "deployedAt": "2026-10-06T04:49:36.4792443+08:00",
       "verifiedAt": "2026-10-06T04:55:16.4545421+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-model-details-before-20261006"
+    },
+    {
+      "buildId": "asset-cutouts-20261006",
+      "sourceCommit": "e06d7af2df0ce5c0fab25d774eb3efaeda29105f",
+      "sha256": "7B07C426876E89911AD4C986FB2E2095387942C111665E3FBBB229DB0C3CB5A6",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-06T05:41:45.0165270+08:00",
+      "verifiedAt": "2026-10-06T05:44:50.6682533+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-model-details-before-20261006/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
