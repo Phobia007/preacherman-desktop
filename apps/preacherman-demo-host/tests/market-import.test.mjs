@@ -121,12 +121,10 @@ test("Market categories stay with the host header and yield to details and the p
   assert.match(row, /hidden=\{page !== "intro" \|\| entrance === "logo" \|\| lensActive\}/);
   assert.match(css, /\.market-surface__categories \{[^}]*position: absolute;[^}]*top: var\(--market-content-top\)/);
   assert.match(css, /\.market-surface__categories\[hidden\] \{ display: none; \}/);
-  assert.match(css, /font: 400 16px\/1\.4 "Market Brilliant Cut"/);
-  assert.match(css, /BrilliantCutPro-Regular\.woff2/);
+  assert.match(css, /font: 400 16px\/1\.4 var\(--demo-font-primary\)/);
   assert.match(css, /button:focus-visible[^}]+--demo-theme-market-focus/);
   const fonts = await text(join(root, "src/surfaces/market/market-details.css"));
-  assert.match(fonts, /font-family: "Market Brilliant Cut"/);
-  assert.match(fonts, /BrilliantCutPro-Medium\.woff2/);
+  assert.match(fonts, /var\(--demo-font-primary\)/);
 });
 
 for (const appearance of ["light", "dark"]) {
@@ -157,6 +155,9 @@ for (const appearance of ["light", "dark"]) {
       assert.match(tokens, new RegExp(`--demo-theme-market-${token}:`));
       assert.match(css, new RegExp(`var\\(--demo-theme-market-${token}\\)`));
     }
+    const embed = await text(join(imported, "market-embed.css"));
+    assert.match(embed, /font-family: var\(--demo-font-primary\) !important/);
+    assert.equal(createHash('sha256').update(await readFile(join(imported, 'assets/fonts/ClashDisplay-Light.ttf'))).digest('hex'), createHash('sha256').update(await readFile(join(root, 'src/assets/fonts/ClashDisplay-Light.ttf'))).digest('hex'));
   });
 }
 
@@ -199,7 +200,8 @@ test("both appearances use white ink on transparent paper without restyling dono
   assert.match(css, /background: transparent !important/);
   assert.match(css, /\.button--primary:hover[^}]+--demo-theme-market-hover/);
   assert.match(css, /color: var\(--demo-theme-market-text/);
-  assert.doesNotMatch(css, /font-family|font-size|display:\s*none|transform:|object-fit|\.hero.*filter/);
+  assert.match(css, /font-family: var\(--demo-font-primary\) !important/);
+  assert.doesNotMatch(css, /font-size|display:\s*none|transform:|object-fit|\.hero.*filter/);
   const adapter = await text(join(imported, "market-embed.js"));
   assert.match(adapter, /attributeFilter: \["data-appearance"\]/);
   assert.match(adapter, /loveconfiguratorready/);

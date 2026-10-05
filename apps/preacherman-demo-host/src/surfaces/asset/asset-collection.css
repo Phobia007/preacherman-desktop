@@ -1,7 +1,6 @@
 @import "./asset-detail-layout.css";
-@font-face { font-family: "Asset Character Serif"; src: url("/asset-characters/character-serif.ttf") format("truetype"); font-display: swap; }
 
-.asset-collection { position: absolute; inset: 100px 0 0; color: var(--demo-theme-market-text); }
+.asset-collection { font-family: var(--demo-font-primary); font-synthesis: none; position: absolute; inset: 100px 0 0; color: var(--demo-theme-market-text); }
 .asset-collection *, .asset-collection *::before, .asset-collection *::after { box-sizing: border-box; }
 .asset-collection button { font: inherit; color: inherit; cursor: pointer; }
 .asset-collection button:focus-visible { outline: 1px solid var(--demo-theme-market-focus); outline-offset: 5px; }
@@ -26,7 +25,7 @@
 .asset-card__image > span { display: block; height: 100%; transform-origin: center bottom; transition: transform 500ms cubic-bezier(.34, 1.56, .64, 1); }
 .asset-card img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; mask-image: linear-gradient(to bottom, black 92%, transparent); }
 .asset-card__name { display: block; position: relative; z-index: 2; }
-.asset-card__name > span { display: block; margin: auto; padding: 14px 25px; max-width: 251px; min-height: 55px; font: 400 18px/1.5 "Asset Character Serif", serif; }
+.asset-card__name > span { display: block; margin: auto; padding: 14px 25px; max-width: 251px; min-height: 55px; font: 400 18px/1.5 var(--demo-font-primary); }
 .asset-card__name::before, .asset-card__name::after {
   content: ""; position: absolute; top: 50%; margin-top: -8px; width: 15px; height: 16px;
   background: url("/asset-characters/character_deco.png") no-repeat 0 0 / 30px 16px;
@@ -44,9 +43,8 @@
 .asset-card:is(:hover, :focus-visible) .asset-card__name::after { transform: translateX(10px); }
 .asset-card:is(:hover, :focus-visible) .asset-card__frame { border-color: var(--demo-theme-market-focus); }
 
-.asset-details { position: absolute; inset: 0; font-family: "Asset Character Serif", serif; animation: asset-detail-arrive 450ms ease both; }
+.asset-details { position: absolute; inset: 0; font-family: var(--demo-font-primary); animation: asset-detail-arrive 450ms ease both; }
 .asset-details__inner { position: relative; width: min(1200px, calc(100% - 100px)); margin: auto; padding: 50px 0 80px; }
-.asset-details__title { position: relative; z-index: 1; margin: 0; font-size: 56px; line-height: 1.1; font-weight: 400; letter-spacing: 7px; }
 .asset-details__back {
   position: absolute; left: 22px; top: 14px; z-index: 4; display: grid; place-items: center; width: 44px; height: 44px;
   padding: 10px; border: 1px solid transparent; background: var(--demo-theme-market-control); border-radius: 50%;
@@ -55,10 +53,11 @@
 .asset-details__back:hover { border-color: var(--demo-theme-market-border); }
 .asset-detail { isolation: isolate; animation: asset-detail-arrive 450ms ease both; }
 .asset-detail__text { position: relative; z-index: 2; }
-.asset-detail__summary { position: relative; color: var(--demo-theme-market-text); }
+.asset-detail__heading { position: relative; width: 56%; color: var(--demo-theme-market-text); }
+.asset-detail__heading .asset-detail__rule { width: min(266px, 100%); }
 .asset-detail__name { margin: 0; font-size: 64px; line-height: 1; font-weight: 400; letter-spacing: 6px; }
 .asset-detail__name[data-long="true"] { font-size: 42px; line-height: 1.4; letter-spacing: 2px; overflow-wrap: anywhere; }
-.asset-detail__formal { margin: 26px 0 0; font-size: 22px; line-height: 1.5; letter-spacing: .2px; }
+.asset-detail__formal { margin: 10px 0 0; font-size: 22px; line-height: 1.5; letter-spacing: .2px; }
 .asset-detail__rule {
   position: relative; width: 60.5%; height: 19px; margin-top: -2px; opacity: .5;
   background: linear-gradient(var(--demo-theme-market-muted), var(--demo-theme-market-muted)) left 5px / 100% 1px no-repeat,
@@ -70,7 +69,7 @@
 .asset-detail__rule i:nth-child(2) { left: 49%; top: 2px; width: 4px; height: 4px; }
 .asset-detail__rule i:nth-child(3) { left: 43%; top: 2px; width: 15px; height: 2px; transform: none; }
 .asset-detail__quote { margin: 35px 0 0; font-size: 36px; line-height: 1.7; letter-spacing: 2px; }
-.asset-detail__description { margin-top: 24px; font-size: 18px; line-height: 1.95; letter-spacing: .2px; text-wrap: pretty; }
+.asset-detail__description { margin-top: 0; font-size: 18px; line-height: 1.95; letter-spacing: .2px; text-wrap: pretty; }
 .asset-detail__description p { margin: 0; }
 .asset-detail__description p + p { margin-top: 8px; }
 .asset-detail__voice { margin: 27px 0 0; font-size: 19px; line-height: 1.8; letter-spacing: 1px; }
@@ -109,16 +108,15 @@
   .asset-card__name > span { padding: 5px 15px; }
   .asset-card__frame { top: calc(25% - 10px); }
   .asset-details__inner { width: calc(100% - 110px); margin-left: 25px; padding-top: 70px; }
-  .asset-details__title { font-size: 33px; letter-spacing: 3px; }
   .asset-details__list { margin: 0; }
-  .asset-detail { position: relative; padding-top: 50px; }
+  .asset-detail { position: relative; }
   .asset-detail__inner { position: relative; }
   .asset-detail__image { margin-top: 30px; transform: none !important; }
   .asset-detail__image img { max-height: 60vh; }
   .asset-detail__name { font-size: 42px; }
   .asset-detail__formal { font-size: 17px; }
   .asset-detail__description { font-size: 15px; line-height: 1.85; }
-  .asset-detail .asset-detail__summary { max-width: 100%; }
+  .asset-detail__heading { width: 100%; }
   .asset-details__index { right: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -34,13 +34,12 @@ export function AssetCollection() {
   </section>;
 }
 
-function Summary({ character }: { character: Character }) {
-  return <div className="asset-detail__summary">
-    <h2 className="asset-detail__name" data-long={character.name.length > 8}>{character.name}</h2>
+function CharacterHeading({ character }: { character: Character }) {
+  return <header className="asset-detail__heading">
+    <h1 className="asset-detail__name" data-long={character.name.length > 8}>{character.name}</h1>
     {character.designation && <p className="asset-detail__formal">{character.designation}</p>}
     <div className="asset-detail__rule" aria-hidden="true"><i /><i /><i /></div>
-    <div className="asset-detail__description">{character.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div>
-  </div>;
+  </header>;
 }
 
 function CharacterDetails({ initialId, onBack }: { initialId: string; onBack: () => void }) {
@@ -63,12 +62,12 @@ function CharacterDetails({ initialId, onBack }: { initialId: string; onBack: ()
     <button ref={back} type="button" className="asset-details__back" aria-label="Back to assets" title="Back to assets" onClick={onBack}><ArrowLeft /></button>
     <div className="asset-details__scroll" ref={viewport}>
       <div className="asset-details__inner">
-        <h1 className="asset-details__title">CHARACTER</h1>
         <div className="asset-details__list">
           <article className="asset-detail" data-detail={character.id} data-framing={character.detailFraming} key={character.id} aria-label={character.label}>
+            <CharacterHeading character={character} />
             <div className="asset-detail__inner">
               <div className="asset-detail__column">
-                <div className="asset-detail__text"><Summary character={character} /></div>
+                <div className="asset-detail__text"><div className="asset-detail__description">{character.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div></div>
                 <div className="asset-detail__art"><figure className="asset-detail__image"><img src={character.image} alt={`${character.label} — character artwork`} width={character.imageWidth} height={character.imageHeight} decoding="async" loading={character.id === initialId ? "eager" : "lazy"} /></figure></div>
               </div>
             </div>

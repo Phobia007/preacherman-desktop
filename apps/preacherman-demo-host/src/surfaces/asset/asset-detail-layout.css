@@ -1,6 +1,6 @@
 .asset-details__list { margin-right: 120px; }
-.asset-detail__inner { position: relative; padding-top: 35px; }
-.asset-detail__column { display: flex; align-items: center; gap: 48px; }
+.asset-detail__inner { position: relative; padding-top: 20px; }
+.asset-detail__column { display: flex; align-items: flex-start; gap: 48px; }
 .asset-detail__text { order: 2; flex: 1; min-width: 0; }
 .asset-detail__art { width: 56%; flex-shrink: 0; }
 .asset-detail__image { display: flex; justify-content: center; }

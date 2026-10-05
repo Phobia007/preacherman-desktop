@@ -1,13 +1,7 @@
-@font-face {
-  font-family: "Market Brilliant Cut";
-  src: url("/market-love/assets/fonts/BrilliantCutPro-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 .market-surface {
   --market-content-top: 100px;
+  font-family: var(--demo-font-primary);
+  font-synthesis: none;
   position: absolute;
   inset: 0;
   background: transparent;
@@ -82,7 +76,7 @@
   padding: 0;
   list-style: none;
   color: var(--demo-theme-market-text);
-  font: 400 16px/1.4 "Market Brilliant Cut", sans-serif;
+  font: 400 16px/1.4 var(--demo-font-primary);
   text-shadow: 0 1px 2px var(--demo-theme-market-ink-shadow), 0 2px 5px var(--demo-theme-market-ink-shadow);
   white-space: nowrap;
   pointer-events: none;

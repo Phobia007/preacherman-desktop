@@ -6,13 +6,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Market Task Profile";
-  src: url("/gallery-v3/portfolio/_nuxt/ABCDiatypePlusVariable.DURmIfav.woff2") format("woff2");
-  font-weight: 100 900;
-  font-display: swap;
-}
-
 .market-profile {
   position: absolute;
   inset: 0;
@@ -45,7 +38,7 @@
 .demo-surface-header__signature { display: flex; align-items: center; }
 
 .market-profile[data-open="true"] .market-profile__toggle {
-  font: 500 12px/1 "Market Task Profile", sans-serif;
+  font: 500 12px/1 var(--demo-font-primary);
 }
 
 .market-profile__backdrop {
@@ -72,7 +65,7 @@
   width: min(720px, calc(100% - 48px));
   padding: 48px 0;
   text-align: center;
-  font: 400 16.8px/1.4 "Market Task Profile", sans-serif;
+  font: 400 16.8px/1.4 var(--demo-font-primary);
   letter-spacing: -0.02em;
   opacity: 1;
   transition: opacity 220ms ease-out;

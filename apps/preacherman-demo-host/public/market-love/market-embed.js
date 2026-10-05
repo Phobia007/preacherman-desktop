@@ -5,6 +5,7 @@
   const syncTheme = () => {
     if (!shell) return;
     const style = parent.getComputedStyle(shell);
+    document.documentElement.style.setProperty("--demo-font-primary", style.getPropertyValue("--demo-font-primary"));
     document.documentElement.dataset.appearance = shell.dataset.appearance;
     // Chromium paints an opaque iframe canvas when its color scheme differs
     // from the embedding document, even when both CSS backgrounds are clear.

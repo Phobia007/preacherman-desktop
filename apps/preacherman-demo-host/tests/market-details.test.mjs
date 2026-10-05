@@ -62,7 +62,7 @@ test("Details keeps the active companion preference isolated and supplies the ex
   assert.doesNotMatch(detail, /market-details-solid|ctx.fillRect/);
   assert.doesNotMatch(tokens, /market-details-solid/);
   assert.equal((tokens.match(/--demo-theme-market-details-glass: color-mix\(in srgb, var\(--demo-theme-home-canvas\) 12%, transparent\)/g) || []).length, 2);
-  assert.match(css, /BrilliantCutPro-Medium.woff2/);
+  assert.match(css, /font: 600 9px\/20px var\(--demo-font-primary\)/);
   assert.match(detail, /cancelAnimationFrame\(frame\)/);
   assert.match(detail, /removeEventListener\(CAPTURE_EVENT/);
 });

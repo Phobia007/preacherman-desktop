@@ -59,5 +59,6 @@ for (const appearance of ['light', 'dark']) test(`Asset controls use deliberate 
   const css = read('src/surfaces/asset/asset-collection.css') + read('src/surfaces/asset/asset-detail-layout.css');
   for (const token of new Set(css.match(/--demo-theme-[a-z-]+/g))) assert.ok(block.includes(token + ':'), token);
   assert.match(css, /:focus-visible/); assert.match(css, /prefers-reduced-motion/);
+  assert.match(css, /\.asset-detail__heading\s*\{[^}]*color: var\(--demo-theme-market-text\)/);
   assert.doesNotMatch(css, /https?:\/\/|background-color:\s*#|color:\s*#/);
 });

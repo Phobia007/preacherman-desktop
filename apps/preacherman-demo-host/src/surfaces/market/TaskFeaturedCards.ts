@@ -80,7 +80,7 @@ export class TaskFeaturedCards {
     this.resize();
   }
   private async load(models: readonly MarketSearchItem[], signal: AbortSignal) {
-    await document.fonts.load('400 24px "Market Brilliant Cut"');
+    await document.fonts.load(`400 24px ${getComputedStyle(this.host).fontFamily}`);
     const loaded: CanvasTexture[] = [];
     for (const model of models) {
       const image = new Image();
@@ -122,7 +122,7 @@ export class TaskFeaturedCards {
     for (const label of this.labels) {
       const context = label.canvas.getContext("2d")!; context.clearRect(0, 0, 1200, 675);
       context.fillStyle = css.getPropertyValue("--demo-theme-market-text").trim();
-      context.font = '400 36px "Market Brilliant Cut", sans-serif'; context.textBaseline = "bottom";
+      context.font = `400 36px ${css.fontFamily}`; context.textBaseline = "bottom";
       context.fillText(label.name, 28, 650, 1080);
       label.texture.needsUpdate = true;
     }
