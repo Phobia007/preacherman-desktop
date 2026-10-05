@@ -24,7 +24,7 @@ export function AssetCollection() {
       <div className="asset-collection__grid">
         {characters.map(character => <button key={character.id} type="button" className="asset-card" data-character={character.id}
           aria-label={`View ${character.label}`} onClick={event => { returnButton.current = event.currentTarget; setSelected(character.id); }}>
-          <span className="asset-card__image"><span><img src={character.cardImage} width="4096" height="4096" alt="" decoding="async" loading="lazy" /></span></span>
+          <span className="asset-card__image"><span><img src={character.cardImage} width={character.cardImageWidth} height={character.cardImageHeight} alt="" decoding="async" loading="lazy" /></span></span>
           <span className="asset-card__name"><span>{character.label}</span></span>
           <span className="asset-card__frame" aria-hidden="true" />
         </button>)}
@@ -65,7 +65,7 @@ function CharacterDetails({ initialId, onBack }: { initialId: string; onBack: ()
       <div className="asset-details__inner">
         <h1 className="asset-details__title">CHARACTER</h1>
         <div className="asset-details__list">
-          <article className="asset-detail" data-detail={character.id} data-landscape={character.imageWidth > character.imageHeight} key={character.id} aria-label={character.label}>
+          <article className="asset-detail" data-detail={character.id} data-framing={character.detailFraming} key={character.id} aria-label={character.label}>
             <div className="asset-detail__inner">
               <div className="asset-detail__column">
                 <div className="asset-detail__text"><Summary character={character} /></div>

@@ -19,8 +19,21 @@ test('Every current Gallery model has exactly one local card and matching detail
     assert.ok(character.cardImage.includes(character.id));
     assert.ok(character.image.includes(character.id));
   }
-  assert.equal(characters.filter(c => c.image.startsWith('/asset-characters/details/')).length, 12);
-  assert.deepEqual(characters.filter(c => c.image === c.cardImage).map(c => c.id), ['stellar-blade-lily-stargazer-coat', 'iron-man-mark-85']);
+  assert.equal(characters.filter(c => c.image.startsWith('/asset-characters/cutouts/')).length, 7);
+  assert.deepEqual(characters.filter(c => c.image === c.cardImage).map(c => c.id), ['zima', 'stellar-blade-lily-stargazer-coat', 'iron-man-mark-85']);
+});
+test('Cards use real RGBA bust renders and isolated artwork stays background-free', () => {
+  for (const character of characters) {
+    assert.ok(character.cardImage.startsWith('/asset-characters/busts/'));
+    const png = readFileSync(new URL('../public' + character.cardImage, import.meta.url));
+    assert.equal(png.readUInt32BE(16), character.cardImageWidth);
+    assert.equal(png.readUInt32BE(20), character.cardImageHeight);
+    assert.equal(png[25], 6, 'RGBA PNG, not an opaque studio photograph');
+    assert.equal(character.detailFraming, character.image === character.cardImage ? 'bust' : 'artwork');
+  }
+  const css = read('src/surfaces/asset/asset-collection.css');
+  assert.doesNotMatch(css, /asset-card__image::before|asset-card__image::after|filter: brightness\(1.12\)/);
+  assert.match(css, /object-fit: contain/);
 });
 test('Detail scrolling cannot expose unrelated characters', () => {
   const component = read('src/surfaces/asset/AssetCollection.tsx');

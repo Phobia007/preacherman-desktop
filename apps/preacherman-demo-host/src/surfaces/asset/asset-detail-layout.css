@@ -1,12 +1,11 @@
 .asset-details__list { margin-right: 120px; }
-.asset-detail__inner { position: relative; padding-top: 45px; }
+.asset-detail__inner { position: relative; padding-top: 35px; }
 .asset-detail__column { display: flex; align-items: center; gap: 48px; }
 .asset-detail__text { order: 2; flex: 1; min-width: 0; }
 .asset-detail__art { width: 56%; flex-shrink: 0; }
-.asset-detail__image img { width: 100%; }
-.asset-detail[data-landscape="true"] .asset-detail__column { flex-direction: column; align-items: stretch; gap: 30px; }
-.asset-detail[data-landscape="true"] .asset-detail__text { order: 0; }
-.asset-detail[data-landscape="true"] .asset-detail__art { width: 100%; }
+.asset-detail__image { display: flex; justify-content: center; }
+.asset-detail__image img { width: auto; max-width: 100%; max-height: min(64vh, 690px); object-fit: contain; }
+.asset-detail[data-framing="bust"] .asset-detail__image img { mask-image: linear-gradient(to bottom, black 94%, transparent); }
 @media (max-width: 768px) {
   .asset-detail__column { flex-direction: column; align-items: stretch; gap: 20px; }
   .asset-detail__text { order: 0; }

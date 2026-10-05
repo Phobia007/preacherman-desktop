@@ -22,14 +22,9 @@
 .asset-card:nth-child(4n+2) { transition-delay: 50ms; }
 .asset-card:nth-child(4n+3) { transition-delay: 100ms; }
 .asset-card:nth-child(4n+4) { transition-delay: 150ms; }
-.asset-card__image { display: block; position: relative; margin: 0 10px; overflow: hidden; z-index: 2; }
-.asset-card__image > span { display: block; transform-origin: center bottom; transition: transform 500ms cubic-bezier(.34, 1.56, .64, 1); }
-.asset-card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; filter: brightness(1.12); }
-.asset-card__image::before, .asset-card__image::after {
-  content: ""; position: absolute; top: 25%; left: 0; right: 0; bottom: 1px;
-  background: url("/asset-characters/noise.png") 0 0 / 758px 508px; z-index: -1;
-}
-.asset-card__image::after { opacity: 0; transform: scaleY(-1); animation: asset-character-noise 500ms steps(5) infinite; }
+.asset-card__image { display: block; position: relative; margin: 0 10px; aspect-ratio: 1 / 1.12; z-index: 2; }
+.asset-card__image > span { display: block; height: 100%; transform-origin: center bottom; transition: transform 500ms cubic-bezier(.34, 1.56, .64, 1); }
+.asset-card img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; mask-image: linear-gradient(to bottom, black 92%, transparent); }
 .asset-card__name { display: block; position: relative; z-index: 2; }
 .asset-card__name > span { display: block; margin: auto; padding: 14px 25px; max-width: 251px; min-height: 55px; font: 400 18px/1.5 "Asset Character Serif", serif; }
 .asset-card__name::before, .asset-card__name::after {
@@ -80,16 +75,13 @@
 .asset-detail__description p + p { margin-top: 8px; }
 .asset-detail__voice { margin: 27px 0 0; font-size: 19px; line-height: 1.8; letter-spacing: 1px; }
 .asset-detail__image { margin: 0; }
-.asset-detail__background { pointer-events: none; }
-.asset-detail .asset-detail__background { width: 122.2222222222%; }
 .asset-details__index {
   position: absolute; right: max(40px, calc((100% - 1200px) / 2)); top: 50%; transform: translateY(-50%); z-index: 3;
   display: flex; flex-direction: column; width: clamp(44px, 5.5vh, 65px); max-height: calc(100% - 90px); overflow-y: auto; scrollbar-width: none;
 }
 .asset-details__index button { flex: 0 0 auto; position: relative; isolation: isolate; display: block; padding: 0 0 5px; border: 0; background: transparent; }
 .asset-details__thumb { position: relative; display: block; margin: 0 5px; overflow: hidden; z-index: 2; }
-.asset-details__thumb::before { content: ""; position: absolute; inset: 20% 0 0; background: url("/asset-characters/noise.png") 0 0 / 758px 508px; opacity: .4; z-index: -1; }
-.asset-details__thumb img { width: 100%; aspect-ratio: 1; object-fit: cover; filter: brightness(.5); transition: filter 250ms; }
+.asset-details__thumb img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: center top; filter: brightness(.5); transition: filter 250ms; }
 .asset-details__thumb-frame { position: absolute; top: calc(20% - 6px); inset-inline: 0; bottom: 0; border: 1px solid var(--demo-theme-market-border); background: var(--demo-theme-market-control); }
 .asset-details__index button:is(:hover, :focus-visible, [aria-current]) img { filter: brightness(1); }
 .asset-details__index button[aria-current] .asset-details__thumb-frame { border-color: var(--demo-theme-market-focus); }
@@ -122,8 +114,7 @@
   .asset-detail { position: relative; padding-top: 50px; }
   .asset-detail__inner { position: relative; }
   .asset-detail__image { margin-top: 30px; transform: none !important; }
-  .asset-detail__image img { width: 100%; }
-  .asset-detail .asset-detail__background { position: absolute; inset: 0; width: 100%; z-index: -1; }
+  .asset-detail__image img { max-height: 60vh; }
   .asset-detail__name { font-size: 42px; }
   .asset-detail__formal { font-size: 17px; }
   .asset-detail__description { font-size: 15px; line-height: 1.85; }
