@@ -1,39 +1,83 @@
 {
   "schemaVersion": 1,
-  "buildId": "asset-cutouts-20261006",
+  "buildId": "asset-layout-fonts-20261006",
   "productVersion": "0.1.0",
-  "sourceTask": "asset-transparent-waist-up-portraits-and-background-extracted-details",
+  "sourceTask": "asset-detail-heading-layout-and-market-asset-default-font",
   "sourceThread": null,
-  "sourceState": "Fourteen Gallery cards use newly rendered transparent waist-up portraits with original model materials. Colored studio rectangles and podiums removed. Seven supplied detail artworks have transparent backgrounds extracted using built-in imagegen; existing transparent artwork retained. Lily, Iron Man and scene-only Zima use large transparent model busts. Detail composition centers the artwork with bounded height. Existing independent detail selection, frame, glass, header, navigation and theme behavior preserved",
-  "sourceCommit": "e06d7af2df0ce5c0fab25d774eb3efaeda29105f",
+  "sourceState": "Asset detail names and source subtitles replace the generic CHARACTER heading at top left. Description aligns to the top of the right column, preserving space below. Market and Asset use the shared Clash Display default font, including iframe, shadow-root options and canvas promotional labels. Handwritten Preacherman brand signatures are preserved. Existing models, glass, routes and motion retained.",
+  "sourceCommit": "bee5d53c4b559b2980445e3c8cb4a4e4bbf023df",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-06T05:41:08.1568870+08:00",
-  "deployedAt": "2026-10-06T05:41:45.0165270+08:00",
-  "verifiedAt": "2026-10-06T05:44:50.6682533+08:00",
+  "builtAt": "2026-10-06T06:31:33.3624841+08:00",
+  "deployedAt": "2026-10-06T06:32:14.0797022+08:00",
+  "verifiedAt": "2026-10-06T06:36:18.1448036+08:00",
   "sizeBytes": 638363648,
-  "sha256": "7B07C426876E89911AD4C986FB2E2095387942C111665E3FBBB229DB0C3CB5A6",
+  "sha256": "6C99BAD0128295609CA37D533CBEB13CF676D0FC3F53E2CB72B2804E73C13A8E",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006/preacherman-demo-host.exe",
-  "backupSha256": "D101581B67244B11970F65A75A91512290E5D3D2DC1FD50C97A96DB47B60899C",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-layout-fonts-before-20261006/preacherman-demo-host.exe",
+  "backupSha256": "7B07C426876E89911AD4C986FB2E2095387942C111665E3FBBB229DB0C3CB5A6",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-layout-fonts-before-20261006/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "1c7341936f525c57b0f7cb415c7dffbdb03b3292",
-  "previousVerificationCommit": "1c7341936f525c57b0f7cb415c7dffbdb03b3292",
+  "rollbackBaselineCommit": "e06d7af2df0ce5c0fab25d774eb3efaeda29105f",
+  "previousVerificationCommit": "e06d7af2df0ce5c0fab25d774eb3efaeda29105f",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 10,
+      "focusedTests": 36,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. All fourteen Gallery model cards map to their own isolated local details. Scrolling, image mapping, thumbnail selection and return focus verified; both appearance modes checked. Shared frost and header, core navigation, window controls, normal restart and cleanup checked.",
+    "nativeFlow": "Canonical shortcut cold launch. Asset header and description positions, default font, independent details and return focus verified. Market discovery, Search and shadow-root detail options use the default font; both appearance modes checked. Shared frost and header, core navigation, window controls, normal restart and cleanup checked.",
+    "marketFonts": [
+      {
+        "appearance": "dark",
+        "discovery": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "categories": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "options": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "views": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "promos": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "search": [
+          "\"Clash Display\", sans-serif"
+        ]
+      },
+      {
+        "appearance": "light",
+        "discovery": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "categories": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "options": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "views": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "promos": [
+          "\"Clash Display\", sans-serif"
+        ],
+        "search": [
+          "\"Clash Display\", sans-serif"
+        ]
+      }
+    ],
     "navigation": [
       "Home",
       "Task",
@@ -145,23 +189,15 @@
         "appearance": "dark",
         "cards": 14,
         "mappedDetails": [
-          "cortana",
-          "zima",
-          "jubilee-midnight-mutant",
-          "halo-mk-v-model",
-          "kitana-mk11-in-mk9-suit",
-          "punk-magik",
           "clove-t-pose",
-          "nier-automata-2b",
           "stellar-blade-lily-stargazer-coat",
-          "iron-man-mark-85",
-          "the-twins-atomic-heart",
-          "spartan-armour-mkv-halo-reach",
-          "halloween-the-game-michael-myers-samhain",
           "apex-legend-pathfinder"
         ],
         "transparentArtwork": true,
         "waistUpCards": true,
+        "headingTopLeft": true,
+        "descriptionTopAligned": true,
+        "defaultFont": true,
         "isolatedDetails": true,
         "internalOnly": true,
         "thumbnailSwitch": true,
@@ -173,10 +209,15 @@
         "appearance": "light",
         "cards": 14,
         "mappedDetails": [
-          "cortana"
+          "clove-t-pose",
+          "stellar-blade-lily-stargazer-coat",
+          "apex-legend-pathfinder"
         ],
         "transparentArtwork": true,
         "waistUpCards": true,
+        "headingTopLeft": true,
+        "descriptionTopAligned": true,
+        "defaultFont": true,
         "isolatedDetails": true,
         "internalOnly": true,
         "thumbnailSwitch": true,
@@ -199,30 +240,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-06T05:44:50.6682533+08:00",
-      "NativePid": 34496,
-      "StartedAt": "2026-10-06T05:44:28.4503184+08:00",
-      "WindowHandle": 723406,
+      "SampledAt": "2026-10-06T06:36:18.1448036+08:00",
+      "NativePid": 23988,
+      "StartedAt": "2026-10-06T06:36:00.0698754+08:00",
+      "WindowHandle": 788906,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        34496,
-        33376,
-        34440,
-        27344,
-        23636,
-        21452,
-        24872,
-        33608,
-        6248,
-        4136,
-        33708
+        23988,
+        32236,
+        29872,
+        32668,
+        16056,
+        31584,
+        26812,
+        31900,
+        5728,
+        11452,
+        25456
       ],
-      "NormalizedCpuPercent": 4.0,
-      "WorkingSetMiB": 1900.3,
-      "GpuDedicatedBytes": 3297726464.0,
-      "MaxGpuEngineUtilization": 11.0,
-      "FreeRamKiB": 17152512,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1918.7,
+      "GpuDedicatedBytes": 3308892160.0,
+      "MaxGpuEngineUtilization": 14.0,
+      "FreeRamKiB": 16597408,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -277,14 +318,14 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "Lily, Iron Man and Zima details use the actual Gallery model bust renders. Seven opaque supplied detail artworks were processed with built-in imagegen to remove backgrounds. Existing baseline diagnostics remain; no new errors."
+      "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\production-build-final.log",
-      "D:\\preacherman\\output\\playwright\\asset-cutouts-20261006\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\production-build-final.log",
+      "D:\\preacherman\\output\\playwright\\asset-layout-fonts-20261006\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1170,9 +1211,18 @@
       "deployedAt": "2026-10-06T05:41:45.0165270+08:00",
       "verifiedAt": "2026-10-06T05:44:50.6682533+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006"
+    },
+    {
+      "buildId": "asset-layout-fonts-20261006",
+      "sourceCommit": "bee5d53c4b559b2980445e3c8cb4a4e4bbf023df",
+      "sha256": "6C99BAD0128295609CA37D533CBEB13CF676D0FC3F53E2CB72B2804E73C13A8E",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-06T06:32:14.0797022+08:00",
+      "verifiedAt": "2026-10-06T06:36:18.1448036+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-layout-fonts-before-20261006"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-layout-fonts-before-20261006/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
