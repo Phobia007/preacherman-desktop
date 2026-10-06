@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "task-link-timeline-20261006",
+  "buildId": "hidden-scrollbars-20261007",
   "productVersion": "0.1.0",
-  "sourceTask": "task-association-timeline-scaled-cards-motion-and-settings-icon",
+  "sourceTask": "hide-scrollbar-chrome-in-all-components",
   "sourceThread": null,
-  "sourceState": "Associations reuse the full chronological Task timeline. Miniatures render the complete task sheet at uniform scale, with wheel/drag navigation and no scrollbar. Linked and query-backed tasks use the existing lateral sheet flights. Task gear matches the sidebar line icon.",
-  "sourceCommit": "3a943e00f55b6328a570b99effce8eb873771090",
+  "sourceState": "The host and all 13 packaged HTML frames share one scrollbar stylesheet. Scrollbar tracks/thumbs and reserved gutters are hidden; existing overflow, wheel, touchpad, keyboard, drag, navigation and theme behavior are retained.",
+  "sourceCommit": "b922d5544f3be43854bcde9c65d716764efcad96",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-06T23:14:09.0055018+08:00",
-  "deployedAt": "2026-10-06T23:14:49.1767216+08:00",
-  "verifiedAt": "2026-10-06T23:20:20.4088719+08:00",
+  "builtAt": "2026-10-07T03:50:41.0519114+08:00",
+  "deployedAt": "2026-10-07T03:51:35.6540507+08:00",
+  "verifiedAt": "2026-10-07T03:57:56.4180622+08:00",
   "sizeBytes": 638538752,
-  "sha256": "518D5537862FE0080D15F3AAB87A1E1EF3C7D58E209DD9C7F20876F34F0A9080",
+  "sha256": "72CDAC1112A1BF848629C851A0848BFDB54891D47A8E28B43BFA5F486B801EAE",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-link-timeline-before-20261006/preacherman-demo-host.exe",
-  "backupSha256": "BC7D020F236772A6F27BC3D73CE8305B7F9BB1C92DBE19F8D71852D49DBB8F37",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-link-timeline-before-20261006/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\hidden-scrollbars-before-20261007/preacherman-demo-host.exe",
+  "backupSha256": "518D5537862FE0080D15F3AAB87A1E1EF3C7D58E209DD9C7F20876F34F0A9080",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\hidden-scrollbars-before-20261007/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "32b2e2156743d277e83808bb25f047bceab39554",
-  "previousVerificationCommit": "32b2e2156743d277e83808bb25f047bceab39554",
+  "rollbackBaselineCommit": "3a943e00f55b6328a570b99effce8eb873771090",
+  "previousVerificationCommit": "3a943e00f55b6328a570b99effce8eb873771090",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 43,
+      "focusedTests": 3,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch; both appearances verify complete timeline, historical selection, original-size scaled cards, wheel/drag movement, return arrow, retained draft, link and neighboring-task navigation and gear editing. Core surfaces, window controls and resource cleanup verified.",
+    "nativeFlow": "Canonical shortcut cold launch; both appearances verify hidden scrollbars throughout rendered host and frame components, Asset collection/detail wheel scrolling, Task composer keyboard scrolling, core routes and window controls. No new console errors. Normal startup and resource cleanup verified.",
     "navigation": [
       "Home",
       "Task",
@@ -140,62 +140,48 @@
         "ready": true
       }
     ],
-    "tasks": [
+    "scrolling": [
       {
         "appearance": "dark",
-        "count": 14,
-        "geometry": {
-          "liveHeight": 10.9979248046875,
-          "previewHeight": 11.01300048828125,
-          "scrollbar": "none",
-          "card": {
-            "x": 117.78125,
-            "y": 790.890625,
-            "width": 297.59375,
-            "height": 162.921875,
-            "top": 790.890625,
-            "right": 415.375,
-            "bottom": 953.8125,
-            "left": 117.78125
-          }
-        },
-        "wheel": 550,
-        "drag": 223,
-        "fullTimeline": true,
-        "oldTaskLinked": true,
-        "link": true,
-        "edit": true,
-        "draftPreserved": true,
-        "returnArrow": true,
-        "neighborCustomTask": true
+        "surface": "Task",
+        "hidden": true,
+        "keyboard": true,
+        "top": 157
+      },
+      {
+        "appearance": "dark",
+        "surface": "Asset",
+        "hidden": true,
+        "wheel": true,
+        "collection": 650,
+        "detail": {
+          "top": 34,
+          "height": 934,
+          "client": 900,
+          "width": "none",
+          "display": "none"
+        }
       },
       {
         "appearance": "light",
-        "count": 14,
-        "geometry": {
-          "liveHeight": 10.9979248046875,
-          "previewHeight": 11.01300048828125,
-          "scrollbar": "none",
-          "card": {
-            "x": 117.78125,
-            "y": 790.890625,
-            "width": 297.59375,
-            "height": 162.921875,
-            "top": 790.890625,
-            "right": 415.375,
-            "bottom": 953.8125,
-            "left": 117.78125
-          }
-        },
-        "wheel": 550,
-        "drag": 223,
-        "fullTimeline": true,
-        "oldTaskLinked": true,
-        "link": true,
-        "edit": true,
-        "draftPreserved": true,
-        "returnArrow": true,
-        "neighborCustomTask": true
+        "surface": "Task",
+        "hidden": true,
+        "keyboard": true,
+        "top": 157
+      },
+      {
+        "appearance": "light",
+        "surface": "Asset",
+        "hidden": true,
+        "wheel": true,
+        "collection": 650,
+        "detail": {
+          "top": 34,
+          "height": 934,
+          "client": 900,
+          "width": "none",
+          "display": "none"
+        }
       }
     ],
     "windowControls": {
@@ -212,30 +198,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-06T23:20:20.4088719+08:00",
-      "NativePid": 11708,
-      "StartedAt": "2026-10-06T23:19:57.9690648+08:00",
-      "WindowHandle": 24578756,
+      "SampledAt": "2026-10-07T03:57:56.4180622+08:00",
+      "NativePid": 33600,
+      "StartedAt": "2026-10-07T03:57:34.4665563+08:00",
+      "WindowHandle": 25233590,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        11708,
-        31692,
-        25596,
-        17320,
-        19900,
-        34568,
-        5160,
-        17760,
-        17200,
-        24472,
-        16708
+        33600,
+        536,
+        11256,
+        15872,
+        25628,
+        34352,
+        30100,
+        29236,
+        32592,
+        28656,
+        21784
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1897.4,
-      "GpuDedicatedBytes": 3263004672,
-      "MaxGpuEngineUtilization": 13,
-      "FreeRamKiB": 17106816,
+      "NormalizedCpuPercent": 4,
+      "WorkingSetMiB": 1914.7,
+      "GpuDedicatedBytes": 3324198912,
+      "MaxGpuEngineUtilization": 12,
+      "FreeRamKiB": 17381472,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -261,6 +247,7 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
       "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
@@ -269,8 +256,7 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
     ],
     "visualReview": {
       "reviewed": [
@@ -293,11 +279,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1237,9 +1223,18 @@
       "deployedAt": "2026-10-06T23:14:49.1767216+08:00",
       "verifiedAt": "2026-10-06T23:20:20.4088719+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-link-timeline-before-20261006"
+    },
+    {
+      "buildId": "hidden-scrollbars-20261007",
+      "sourceCommit": "b922d5544f3be43854bcde9c65d716764efcad96",
+      "sha256": "72CDAC1112A1BF848629C851A0848BFDB54891D47A8E28B43BFA5F486B801EAE",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-07T03:51:35.6540507+08:00",
+      "verifiedAt": "2026-10-07T03:57:56.4180622+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\hidden-scrollbars-before-20261007"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-link-timeline-before-20261006/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\hidden-scrollbars-before-20261007/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
