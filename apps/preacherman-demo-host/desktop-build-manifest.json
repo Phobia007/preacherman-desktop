@@ -1194,6 +1194,15 @@
       "deployedAt": "2026-10-06T08:41:05.5565083+08:00",
       "verifiedAt": "2026-10-06T08:43:03.4504663+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-source-center-before-20261006"
+    },
+    {
+      "buildId": "task-workspace-links-20261006-first-attempt",
+      "sourceCommit": "2393ca8bd9aafbf4f2edd69afd7681462ff5e94d",
+      "sha256": "B4218CC3E7E77FF37F4D0FB2340CB3A4CD20B3E4B5D9BD7800604F71D9B79B50",
+      "status": "rolled-back-before-handoff",
+      "reason": "First task-create click could precede Profile lens initialization. Restored the previous verified executable and matching unchanged sidecar; queued-open fix follows.",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-workspace-links-before-20261006",
+      "restoredSha256": "F749495CD88FFB8E7A737A406EEAFE1DB6880ED6B1DE409107A4ECDA6B777D52"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-source-center-before-20261006/desktop-build-manifest.json",

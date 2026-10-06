@@ -446,3 +446,16 @@ test("new controls use both appearance modes' inherited semantic colors and keyb
  assert.ok(picker.includes('event.key === "Escape"'));assert.ok(picker.includes('event.key === "Tab"'));
  assert.ok(picker.includes('window.removeEventListener("resize", shrink)'));
 });
+
+test("the first create click is retained while the Profile lens initializes",()=>{
+ const dialog=fs.readFileSync(new URL("task-create-dialog.js",root),"utf8");
+ const handlers=new Map();const calls=[];
+ const ctx={window:{addEventListener:(name,handler)=>handlers.set(name,handler)},calls};
+ const prelude=dialog.slice(dialog.indexOf('let activeDialog ='),dialog.indexOf('export function installTaskCreateDialog'));
+ vm.runInNewContext(prelude,ctx);
+ const click={type:"preacherman:task-create-open"};handlers.get(click.type)(click);
+ assert.equal(calls.length,0);
+ vm.runInNewContext('activeDialog = event => calls.push(event); if(pendingOpen){activeDialog(pendingOpen);pendingOpen=null;}',ctx);
+ assert.equal(calls[0],click);
+ handlers.get(click.type)(click);assert.equal(calls.length,2);
+});

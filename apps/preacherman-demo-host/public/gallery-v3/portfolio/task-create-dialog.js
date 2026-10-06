@@ -2,6 +2,17 @@
 import {prepareTaskCover, saveTaskCover, discardTaskCover, loadTaskCovers, taskCoverUrl} from "./task-covers.js";
 import {pickTaskWorkspace} from "./task-workspace.js";
 import {stageTaskSheet} from "./task-sheet-overlay.js";
+
+// The visible rail can finish entering before the Profile's text textures.
+// Preserve the first click until the existing lens is ready to receive it.
+let activeDialog = null;
+let pendingOpen = null;
+const requestOpen = event => {
+  if (activeDialog) void activeDialog(event);
+  else pendingOpen = event;
+};
+window.addEventListener("preacherman:task-create-open", requestOpen);
+window.addEventListener("preacherman:task-edit-open", requestOpen);
 export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, watch}) {
   const body = document.createElement("section");
   body.id = "task-create-dialog";
@@ -339,8 +350,12 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   const types = ["click", "pointerdown", "wheel", "touchstart", "keydown"];
   for (const type of types) window.addEventListener(type, guard, {capture:true, passive:false});
   for (const type of ["pointerdown", "wheel", "touchstart"]) body.addEventListener(type, shield);
-  window.addEventListener("preacherman:task-create-open", open);
-  window.addEventListener("preacherman:task-edit-open", open);
+  activeDialog = open;
+  if (pendingOpen) {
+    const event = pendingOpen;
+    pendingOpen = null;
+    queueMicrotask(() => { if (!disposed) void open(event); });
+  }
   const stopWatching = watch(profileOpen, (value) => {
     if (!value) restore();
     // Keep the new-task closing lens empty; only normal Profile restores its decoration.
@@ -354,8 +369,8 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
       restore();
       folio.taskCreateDialogOpen = false;
       stopWatching();
-      window.removeEventListener("preacherman:task-create-open", open);
-      window.removeEventListener("preacherman:task-edit-open", open);
+      if (activeDialog === open) activeDialog = null;
+      pendingOpen = null;
       for (const type of types) window.removeEventListener(type, guard, true);
       body.remove();
     },
