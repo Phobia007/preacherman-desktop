@@ -1,7 +1,8 @@
 // Task detail extension. Keep the authored sheet, columns, card rail and close motion.
 // Editable DOM text must not enter the portfolio's WebGL text rasterizer.
-import { ad as ref, a8 as element, a3 as onMounted, a6 as onUnmounted } from "./_nuxt/D9b8F35K.js";
+import { ad as ref, a8 as element, a3 as onMounted, a6 as onUnmounted, a0 as useNuxtApp, aw as useNavigation } from "./_nuxt/D9b8F35K.js";
 import { taskCoverUrl } from "./task-covers.js";
+import { openTaskLinkPicker } from "./task-link-picker.js";
 
 const ROOT_TASK_ID = "nathan-riley";
 const TASK_PROJECTS_KEY = "preacherman.task.projects";
@@ -11,6 +12,64 @@ const PENDING_TASK_KEY = "preacherman.task.pending-focus";
 const EMPTY_CARD_URL = new URL("./task-empty-card.svg", import.meta.url).href;
 const EMPTY_PREVIEW_URL = new URL("./task-empty-preview.svg", import.meta.url).href;
 const authoredTasks = new Map();
+const SETTINGS_KEY = "preacherman.task.settings";
+const LINKS_KEY = "preacherman.task.links";
+const OPENED_KEY = "preacherman.task.opened";
+const readObject = key => {
+  const value = JSON.parse(localStorage.getItem(key) ?? "{}");
+  if (!value || Array.isArray(value) || typeof value !== "object") throw new Error("任务资料无法读取。");
+  return value;
+};
+export function readTaskSettings(id, fallback = {}) {
+  const original = readStoredTaskProjects().find(item => item.id === id) ?? {};
+  const saved = readObject(SETTINGS_KEY)[id] ?? {};
+  return {...original, title: normalizeTitle(localStorage.getItem(titleStorageKey(id)) ?? original.title ?? fallback.title ?? ""), summary: original.summary ?? "", group: original.group ?? "", workspacePath: original.workspacePath ?? "", ...saved, id};
+}
+export function updateTaskSettings(id, values) {
+  if (deletedTaskIds().has(id)) throw new Error("任务已被删除。");
+  const title = normalizeTitle(values.title ?? "");
+  if (!title) throw new Error("请填写任务名称。");
+  const settings = readObject(SETTINGS_KEY);
+  settings[id] = {...readTaskSettings(id), title, summary: String(values.summary ?? "").trim().slice(0, 2000), group: normalizeTitle(values.group ?? "").slice(0, 80), workspacePath: String(values.workspacePath ?? "").trim().slice(0, 4096), coverId: values.coverId ?? null};
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  titleRevision.value++;
+  return settings[id];
+}
+export function rememberOpenedTask(id) {
+  const opened = JSON.parse(localStorage.getItem(OPENED_KEY) ?? "[]");
+  if (Array.isArray(opened) && !opened.includes(id)) localStorage.setItem(OPENED_KEY, JSON.stringify([...opened, id]));
+}
+export function taskLinkCandidates() {
+  const created = readTaskProjects();
+  const opened = JSON.parse(localStorage.getItem(OPENED_KEY) ?? "[]");
+  const ids = new Set(Array.isArray(opened) ? opened : []);
+  for (const id of authoredTasks.keys()) if (localStorage.getItem(`preacherman.task.${id}.messages`)) ids.add(id);
+  const deleted = deletedTaskIds();
+  const authored = [...ids].filter(id => authoredTasks.has(id) && !deleted.has(id)).map(id => readTaskSettings(id, authoredTasks.get(id)));
+  return [...authored, ...created].map(item => ({...item, title:taskDisplayTitle({slug:item.id,title:item.title})}));
+}
+export function savedTaskCoverIds() { return [...readTaskProjects().map(item => item.coverId), ...Object.values(readObject(SETTINGS_KEY)).map(item => item.coverId)]; }
+
+export function relatedTaskProjects(currentId) {
+  void titleRevision.value;
+  const edges = JSON.parse(localStorage.getItem(LINKS_KEY) ?? "[]");
+  if (!Array.isArray(edges)) throw new Error("关联任务无法读取。");
+  const ids = new Set(edges.filter(edge => Array.isArray(edge) && edge.length === 2 && edge.includes(currentId)).map(edge => edge.find(id => id !== currentId)));
+  const deleted = deletedTaskIds();
+  return [...ids].filter(id => id && !deleted.has(id)).map(id => {
+    const item = readTaskSettings(id, authoredTasks.get(id));
+    return {id, title: item.title || "未命名任务"};
+  });
+}
+export function linkTaskProjects(source, target) {
+  const candidates = new Set(taskLinkCandidates().map(item => item.id));
+  if (source === target || !candidates.has(source) || !candidates.has(target)) throw new Error("请选择其他可用任务。");
+  const edges = JSON.parse(localStorage.getItem(LINKS_KEY) ?? "[]");
+  if (!Array.isArray(edges)) throw new Error("关联任务无法读取。");
+  if (edges.some(edge => Array.isArray(edge) && edge.includes(source) && edge.includes(target))) return;
+  localStorage.setItem(LINKS_KEY, JSON.stringify([...edges, [source, target]]));
+  titleRevision.value++;
+}
 
 export const titleStorageKey = (slug) => `preacherman.task.${slug}.title`;
 export const normalizeTitle = (value) => String(value).replace(/\s+/g, " ").trim().slice(0, 120);
@@ -37,7 +96,7 @@ export function deletedTaskIds() {
 
 export function readTaskProjects() {
   const deleted = deletedTaskIds();
-  return readStoredTaskProjects().filter(project => !deleted.has(project.id));
+  return readStoredTaskProjects().filter(project => !deleted.has(project.id)).map(project => ({...project, ...readObject(SETTINGS_KEY)[project.id]}));
 }
 
 // A single durable write removes a card everywhere without destroying source media
@@ -61,38 +120,20 @@ function taskId() {
   return `task-${uuid ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`}`;
 }
 
-function readLastTaskId() {
-  try {
-    const candidate = localStorage.getItem(LAST_TASK_KEY);
-    return (candidate === ROOT_TASK_ID || authoredTasks.has(candidate) || readTaskProjects().some(project => project.id === candidate)) && !deletedTaskIds().has(candidate)
-      ? candidate
-      : deletedTaskIds().has(ROOT_TASK_ID) ? "" : ROOT_TASK_ID;
-  } catch {
-    return ROOT_TASK_ID;
-  }
-}
-
 export function createTaskProject(values = {}) {
   const project = {
     id: taskId(),
     title: normalizeTitle(values.title ?? "") || "new one",
     summary: String(values.summary ?? "").trim().slice(0, 2000),
     group: normalizeTitle(values.group ?? "").slice(0, 80),
-    parentId: readLastTaskId(),
+    parentId: "",
+    workspacePath: String(values.workspacePath ?? "").trim().slice(0, 4096),
     createdAt: new Date().toISOString(),
     ...(typeof values.coverId === "string" ? {coverId: values.coverId} : {}),
   };
   const projects = [...readStoredTaskProjects(), project];
   writeTaskProjects(projects);
   return project;
-}
-
-function updateTaskProjectTitle(id, title) {
-  const projects = readStoredTaskProjects();
-  const index = projects.findIndex(project => project.id === id);
-  if (index < 0) return;
-  projects[index] = {...projects[index], title};
-  writeTaskProjects(projects);
 }
 
 export function projectRecord(project) {
@@ -126,7 +167,11 @@ export function augmentTaskProjects(projects) {
   }
   const dynamic = readTaskProjects().map(projectRecord);
   const deleted = deletedTaskIds();
-  const authored = projects.filter(project => !project?.preachermanTask && !deleted.has(project.slug));
+  const authored = projects.filter(project => !project?.preachermanTask && !deleted.has(project.slug)).map(project => {
+    const settings = readObject(SETTINGS_KEY)[project.slug];
+    const cover = taskCoverUrl(settings?.coverId);
+    return cover ? {...project, src:cover, thumb:cover, card:cover, coverId:settings.coverId} : project;
+  });
   const rootIndex = authored.findIndex(project => project?.slug === ROOT_TASK_ID);
   if (rootIndex < 0) return [...authored, ...dynamic];
   return [...authored.slice(0, rootIndex + 1), ...dynamic, ...authored.slice(rootIndex + 1)];
@@ -174,6 +219,10 @@ const titleRevision = ref(0);
 // Keep the authored labels and their WebGL font rasterization; change only copy.
 export const taskDisplayTitle = (project) => {
   void titleRevision.value;
+  try {
+    const updated = readObject(SETTINGS_KEY)[project?.slug]?.title;
+    if (updated) return updated;
+  } catch {}
   if (project?.preachermanTask) {
     try {
       return normalizeTitle(localStorage.getItem(titleStorageKey(project.slug)) ?? "") || project.title;
@@ -217,33 +266,8 @@ addEventListener("message", (event) => {
   if (event.source === parent && event.origin === location.origin && event.data?.type === "gallery-theme") syncTheme();
 });
 
-function relatedTaskProjects(currentId) {
-  const projects = readTaskProjects();
-  const current = projects.find(project => project.id === currentId);
-  const relations = [];
-  if (current?.parentId && !deletedTaskIds().has(current.parentId)) {
-    const parentProject = projects.find(project => project.id === current.parentId);
-    relations.push({
-      id: current.parentId,
-      title: taskDisplayTitle(parentProject ? {slug:parentProject.id, title:parentProject.title} : authoredTasks.get(current.parentId) ?? {slug:current.parentId, title:"未命名任务"}),
-      relation: "来源任务",
-    });
-  }
-  for (const project of projects) {
-    if (project.parentId === currentId) relations.push({id: project.id, title: project.title, relation: "后续任务"});
-  }
-  return relations;
-}
-
-function openTask(id) {
-  try { localStorage.setItem(LAST_TASK_KEY, id); } catch {}
-  try { sessionStorage.setItem(PENDING_TASK_KEY, id); } catch {}
-  const router = document.querySelector("#__nuxt")?.__vue_app__?.config?.globalProperties?.$router;
-  if (router) {
-    Promise.resolve(router.push("/")).catch(() => { location.href = "/gallery-v3/portfolio/index.html"; });
-    return;
-  }
-  location.href = "/gallery-v3/portfolio/index.html";
+export function taskRoute(id) {
+  return taskProjectRoute(readTaskProjects().some(item => item.id === id) ? {slug:id,preachermanTask:true} : {slug:id});
 }
 
 function plusIcon() {
@@ -269,56 +293,54 @@ export const TaskMetadata = {
   props: { slug: { type: String, required: true }, title: {type:String, default:""} },
   setup(props) {
     const task = resolveTaskId(props.slug);
-    const project = readTaskProjects().find(project => project.id === task);
-    const fallback = normalizeTitle(props.title ?? "") || (task === ROOT_TASK_ID ? "未命名任务" : "new one");
-    let saved = fallback;
-    try { saved = normalizeTitle(localStorage.getItem(titleStorageKey(task)) ?? project?.title ?? "") || fallback; } catch {}
-    const title = ref(saved);
+    if (!task.startsWith("task-") && !authoredTasks.has(task)) authoredTasks.set(task, {slug:task, title:props.title});
+    const {$folio: folio} = useNuxtApp();
+    const {to: navigate} = useNavigation();
     const error = ref("");
-    const commit = () => {
-      title.value = normalizeTitle(title.value) || saved;
-      try {
-        localStorage.setItem(titleStorageKey(task), title.value);
-        updateTaskProjectTitle(task, title.value);
-        saved = title.value;
-        error.value = "";
-        titleRevision.value++;
-      } catch { error.value = "名称未能保存，请重新编辑后重试。"; }
+    let picker = null;
+    onMounted(() => { try { rememberOpenedTask(task); } catch { error.value = "任务访问记录未能保存。"; } });
+    onUnmounted(() => picker?.dispose());
+    const settings = () => {
+      error.value = "";
+      window.dispatchEvent(new CustomEvent("preacherman:task-edit-open", {detail:{id:task, title:props.title}}));
     };
-    onUnmounted(commit);
+    const associate = event => {
+      if (picker) return;
+      error.value = "";
+      try {
+        picker = openTaskLinkPicker({folio, task, anchor:event.currentTarget, candidates:taskLinkCandidates(), linked:relatedTaskProjects(task).map(item=>item.id),
+          onSelect:target => linkTaskProjects(task, target), onClose:()=>{picker=null;}});
+      } catch { error.value = "关联任务暂不可用，请重试。"; }
+    };
     return () => {
+      void titleRevision.value;
+      const project = readTaskSettings(task, {title:props.title});
       const related = relatedTaskProjects(task);
       return element("div", { class: "task-metadata", "data-task-id": task, tabindex: 0 }, [
         element("h1", { class: "task-metadata__heading" }, [
-          element("input", {
-            class: "task-metadata__title",
-            "aria-label": "任务名称",
-            title: "点击修改任务名称，按 Enter 保存",
-            type: "text", maxlength: 120, autocomplete: "off", spellcheck: false,
-            value: title.value,
-            onInput: (event) => { title.value = event.target.value; },
-            onBlur: commit,
-            onKeydown: (event) => {
-              if (event.isComposing) return;
-              if (event.key === "Enter") { event.preventDefault(); event.stopPropagation(); event.target.blur(); }
-              if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); title.value = saved; event.target.blur(); }
-            },
-          }),
+          element("span", {class:"task-metadata__title"}, project.title || "未命名任务"),
+          element("button", {type:"button", class:"task-metadata__settings", title:"任务设置", "aria-label":"任务设置", onClick:settings}, [
+            element("svg", {viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", "stroke-width":1.4, "stroke-linejoin":"round", "aria-hidden":"true"}, [
+              element("path", {d:"m9 3-1 3-3 1-2 3 2 2-1 3 2 3 3-1 3 2 3-2 3 1 2-3-1-3 2-2-2-3-3-1-1-3Z"}), element("circle", {cx:12,cy:12,r:3}),
+            ]),
+          ]),
         ]),
         element("div", { class: "task-metadata__description" }, [
-          element("p", { class: "task-metadata__summary", "aria-label": "任务摘要" }, project?.summary || "暂无任务摘要。"),
-          project?.group ? element("p", {class:"task-metadata__group", "aria-label":"任务分组"}, project.group) : null,
+          element("p", { class: "task-metadata__summary", "aria-label": "任务摘要" }, project.summary || "暂无任务摘要。"),
+          project.group ? element("p", {class:"task-metadata__group", "aria-label":"任务分组"}, project.group) : null,
+          project.workspacePath ? element("p", {class:"task-metadata__workspace", title:project.workspacePath, "aria-label":"工作区"}, project.workspacePath) : null,
         ]),
         element("section", {class:"task-metadata__relations", "aria-labelledby":`task-relations-${task}`}, [
           element("h2", {id:`task-relations-${task}`, class:"task-metadata__relations-title"}, "关联任务"),
           related.length
             ? element("ul", {class:"task-metadata__relations-list"}, related.map(relation => element("li", {key:relation.id}, [
-                element("button", {type:"button", class:"task-metadata__relation", onClick:() => openTask(relation.id)}, [
+                element("button", {type:"button", class:"task-metadata__relation", onClick:() => navigate(taskRoute(relation.id))}, [
                   element("span", {class:"task-metadata__relation-name"}, relation.title),
-                  element("span", {class:"task-metadata__relation-kind"}, relation.relation),
+                  element("span", {class:"task-metadata__relation-kind", "aria-hidden":"true"}, "↗"),
                 ]),
               ])))
-            : element("p", {class:"task-metadata__relations-empty"}, "暂无关联任务。新建的对话会排列在这里。"),
+            : element("p", {class:"task-metadata__relations-empty"}, "暂无关联任务"),
+          element("button", {type:"button", class:"task-metadata__link-add", "aria-label":"关联任务", title:"关联任务", onClick:associate}, [plusIcon()]),
         ]),
         error.value ? element("p", { class: "task-metadata__error", role: "alert" }, error.value) : null,
       ]);

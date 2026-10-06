@@ -7,6 +7,7 @@ import {
 } from "react";
 
 import { useExecutionFrameBridge } from "../../execution/useExecutionFrameBridge";
+import { useTaskWorkspaceBridge } from "./useTaskWorkspaceBridge";
 import "../gallery/gallery-surface.css";
 
 type GalleryAppearance = "light" | "dark";
@@ -41,6 +42,7 @@ function getAppearance(): GalleryAppearance {
 export function TaskExperienceSurface({ hideProjectCards = false }: TaskExperienceSurfaceProps) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   useExecutionFrameBridge(frameRef);
+  useTaskWorkspaceBridge(frameRef);
   const revealFrameRef = useRef<number | null>(null);
   const reduceMotionRef = useRef(
     window.matchMedia("(prefers-reduced-motion: reduce)").matches,

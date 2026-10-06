@@ -1,3 +1,4 @@
+import {savedTaskCoverIds} from "./task-metadata.js";
 import {a0 as useNuxtApp, a1 as withAsyncContext, a2 as useHead, a3 as onMounted, a4 as nextTick, a6 as onUnmounted, a8 as h, ac as useAsyncData, ad as ref, af as computed, aw as useNavigation} from "./_nuxt/D9b8F35K.js";
 import {u as usePrefetch} from "./_nuxt/DXCfcV2M.js";
 import {loadTaskCovers} from "./task-covers.js";
@@ -174,7 +175,7 @@ export default {
     onMounted(async () => {
       try {
         records.value = readTaskProjects();
-        await loadTaskCovers(records.value.map(project => project.coverId));
+        await loadTaskCovers(savedTaskCoverIds());
         if (disposed) return;
         projects.value = taskIndexProjects(data.value ?? []);
         if (view.open === null) {

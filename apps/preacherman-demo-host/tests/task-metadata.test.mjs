@@ -12,6 +12,9 @@ function fixture(initial) {
   let cleanup;
   let mount;
   const context = {
+    useNuxtApp: () => ({$folio:{}}),
+    useNavigation: () => ({to:path => events.push(path)}),
+    CustomEvent: class {constructor(type,options){this.type=type;this.detail=options.detail;}},
     ref: (value) => ({value}),
     taskCoverUrl: id => id === "cover-saved" ? "blob:local-cover" : null,
     element: (tag, props, children) => ({tag, props, children}),
@@ -42,44 +45,25 @@ test("every authored card uses the same task metadata and conversation template"
   assert.equal(context.isTaskTemplate(null), false);
 });
 
-test("task names save, survive reopen, cancel and reject empty replacement", () => {
-  const f = fixture();
-  assert.equal(f.input().value, "未命名任务");
-  f.input().onInput({target:{value:"  整理项目资料  "}});
-  f.input().onBlur();
-  assert.equal(fixture(f.storage.get("preacherman.task.nathan-riley.title")).input().value, "整理项目资料");
-  f.input().onInput({target:{value:"   "}}); f.input().onBlur();
-  assert.equal(f.input().value, "整理项目资料");
-  f.input().onInput({target:{value:"取消这个名称"}});
-  f.input().onKeydown({key:"Escape", preventDefault(){}, stopPropagation(){}, target:{blur:() => f.input().onBlur()}});
-  assert.equal(f.input().value, "整理项目资料");
-  f.input().onInput({target:{value:"新名称"}}); f.unmount();
-  assert.equal(f.storage.get("preacherman.task.nathan-riley.title"), "新名称");
-});
-
-test("IME Enter does not prematurely save, and storage failure is visible", () => {
-  const f = fixture();
-  f.input().onKeydown({key:"Enter", isComposing:true, target:{blur:() => assert.fail("IME must not commit")}});
-  f.context.localStorage.setItem = () => {throw new Error("blocked");};
-  f.input().onInput({target:{value:"仍可编辑"}}); f.input().onBlur();
-  assert.equal(f.render().children[3].props.role, "alert");
-  assert.equal(f.input().value, "仍可编辑");
-});
-
-test("saved names synchronize the authored card and index copy without changing other projects", () => {
-  const f = fixture("preacherman");
-  const selected = {slug:"nathan-riley", title:"Nathan Riley"};
-  const other = {slug:"casa-di-solare", title:"Casa Di Solare"};
-  assert.equal(f.context.taskDisplayTitle(selected), "preacherman");
-  assert.equal(f.context.taskDisplayTitle(other), "Casa Di Solare");
-  f.input().onInput({target:{value:"  新的任务  "}}); f.input().onBlur();
-  assert.equal(f.context.taskDisplayTitle(selected), "新的任务");
-  f.context.localStorage.setItem = () => {throw new Error("blocked");};
-  f.input().onInput({target:{value:"未保存"}}); f.input().onBlur();
-  assert.equal(f.context.taskDisplayTitle(selected), "新的任务");
-  f.context.localStorage.getItem = () => {throw new Error("blocked");};
-  assert.equal(f.context.taskDisplayTitle(selected), "Nathan Riley");
-  assert.equal(fixture().context.taskDisplayTitle(selected), "Nathan Riley");
+test("settings are the only name editor; optional fields stay blank; saves are atomic", () => {
+ const f=fixture("old name");
+ assert.equal(f.render().children[0].children[0].tag,"span");
+ assert.equal(f.input().onInput,undefined);
+ f.render().children[0].children[1].props.onClick();
+ assert.deepEqual(f.events,["preacherman:task-edit-open"]);
+ const empty=f.context.readTaskSettings("demo",{title:"Demo"});
+ for(const key of ["summary","group","workspacePath"])assert.equal(empty[key],"");
+ f.context.updateTaskSettings("nathan-riley",{title:"  new name  ",summary:"notes",group:"g",workspacePath:"D:/preacherman",coverId:"cover-saved"});
+ assert.equal(f.context.taskDisplayTitle({slug:"nathan-riley"}),"new name");
+ assert.equal(f.context.readTaskSettings("nathan-riley").workspacePath,"D:/preacherman");
+ assert.equal(f.context.readTaskSettings("nathan-riley").coverId,"cover-saved");
+ const saved=f.storage.get("preacherman.task.settings");
+ assert.throws(()=>f.context.updateTaskSettings("nathan-riley",{title:" "}));
+ f.context.localStorage.setItem=()=>{throw new Error("quota");};
+ assert.throws(()=>f.context.updateTaskSettings("nathan-riley",{title:"not saved"}),/quota/);
+ assert.equal(f.storage.get("preacherman.task.settings"),saved);
+ assert.equal(f.context.readTaskSettings("nathan-riley").title,"new name");
+ assert.equal(f.context.taskDisplayTitle({slug:"casa",title:"Casa"}),"Casa");
 });
 
 test("cards retain authored typography and the bounded timeline uses synchronized titles", () => {
@@ -98,11 +82,11 @@ test("cards retain authored typography and the bounded timeline uses synchronize
   assert.ok(timeline.includes("folio.text(event.currentTarget, {reveal: false})"));
 });
 
-test("new conversation cards persist as blank task projects and relate to their source", () => {
+test("new conversation cards persist without invented source relationships", () => {
   const f = fixture("preacherman");
   const created = f.context.createTaskProject();
   assert.equal(created.title,"new one");
-  assert.equal(created.parentId,"nathan-riley");
+  assert.equal(created.parentId,"");
   assert.equal(f.context.taskDisplayTitle({slug:created.id,preachermanTask:true,title:created.title}),"new one");
   const augmented = f.context.augmentTaskProjects([{slug:"nathan-riley",title:"Nathan Riley"},{slug:"casa",title:"Casa"}]);
   assert.deepEqual(Array.from(augmented, project => project.slug),["nathan-riley",created.id,"casa"]);
@@ -110,8 +94,8 @@ test("new conversation cards persist as blank task projects and relate to their 
   assert.equal(augmented[1].video, null);
   assert.equal(augmented[1].images.length, 0);
   const relations = f.render().children[2];
-  assert.equal(relations.children[1].tag,"ul");
-  assert.equal(relations.children[1].children[0].children[0].children[0].children,"new one");
+  assert.equal(relations.children[1].tag,"p");
+  assert.equal(relations.children[2].props["aria-label"],"关联任务");
 });
 
 test("blank tasks retain the authored card material, caption and arrow instead of CSS wash overrides", () => {
@@ -157,7 +141,7 @@ test("task creation reuses the authored profile lens and owns dismiss/focus clea
   const dialog = fs.readFileSync(new URL("task-create-dialog.js", root), "utf8");
   assert.ok(runtime.includes('e.openHole(_),taskDialog?.opened||f(_)'));
   assert.ok(runtime.includes('taskDialog?.dispose()'));
-  assert.ok(runtime.includes('this.taskCreateDialogOpen?0:this.hole.p'));
+  assert.ok(runtime.includes('installTaskCreateDialog'));
   assert.ok(dialog.includes('profileOpen.value = true'));
   assert.ok(dialog.includes('event.key === "Escape"'));
   assert.ok(dialog.includes('event.key === "Tab"'));
@@ -178,7 +162,7 @@ test("creation persists all three fields atomically, normalizes limits and resto
   assert.equal(f.session.size, 0); // no delayed route reload or old pending-focus
   f.context.location.search = "?task=" + project.id;
   const detail = f.context.TaskMetadata.setup({slug:"nathan-riley"})();
-  assert.equal(detail.children[0].children[0].props.value, project.title);
+  assert.equal(detail.children[0].children[0].children, project.title);
   assert.equal(detail.children[1].children[0].children, project.summary);
   assert.equal(detail.children[1].children[1].children, project.group);
   assert.equal(f.context.createTaskProject({title:"t".repeat(150),summary:"s".repeat(2100),group:"g".repeat(90)}).group.length,80);
@@ -397,14 +381,15 @@ test("authored cards retain their own title, summary state and creation provenan
   const authored = {slug:"griflan",title:"Griflan"};
   f.context.augmentTaskProjects([authored]);
   const detail = f.context.TaskMetadata.setup({slug:authored.slug,title:authored.title});
-  assert.equal(detail().children[0].children[0].props.value,"Griflan");
+  assert.equal(detail().children[0].children[0].children,"Griflan");
   assert.equal(detail().children[1].children[0].children,"暂无任务摘要。");
-  detail().children[0].children[0].props.onInput({target:{value:"独立任务"}});
-  detail().children[0].children[0].props.onBlur();
+  f.context.updateTaskSettings(authored.slug,{title:"独立任务"});
+  f.mount();
   assert.equal(f.context.taskDisplayTitle(authored),"独立任务");
   assert.equal(f.context.taskDisplayTitle({slug:"nathan-riley",title:"Nathan Riley"}),"Nathan Riley");
   const child = f.context.createTaskProject({title:"后续"});
-  assert.equal(child.parentId,"griflan");
+  assert.equal(child.parentId, "");
+  f.context.linkTaskProjects(authored.slug,child.id);
   f.context.location.search="?task="+child.id;
   const childDetail=f.context.TaskMetadata.setup({slug:"nathan-riley"})();
   assert.equal(childDetail.children[2].children[1].children[0].children[0].children[0].children,"独立任务");
@@ -420,4 +405,44 @@ test("creation removes redundant close controls only while creating and retains 
   assert.ok(css.includes('html[data-task-creating] [data-od-id="profile-toggle"]'));
   assert.ok(dialog.includes('coverPicker.accept = "image/jpeg,image/png,image/webp"'));
   assert.ok(css.includes('task-create-dialog__cover:focus-visible'));
+});
+
+
+test("manual links are reciprocal, unique and direct; unopened demos, deleted and self links are excluded", () => {
+ const f=fixture();
+ f.context.augmentTaskProjects([{slug:"nathan-riley",title:"Preacherman"},{slug:"demo",title:"Unused"}]);
+ f.mount();
+ const a=f.context.createTaskProject({title:"A",workspacePath:"D:/preacherman"});
+ f.context.crypto.randomUUID=()=>"second";
+ const b=f.context.createTaskProject({title:"B"});
+ assert.equal(f.context.taskLinkCandidates().length,3);
+ assert.equal(f.context.readTaskProjects()[0].workspacePath,"D:/preacherman");
+ f.context.linkTaskProjects(a.id,b.id);f.context.linkTaskProjects(b.id,a.id);
+ assert.equal(JSON.parse(f.storage.get("preacherman.task.links")).length,1);
+ assert.equal(f.context.relatedTaskProjects(a.id)[0].id,b.id);
+ assert.equal(f.context.relatedTaskProjects(b.id)[0].id,a.id);
+ assert.throws(()=>f.context.linkTaskProjects(a.id,a.id));assert.throws(()=>f.context.linkTaskProjects(a.id,"demo"));
+ f.context.location.search="?task="+a.id;
+ const detail=f.context.TaskMetadata.setup({slug:"nathan-riley"})();
+ detail.children[2].children[1].children[0].children[0].props.onClick();
+ assert.equal(f.events.at(-1),"/projects/nathan-riley?task="+b.id);
+ f.context.deleteTaskProject(b.id);
+ assert.equal(f.context.relatedTaskProjects(a.id).length,0);
+ assert.throws(()=>f.context.linkTaskProjects(a.id,b.id));
+});
+
+test("failed association leaves no partial link",()=>{
+ const f=fixture();const a=f.context.createTaskProject();f.context.crypto.randomUUID=()=>"second";const b=f.context.createTaskProject();
+ f.context.localStorage.setItem=()=>{throw new Error("quota");};
+ assert.throws(()=>f.context.linkTaskProjects(a.id,b.id),/quota/);
+ assert.equal(f.context.relatedTaskProjects(a.id).length,0);assert.equal(f.context.relatedTaskProjects(b.id).length,0);
+});
+
+test("new controls use both appearance modes' inherited semantic colors and keyboard access",()=>{
+ const css=fs.readFileSync(new URL("task-metadata.css",root),"utf8");
+ assert.doesNotMatch(css,/#[0-9a-f]{3,8}\b/i);
+ for(const key of ["text","border","focus","error","hover"])assert.ok(css.includes("--demo-theme-chat-"+key));
+ const picker=fs.readFileSync(new URL("task-link-picker.js",root),"utf8");
+ assert.ok(picker.includes('event.key === "Escape"'));assert.ok(picker.includes('event.key === "Tab"'));
+ assert.ok(picker.includes('window.removeEventListener("resize", shrink)'));
 });

@@ -23,13 +23,16 @@
 }
 
 .task-metadata__heading {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
   margin: 0;
   font: inherit;
 }
 
 .task-metadata__title {
   display: block;
-  width: 100%;
+  max-width: calc(100% - 3.6rem);
   min-width: 0;
   margin: 0;
   padding: 0;
@@ -42,11 +45,8 @@
   line-height: 1.15;
   letter-spacing: -0.035em;
   caret-color: var(--demo-theme-gallery-detail-action-rest-text);
-  cursor: text;
-}
-
-.task-metadata__title:hover {
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--demo-theme-gallery-detail-action-rest-text) 35%, transparent);
+  overflow-wrap: anywhere;
+  cursor: default;
 }
 
 .task-metadata__title:focus-visible {
@@ -70,10 +70,76 @@
 }
 
 .task-metadata__relations {
-  margin-top: clamp(3.2rem, 5vh, 5rem);
+  margin-block: auto;
+  padding-top: 3rem;
   width: 100%;
   flex: none;
 }
+
+.task-metadata__settings, .task-metadata__link-add {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.8rem;
+  height: 2.8rem;
+  padding: .4rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  opacity: .65;
+  cursor: pointer;
+}
+.task-metadata__settings svg, .task-metadata__link-add svg { width: 100%; height: 100%; }
+.task-metadata__settings:hover, .task-metadata__link-add:hover { opacity: 1; background: var(--demo-theme-chat-hover); }
+.task-metadata__settings:focus-visible, .task-metadata__link-add:focus-visible { outline: 2px solid var(--demo-theme-chat-focus); outline-offset: 3px; }
+.task-metadata__link-add { margin: 1rem 0 0 auto; }
+.task-metadata__workspace { margin: .8rem 0 0; font-size: 1.2rem; color: var(--demo-theme-chat-muted); overflow-wrap: anywhere; }
+.task-create-dialog__workspace {
+  width: 100%; min-width: 0; min-height: 5rem; padding: 1.4rem 2.5rem;
+  border: 1px solid color-mix(in srgb, var(--demo-theme-brand-menu-focus) 32%, transparent);
+  border-radius: 999px; background: transparent; color: var(--demo-theme-brand-menu-text-hover);
+  text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: inherit; cursor: pointer;
+}
+.task-create-dialog__workspace:hover { border-color: var(--demo-theme-brand-menu-focus); }
+.task-create-dialog__workspace:focus-visible { outline: 2px solid var(--demo-theme-brand-menu-focus); outline-offset: 3px; }
+.task-create-dialog__workspace:disabled { color: var(--demo-theme-chat-muted); cursor: wait; }
+
+.task-link-picker {
+  position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none;
+  margin: 0; padding: 10vh 6vw 3vh; border: 0; background: transparent;
+  color: var(--demo-theme-brand-menu-text-hover); -webkit-text-fill-color: currentColor;
+  display: flex; flex-direction: column; gap: 2rem; font: inherit;
+  transition: opacity 360ms ease;
+}
+.task-link-picker::backdrop { background: transparent; }
+.task-link-picker[data-closing="true"] { opacity: 0; pointer-events: none; }
+.task-link-picker__header { display: flex; align-items: center; justify-content: space-between; }
+.task-link-picker__header h2 { font: inherit; font-size: 1.8rem; }
+.task-link-picker__cancel { background: transparent; border: 0; color: inherit; padding: 1rem; cursor: pointer; }
+.task-link-picker__names { display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: 2rem 4rem; align-content: start; overflow: auto; flex: 1; padding: 1rem; }
+.task-link-picker__name { display: flex; flex-direction: column; gap: .5rem; border: 0; background: transparent; text-align: left; color: inherit; font: inherit; font-size: 2.8rem; padding: 1rem 0; cursor: pointer; overflow-wrap: anywhere; }
+.task-link-picker__name small { font-size: 1.2rem; }
+.task-link-picker__name:disabled { opacity: .4; cursor: default; }
+.task-link-picker__name:not(:disabled):hover { transform: translateX(.6rem); }
+.task-link-picker__name { transition: transform 220ms ease; }
+.task-link-picker button:focus-visible { outline: 2px solid var(--demo-theme-brand-menu-focus); outline-offset: 3px; }
+.task-link-picker__strip { display: flex; gap: 2vw; overflow-x: auto; flex: none; padding: 1rem .5rem; scrollbar-width: thin; }
+.task-link-picker__card { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; flex: 0 0 clamp(21rem, 16vw, 31rem); height: clamp(12rem, 15vh, 18rem); padding: 1.5rem; border: 1px solid var(--demo-theme-chat-border); border-radius: 1rem; background: var(--demo-theme-gallery-detail-action-rest-bg); color: var(--demo-theme-gallery-detail-action-rest-text); text-align: left; cursor: pointer; overflow: hidden; animation: task-link-card-in 480ms cubic-bezier(.22,1,.36,1) both; }
+.task-link-picker__card[data-current="true"] { opacity: 0; animation: none; }
+.task-link-picker__card:disabled { cursor: default; }
+.task-link-picker__copy { min-width: 0; overflow: hidden; font-size: 1rem; }
+.task-link-picker__copy strong { display: block; font-size: 1.4rem; font-weight: 400; overflow-wrap: anywhere; }
+.task-link-picker__copy p { margin-top: 1rem; }
+.task-link-picker__chat { display: flex; flex-direction: column; gap: .4rem; min-width: 0; border-left: 1px solid var(--demo-theme-chat-border); padding-left: .8rem; }
+.task-link-picker__bubble { display: block; align-self: flex-start; max-width: 90%; padding: .3rem .5rem; border-radius: .4rem; color: var(--demo-theme-chat-text); background: var(--demo-theme-chat-message); font-size: .8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.task-link-picker__bubble[data-role="user"] { align-self: flex-end; }
+.task-link-picker__composer { margin-top: auto; height: 2rem; border-radius: .5rem; background: var(--demo-theme-chat-composer); }
+.task-link-picker__error { color: var(--demo-theme-chat-error); }
+.task-link-picker__error:empty { display: none; }
+.task-link-picker__empty { font-size: 1.4rem; }
+html[data-task-linking] .task-view-toggle, html[data-task-linking] [data-gl="related"] { visibility: hidden; }
+@keyframes task-link-card-in { from { opacity: 0; transform: translateY(2rem); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .task-link-picker, .task-link-picker * { animation: none !important; transition: none !important; } }
 
 .task-metadata__relations-title {
   margin: 0 0 1.2rem;

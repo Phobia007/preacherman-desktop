@@ -1,5 +1,7 @@
 // Task creation stays inside the original Profile lens, followed by rail arrival.
-import {prepareTaskCover} from "./task-covers.js";
+import {prepareTaskCover, saveTaskCover, discardTaskCover, loadTaskCovers, taskCoverUrl} from "./task-covers.js";
+import {pickTaskWorkspace} from "./task-workspace.js";
+import {stageTaskSheet} from "./task-sheet-overlay.js";
 export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, watch}) {
   const body = document.createElement("section");
   body.id = "task-create-dialog";
@@ -33,6 +35,24 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     form.append(row);
     fields[name] = input;
   }
+  const workspaceRow = document.createElement("div");
+  workspaceRow.className = "task-create-dialog__field";
+  const workspaceCaption = document.createElement("span");
+  workspaceCaption.textContent = "工作区 · 可选";
+  const workspaceControls = document.createElement("div");
+  workspaceControls.className = "task-create-dialog__cover-controls";
+  const workspaceButton = document.createElement("button");
+  workspaceButton.type = "button";
+  workspaceButton.className = "task-create-dialog__workspace";
+  workspaceButton.setAttribute("aria-label", "选择工作文件夹");
+  const clearWorkspace = document.createElement("button");
+  clearWorkspace.type = "button";
+  clearWorkspace.className = "task-create-dialog__cover-remove";
+  clearWorkspace.textContent = "×";
+  clearWorkspace.setAttribute("aria-label", "清除工作区");
+  workspaceControls.append(workspaceButton, clearWorkspace);
+  workspaceRow.append(workspaceCaption, workspaceControls);
+  form.append(workspaceRow);
   const coverRow = document.createElement("div");
   coverRow.className = "task-create-dialog__field";
   const coverCaption = document.createElement("span");
@@ -107,10 +127,37 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   let coverPreviewUrl = null;
   let coverRevision = 0;
   let readingCover = false;
+  let editingId = null;
+  let savedCoverId = null;
+  let workspacePath = "";
+  let workspaceRequest = null;
+  let sheetStage = null;
+  let dialogRevision = 0;
+  const showWorkspace = () => {
+    workspaceButton.textContent = workspaceRequest ? "正在选择文件夹…" : workspacePath || "选择工作文件夹";
+    workspaceButton.title = workspacePath;
+    workspaceButton.disabled = busy || !!workspaceRequest;
+    clearWorkspace.hidden = !workspacePath;
+    clearWorkspace.disabled = busy || !!workspaceRequest;
+    submit.disabled = busy || readingCover || !!workspaceRequest;
+  };
+  workspaceButton.addEventListener("click", async () => {
+    if (busy || workspaceRequest) return;
+    const request = new AbortController();
+    workspaceRequest = request;
+    clearError(); showWorkspace();
+    try {
+      const path = await pickTaskWorkspace(request.signal);
+      if (!request.signal.aborted && opened && path) workspacePath = path;
+    } catch (reason) { if (!request.signal.aborted && opened) error.textContent = reason.message; }
+    finally { if (workspaceRequest === request) { workspaceRequest = null; showWorkspace(); } }
+  });
+  clearWorkspace.addEventListener("click", () => { workspacePath = ""; showWorkspace(); workspaceButton.focus(); });
   const close = () => { if (!busy) profileOpen.value = false; };
   const resetCover = () => {
     coverRevision++;
     coverBlob = null;
+    savedCoverId = null;
     if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
     coverPreviewUrl = null;
     preview.removeAttribute("src");
@@ -159,6 +206,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (busy || readingCover) return;
+    if (workspaceRequest) return;
     clearError();
     if (!fields.title.value.trim()) {
       error.textContent = "请填写任务名称。";
@@ -170,13 +218,24 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     busy = true;
     submit.disabled = coverButton.disabled = removeCover.disabled = true;
     form.setAttribute("aria-busy", "true");
-    label.textContent = "Adding…";
+    showWorkspace();
+    label.textContent = editingId ? "Saving…" : "Adding…";
+    let newCoverId = null;
     try {
-      if (!folio.prepareTaskCreation) throw new Error("任务页面尚未就绪，请稍后重试。");
-      const arrive = await folio.prepareTaskCreation({
+      const values = {
         ...Object.fromEntries(Object.entries(fields).map(([name, input]) => [name, input.value])),
-        coverBlob,
-      });
+        coverBlob, workspacePath,
+      };
+      let arrive = () => {};
+      if (editingId) {
+        const {updateTaskSettings} = await import("./task-metadata.js");
+        if (coverBlob) newCoverId = await saveTaskCover(coverBlob);
+        if (disposed) { if (newCoverId) await discardTaskCover(newCoverId); return; }
+        updateTaskSettings(editingId, {...values, coverId:newCoverId ?? savedCoverId});
+      } else {
+        if (!folio.prepareTaskCreation) throw new Error("任务页面尚未就绪，请稍后重试。");
+        arrive = await folio.prepareTaskCreation(values);
+      }
       if (disposed) return;
       form.reset();
       resetCover();
@@ -184,17 +243,24 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
       close();
       arrive();
     } catch {
-      if (!disposed) error.textContent = "任务未能添加，请保留填写内容后重试。";
+      if (newCoverId) await discardTaskCover(newCoverId).catch(() => {});
+      if (!disposed) error.textContent = editingId ? "修改未能保存，请保留填写内容后重试。" : "任务未能添加，请保留填写内容后重试。";
     } finally {
       busy = false;
       submit.disabled = coverButton.disabled = removeCover.disabled = false;
       form.removeAttribute("aria-busy");
-      label.textContent = "Add task";
+      label.textContent = editingId ? "Save task" : "Add task";
+      showWorkspace();
     }
   });
   const restore = () => {
     if (!opened) return;
     opened = false;
+    dialogRevision++;
+    workspaceRequest?.abort();
+    workspaceRequest = null;
+    void sheetStage?.restore(false);
+    sheetStage = null;
     body.hidden = true;
     document.documentElement.removeAttribute("data-task-creating");
     profileCopy.inert = copyWasInert;
@@ -203,9 +269,26 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     document.querySelector(".task-create__button")?.setAttribute("aria-expanded", "false");
     previousFocus?.isConnected && previousFocus.focus({preventScroll:true});
   };
-  const open = () => {
+  const open = async (event) => {
     if (opened) return;
+    const editing = event?.type === "preacherman:task-edit-open" ? event.detail : null;
+    let record;
+    try { record = editing ? (await import("./task-metadata.js")).readTaskSettings(editing.id, {title:editing.title}) : null; }
+    catch { return; }
+    if (disposed || opened) return;
+    resetCover();
+    form.reset();
+    clearError();
+    editingId = record?.id ?? null;
+    for (const [name, input] of Object.entries(fields)) input.value = record?.[name] ?? "";
+    workspacePath = record?.workspacePath ?? "";
+    savedCoverId = record?.coverId ?? null;
+    label.textContent = editingId ? "Save task" : "Add task";
+    body.setAttribute("aria-label", editingId ? "任务设置" : "创建新对话");
+    showWorkspace();
+    if (editingId) sheetStage = stageTaskSheet(folio, {hide:true});
     opened = true;
+    const revision = ++dialogRevision;
     document.documentElement.setAttribute("data-task-creating", "");
     folio.taskCreateDialogOpen = true;
     previousFocus = document.activeElement;
@@ -223,12 +306,19 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     // Keep the Profile lens motion; only creation hides its redundant Close label.
     profileOpen.value = true;
     queueMicrotask(() => { if (opened) fields.title.focus({preventScroll:true}); });
+    if (savedCoverId) {
+      await loadTaskCovers([savedCoverId]);
+      if (opened && revision === dialogRevision && savedCoverId) {
+        const url = taskCoverUrl(savedCoverId);
+        if (url) { preview.src = url; preview.hidden = removeCover.hidden = false; coverName.textContent = "更换封面图片"; }
+      }
+    }
   };
   const guard = (event) => {
     if (!opened) return;
     if (event.type === "keydown") {
       if (event.key === "Tab") {
-        const stops = [...Object.values(fields), ...[coverButton, removeCover, submit].filter(control => !control.hidden && !control.disabled)];
+        const stops = [...Object.values(fields), ...[workspaceButton, clearWorkspace, coverButton, removeCover, submit].filter(control => !control.hidden && !control.disabled)];
         const index = stops.indexOf(document.activeElement);
         event.preventDefault();
         stops[(index + (event.shiftKey ? -1 : 1) + stops.length) % stops.length].focus();
@@ -250,6 +340,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   for (const type of types) window.addEventListener(type, guard, {capture:true, passive:false});
   for (const type of ["pointerdown", "wheel", "touchstart"]) body.addEventListener(type, shield);
   window.addEventListener("preacherman:task-create-open", open);
+  window.addEventListener("preacherman:task-edit-open", open);
   const stopWatching = watch(profileOpen, (value) => {
     if (!value) restore();
     // Keep the new-task closing lens empty; only normal Profile restores its decoration.
@@ -264,6 +355,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
       folio.taskCreateDialogOpen = false;
       stopWatching();
       window.removeEventListener("preacherman:task-create-open", open);
+      window.removeEventListener("preacherman:task-edit-open", open);
       for (const type of types) window.removeEventListener(type, guard, true);
       body.remove();
     },
