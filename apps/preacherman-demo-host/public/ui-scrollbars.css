@@ -1,0 +1,14 @@
+/* Shared by the host and packaged frames in both appearances. Hide only the
+   scrollbar chrome; each component keeps its own overflow and input behavior. */
+*,
+*::before,
+*::after {
+  scrollbar-width: none !important;
+  scrollbar-gutter: auto !important;
+}
+
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
