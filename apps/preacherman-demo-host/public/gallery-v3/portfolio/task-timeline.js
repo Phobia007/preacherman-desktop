@@ -11,16 +11,18 @@ style.href = new URL("./task-timeline.css", import.meta.url).href;
 document.head.append(style);
 
 // View state only. Nothing here changes saved task records, dates or conversations.
-const view = {open: null, x: 0, columns: new Map()};
+const indexView = {open: null, x: 0, columns: new Map()};
 export default {
   __name: "full",
-  async setup() {
+  props: {picker: {type:Object, default:null}},
+  async setup(props) {
+    const view = props.picker ? {open:null, x:0, columns:new Map()} : indexView;
     const nuxt = useNuxtApp();
     const {$folio: folio, $dato: dato, $resize: resize} = nuxt;
     const {to: navigate} = useNavigation();
     let pending, restore;
     const {data} = ([pending, restore] = withAsyncContext(() => useAsyncData("projects", () => dato.projects())), pending = await pending, restore(), pending);
-    useHead(() => ({title: "Index"}));
+    if (!props.picker) useHead(() => ({title: "Index"}));
     const root = ref(null), panel = ref(null), horizontal = ref(null), track = ref(null), ruler = ref(null);
     const projects = ref([]), records = ref([]), ready = ref(false), error = ref("");
     const authored = (data.value ?? []).filter(project => !project.preachermanTask).map(project => project.slug);
@@ -40,6 +42,7 @@ export default {
       return bounds;
     };
     const point = event => {
+      if (props.picker) return;
       if (!resize.mouse) return;
       pointer = {x: event.clientX, y: event.clientY};
       folio.rail.point(pointer.x, pointer.y);
@@ -76,6 +79,7 @@ export default {
       if (column) column.scrollTop = view.columns.get(day) ?? 0;
     };
     const preview = (event, index) => {
+      if (props.picker) return;
       if (!ready.value || (!resize.mouse && event.type !== "focus")) return;
       activeName = event.currentTarget;
       keyboardPreview = event.type === "focus";
@@ -87,6 +91,7 @@ export default {
     const visit = async (event, project) => {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
+      if (props.picker) { props.picker.select(project.slug); return; }
       if (navigating || !ready.value) return;
       navigating = true;
       stopScroll();
@@ -171,7 +176,7 @@ export default {
       event.preventDefault();
       moveHorizontal(delta);
     };
-    usePrefetch(() => data.value?.length ? [`/projects/${data.value[0].slug}`] : [], {payloads: 0});
+    if (!props.picker) usePrefetch(() => data.value?.length ? [`/projects/${data.value[0].slug}`] : [], {payloads: 0});
     onMounted(async () => {
       try {
         records.value = readTaskProjects();
@@ -184,6 +189,7 @@ export default {
         }
         await nextTick();
         if (disposed) return;
+        if (!props.picker) {
         folio.declare();
         await folio.booted;
         if (disposed) return;
@@ -197,6 +203,7 @@ export default {
         window.addEventListener("pointermove", point, {passive: true});
         folio.staggerHud(.2, .03);
         folio.setScroll(0);
+        }
         ready.value = true;
         await nextTick();
         if (disposed) return;
@@ -216,12 +223,11 @@ export default {
       window.removeEventListener("pointermove", point);
       cancelAnimationFrame(frame);
       stopScroll();
-      folio.rail.bind(null);
-      folio.dropTexts(flying);
+      if (!props.picker) { folio.rail.bind(null); folio.dropTexts(flying); }
     });
     const arrow = expanded => h("svg", {viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 1.25, "aria-hidden": "true", class: "task-timeline__arrow", style: {transform: expanded ? "rotate(180deg)" : ""}}, [h("path", {d: "m6 9 6 6 6-6"})]);
     return () => h("main", {
-      ref: root, class: "task-timeline", "data-gl-shield": "", "aria-label": "Task timeline",
+      ref: root, class: "task-timeline", "data-gl-shield": "", "aria-label": "Task timeline", "data-picker": !!props.picker,
       "data-profile-open": !!nuxt.payload.state["$sprofile-open"],
     }, [
       h("div", {class: "task-timeline__viewport", ref: horizontal, onScroll: rememberHorizontal, onWheel: wheel, "data-lenis-prevent": ""},
@@ -244,6 +250,7 @@ export default {
             key: project.slug, style: {"--row-delay": Math.min(row * 32, 256) + "ms"},
           }, [h("a", {
             class: "task-timeline__name", href: taskProjectRoute(project), "data-project-index": index,
+            "data-task-id": project.slug, "aria-disabled": props.picker?.disabled(project.slug) || undefined,
             onPointerenter: event => preview(event, index), onPointerleave: clearPreview, onFocus: event => preview(event, index), onBlur: clearPreview,
             onClick: event => visit(event, project),
           }, taskDisplayTitle(project))])))] : []))),

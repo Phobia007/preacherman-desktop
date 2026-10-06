@@ -44,10 +44,11 @@ function selectionKey(providerId, modelId) {
   return `${providerId}::${modelId}`;
 }
 
+let previewCatalog = {providers:[], active:null};
 export const TaskConversation = {
-  props: {slug:{type:String, required:true}},
+  props: {slug:{type:String, required:true}, preview:{type:Boolean, default:false}},
   setup(props) {
-    const task = resolveTaskId(props.slug);
+    const task = props.preview ? props.slug : resolveTaskId(props.slug);
     const messages = ref([]);
     const draft = ref("");
     const files = ref([]);
@@ -57,8 +58,8 @@ export const TaskConversation = {
     const list = ref(null);
     const input = ref(null);
     const picker = ref(null);
-    const providers = ref([]);
-    const providerState = ref("loading");
+    const providers = ref(props.preview ? previewCatalog.providers : []);
+    const providerState = ref(props.preview ? "ready" : "loading");
     const modelOpen = ref(false);
     const selected = ref("");
     let selectionPinned = false;
@@ -135,6 +136,7 @@ export const TaskConversation = {
     };
 
     const requestProviders = () => {
+      if (props.preview) return;
       providerState.value = providers.value.length ? "ready" : "loading";
       const targetOrigin = location.origin === "null" ? "*" : location.origin;
       parent.postMessage({type:"gallery-provider-request"}, targetOrigin);
@@ -154,6 +156,7 @@ export const TaskConversation = {
         return;
       }
       providers.value = validProviders(event.data.providers);
+      previewCatalog = {providers:providers.value, active:event.data.active};
       providerState.value = "ready";
       const active = event.data.active;
       const defaultKey = active ? selectionKey(active.mode === "cli" ? active.agentId : active.connectionId, active.model) : "";
@@ -163,6 +166,11 @@ export const TaskConversation = {
       if (!event.target.closest?.(".task-chat__model-select")) modelOpen.value = false;
     };
     onMounted(() => {
+      if (props.preview) {
+        const active = previewCatalog.active;
+        if (!selected.value && active) selected.value = selectionKey(active.mode === "cli" ? active.agentId : active.connectionId, active.model);
+        scrollToLatest(); return;
+      }
       addEventListener("message", receiveProviders);
       document.addEventListener("pointerdown", closeOutside);
       requestProviders();

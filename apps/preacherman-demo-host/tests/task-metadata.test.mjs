@@ -408,7 +408,7 @@ test("creation removes redundant close controls only while creating and retains 
 });
 
 
-test("manual links are reciprocal, unique and direct; unopened demos, deleted and self links are excluded", () => {
+test("manual links include older timeline tasks; miniature candidates still contain only opened or created tasks", () => {
  const f=fixture();
  f.context.augmentTaskProjects([{slug:"nathan-riley",title:"Preacherman"},{slug:"demo",title:"Unused"}]);
  f.mount();
@@ -421,13 +421,17 @@ test("manual links are reciprocal, unique and direct; unopened demos, deleted an
  assert.equal(JSON.parse(f.storage.get("preacherman.task.links")).length,1);
  assert.equal(f.context.relatedTaskProjects(a.id)[0].id,b.id);
  assert.equal(f.context.relatedTaskProjects(b.id)[0].id,a.id);
- assert.throws(()=>f.context.linkTaskProjects(a.id,a.id));assert.throws(()=>f.context.linkTaskProjects(a.id,"demo"));
+ assert.throws(()=>f.context.linkTaskProjects(a.id,a.id));
+ f.context.linkTaskProjects(a.id,"demo");
+ assert.equal(f.context.relatedTaskProjects(a.id).length,2);
+ assert.throws(()=>f.context.linkTaskProjects(a.id,"missing"));
  f.context.location.search="?task="+a.id;
  const detail=f.context.TaskMetadata.setup({slug:"nathan-riley"})();
  detail.children[2].children[1].children[0].children[0].props.onClick();
  assert.equal(f.events.at(-1),"/projects/nathan-riley?task="+b.id);
  f.context.deleteTaskProject(b.id);
- assert.equal(f.context.relatedTaskProjects(a.id).length,0);
+ assert.equal(f.context.relatedTaskProjects(a.id).length,1);
+ assert.equal(f.context.relatedTaskProjects(a.id)[0].id,"demo");
  assert.throws(()=>f.context.linkTaskProjects(a.id,b.id));
 });
 

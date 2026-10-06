@@ -23,25 +23,32 @@ export function stageTaskSheet(folio, {hide = false} = {}) {
     sheet.style.transformOrigin = "50% 50%";
   }
   let animation;
+  const origin = sheet?.getBoundingClientRect();
+  let shrunk = false;
   let disposed = false;
   return {
     shrink(rect) {
       if (!sheet || disposed) return;
+      const target = `translate(${rect.left - origin.left}px, ${rect.top - origin.top}px) scale(${rect.width / origin.width}, ${rect.height / origin.height})`;
+      const from = getComputedStyle(sheet).transform;
       animation?.cancel();
-      if (saved === null) sheet.removeAttribute("style");
-      else sheet.setAttribute("style", saved);
-      const from = sheet.getBoundingClientRect();
       sheet.style.transformOrigin = "0 0";
-      animation = sheet.animate([
-        {transform:"none"},
-        {transform:`translate(${rect.left - from.left}px, ${rect.top - from.top}px) scale(${rect.width / from.width}, ${rect.height / from.height})`},
-      ], {duration:matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 520, easing:"cubic-bezier(.22,1,.36,1)", fill:"forwards"});
+      sheet.style.transform = target;
+      if (!shrunk) animation = sheet.animate([{transform:from}, {transform:target}], {duration:matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 520, easing:"cubic-bezier(.22,1,.36,1)"});
+      shrunk = true;
     },
     async restore(animate = true) {
       if (disposed) return;
       disposed = true;
-      if (animate && animation) {
-        animation.reverse();
+      const from = sheet && getComputedStyle(sheet).transform;
+      animation?.cancel();
+      if (animate && shrunk && sheet) {
+        const original = sheet.style.transform;
+        if (saved === null) sheet.removeAttribute("style"); else sheet.setAttribute("style", saved);
+        const to = getComputedStyle(sheet).transform;
+        sheet.style.transformOrigin = "0 0";
+        sheet.style.transform = original;
+        animation = sheet.animate([{transform:from}, {transform:to}], {duration:matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 520, easing:"cubic-bezier(.22,1,.36,1)"});
         await animation.finished.catch(() => {});
       }
       animation?.cancel();

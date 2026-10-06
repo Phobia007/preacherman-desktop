@@ -62,7 +62,7 @@ export function relatedTaskProjects(currentId) {
   });
 }
 export function linkTaskProjects(source, target) {
-  const candidates = new Set(taskLinkCandidates().map(item => item.id));
+  const candidates = new Set([...authoredTasks.keys(), ...readTaskProjects().map(item => item.id)].filter(id => !deletedTaskIds().has(id)));
   if (source === target || !candidates.has(source) || !candidates.has(target)) throw new Error("请选择其他可用任务。");
   const edges = JSON.parse(localStorage.getItem(LINKS_KEY) ?? "[]");
   if (!Array.isArray(edges)) throw new Error("关联任务无法读取。");
@@ -290,15 +290,16 @@ export const TaskCreateControl = {
 };
 
 export const TaskMetadata = {
-  props: { slug: { type: String, required: true }, title: {type:String, default:""} },
+  props: { slug: { type: String, required: true }, title: {type:String, default:""}, preview:{type:Boolean, default:false} },
   setup(props) {
-    const task = resolveTaskId(props.slug);
+    const task = props.preview ? props.slug : resolveTaskId(props.slug);
     if (!task.startsWith("task-") && !authoredTasks.has(task)) authoredTasks.set(task, {slug:task, title:props.title});
-    const {$folio: folio} = useNuxtApp();
+    const nuxt = useNuxtApp();
+    const {$folio: folio} = nuxt;
     const {to: navigate} = useNavigation();
     const error = ref("");
     let picker = null;
-    onMounted(() => { try { rememberOpenedTask(task); } catch { error.value = "任务访问记录未能保存。"; } });
+    onMounted(() => { if (props.preview) return; try { rememberOpenedTask(task); } catch { error.value = "任务访问记录未能保存。"; } });
     onUnmounted(() => picker?.dispose());
     const settings = () => {
       error.value = "";
@@ -308,7 +309,7 @@ export const TaskMetadata = {
       if (picker) return;
       error.value = "";
       try {
-        picker = openTaskLinkPicker({folio, task, anchor:event.currentTarget, candidates:taskLinkCandidates(), linked:relatedTaskProjects(task).map(item=>item.id),
+        picker = openTaskLinkPicker({folio, appContext:nuxt.vueApp._context, task, anchor:event.currentTarget, candidates:taskLinkCandidates(), linked:relatedTaskProjects(task).map(item=>item.id),
           onSelect:target => linkTaskProjects(task, target), onClose:()=>{picker=null;}});
       } catch { error.value = "关联任务暂不可用，请重试。"; }
     };
@@ -320,8 +321,8 @@ export const TaskMetadata = {
         element("h1", { class: "task-metadata__heading" }, [
           element("span", {class:"task-metadata__title"}, project.title || "未命名任务"),
           element("button", {type:"button", class:"task-metadata__settings", title:"任务设置", "aria-label":"任务设置", onClick:settings}, [
-            element("svg", {viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", "stroke-width":1.4, "stroke-linejoin":"round", "aria-hidden":"true"}, [
-              element("path", {d:"m9 3-1 3-3 1-2 3 2 2-1 3 2 3 3-1 3 2 3-2 3 1 2-3-1-3 2-2-2-3-3-1-1-3Z"}), element("circle", {cx:12,cy:12,r:3}),
+            element("svg", {viewBox:"14 14 52 52", fill:"none", stroke:"currentColor", "stroke-width":2.6, "stroke-linecap":"round", "stroke-linejoin":"round", "aria-hidden":"true"}, [
+              element("path", {d:"M55.71,33.49L56.56,36.18L61.73,36.56L61.73,43.44L56.56,43.82L55.71,46.51L54.42,49.01L57.80,52.93L52.93,57.80L49.01,54.42L46.51,55.71L43.82,56.56L43.44,61.73L36.56,61.73L36.18,56.56L33.49,55.71L30.99,54.42L27.07,57.80L22.20,52.93L25.58,49.01L24.29,46.51L23.44,43.82L18.27,43.44L18.27,36.56L23.44,36.18L24.29,33.49L25.58,30.99L22.20,27.07L27.07,22.20L30.99,25.58L33.49,24.29L36.18,23.44L36.56,18.27L43.44,18.27L43.82,23.44L46.51,24.29L49.01,25.58L52.93,22.20L57.80,27.07L54.42,30.99Z"}), element("circle", {cx:40,cy:40,r:8.5}),
             ]),
           ]),
         ]),

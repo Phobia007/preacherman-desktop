@@ -14,12 +14,12 @@
 .task-chat__execution button:focus-visible { outline: 1px solid var(--demo-theme-chat-text); outline-offset: 3px; }
 .task-chat__author { display: block; opacity: 0.7; font-size: 0.85em; margin-bottom: 0.3rem; }
 /* Cover ratios belong to rail cards, never the viewport-sized detail sheet. */
-[data-gl="sheet"]:has(.task-metadata) {
+:is([data-gl="sheet"], .task-link-picker__sheet):has(.task-metadata) {
   aspect-ratio: auto;
   min-height: 0;
   cursor: default;
 }
-[data-gl="sheet"]:has(.task-metadata)::after {
+:is([data-gl="sheet"], .task-link-picker__sheet):has(.task-metadata)::after {
   content: "";
   position: absolute;
   top: 3rem;
@@ -30,7 +30,7 @@
   pointer-events: none;
   opacity: var(--task-content-opacity, 0);
 }
-[data-gl="sheet"]:has(.task-metadata) > div:first-child {
+:is([data-gl="sheet"], .task-link-picker__sheet):has(.task-metadata) > div:first-child {
   flex: none;
   width: calc(50% - 4rem);
   height: calc(100% - 3rem);
@@ -38,7 +38,7 @@
   align-self: stretch;
   overflow: hidden;
 }
-[data-gl="sheet"]:has(.task-metadata) > div:nth-child(2) {
+:is([data-gl="sheet"], .task-link-picker__sheet):has(.task-metadata) > div:nth-child(2) {
   position: absolute;
   inset: 9rem 3rem 4rem 50%;
   width: auto;
@@ -234,8 +234,8 @@
   .task-chat__model svg { transition: none; }
 }
 @media (max-width: 649px) {
-  [data-gl="sheet"]:has(.task-metadata) > div:first-child { padding-left: 0.8rem; padding-right: 0.8rem; }
-  [data-gl="sheet"]:has(.task-metadata) > div:nth-child(2) { inset: 7rem 1rem 6rem 50%; padding-left: 1rem; }
+  :is([data-gl="sheet"], .task-link-picker__sheet):has(.task-metadata) > div:first-child { padding-left: 0.8rem; padding-right: 0.8rem; }
+  :is([data-gl="sheet"], .task-link-picker__sheet):has(.task-metadata) > div:nth-child(2) { inset: 7rem 1rem 6rem 50%; padding-left: 1rem; }
   .task-chat__toolbar { flex-wrap: wrap; gap: 0.2rem; }
   .task-chat__tool { font-size: 1.1rem; }
 }
