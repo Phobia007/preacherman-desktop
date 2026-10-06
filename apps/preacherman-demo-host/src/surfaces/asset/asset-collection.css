@@ -54,10 +54,11 @@
 .asset-detail { isolation: isolate; animation: asset-detail-arrive 450ms ease both; }
 .asset-detail__text { position: relative; z-index: 2; }
 .asset-detail__heading { position: relative; width: 56%; color: var(--demo-theme-market-text); }
+.asset-detail__heading .asset-detail__formal,
 .asset-detail__heading .asset-detail__rule { width: min(266px, 100%); }
 .asset-detail__name { margin: 0; font-size: 64px; line-height: 1; font-weight: 400; letter-spacing: 6px; }
 .asset-detail__name[data-long="true"] { font-size: 42px; line-height: 1.4; letter-spacing: 2px; overflow-wrap: anywhere; }
-.asset-detail__formal { margin: 10px 0 0; font-size: 22px; line-height: 1.5; letter-spacing: .2px; }
+.asset-detail__formal { margin: 10px 0 0; text-align: center; font-size: 22px; line-height: 1.5; letter-spacing: .2px; }
 .asset-detail__rule {
   position: relative; width: 60.5%; height: 19px; margin-top: -2px; opacity: .5;
   background: linear-gradient(var(--demo-theme-market-muted), var(--demo-theme-market-muted)) left 5px / 100% 1px no-repeat,
