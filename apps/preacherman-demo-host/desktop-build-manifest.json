@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "task-workspace-links-20261006",
+  "buildId": "task-link-timeline-20261006",
   "productVersion": "0.1.0",
-  "sourceTask": "task-workspace-settings-and-manual-card-links",
+  "sourceTask": "task-association-timeline-scaled-cards-motion-and-settings-icon",
   "sourceThread": null,
-  "sourceState": "Task creation adds a native folder picker; gear editing reuses the Profile lens and preserves drafts. Explicit reciprocal task links replace inferred parent relationships, with a bottom miniature picker and direct card navigation. Workspace paths are saved as task metadata; existing agent execution configuration is unchanged.",
-  "sourceCommit": "32b2e2156743d277e83808bb25f047bceab39554",
+  "sourceState": "Associations reuse the full chronological Task timeline. Miniatures render the complete task sheet at uniform scale, with wheel/drag navigation and no scrollbar. Linked and query-backed tasks use the existing lateral sheet flights. Task gear matches the sidebar line icon.",
+  "sourceCommit": "3a943e00f55b6328a570b99effce8eb873771090",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-06T10:51:17.0490157+08:00",
-  "deployedAt": "2026-10-06T10:52:03.0278896+08:00",
-  "verifiedAt": "2026-10-06T11:36:36.6251554+08:00",
-  "sizeBytes": 638535680,
-  "sha256": "BC7D020F236772A6F27BC3D73CE8305B7F9BB1C92DBE19F8D71852D49DBB8F37",
+  "builtAt": "2026-10-06T23:14:09.0055018+08:00",
+  "deployedAt": "2026-10-06T23:14:49.1767216+08:00",
+  "verifiedAt": "2026-10-06T23:20:20.4088719+08:00",
+  "sizeBytes": 638538752,
+  "sha256": "518D5537862FE0080D15F3AAB87A1E1EF3C7D58E209DD9C7F20876F34F0A9080",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-workspace-links-before-20261006/preacherman-demo-host.exe",
-  "backupSha256": "F749495CD88FFB8E7A737A406EEAFE1DB6880ED6B1DE409107A4ECDA6B777D52",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-workspace-links-before-20261006/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-link-timeline-before-20261006/preacherman-demo-host.exe",
+  "backupSha256": "BC7D020F236772A6F27BC3D73CE8305B7F9BB1C92DBE19F8D71852D49DBB8F37",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-link-timeline-before-20261006/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "b46684ae6734b70eea3f41e81daf45f0a869d1b7",
-  "previousVerificationCommit": "b46684ae6734b70eea3f41e81daf45f0a869d1b7",
+  "rollbackBaselineCommit": "32b2e2156743d277e83808bb25f047bceab39554",
+  "previousVerificationCommit": "32b2e2156743d277e83808bb25f047bceab39554",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 41,
+      "focusedTests": 43,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Task creation, settings prefill/save/cancel, read-only title, miniature link picker, reciprocal links, direct navigation and draft preservation verified in both appearances. Core navigation, window controls and resource cleanup verified.",
+    "nativeFlow": "Canonical shortcut cold launch; both appearances verify complete timeline, historical selection, original-size scaled cards, wheel/drag movement, return arrow, retained draft, link and neighboring-task navigation and gear editing. Core surfaces, window controls and resource cleanup verified.",
     "navigation": [
       "Home",
       "Task",
@@ -140,83 +140,64 @@
         "ready": true
       }
     ],
-    "assets": [
-      {
-        "appearance": "dark",
-        "sourceCentered": true,
-        "cards": 14,
-        "mappedDetails": [
-          "zima",
-          "stellar-blade-lily-stargazer-coat"
-        ],
-        "transparentArtwork": true,
-        "waistUpCards": true,
-        "headingTopLeft": true,
-        "descriptionTopAligned": true,
-        "defaultFont": true,
-        "isolatedDetails": true,
-        "internalOnly": true,
-        "thumbnailSwitch": true,
-        "escapeBack": true,
-        "returnFocus": true,
-        "glass": "blur(12px)"
-      },
-      {
-        "appearance": "light",
-        "sourceCentered": true,
-        "cards": 14,
-        "mappedDetails": [
-          "zima",
-          "stellar-blade-lily-stargazer-coat"
-        ],
-        "transparentArtwork": true,
-        "waistUpCards": true,
-        "headingTopLeft": true,
-        "descriptionTopAligned": true,
-        "defaultFont": true,
-        "isolatedDetails": true,
-        "internalOnly": true,
-        "thumbnailSwitch": true,
-        "escapeBack": true,
-        "returnFocus": true,
-        "glass": "blur(12px)"
-      }
-    ],
     "tasks": [
       {
         "appearance": "dark",
-        "count": 8,
-        "create": true,
-        "edit": true,
-        "readonlyTitle": true,
-        "emptyFields": true,
+        "count": 14,
+        "geometry": {
+          "liveHeight": 10.9979248046875,
+          "previewHeight": 11.01300048828125,
+          "scrollbar": "none",
+          "card": {
+            "x": 117.78125,
+            "y": 790.890625,
+            "width": 297.59375,
+            "height": 162.921875,
+            "top": 790.890625,
+            "right": 415.375,
+            "bottom": 953.8125,
+            "left": 117.78125
+          }
+        },
+        "wheel": 550,
+        "drag": 223,
+        "fullTimeline": true,
+        "oldTaskLinked": true,
         "link": true,
-        "directNavigation": true,
-        "reciprocal": true,
-        "cancel": true,
-        "draftPreserved": true
+        "edit": true,
+        "draftPreserved": true,
+        "returnArrow": true,
+        "neighborCustomTask": true
       },
       {
         "appearance": "light",
-        "count": 8,
-        "create": true,
-        "edit": true,
-        "readonlyTitle": true,
-        "emptyFields": true,
+        "count": 14,
+        "geometry": {
+          "liveHeight": 10.9979248046875,
+          "previewHeight": 11.01300048828125,
+          "scrollbar": "none",
+          "card": {
+            "x": 117.78125,
+            "y": 790.890625,
+            "width": 297.59375,
+            "height": 162.921875,
+            "top": 790.890625,
+            "right": 415.375,
+            "bottom": 953.8125,
+            "left": 117.78125
+          }
+        },
+        "wheel": 550,
+        "drag": 223,
+        "fullTimeline": true,
+        "oldTaskLinked": true,
         "link": true,
-        "directNavigation": true,
-        "reciprocal": true,
-        "cancel": true,
-        "draftPreserved": true
+        "edit": true,
+        "draftPreserved": true,
+        "returnArrow": true,
+        "neighborCustomTask": true
       }
     ],
-    "nativeFolder": {
-      "nativeFolderSelected": true,
-      "savedAndPrefilled": true,
-      "cancelPreserved": true,
-      "clear": true,
-      "passed": true
-    },
     "windowControls": {
       "restore": true,
       "resizedAsset": {
@@ -231,30 +212,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-06T11:36:36.6251554+08:00",
-      "NativePid": 3436,
-      "StartedAt": "2026-10-06T11:36:14.0519475+08:00",
-      "WindowHandle": 2296140,
+      "SampledAt": "2026-10-06T23:20:20.4088719+08:00",
+      "NativePid": 11708,
+      "StartedAt": "2026-10-06T23:19:57.9690648+08:00",
+      "WindowHandle": 24578756,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        3436,
-        26836,
-        29540,
-        23648,
-        24804,
-        26964,
-        31464,
-        21516,
-        25792,
-        28604,
-        876
+        11708,
+        31692,
+        25596,
+        17320,
+        19900,
+        34568,
+        5160,
+        17760,
+        17200,
+        24472,
+        16708
       ],
-      "NormalizedCpuPercent": 4,
-      "WorkingSetMiB": 1946,
-      "GpuDedicatedBytes": 3299008512,
-      "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 17448668,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1897.4,
+      "GpuDedicatedBytes": 3263004672,
+      "MaxGpuEngineUtilization": 13,
+      "FreeRamKiB": 17106816,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -264,7 +245,6 @@
     },
     "newErrors": [],
     "observedErrors": [
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
@@ -289,7 +269,8 @@
       "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked."
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "visualReview": {
       "reviewed": [
@@ -312,12 +293,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\task-workspace-links-20261006\\native-folder.json",
-      "D:\\preacherman\\output\\playwright\\task-workspace-links-20261006\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\task-workspace-links-20261006\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\task-workspace-links-20261006\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\task-workspace-links-20261006\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\task-workspace-links-20261006\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\task-link-timeline-20261006\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1248,9 +1228,18 @@
       "deployedAt": "2026-10-06T10:52:03.0278896+08:00",
       "verifiedAt": "2026-10-06T11:36:36.6251554+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-workspace-links-before-20261006"
+    },
+    {
+      "buildId": "task-link-timeline-20261006",
+      "sourceCommit": "3a943e00f55b6328a570b99effce8eb873771090",
+      "sha256": "518D5537862FE0080D15F3AAB87A1E1EF3C7D58E209DD9C7F20876F34F0A9080",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-06T23:14:49.1767216+08:00",
+      "verifiedAt": "2026-10-06T23:20:20.4088719+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-link-timeline-before-20261006"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-workspace-links-before-20261006/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\task-link-timeline-before-20261006/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
