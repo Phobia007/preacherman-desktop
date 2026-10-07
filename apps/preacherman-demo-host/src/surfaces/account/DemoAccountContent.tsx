@@ -12,7 +12,6 @@ export function DemoAccountContent({ account, editing, busy, onEdit, onCancel, o
   return <section className="account__member" aria-label={editing ? "Edit profile" : "Your profile"}>
     <header className="account__heading account__member-heading">
       <span className="account__portrait" aria-hidden="true">{account.name.slice(0, 1).toUpperCase()}</span>
-      <span className="account__demo-label">Demo account</span>
       <h1 tabIndex={-1}>{editing ? "Edit your profile" : account.name}</h1>
       <p className="account__member-number">{account.id}</p>
     </header>
@@ -27,8 +26,8 @@ export function DemoAccountContent({ account, editing, busy, onEdit, onCancel, o
       <button className="account__continue" type="submit" disabled={busy || !name.trim()}>Save changes</button>
       <button className="account__text-action account__cancel" type="button" disabled={busy} onClick={onCancel}>Cancel</button>
     </form> : <>
-      <p className="account__bio">{account.bio || "A space for your second identity."}</p>
-      <p className="account__member-email">{account.email}</p>
+      <p className="account__bio">Already joined preacherman blockchain</p>
+      <p className="account__member-email">credit: 0</p>
       <nav className="account__destinations" aria-label="Your spaces">
         <button type="button" onClick={() => onNavigate("market")}><span>My Gallery<small>Your chosen collection</small></span><Arrow /></button>
         <button type="button" onClick={() => onNavigate("asset")}><span>My Asset<small>Your virtual characters</small></span><Arrow /></button>
