@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "friends-focus-20261008",
+  "buildId": "account-credit-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "prevent-friends-entry-desktop-scroll-white-edge",
+  "sourceTask": "account-membership-status-and-credit-placeholder",
   "sourceThread": null,
-  "sourceState": "Friends entry transfers focus without automatic scrolling. The scaled desktop viewport clips overflow without becoming scrollable; component scrolling, themes and authored entry/exit animations remain unchanged.",
-  "sourceCommit": "afc3b07c751e7e65ab1e30f7357ebe73e650c833",
+  "sourceState": "Account profile removes the upper Demo account label, displays Already joined preacherman blockchain and credit: 0 as a local placeholder. Existing typography, themes, profile editing and transitions are retained.",
+  "sourceCommit": "dadd41aaaaefead37afd6851b0befa6ccca9a015",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-08T03:04:17.0206378+08:00",
-  "deployedAt": "2026-10-08T03:05:11.8423421+08:00",
-  "verifiedAt": "2026-10-08T03:12:05.9700602+08:00",
+  "builtAt": "2026-10-08T04:36:10.4035973+08:00",
+  "deployedAt": "2026-10-08T04:36:47.5803120+08:00",
+  "verifiedAt": "2026-10-08T04:39:13.3365176+08:00",
   "sizeBytes": 638540288,
-  "sha256": "806ED0C67F61399A62F24CBFBF38F30CFFF3F98E093700F3A18C9E43BC40A4A5",
+  "sha256": "D9ECA7FE561F524390B55E9AD0865A53B55427B3E83ABD02E0C12FDA008FF7D7",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\friends-focus-before-20261008/preacherman-demo-host.exe",
-  "backupSha256": "F8FC588310AA1380AEFC176DF7B0BED7FFC407A6E489BDEE8BF1D4128D14C4CD",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\friends-focus-before-20261008/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "806ED0C67F61399A62F24CBFBF38F30CFFF3F98E093700F3A18C9E43BC40A4A5",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "923a9434f11d6a8ced25fe0b74fdd2c9f8cff07a",
-  "previousVerificationCommit": "923a9434f11d6a8ced25fe0b74fdd2c9f8cff07a",
+  "rollbackBaselineCommit": "afc3b07c751e7e65ab1e30f7357ebe73e650c833",
+  "previousVerificationCommit": "afc3b07c751e7e65ab1e30f7357ebe73e650c833",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 18,
+      "focusedTests": 14,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch; both appearances verify repeated mouse and keyboard Friends entry with frame-by-frame viewport bounds and zero desktop scrolling, footer return/search, core navigation and window controls. No new console errors. Normal startup and resource cleanup verified.",
+    "nativeFlow": "Canonical shortcut cold launch; both appearances verify the exact account status, credit placeholder, absence of upper demo label and email, profile edit/cancel, core navigation and window controls. No new console errors. Normal startup and resource cleanup verified.",
     "navigation": [
       "Home",
       "Task",
@@ -144,48 +144,20 @@
       {
         "appearance": "dark",
         "passed": true,
-        "measurements": [
-          {
-            "input": "mouse",
-            "frames": 290,
-            "stable": true
-          },
-          {
-            "input": "keyboard",
-            "frames": 290,
-            "stable": true
-          },
-          {
-            "input": "mouse",
-            "frames": 290,
-            "stable": true
-          }
-        ],
-        "footerReturn": true,
-        "searchClear": true
+        "status": "Already joined preacherman blockchain",
+        "credit": 0,
+        "upperDemoLabelRemoved": true,
+        "emailReplaced": true,
+        "editCancel": true
       },
       {
         "appearance": "light",
         "passed": true,
-        "measurements": [
-          {
-            "input": "mouse",
-            "frames": 289,
-            "stable": true
-          },
-          {
-            "input": "keyboard",
-            "frames": 290,
-            "stable": true
-          },
-          {
-            "input": "mouse",
-            "frames": 290,
-            "stable": true
-          }
-        ],
-        "footerReturn": true,
-        "searchClear": true
+        "status": "Already joined preacherman blockchain",
+        "credit": 0,
+        "upperDemoLabelRemoved": true,
+        "emailReplaced": true,
+        "editCancel": true
       }
     ],
     "windowControls": {
@@ -202,30 +174,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-08T03:12:05.9700602+08:00",
-      "NativePid": 13396,
-      "StartedAt": "2026-10-08T03:11:48.3837057+08:00",
-      "WindowHandle": 6752812,
+      "SampledAt": "2026-10-08T04:39:13.3365176+08:00",
+      "NativePid": 38636,
+      "StartedAt": "2026-10-08T04:38:55.0464743+08:00",
+      "WindowHandle": 1642250,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        13396,
-        33292,
-        8160,
-        37320,
-        38116,
-        10656,
-        33344,
-        25120,
-        37816,
-        35684,
-        41788
+        38636,
+        36248,
+        14688,
+        38356,
+        30628,
+        34056,
+        34996,
+        3084,
+        22852,
+        36948,
+        28584
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 1844.5,
-      "GpuDedicatedBytes": 3309105152,
-      "MaxGpuEngineUtilization": 13,
-      "FreeRamKiB": 13405648,
+      "NormalizedCpuPercent": 5.99,
+      "WorkingSetMiB": 1875.7,
+      "GpuDedicatedBytes": 3290103808,
+      "MaxGpuEngineUtilization": 14,
+      "FreeRamKiB": 15188324,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -235,22 +207,6 @@
     },
     "newErrors": [],
     "observedErrors": [
-      "Hydration completed but contains mismatches.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
       "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
@@ -283,13 +239,12 @@
       "Existing baseline diagnostics remain; no new errors.",
       "Both appearances passed real cold launches. Forced CDP document reload lost avatar rendering during diagnostics, also observed on the previous executable before this patch."
     ],
-    "buildRetry": "The first rustc invocation exited with STATUS_ACCESS_VIOLATION. The same cached production build succeeded on retry; no failed artifact was deployed.",
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\friends-focus-20261008\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\friends-focus-20261008\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\friends-focus-20261008\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\friends-focus-20261008\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\friends-focus-20261008\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1256,9 +1211,18 @@
       "deployedAt": "2026-10-08T03:05:11.8423421+08:00",
       "verifiedAt": "2026-10-08T03:12:05.9700602+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\friends-focus-before-20261008"
+    },
+    {
+      "buildId": "account-credit-20261008",
+      "sourceCommit": "dadd41aaaaefead37afd6851b0befa6ccca9a015",
+      "sha256": "D9ECA7FE561F524390B55E9AD0865A53B55427B3E83ABD02E0C12FDA008FF7D7",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T04:36:47.5803120+08:00",
+      "verifiedAt": "2026-10-08T04:39:13.3365176+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\friends-focus-before-20261008/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
