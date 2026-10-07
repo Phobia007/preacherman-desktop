@@ -15,6 +15,11 @@ for(const appearance of ['light','dark'])test(`Account defines every glass, form
  }
  assert.match(account,/\.account button:focus-visible, \.account input:focus-visible/);
  assert.match(account,/\.account__dialog::backdrop/);
+ const topUp=read('src/surfaces/account/CreditTopUp.tsx');
+ assert.match(topUp,/className="account__dialog account__top-up"/);
+ assert.match(account,/\.account__credit-add:hover \{[^}]*var\(--demo-theme-account-text\)[^}]*var\(--demo-theme-account-hover\)/);
+ assert.match(account,/\.account__top-up-balance \{[^}]*var\(--demo-theme-account-border\)/);
+ assert.match(account,/prefers-reduced-motion: reduce[\s\S]*\.account__top-up\[open\]\[data-closing="true"\]::backdrop \{ animation: none;/);
  assert.match(styles,/data-active-surface="account"\] \.demo-window-controls__button img/);
 });
 test('Account entry preserves a single shared model and does not replace the selected avatar',()=>{

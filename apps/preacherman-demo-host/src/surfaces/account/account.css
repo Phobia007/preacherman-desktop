@@ -112,7 +112,31 @@
 .account__member-heading h1 { overflow-wrap: anywhere; }
 .account__heading .account__member-number { font-size: 12px; letter-spacing: .1em; }
 .account__bio { margin: 0 auto 8px; text-align: center; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 16px; line-height: 1.6; }
-.account__member-email { margin: 0; text-align: center; overflow-wrap: anywhere; color: var(--demo-theme-account-muted); font-size: 13px; }
+.account__credit { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0; color: var(--demo-theme-account-muted); font-size: 13px; }
+.account__credit-add { display: grid; place-items: center; width: 26px; height: 26px; padding: 2px; border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; transition: color 180ms ease, background 180ms ease; }
+.account__credit-add svg { width: 22px; height: 22px; }
+.account__credit-add:hover { color: var(--demo-theme-account-text); background: var(--demo-theme-account-hover); }
+.account__credit-add:disabled { opacity: .45; cursor: default; }
+.account__top-up { box-sizing: border-box; width: min(360px, calc(100vw - 48px)); padding: 32px; font-family: var(--demo-font-primary); font-weight: 300; }
+.account__top-up[open] { animation: account-top-up-in 320ms cubic-bezier(.22, 1, .36, 1) both; }
+.account__top-up[open]::backdrop { animation: account-light 320ms ease both; }
+.account__top-up[open][data-closing="true"] { animation: account-top-up-out 220ms ease both; pointer-events: none; }
+.account__top-up[open][data-closing="true"]::backdrop { animation: account-light 220ms ease reverse both; }
+.account__top-up h2 { padding-right: 20px; font-weight: 300; }
+.account__top-up-close { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 28px; height: 28px; padding: 5px; border: 0; border-radius: 50%; background: transparent; color: var(--demo-theme-account-muted); cursor: pointer; }
+.account__top-up-close svg { width: 18px; height: 18px; }
+.account__top-up-close:hover { color: var(--demo-theme-account-text); background: var(--demo-theme-account-hover); }
+.account__top-up-balance { display: grid; gap: 12px; margin: 28px 0 20px; padding-bottom: 24px; border-bottom: 1px solid var(--demo-theme-account-border); }
+.account__top-up-balance > span { color: var(--demo-theme-account-muted); font-size: 13px; }
+.account__top-up-balance strong { font-size: 36px; font-weight: 300; line-height: 1.2; }
+.account__top-up-balance small { color: var(--demo-theme-account-muted); font-size: 14px; }
+@keyframes account-top-up-in { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes account-top-up-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(12px) scale(.97); } }
+@media (prefers-reduced-motion: reduce) {
+  .account__top-up[open], .account__top-up[open]::backdrop,
+  .account__top-up[open][data-closing="true"], .account__top-up[open][data-closing="true"]::backdrop { animation: none; }
+  .account__credit-add { transition: none; }
+}
 .account__destinations { margin: 32px 0; border-top: 1px solid var(--demo-theme-account-border); }
 .account__destinations button { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 76px; padding: 16px 4px; border: 0; border-bottom: 1px solid var(--demo-theme-account-border); background: transparent; color: var(--demo-theme-account-text); text-align: left; font: 300 18px/1.3 var(--demo-font-primary); cursor: pointer; transition: background 180ms ease; }
 .account__destinations button:hover { background: var(--demo-theme-account-hover); }

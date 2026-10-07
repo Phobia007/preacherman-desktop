@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { DemoAccount } from "../../auth/demoAccount";
 import type { LocalSurfaceType } from "../../demo/screenRoute";
+import { CreditTopUp } from "./CreditTopUp";
 
 export function DemoAccountContent({ account, editing, busy, onEdit, onCancel, onSave, onSignOut, onNavigate }: {
   account: DemoAccount; editing: boolean; busy: boolean;
@@ -27,7 +28,7 @@ export function DemoAccountContent({ account, editing, busy, onEdit, onCancel, o
       <button className="account__text-action account__cancel" type="button" disabled={busy} onClick={onCancel}>Cancel</button>
     </form> : <>
       <p className="account__bio">Already joined preacherman blockchain</p>
-      <p className="account__member-email">credit: 0</p>
+      <div className="account__credit"><span>credit: 0</span><CreditTopUp disabled={busy} /></div>
       <nav className="account__destinations" aria-label="Your spaces">
         <button type="button" onClick={() => onNavigate("market")}><span>My Gallery<small>Your chosen collection</small></span><Arrow /></button>
         <button type="button" onClick={() => onNavigate("asset")}><span>My Asset<small>Your virtual characters</small></span><Arrow /></button>
