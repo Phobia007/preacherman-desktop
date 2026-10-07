@@ -159,6 +159,12 @@ for (const appearance of ["light", "dark"]) {
     assert.match(embed, /font-family: var\(--demo-font-primary\) !important/);
     assert.equal(createHash('sha256').update(await readFile(join(imported, 'assets/fonts/ClashDisplay-Light.ttf'))).digest('hex'), createHash('sha256').update(await readFile(join(root, 'src/assets/fonts/ClashDisplay-Light.ttf'))).digest('hex'));
   });
+  test(`Market account identity floats without an enclosing plate in ${appearance}`, async () => {
+    const styles = await text(join(root, "src/styles.css"));
+    assert.equal((styles.match(/--demo-theme-member-surface:\s*transparent;/g) || []).length, 2);
+    assert.match(styles, /\.demo-account-dock\s*\{[^}]*z-index: 21;[^}]*background: var\(--demo-theme-member-surface\);[^}]*backdrop-filter: none;/);
+    assert.doesNotMatch(styles, /\[data-active-surface="ledger"\] \.demo-account-dock/);
+  });
 }
 
 test("every imported asset is packaged and matches its recorded hash", async () => {
@@ -191,7 +197,7 @@ test("the 3D bundle changes only paper backings and transparent floor compositin
   assert.equal(createHash("sha256").update(bundle).digest("hex"), manifest.originalBundleSha256);
 });
 
-test("both appearances use white ink on transparent paper without restyling donor layout", async () => {
+test("both appearances use semantic ink on transparent paper with contained character art", async () => {
   const styles = await text(join(root, "src/styles.css"));
   const css = await text(join(imported, "market-embed.css"));
   for (const token of ["text", "muted", "border", "control", "hover", "focus", "loading", "error", "ink-shadow"]) {
@@ -201,7 +207,8 @@ test("both appearances use white ink on transparent paper without restyling dono
   assert.match(css, /\.button--primary:hover[^}]+--demo-theme-market-hover/);
   assert.match(css, /color: var\(--demo-theme-market-text/);
   assert.match(css, /font-family: var\(--demo-font-primary\) !important/);
-  assert.doesNotMatch(css, /font-size|display:\s*none|transform:|object-fit|\.hero.*filter/);
+  assert.doesNotMatch(css, /font-size|display:\s*none|transform:|\.hero.*filter/);
+  assert.match(css, /\.descriptive-card\[data-character-id\] \.descriptive-card__img\s*\{[^}]*object-fit: contain;[^}]*background: transparent;/);
   const adapter = await text(join(imported, "market-embed.js"));
   assert.match(adapter, /attributeFilter: \["data-appearance"\]/);
   assert.match(adapter, /loveconfiguratorready/);
@@ -235,9 +242,13 @@ test("all Gallery portraits are packaged in order with alternating sides and cor
       .replace(/aria-label="[^"]*"/g, 'aria-label="LABEL"')
       .replace(/href="love-configurator.html\?character=[^"]+"/g, 'href="DETAILS"');
     assert.equal(neutralCopy(row), neutralCopy(rows[0]));
-    assert.ok(row.includes('width="4096" height="4096"'));
+    assert.ok(row.includes(`width="${portrait.width}" height="${portrait.height}"`));
     assert.ok(row.includes(index === 0 ? 'loading="eager"' : 'loading="lazy"'));
     const bytes = await readFile(join(imported, portrait.image));
+    assert.equal(bytes.toString('ascii', 1, 4), 'PNG');
+    assert.equal(bytes[25], 6, `${portrait.name} must retain its alpha channel`);
+    assert.equal(bytes.readUInt32BE(16), portrait.width);
+    assert.equal(bytes.readUInt32BE(20), portrait.height);
     assert.equal(bytes.length, portrait.bytes);
     assert.equal(createHash("sha256").update(bytes).digest("hex"), portrait.sha256);
   }

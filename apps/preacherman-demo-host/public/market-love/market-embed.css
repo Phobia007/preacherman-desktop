@@ -106,3 +106,12 @@ html::-webkit-scrollbar { width: 0; height: 0; }
 input { caret-color: var(--demo-theme-market-text, #fff); }
 
 #configurator[data-market-styling="pending"] { visibility: hidden; }
+
+/* Transparent Gallery portraits float over the shared frosted scene. */
+.descriptive-card[data-character-id] .descriptive-card__img {
+  object-fit: contain;
+  box-sizing: border-box;
+  padding: 10% 12%;
+  background: transparent;
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 98%);
+}

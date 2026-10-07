@@ -44,11 +44,25 @@ export async function captureMarketFrame(frame: HTMLIFrameElement, signal: Abort
 
   for (const image of visibleImages) {
     const box = image.getBoundingClientRect();
-    const scale = Math.max(box.width / image.naturalWidth, box.height / image.naturalHeight);
+    const style = view.getComputedStyle(image);
+    const left = parseFloat(style.paddingLeft), right = parseFloat(style.paddingRight);
+    const top = parseFloat(style.paddingTop), bottom = parseFloat(style.paddingBottom);
+    const contentWidth = box.width - left - right, contentHeight = box.height - top - bottom;
+    const scale = (style.objectFit === "contain" ? Math.min : Math.max)(contentWidth / image.naturalWidth, contentHeight / image.naturalHeight);
     const width = image.naturalWidth * scale, height = image.naturalHeight * scale;
+    const layer = doc.createElement("canvas");
+    layer.width = Math.ceil(box.width); layer.height = Math.ceil(box.height);
+    const ink = layer.getContext("2d")!;
+    ink.drawImage(image, left + (contentWidth - width) / 2, top + (contentHeight - height) / 2, width, height);
+    if (style.maskImage !== "none") {
+      const fade = ink.createLinearGradient(0, 0, 0, box.height);
+      fade.addColorStop(0, "#000"); fade.addColorStop(.78, "#000"); fade.addColorStop(.98, "transparent");
+      ink.globalCompositeOperation = "destination-in";
+      ink.fillStyle = fade; ink.fillRect(0, 0, layer.width, layer.height);
+    }
     ctx.save();
     ctx.beginPath(); ctx.rect(box.x, box.y, box.width, box.height); ctx.clip();
-    ctx.drawImage(image, box.x + (box.width - width) / 2, box.y + (box.height - height) / 2, width, height);
+    ctx.drawImage(layer, box.x, box.y);
     ctx.restore();
   }
 

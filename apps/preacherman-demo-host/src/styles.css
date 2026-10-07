@@ -2766,7 +2766,6 @@ body {
   background: var(--demo-theme-brand-menu-surface);
   backdrop-filter: blur(20px);
 }
-.demo-app-shell[data-appearance="light"][data-active-surface="ledger"] .demo-account-dock,
 .demo-app-shell[data-appearance="light"][data-active-surface="account"] .demo-account-dock {
   background: var(--demo-theme-brand-menu-surface);
   border-radius: 24px;
