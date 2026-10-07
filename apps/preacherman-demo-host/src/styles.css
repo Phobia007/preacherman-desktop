@@ -2775,11 +2775,11 @@ body {
   bottom: 19px;
   backdrop-filter: blur(18px);
 }
-.demo-app-shell[data-appearance="light"] .demo-app-shell__scene,
-.demo-app-shell[data-appearance="light"][data-active-surface="market"] .demo-app-shell__scene {
+.demo-app-shell[data-appearance="light"]:not([data-gallery-detail="true"]) .demo-app-shell__scene,
+.demo-app-shell[data-appearance="light"][data-active-surface="market"]:not([data-gallery-detail="true"]) .demo-app-shell__scene {
   background: var(--demo-theme-daylight-room);
 }
-.demo-app-shell[data-appearance="light"] .demo-app-shell__scene::before {
+.demo-app-shell[data-appearance="light"]:not([data-gallery-detail="true"]) .demo-app-shell__scene::before {
   content: "";
   position: absolute;
   left: 14%;
@@ -2801,6 +2801,33 @@ body {
 .demo-app-shell[data-appearance="light"] .demo-app-shell__brand-drawer {
   backdrop-filter: blur(28px) saturate(120%);
   box-shadow: var(--demo-theme-glass-shadow);
+}
+/* The authored Gallery room stays visible behind the isolated companion in
+   both appearances. Only chrome over that room needs a light foreground. */
+.demo-app-shell[data-appearance="light"][data-active-surface="market"][data-gallery-detail="true"] {
+  --demo-theme-control: rgb(245 243 239 / 72%);
+  --demo-theme-control-hover: rgb(255 255 255 / 96%);
+  --demo-theme-control-hover-bg: rgb(255 255 255 / 9%);
+  --demo-theme-focus: rgb(255 255 255 / 52%);
+  --demo-theme-window-control-icon-filter: brightness(0) invert(1);
+  --demo-theme-gallery-detail-control-text: #e5eff3;
+  --demo-theme-gallery-detail-control-border: rgb(229 239 243 / 38%);
+  --demo-theme-member-text: #f0f1f1;
+  --demo-theme-member-muted: #a7afb3;
+  --demo-theme-member-hover: #ffffff;
+  --demo-theme-member-border: rgb(240 244 246 / 20%);
+  --demo-theme-member-focus: #91bdd1;
+  --demo-theme-member-loading: #b2bfc5;
+  --demo-theme-member-error: #e4b4aa;
+}
+.demo-app-shell[data-active-surface="market"][data-gallery-detail="true"] .demo-app-shell__brand-navigation[data-open="false"] .demo-app-shell__brand-trigger {
+  color: var(--demo-theme-control);
+}
+.demo-app-shell[data-active-surface="market"][data-gallery-detail="true"] .demo-app-shell__brand-navigation[data-open="false"] .demo-app-shell__brand-trigger:hover {
+  color: var(--demo-theme-control-hover);
+}
+.demo-app-shell[data-active-surface="market"][data-gallery-detail="true"] .demo-app-shell__brand-navigation[data-open="false"] .demo-app-shell__brand-trigger:focus-visible {
+  outline-color: var(--demo-theme-focus);
 }
 .home-companion-gesture {
   position: absolute;
