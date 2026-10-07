@@ -1,39 +1,38 @@
 {
   "schemaVersion": 1,
-  "buildId": "daylight-home-20261008",
+  "buildId": "market-transparent-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "settings-appearance-liquid-glass-and-home-companion-rotation-zoom",
+  "sourceTask": "market-floating-account-and-transparent-character-art",
   "sourceThread": null,
-  "sourceState": "Settings gains a persisted sun/moon appearance toggle. Light mode uses a white-to-gray glass room, dark foregrounds and black platform ring; dark mode keeps its authored room. Home supports horizontal pointer rotation and bounded wheel zoom into the shared portrait frame; other page framing and transitions remain unchanged.",
-  "sourceCommit": "96003bcf46d97aeacf46eb02dd1def880799f436",
+  "sourceState": "Market account identity has no enclosing light-mode capsule. All 14 Market portraits reuse packaged transparent Gallery busts, contained above the shared frosted scene. Search keeps the shared catalog and the profile lens capture matches portrait framing and alpha.",
+  "sourceCommit": "c58ef9e902ab3b36bee0c68469c3eaecd5090b54",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-08T05:53:49.8997614+08:00",
-  "deployedAt": "2026-10-08T05:55:05.6802539+08:00",
-  "verifiedAt": "2026-10-08T06:03:12.8333070+08:00",
-  "sizeBytes": 638543360,
-  "sha256": "9C07C96176B47ECC1FC1BE39950060079BAF1A660CB0CA92E5F51491D8C14DEC",
+  "builtAt": "2026-10-08T06:14:32.8769882+08:00",
+  "deployedAt": "2026-10-08T06:15:28.5323608+08:00",
+  "verifiedAt": "2026-10-08T06:19:02.0209496+08:00",
+  "sizeBytes": 638543872,
+  "sha256": "CA744E1EE1D572CDF8AE0DE9A4D19E4A3421E3B66544BAF32706944256C20946",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008/preacherman-demo-host.exe",
-  "backupSha256": "3FD7C6D05F5EE8C241F5C2E63794E395B10FC19260BDC6AB95E53DBFE7374303",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-transparent-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "9C07C96176B47ECC1FC1BE39950060079BAF1A660CB0CA92E5F51491D8C14DEC",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-transparent-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "ff4660512f8b574f7ec031d7e1c2ff7a4e62af19",
-  "previousVerificationCommit": "ff4660512f8b574f7ec031d7e1c2ff7a4e62af19",
+  "rollbackBaselineCommit": "96003bcf46d97aeacf46eb02dd1def880799f436",
+  "previousVerificationCommit": "96003bcf46d97aeacf46eb02dd1def880799f436",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 13,
+      "focusedTests": 41,
       "focusedFailures": 0,
-      "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch; Settings appearance toggle persistence, light glass room, dark room, Home horizontal rotation, ignored vertical drag, bounded portrait zoom and zoom-out verified in both modes. Core navigation, native window controls, normal startup and cleanup verified; no new console errors.",
+    "nativeFlow": "Canonical shortcut cold launch. All 14 Market transparent portraits, real alpha, contained framing, floating account identity while scrolling and both appearances verified. Core navigation, native window controls, normal startup and cleanup verified; no new console errors.",
     "navigation": [
       "Home",
       "Task",
@@ -140,32 +139,18 @@
         "ready": true
       }
     ],
-    "homeControls": [
+    "marketTransparency": [
       {
         "appearance": "dark",
-        "passed": true,
-        "horizontalDrag": true,
-        "verticalDragIgnored": true,
-        "portraitZoom": true,
-        "zoomOut": true,
-        "colors": {
-          "ring": "#ebf2ff",
-          "canvas": "#010409",
-          "foreground": "#f5f3ef"
-        }
+        "portraits": 14,
+        "transparent": true,
+        "accountFloating": true
       },
       {
         "appearance": "light",
-        "passed": true,
-        "horizontalDrag": true,
-        "verticalDragIgnored": true,
-        "portraitZoom": true,
-        "zoomOut": true,
-        "colors": {
-          "ring": "#17191c",
-          "canvas": "#edf0f2",
-          "foreground": "#202326"
-        }
+        "portraits": 14,
+        "transparent": true,
+        "accountFloating": true
       }
     ],
     "windowControls": {
@@ -182,30 +167,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-08T06:03:12.8333070+08:00",
-      "NativePid": 26124,
-      "StartedAt": "2026-10-08T06:02:50.6035111+08:00",
-      "WindowHandle": 1118298,
+      "SampledAt": "2026-10-08T06:19:02.0209496+08:00",
+      "NativePid": 37376,
+      "StartedAt": "2026-10-08T06:18:45.3906134+08:00",
+      "WindowHandle": 2952972,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        26124,
-        38032,
-        39480,
-        34904,
-        37988,
-        40872,
-        36516,
-        30328,
-        38788,
-        31472,
-        33444
+        37376,
+        31056,
+        25956,
+        24840,
+        35820,
+        36760,
+        39468,
+        29132,
+        36308,
+        35692,
+        39832
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1919.1,
-      "GpuDedicatedBytes": 3347267584,
-      "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 16149184,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 1905.1,
+      "GpuDedicatedBytes": 3319111680,
+      "MaxGpuEngineUtilization": 13,
+      "FreeRamKiB": 17048944,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -238,11 +223,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\market-transparent-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\market-transparent-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\market-transparent-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\market-transparent-20261008\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\market-transparent-20261008\\source-tests.log"
     ]
   },
   "releaseAttempts": [
@@ -1243,9 +1228,18 @@
       "deployedAt": "2026-10-08T05:55:05.6802539+08:00",
       "verifiedAt": "2026-10-08T06:03:12.8333070+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008"
+    },
+    {
+      "buildId": "market-transparent-20261008",
+      "sourceCommit": "c58ef9e902ab3b36bee0c68469c3eaecd5090b54",
+      "sha256": "CA744E1EE1D572CDF8AE0DE9A4D19E4A3421E3B66544BAF32706944256C20946",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T06:15:28.5323608+08:00",
+      "verifiedAt": "2026-10-08T06:19:02.0209496+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-transparent-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-transparent-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
