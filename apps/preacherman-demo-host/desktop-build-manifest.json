@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "hidden-scrollbars-20261007",
+  "buildId": "account-demo-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "hide-scrollbar-chrome-in-all-components",
+  "sourceTask": "local-email-demo-account-and-profile",
   "sourceThread": null,
-  "sourceState": "The host and all 13 packaged HTML frames share one scrollbar stylesheet. Scrollbar tracks/thumbs and reserved gutters are hidden; existing overflow, wheel, touchpad, keyboard, drag, navigation and theme behavior are retained.",
-  "sourceCommit": "b922d5544f3be43854bcde9c65d716764efcad96",
+  "sourceState": "Local email demo login, profile editing and persistence, sign-out, Gallery/Asset/Friends entrances and account badge; existing GitHub auth, shared Home avatar and reversible Account navigation are preserved.",
+  "sourceCommit": "923a9434f11d6a8ced25fe0b74fdd2c9f8cff07a",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-07T03:50:41.0519114+08:00",
-  "deployedAt": "2026-10-07T03:51:35.6540507+08:00",
-  "verifiedAt": "2026-10-07T03:57:56.4180622+08:00",
-  "sizeBytes": 638538752,
-  "sha256": "72CDAC1112A1BF848629C851A0848BFDB54891D47A8E28B43BFA5F486B801EAE",
+  "builtAt": "2026-10-08T02:45:32.7408873+08:00",
+  "deployedAt": "2026-10-08T02:46:50.3355851+08:00",
+  "verifiedAt": "2026-10-08T02:49:39.3526787+08:00",
+  "sizeBytes": 638540288,
+  "sha256": "F8FC588310AA1380AEFC176DF7B0BED7FFC407A6E489BDEE8BF1D4128D14C4CD",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\hidden-scrollbars-before-20261007/preacherman-demo-host.exe",
-  "backupSha256": "518D5537862FE0080D15F3AAB87A1E1EF3C7D58E209DD9C7F20876F34F0A9080",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\hidden-scrollbars-before-20261007/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-demo-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "72CDAC1112A1BF848629C851A0848BFDB54891D47A8E28B43BFA5F486B801EAE",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-demo-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "3a943e00f55b6328a570b99effce8eb873771090",
-  "previousVerificationCommit": "3a943e00f55b6328a570b99effce8eb873771090",
+  "rollbackBaselineCommit": "b922d5544f3be43854bcde9c65d716764efcad96",
+  "previousVerificationCommit": "b922d5544f3be43854bcde9c65d716764efcad96",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 3,
+      "focusedTests": 30,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch; both appearances verify hidden scrollbars throughout rendered host and frame components, Asset collection/detail wheel scrolling, Task composer keyboard scrolling, core routes and window controls. No new console errors. Normal startup and resource cleanup verified.",
+    "nativeFlow": "Canonical shortcut cold launch; both appearances verify local demo login, edit/cancel/save, persistence, sign-out, content entrance/exit, existing Account exit, Gallery/Asset/Friends entrances, core navigation and window controls. No new console errors. Normal startup and resource cleanup verified.",
     "navigation": [
       "Home",
       "Task",
@@ -140,48 +140,36 @@
         "ready": true
       }
     ],
-    "scrolling": [
+    "accountDemo": [
       {
         "appearance": "dark",
-        "surface": "Task",
-        "hidden": true,
-        "keyboard": true,
-        "top": 157
-      },
-      {
-        "appearance": "dark",
-        "surface": "Asset",
-        "hidden": true,
-        "wheel": true,
-        "collection": 650,
-        "detail": {
-          "top": 34,
-          "height": 934,
-          "client": 900,
-          "width": "none",
-          "display": "none"
-        }
+        "passed": true,
+        "login": true,
+        "editCancelSave": true,
+        "persistedOnReturn": true,
+        "signOut": true,
+        "contentEntranceExit": true,
+        "accountExit": true,
+        "sharedScene": true,
+        "friends": true,
+        "asset": true,
+        "gallery": true,
+        "emailNotSent": true
       },
       {
         "appearance": "light",
-        "surface": "Task",
-        "hidden": true,
-        "keyboard": true,
-        "top": 157
-      },
-      {
-        "appearance": "light",
-        "surface": "Asset",
-        "hidden": true,
-        "wheel": true,
-        "collection": 650,
-        "detail": {
-          "top": 34,
-          "height": 934,
-          "client": 900,
-          "width": "none",
-          "display": "none"
-        }
+        "passed": true,
+        "login": true,
+        "editCancelSave": true,
+        "persistedOnReturn": true,
+        "signOut": true,
+        "contentEntranceExit": true,
+        "accountExit": true,
+        "sharedScene": true,
+        "friends": true,
+        "asset": true,
+        "gallery": true,
+        "emailNotSent": true
       }
     ],
     "windowControls": {
@@ -198,30 +186,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-07T03:57:56.4180622+08:00",
-      "NativePid": 33600,
-      "StartedAt": "2026-10-07T03:57:34.4665563+08:00",
-      "WindowHandle": 25233590,
+      "SampledAt": "2026-10-08T02:49:39.3526787+08:00",
+      "NativePid": 33056,
+      "StartedAt": "2026-10-08T02:49:20.9596359+08:00",
+      "WindowHandle": 6228524,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        33600,
-        536,
-        11256,
-        15872,
-        25628,
-        34352,
-        30100,
-        29236,
-        32592,
-        28656,
-        21784
+        33056,
+        34980,
+        3192,
+        32148,
+        23708,
+        26584,
+        3964,
+        32092,
+        29748,
+        26384,
+        14692
       ],
-      "NormalizedCpuPercent": 4,
-      "WorkingSetMiB": 1914.7,
-      "GpuDedicatedBytes": 3324198912,
-      "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 17381472,
+      "NormalizedCpuPercent": 6.99,
+      "WorkingSetMiB": 1871.7,
+      "GpuDedicatedBytes": 3316207616,
+      "MaxGpuEngineUtilization": 13,
+      "FreeRamKiB": 15008044,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -231,6 +219,7 @@
     },
     "newErrors": [],
     "observedErrors": [
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Hydration completed but contains mismatches.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
@@ -247,7 +236,6 @@
       "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
       "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
       "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
       "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
@@ -279,11 +267,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\hidden-scrollbars-20261007\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\account-demo-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\account-demo-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\account-demo-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\account-demo-20261008\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\account-demo-20261008\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1232,9 +1220,18 @@
       "deployedAt": "2026-10-07T03:51:35.6540507+08:00",
       "verifiedAt": "2026-10-07T03:57:56.4180622+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\hidden-scrollbars-before-20261007"
+    },
+    {
+      "buildId": "account-demo-20261008",
+      "sourceCommit": "923a9434f11d6a8ced25fe0b74fdd2c9f8cff07a",
+      "sha256": "F8FC588310AA1380AEFC176DF7B0BED7FFC407A6E489BDEE8BF1D4128D14C4CD",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T02:46:50.3355851+08:00",
+      "verifiedAt": "2026-10-08T02:49:39.3526787+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-demo-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\hidden-scrollbars-before-20261007/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-demo-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
