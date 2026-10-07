@@ -49,7 +49,7 @@ export function AppShell({
     let focusFrame = 0;
     const openFriends = () => {
       setDrawerView("friends"); setBrandNavigationOpen(true);
-      focusFrame = requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(".demo-drawer-social-actions__friends")?.focus());
+      focusFrame = requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(".demo-drawer-social-actions__friends")?.focus({ preventScroll: true }));
     };
     window.addEventListener("preacherman:open-friends", openFriends);
     return () => { window.removeEventListener("preacherman:open-friends", openFriends); cancelAnimationFrame(focusFrame); };

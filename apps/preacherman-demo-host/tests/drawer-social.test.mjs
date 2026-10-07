@@ -31,4 +31,6 @@ for(const theme of ['light','dark'])test(`Drawer social controls retain aligned 
  assert.match(css,/width: 48px; height: 48px/);
  assert.match(css,/:focus-visible/);assert.match(css,/prefers-reduced-motion/);
  assert.match(css,/translate3d\(-288px, 0, 0\)/);assert.match(css,/translate3d\(100%, 0, 0\)/);
+ assert.match(shell,/querySelector<HTMLButtonElement>\("\.demo-drawer-social-actions__friends"\)\?\.focus\(\{ preventScroll: true \}\)/);
+ assert.match(styles,/\.demo-app-viewport \{\s*position: fixed;[^}]*overflow: clip;/);
 });

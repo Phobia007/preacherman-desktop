@@ -359,6 +359,8 @@ html[data-appearance="dark"] #root {
 .demo-app-viewport {
   position: fixed;
   inset: 0;
+  /* The scaled desktop frame must never scroll when a moving control gains focus. */
+  overflow: clip;
   background: var(--demo-theme-canvas, #f7f5f1);
 }
 
