@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "buildId": "account-credit-20261008",
+  "buildId": "account-topup-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "account-membership-status-and-credit-placeholder",
+  "sourceTask": "account-credit-top-up-entry-dialog",
   "sourceThread": null,
-  "sourceState": "Account profile removes the upper Demo account label, displays Already joined preacherman blockchain and credit: 0 as a local placeholder. Existing typography, themes, profile editing and transitions are retained.",
-  "sourceCommit": "dadd41aaaaefead37afd6851b0befa6ccca9a015",
+  "sourceState": "Account credit row adds a circle-plus button and a small theme-aware native modal with animated entry and exit. Close button, Escape and outside click dismiss it and return focus. Payment remains unconnected and the demo balance is unchanged.",
+  "sourceCommit": "ff4660512f8b574f7ec031d7e1c2ff7a4e62af19",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-08T04:36:10.4035973+08:00",
-  "deployedAt": "2026-10-08T04:36:47.5803120+08:00",
-  "verifiedAt": "2026-10-08T04:39:13.3365176+08:00",
-  "sizeBytes": 638540288,
-  "sha256": "D9ECA7FE561F524390B55E9AD0865A53B55427B3E83ABD02E0C12FDA008FF7D7",
+  "builtAt": "2026-10-08T05:07:09.3230693+08:00",
+  "deployedAt": "2026-10-08T05:14:33.2023058+08:00",
+  "verifiedAt": "2026-10-08T05:19:41.3538830+08:00",
+  "sizeBytes": 638540800,
+  "sha256": "3FD7C6D05F5EE8C241F5C2E63794E395B10FC19260BDC6AB95E53DBFE7374303",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008/preacherman-demo-host.exe",
-  "backupSha256": "806ED0C67F61399A62F24CBFBF38F30CFFF3F98E093700F3A18C9E43BC40A4A5",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "D9ECA7FE561F524390B55E9AD0865A53B55427B3E83ABD02E0C12FDA008FF7D7",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "afc3b07c751e7e65ab1e30f7357ebe73e650c833",
-  "previousVerificationCommit": "afc3b07c751e7e65ab1e30f7357ebe73e650c833",
+  "rollbackBaselineCommit": "dadd41aaaaefead37afd6851b0befa6ccca9a015",
+  "previousVerificationCommit": "dadd41aaaaefead37afd6851b0befa6ccca9a015",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
@@ -33,7 +33,7 @@
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch; both appearances verify the exact account status, credit placeholder, absence of upper demo label and email, profile edit/cancel, core navigation and window controls. No new console errors. Normal startup and resource cleanup verified.",
+    "nativeFlow": "Canonical shortcut cold launch; both appearances verify the credit button, top-up modal, animated close, Escape, backdrop dismissal, focus return, reduced motion, unchanged balance, core navigation and window controls. No new console errors. Normal startup and resource cleanup verified.",
     "navigation": [
       "Home",
       "Task",
@@ -144,20 +144,28 @@
       {
         "appearance": "dark",
         "passed": true,
-        "status": "Already joined preacherman blockchain",
-        "credit": 0,
-        "upperDemoLabelRemoved": true,
-        "emailReplaced": true,
-        "editCancel": true
+        "circlePlusAligned": true,
+        "modal": true,
+        "closeAnimation": true,
+        "escape": true,
+        "backdrop": true,
+        "focusReturn": true,
+        "reducedMotion": true,
+        "balanceUnchanged": true,
+        "paymentUnconnected": true
       },
       {
         "appearance": "light",
         "passed": true,
-        "status": "Already joined preacherman blockchain",
-        "credit": 0,
-        "upperDemoLabelRemoved": true,
-        "emailReplaced": true,
-        "editCancel": true
+        "circlePlusAligned": true,
+        "modal": true,
+        "closeAnimation": true,
+        "escape": true,
+        "backdrop": true,
+        "focusReturn": true,
+        "reducedMotion": true,
+        "balanceUnchanged": true,
+        "paymentUnconnected": true
       }
     ],
     "windowControls": {
@@ -174,30 +182,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-08T04:39:13.3365176+08:00",
-      "NativePid": 38636,
-      "StartedAt": "2026-10-08T04:38:55.0464743+08:00",
-      "WindowHandle": 1642250,
+      "SampledAt": "2026-10-08T05:19:41.3538830+08:00",
+      "NativePid": 32520,
+      "StartedAt": "2026-10-08T05:19:18.6587374+08:00",
+      "WindowHandle": 1969956,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        38636,
-        36248,
-        14688,
-        38356,
-        30628,
-        34056,
-        34996,
-        3084,
-        22852,
-        36948,
-        28584
+        32520,
+        13732,
+        40572,
+        31400,
+        38196,
+        31532,
+        39056,
+        39940,
+        39084,
+        39180,
+        36144
       ],
       "NormalizedCpuPercent": 5.99,
-      "WorkingSetMiB": 1875.7,
-      "GpuDedicatedBytes": 3290103808,
-      "MaxGpuEngineUtilization": 14,
-      "FreeRamKiB": 15188324,
+      "WorkingSetMiB": 1910.2,
+      "GpuDedicatedBytes": 3305062400,
+      "MaxGpuEngineUtilization": 11,
+      "FreeRamKiB": 11732444,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -237,14 +245,14 @@
     },
     "limitations": [
       "Existing baseline diagnostics remain; no new errors.",
-      "Both appearances passed real cold launches. Forced CDP document reload lost avatar rendering during diagnostics, also observed on the previous executable before this patch."
+      "Top-up entry is a frontend preview; payment and pricing are not connected."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\account-credit-20261008\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1220,9 +1228,25 @@
       "deployedAt": "2026-10-08T04:36:47.5803120+08:00",
       "verifiedAt": "2026-10-08T04:39:13.3365176+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008"
+    },
+    {
+      "sha256": "3FD7C6D05F5EE8C241F5C2E63794E395B10FC19260BDC6AB95E53DBFE7374303",
+      "status": "temporarily-restored-baseline-during-native-diagnostics",
+      "reason": "Navigation automation changed to Enter activation after mouse-triggered sidebar dismissal; Gallery then had no orbit diagnostics. Restored verified pair. Baseline passed cold Home, Market, Task, Gallery and Settings with normal mouse navigation; same cached candidate is checked again with corrected input automation.",
+      "baselineSha256": "D9ECA7FE561F524390B55E9AD0865A53B55427B3E83ABD02E0C12FDA008FF7D7",
+      "baselineReport": "output\\playwright\\account-topup-20261008\\baseline\\native-report.json"
+    },
+    {
+      "buildId": "account-topup-20261008",
+      "sourceCommit": "ff4660512f8b574f7ec031d7e1c2ff7a4e62af19",
+      "sha256": "3FD7C6D05F5EE8C241F5C2E63794E395B10FC19260BDC6AB95E53DBFE7374303",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T05:14:33.2023058+08:00",
+      "verifiedAt": "2026-10-08T05:19:41.3538830+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
