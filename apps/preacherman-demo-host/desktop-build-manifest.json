@@ -1,39 +1,39 @@
 {
   "schemaVersion": 1,
-  "buildId": "account-topup-20261008",
+  "buildId": "daylight-home-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "account-credit-top-up-entry-dialog",
+  "sourceTask": "settings-appearance-liquid-glass-and-home-companion-rotation-zoom",
   "sourceThread": null,
-  "sourceState": "Account credit row adds a circle-plus button and a small theme-aware native modal with animated entry and exit. Close button, Escape and outside click dismiss it and return focus. Payment remains unconnected and the demo balance is unchanged.",
-  "sourceCommit": "ff4660512f8b574f7ec031d7e1c2ff7a4e62af19",
+  "sourceState": "Settings gains a persisted sun/moon appearance toggle. Light mode uses a white-to-gray glass room, dark foregrounds and black platform ring; dark mode keeps its authored room. Home supports horizontal pointer rotation and bounded wheel zoom into the shared portrait frame; other page framing and transitions remain unchanged.",
+  "sourceCommit": "96003bcf46d97aeacf46eb02dd1def880799f436",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-08T05:07:09.3230693+08:00",
-  "deployedAt": "2026-10-08T05:14:33.2023058+08:00",
-  "verifiedAt": "2026-10-08T05:19:41.3538830+08:00",
-  "sizeBytes": 638540800,
-  "sha256": "3FD7C6D05F5EE8C241F5C2E63794E395B10FC19260BDC6AB95E53DBFE7374303",
+  "builtAt": "2026-10-08T05:53:49.8997614+08:00",
+  "deployedAt": "2026-10-08T05:55:05.6802539+08:00",
+  "verifiedAt": "2026-10-08T06:03:12.8333070+08:00",
+  "sizeBytes": 638543360,
+  "sha256": "9C07C96176B47ECC1FC1BE39950060079BAF1A660CB0CA92E5F51491D8C14DEC",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008/preacherman-demo-host.exe",
-  "backupSha256": "D9ECA7FE561F524390B55E9AD0865A53B55427B3E83ABD02E0C12FDA008FF7D7",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "3FD7C6D05F5EE8C241F5C2E63794E395B10FC19260BDC6AB95E53DBFE7374303",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "dadd41aaaaefead37afd6851b0befa6ccca9a015",
-  "previousVerificationCommit": "dadd41aaaaefead37afd6851b0befa6ccca9a015",
+  "rollbackBaselineCommit": "ff4660512f8b574f7ec031d7e1c2ff7a4e62af19",
+  "previousVerificationCommit": "ff4660512f8b574f7ec031d7e1c2ff7a4e62af19",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 14,
+      "focusedTests": 13,
       "focusedFailures": 0,
       "rendererBuild": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch; both appearances verify the credit button, top-up modal, animated close, Escape, backdrop dismissal, focus return, reduced motion, unchanged balance, core navigation and window controls. No new console errors. Normal startup and resource cleanup verified.",
+    "nativeFlow": "Canonical shortcut cold launch; Settings appearance toggle persistence, light glass room, dark room, Home horizontal rotation, ignored vertical drag, bounded portrait zoom and zoom-out verified in both modes. Core navigation, native window controls, normal startup and cleanup verified; no new console errors.",
     "navigation": [
       "Home",
       "Task",
@@ -140,32 +140,32 @@
         "ready": true
       }
     ],
-    "accountDemo": [
+    "homeControls": [
       {
         "appearance": "dark",
         "passed": true,
-        "circlePlusAligned": true,
-        "modal": true,
-        "closeAnimation": true,
-        "escape": true,
-        "backdrop": true,
-        "focusReturn": true,
-        "reducedMotion": true,
-        "balanceUnchanged": true,
-        "paymentUnconnected": true
+        "horizontalDrag": true,
+        "verticalDragIgnored": true,
+        "portraitZoom": true,
+        "zoomOut": true,
+        "colors": {
+          "ring": "#ebf2ff",
+          "canvas": "#010409",
+          "foreground": "#f5f3ef"
+        }
       },
       {
         "appearance": "light",
         "passed": true,
-        "circlePlusAligned": true,
-        "modal": true,
-        "closeAnimation": true,
-        "escape": true,
-        "backdrop": true,
-        "focusReturn": true,
-        "reducedMotion": true,
-        "balanceUnchanged": true,
-        "paymentUnconnected": true
+        "horizontalDrag": true,
+        "verticalDragIgnored": true,
+        "portraitZoom": true,
+        "zoomOut": true,
+        "colors": {
+          "ring": "#17191c",
+          "canvas": "#edf0f2",
+          "foreground": "#202326"
+        }
       }
     ],
     "windowControls": {
@@ -182,30 +182,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-08T05:19:41.3538830+08:00",
-      "NativePid": 32520,
-      "StartedAt": "2026-10-08T05:19:18.6587374+08:00",
-      "WindowHandle": 1969956,
+      "SampledAt": "2026-10-08T06:03:12.8333070+08:00",
+      "NativePid": 26124,
+      "StartedAt": "2026-10-08T06:02:50.6035111+08:00",
+      "WindowHandle": 1118298,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        32520,
-        13732,
-        40572,
-        31400,
-        38196,
-        31532,
-        39056,
-        39940,
-        39084,
-        39180,
-        36144
+        26124,
+        38032,
+        39480,
+        34904,
+        37988,
+        40872,
+        36516,
+        30328,
+        38788,
+        31472,
+        33444
       ],
-      "NormalizedCpuPercent": 5.99,
-      "WorkingSetMiB": 1910.2,
-      "GpuDedicatedBytes": 3305062400,
-      "MaxGpuEngineUtilization": 11,
-      "FreeRamKiB": 11732444,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1919.1,
+      "GpuDedicatedBytes": 3347267584,
+      "MaxGpuEngineUtilization": 12,
+      "FreeRamKiB": 16149184,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -215,15 +215,6 @@
     },
     "newErrors": [],
     "observedErrors": [
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "visualReview": {
@@ -244,15 +235,14 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "Existing baseline diagnostics remain; no new errors.",
-      "Top-up entry is a frontend preview; payment and pricing are not connected."
+      "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\account-topup-20261008\\source-checks.log"
+      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\daylight-home-20261008\\source-checks.log"
     ]
   },
   "releaseAttempts": [
@@ -1244,9 +1234,18 @@
       "deployedAt": "2026-10-08T05:14:33.2023058+08:00",
       "verifiedAt": "2026-10-08T05:19:41.3538830+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008"
+    },
+    {
+      "buildId": "daylight-home-20261008",
+      "sourceCommit": "96003bcf46d97aeacf46eb02dd1def880799f436",
+      "sha256": "9C07C96176B47ECC1FC1BE39950060079BAF1A660CB0CA92E5F51491D8C14DEC",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T05:55:05.6802539+08:00",
+      "verifiedAt": "2026-10-08T06:03:12.8333070+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
