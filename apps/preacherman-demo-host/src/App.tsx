@@ -453,7 +453,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       </div>
       {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
       {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} /> : null}
-      {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} /> : null}
+      {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onNavigate={handleSurfaceNavigate} /> : null}
       {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}

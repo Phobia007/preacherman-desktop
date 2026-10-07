@@ -60,7 +60,7 @@
 .account__continue { width: 100%; min-height: 48px; margin-top: 16px; padding: 10px 20px; border: 0; border-radius: 8px; background: var(--demo-theme-account-text); color: var(--demo-theme-account-canvas); font: 300 16px/24px var(--demo-font-primary); cursor: pointer; }
 .account__continue:hover:not(:disabled) { background: var(--demo-theme-account-action-hover); }
 .account__continue:disabled { opacity: .45; cursor: not-allowed; }
-.account button:focus-visible, .account input:focus-visible { outline: 2px solid var(--demo-theme-account-focus); outline-offset: 3px; }
+.account button:focus-visible, .account input:focus-visible, .account textarea:focus-visible { outline: 2px solid var(--demo-theme-account-focus); outline-offset: 3px; }
 .account__error, .account__effect-error { color: var(--demo-theme-account-error); font-size: 13px; line-height: 20px; margin: 8px 0 0; }
 .account__effect-error { position: absolute; top: calc(50% + 155px); left: 0; width: 100%; text-align: center; }
 .account__lens, .account__lens canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -101,3 +101,32 @@
 .account__identity div { padding: 14px 0; border-bottom: 1px solid var(--demo-theme-account-border); }
 .account__identity dt { color: var(--demo-theme-account-muted); font-size: 13px; line-height: 20px; }
 .account__identity dd { margin: 4px 0 0; color: var(--demo-theme-account-text); font-size: 16px; line-height: 24px; overflow-wrap: anywhere; }
+
+.account__content { width: 100%; max-width: 418px; flex-shrink: 0; margin: auto; }
+.account__content[data-content-phase="exiting"] { animation: account-content-out 220ms cubic-bezier(.22, 1, .36, 1) both; pointer-events: none; }
+.account__content[data-content-phase="entering"] { animation: account-content-in 420ms cubic-bezier(.22, 1, .36, 1) both; }
+.account__heading h1:focus { outline: none; }
+.account__member-heading { margin-bottom: 18px; }
+.account__portrait { display: grid; place-items: center; width: 72px; height: 72px; margin: 0 auto 18px; border: 1px solid var(--demo-theme-account-border); border-radius: 50%; background: var(--demo-theme-account-surface); font-size: 30px; }
+.account__demo-label { display: block; margin-bottom: 10px; color: var(--demo-theme-account-muted); font-size: 12px; letter-spacing: .06em; }
+.account__member-heading h1 { overflow-wrap: anywhere; }
+.account__heading .account__member-number { font-size: 12px; letter-spacing: .1em; }
+.account__bio { margin: 0 auto 8px; text-align: center; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 16px; line-height: 1.6; }
+.account__member-email { margin: 0; text-align: center; overflow-wrap: anywhere; color: var(--demo-theme-account-muted); font-size: 13px; }
+.account__destinations { margin: 32px 0; border-top: 1px solid var(--demo-theme-account-border); }
+.account__destinations button { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 76px; padding: 16px 4px; border: 0; border-bottom: 1px solid var(--demo-theme-account-border); background: transparent; color: var(--demo-theme-account-text); text-align: left; font: 300 18px/1.3 var(--demo-font-primary); cursor: pointer; transition: background 180ms ease; }
+.account__destinations button:hover { background: var(--demo-theme-account-hover); }
+.account__destinations small { display: block; margin-top: 5px; color: var(--demo-theme-account-muted); font-size: 13px; }
+.account__destinations svg { flex-shrink: 0; color: var(--demo-theme-account-muted); }
+.account__member-actions { display: grid; gap: 14px; }
+.account__editor { display: grid; gap: 12px; }
+.account__editor label { margin-top: 8px; color: var(--demo-theme-account-muted); font-size: 14px; }
+.account__bio-input { height: 112px; padding: 14px 16px; resize: none; }
+.account__local-note { margin: 12px 0 0; color: var(--demo-theme-account-muted); font-size: 12px; line-height: 1.6; text-align: center; }
+.account__cancel { justify-self: center; }
+@keyframes account-content-in { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes account-content-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(32px); } }
+@media (prefers-reduced-motion: reduce) {
+  .account__content[data-content-phase] { animation: none; }
+  .account__destinations button { transition: none; }
+}

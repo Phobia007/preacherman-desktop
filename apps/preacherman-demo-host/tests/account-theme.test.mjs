@@ -50,7 +50,8 @@ test('The Account lens uses only authored scene pixels, and login feedback is lo
  assert.match(surface,/lens\.current\?\.dispose\(\)/);
  assert.doesNotMatch(surface,/fetch\(|localStorage|sessionStorage|https?:\/\/|evomap/i);
  assert.match(surface,/type="email"[\s\S]*?autoComplete="email" required/);
- assert.match(surface,/Your email has not been sent or saved/);
+ assert.match(surface,/demoAccount.signIn\(email\)/);
+ assert.match(surface,/No verification needed/);
  assert.match(surface,/\.showModal\(\)/);
 });
 

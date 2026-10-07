@@ -45,6 +45,15 @@ export function AppShell({
   const [brandNavigationOpen, setBrandNavigationOpen] = useState(false);
   const [drawerView, setDrawerView] = useState<DrawerView>("menu");
   const accountDockHidden = brandNavigationOpen;
+  useEffect(() => {
+    let focusFrame = 0;
+    const openFriends = () => {
+      setDrawerView("friends"); setBrandNavigationOpen(true);
+      focusFrame = requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(".demo-drawer-social-actions__friends")?.focus());
+    };
+    window.addEventListener("preacherman:open-friends", openFriends);
+    return () => { window.removeEventListener("preacherman:open-friends", openFriends); cancelAnimationFrame(focusFrame); };
+  }, []);
   const [scale, setScale] = useState(() => {
     if (typeof window === "undefined") return 1;
     return Math.min(window.innerWidth / 1800, window.innerHeight / 1000);

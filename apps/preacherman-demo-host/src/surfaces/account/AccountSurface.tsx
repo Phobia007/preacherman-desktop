@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { accountAuth, accountProfile } from "../../auth/accountAuth";
+import { demoAccount } from "../../auth/demoAccount";
+import type { LocalSurfaceType } from "../../demo/screenRoute";
+import { DemoAccountContent } from "./DemoAccountContent";
 import { formatMemberNumber, memberName } from "../../auth/profileController";
 import type { Appearance } from "../../preferences";
 import markDark from "../../assets/preacherman-mark-dark.png";
@@ -12,8 +15,24 @@ import codexIcon from "./assets/codex.svg";
 import "../market/market-profile.css";
 import "./account.css";
 
-export function AccountSurface({ appearance }: { appearance: Appearance }) {
+export function AccountSurface({ appearance, onNavigate }: { appearance: Appearance; onNavigate: (surface: LocalSurfaceType) => void }) {
   const auth = useSyncExternalStore(accountAuth.subscribe, accountAuth.getSnapshot);
+  const demo = useSyncExternalStore(demoAccount.subscribe, demoAccount.getSnapshot);
+  const [view, setView] = useState<"login" | "demo" | "edit">(() => demo ? "demo" : "login");
+  const [contentPhase, setContentPhase] = useState("idle");
+  const [demoError, setDemoError] = useState("");
+  const contentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (contentTimer.current) clearTimeout(contentTimer.current); }, []);
+  const changeView = (next: typeof view, commit?: () => void) => {
+    if (contentTimer.current) return;
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setDemoError(""); setContentPhase("exiting");
+    contentTimer.current = setTimeout(() => {
+      try { commit?.(); setView(next); }
+      catch { setDemoError("Could not save your demo profile on this device. Please try again."); }
+      setContentPhase(reducedMotion ? "idle" : "entering"); contentTimer.current = null;
+    }, reducedMotion ? 0 : 220);
+  };
   const member = useSyncExternalStore(accountProfile.subscribe, accountProfile.getSnapshot);
   const profile = member.userId === auth.user?.id ? member.profile : null;
   const signingIn = ["restoring", "opening", "waiting", "finishing"].includes(auth.status);
@@ -87,7 +106,7 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
     return () => window.removeEventListener("keydown", close);
   }, [open]);
 
-  const showSignInStatus = (provider: "Google" | "Apple" | "Codex" | "Email") => {
+  const showSignInStatus = (provider: "Google" | "Apple" | "Codex") => {
     setUnavailableProvider(provider);
     dialog.current?.showModal();
   };
@@ -108,9 +127,19 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
         {effectError && <p className="account__effect-error" role="status">{effectError}</p>}
       </section>
       <main className="account__main" data-auth-state={auth.status}>
-        <form className="account__form" onSubmit={event => { event.preventDefault(); if (valid) showSignInStatus("Email"); }}>
+        <div className="account__content" data-view={view} data-content-phase={contentPhase} aria-busy={contentPhase === "exiting"}
+          ref={element => { element?.toggleAttribute("inert", contentPhase === "exiting"); }}
+          onAnimationEnd={event => { if (event.target === event.currentTarget && contentPhase === "entering") {
+            setContentPhase("idle"); event.currentTarget.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
+          } }}>
+        {view !== "login" && demo ? <DemoAccountContent key={view} account={demo} editing={view === "edit"} busy={contentPhase === "exiting"}
+          onEdit={() => changeView("edit")} onCancel={() => changeView("demo")}
+          onSave={(name, bio) => changeView("demo", () => demoAccount.update(name, bio))}
+          onSignOut={() => changeView("login", () => { demoAccount.signOut(); setEmail(""); setValid(false); setBlurred(false); })}
+          onNavigate={onNavigate} /> :
+        <form className="account__form" onSubmit={event => { event.preventDefault(); if (valid) changeView("demo", () => demoAccount.signIn(email)); }}>
           <header className="account__heading">
-            <h1>{auth.user ? "Your account" : "Log in to Preacherman"}</h1>
+            <h1 tabIndex={-1}>{auth.user ? "Your account" : "Log in to Preacherman"}</h1>
             <p>{auth.user ? "Signed in to Preacherman." : "Sign in or create an account to continue."}</p>
           </header>
           {auth.user ? <>
@@ -146,14 +175,17 @@ export function AccountSurface({ appearance }: { appearance: Appearance }) {
             onBlur={() => setBlurred(true)} onChange={event => { setEmail(event.target.value); setValid(event.target.validity.valid); }} />
           {blurred && !!email && !valid && <p className="account__error" id="account-email-error">Enter a valid email address.</p>}
           <button className="account__continue" type="submit" disabled={!valid}>Continue</button>
+          <p className="account__local-note">Enter any email to explore a demo account. No verification needed.</p>
           </>}
           {auth.error && <div className="account__auth-status"><p className="account__error" role="alert">{auth.error}</p>
             <button className="account__text-action" type="button" onClick={() => { void accountAuth.retry(); }}>Check connection</button></div>}
-        </form>
+        </form>}
+        {demoError && <p className="account__error" role="alert">{demoError}</p>}
+        </div>
       </main>
       <dialog ref={dialog} className="account__dialog" aria-labelledby="account-sign-in-title" aria-describedby="account-sign-in-description">
         <h2 id="account-sign-in-title">Sign-in is coming soon</h2>
-        <p id="account-sign-in-description">{unavailableProvider} sign-in is not connected yet. You can continue with GitHub.{unavailableProvider === "Email" && " Your email has not been sent or saved."}</p>
+        <p id="account-sign-in-description">{unavailableProvider} sign-in is not connected yet. You can continue with GitHub or explore a demo account using your email.</p>
         <form method="dialog"><button className="account__continue" autoFocus>Got it</button></form>
       </dialog>
     </section>
