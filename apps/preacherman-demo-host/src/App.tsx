@@ -409,6 +409,8 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         <CortanaModelStage
           ariaLabel={`Persistent ${avatarModelName(sceneModelId ?? "cortana")} companion scene`}
           environment="cinematic"
+          appearance={preferences.appearance}
+          homeInteractive={activeSurfaceType === "home" && navigationPhase === "idle"}
           isolateCompanion={activeSurfaceType === "account" || (activeSurfaceType === "market" && galleryDetailOpen)}
           cameraFraming={!accountHomeHandoff && (activeSurfaceType === "account" || activeSurfaceType === "market" || activeSurfaceType === "settings") ? "portrait" : "full-body"}
           modelId={sceneModelId ?? "cortana"}

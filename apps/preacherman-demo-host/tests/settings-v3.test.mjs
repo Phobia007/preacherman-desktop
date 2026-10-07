@@ -48,6 +48,8 @@ test("Settings renders the sixteen requested names in order without changing con
       assert.ok(html.includes('data-settings-state="framing"'));
       assert.equal((html.match(/class="settings-menu__item"/g) ?? []).length, 16);
       assert.equal((html.match(/disabled=""/g) ?? []).length, 16);
+      assert.ok(html.includes(`aria-pressed="${appearance === "light"}"`));
+      assert.ok(html.includes('class="settings-menu__appearance"'));
       const names = ["Execution Mode", "Instructions / Rules", "Memory", "Media Providers", "External MCP", "Connectors", "MCP Servers", "Language", "Appearance", "Design Council", "Notifications", "Pets", "Design System", "Project Location", "Privacy", "About"];
       let previous = -1;
       for (const name of names) {
@@ -75,7 +77,7 @@ test("Settings reuses Gallery portrait and starts a bounded top-to-bottom wave a
   const app = await readFile(join(hostRoot, "src", "App.tsx"), "utf8");
   const source = await readFile(componentPath, "utf8");
   const css = await readFile(join(hostRoot, "src", "settings", "settings-menu.css"), "utf8");
-  assert.match(app, /activeSurfaceType === "market" \|\| activeSurfaceType === "settings" \? "portrait" : "full-body"/);
+  assert.match(app, /activeSurfaceType === "market" \|\| activeSurfaceType === "settings"\) \? "portrait" : "full-body"/);
   assert.match(source, /reducedMotion.matches \? 0 : 650/);
   assert.match(css, /var\(--settings-order\) \* 35ms/);
   assert.match(css, /prefers-reduced-motion: reduce/);

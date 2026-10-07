@@ -1,6 +1,6 @@
-import { useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef } from "react";
-import { AdditiveBlending, DoubleSide } from "three";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { AdditiveBlending, NormalBlending, Color, DoubleSide } from "three";
 import { platformBreath } from "./platformRingMotion";
 
 const ENERGY_VERTEX_SHADER = `
@@ -14,6 +14,7 @@ const ENERGY_VERTEX_SHADER = `
 const ENERGY_FRAGMENT_SHADER = `
   uniform float uBreath;
   uniform float uTime;
+  uniform vec3 uColor;
   varying vec2 vPlatformPosition;
 
   // Pixel-footprint filtering keeps the silver edges continuous at grazing angles.
@@ -48,16 +49,22 @@ const ENERGY_FRAGMENT_SHADER = `
       + softShoulder * (0.022 + flow * 0.075);
     float spill = lightSpill * (0.004 + flow * 0.018);
     float alpha = clamp((edges + channel + spill) * breath * 3.0, 0.0, 0.85);
-    gl_FragColor = vec4(vec3(0.92, 0.95, 1.0), alpha);
+    gl_FragColor = vec4(uColor, alpha);
   }
 `;
 
-function BreathingPlatformLight() {
+function BreathingPlatformLight({ appearance }: { appearance: "light" | "dark" }) {
+  const { gl } = useThree();
   const elapsed = useRef(1.4);
   const energyUniforms = useMemo(() => ({
     uBreath: { value: platformBreath(1.4) },
     uTime: { value: 1.4 },
+    uColor: { value: new Color(0.92, 0.95, 1.0) },
   }), []);
+  useLayoutEffect(() => {
+    const value = getComputedStyle(gl.domElement).getPropertyValue("--demo-theme-avatar-ring").trim();
+    energyUniforms.uColor.value.set(value || (appearance === "light" ? "#17191c" : "#ebf2ff"));
+  }, [appearance, energyUniforms, gl]);
   const reduceMotion = useRef(false);
 
   useEffect(() => {
@@ -81,7 +88,7 @@ function BreathingPlatformLight() {
       <mesh name="companion-platform-ring" position={[0, 0.015, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[0.56, 0.63, 384]} />
         <shaderMaterial
-          blending={AdditiveBlending}
+          blending={appearance === "light" ? NormalBlending : AdditiveBlending}
           depthWrite={false}
           fragmentShader={ENERGY_FRAGMENT_SHADER}
           side={DoubleSide}
@@ -91,7 +98,7 @@ function BreathingPlatformLight() {
           vertexShader={ENERGY_VERTEX_SHADER}
         />
       </mesh>
-      <group>
+      <group visible={appearance === "dark"}>
         <mesh position={[0, -0.035, 0]} receiveShadow>
           <cylinderGeometry args={[0.555, 0.555, 0.08, 128, 1, true]} />
           <meshStandardMaterial
@@ -116,25 +123,27 @@ function BreathingPlatformLight() {
  * A real, deliberately under-lit 3D room for the persistent companion stage.
  * The geometry stays restrained so Cortana remains the only visual subject.
  */
-export function CinematicEnvironment({ isolateCompanion = false }: {
+export function CinematicEnvironment({ isolateCompanion = false, appearance = "dark" }: {
   readonly isolateCompanion?: boolean;
+  readonly appearance?: "light" | "dark";
 }) {
+  const dark = appearance === "dark";
   return (
     <>
-      {!isolateCompanion ? <color attach="background" args={["#010409"]} /> : null}
-      <fog attach="fog" args={["#010409", 3.8, 9.5]} />
+      {!isolateCompanion && dark ? <color attach="background" args={["#010409"]} /> : null}
+      {dark ? <fog attach="fog" args={["#010409", 3.8, 9.5]} /> : null}
 
-      <mesh visible={!isolateCompanion} position={[0, -0.025, -0.4]} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh visible={!isolateCompanion && dark} position={[0, -0.025, -0.4]} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[14, 14]} />
         <meshStandardMaterial color="#050b12" metalness={0.22} roughness={0.72} />
       </mesh>
 
-      <mesh visible={!isolateCompanion} position={[0, 2.15, -2.35]} receiveShadow>
+      <mesh visible={!isolateCompanion && dark} position={[0, 2.15, -2.35]} receiveShadow>
         <planeGeometry args={[11, 5.4]} />
         <meshStandardMaterial color="#02070d" metalness={0.08} roughness={0.92} />
       </mesh>
 
-      <BreathingPlatformLight />
+      <BreathingPlatformLight appearance={appearance} />
     </>
   );
 }

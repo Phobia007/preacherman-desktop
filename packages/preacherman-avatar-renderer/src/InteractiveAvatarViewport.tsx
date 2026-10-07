@@ -50,6 +50,8 @@ export function InteractiveAvatarViewport({
   modelId = "cortana",
   cameraFraming = "full-body",
   rotationOffsetY = 0,
+  appearance = "dark",
+  cameraZoom = 0,
 }: InteractiveAvatarViewportProps) {
   const [failure, setFailure] = useState<{ modelKey: string; state: AvatarLoadState } | null>(null);
   const [documentVisible, setDocumentVisible] = useState(() => typeof document === "undefined" || !document.hidden);
@@ -134,7 +136,7 @@ export function InteractiveAvatarViewport({
             gl.info.autoReset = true;
             if (environment === "cinematic") configureHologramRenderer(gl, environment);
             else configureHologramRenderer(gl);
-            gl.setClearColor(0x010409, environment === "cinematic" && !isolateCompanion ? 1 : 0);
+            gl.setClearColor(0x010409, environment === "cinematic" && !isolateCompanion && appearance === "dark" ? 1 : 0);
           }}
           shadows={environment === "cinematic"}
         >
@@ -159,6 +161,8 @@ export function InteractiveAvatarViewport({
               modelId={modelId}
               cameraFraming={cameraFraming}
               rotationOffsetY={rotationOffsetY}
+              appearance={appearance}
+              cameraZoom={cameraZoom}
             />
           </Suspense>
           <Suspense fallback={null}>{sceneContent}</Suspense>

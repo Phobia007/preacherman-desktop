@@ -69,7 +69,8 @@ test("the persistent shell exposes semantic theme tokens and themed window contr
   assert.match(styles, /\.demo-window-controls__button\s*\{[\s\S]*?border:\s*0;[\s\S]*?background:\s*transparent/);
   assert.match(styles, /\.demo-app-shell\[data-active-surface="workspace"\] \.demo-window-controls__button\s*\{[\s\S]*?background:\s*transparent/);
   assert.match(styles, /\.demo-app-shell\[data-active-surface="settings"\] \.demo-window-controls__button\s*\{[\s\S]*?background:\s*transparent/);
-  assert.equal((styles.match(/--demo-theme-home-canvas:\s*#010409/g) ?? []).length, 2);
+  assert.equal((styles.match(/--demo-theme-home-canvas:\s*#010409/g) ?? []).length, 1);
+  assert.match(styles, /--demo-theme-home-canvas:\s*#edf0f2/);
   assert.match(
     styles,
     /\.demo-app-shell__scene\s*\{[\s\S]*background:\s*var\(--demo-theme-home-canvas\)/,
@@ -95,9 +96,10 @@ test("current Gallery and its companion keep semantic chrome around authored con
   assert.match(bridge, /attributeFilter: \["data-appearance"\]/);
   assert.match(bridge, /gallery-conversation-theme/);
   assert.match(modelStage, /<InteractiveAvatarViewport\b/);
-  assert.doesNotMatch(modelStage, /appearance=|theme=|material=/);
+  assert.match(modelStage, /appearance=\{appearance\}/);
+  assert.doesNotMatch(modelStage, /material=/);
   assert.match(viewport, /alpha:\s*true/);
-  assert.match(scene, /setClearAlpha\(environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
+  assert.match(scene, /setClearAlpha\(environment === "cinematic" && !isolateCompanion && appearance === "dark" \? 1 : 0\)/);
   assert.match(rendererStyles, /\.preacherman-avatar-debug\s*\{[\s\S]*var\(--demo-theme-border-strong\)[\s\S]*var\(--demo-theme-text\)[\s\S]*var\(--demo-theme-surface-elevated\)/);
 });
 

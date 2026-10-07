@@ -20,7 +20,7 @@ export const settingsMenuItems = [
   "Design System", "Project Location", "Privacy", "About",
 ] as const;
 
-export function SettingsScreen({ locale }: SettingsScreenProps) {
+export function SettingsScreen({ locale, appearance, onAppearanceChange }: SettingsScreenProps) {
   const [ready, setReady] = useState(false);
   const [selected, setSelected] = useState<{ label: string; x: number; y: number; width: number; height: number } | null>(null);
   const surfaceRef = useRef<HTMLElement>(null);
@@ -78,6 +78,18 @@ export function SettingsScreen({ locale }: SettingsScreenProps) {
       data-settings-focused={Boolean(selected)}
       ref={surfaceRef}
     >
+      <button
+        className="settings-menu__appearance"
+        aria-label={locale === "zh-CN" ? "切换白天模式" : "Light appearance"}
+        aria-pressed={appearance === "light"}
+        title={appearance === "dark" ? "Light appearance" : "Dark appearance"}
+        onClick={() => onAppearanceChange(appearance === "dark" ? "light" : "dark")}
+        type="button"
+      >
+        <svg aria-hidden="true" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round">
+          {appearance === "light" ? <><circle cx="16" cy="16" r="5" /><path d="M16 3v3m0 20v3M3 16h3m20 0h3M6.8 6.8l2.1 2.1m14.2 14.2 2.1 2.1M6.8 25.2l2.1-2.1M23.1 8.9l2.1-2.1" /></> : <path d="M21.2 5.5a10.5 10.5 0 1 1-14.7 14.7A9.1 9.1 0 0 0 21.2 5.5Z" />}
+        </svg>
+      </button>
       <nav aria-hidden={Boolean(selected)} aria-label="Settings preferences" className="settings-menu__list" lang="en">
         {settingsMenuItems.map((label, index) => (
           <div className="settings-menu__row" data-focused={selected?.label === label} key={label} style={{ "--settings-order": index } as CSSProperties}>

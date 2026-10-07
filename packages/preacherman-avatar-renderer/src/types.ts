@@ -50,6 +50,10 @@ export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   readonly companionVisible?: boolean;
   readonly modelId?: AvatarModelId;
   readonly cameraFraming?: AvatarCameraFraming;
+  /** Environmental appearance only; authored model materials stay unchanged. */
+  readonly appearance?: "light" | "dark";
+  /** Interpolates full-body toward the shared portrait frame (0–1). */
+  readonly cameraZoom?: number;
   /** Adds a scene-local yaw correction without changing the avatar profile. */
   readonly rotationOffsetY?: number;
   readonly actionId?: string;

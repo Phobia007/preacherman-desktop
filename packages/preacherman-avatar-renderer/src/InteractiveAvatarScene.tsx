@@ -36,6 +36,8 @@ interface InteractiveAvatarSceneProps {
   readonly modelId: AvatarModelId;
   readonly cameraFraming: AvatarCameraFraming;
   readonly rotationOffsetY: number;
+  readonly appearance: "light" | "dark";
+  readonly cameraZoom: number;
 }
 
 const FULL_BODY_CAMERA = { x: 0, y: 0.94, z: 4.35 } as const;
@@ -50,9 +52,10 @@ function moveToward(current: number, target: number, smoothing: number, delta: n
 
 function CameraRig({
   cameraFraming,
+  cameraZoom,
   environment,
   resetKey,
-}: Pick<InteractiveAvatarSceneProps, "cameraFraming" | "environment" | "resetKey">) {
+}: Pick<InteractiveAvatarSceneProps, "cameraFraming" | "cameraZoom" | "environment" | "resetKey">) {
   const { camera, invalidate } = useThree();
   const controls = useRef<OrbitControlsImpl>(null);
   const reducedMotion = useRef(false);
@@ -85,8 +88,9 @@ function CameraRig({
   useFrame((_, delta) => {
     if (environment !== "cinematic") return;
     const portrait = cameraFraming === "portrait";
-    const cameraFrame = portrait ? PORTRAIT_CAMERA : FULL_BODY_CAMERA;
-    const controlsTarget = portrait ? PORTRAIT_TARGET : FULL_BODY_TARGET;
+    const amount = portrait ? 1 : Math.max(0, Math.min(1, cameraZoom));
+    const cameraFrame = { x: 0, y: FULL_BODY_CAMERA.y + (PORTRAIT_CAMERA.y - FULL_BODY_CAMERA.y) * amount, z: FULL_BODY_CAMERA.z + (PORTRAIT_CAMERA.z - FULL_BODY_CAMERA.z) * amount };
+    const controlsTarget = { x: 0, y: FULL_BODY_TARGET.y + (PORTRAIT_TARGET.y - FULL_BODY_TARGET.y) * amount, z: 0 };
     const smoothing = reducedMotion.current ? Number.POSITIVE_INFINITY : portrait ? 6 : 8.5;
     camera.position.set(
       moveToward(camera.position.x, cameraFrame.x, smoothing, delta),
@@ -159,18 +163,20 @@ export function InteractiveAvatarScene({
   modelId,
   cameraFraming,
   rotationOffsetY,
+  appearance,
+  cameraZoom,
 }: InteractiveAvatarSceneProps) {
   const { gl, scene, invalidate } = useThree();
   useLayoutEffect(() => {
     // R3F restores the previous attached Color when <color> is removed. Explicitly
     // clear it for the isolated pass; otherwise Three clears the whole frame opaque.
-    if (isolateCompanion) scene.background = null;
-    gl.setClearAlpha(environment === "cinematic" && !isolateCompanion ? 1 : 0);
+    if (isolateCompanion || appearance === "light") scene.background = null;
+    gl.setClearAlpha(environment === "cinematic" && !isolateCompanion && appearance === "dark" ? 1 : 0);
     invalidate();
-  }, [environment, gl, scene, invalidate, isolateCompanion]);
+  }, [environment, gl, scene, invalidate, isolateCompanion, appearance]);
   return (
     <>
-      {environment === "cinematic" ? <CinematicEnvironment isolateCompanion={isolateCompanion} /> : null}
+      {environment === "cinematic" ? <CinematicEnvironment isolateCompanion={isolateCompanion} appearance={appearance} /> : null}
       {environment === "cinematic" ? <CinematicHologramLights /> : <HologramLights />}
       {companionVisible ? <AvatarModel
         key={`${modelId}:${assetBaseUrl}`}
@@ -188,7 +194,7 @@ export function InteractiveAvatarScene({
         modelId={modelId}
         rotationOffsetY={rotationOffsetY}
       /> : null}
-      <CameraRig cameraFraming={cameraFraming} environment={environment} resetKey={resetKey} />
+      <CameraRig cameraFraming={cameraFraming} cameraZoom={cameraZoom} environment={environment} resetKey={resetKey} />
       <AvatarFrameMetrics />
       <ContextLossListener onContextLost={onContextLost} />
     </>

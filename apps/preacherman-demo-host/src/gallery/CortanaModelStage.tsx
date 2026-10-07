@@ -7,7 +7,8 @@ import {
   type AvatarCameraFraming,
   type AvatarSceneEnvironment,
 } from "@preacherman/avatar-renderer";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { rotateCompanion, zoomCompanion } from "./homeCompanionControls";
 import { localAvatarAssetBaseUrl } from "../avatar/avatarAssets";
 import { useAvatarInteractionState } from "../live/LiveCoordinatorContext";
 import {
@@ -29,6 +30,8 @@ interface CortanaModelStageProps {
   readonly prefetchModelId?: ModelId;
   readonly cameraFraming?: AvatarCameraFraming;
   readonly rotationOffsetY?: number;
+  readonly appearance?: "light" | "dark";
+  readonly homeInteractive?: boolean;
 }
 
 export function CortanaModelStage({
@@ -43,7 +46,23 @@ export function CortanaModelStage({
   prefetchModelId,
   cameraFraming = "full-body",
   rotationOffsetY = 0,
+  appearance = "dark",
+  homeInteractive = false,
 }: CortanaModelStageProps) {
+  const [yaw, setYaw] = useState(0);
+  const [zoom, setZoom] = useState(0);
+  const gestureRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ id: number; x: number } | null>(null);
+  useEffect(() => {
+    const target = gestureRef.current;
+    if (!homeInteractive || !target) { drag.current = null; return; }
+    const wheel = (event: WheelEvent) => {
+      event.preventDefault();
+      setZoom(current => zoomCompanion(current, event.deltaY, event.deltaMode));
+    };
+    target.addEventListener("wheel", wheel, { passive: false });
+    return () => target.removeEventListener("wheel", wheel);
+  }, [homeInteractive]);
   const modelName = avatarModelName(modelId);
   const interactionState = useAvatarInteractionState();
   const [readyModel, setReadyModel] = useState<ModelId | null>(null);
@@ -78,6 +97,8 @@ export function CortanaModelStage({
       data-avatar-state={interactionState}
       data-motion-action={defaultActionId}
       data-scene-environment={environment}
+      data-home-yaw={homeInteractive ? yaw : 0}
+      data-home-zoom={homeInteractive ? zoom : 0}
       tabIndex={-1}
     >
       <InteractiveAvatarViewport
@@ -97,8 +118,43 @@ export function CortanaModelStage({
         modelId={modelId}
         cameraFraming={cameraFraming}
         renderActive={renderActive}
-        rotationOffsetY={rotationOffsetY}
+        rotationOffsetY={rotationOffsetY + (homeInteractive ? yaw : 0)}
+        cameraZoom={homeInteractive ? zoom : 0}
+        appearance={appearance}
       />
+      {homeInteractive ? <div
+        ref={gestureRef}
+        className="home-companion-gesture"
+        aria-label="Rotate companion with left and right arrows; zoom with up and down arrows"
+        role="group"
+        tabIndex={0}
+        onPointerDown={event => {
+          if (event.button !== 0) return;
+          drag.current = { id: event.pointerId, x: event.clientX };
+          event.currentTarget.setPointerCapture(event.pointerId);
+          event.currentTarget.dataset.dragging = "true";
+        }}
+        onPointerMove={event => {
+          if (drag.current?.id !== event.pointerId) return;
+          const dx = event.clientX - drag.current.x;
+          const width = event.currentTarget.getBoundingClientRect().width;
+          drag.current.x = event.clientX;
+          setYaw(current => rotateCompanion(current, dx, width));
+        }}
+        onPointerUp={event => {
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+          drag.current = null;
+          event.currentTarget.dataset.dragging = "false";
+        }}
+        onLostPointerCapture={event => { drag.current = null; event.currentTarget.dataset.dragging = "false"; }}
+        onKeyDown={event => {
+          if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home"].includes(event.key)) return;
+          event.preventDefault();
+          if (event.key === "Home") { setYaw(0); setZoom(0); }
+          else if (event.key === "ArrowLeft" || event.key === "ArrowRight") setYaw(current => current + (event.key === "ArrowLeft" ? -.15 : .15));
+          else setZoom(current => zoomCompanion(current, event.key === "ArrowUp" ? -70 : 70));
+        }}
+      /> : null}
       {companionVisible && loadState === "loading" ? (
         <div aria-label={`Loading ${modelName}`} className="cortana-model-stage__loading" role="status">
           <span />

@@ -5,6 +5,29 @@
   pointer-events: none;
 }
 
+.settings-menu__appearance {
+  position: absolute;
+  top: 54px;
+  left: 1272px;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--demo-theme-brand-menu-text);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 180ms ease, background 180ms ease, transform 280ms ease;
+}
+.settings-menu__appearance svg { width: 30px; height: 30px; }
+.settings-menu__appearance:hover { color: var(--demo-theme-brand-menu-text-hover); background: var(--demo-theme-control-hover-bg); transform: rotate(12deg); }
+.settings-menu__appearance:focus-visible { outline: 1px solid var(--demo-theme-brand-menu-focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .settings-menu__appearance { transition: none; } }
+
 .settings-menu__list {
   position: absolute;
   top: 140px;
