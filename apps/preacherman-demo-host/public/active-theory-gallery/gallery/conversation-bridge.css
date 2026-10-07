@@ -4,6 +4,10 @@
 [data-preacherman-chat] [data-preacherman-message] { white-space: pre-wrap; overflow-wrap: anywhere; pointer-events: auto; }
 [data-preacherman-chat] [role="log"] { overflow-y: auto !important; scrollbar-width: none; overscroll-behavior: contain; pointer-events: auto; }
 [data-preacherman-chat] textarea { color: var(--demo-theme-settings-text) !important; }
+html[data-appearance="light"] [data-preacherman-chat] [role="log"] > * {
+  color: var(--demo-theme-settings-text) !important;
+  text-shadow: 0 1px 2px var(--demo-theme-settings-canvas), 0 0 5px var(--demo-theme-settings-canvas);
+}
 [data-preacherman-chat] textarea::placeholder { color: var(--demo-theme-settings-muted); opacity: 1; }
 [data-preacherman-chat][aria-busy="true"] textarea::placeholder { color: var(--demo-theme-settings-loading); }
 @media (max-width: 600px) {

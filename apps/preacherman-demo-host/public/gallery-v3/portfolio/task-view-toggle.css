@@ -19,6 +19,11 @@
   touch-action: manipulation;
   transition: color 180ms ease, opacity 240ms ease, visibility 240ms;
 }
+/* The authored brand remains a signature while its ink follows the shared room. */
+[data-od-id="profile-toggle"] {
+  color: var(--demo-theme-brand-menu-text-hover) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
 .task-view-toggle:hover, .task-view-toggle:focus-visible { color: var(--demo-theme-brand-menu-text-hover); }
 .task-view-toggle:focus-visible { outline: 1px solid var(--demo-theme-brand-menu-focus) !important; outline-offset: 3px; }
 .task-view-toggle:active { opacity: .72; }

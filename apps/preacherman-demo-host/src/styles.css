@@ -2750,6 +2750,7 @@ body {
 }
 .demo-app-shell[data-appearance="dark"] { --demo-theme-avatar-ring: #ebf2ff; }
 .demo-app-shell[data-appearance="light"] {
+  --demo-theme-gallery-composite-key: transparent;
   --demo-theme-member-text: #272c31;
   --demo-theme-member-muted: #50565c;
   --demo-theme-member-hover: #101418;
@@ -2758,6 +2759,22 @@ body {
   --demo-theme-member-loading: #32617b;
   --demo-theme-member-error: #973a39;
   --demo-theme-market-header-glass: rgb(255 255 255 / 36%);
+}
+.demo-app-shell[data-appearance="light"] .market-surface__categories {
+  left: 0;
+  right: 0;
+  background: var(--demo-theme-brand-menu-surface);
+  backdrop-filter: blur(20px);
+}
+.demo-app-shell[data-appearance="light"][data-active-surface="ledger"] .demo-account-dock,
+.demo-app-shell[data-appearance="light"][data-active-surface="account"] .demo-account-dock {
+  background: var(--demo-theme-brand-menu-surface);
+  border-radius: 24px;
+  padding: 5px 10px;
+  height: 44px;
+  left: 30px;
+  bottom: 19px;
+  backdrop-filter: blur(18px);
 }
 .demo-app-shell[data-appearance="light"] .demo-app-shell__scene,
 .demo-app-shell[data-appearance="light"][data-active-surface="market"] .demo-app-shell__scene {
