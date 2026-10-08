@@ -1260,6 +1260,16 @@
       "deployedAt": "2026-10-08T06:34:10.4816208+08:00",
       "verifiedAt": "2026-10-08T06:37:03.2487080+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-daylight-before-20261008"
+    },
+    {
+      "buildId": "extension-marketplace-first-candidate-20261008",
+      "sourceCommit": "6ac0f6ec5569a0089b1d7436bb6935aea95c4e6e",
+      "sha256": "27496495EA1C5E2243F02C4CD0321D9FCECF754FAE875696F44E5D4778D212D7",
+      "status": "rolled-back-before-correction",
+      "reason": "Native visual review caught white Task profile copy in light appearance",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-first-candidate-20261008",
+      "restoredSha256": "EB1B08486C399974F8197F3B833A4B26A066E6E9A3B2D1ED2B65FC99BF607A08",
+      "at": "2026-10-08T09:09:47.8075692+08:00"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-daylight-before-20261008/desktop-build-manifest.json",
@@ -1298,7 +1308,7 @@
     "inventoryLimitations": [
       {
         "path": "D:\\preacherman\\output\\gallery-model-import-20260910\\tmp\\tmpr6ihcejq",
-        "error": "[WinError 5] 鎷掔粷璁块棶銆? 'D:\\\\preacherman\\\\output\\\\gallery-model-import-20260910\\\\tmp\\\\tmpr6ihcejq'"
+        "error": "[WinError 5] 閹锋帞绮风拋鍧楁６閵? 'D:\\\\preacherman\\\\output\\\\gallery-model-import-20260910\\\\tmp\\\\tmpr6ihcejq'"
       }
     ],
     "oldWorktreePhysicalRetirement": "deferred: 6 different or unique local state files and independent runtime data; old worktree is no longer a release source"

@@ -31,12 +31,28 @@ test("Task uses one signature layer and keeps the original lens motion", () => {
   const runtime = read("_nuxt/D9b8F35K.js");
   const brand = css.match(/\[data-od-id="profile-toggle"\]\s*\{([^}]+)\}/)[1];
   assert.match(brand, /-webkit-text-fill-color:\s*transparent\s*!important/);
-  assert.match(css, /\[data-task-profile-disc\][^}]+var\(--demo-theme-text/);
+  assert.match(css, /\[data-gallery-profile-copy\][^}]+var\(--demo-theme-text/);
   assert.match(runtime, /sampleAlpha = max\(cr.a, max\(cg.a, cb.a\)\)/);
   assert.match(runtime, /vec4\(0.0, 0.0, 0.0, 1.0 - u_daylight\)/);
+  assert.match(runtime, /if \(uv.x < 0.0[^\n]+return vec4\(0.0, 0.0, 0.0, 1.0 - u_daylight\)/);
   assert.match(runtime, /syncHole\(\)\{syncTaskProfileAppearance\(this\)/);
   assert.match(runtime, /openHole\(e\)\{ve.to\(this.hole/);
   for (const page of ["index.html", "full/index.html"]) {
     assert.match(read(page), /galleryAppearance=data.appearance==="light"\?"light":"dark"/);
   }
+});
+
+test("hydrated profile copy uses host ink even when its authored CSS is still white", () => {
+  let ink = "#16191c";
+  const document = {documentElement: {dataset: {galleryAppearance: "light"}, style: {getPropertyValue: () => ink}}};
+  const context = vm.createContext({document, getComputedStyle: () => ({color: "rgb(255, 255, 255)"})});
+  vm.runInContext(read("task-profile-appearance.js").replace("export function", "function"), context);
+  const body = {el: {isConnected: true}, setColor(value) { this.ink = value; }};
+  const folio = {core: {post: {u: {u_daylight: {value: 0}}}}, overlay: [body], hud: []};
+  context.syncTaskProfileAppearance(folio);
+  assert.equal(body.ink, "#16191c");
+  document.documentElement.dataset.galleryAppearance = "dark";
+  ink = "#f5fafc";
+  context.syncTaskProfileAppearance(folio);
+  assert.equal(body.ink, "#f5fafc");
 });

@@ -43,4 +43,4 @@
   .task-view-toggle, .task-view-toggle path { transition: none; }
 }
 
-[data-task-profile-disc] { color: var(--demo-theme-text, var(--gallery-host-text, #fff)); }
+[data-task-profile-disc], [data-gallery-profile-copy] { color: var(--demo-theme-text, var(--gallery-host-text, #fff)); }

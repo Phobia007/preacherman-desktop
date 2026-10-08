@@ -47,7 +47,7 @@ test("the generated lens geometry and curve retain Task's source across its dayl
     .replace(/\s*float sampleAlpha = max\(cr.a, max\(cg.a, cb.a\)\);/, "")
     .replace(/\s*vec3 sampleColor = vec3\(cr.r, cg.g, cb.b\);/, "")
     .replace("vec4 col = vec4(mix(sampleColor, sampleColor / max(sampleAlpha, 0.0001), u_daylight), mix(1.0, sampleAlpha, u_daylight));", "vec4 col = vec4(cr.r, cg.g, cb.b, 1.0);")
-    .replace("1.0 - u_daylight", "1.0");
+    .replaceAll("1.0 - u_daylight", "1.0");
   assert.equal(task.exports.taskProfileFragment, clean(originalComposite));
   assert.equal(JSON.stringify(task.exports.taskProfileCurve), JSON.stringify(runInNewContext(source.match(/pU=(\[\[.*?\]\]),zu=/)[1])));
   assert.ok(source.includes("duration:e?.85:.65,ease:zu"));

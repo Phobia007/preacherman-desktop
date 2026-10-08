@@ -4412,7 +4412,7 @@ float lobes(float a) {
 vec4 grab(vec2 dir, float rad) {
 	vec2 uv = (dir * rad * widthUnit()) / (squash() * u_aspect) + u_center;
 
-	if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) return vec4(0.0, 0.0, 0.0, 1.0);
+	if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) return vec4(0.0, 0.0, 0.0, 1.0 - u_daylight);
 
 	return texture2D(u_scene, uv);
 }

@@ -8,7 +8,13 @@ export function syncTaskProfileAppearance(folio) {
   if (folio.taskProfileAppearanceKey === key) return;
   folio.taskProfileAppearanceKey = key;
   folio.core.post.u.u_daylight.value = appearance === "light" ? 1 : 0;
-  for (const text of [...folio.overlay, ...folio.hud]) {
+  // Profile copy comes from hydrated SSR markup: it can retain the authored
+  // white CSS even though the host changed theme. Use the host's semantic ink.
+  for (const text of folio.overlay) {
+    if (!text.el?.isConnected) continue;
+    text.setColor(ink || getComputedStyle(text.el).color);
+  }
+  for (const text of folio.hud) {
     if (!text.el?.isConnected) continue;
     text.setColor(getComputedStyle(text.el).color);
   }
