@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "buildId": "extension-font-20261008",
+  "buildId": "extension-static-nav-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "extension-default-font-and-centered-navigation",
+  "sourceTask": "extension-persistent-navigation-content-only-transition",
   "sourceThread": null,
-  "sourceState": "All Extension text uses the shared Clash Display font. Home, connectors/plugins and agents/products navigation, including search, is centered. The host handwritten brand and existing appearance and motion are preserved",
-  "sourceCommit": "525e968ab3b809993a4a3939d79973508b97259f",
+  "sourceState": "Extension has one persistent host navigation bar. Only catalog content transitions between Home, connectors/plugins and agents/products; default font, theme, search and surface entrance/exit are preserved",
+  "sourceCommit": "e4f08fe8650d2bae70568f1cd7732b5bef029d37",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-08T12:28:06.6122845+08:00",
-  "deployedAt": "2026-10-08T12:30:03.3601121+08:00",
-  "verifiedAt": "2026-10-08T12:32:24.5055687+08:00",
-  "sizeBytes": 652090368,
-  "sha256": "FA0C54E7733BD7C4AD27E4BD3C113429D0E35BC8A1805E02166E9191E9049C44",
+  "builtAt": "2026-10-08T14:14:31.3052686+08:00",
+  "deployedAt": "2026-10-08T14:15:11.7517157+08:00",
+  "verifiedAt": "2026-10-08T14:17:58.0819043+08:00",
+  "sizeBytes": 652090880,
+  "sha256": "B588D9A04BC95ECF914B2444FDE616A22CA2EE1D3DE738E9ABE6B73A80271FD5",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-font-before-20261008/preacherman-demo-host.exe",
-  "backupSha256": "D0BE67509AD569A74B45EF82FD14F45D687F6F28A649332AFCB560F7E25BA46C",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-font-before-20261008/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-static-nav-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "FA0C54E7733BD7C4AD27E4BD3C113429D0E35BC8A1805E02166E9191E9049C44",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-static-nav-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "92e1a44de731c6a9c62da757abe8b58f01e3e85b",
-  "previousVerificationCommit": "92e1a44de731c6a9c62da757abe8b58f01e3e85b",
+  "rollbackBaselineCommit": "525e968ab3b809993a4a3939d79973508b97259f",
+  "previousVerificationCommit": "525e968ab3b809993a4a3939d79973508b97259f",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
@@ -32,7 +32,7 @@
       "focusedFailures": 0,
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. All three Extension pages and search checked for loaded default font and centered navigation in both appearances. Core routes, window controls and cleanup verified with no new console errors",
+    "nativeFlow": "Canonical shortcut cold launch. Navigation DOM identity and opacity sampled through tab switches, search and detail dialogs checked in both appearances. Core routes, native controls and cleanup verified with no new console errors",
     "navigation": [
       "Home",
       "Task",
@@ -163,38 +163,128 @@
       {
         "from": "asset",
         "to": "extension",
-        "opacity": 0.948312,
+        "opacity": 0.962956,
         "appearance": "dark"
       },
       {
         "from": "extension",
         "to": "asset",
+        "opacity": 0.962878,
+        "appearance": "dark"
+      },
+      {
+        "from": "asset",
+        "to": "extension",
         "opacity": 0.966084,
         "appearance": "dark"
       },
       {
         "from": "asset",
         "to": "extension",
-        "opacity": 0.962956,
-        "appearance": "dark"
-      },
-      {
-        "from": "asset",
-        "to": "extension",
         "opacity": 0.962878,
         "appearance": "light"
       },
       {
         "from": "extension",
         "to": "asset",
-        "opacity": 0.948215,
+        "opacity": 0.948312,
         "appearance": "light"
       },
       {
         "from": "asset",
         "to": "extension",
-        "opacity": 0.962878,
+        "opacity": 0.948312,
         "appearance": "light"
+      }
+    ],
+    "persistentNavigation": [
+      {
+        "appearance": "dark",
+        "label": "Connectors and plugins",
+        "samples": 134,
+        "retained": true,
+        "minimumOpacity": 1
+      },
+      {
+        "appearance": "dark",
+        "label": "Home",
+        "samples": 145,
+        "retained": true,
+        "minimumOpacity": 1
+      },
+      {
+        "appearance": "dark",
+        "label": "Agents and products",
+        "samples": 145,
+        "retained": true,
+        "minimumOpacity": 1
+      },
+      {
+        "appearance": "dark",
+        "label": "Connectors and plugins",
+        "samples": 145,
+        "retained": true,
+        "minimumOpacity": 1
+      },
+      {
+        "appearance": "light",
+        "label": "Connectors and plugins",
+        "samples": 145,
+        "retained": true,
+        "minimumOpacity": 1
+      },
+      {
+        "appearance": "light",
+        "label": "Home",
+        "samples": 145,
+        "retained": true,
+        "minimumOpacity": 1
+      },
+      {
+        "appearance": "light",
+        "label": "Agents and products",
+        "samples": 145,
+        "retained": true,
+        "minimumOpacity": 1
+      },
+      {
+        "appearance": "light",
+        "label": "Connectors and plugins",
+        "samples": 145,
+        "retained": true,
+        "minimumOpacity": 1
+      }
+    ],
+    "search": [
+      {
+        "appearance": "dark",
+        "page": "http://tauri.localhost/extension-marketplace/marketplace-agents.html",
+        "passed": true
+      },
+      {
+        "appearance": "dark",
+        "page": "http://tauri.localhost/extension-marketplace/claude-marketplace.html",
+        "passed": true
+      },
+      {
+        "appearance": "dark",
+        "page": "http://tauri.localhost/extension-marketplace/marketplace-home.html",
+        "passed": true
+      },
+      {
+        "appearance": "light",
+        "page": "http://tauri.localhost/extension-marketplace/marketplace-agents.html",
+        "passed": true
+      },
+      {
+        "appearance": "light",
+        "page": "http://tauri.localhost/extension-marketplace/claude-marketplace.html",
+        "passed": true
+      },
+      {
+        "appearance": "light",
+        "page": "http://tauri.localhost/extension-marketplace/marketplace-home.html",
+        "passed": true
       }
     ],
     "typography": [
@@ -269,30 +359,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-08T12:32:24.5055687+08:00",
-      "NativePid": 34804,
-      "StartedAt": "2026-10-08T12:32:02.2027732+08:00",
-      "WindowHandle": 2756416,
+      "SampledAt": "2026-10-08T14:17:58.0819043+08:00",
+      "NativePid": 41468,
+      "StartedAt": "2026-10-08T14:17:39.4970369+08:00",
+      "WindowHandle": 19468364,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        34804,
-        11056,
-        9380,
-        33024,
-        38688,
-        34048,
-        38608,
-        35548,
-        34576,
-        18520,
-        23888
+        41468,
+        37304,
+        35400,
+        25300,
+        9196,
+        36768,
+        40876,
+        29156,
+        41812,
+        41712,
+        24872
       ],
-      "NormalizedCpuPercent": 4.99,
-      "WorkingSetMiB": 2019.5,
-      "GpuDedicatedBytes": 3504467968,
-      "MaxGpuEngineUtilization": 12,
-      "FreeRamKiB": 15521616,
+      "NormalizedCpuPercent": 5.98,
+      "WorkingSetMiB": 1974.7,
+      "GpuDedicatedBytes": 3592531968,
+      "MaxGpuEngineUtilization": 11,
+      "FreeRamKiB": 14522860,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -350,11 +440,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\source-tests.log"
+      "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\source-tests.log"
     ]
   },
   "releaseAttempts": [
@@ -1420,9 +1510,18 @@
       "deployedAt": "2026-10-08T12:30:03.3601121+08:00",
       "verifiedAt": "2026-10-08T12:32:24.5055687+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-font-before-20261008"
+    },
+    {
+      "buildId": "extension-static-nav-20261008",
+      "sourceCommit": "e4f08fe8650d2bae70568f1cd7732b5bef029d37",
+      "sha256": "B588D9A04BC95ECF914B2444FDE616A22CA2EE1D3DE738E9ABE6B73A80271FD5",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T14:15:11.7517157+08:00",
+      "verifiedAt": "2026-10-08T14:17:58.0819043+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-static-nav-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-font-before-20261008/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-static-nav-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
