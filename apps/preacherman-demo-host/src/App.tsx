@@ -421,7 +421,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           environment="cinematic"
           appearance={preferences.appearance}
           homeInteractive={activeSurfaceType === "home" && navigationPhase === "idle"}
-          isolateCompanion={activeSurfaceType === "account" || (activeSurfaceType === "market" && galleryDetailOpen)}
+          isolateCompanion={activeSurfaceType === "home" || activeSurfaceType === "account" || (activeSurfaceType === "market" && galleryDetailOpen)}
           cameraFraming={!accountHomeHandoff && (activeSurfaceType === "account" || activeSurfaceType === "market" || activeSurfaceType === "settings") ? "portrait" : "full-body"}
           modelId={sceneModelId ?? "cortana"}
           companionVisible={sceneModelId !== null}
