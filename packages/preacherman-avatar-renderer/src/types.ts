@@ -68,6 +68,8 @@ export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   readonly environment?: AvatarSceneEnvironment;
   /** Keep cinematic lighting and the platform, but composite the companion over another scene. */
   readonly isolateCompanion?: boolean;
+  /** Retain the animated floor ring without its solid pedestal. */
+  readonly platformStyle?: "solid" | "ring";
   readonly motionSource?: AvatarMotionStreamSource;
   readonly motionRigBinding?: AvatarMotionRigBinding;
   /** Keeps the prepared WebGL scene mounted while pausing continuous rendering. */

@@ -45,6 +45,7 @@ export function InteractiveAvatarViewport({
   motionState,
   environment = "transparent",
   isolateCompanion = false,
+  platformStyle = "solid",
   motionSource,
   motionRigBinding,
   renderActive = true,
@@ -158,6 +159,7 @@ export function InteractiveAvatarViewport({
               motionState={motionState}
               environment={environment}
               isolateCompanion={isolateCompanion}
+              platformStyle={platformStyle}
               motionSource={motionSource}
               motionRigBinding={motionRigBinding}
               modelId={modelId}

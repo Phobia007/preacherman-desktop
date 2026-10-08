@@ -4,6 +4,7 @@ import { InteractiveAvatarViewport, avatarDefaultActionId, avatarModelName } fro
 import { localAvatarAssetBaseUrl } from "../../avatar/avatarAssets";
 import type { ModelId } from "../../preferences";
 import { revealMarketDetails, type MarketDetailsPhase } from "./marketEntrance";
+import { createMarketSelection, marketSelectionTotal } from "./marketSelection";
 import "./market-details.css";
 
 export const MARKET_VIEWS = ["Front", "Side", "Back", "Zoom In"] as const;
@@ -24,8 +25,9 @@ function DetailsSceneCapture() {
 }
 
 /** The selected product owns this viewport. It never writes the active companion preference. */
-export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, onRevealComplete }: {
+export function MarketDetails({ modelId, appearance, panelRef, lensActive, onClose, phase, onRevealComplete }: {
   modelId: ModelId;
+  appearance: "light" | "dark";
   panelRef: RefObject<HTMLElement>;
   lensActive: boolean;
   onClose: () => void;
@@ -37,7 +39,9 @@ export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, o
   const rotationRef = useRef(0);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [attempt, setAttempt] = useState(0);
-  const footer = useRef<HTMLIFrameElement>(null);
+  const [selection] = useState(() => createMarketSelection(modelId));
+  const total = marketSelectionTotal(selection);
+  const purchaseDialog = useRef<HTMLDialogElement>(null);
   const ready = useCallback(() => setStatus("ready"), []);
   const failed = useCallback(() => setStatus("error"), []);
 
@@ -76,19 +80,11 @@ export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, o
   }, [view]);
   useEffect(() => {
     const close = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !lensActive) { event.preventDefault(); onClose(); }
+      if (event.key === "Escape" && !lensActive && !purchaseDialog.current?.open) { event.preventDefault(); onClose(); }
     };
     window.addEventListener("keydown", close);
-    const doc = footer.current?.contentDocument;
-    doc?.addEventListener("keydown", close);
-    const attach = () => footer.current?.contentDocument?.addEventListener("keydown", close);
-    const frame = footer.current;
-    frame?.addEventListener("load", attach);
     return () => {
       window.removeEventListener("keydown", close);
-      doc?.removeEventListener("keydown", close);
-      frame?.contentDocument?.removeEventListener("keydown", close);
-      frame?.removeEventListener("load", attach);
     };
   }, [onClose, lensActive]);
 
@@ -105,14 +101,24 @@ export function MarketDetails({ modelId, panelRef, lensActive, onClose, phase, o
       <div className="market-details__model">
         {!["exiting", "unfrost", "returning"].includes(phase) && <InteractiveAvatarViewport key={attempt} modelId={modelId} assetBaseUrl={localAvatarAssetBaseUrl(modelId)}
           actionId={avatarDefaultActionId(modelId)} quality="high" pose="standby" environment="cinematic" isolateCompanion
+          appearance={appearance} platformStyle="ring"
           cameraFraming={view === "Zoom In" ? "portrait" : "full-body"} rotationOffsetY={rotation}
           renderActive={!lensActive} onReady={ready} onError={failed} sceneContent={<DetailsSceneCapture />} />}
         {status === "loading" && <div className="market-details__status" role="status">Loading {avatarModelName(modelId)}…</div>}
         {status === "error" && <div className="market-details__status" role="alert"><p>The model could not be loaded.</p>
           <button type="button" onClick={() => { setStatus("loading"); setAttempt(value => value + 1); }}>Try again</button></div>}
       </div>
-      <iframe ref={footer} className="market-details__options" src="/market-love/love-configurator.html?footer=1"
-        title="Product options" referrerPolicy="no-referrer" />
+      <div className="market-details__options">
+        <p className="market-details__price">Your current selection: <output aria-live="polite">{total.toLocaleString("en-US")}</output></p>
+        <button type="button" className="market-details__purchase" onClick={() => purchaseDialog.current?.showModal()}>Purchase</button>
+      </div>
+      <dialog ref={purchaseDialog} className="market-details__purchase-dialog" aria-labelledby="market-purchase-title">
+        <h2 id="market-purchase-title">Purchase</h2>
+        <p>{avatarModelName(selection.modelId)}</p>
+        <p>Your current selection: <output>{total.toLocaleString("en-US")}</output></p>
+        <p className="market-details__purchase-note">Checkout is not available yet.</p>
+        <form method="dialog"><button className="market-details__purchase" autoFocus>Close</button></form>
+      </dialog>
     </section>
   );
 }
@@ -149,9 +155,14 @@ export async function captureMarketDetails(panel: HTMLElement, signal: AbortSign
     }
   };
   paintText(panel.querySelector("nav")!, document);
-  const footer = panel.querySelector("iframe")!, doc = footer.contentDocument;
-  const root = doc?.getElementById("configurator")?.shadowRoot;
-  if (doc && root) { const box = footer.getBoundingClientRect(); paintText(root, doc, box.left, box.top); }
+  const footer = panel.querySelector<HTMLElement>(".market-details__options")!;
+  paintText(footer, document);
+  const purchase = footer.querySelector("button")!.getBoundingClientRect();
+  ctx.strokeStyle = style.getPropertyValue("--demo-theme-market-border").trim();
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect((purchase.left - bounds.left) * sx, (purchase.top - bounds.top) * sy, purchase.width * sx, purchase.height * sy, purchase.height * sy / 2);
+  ctx.stroke();
   const back = panel.querySelector(".market-details__back")!.getBoundingClientRect();
   ctx.strokeStyle = style.getPropertyValue("--demo-theme-market-text").trim(); ctx.lineWidth = 1.25;
   const x = (back.left - bounds.left) * sx, y = (back.top - bounds.top) * sy + 22;

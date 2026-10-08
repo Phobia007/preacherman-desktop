@@ -15,7 +15,7 @@ const marketModelIds: readonly ModelId[] = Object.values(galleryModelBindings);
 import { MarketDetails, captureMarketDetails } from "./MarketDetails";
 
 /** The imported document owns its layout; the host only supplies the stage. */
-export function MarketSurface() {
+export function MarketSurface({ appearance }: { appearance: "light" | "dark" }) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const surfaceRef = useRef<HTMLElement>(null);
   const frostRef = useRef<HTMLDivElement>(null);
@@ -265,7 +265,7 @@ export function MarketSurface() {
       <section id="market-category-page" aria-label={marketCategoryLabels[category.active]} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover" || category.active === "Search"} />
       <MarketSearch panelRef={searchRef} models={searchModels} active={category.active === "Search"} ready={category.phase === "idle" && !selectedModel}
         interactive={category.phase === "idle" && !selectedModel && !profileOpen && !lensActive} onOpenModel={openModel} />
-      {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}
+      {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} appearance={appearance} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}
         phase={detailsPhase} onRevealComplete={advanceDetailsReveal} />}
       <iframe
         id="market-discover-page"

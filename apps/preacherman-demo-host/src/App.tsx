@@ -453,7 +453,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           onPreviewModelChange={setGalleryPreviewModelId}
         />
       </div>
-      {activeSurfaceType === "ledger" ? <MarketSurface /> : null}
+      {activeSurfaceType === "ledger" ? <MarketSurface appearance={preferences.appearance} /> : null}
       {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} /> : null}
       {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onNavigate={handleSurfaceNavigate} /> : null}
       {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface ? (

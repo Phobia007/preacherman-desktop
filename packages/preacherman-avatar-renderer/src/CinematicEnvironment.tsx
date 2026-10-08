@@ -53,7 +53,7 @@ const ENERGY_FRAGMENT_SHADER = `
   }
 `;
 
-function BreathingPlatformLight({ appearance }: { appearance: "light" | "dark" }) {
+function BreathingPlatformLight({ appearance, platformStyle }: { appearance: "light" | "dark"; platformStyle: "solid" | "ring" }) {
   const { gl } = useThree();
   const elapsed = useRef(1.4);
   const energyUniforms = useMemo(() => ({
@@ -98,7 +98,7 @@ function BreathingPlatformLight({ appearance }: { appearance: "light" | "dark" }
           vertexShader={ENERGY_VERTEX_SHADER}
         />
       </mesh>
-      <group visible={appearance === "dark"}>
+      <group name="companion-platform-pedestal" visible={appearance === "dark" && platformStyle === "solid"}>
         <mesh position={[0, -0.035, 0]} receiveShadow>
           <cylinderGeometry args={[0.555, 0.555, 0.08, 128, 1, true]} />
           <meshStandardMaterial
@@ -123,9 +123,10 @@ function BreathingPlatformLight({ appearance }: { appearance: "light" | "dark" }
  * A real, deliberately under-lit 3D room for the persistent companion stage.
  * The geometry stays restrained so Cortana remains the only visual subject.
  */
-export function CinematicEnvironment({ isolateCompanion = false, appearance = "dark" }: {
+export function CinematicEnvironment({ isolateCompanion = false, appearance = "dark", platformStyle = "solid" }: {
   readonly isolateCompanion?: boolean;
   readonly appearance?: "light" | "dark";
+  readonly platformStyle?: "solid" | "ring";
 }) {
   const dark = appearance === "dark";
   return (
@@ -143,7 +144,7 @@ export function CinematicEnvironment({ isolateCompanion = false, appearance = "d
         <meshStandardMaterial color="#02070d" metalness={0.08} roughness={0.92} />
       </mesh>
 
-      <BreathingPlatformLight appearance={appearance} />
+      <BreathingPlatformLight appearance={appearance} platformStyle={platformStyle} />
     </>
   );
 }
