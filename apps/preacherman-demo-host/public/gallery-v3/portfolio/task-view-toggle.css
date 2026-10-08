@@ -22,7 +22,9 @@
 /* The authored brand remains a signature while its ink follows the shared room. */
 [data-od-id="profile-toggle"] {
   color: var(--demo-theme-brand-menu-text-hover) !important;
-  -webkit-text-fill-color: currentColor !important;
+  /* WebGL owns the signature: painting it in DOM too doubles its weight. */
+  -webkit-text-fill-color: transparent !important;
+  font-synthesis: none;
 }
 .task-view-toggle:hover, .task-view-toggle:focus-visible { color: var(--demo-theme-brand-menu-text-hover); }
 .task-view-toggle:focus-visible { outline: 1px solid var(--demo-theme-brand-menu-focus) !important; outline-offset: 3px; }
@@ -40,3 +42,5 @@
 @media (prefers-reduced-motion: reduce) {
   .task-view-toggle, .task-view-toggle path { transition: none; }
 }
+
+[data-task-profile-disc] { color: var(--demo-theme-text, var(--gallery-host-text, #fff)); }

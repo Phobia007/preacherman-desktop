@@ -1,0 +1,40 @@
+/* Source timings: PageTransition, original stylesheet 4-e3318dc988956416.css. */
+html {
+  background-color: var(--theme-background-primary, #141413);
+}
+
+html[data-marketplace-navigation]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--theme-background-primary, #141413);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms ease-in;
+}
+
+html[data-marketplace-navigation="leaving"]::after {
+  opacity: 1;
+  pointer-events: auto;
+  transition-duration: 300ms;
+  transition-timing-function: ease-out;
+}
+
+html[data-marketplace-navigation="arriving"]::after {
+  opacity: 1;
+  pointer-events: auto;
+  transition: none;
+}
+
+html[data-marketplace-navigation="restored"]::after {
+  opacity: 0;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-marketplace-navigation]::after {
+    display: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,61 @@
+/* Original typography, dimensions, cards and transitions; the host owns the room. */
+:root, .theme-main, .theme-dark, .theme-accent, [data-theme] {
+  --bg: transparent;
+  --surface: var(--demo-theme-extension-card);
+  --fg: var(--demo-theme-text);
+  --muted: var(--demo-theme-muted);
+  --border: var(--demo-theme-border);
+  --color-focus: var(--demo-theme-focus);
+  --theme-background-primary: transparent;
+  --theme-background-secondary: var(--demo-theme-extension-card);
+  --theme-background-tertiary: var(--demo-theme-extension-hover);
+  --theme-background-overlay: var(--demo-theme-surface-elevated);
+  --theme-foreground-primary: var(--demo-theme-text);
+  --theme-foreground-secondary: var(--demo-theme-muted);
+  --theme-foreground-tertiary: var(--demo-theme-muted);
+  --theme-border-primary: var(--demo-theme-border-strong);
+  --theme-border-secondary: var(--demo-theme-border);
+  --theme-border-tertiary: var(--demo-theme-border);
+  --theme-button-primary-bg: var(--demo-theme-text);
+  --theme-button-primary-fg: var(--demo-theme-canvas);
+  --theme-button-secondary-bg: var(--demo-theme-extension-card);
+  --theme-button-secondary-fg: var(--demo-theme-text);
+  --theme-button-secondary-fg-hover: var(--demo-theme-text);
+  --theme-button-secondary-border: var(--demo-theme-border);
+  --theme-button-tertiary-bg: var(--demo-theme-extension-card);
+  --theme-button-tertiary-fg: var(--demo-theme-text);
+  --theme-button-tertiary-fg-hover: var(--demo-theme-text);
+  --theme-button-tertiary-border: var(--demo-theme-border);
+  --theme-input-bg: var(--demo-theme-extension-card);
+  --theme-input-placeholder: var(--demo-theme-muted);
+  --theme-input-text: var(--demo-theme-text);
+  --theme-checkbox-bg-unselected: transparent;
+  --theme-checkbox-bg-selected: var(--demo-theme-text);
+  --theme-checkbox-fg-selected: var(--demo-theme-canvas);
+  --theme-tab-track-bg: var(--demo-theme-extension-card);
+  --theme-tab-selected-bg: var(--demo-theme-extension-hover);
+  --theme-tab-selected-fg: var(--demo-theme-text);
+}
+html, body { background: transparent !important; color: var(--demo-theme-text); }
+html[data-appearance="light"] { color-scheme: light; }
+html[data-appearance="dark"] { color-scheme: dark; }
+*, *::before, *::after { scrollbar-width: none !important; }
+::-webkit-scrollbar { display: none; }
+html { --nav-height: 54px; }
+header[class*="NavBar"] { animation: none !important; background: var(--demo-theme-market-header-glass); backdrop-filter: blur(18px); }
+[class*="FilterHub"][class*="__hub"] { padding-top: calc(var(--section-spacing-page-top) - 84px); }
+[class*="MarketplaceHero"][class$="__hero"] { padding-top: calc(var(--section-spacing-page-top) - 84px); }
+main aside { top: 70px !important; }
+dialog, #marketplace-search { background: var(--demo-theme-surface-elevated); color: var(--demo-theme-text); border-color: var(--demo-theme-border); }
+dialog::backdrop { background: var(--demo-theme-extension-scrim); }
+.dialog-primary, .dialog-actions a:first-child { color: var(--demo-theme-canvas); }
+[class*="__variant-primary"]:hover { background: var(--demo-theme-muted) !important; color: var(--demo-theme-canvas) !important; }
+html[data-marketplace-page] [class*="MarginaliaCard"][class*="__card"] { background: var(--demo-theme-extension-card); }
+html[data-marketplace-page] [class*="MarginaliaCard"] [class*="__title"],
+html[data-marketplace-page] [class*="MarginaliaCard"] [class*="__description"] { color: var(--demo-theme-text) !important; }
+.detail-icon { background: var(--demo-theme-surface-elevated); }
+html::after { background: var(--demo-theme-extension-transition) !important; }
+@media (max-width: 767px) {
+  [class*="FilterHub"][class*="__hub"] { padding-top: 114px !important; }
+  [class*="MarketplaceHero"][class$="__hero"] { padding-top: 114px; }
+}

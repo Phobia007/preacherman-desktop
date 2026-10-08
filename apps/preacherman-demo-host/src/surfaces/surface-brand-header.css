@@ -1,0 +1,7 @@
+.demo-frosted-surface__content { position: absolute; inset: 0; }
+
+/* Keep the live model and glass behind the same transparent optical pass. */
+.demo-frosted-surface[data-lens-active="true"] > .demo-frosted-surface__content {
+  opacity: 0;
+  pointer-events: none;
+}

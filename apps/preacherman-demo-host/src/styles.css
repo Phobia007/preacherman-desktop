@@ -2839,5 +2839,17 @@ body {
   cursor: grab;
 }
 .home-companion-gesture[data-dragging="true"] { cursor: grabbing; }
+.demo-app-shell {
+  --demo-theme-extension-card: rgb(255 255 255 / 36%);
+  --demo-theme-extension-hover: rgb(255 255 255 / 58%);
+  --demo-theme-extension-scrim: rgb(32 38 44 / 18%);
+  --demo-theme-extension-transition: rgb(239 242 245 / 82%);
+}
+.demo-app-shell[data-appearance="dark"] {
+  --demo-theme-extension-card: rgb(255 255 255 / 5%);
+  --demo-theme-extension-hover: rgb(255 255 255 / 10%);
+  --demo-theme-extension-scrim: rgb(0 0 0 / 35%);
+  --demo-theme-extension-transition: rgb(0 0 0 / 82%);
+}
 .home-companion-gesture:focus-visible { outline: none; }
 .home-companion-gesture:focus-visible::after { content: ""; position: absolute; bottom: 0; left: calc(50% - 18px); width: 36px; height: 2px; background: var(--demo-theme-focus); }

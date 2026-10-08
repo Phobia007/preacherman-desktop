@@ -1,0 +1,13 @@
+{
+  "sourceShortcut": "Claude Marketplace.lnk",
+  "sourceProject": "C:/Users/Administrator/AppData/Roaming/Open Design/namespaces/release-stable-win/data/projects/1c808ea5-c8a3-40ac-ae01-fc5bfd1c8013",
+  "sourcePages": [
+    "marketplace-agents.html",
+    "marketplace-home.html",
+    "claude-marketplace.html"
+  ],
+  "defaultPage": "marketplace-agents.html",
+  "importedAssets": 803,
+  "removed": "Global Claude product navigation only; marketplace subnavigation retained",
+  "background": "Preacherman theme and shared frosted scene"
+}

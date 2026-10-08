@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Anthropic "A\" mark on tile — path from apps design-system AnthropicIcon (canonical mark); tile treatment matches the shipped Anthropic app icon -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
+	<rect width="28" height="28" rx="6" fill="#181818"/>
+	<g transform="translate(4.4 4.4) scale(0.6857)">
+		<path fill="#FFFFFF" d="M20 4h-4.3l7.7 19.5h4.2L20 4ZM7.6 4 0 23.5h4.3L6 19.4h8l1.6 4h4.3L12.1 4H7.7Zm-.4 11.8 2.6-6.9 2.7 6.9H7.3Z"/>
+	</g>
+</svg>

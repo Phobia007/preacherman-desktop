@@ -60,6 +60,9 @@
   pointer-events: none;
 }
 
+/* The signature belongs to the fixed header, never to the refracted page. */
+.market-profile__lens { clip-path: inset(var(--market-content-top, 100px) 0 0); }
+
 .market-profile__content {
   position: relative;
   width: min(720px, calc(100% - 48px));

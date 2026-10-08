@@ -37,12 +37,18 @@ function harness({ reduced = false, compileFails = false } = {}) {
   return { ...module.exports, create, step, frames, raf, listeners, motionListeners, resources, document };
 }
 
-test("the generated vertex/fragment and curve are exactly Task's source, not a CSS imitation", async () => {
+test("the generated lens geometry and curve retain Task's source across its daylight compositing", async () => {
   const source = await read("public/gallery-v3/portfolio/_nuxt/D9b8F35K.js");
   const shaders = source.match(/const p0=`([\s\S]*?)`,C3=`([\s\S]*?)`,P3=/);
   const clean = value => value.replaceAll("\r\n", "\n").replace(/\/\/[^\n]*/g, "").replace(/\n\s*\n/g, "\n").trim();
   assert.equal(task.exports.taskProfileVertex, clean(shaders[1]));
-  assert.equal(task.exports.taskProfileFragment, clean(shaders[2]));
+  const originalComposite = shaders[2]
+    .replace(/uniform float u_daylight;[^\n]*\n/, "")
+    .replace(/\s*float sampleAlpha = max\(cr.a, max\(cg.a, cb.a\)\);/, "")
+    .replace(/\s*vec3 sampleColor = vec3\(cr.r, cg.g, cb.b\);/, "")
+    .replace("vec4 col = vec4(mix(sampleColor, sampleColor / max(sampleAlpha, 0.0001), u_daylight), mix(1.0, sampleAlpha, u_daylight));", "vec4 col = vec4(cr.r, cg.g, cb.b, 1.0);")
+    .replace("1.0 - u_daylight", "1.0");
+  assert.equal(task.exports.taskProfileFragment, clean(originalComposite));
   assert.equal(JSON.stringify(task.exports.taskProfileCurve), JSON.stringify(runInNewContext(source.match(/pU=(\[\[.*?\]\]),zu=/)[1])));
   assert.ok(source.includes("duration:e?.85:.65,ease:zu"));
   assert.match(source, /WU=\.11,qU=1\.5,XU=\.09,\$U=\.3,YU=\.05,KU=-\.1,jU=\.25,ZU=\.3,JU=\.015,QU=\.004/);

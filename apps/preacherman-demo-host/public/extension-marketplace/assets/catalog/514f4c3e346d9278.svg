@@ -1,0 +1,32 @@
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 180 180">
+  
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+      }
+
+      .st1 {
+        fill: #032d42;
+      }
+
+      .st2 {
+        fill: #62d84e;
+        fill-rule: evenodd;
+      }
+
+      .st3 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st0" width="180" height="180" rx="12" ry="12"></rect>
+    </clipPath>
+  </defs>
+  <g class="st3">
+    <g>
+      <rect class="st1" width="180" height="180" rx="12" ry="12"></rect>
+      <path class="st2" d="M90.25,35c-33.64,0-61.75,27.37-62.25,61.22,0,17.92,7.53,33.84,19.58,45.29,4.52,3.98,11.04,4.48,16.06.99,7.03-5.48,16.06-8.46,26.61-8.46s19.58,3.48,26.61,8.46c5.02,3.48,11.55,3.48,16.07-.99,12.05-11.45,19.08-26.88,19.08-44.79-.5-34.34-27.61-61.71-61.75-61.71ZM89.75,127.07c-18.57,0-31.13-13.94-31.13-30.86s12.55-30.86,31.13-30.86,31.13,13.94,31.13,30.86-12.55,30.86-31.13,30.86Z"></path>
+    </g>
+  </g>
+</svg>

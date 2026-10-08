@@ -8,7 +8,7 @@ export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, 
   disabled?: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  frameRef: RefObject<HTMLIFrameElement>;
+  frameRef?: RefObject<HTMLIFrameElement>;
   captureSource?: (signal: AbortSignal) => Promise<HTMLCanvasElement>;
   onLensActiveChange: (active: boolean) => void;
 }) {
@@ -27,11 +27,11 @@ export function MarketProfile({ disabled = false, open, onOpenChange, frameRef, 
     }
     if (!open) { setPhase("closed"); return; }
     const abort = new AbortController();
-    const frame = frameRef.current;
-    if (!frame) return;
+    const frame = frameRef?.current;
+    if (!captureSource && !frame) return;
     setPhase("preparing");
     setError("");
-    (captureSource ? captureSource(abort.signal) : captureMarketFrame(frame, abort.signal)).then(source => {
+    (captureSource ? captureSource(abort.signal) : captureMarketFrame(frame!, abort.signal)).then(source => {
       if (abort.signal.aborted || !hostRef.current) return;
       const lens = new TaskProfileLens(hostRef.current, source, (progress, settled) => {
         profileRef.current?.style.setProperty("--market-lens-progress", String(progress));
