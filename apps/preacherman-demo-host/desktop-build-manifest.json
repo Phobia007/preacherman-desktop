@@ -1706,6 +1706,25 @@
       "deployedAt": "2026-10-09T07:21:03.4906845+08:00",
       "verifiedAt": "2026-10-09T07:24:32.2346611+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009"
+    },
+    {
+      "buildId": "account-guide-content-20261009-first",
+      "sourceCommit": "4820c56763d1e7937f18c15464cb6425129a1f5a",
+      "sha256": "793C574313BA02F4E865A045FB3CE8C0F0955BFEF37130B913E4BDAA3201ED2F",
+      "status": "rolled-back",
+      "reason": "Native pointer test found the existing empty Gallery screen-page intercepting the new guide button. Restored previous verified host and sidecar pair and confirmed core routes; fix omits this empty page while the account guide owns the surface.",
+      "rollbackVerified": {
+        "routes": [
+          "Home",
+          "Task",
+          "Gallery",
+          "Settings"
+        ],
+        "passed": true
+      },
+      "failedArtifact": "output\\playwright\\account-guide-content-20261009\\failed-pointer-layer.exe",
+      "restoredSha256": "F421ADB9E9CB916660463E1F9F9C57F224D4D99A654563CDE2362379BCFFD7F8",
+      "recordedAt": "2026-10-09T07:49:45.934464+08:00"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009/desktop-build-manifest.json",

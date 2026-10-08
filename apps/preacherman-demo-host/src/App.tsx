@@ -467,7 +467,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       {activeSurfaceType === "ledger" ? <MarketSurface appearance={preferences.appearance} hasAccount={hasAccount} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
       {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} accountRequired={accountRequired} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
       {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onNavigate={handleSurfaceNavigate} /> : null}
-      {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface ? (
+      {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface && !accountRequired ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
           {mainContent}
           {visiblePanelSurface && visiblePanelSurface !== "account" && visiblePanelSurface !== "workspace" && visiblePanelSurface !== "settings" ? (
