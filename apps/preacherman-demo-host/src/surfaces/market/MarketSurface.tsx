@@ -16,7 +16,7 @@ import { MarketDetails, captureMarketDetails } from "./MarketDetails";
 import { AccountGate } from "../account/AccountGate";
 
 /** The imported document owns its layout; the host only supplies the stage. */
-export function MarketSurface({ appearance, hasAccount = false }: { appearance: "light" | "dark"; hasAccount?: boolean }) {
+export function MarketSurface({ appearance, hasAccount = false, onSignIn }: { appearance: "light" | "dark"; hasAccount?: boolean; onSignIn: () => void }) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const surfaceRef = useRef<HTMLElement>(null);
   const frostRef = useRef<HTMLDivElement>(null);
@@ -264,7 +264,7 @@ export function MarketSurface({ appearance, hasAccount = false }: { appearance: 
         </li>)}
       </ul>
       <section id="market-category-page" aria-label={marketCategoryLabels[category.active]} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover" || category.active === "Search"}>
-        {category.active === "Studio" && !hasAccount && category.phase === "idle" ? <AccountGate embedded /> : null}
+        {category.active === "Studio" && !hasAccount && category.phase === "idle" ? <AccountGate embedded onSignIn={onSignIn} /> : null}
       </section>
       <MarketSearch panelRef={searchRef} models={searchModels} active={category.active === "Search"} ready={category.phase === "idle" && !selectedModel}
         interactive={category.phase === "idle" && !selectedModel && !profileOpen && !lensActive} onOpenModel={openModel} />

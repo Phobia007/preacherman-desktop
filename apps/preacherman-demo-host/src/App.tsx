@@ -463,9 +463,9 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           onPreviewModelChange={setGalleryPreviewModelId}
         />
       </div>}
-      {accountRequired && !isFrostedSurface ? <AccountGate key={activeSurfaceType} surface={activeSurfaceType} /> : null}
-      {activeSurfaceType === "ledger" ? <MarketSurface appearance={preferences.appearance} hasAccount={hasAccount} /> : null}
-      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} accountRequired={accountRequired} /> : null}
+      {accountRequired && !isFrostedSurface ? <AccountGate key={activeSurfaceType} surface={activeSurfaceType} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
+      {activeSurfaceType === "ledger" ? <MarketSurface appearance={preferences.appearance} hasAccount={hasAccount} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
+      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} accountRequired={accountRequired} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
       {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onNavigate={handleSurfaceNavigate} /> : null}
       {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>
