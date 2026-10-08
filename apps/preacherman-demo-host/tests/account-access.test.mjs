@@ -16,8 +16,8 @@ test('protected destinations stay closed during restore, pending login and logou
   }
   assert.equal(hasAccountAccess({status: 'signed-in', user: null}, null), false);
   assert.equal(hasAccountAccess({status: 'signed-in', user: {id: 'member'}}, null), true);
-  for (const surface of ['home','market','asset','extension']) assert.equal(requiresAccount(surface), true);
-  for (const surface of ['account','settings','workspace','ledger']) assert.equal(requiresAccount(surface), false);
+  for (const surface of ['market','asset','extension']) assert.equal(requiresAccount(surface), true);
+  for (const surface of ['home','account','settings','workspace','ledger']) assert.equal(requiresAccount(surface), false);
 });
 
 test('existing demo account unlocks immediately, persists and locks again on sign out', () => {

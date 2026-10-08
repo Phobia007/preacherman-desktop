@@ -8,5 +8,5 @@ export function hasAccountAccess(auth: Pick<AccountState, "status" | "user">, de
 }
 
 export function requiresAccount(surface: LocalSurfaceType): boolean {
-  return ["home", "market", "asset", "extension"].includes(surface);
+  return ["market", "asset", "extension"].includes(surface);
 }

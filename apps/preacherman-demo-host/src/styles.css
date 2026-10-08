@@ -2745,6 +2745,14 @@ body {
 
 /* The daylight room is composed behind the unchanged avatar and page motion. */
 .demo-app-shell {
+  --demo-theme-home-statement: #dedbd6;
+  --demo-theme-home-statement-dark-wall: #37322d;
+  --demo-theme-home-statement-dark-opacity: .25;
+  --demo-theme-home-statement-light-wall: #ffffff;
+  --demo-theme-home-statement-light-opacity: .52;
+  --demo-theme-home-statement-occlusion: #2d2925;
+  --demo-theme-home-statement-occlusion-opacity: .16;
+  --demo-theme-home-mark: #11110f;
   --demo-theme-avatar-ring: #17191c;
   --demo-theme-daylight-room: linear-gradient(138deg, #fcfcfd 0%, #edf0f2 43%, #d5d9de 72%, #9ca4ad 100%);
   --demo-theme-glass-fill: linear-gradient(135deg, rgb(255 255 255 / 52%), rgb(255 255 255 / 8%) 48%, rgb(74 85 100 / 10%));
@@ -2752,7 +2760,19 @@ body {
   --demo-theme-glass-shadow: 22px 38px 80px -32px rgb(30 40 52 / 30%), inset 1px 2px 2px rgb(255 255 255 / 94%), inset -2px -3px 8px rgb(58 70 86 / 13%);
   --demo-theme-daylight-sheen: radial-gradient(ellipse at 25% 18%, rgb(255 255 255 / 36%), transparent 62%);
 }
-.demo-app-shell[data-appearance="dark"] { --demo-theme-avatar-ring: #ebf2ff; }
+.demo-app-shell[data-appearance="dark"] {
+  --demo-theme-avatar-ring: #ebf2ff;
+  --demo-theme-home-statement: #2c2b27;
+  --demo-theme-home-statement-dark-wall: #12120f;
+  --demo-theme-home-statement-dark-opacity: .42;
+  --demo-theme-home-statement-light-wall: #3a3934;
+  --demo-theme-home-statement-light-opacity: .44;
+  --demo-theme-home-statement-occlusion: #0d0d0b;
+  --demo-theme-home-statement-occlusion-opacity: .22;
+  --demo-theme-home-mark: #f2efe8;
+}
+.demo-app-shell[data-active-surface="home"] .demo-app-shell__scene::before,
+.demo-app-shell[data-active-surface="home"] .demo-app-shell__scene::after { display: none; }
 .demo-app-shell[data-appearance="light"] {
   --demo-theme-gallery-composite-key: transparent;
   --demo-theme-member-text: #272c31;

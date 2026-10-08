@@ -1,0 +1,30 @@
+/* Reused from preachermanai.com's hero statement and PM monogram. */
+@font-face {
+  font-family: "Preacherman Home Zodiak";
+  src: url("./assets/Zodiak-Bold.otf") format("opentype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+.home-backdrop {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; user-select: none;
+}
+.home-backdrop__statement {
+  position: absolute; top: 47%; left: 2%; width: 96%; height: auto;
+  overflow: visible;
+  font-family: "Preacherman Home Zodiak", Georgia, serif;
+  font-size: 212px; font-style: normal; font-weight: 700;
+  letter-spacing: -.03em; word-spacing: .1em;
+}
+.home-backdrop__glyphs { fill: var(--demo-theme-home-statement); filter: url(#home-statement-deboss); }
+.home-backdrop__floor { flood-color: var(--demo-theme-home-statement); }
+.home-backdrop__dark-wall { flood-color: var(--demo-theme-home-statement-dark-wall); flood-opacity: var(--demo-theme-home-statement-dark-opacity); }
+.home-backdrop__light-wall { flood-color: var(--demo-theme-home-statement-light-wall); flood-opacity: var(--demo-theme-home-statement-light-opacity); }
+.home-backdrop__occlusion { flood-color: var(--demo-theme-home-statement-occlusion); flood-opacity: var(--demo-theme-home-statement-occlusion-opacity); }
+.home-backdrop__mark {
+  position: absolute; top: 47%; left: 50%; transform: translate(-50%, -50%);
+  width: clamp(135px, 19.2vw, 244px); aspect-ratio: 212 / 240;
+  background: var(--demo-theme-home-mark);
+  mask: url("./assets/preacherman-pm.svg") center / contain no-repeat;
+}
