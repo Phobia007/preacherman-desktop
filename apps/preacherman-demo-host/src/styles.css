@@ -2771,8 +2771,8 @@ body {
   --demo-theme-home-statement-occlusion-opacity: .22;
   --demo-theme-home-mark: #f2efe8;
 }
-.demo-app-shell[data-active-surface="home"] .demo-app-shell__scene::before,
-.demo-app-shell[data-active-surface="home"] .demo-app-shell__scene::after { display: none; }
+.demo-app-shell__scene::before,
+.demo-app-shell__scene::after { display: none; }
 .demo-app-shell[data-appearance="light"] {
   --demo-theme-gallery-composite-key: transparent;
   --demo-theme-member-text: #272c31;

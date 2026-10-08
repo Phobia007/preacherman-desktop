@@ -413,7 +413,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       locale={preferences.locale}
       onNavigate={handleSurfaceNavigate}
       scene={<>
-        {activeSurfaceType === "home" ? <HomeBackdrop /> : null}
+        <HomeBackdrop />
         {activeSurfaceType === "account" ? <AccountFrost appearance={preferences.appearance} /> : null}
         {hasAccount && (sceneModelId || activeSurfaceType === "market") ? (
         <CortanaModelStage
@@ -421,7 +421,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           environment="cinematic"
           appearance={preferences.appearance}
           homeInteractive={activeSurfaceType === "home" && navigationPhase === "idle"}
-          isolateCompanion={activeSurfaceType === "home" || activeSurfaceType === "account" || (activeSurfaceType === "market" && galleryDetailOpen)}
+          isolateCompanion
           cameraFraming={!accountHomeHandoff && (activeSurfaceType === "account" || activeSurfaceType === "market" || activeSurfaceType === "settings") ? "portrait" : "full-body"}
           modelId={sceneModelId ?? "cortana"}
           companionVisible={sceneModelId !== null}

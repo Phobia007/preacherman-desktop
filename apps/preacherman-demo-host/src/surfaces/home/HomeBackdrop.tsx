@@ -1,6 +1,6 @@
 import "./home-backdrop.css";
 
-/** Original website lettering, deboss filter and PM geometry, behind the avatar. */
+/** Shared default backdrop: original lettering, deboss filter and PM behind every surface. */
 export function HomeBackdrop() {
   return <div className="home-backdrop" aria-hidden="true">
     <svg className="home-backdrop__statement" viewBox="0 0 1800 280" focusable="false">
