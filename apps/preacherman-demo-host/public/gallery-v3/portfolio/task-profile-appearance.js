@@ -3,7 +3,9 @@
 export function syncTaskProfileAppearance(folio) {
   const root = document.documentElement;
   const appearance = root.dataset.galleryAppearance === "light" ? "light" : "dark";
-  const ink = root.style.getPropertyValue("--gallery-host-text");
+  const ink = root.style.getPropertyValue("--gallery-host-text").trim()
+    .replace(/^rgba?\(([^)]+)\)$/, (_, channels) =>
+      `rgb(${channels.trim().split(/[\s,/]+/).slice(0, 3).join(",")})`);
   const key = `${appearance}:${ink}:${folio.overlay.length}:${folio.hud.length}`;
   if (folio.taskProfileAppearanceKey === key) return;
   folio.taskProfileAppearanceKey = key;

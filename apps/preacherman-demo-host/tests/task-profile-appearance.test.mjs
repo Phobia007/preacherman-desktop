@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import vm from "node:vm";
+import { Color } from "three";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../public/gallery-v3/portfolio");
@@ -52,7 +53,7 @@ test("hydrated profile copy uses host ink even when its authored CSS is still wh
   context.syncTaskProfileAppearance(folio);
   assert.equal(body.ink, "#16191c");
   document.documentElement.dataset.galleryAppearance = "dark";
-  ink = "#f5fafc";
+  ink = "rgb(245 250 252 / 96%)";
   context.syncTaskProfileAppearance(folio);
-  assert.equal(body.ink, "#f5fafc");
+  assert.equal(new Color(body.ink).getHexString(), "f5fafc");
 });

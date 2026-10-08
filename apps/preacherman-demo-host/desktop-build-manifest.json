@@ -1270,6 +1270,16 @@
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-first-candidate-20261008",
       "restoredSha256": "EB1B08486C399974F8197F3B833A4B26A066E6E9A3B2D1ED2B65FC99BF607A08",
       "at": "2026-10-08T09:09:47.8075692+08:00"
+    },
+    {
+      "buildId": "extension-marketplace-second-candidate-20261008",
+      "sourceCommit": "bb2b17ad880433a325e50b46cf93a019166a7cfc",
+      "sha256": "8ADA6A6B22BF138B72AA728751326605BE9458F427FBA44074B7B975BD8214DE",
+      "status": "rolled-back-before-correction",
+      "reason": "Native visual review caught Unsupported modern RGB syntax kept previous GPU ink when switching to dark appearance",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-second-candidate-20261008",
+      "restoredSha256": "EB1B08486C399974F8197F3B833A4B26A066E6E9A3B2D1ED2B65FC99BF607A08",
+      "at": "2026-10-08T09:18:24.3207084+08:00"
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-daylight-before-20261008/desktop-build-manifest.json",
@@ -1308,7 +1318,7 @@
     "inventoryLimitations": [
       {
         "path": "D:\\preacherman\\output\\gallery-model-import-20260910\\tmp\\tmpr6ihcejq",
-        "error": "[WinError 5] 閹锋帞绮风拋鍧楁６閵? 'D:\\\\preacherman\\\\output\\\\gallery-model-import-20260910\\\\tmp\\\\tmpr6ihcejq'"
+        "error": "[WinError 5] 闁归攱甯炵划椋庢媼閸ф锛栭柕? 'D:\\\\preacherman\\\\output\\\\gallery-model-import-20260910\\\\tmp\\\\tmpr6ihcejq'"
       }
     ],
     "oldWorktreePhysicalRetirement": "deferred: 6 different or unique local state files and independent runtime data; old worktree is no longer a release source"
