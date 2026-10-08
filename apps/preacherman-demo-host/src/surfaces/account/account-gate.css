@@ -1,0 +1,26 @@
+/* Shell geometry and paired shadows from preachermanai.com's .site-login-panel.
+   Source: D:/Preacherman-web/work/Preacherman-Standalone.html. No form or QR content. */
+.account-gate {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  box-sizing: border-box; padding: 80px 24px;
+  color: var(--demo-theme-text); font-family: var(--demo-font-primary);
+}
+.account-gate[data-embedded="true"] { padding-top: 180px; }
+.account-gate__card {
+  position: relative; box-sizing: border-box;
+  width: min(28.125rem, 100%); height: min(43.125rem, calc(100svh - 180px));
+  padding: clamp(1.5rem, 3vw, 1.9rem); overflow: hidden;
+  background: var(--demo-theme-guide-card); border: 0; border-radius: .55rem;
+  box-shadow: .7rem .7rem 1.6rem var(--demo-theme-guide-shadow), -.55rem -.55rem 1.35rem var(--demo-theme-guide-highlight);
+}
+.account-gate__fold {
+  position: absolute; top: 0; right: 0; width: 72px; height: 72px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  background: linear-gradient(225deg, var(--demo-theme-guide-fold) 0 48%, var(--demo-theme-guide-fold-edge) 50%, var(--demo-theme-guide-fold) 55%);
+  pointer-events: none;
+}
+.market-surface__category-page:has(.account-gate) { pointer-events: auto; }
+.market-surface[data-lens-active="true"] .account-gate { visibility: hidden; }
+@media (max-height: 700px) {
+  .account-gate__card { height: calc(100svh - 200px); }
+}

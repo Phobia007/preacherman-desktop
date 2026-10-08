@@ -8,7 +8,11 @@ import {
   type SurfaceManifest,
   type SurfaceProjection,
 } from "@preacherman/surface-skin";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { accountAuth } from "./auth/accountAuth";
+import { demoAccount } from "./auth/demoAccount";
+import { hasAccountAccess, requiresAccount } from "./auth/accountAccess";
+import { AccountGate } from "./surfaces/account/AccountGate";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { PreachermanFeaturePanel } from "./preacherman/PreachermanFeaturePanel";
@@ -151,6 +155,10 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
     ? route.surfaceType
     : "home";
   const isFrostedSurface = activeSurfaceType === "asset" || activeSurfaceType === "extension";
+  const auth = useSyncExternalStore(accountAuth.subscribe, accountAuth.getSnapshot);
+  const demo = useSyncExternalStore(demoAccount.subscribe, demoAccount.getSnapshot);
+  const hasAccount = hasAccountAccess(auth, demo);
+  const accountRequired = route.kind !== "index" && !hasAccount && requiresAccount(activeSurfaceType);
   // Reveal Home's framing beneath the outgoing page before Account takes over.
   // The shared camera also returns there while Account retraces its entrance.
   const accountHomeHandoff = navigationPhase === "exiting"
@@ -276,7 +284,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       : `screen-${route.screenId ?? acceptedScreenId}`;
   const HomeSurface = adapter.resolve(manifest).component;
   const [galleryBridge, setGalleryBridge] = useState<GalleryDetailBridge>();
-  const activeModelId = preferences.activeModelId;
+  const activeModelId = hasAccount ? preferences.activeModelId : null;
   const isCompanionActive = activeModelId !== null;
   // Only an open card previews its own character; the overview uses the equipped companion.
   const galleryModelId = galleryDetailOpen ? galleryPreviewModelId : activeModelId;
@@ -322,7 +330,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       </div>
     </main>
   );
-  const mainContent = route.kind === "index"
+  const mainContent = accountRequired ? null : route.kind === "index"
     ? (
         <div className="demo-host">
           <ScreenIndex onOpenScreen={openDemoScreen} />
@@ -405,7 +413,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       onNavigate={handleSurfaceNavigate}
       scene={<>
         {activeSurfaceType === "account" ? <AccountFrost appearance={preferences.appearance} /> : null}
-        {sceneModelId || activeSurfaceType === "market" ? (
+        {hasAccount && (sceneModelId || activeSurfaceType === "market") ? (
         <CortanaModelStage
           ariaLabel={`Persistent ${avatarModelName(sceneModelId ?? "cortana")} companion scene`}
           environment="cinematic"
@@ -422,7 +430,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
         />
       ) : null}</>}
     >
-      {activeSurfaceType !== "account" && !isFrostedSurface ? (
+      {activeSurfaceType !== "account" && !isFrostedSurface && !accountRequired ? (
         <PreachermanDomObservationBridge currentSurface={activeSurfaceType} serviceRequest={preachermanServiceRequest} />
       ) : null}
       <div
@@ -436,7 +444,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           <TaskExperienceSurface />
         </div>
       </div>
-      <div
+      {hasAccount && <div
         aria-hidden={activeSurfaceType !== "market"}
         className="demo-app-shell__prewarmed-surface"
         data-active={activeSurfaceType === "market"}
@@ -452,9 +460,10 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           onDetailChange={setGalleryDetailOpen}
           onPreviewModelChange={setGalleryPreviewModelId}
         />
-      </div>
-      {activeSurfaceType === "ledger" ? <MarketSurface appearance={preferences.appearance} /> : null}
-      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} /> : null}
+      </div>}
+      {accountRequired && !isFrostedSurface ? <AccountGate key={activeSurfaceType} surface={activeSurfaceType} /> : null}
+      {activeSurfaceType === "ledger" ? <MarketSurface appearance={preferences.appearance} hasAccount={hasAccount} /> : null}
+      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} accountRequired={accountRequired} /> : null}
       {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onNavigate={handleSurfaceNavigate} /> : null}
       {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>

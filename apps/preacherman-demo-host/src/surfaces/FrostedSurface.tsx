@@ -3,9 +3,10 @@ import { AssetCollection } from "./asset/AssetCollection";
 import { ExtensionMarketplace } from "./extension/ExtensionMarketplace";
 import { useLayoutEffect, useRef, useState } from "react";
 import { registerSurfaceMotion } from "../app-shell/surfaceMotion";
+import { AccountGate } from "./account/AccountGate";
 
 /** Both destinations retain the same continuous glass over the Home scene. */
-export function FrostedSurface({ name }: { readonly name: "Asset" | "Extension" }) {
+export function FrostedSurface({ name, accountRequired = false }: { readonly name: "Asset" | "Extension"; readonly accountRequired?: boolean }) {
   const surfaceRef = useRef<HTMLElement>(null);
   const [lensActive, setLensActive] = useState(false);
   useLayoutEffect(() => {
@@ -24,7 +25,7 @@ export function FrostedSurface({ name }: { readonly name: "Asset" | "Extension" 
   return <main ref={surfaceRef} className="demo-frosted-surface" aria-label={name} data-lens-active={lensActive}>
     <SurfaceBrandHeader surfaceRef={surfaceRef} onLensActiveChange={setLensActive} />
     <div className="demo-frosted-surface__content" ref={element => element?.toggleAttribute("inert", lensActive)}>
-      {name === "Asset" ? <AssetCollection /> : <ExtensionMarketplace />}
+      {accountRequired ? <AccountGate embedded /> : name === "Asset" ? <AssetCollection /> : <ExtensionMarketplace />}
     </div>
   </main>;
 }

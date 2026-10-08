@@ -13,9 +13,10 @@ import { localAvatarAssetBaseUrl } from "../../avatar/avatarAssets";
 import { galleryModelBindings } from "../gallery/galleryModelBindings";
 const marketModelIds: readonly ModelId[] = Object.values(galleryModelBindings);
 import { MarketDetails, captureMarketDetails } from "./MarketDetails";
+import { AccountGate } from "../account/AccountGate";
 
 /** The imported document owns its layout; the host only supplies the stage. */
-export function MarketSurface({ appearance }: { appearance: "light" | "dark" }) {
+export function MarketSurface({ appearance, hasAccount = false }: { appearance: "light" | "dark"; hasAccount?: boolean }) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const surfaceRef = useRef<HTMLElement>(null);
   const frostRef = useRef<HTMLDivElement>(null);
@@ -262,7 +263,9 @@ export function MarketSurface({ appearance }: { appearance: "light" | "dark" }) 
           {label === "Search" && <span ref={indicatorRef} className="market-surface__category-indicator" aria-hidden="true" />}
         </li>)}
       </ul>
-      <section id="market-category-page" aria-label={marketCategoryLabels[category.active]} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover" || category.active === "Search"} />
+      <section id="market-category-page" aria-label={marketCategoryLabels[category.active]} aria-busy={category.phase !== "idle"} className="market-surface__category-page" hidden={category.active === "Discover" || category.active === "Search"}>
+        {category.active === "Studio" && !hasAccount && category.phase === "idle" ? <AccountGate embedded /> : null}
+      </section>
       <MarketSearch panelRef={searchRef} models={searchModels} active={category.active === "Search"} ready={category.phase === "idle" && !selectedModel}
         interactive={category.phase === "idle" && !selectedModel && !profileOpen && !lensActive} onOpenModel={openModel} />
       {selectedModel && <MarketDetails key={selectedModel} modelId={selectedModel} appearance={appearance} panelRef={detailsRef} lensActive={lensActive} onClose={closeDetails}
