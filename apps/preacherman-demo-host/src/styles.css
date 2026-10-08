@@ -632,7 +632,6 @@ html[data-appearance="dark"] #root {
 
 /* Reserved destinations share Market's single, continuous translucent backdrop. */
 .demo-frosted-surface {
-  animation: demo-frost-enter 260ms ease-out both;
   position: absolute;
   inset: 0;
   background: var(--demo-theme-market-details-glass);

@@ -1,5 +1,9 @@
 .extension-marketplace { position: absolute; inset: 100px 0 0; color: var(--demo-theme-text); background: transparent; }
-.extension-marketplace__frame { display: block; width: 100%; height: 100%; border: 0; background: transparent; }
+.extension-marketplace__frame { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border: 0; background: transparent; visibility: hidden; pointer-events: none; }
+.extension-marketplace__frame[data-active="true"] { visibility: visible; pointer-events: auto; animation: extension-page-enter 180ms ease-out both; }
+.extension-marketplace[data-phase="leaving"] .extension-marketplace__frame[data-active="true"] { pointer-events: none; }
+@keyframes extension-page-enter { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .extension-marketplace__frame { animation: none !important; } }
 .extension-marketplace__status { position: absolute; top: 58px; right: 28px; color: var(--demo-theme-loading); font: 14px var(--demo-font-primary); }
 .extension-marketplace__status[role="alert"] { color: var(--demo-theme-error); background: var(--demo-theme-surface-elevated); padding: 12px 18px; border-radius: 10px; }
 .extension-marketplace__frame:focus-visible { outline: 2px solid var(--demo-theme-focus); outline-offset: -2px; }

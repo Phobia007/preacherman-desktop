@@ -8,6 +8,10 @@
   ],
   "defaultPage": "marketplace-agents.html",
   "importedAssets": 803,
-  "removed": "Global Claude product navigation only; marketplace subnavigation retained",
-  "background": "Preacherman theme and shared frosted scene"
+  "removed": "Claude global navigation, marketplace nav label, service-partner nav links and corporate footer; agents hero sales copy, purchase CTA and customer-story panel; Home marketplace eyebrow",
+  "background": "Preacherman theme and shared frosted scene",
+  "customCopy": {
+    "home": "Where your avatar gets connected with the world",
+    "connectors": "Bring the tools you already use into Vessels."
+  }
 }

@@ -25,4 +25,17 @@
   });
   const originalOpen = window.open.bind(window);
   window.open = (url, ...args) => external(String(url)) ? null : originalOpen(url, ...args);
+  // The host retains these documents; switching a tab no longer reloads its catalog.
+  const routes = new Set(['marketplace-home.html', 'claude-marketplace.html', 'marketplace-agents.html']);
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (!parent.document.querySelector('.extension-marketplace')) return;
+    const anchor = event.target.closest?.('a[href]');
+    if (!anchor || anchor.hasAttribute('download') || (anchor.target && anchor.target !== '_self')) return;
+    const url = new URL(anchor.href, location.href), page = url.pathname.split('/').pop();
+    if (url.origin !== location.origin || !routes.has(page)) return;
+    event.preventDefault();
+    document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close());
+    parent.postMessage({ type: 'preacherman-extension-route', page }, location.origin);
+  }, true);
 })();

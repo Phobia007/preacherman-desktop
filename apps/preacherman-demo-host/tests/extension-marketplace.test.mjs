@@ -13,10 +13,21 @@ test('Extension packages the three reference pages without the global Claude hea
     assert.match(html, /SubNav-module/);
     assert.match(html, /preacherman-embed.js/);
     assert.match(html, /preacherman-embed.css/);
+    assert.doesNotMatch(html, /<footer\b/);
+    assert.doesNotMatch(html, /<p[^>]*SubNav[^>]*__label[^>]*>Claude Marketplace/);
     for (const asset of new Set(html.match(/assets\/[\w./%+@=-]+/g))) assert.ok(existsSync(new URL('../' + prefix + asset, import.meta.url)), asset);
   }
   assert.equal((read(prefix + manifest.defaultPage).match(/data-agent-card=""/g) || []).length, 16);
   assert.match(read(prefix + 'claude-marketplace.html'), /data-od-id="sort"/);
+});
+test('Extension presents the requested Home and Vessels copy without the agents sales header', () => {
+  const home = read(prefix + 'marketplace-home.html');
+  assert.match(home, /<h1[^>]*>Where your avatar gets connected with the world<\/h1>/);
+  assert.doesNotMatch(home, /data-od-id="home-h1-86"/);
+  assert.match(read(prefix + 'claude-marketplace.html'), /Bring the tools you already use into Vessels\./);
+  const agents = read(prefix + 'marketplace-agents.html');
+  assert.doesNotMatch(agents, /Put your Anthropic commitment toward/);
+  assert.doesNotMatch(agents, /<article[^>]*MarginaliaCard/);
 });
 for (const mode of ['light', 'dark']) test(`Extension preserves the shared room and follows ${mode} appearance`, () => {
   const css = read(prefix + 'preacherman-embed.css');

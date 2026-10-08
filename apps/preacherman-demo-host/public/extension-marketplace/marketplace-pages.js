@@ -42,7 +42,7 @@
   results.addEventListener('click',event=>{const row=event.target.closest('[data-result-index]');if(row)window.open(searchMatches[Number(row.dataset.resultIndex)].href,'_blank','noopener,noreferrer');});
 
   function openMenu(){
-    menu.innerHTML='<button type="button" class="dialog-close" data-close aria-label="Close menu">×</button><h2>Claude Marketplace</h2><nav><a href="marketplace-home.html" data-marketplace-route>Home</a><a href="claude-marketplace.html" data-marketplace-route>Connectors and plugins</a><a href="marketplace-agents.html" data-marketplace-route>Agents and products</a><a href="https://claude.com/marketplace/service-partners" target="_blank" rel="noopener noreferrer">Service partners ↗</a></nav>';
+    menu.innerHTML='<button type="button" class="dialog-close" data-close aria-label="Close menu">×</button><h2>Extension</h2><nav><a href="marketplace-home.html" data-marketplace-route>Home</a><a href="claude-marketplace.html" data-marketplace-route>Connectors and plugins</a><a href="marketplace-agents.html" data-marketplace-route>Agents and products</a></nav>';
     menu.querySelector(`a[href="${page==='home'?'marketplace-home.html':'marketplace-agents.html'}"]`).setAttribute('aria-current','page');menu.showModal();
   }
 
