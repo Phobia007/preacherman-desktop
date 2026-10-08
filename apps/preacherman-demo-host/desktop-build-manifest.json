@@ -1,38 +1,38 @@
 {
   "schemaVersion": 1,
-  "buildId": "extension-marketplace-20261008",
+  "buildId": "extension-refine-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "extension-marketplace-and-unified-profile-lenses",
+  "sourceTask": "extension-content-cleanup-and-sequential-cached-navigation",
   "sourceThread": null,
-  "sourceState": "Extension packages the supplied Marketplace pages, assets, search and filters without global Claude navigation, above the shared frosted scene. Asset and Extension share the reversible profile lens. Market excludes the fixed header from the lens; Task uses a single signature layer, transparent daytime compositing and themed text.",
-  "sourceCommit": "d24e6d0b59b37490a21874ffc92b90df62e9286a",
+  "sourceState": "Extension removes the requested Claude branding, navigation link, agents promotion and corporate footers, and uses the requested Home and Vessels copy. Internal tabs retain their loaded documents; Asset and Extension reverse their entrance before mounting the next surface.",
+  "sourceCommit": "92e1a44de731c6a9c62da757abe8b58f01e3e85b",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-08T09:20:42.0637060+08:00",
-  "deployedAt": "2026-10-08T09:21:27.1378377+08:00",
-  "verifiedAt": "2026-10-08T09:25:33.7309118+08:00",
-  "sizeBytes": 652118016,
-  "sha256": "35CBB7424F8DD43097DF823DF2EFC6D488C39E28535B7659342F6DBD9CD0892D",
+  "builtAt": "2026-10-08T11:09:59.4845759+08:00",
+  "deployedAt": "2026-10-08T11:11:27.6278121+08:00",
+  "verifiedAt": "2026-10-08T11:14:17.7935776+08:00",
+  "sizeBytes": 652090368,
+  "sha256": "D0BE67509AD569A74B45EF82FD14F45D687F6F28A649332AFCB560F7E25BA46C",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-before-20261008/preacherman-demo-host.exe",
-  "backupSha256": "EB1B08486C399974F8197F3B833A4B26A066E6E9A3B2D1ED2B65FC99BF607A08",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-before-20261008/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-refine-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "35CBB7424F8DD43097DF823DF2EFC6D488C39E28535B7659342F6DBD9CD0892D",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-refine-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "a2575c731486967fffae56cce39a98cb854ff2d0",
-  "previousVerificationCommit": "a2575c731486967fffae56cce39a98cb854ff2d0",
+  "rollbackBaselineCommit": "d24e6d0b59b37490a21874ffc92b90df62e9286a",
+  "previousVerificationCommit": "d24e6d0b59b37490a21874ffc92b90df62e9286a",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 19,
+      "focusedTests": 7,
       "focusedFailures": 0,
-      "gitDiffCheck": "Application code passed; original imported SVG whitespace retained"
+      "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Extension cards, search and imported navigation verified; Task, Market, Asset and Extension profile open/close tested in both appearances. Core navigation, native window controls, normal startup and cleanup verified; no new console errors.",
+    "nativeFlow": "Canonical shortcut cold launch. Extension content, cached Home/connectors/agents navigation, search and sequential Asset/Extension exit verified in both appearances. Core navigation, native window controls and cleanup checked; no new console errors.",
     "navigation": [
       "Home",
       "Task",
@@ -144,82 +144,57 @@
         "appearance": "dark",
         "agents": 16,
         "search": true,
-        "headerRemoved": true
+        "headerRemoved": true,
+        "footerRemoved": true,
+        "newCopy": true,
+        "cachedTabs": true
       },
       {
         "appearance": "light",
         "agents": 16,
         "search": true,
-        "headerRemoved": true
+        "headerRemoved": true,
+        "footerRemoved": true,
+        "newCopy": true,
+        "cachedTabs": true
       }
     ],
-    "profiles": [
+    "transitions": [
       {
-        "appearance": "dark",
-        "name": "Market",
-        "color": "rgba(245, 250, 252, 0.96)",
-        "clip": "inset(100px 0px 0px)",
-        "returned": true
+        "from": "asset",
+        "to": "extension",
+        "opacity": 0.962956,
+        "appearance": "dark"
       },
       {
-        "appearance": "dark",
-        "name": "Task",
-        "ink": [
-          "f5fafc",
-          "f5fafc",
-          "f5fafc",
-          "f5fafc"
-        ],
-        "expected": "f5fafc",
-        "returned": true,
-        "settledOpenAndClose": true
+        "from": "extension",
+        "to": "asset",
+        "opacity": 0.959568,
+        "appearance": "dark"
       },
       {
-        "appearance": "dark",
-        "name": "Asset",
-        "color": "rgba(245, 250, 252, 0.96)",
-        "clip": "inset(100px 0px 0px)",
-        "returned": true
+        "from": "asset",
+        "to": "extension",
+        "opacity": 0.962956,
+        "appearance": "dark"
       },
       {
-        "appearance": "dark",
-        "name": "Extension",
-        "color": "rgba(245, 250, 252, 0.96)",
-        "clip": "inset(100px 0px 0px)",
-        "returned": true
+        "from": "asset",
+        "to": "extension",
+        "opacity": 0.966158,
+        "appearance": "light"
       },
       {
-        "appearance": "light",
-        "name": "Market",
-        "color": "rgb(22, 25, 28)",
-        "clip": "inset(100px 0px 0px)",
-        "returned": true
+        "from": "extension",
+        "to": "asset",
+        "opacity": 0.959568,
+        "appearance": "light"
       },
       {
-        "appearance": "light",
-        "name": "Task",
-        "ink": [
-          "16191c",
-          "16191c",
-          "16191c",
-          "16191c"
-        ],
-        "expected": "16191c",
-        "returned": true
-      },
-      {
-        "appearance": "light",
-        "name": "Asset",
-        "color": "rgb(22, 25, 28)",
-        "clip": "inset(100px 0px 0px)",
-        "returned": true
-      },
-      {
-        "appearance": "light",
-        "name": "Extension",
-        "color": "rgb(22, 25, 28)",
-        "clip": "inset(100px 0px 0px)",
-        "returned": true
+        "from": "asset",
+        "to": "extension",
+        "opacity": 0.966084,
+        "appearance": "light"
       }
     ],
     "windowControls": {
@@ -236,30 +211,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-08T09:25:33.7309118+08:00",
-      "NativePid": 36368,
-      "StartedAt": "2026-10-08T09:25:17.1069714+08:00",
-      "WindowHandle": 11537014,
+      "SampledAt": "2026-10-08T11:14:17.7935776+08:00",
+      "NativePid": 31968,
+      "StartedAt": "2026-10-08T11:13:54.9973505+08:00",
+      "WindowHandle": 4918982,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        36368,
-        3364,
-        24492,
-        36276,
-        36340,
-        2072,
-        36604,
-        34664,
-        40160,
-        40712,
-        38648
+        31968,
+        41248,
+        22288,
+        8700,
+        41048,
+        39188,
+        37556,
+        27060,
+        35876,
+        14864,
+        32008
       ],
-      "NormalizedCpuPercent": 6,
-      "WorkingSetMiB": 2035.5,
-      "GpuDedicatedBytes": 3514523648,
+      "NormalizedCpuPercent": 6.98,
+      "WorkingSetMiB": 1981,
+      "GpuDedicatedBytes": 3581222912,
       "MaxGpuEngineUtilization": 11,
-      "FreeRamKiB": 15633548,
+      "FreeRamKiB": 15455236,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -317,11 +292,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\production-build-rgb.log",
-      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\source-tests.log"
+      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\source-tests.log"
     ]
   },
   "releaseAttempts": [
@@ -1369,9 +1344,18 @@
       "deployedAt": "2026-10-08T09:21:27.1378377+08:00",
       "verifiedAt": "2026-10-08T09:25:33.7309118+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-before-20261008"
+    },
+    {
+      "buildId": "extension-refine-20261008",
+      "sourceCommit": "92e1a44de731c6a9c62da757abe8b58f01e3e85b",
+      "sha256": "D0BE67509AD569A74B45EF82FD14F45D687F6F28A649332AFCB560F7E25BA46C",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T11:11:27.6278121+08:00",
+      "verifiedAt": "2026-10-08T11:14:17.7935776+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-refine-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-before-20261008/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-refine-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
