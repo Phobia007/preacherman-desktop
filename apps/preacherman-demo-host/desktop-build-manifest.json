@@ -1,38 +1,38 @@
 {
   "schemaVersion": 1,
-  "buildId": "gallery-daylight-restore-20261008",
+  "buildId": "extension-marketplace-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "gallery-daylight-authored-room-restoration",
+  "sourceTask": "extension-marketplace-and-unified-profile-lenses",
   "sourceThread": null,
-  "sourceState": "Gallery character detail retains its authored room, video and description in both appearances. The daylight glass background is excluded only while the raised detail scene is open. Persistent controls and chat retain readable contrast; returning to cards restores the daylight scene.",
-  "sourceCommit": "a2575c731486967fffae56cce39a98cb854ff2d0",
+  "sourceState": "Extension packages the supplied Marketplace pages, assets, search and filters without global Claude navigation, above the shared frosted scene. Asset and Extension share the reversible profile lens. Market excludes the fixed header from the lens; Task uses a single signature layer, transparent daytime compositing and themed text.",
+  "sourceCommit": "d24e6d0b59b37490a21874ffc92b90df62e9286a",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-08T06:33:21.3362503+08:00",
-  "deployedAt": "2026-10-08T06:34:10.4816208+08:00",
-  "verifiedAt": "2026-10-08T06:37:03.2487080+08:00",
-  "sizeBytes": 638543872,
-  "sha256": "EB1B08486C399974F8197F3B833A4B26A066E6E9A3B2D1ED2B65FC99BF607A08",
+  "builtAt": "2026-10-08T09:20:42.0637060+08:00",
+  "deployedAt": "2026-10-08T09:21:27.1378377+08:00",
+  "verifiedAt": "2026-10-08T09:25:33.7309118+08:00",
+  "sizeBytes": 652118016,
+  "sha256": "35CBB7424F8DD43097DF823DF2EFC6D488C39E28535B7659342F6DBD9CD0892D",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-daylight-before-20261008/preacherman-demo-host.exe",
-  "backupSha256": "CA744E1EE1D572CDF8AE0DE9A4D19E4A3421E3B66544BAF32706944256C20946",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-daylight-before-20261008/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "EB1B08486C399974F8197F3B833A4B26A066E6E9A3B2D1ED2B65FC99BF607A08",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "c58ef9e902ab3b36bee0c68469c3eaecd5090b54",
-  "previousVerificationCommit": "c58ef9e902ab3b36bee0c68469c3eaecd5090b54",
+  "rollbackBaselineCommit": "a2575c731486967fffae56cce39a98cb854ff2d0",
+  "previousVerificationCommit": "a2575c731486967fffae56cce39a98cb854ff2d0",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 7,
+      "focusedTests": 19,
       "focusedFailures": 0,
-      "gitDiffCheck": "passed"
+      "gitDiffCheck": "Application code passed; original imported SVG whitespace retained"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Gallery detail room, readable copy, video playback, next-character motion and return to cards verified in both appearances. Core navigation, native window controls, normal startup and cleanup verified; no new console errors.",
+    "nativeFlow": "Canonical shortcut cold launch. Extension cards, search and imported navigation verified; Task, Market, Asset and Extension profile open/close tested in both appearances. Core navigation, native window controls, normal startup and cleanup verified; no new console errors.",
     "navigation": [
       "Home",
       "Task",
@@ -139,32 +139,87 @@
         "ready": true
       }
     ],
-    "galleryDetail": [
+    "extension": [
       {
         "appearance": "dark",
-        "scene": {
-          "background": "none",
-          "color": "rgba(0, 0, 0, 0)",
-          "glass": "none"
-        },
-        "copy": "Details\n\nCortana is from the Halo series. An advanced AI created from Dr. Catherine Halsey's neural architecture, she was initially tasked with system infiltration, intelligence analysis, and tactical support.\n\n2003 / HALO 4 / preacherman avatar\n\nCortana",
-        "controls": "rgb(229, 239, 243)",
-        "videoPlaying": true,
-        "navigation": true,
-        "returnedToRail": true
+        "agents": 16,
+        "search": true,
+        "headerRemoved": true
       },
       {
         "appearance": "light",
-        "scene": {
-          "background": "none",
-          "color": "rgba(0, 0, 0, 0)",
-          "glass": "none"
-        },
-        "copy": "Details\n\nCortana is from the Halo series. An advanced AI created from Dr. Catherine Halsey's neural architecture, she was initially tasked with system infiltration, intelligence analysis, and tactical support.\n\n2003 / HALO 4 / preacherman avatar\n\nCortana",
-        "controls": "rgb(229, 239, 243)",
-        "videoPlaying": true,
-        "navigation": true,
-        "returnedToRail": true
+        "agents": 16,
+        "search": true,
+        "headerRemoved": true
+      }
+    ],
+    "profiles": [
+      {
+        "appearance": "dark",
+        "name": "Market",
+        "color": "rgba(245, 250, 252, 0.96)",
+        "clip": "inset(100px 0px 0px)",
+        "returned": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Task",
+        "ink": [
+          "f5fafc",
+          "f5fafc",
+          "f5fafc",
+          "f5fafc"
+        ],
+        "expected": "f5fafc",
+        "returned": true,
+        "settledOpenAndClose": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Asset",
+        "color": "rgba(245, 250, 252, 0.96)",
+        "clip": "inset(100px 0px 0px)",
+        "returned": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Extension",
+        "color": "rgba(245, 250, 252, 0.96)",
+        "clip": "inset(100px 0px 0px)",
+        "returned": true
+      },
+      {
+        "appearance": "light",
+        "name": "Market",
+        "color": "rgb(22, 25, 28)",
+        "clip": "inset(100px 0px 0px)",
+        "returned": true
+      },
+      {
+        "appearance": "light",
+        "name": "Task",
+        "ink": [
+          "16191c",
+          "16191c",
+          "16191c",
+          "16191c"
+        ],
+        "expected": "16191c",
+        "returned": true
+      },
+      {
+        "appearance": "light",
+        "name": "Asset",
+        "color": "rgb(22, 25, 28)",
+        "clip": "inset(100px 0px 0px)",
+        "returned": true
+      },
+      {
+        "appearance": "light",
+        "name": "Extension",
+        "color": "rgb(22, 25, 28)",
+        "clip": "inset(100px 0px 0px)",
+        "returned": true
       }
     ],
     "windowControls": {
@@ -181,30 +236,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-08T06:37:03.2487080+08:00",
-      "NativePid": 25680,
-      "StartedAt": "2026-10-08T06:36:44.7402100+08:00",
-      "WindowHandle": 2428748,
+      "SampledAt": "2026-10-08T09:25:33.7309118+08:00",
+      "NativePid": 36368,
+      "StartedAt": "2026-10-08T09:25:17.1069714+08:00",
+      "WindowHandle": 11537014,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        25680,
-        26916,
-        39368,
-        41408,
-        26316,
-        7516,
-        24064,
-        28544,
-        39512,
-        40776,
-        38376
+        36368,
+        3364,
+        24492,
+        36276,
+        36340,
+        2072,
+        36604,
+        34664,
+        40160,
+        40712,
+        38648
       ],
-      "NormalizedCpuPercent": 6.98,
-      "WorkingSetMiB": 1861.6,
-      "GpuDedicatedBytes": 3321618432,
+      "NormalizedCpuPercent": 6,
+      "WorkingSetMiB": 2035.5,
+      "GpuDedicatedBytes": 3514523648,
       "MaxGpuEngineUtilization": 11,
-      "FreeRamKiB": 16697488,
+      "FreeRamKiB": 15633548,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -214,6 +269,31 @@
     },
     "newErrors": [],
     "observedErrors": [
+      "Hydration completed but contains mismatches.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "visualReview": {
@@ -237,11 +317,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\gallery-daylight-restore-20261008\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\gallery-daylight-restore-20261008\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\gallery-daylight-restore-20261008\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\gallery-daylight-restore-20261008\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\gallery-daylight-restore-20261008\\source-tests.log"
+      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\production-build-rgb.log",
+      "D:\\preacherman\\output\\playwright\\extension-marketplace-20261008\\source-tests.log"
     ]
   },
   "releaseAttempts": [
@@ -1280,9 +1360,18 @@
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-second-candidate-20261008",
       "restoredSha256": "EB1B08486C399974F8197F3B833A4B26A066E6E9A3B2D1ED2B65FC99BF607A08",
       "at": "2026-10-08T09:18:24.3207084+08:00"
+    },
+    {
+      "buildId": "extension-marketplace-20261008",
+      "sourceCommit": "d24e6d0b59b37490a21874ffc92b90df62e9286a",
+      "sha256": "35CBB7424F8DD43097DF823DF2EFC6D488C39E28535B7659342F6DBD9CD0892D",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T09:21:27.1378377+08:00",
+      "verifiedAt": "2026-10-08T09:25:33.7309118+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-daylight-before-20261008/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-marketplace-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
