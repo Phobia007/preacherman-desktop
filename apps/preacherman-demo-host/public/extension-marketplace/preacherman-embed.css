@@ -1,4 +1,17 @@
-/* Original typography, dimensions, cards and transitions; the host owns the room. */
+/* Shared Preacherman typography; preserve the catalog's layout and transitions. */
+@font-face {
+  font-family: "Clash Display";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("../market-love/assets/fonts/ClashDisplay-Light.ttf") format("truetype");
+}
+:root { --demo-font-primary: "Clash Display", sans-serif; }
+html, html body, html body *, html body *::before, html body *::after,
+html[data-marketplace-page] body [class] {
+  font-family: var(--demo-font-primary) !important;
+  font-synthesis: none;
+}
 :root, .theme-main, .theme-dark, .theme-accent, [data-theme] {
   --bg: transparent;
   --surface: var(--demo-theme-extension-card);
@@ -43,7 +56,7 @@ html[data-appearance="dark"] { color-scheme: dark; }
 ::-webkit-scrollbar { display: none; }
 html { --nav-height: 54px; }
 header[class*="NavBar"] { animation: none !important; background: var(--demo-theme-market-header-glass); backdrop-filter: blur(18px); }
-header [class*="SubNav"][class*="__inner"] { justify-content: flex-end; }
+header [class*="SubNav"][class*="__inner"] { justify-content: center; }
 [class*="FilterHub"][class*="__hub"] { padding-top: calc(var(--section-spacing-page-top) - 84px); }
 [class*="MarketplaceHero"][class$="__hero"] { padding-top: calc(var(--section-spacing-page-top) - 84px); }
 main aside { top: 70px !important; }

@@ -4,7 +4,7 @@
     const shell = parent.document.querySelector('.demo-app-shell');
     if (!shell) return;
     const style = parent.getComputedStyle(shell);
-    for (const key of style) if (key.startsWith('--demo-theme-')) document.documentElement.style.setProperty(key, style.getPropertyValue(key));
+    for (const key of style) if (key.startsWith('--demo-theme-') || key === '--demo-font-primary') document.documentElement.style.setProperty(key, style.getPropertyValue(key));
     document.documentElement.dataset.appearance = parent.document.documentElement.dataset.appearance || 'dark';
   };
   sync();

@@ -33,9 +33,12 @@ for (const mode of ['light', 'dark']) test(`Extension preserves the shared room 
   const css = read(prefix + 'preacherman-embed.css');
   assert.match(css, new RegExp(`html\\[data-appearance="${mode}"\\] \\{ color-scheme: ${mode}`));
   assert.match(css, /html, body \{ background: transparent !important/);
+  assert.match(css, /font-family: var\(--demo-font-primary\) !important/);
+  assert.ok(existsSync(new URL('../public/market-love/assets/fonts/ClashDisplay-Light.ttf', import.meta.url)));
   for (const token of ['text', 'muted', 'border', 'focus', 'surface-elevated', 'extension-card']) assert.ok(css.includes(`var(--demo-theme-${token})`));
   const bridge = read(prefix + 'preacherman-embed.js');
   assert.match(bridge, /MutationObserver\(sync\)/);
+  assert.match(bridge, /key === '--demo-font-primary'/);
   assert.match(bridge, /observer.disconnect\(\)/);
   assert.match(read('src/surfaces/FrostedSurface.tsx'), /<ExtensionMarketplace \/>/);
 });
