@@ -6,7 +6,14 @@
   font-display: swap;
   src: url("../market-love/assets/fonts/ClashDisplay-Light.ttf") format("truetype");
 }
-:root { --demo-font-primary: "Clash Display", sans-serif; }
+:root {
+  --demo-font-primary: "Clash Display", sans-serif;
+  --font-sans: var(--demo-font-primary) !important;
+  --font-serif: var(--demo-font-primary) !important;
+  --font-anthropic-sans: var(--demo-font-primary) !important;
+  --font-anthropic-serif: var(--demo-font-primary) !important;
+  --font-anthropic-mono: var(--demo-font-primary) !important;
+}
 html, html body, html body *, html body *::before, html body *::after,
 html[data-marketplace-page] body [class] {
   font-family: var(--demo-font-primary) !important;
