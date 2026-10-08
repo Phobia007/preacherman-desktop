@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "buildId": "account-gate-20261009",
+  "buildId": "home-backdrop-20261009",
   "productVersion": "0.1.0",
-  "sourceTask": "account-gated-personal-surfaces-empty-onboarding-shell",
+  "sourceTask": "shared-original-website-statement-pm-logo-background",
   "sourceThread": null,
-  "sourceState": "Logged-out Home, Gallery, Asset, Extension and Market Studio display an empty card based on the supplied website card, including corner fold and soft shadows. Personal contents and persistent companion models mount only after existing demo or verified account sign-in. Public Market remains open. Both themes and original navigation motion are preserved.",
-  "sourceCommit": "2aa687eaf4a4d43df04b792897c07fa2e6c8316a",
+  "sourceState": "All pages share one persistent original website Zodiak statement and PM background with We Bring a New. copy and original light/dark colors. The decorative glass ellipse is removed globally. Persistent avatar canvas is transparent so the shared background survives both modes. Home has no account guide; guest avatar remains hidden. Other account gates and authored content remain unchanged, and content may occlude the shared background.",
+  "sourceCommit": "20a94c2909f9eee63d56434d3a1d497663d1d5cd",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-09T06:36:10.4058646+08:00",
-  "deployedAt": "2026-10-09T06:36:53.1374325+08:00",
-  "verifiedAt": "2026-10-09T06:50:11.2801959+08:00",
-  "sizeBytes": 675166208,
-  "sha256": "39D541224B67EC257CBDADD66FBFDEE14E32D1DA3BCDC325E00BC57E1E1AE18F",
+  "builtAt": "2026-10-09T07:20:14.4662896+08:00",
+  "deployedAt": "2026-10-09T07:21:03.4906845+08:00",
+  "verifiedAt": "2026-10-09T07:24:32.2346611+08:00",
+  "sizeBytes": 675195392,
+  "sha256": "F421ADB9E9CB916660463E1F9F9C57F224D4D99A654563CDE2362379BCFFD7F8",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-gate-before-20261009/preacherman-demo-host.exe",
-  "backupSha256": "2A4E1F8D4BB207C697D6AC00650BFBC2B8348B50118ECFFF37BDB35D8BBF4CF8",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-gate-before-20261009/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009/preacherman-demo-host.exe",
+  "backupSha256": "39D541224B67EC257CBDADD66FBFDEE14E32D1DA3BCDC325E00BC57E1E1AE18F",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "80e05c542581a42dcf0e91317517b46d8a0addab",
-  "previousVerificationCommit": "80e05c542581a42dcf0e91317517b46d8a0addab",
+  "rollbackBaselineCommit": "2aa687eaf4a4d43df04b792897c07fa2e6c8316a",
+  "previousVerificationCommit": "2aa687eaf4a4d43df04b792897c07fa2e6c8316a",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
@@ -32,16 +32,131 @@
       "focusedFailures": 0,
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical desktop shortcut to logged-out Home. All five gated destinations, public Market, email demo sign-in, unlocked content and sign-out relocking verified in light and dark. Core Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension verified. Native controls and resource cleanup verified.",
+    "nativeFlow": "Cold launch through canonical desktop shortcut to logged-out Home. Persistent shared background across all eight routes, four remaining gated destinations, public Market, email demo sign-in, unlocked content and sign-out relocking verified in light and dark. Core Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension verified. Native controls and resource cleanup verified.",
+    "sharedBackdrop": {
+      "retainedAcrossRoutes": true,
+      "homeChecks": [
+        {
+          "appearance": "light",
+          "signedIn": false,
+          "text": "We Bring a New.",
+          "color": "rgb(222, 219, 214)",
+          "markColor": "rgb(17, 17, 15)",
+          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
+          "fontLoaded": true,
+          "ellipse": "none",
+          "sheen": "none",
+          "left": 92.9888916015625,
+          "right": 1826.9949951171875,
+          "width": 1920,
+          "backdropZ": "0",
+          "modelZ": null
+        },
+        {
+          "appearance": "light",
+          "signedIn": false,
+          "text": "We Bring a New.",
+          "color": "rgb(222, 219, 214)",
+          "markColor": "rgb(17, 17, 15)",
+          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
+          "fontLoaded": true,
+          "ellipse": "none",
+          "sheen": "none",
+          "left": 92.9888916015625,
+          "right": 1826.9949951171875,
+          "width": 1920,
+          "backdropZ": "0",
+          "modelZ": null
+        },
+        {
+          "appearance": "light",
+          "signedIn": true,
+          "text": "We Bring a New.",
+          "color": "rgb(222, 219, 214)",
+          "markColor": "rgb(17, 17, 15)",
+          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
+          "fontLoaded": true,
+          "ellipse": "none",
+          "sheen": "none",
+          "left": 92.9888916015625,
+          "right": 1826.9949951171875,
+          "width": 1920,
+          "backdropZ": "0",
+          "modelZ": "1"
+        },
+        {
+          "appearance": "light",
+          "signedIn": false,
+          "text": "We Bring a New.",
+          "color": "rgb(222, 219, 214)",
+          "markColor": "rgb(17, 17, 15)",
+          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
+          "fontLoaded": true,
+          "ellipse": "none",
+          "sheen": "none",
+          "left": 92.9888916015625,
+          "right": 1826.9949951171875,
+          "width": 1920,
+          "backdropZ": "0",
+          "modelZ": null
+        },
+        {
+          "appearance": "dark",
+          "signedIn": false,
+          "text": "We Bring a New.",
+          "color": "rgb(44, 43, 39)",
+          "markColor": "rgb(242, 239, 232)",
+          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
+          "fontLoaded": true,
+          "ellipse": "none",
+          "sheen": "none",
+          "left": 92.9888916015625,
+          "right": 1826.9949951171875,
+          "width": 1920,
+          "backdropZ": "0",
+          "modelZ": null,
+          "visibleLetterPixels": 25833
+        },
+        {
+          "appearance": "dark",
+          "signedIn": true,
+          "text": "We Bring a New.",
+          "color": "rgb(44, 43, 39)",
+          "markColor": "rgb(242, 239, 232)",
+          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
+          "fontLoaded": true,
+          "ellipse": "none",
+          "sheen": "none",
+          "left": 92.9888916015625,
+          "right": 1826.9949951171875,
+          "width": 1920,
+          "backdropZ": "0",
+          "modelZ": "1",
+          "visibleLetterPixels": 25831
+        },
+        {
+          "appearance": "dark",
+          "signedIn": false,
+          "text": "We Bring a New.",
+          "color": "rgb(44, 43, 39)",
+          "markColor": "rgb(242, 239, 232)",
+          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
+          "fontLoaded": true,
+          "ellipse": "none",
+          "sheen": "none",
+          "left": 92.9888916015625,
+          "right": 1826.9949951171875,
+          "width": 1920,
+          "backdropZ": "0",
+          "modelZ": null,
+          "visibleLetterPixels": 25831
+        }
+      ]
+    },
     "accountGate": [
       {
         "appearance": "light",
         "locked": [
-          {
-            "name": "Home",
-            "background": "rgb(243, 241, 235)",
-            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px"
-          },
           {
             "name": "Gallery",
             "background": "rgb(243, 241, 235)",
@@ -71,29 +186,24 @@
         "appearance": "dark",
         "locked": [
           {
-            "name": "Home",
-            "empty": true,
-            "modelAndPersonalContentAbsent": true
-          },
-          {
             "name": "Gallery",
-            "empty": true,
-            "modelAndPersonalContentAbsent": true
+            "background": "rgb(16, 16, 15)",
+            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px"
           },
           {
             "name": "Asset",
-            "empty": true,
-            "modelAndPersonalContentAbsent": true
+            "background": "rgb(16, 16, 15)",
+            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px"
           },
           {
             "name": "Extension",
-            "empty": true,
-            "modelAndPersonalContentAbsent": true
+            "background": "rgb(16, 16, 15)",
+            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px"
           },
           {
             "name": "Studio",
-            "empty": true,
-            "modelAndPersonalContentAbsent": true
+            "background": "rgb(16, 16, 15)",
+            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px"
           }
         ],
         "publicMarket": true,
@@ -105,27 +215,33 @@
       "modes": [
         {
           "appearance": "light",
-          "background": "rgb(243, 241, 235)",
-          "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px",
-          "radius": "8.8px",
-          "text": "",
-          "children": 0,
-          "lockedContentAbsent": true,
-          "unlockAndSignOut": true,
-          "exitBeforeEntry": true,
-          "responsive": true
+          "text": "We Bring a New.",
+          "font": true,
+          "ink": "rgb(222, 219, 214)",
+          "logo": "rgb(17, 17, 15)",
+          "ellipse": "none",
+          "overlay": "none",
+          "left": 92.97940063476562,
+          "right": 1826.9894104003906,
+          "width": 1920,
+          "filter": "url(\"#home-statement-deboss\")",
+          "responsive": true,
+          "sharedAcrossAllSurfaces": true
         },
         {
           "appearance": "dark",
-          "background": "rgb(16, 16, 15)",
-          "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px",
-          "radius": "8.8px",
-          "text": "",
-          "children": 0,
-          "lockedContentAbsent": true,
-          "unlockAndSignOut": true,
-          "exitBeforeEntry": true,
-          "responsive": true
+          "text": "We Bring a New.",
+          "font": true,
+          "ink": "rgb(44, 43, 39)",
+          "logo": "rgb(242, 239, 232)",
+          "ellipse": "none",
+          "overlay": "none",
+          "left": 92.97940063476562,
+          "right": 1826.9894104003906,
+          "width": 1920,
+          "filter": "url(\"#home-statement-deboss\")",
+          "responsive": true,
+          "sharedAcrossAllSurfaces": true
         }
       ],
       "errors": [],
@@ -231,14 +347,11 @@
     ],
     "windowControls": {
       "restore": true,
-      "resizedCard": {
-        "empty": true,
+      "resizedHome": {
+        "text": "We Bring a New.",
         "windowWidth": 1280,
-        "windowHeight": 800,
-        "left": 480,
-        "right": 800,
-        "top": 215.11111450195312,
-        "bottom": 656
+        "left": 61.969390869140625,
+        "right": 1218.0306701660156
       },
       "maximize": true,
       "minimize": true,
@@ -246,29 +359,29 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-09T06:50:11.2801959+08:00",
-      "NativePid": 42780,
-      "StartedAt": "2026-10-09T06:49:48.9546334+08:00",
-      "WindowHandle": 2429130,
+      "SampledAt": "2026-10-09T07:24:32.2346611+08:00",
+      "NativePid": 44932,
+      "StartedAt": "2026-10-09T07:24:14.2377745+08:00",
+      "WindowHandle": 4591804,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        42780,
-        30496,
-        38080,
-        30544,
-        20336,
-        26044,
-        36740,
-        28076,
-        14664,
-        29708
+        44932,
+        33580,
+        25956,
+        29968,
+        46708,
+        32628,
+        30788,
+        43876,
+        42036,
+        28756
       ],
-      "NormalizedCpuPercent": 2,
-      "WorkingSetMiB": 903.6,
-      "GpuDedicatedBytes": 449548288,
-      "MaxGpuEngineUtilization": 20,
-      "FreeRamKiB": 15075168,
+      "NormalizedCpuPercent": 1.99,
+      "WorkingSetMiB": 909.6,
+      "GpuDedicatedBytes": 406491136,
+      "MaxGpuEngineUtilization": 17,
+      "FreeRamKiB": 15479228,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -435,115 +548,10 @@
         "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token"
       }
     ],
-    "baselineErrorEvidence": [
-      {
-        "error": "Hydration completed but contains mismatches.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-        "previousReport": "D:\\preacherman\\output\\playwright\\extension-static-nav-20261008\\native-report.json"
-      },
-      {
-        "error": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
-        "previousReport": "D:\\preacherman\\output\\playwright\\market-purchase-20261009\\native-report.json"
-      }
-    ],
+    "baselineErrorEvidence": [],
     "visualReview": {
       "reviewed": [
-        "Empty guide on Home, Gallery, Asset, Extension, Studio",
+        "Shared engraved statement and PM behind every page, no glass ellipse; guest and signed-in Home; unchanged other account gates",
         "Home",
         "Task",
         "Gallery",
@@ -560,16 +568,15 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "Guide card is intentionally empty pending user direction. Account sign-in remains available from the existing account dock.",
+      "Background customization is not introduced. Existing account sign-in remains available from the account dock.",
       "This is presentation access for the existing demo; it does not add backend entitlements or purchases."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\account-gate-20261009\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\account-gate-20261009\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\account-gate-20261009\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\account-gate-20261009\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\account-gate-20261009\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\account-gate-20261009\\source-tests.log"
+      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\preview-report.json"
     ]
   },
   "releaseAttempts": [
@@ -1690,9 +1697,18 @@
       "failedArtifact": "output\\playwright\\home-backdrop-20261009\\failed-home-backdrop.exe",
       "restoredSha256": "39D541224B67EC257CBDADD66FBFDEE14E32D1DA3BCDC325E00BC57E1E1AE18F",
       "recordedAt": "2026-10-09T07:15:35.262258+08:00"
+    },
+    {
+      "buildId": "home-backdrop-20261009",
+      "sourceCommit": "20a94c2909f9eee63d56434d3a1d497663d1d5cd",
+      "sha256": "F421ADB9E9CB916660463E1F9F9C57F224D4D99A654563CDE2362379BCFFD7F8",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-09T07:21:03.4906845+08:00",
+      "verifiedAt": "2026-10-09T07:24:32.2346611+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-gate-before-20261009/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
