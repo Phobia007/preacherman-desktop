@@ -1,38 +1,38 @@
 {
   "schemaVersion": 1,
-  "buildId": "extension-refine-20261008",
+  "buildId": "extension-font-20261008",
   "productVersion": "0.1.0",
-  "sourceTask": "extension-content-cleanup-and-sequential-cached-navigation",
+  "sourceTask": "extension-default-font-and-centered-navigation",
   "sourceThread": null,
-  "sourceState": "Extension removes the requested Claude branding, navigation link, agents promotion and corporate footers, and uses the requested Home and Vessels copy. Internal tabs retain their loaded documents; Asset and Extension reverse their entrance before mounting the next surface.",
-  "sourceCommit": "92e1a44de731c6a9c62da757abe8b58f01e3e85b",
+  "sourceState": "All Extension text uses the shared Clash Display font. Home, connectors/plugins and agents/products navigation, including search, is centered. The host handwritten brand and existing appearance and motion are preserved",
+  "sourceCommit": "525e968ab3b809993a4a3939d79973508b97259f",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-08T11:09:59.4845759+08:00",
-  "deployedAt": "2026-10-08T11:11:27.6278121+08:00",
-  "verifiedAt": "2026-10-08T11:14:17.7935776+08:00",
+  "builtAt": "2026-10-08T12:28:06.6122845+08:00",
+  "deployedAt": "2026-10-08T12:30:03.3601121+08:00",
+  "verifiedAt": "2026-10-08T12:32:24.5055687+08:00",
   "sizeBytes": 652090368,
-  "sha256": "D0BE67509AD569A74B45EF82FD14F45D687F6F28A649332AFCB560F7E25BA46C",
+  "sha256": "FA0C54E7733BD7C4AD27E4BD3C113429D0E35BC8A1805E02166E9191E9049C44",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-refine-before-20261008/preacherman-demo-host.exe",
-  "backupSha256": "35CBB7424F8DD43097DF823DF2EFC6D488C39E28535B7659342F6DBD9CD0892D",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-refine-before-20261008/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-font-before-20261008/preacherman-demo-host.exe",
+  "backupSha256": "D0BE67509AD569A74B45EF82FD14F45D687F6F28A649332AFCB560F7E25BA46C",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-font-before-20261008/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "d24e6d0b59b37490a21874ffc92b90df62e9286a",
-  "previousVerificationCommit": "d24e6d0b59b37490a21874ffc92b90df62e9286a",
+  "rollbackBaselineCommit": "92e1a44de731c6a9c62da757abe8b58f01e3e85b",
+  "previousVerificationCommit": "92e1a44de731c6a9c62da757abe8b58f01e3e85b",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 7,
+      "focusedTests": 4,
       "focusedFailures": 0,
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Canonical shortcut cold launch. Extension content, cached Home/connectors/agents navigation, search and sequential Asset/Extension exit verified in both appearances. Core navigation, native window controls and cleanup checked; no new console errors.",
+    "nativeFlow": "Canonical shortcut cold launch. All three Extension pages and search checked for loaded default font and centered navigation in both appearances. Core routes, window controls and cleanup verified with no new console errors",
     "navigation": [
       "Home",
       "Task",
@@ -163,37 +163,95 @@
       {
         "from": "asset",
         "to": "extension",
-        "opacity": 0.962956,
+        "opacity": 0.948312,
         "appearance": "dark"
       },
       {
         "from": "extension",
         "to": "asset",
-        "opacity": 0.959568,
-        "appearance": "dark"
-      },
-      {
-        "from": "asset",
-        "to": "extension",
-        "opacity": 0.962956,
-        "appearance": "dark"
-      },
-      {
-        "from": "asset",
-        "to": "extension",
-        "opacity": 0.966158,
-        "appearance": "light"
-      },
-      {
-        "from": "extension",
-        "to": "asset",
-        "opacity": 0.959568,
-        "appearance": "light"
-      },
-      {
-        "from": "asset",
-        "to": "extension",
         "opacity": 0.966084,
+        "appearance": "dark"
+      },
+      {
+        "from": "asset",
+        "to": "extension",
+        "opacity": 0.962956,
+        "appearance": "dark"
+      },
+      {
+        "from": "asset",
+        "to": "extension",
+        "opacity": 0.962878,
+        "appearance": "light"
+      },
+      {
+        "from": "extension",
+        "to": "asset",
+        "opacity": 0.948215,
+        "appearance": "light"
+      },
+      {
+        "from": "asset",
+        "to": "extension",
+        "opacity": 0.962878,
+        "appearance": "light"
+      }
+    ],
+    "typography": [
+      {
+        "page": "/extension-marketplace/marketplace-agents.html",
+        "loaded": true,
+        "wrong": [],
+        "centerOffset": 0.0078125,
+        "appearance": "dark"
+      },
+      {
+        "page": "/extension-marketplace/claude-marketplace.html",
+        "loaded": true,
+        "wrong": [],
+        "centerOffset": 0.0078125,
+        "appearance": "dark"
+      },
+      {
+        "page": "/extension-marketplace/claude-marketplace.html",
+        "loaded": true,
+        "wrong": [],
+        "centerOffset": 0.0078125,
+        "appearance": "dark"
+      },
+      {
+        "page": "/extension-marketplace/marketplace-home.html",
+        "loaded": true,
+        "wrong": [],
+        "centerOffset": 0.0078125,
+        "appearance": "dark"
+      },
+      {
+        "page": "/extension-marketplace/marketplace-agents.html",
+        "loaded": true,
+        "wrong": [],
+        "centerOffset": 0.0078125,
+        "appearance": "light"
+      },
+      {
+        "page": "/extension-marketplace/claude-marketplace.html",
+        "loaded": true,
+        "wrong": [],
+        "centerOffset": 0.0078125,
+        "appearance": "light"
+      },
+      {
+        "page": "/extension-marketplace/claude-marketplace.html",
+        "loaded": true,
+        "wrong": [],
+        "centerOffset": 0.0078125,
+        "appearance": "light"
+      },
+      {
+        "page": "/extension-marketplace/marketplace-home.html",
+        "loaded": true,
+        "wrong": [],
+        "centerOffset": 0.0078125,
         "appearance": "light"
       }
     ],
@@ -211,30 +269,30 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-08T11:14:17.7935776+08:00",
-      "NativePid": 31968,
-      "StartedAt": "2026-10-08T11:13:54.9973505+08:00",
-      "WindowHandle": 4918982,
+      "SampledAt": "2026-10-08T12:32:24.5055687+08:00",
+      "NativePid": 34804,
+      "StartedAt": "2026-10-08T12:32:02.2027732+08:00",
+      "WindowHandle": 2756416,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        31968,
-        41248,
-        22288,
-        8700,
-        41048,
-        39188,
-        37556,
-        27060,
-        35876,
-        14864,
-        32008
+        34804,
+        11056,
+        9380,
+        33024,
+        38688,
+        34048,
+        38608,
+        35548,
+        34576,
+        18520,
+        23888
       ],
-      "NormalizedCpuPercent": 6.98,
-      "WorkingSetMiB": 1981,
-      "GpuDedicatedBytes": 3581222912,
-      "MaxGpuEngineUtilization": 11,
-      "FreeRamKiB": 15455236,
+      "NormalizedCpuPercent": 4.99,
+      "WorkingSetMiB": 2019.5,
+      "GpuDedicatedBytes": 3504467968,
+      "MaxGpuEngineUtilization": 12,
+      "FreeRamKiB": 15521616,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -292,11 +350,11 @@
       "Existing baseline diagnostics remain; no new errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\extension-refine-20261008\\source-tests.log"
+      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\extension-font-20261008\\source-tests.log"
     ]
   },
   "releaseAttempts": [
@@ -1353,9 +1411,18 @@
       "deployedAt": "2026-10-08T11:11:27.6278121+08:00",
       "verifiedAt": "2026-10-08T11:14:17.7935776+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-refine-before-20261008"
+    },
+    {
+      "buildId": "extension-font-20261008",
+      "sourceCommit": "525e968ab3b809993a4a3939d79973508b97259f",
+      "sha256": "FA0C54E7733BD7C4AD27E4BD3C113429D0E35BC8A1805E02166E9191E9049C44",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-08T12:30:03.3601121+08:00",
+      "verifiedAt": "2026-10-08T12:32:24.5055687+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-font-before-20261008"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-refine-before-20261008/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\extension-font-before-20261008/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
