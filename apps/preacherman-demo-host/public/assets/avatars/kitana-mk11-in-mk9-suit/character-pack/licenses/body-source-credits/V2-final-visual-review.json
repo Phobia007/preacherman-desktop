@@ -1,0 +1,24 @@
+{
+  "checkedAtUTC": "2026-10-01T16:55:41.043639+00:00",
+  "assetSHA256": "c8eb96f78467f8dcff49e5d19750c794949a5801dfc33b64c0277e42d1f0ce68",
+  "method": "Final GLB offline Blender key-pose renders inspected; temporal smoothing and head pacing verified separately by actual Three animation evaluation.",
+  "inspectedImages": [
+    "continuous-0-front.png",
+    "continuous-210-side.png",
+    "continuous-480-front.png"
+  ],
+  "imageSHA256": {
+    "continuous-0-front.png": "cac4ffcd1f762c9b2b9303a40c00ca70a49237d48d97cacb7e7550d4797980d5",
+    "continuous-210-side.png": "8c9c0cdffb8d7d4d7b51ae6273fd3992def35c5e99f5a01af48ac8c2781f105e",
+    "continuous-480-front.png": "25a789d6671a8ad43a679364d4663d49b21134764e07d53d732780f902bbed4f"
+  },
+  "findings": [
+    "Quiet standing support remains natural in inspected poses.",
+    "Hand/thigh separation and downward cloth drape retained.",
+    "Large captured sway remains visible."
+  ],
+  "limits": [
+    "Still views alone cannot verify jitter or timing. Numerical temporal reports are separate.",
+    "Browser live WebGL and console not automatically verified due to file navigation restriction."
+  ]
+}

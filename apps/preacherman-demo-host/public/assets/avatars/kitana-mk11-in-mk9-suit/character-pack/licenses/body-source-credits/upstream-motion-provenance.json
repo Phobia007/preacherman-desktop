@@ -1,0 +1,957 @@
+{
+  "clip": "kitana-mk11-in-mk9-suit.idle.actorcore_talk.v3",
+  "channels": 63,
+  "duration": 28.133333333333333,
+  "runtimeSha256": "def4acdb156e876602d3fc181bf8f39dd9850a6e8869f2c8502973dd079f5026",
+  "runtimeBytes": 13091808,
+  "originalBinarySha256": "a9e917176bf3128f8734751222c716ce48e32a875864f06e11a946b26a84196d",
+  "originalBinaryBytes": 11229208,
+  "originalMeshSkinMaterialImageBuffersUnchanged": true,
+  "loopSeam": 0,
+  "id": "kitana-mk11-in-mk9-suit",
+  "source": "D:/preacherman/output/actorcore-talk-20260914/input/stand-talk-378997.fbx",
+  "sourceSha256": "b59eb1ada0172ca061abdfbe8d2640f0f32837349497e4908ba8a43d3b076282",
+  "sourceDuration": 28.133333333333333,
+  "sourceFps": 60,
+  "sampleFps": 60,
+  "boneMapping": {
+    "b_pelvis": "pelvis",
+    "b_spine0": "spine 1",
+    "b_spine1": "spine 2",
+    "b_spine3": "spine 4",
+    "b_neck0": "head neck lower",
+    "b_head": "head neck upper",
+    "b_l_thigh": "leg left thigh",
+    "b_l_calf": "leg left knee",
+    "b_l_foot": "leg left ankle",
+    "b_l_toe": "leg left toes",
+    "b_l_clav": "arm left shoulder 1",
+    "b_l_upperarm": "arm left shoulder 2",
+    "b_l_forearm": "arm left elbow",
+    "b_l_hand": "arm left wrist",
+    "b_l_thumb1": "arm left finger 1a",
+    "b_l_thumb2": "arm left finger 1b",
+    "b_l_thumb3": "arm left finger 1c",
+    "b_l_index1": "arm left finger 2a",
+    "b_l_index2": "arm left finger 2b",
+    "b_l_index3": "arm left finger 2c",
+    "b_l_middle1": "arm left finger 3a",
+    "b_l_middle2": "arm left finger 3b",
+    "b_l_middle3": "arm left finger 3c",
+    "b_l_ring1": "arm left finger 4a",
+    "b_l_ring2": "arm left finger 4b",
+    "b_l_ring3": "arm left finger 4c",
+    "b_l_pinky1": "arm left finger 5a",
+    "b_l_pinky2": "arm left finger 5b",
+    "b_l_pinky3": "arm left finger 5c",
+    "b_r_thigh": "leg right thigh",
+    "b_r_calf": "leg right knee",
+    "b_r_foot": "leg right ankle",
+    "b_r_toe": "leg right toes",
+    "b_r_clav": "arm right shoulder 1",
+    "b_r_upperarm": "arm right shoulder 2",
+    "b_r_forearm": "arm right elbow",
+    "b_r_hand": "arm right wrist",
+    "b_r_thumb1": "arm right finger 1a",
+    "b_r_thumb2": "arm right finger 1b",
+    "b_r_thumb3": "arm right finger 1c",
+    "b_r_index1": "arm right finger 2a",
+    "b_r_index2": "arm right finger 2b",
+    "b_r_index3": "arm right finger 2c",
+    "b_r_middle1": "arm right finger 3a",
+    "b_r_middle2": "arm right finger 3b",
+    "b_r_middle3": "arm right finger 3c",
+    "b_r_ring1": "arm right finger 4a",
+    "b_r_ring2": "arm right finger 4b",
+    "b_r_ring3": "arm right finger 4c",
+    "b_r_pinky1": "arm right finger 5a",
+    "b_r_pinky2": "arm right finger 5b",
+    "b_r_pinky3": "arm right finger 5c"
+  },
+  "auxiliaryBones": [
+    "leg left thigh roll",
+    "leg left knee roll",
+    "leg right thigh roll",
+    "leg right knee roll",
+    "arm left shoulder roll",
+    "arm left elbow roll",
+    "arm right shoulder roll",
+    "arm right elbow roll"
+  ],
+  "distributedSpineBones": [
+    "spine 3",
+    "head neck middle"
+  ],
+  "hierarchyRepair": "spine 1 follows pelvis",
+  "footGoalMaxError": 7.060614293734654e-07,
+  "originalGLBSha256": "dc852e0b65469af459d96dd1aa0a3f1777a5e66e8769f4f7fb7188f74d9c4715",
+  "loopMode": "preserve source with eased return and matched seam",
+  "preservedAccessors": [
+    {
+      "index": 0,
+      "descriptor": {
+        "bufferView": 0,
+        "componentType": 5126,
+        "count": 21028,
+        "max": [
+          0.6496202349662781,
+          1.7837140560150146,
+          0.27926960587501526
+        ],
+        "min": [
+          -0.6496196985244751,
+          0.7030301690101624,
+          -0.12430714815855026
+        ],
+        "type": "VEC3"
+      },
+      "viewSha256": "758ae9b4de6e5dd1c38da08347920e4937f0bfc3b0b42aefa5512c1a8328cac1"
+    },
+    {
+      "index": 1,
+      "descriptor": {
+        "bufferView": 1,
+        "componentType": 5126,
+        "count": 21028,
+        "type": "VEC3"
+      },
+      "viewSha256": "4d0ceb86130315db2470fa64cd874eba6dff817ef67f5d51852a975ee367e81e"
+    },
+    {
+      "index": 2,
+      "descriptor": {
+        "bufferView": 2,
+        "componentType": 5126,
+        "count": 21028,
+        "type": "VEC2"
+      },
+      "viewSha256": "48bea6fa29ea458a79bef8986e9aee2dadae9173a295a9d9c2e80d87d45619dd"
+    },
+    {
+      "index": 3,
+      "descriptor": {
+        "bufferView": 3,
+        "componentType": 5126,
+        "count": 21028,
+        "type": "VEC2"
+      },
+      "viewSha256": "7be14afa376f73b390a4bea9a50b704580aedb6b2d18a450a55bb9ffc4bcc42d"
+    },
+    {
+      "index": 4,
+      "descriptor": {
+        "bufferView": 4,
+        "componentType": 5126,
+        "count": 21028,
+        "type": "VEC2"
+      },
+      "viewSha256": "4613fec0990e8b331f7fad17a174f39b1aa734f163183acab386e34b58475bf1"
+    },
+    {
+      "index": 5,
+      "descriptor": {
+        "bufferView": 5,
+        "componentType": 5126,
+        "count": 21028,
+        "type": "VEC2"
+      },
+      "viewSha256": "db9d869170374676d6ccf02138eb57bd0bcb7e424459da5e946787129443845f"
+    },
+    {
+      "index": 6,
+      "descriptor": {
+        "bufferView": 6,
+        "componentType": 5121,
+        "count": 21028,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "eb27f87b011e16d4811269c48dadcbcf0c11cdfb555c63abe9c2cc39d4699ad2"
+    },
+    {
+      "index": 7,
+      "descriptor": {
+        "bufferView": 7,
+        "componentType": 5123,
+        "count": 21028,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "9a6f3ac4a07a04d0068a992dd8bb1aa0a84408102c51bdcc3ae6ad61624d3194"
+    },
+    {
+      "index": 8,
+      "descriptor": {
+        "bufferView": 8,
+        "componentType": 5121,
+        "count": 21028,
+        "type": "VEC4"
+      },
+      "viewSha256": "0c628489c19e4ce4bedbdfcfe3c870b20e340604c98a4f489fd2a1d517d6e8ba"
+    },
+    {
+      "index": 9,
+      "descriptor": {
+        "bufferView": 9,
+        "componentType": 5126,
+        "count": 21028,
+        "type": "VEC4"
+      },
+      "viewSha256": "6c0abd2999fb8e2ed3561d9310171db1733457671c073e691f5063e9b2c721d5"
+    },
+    {
+      "index": 10,
+      "descriptor": {
+        "bufferView": 10,
+        "componentType": 5123,
+        "count": 115611,
+        "type": "SCALAR"
+      },
+      "viewSha256": "411530cc1b7c6a7cc79341bef39771726305e5910031acd892a60351c1155328"
+    },
+    {
+      "index": 11,
+      "descriptor": {
+        "bufferView": 13,
+        "componentType": 5126,
+        "count": 9066,
+        "max": [
+          0.5263385772705078,
+          1.806790828704834,
+          0.5927406549453735
+        ],
+        "min": [
+          -0.5263383388519287,
+          -0.013621309772133827,
+          -0.12498807907104492
+        ],
+        "type": "VEC3"
+      },
+      "viewSha256": "aa222815c1766d3ca27d867bdab4246bb9ad7298de0dc1bbd34b35c700f27a7b"
+    },
+    {
+      "index": 12,
+      "descriptor": {
+        "bufferView": 14,
+        "componentType": 5126,
+        "count": 9066,
+        "type": "VEC3"
+      },
+      "viewSha256": "23befe647c17ec4242118c9d37deceb4650736a5e7b78ffea1bd80652dc555cc"
+    },
+    {
+      "index": 13,
+      "descriptor": {
+        "bufferView": 15,
+        "componentType": 5126,
+        "count": 9066,
+        "type": "VEC2"
+      },
+      "viewSha256": "2fa08b81caf7689774e3046df33581e96000b43836b4ecd049062f02e08642f6"
+    },
+    {
+      "index": 14,
+      "descriptor": {
+        "bufferView": 16,
+        "componentType": 5126,
+        "count": 9066,
+        "type": "VEC2"
+      },
+      "viewSha256": "cd4047e2af3be268e7750154ca3b922184c7d55169b2b8a11fd9edda0e9f1a63"
+    },
+    {
+      "index": 15,
+      "descriptor": {
+        "bufferView": 17,
+        "componentType": 5126,
+        "count": 9066,
+        "type": "VEC2"
+      },
+      "viewSha256": "cd4047e2af3be268e7750154ca3b922184c7d55169b2b8a11fd9edda0e9f1a63"
+    },
+    {
+      "index": 16,
+      "descriptor": {
+        "bufferView": 18,
+        "componentType": 5126,
+        "count": 9066,
+        "type": "VEC2"
+      },
+      "viewSha256": "cd4047e2af3be268e7750154ca3b922184c7d55169b2b8a11fd9edda0e9f1a63"
+    },
+    {
+      "index": 17,
+      "descriptor": {
+        "bufferView": 19,
+        "componentType": 5121,
+        "count": 9066,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "c6b4814db7219cd5a79a5183fd739e47cd0f0f595c474eec4ff14bab3a691dae"
+    },
+    {
+      "index": 18,
+      "descriptor": {
+        "bufferView": 20,
+        "componentType": 5123,
+        "count": 9066,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "84f414a58dc28caab889addb5add6e68c0f778e7b74c2ff2915361bd906a4bdd"
+    },
+    {
+      "index": 19,
+      "descriptor": {
+        "bufferView": 21,
+        "componentType": 5121,
+        "count": 9066,
+        "type": "VEC4"
+      },
+      "viewSha256": "18269e6f9470566a92367a17d84f8c27bc62542398fcf32a67e7071b314a2bc5"
+    },
+    {
+      "index": 20,
+      "descriptor": {
+        "bufferView": 22,
+        "componentType": 5126,
+        "count": 9066,
+        "type": "VEC4"
+      },
+      "viewSha256": "25b61553932fe988d125192ce24ebf0ba7607cd788244edef47c19f7adc830e2"
+    },
+    {
+      "index": 21,
+      "descriptor": {
+        "bufferView": 23,
+        "componentType": 5123,
+        "count": 43776,
+        "type": "SCALAR"
+      },
+      "viewSha256": "9ba0fa640cc4b82c2cbaeefd5e05ffbcd0141f4fbc2d371edbb468eb4b1da2b9"
+    },
+    {
+      "index": 22,
+      "descriptor": {
+        "bufferView": 26,
+        "componentType": 5126,
+        "count": 942,
+        "max": [
+          0.045000988990068436,
+          1.6887911558151245,
+          0.09655456244945526
+        ],
+        "min": [
+          -0.046391166746616364,
+          1.6615582704544067,
+          0.07771644741296768
+        ],
+        "type": "VEC3"
+      },
+      "viewSha256": "0cce3fd07e5610a9b9b88d5f91af982490537a020184e87d0394ce656490efc4"
+    },
+    {
+      "index": 23,
+      "descriptor": {
+        "bufferView": 27,
+        "componentType": 5126,
+        "count": 942,
+        "type": "VEC3"
+      },
+      "viewSha256": "902c209f087bee9545367446d6dadcd94c6b375b18d70a90ce8721e9b9be807a"
+    },
+    {
+      "index": 24,
+      "descriptor": {
+        "bufferView": 28,
+        "componentType": 5126,
+        "count": 942,
+        "type": "VEC2"
+      },
+      "viewSha256": "163b971bd73239b7520c13182b2406cb918279b71ed61fd321009e0be4ec2c87"
+    },
+    {
+      "index": 25,
+      "descriptor": {
+        "bufferView": 29,
+        "componentType": 5126,
+        "count": 942,
+        "type": "VEC2"
+      },
+      "viewSha256": "163b971bd73239b7520c13182b2406cb918279b71ed61fd321009e0be4ec2c87"
+    },
+    {
+      "index": 26,
+      "descriptor": {
+        "bufferView": 30,
+        "componentType": 5126,
+        "count": 942,
+        "type": "VEC2"
+      },
+      "viewSha256": "163b971bd73239b7520c13182b2406cb918279b71ed61fd321009e0be4ec2c87"
+    },
+    {
+      "index": 27,
+      "descriptor": {
+        "bufferView": 31,
+        "componentType": 5126,
+        "count": 942,
+        "type": "VEC2"
+      },
+      "viewSha256": "163b971bd73239b7520c13182b2406cb918279b71ed61fd321009e0be4ec2c87"
+    },
+    {
+      "index": 28,
+      "descriptor": {
+        "bufferView": 32,
+        "componentType": 5121,
+        "count": 942,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "be050fa4a259dd44f385303ce391c2ae1dd8b56467a588b6c7f595f0d5f540ed"
+    },
+    {
+      "index": 29,
+      "descriptor": {
+        "bufferView": 33,
+        "componentType": 5123,
+        "count": 942,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "2d7d784f2b8ce1cf0c1e7884d3be5aca28a2b1d1c766961cc7ab22d693f6ae1e"
+    },
+    {
+      "index": 30,
+      "descriptor": {
+        "bufferView": 34,
+        "componentType": 5121,
+        "count": 942,
+        "type": "VEC4"
+      },
+      "viewSha256": "e9a266e353f0dd71997aea3270ed432f00c2033f1a438341b36cb6e472d04bc6"
+    },
+    {
+      "index": 31,
+      "descriptor": {
+        "bufferView": 35,
+        "componentType": 5126,
+        "count": 942,
+        "type": "VEC4"
+      },
+      "viewSha256": "b00217bcf8f5d3e8cd1c37998563b1f000039af4f24df08c33781c0cd6870ffc"
+    },
+    {
+      "index": 32,
+      "descriptor": {
+        "bufferView": 36,
+        "componentType": 5123,
+        "count": 5376,
+        "type": "SCALAR"
+      },
+      "viewSha256": "67ef132e75612db064dac56d17ccc21f7143cf1f36b56032a44416bcf19ec0f0"
+    },
+    {
+      "index": 33,
+      "descriptor": {
+        "bufferView": 39,
+        "componentType": 5126,
+        "count": 2630,
+        "max": [
+          0.0463077649474144,
+          1.643813133239746,
+          0.10160523653030396
+        ],
+        "min": [
+          -0.043649740517139435,
+          1.5777921676635742,
+          -0.003278684336692095
+        ],
+        "type": "VEC3"
+      },
+      "viewSha256": "23c27783d31919eba7a65136918ef05249a17850207f9b8182024600cdf140f0"
+    },
+    {
+      "index": 34,
+      "descriptor": {
+        "bufferView": 40,
+        "componentType": 5126,
+        "count": 2630,
+        "type": "VEC3"
+      },
+      "viewSha256": "a7339ba1cd2e781129b1e71d3e976ee6af3f2ba76c5d29b372ae440ca16628cc"
+    },
+    {
+      "index": 35,
+      "descriptor": {
+        "bufferView": 41,
+        "componentType": 5126,
+        "count": 2630,
+        "type": "VEC2"
+      },
+      "viewSha256": "ab41be201b7320f53c9b38945b2fda8dfdc2287dcee3082bdf55cfdcb0c13344"
+    },
+    {
+      "index": 36,
+      "descriptor": {
+        "bufferView": 42,
+        "componentType": 5126,
+        "count": 2630,
+        "type": "VEC2"
+      },
+      "viewSha256": "39ae9c1acedb092de4d4028fccefc6fbb31d8b7128282f3d0c8102adb7646060"
+    },
+    {
+      "index": 37,
+      "descriptor": {
+        "bufferView": 43,
+        "componentType": 5126,
+        "count": 2630,
+        "type": "VEC2"
+      },
+      "viewSha256": "39ae9c1acedb092de4d4028fccefc6fbb31d8b7128282f3d0c8102adb7646060"
+    },
+    {
+      "index": 38,
+      "descriptor": {
+        "bufferView": 44,
+        "componentType": 5126,
+        "count": 2630,
+        "type": "VEC2"
+      },
+      "viewSha256": "39ae9c1acedb092de4d4028fccefc6fbb31d8b7128282f3d0c8102adb7646060"
+    },
+    {
+      "index": 39,
+      "descriptor": {
+        "bufferView": 45,
+        "componentType": 5121,
+        "count": 2630,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "4aa59c0fa750da38917fb551b29dbda42e98b7b1999e76847f3e01fa1f6ed492"
+    },
+    {
+      "index": 40,
+      "descriptor": {
+        "bufferView": 46,
+        "componentType": 5123,
+        "count": 2630,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "c50c4f0eaba33e075b3ecb827e45615d34e8e6887d4f985c940906a4e4cf5db0"
+    },
+    {
+      "index": 41,
+      "descriptor": {
+        "bufferView": 47,
+        "componentType": 5121,
+        "count": 2630,
+        "type": "VEC4"
+      },
+      "viewSha256": "6f709e009283964e4a321f5f17c1d968fa77329749df4f2ffce3c773bc10c1b2"
+    },
+    {
+      "index": 42,
+      "descriptor": {
+        "bufferView": 48,
+        "componentType": 5126,
+        "count": 2630,
+        "type": "VEC4"
+      },
+      "viewSha256": "51137b56013d6a8bfed8874f0e0382f073bb2468728fa245e4e01e69d58ef2b2"
+    },
+    {
+      "index": 43,
+      "descriptor": {
+        "bufferView": 49,
+        "componentType": 5123,
+        "count": 15138,
+        "type": "SCALAR"
+      },
+      "viewSha256": "964b4f25a97f06525207afed5912b1cef34eb7e432d2513b6c785532368fb6a1"
+    },
+    {
+      "index": 44,
+      "descriptor": {
+        "bufferView": 52,
+        "componentType": 5126,
+        "count": 7552,
+        "max": [
+          0.05029124766588211,
+          1.6834874153137207,
+          0.10664594918489456
+        ],
+        "min": [
+          -0.05136434733867645,
+          1.6650978326797485,
+          0.0898861512541771
+        ],
+        "type": "VEC3"
+      },
+      "viewSha256": "0da9c3796f524ac689c142aae92d00db620c242761bac37fb133e9ade758aaf0"
+    },
+    {
+      "index": 45,
+      "descriptor": {
+        "bufferView": 53,
+        "componentType": 5126,
+        "count": 7552,
+        "type": "VEC3"
+      },
+      "viewSha256": "4adb8fef733baf6b3c3051ed96d4c18ea9ffbac2e86ba720c514d1466a62a51b"
+    },
+    {
+      "index": 46,
+      "descriptor": {
+        "bufferView": 54,
+        "componentType": 5126,
+        "count": 7552,
+        "type": "VEC2"
+      },
+      "viewSha256": "24419ee221d9d0e1b228add56293857be2ed79d5a85b7ef5873b586416043c91"
+    },
+    {
+      "index": 47,
+      "descriptor": {
+        "bufferView": 55,
+        "componentType": 5126,
+        "count": 7552,
+        "type": "VEC2"
+      },
+      "viewSha256": "08ad6bf7a19de376468bab7df3460eff940efab5c2fde595a9bb44b2d7590cd2"
+    },
+    {
+      "index": 48,
+      "descriptor": {
+        "bufferView": 56,
+        "componentType": 5126,
+        "count": 7552,
+        "type": "VEC2"
+      },
+      "viewSha256": "08ad6bf7a19de376468bab7df3460eff940efab5c2fde595a9bb44b2d7590cd2"
+    },
+    {
+      "index": 49,
+      "descriptor": {
+        "bufferView": 57,
+        "componentType": 5126,
+        "count": 7552,
+        "type": "VEC2"
+      },
+      "viewSha256": "08ad6bf7a19de376468bab7df3460eff940efab5c2fde595a9bb44b2d7590cd2"
+    },
+    {
+      "index": 50,
+      "descriptor": {
+        "bufferView": 58,
+        "componentType": 5121,
+        "count": 7552,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "878789313c8b4f01a27d84fd0c1a5f41f646c44c0475fdd5b51ede620dfb4a68"
+    },
+    {
+      "index": 51,
+      "descriptor": {
+        "bufferView": 59,
+        "componentType": 5123,
+        "count": 7552,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "9bcd4ebc5022da5dfdf5f8d623b46ae40bb242daf70a3198cdc93b6f21442bdc"
+    },
+    {
+      "index": 52,
+      "descriptor": {
+        "bufferView": 60,
+        "componentType": 5121,
+        "count": 7552,
+        "type": "VEC4"
+      },
+      "viewSha256": "1d997e415ce95b3c5647375b64b28773e6bb07e6624631279fefd1f23342a28b"
+    },
+    {
+      "index": 53,
+      "descriptor": {
+        "bufferView": 61,
+        "componentType": 5126,
+        "count": 7552,
+        "type": "VEC4"
+      },
+      "viewSha256": "9ca83dde0b4aa543002c04d139e767e1f317d319eb6436a6f5f225ab8a661ae1"
+    },
+    {
+      "index": 54,
+      "descriptor": {
+        "bufferView": 62,
+        "componentType": 5123,
+        "count": 25488,
+        "type": "SCALAR"
+      },
+      "viewSha256": "0d48391a7d3d970b1fc86d4adf67208bb3021848fa48baeea042c84948984e28"
+    },
+    {
+      "index": 55,
+      "descriptor": {
+        "bufferView": 64,
+        "componentType": 5126,
+        "count": 232,
+        "max": [
+          0.04484748840332031,
+          1.6805254220962524,
+          0.09710965305566788
+        ],
+        "min": [
+          -0.04620496556162834,
+          1.668606162071228,
+          0.08958175033330917
+        ],
+        "type": "VEC3"
+      },
+      "viewSha256": "d3e7ac79a14491fe6d6cf9a1252d92583eb007974a7a73e1f3cde48748aebfd2"
+    },
+    {
+      "index": 56,
+      "descriptor": {
+        "bufferView": 65,
+        "componentType": 5126,
+        "count": 232,
+        "type": "VEC3"
+      },
+      "viewSha256": "88799319aa777103b66c5ab8bbca8fee40028d5b4580e9b14c2d7876c129675c"
+    },
+    {
+      "index": 57,
+      "descriptor": {
+        "bufferView": 66,
+        "componentType": 5126,
+        "count": 232,
+        "type": "VEC2"
+      },
+      "viewSha256": "512f468c544e51b1a595373b2a6dd05ca4a8a7b6ab9928f5fd2b06e318ce5084"
+    },
+    {
+      "index": 58,
+      "descriptor": {
+        "bufferView": 67,
+        "componentType": 5126,
+        "count": 232,
+        "type": "VEC2"
+      },
+      "viewSha256": "dee0c1b18794ef74f912f7251cd4aab4b89351e13ed9ccf2269f01ea01b7fa17"
+    },
+    {
+      "index": 59,
+      "descriptor": {
+        "bufferView": 68,
+        "componentType": 5126,
+        "count": 232,
+        "type": "VEC2"
+      },
+      "viewSha256": "dee0c1b18794ef74f912f7251cd4aab4b89351e13ed9ccf2269f01ea01b7fa17"
+    },
+    {
+      "index": 60,
+      "descriptor": {
+        "bufferView": 69,
+        "componentType": 5126,
+        "count": 232,
+        "type": "VEC2"
+      },
+      "viewSha256": "dee0c1b18794ef74f912f7251cd4aab4b89351e13ed9ccf2269f01ea01b7fa17"
+    },
+    {
+      "index": 61,
+      "descriptor": {
+        "bufferView": 70,
+        "componentType": 5121,
+        "count": 232,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "1aa77057b9281d9767a286af73f83f3f630f1b34e5379c703624b06888992a9e"
+    },
+    {
+      "index": 62,
+      "descriptor": {
+        "bufferView": 71,
+        "componentType": 5123,
+        "count": 232,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "945a30b9eaae2b111aab1a821c117a9a76384842b742160d64cc9bdc958a7d4a"
+    },
+    {
+      "index": 63,
+      "descriptor": {
+        "bufferView": 72,
+        "componentType": 5121,
+        "count": 232,
+        "type": "VEC4"
+      },
+      "viewSha256": "2713449d92da5e434cda58710e2596ce1bcfa5c9e2a3121f8a835be104fcb0f1"
+    },
+    {
+      "index": 64,
+      "descriptor": {
+        "bufferView": 73,
+        "componentType": 5126,
+        "count": 232,
+        "type": "VEC4"
+      },
+      "viewSha256": "9a2c7121695d387afac3a101d2822adaaaec2f28998a88dc7a0c7dde1fff1cd9"
+    },
+    {
+      "index": 65,
+      "descriptor": {
+        "bufferView": 74,
+        "componentType": 5123,
+        "count": 1176,
+        "type": "SCALAR"
+      },
+      "viewSha256": "5ebf9808d2103d170e58633b64c1de6f65e5261566279e5d60e255b758ac0bdc"
+    },
+    {
+      "index": 66,
+      "descriptor": {
+        "bufferView": 76,
+        "componentType": 5126,
+        "count": 11855,
+        "max": [
+          0.12510450184345245,
+          1.7982739210128784,
+          0.0919947475194931
+        ],
+        "min": [
+          -0.12316461652517319,
+          1.5672911405563354,
+          -0.12628914415836334
+        ],
+        "type": "VEC3"
+      },
+      "viewSha256": "012793360a5843b73398b35b0b382da48e325d04611ea5758fef80743c498c4c"
+    },
+    {
+      "index": 67,
+      "descriptor": {
+        "bufferView": 77,
+        "componentType": 5126,
+        "count": 11855,
+        "type": "VEC3"
+      },
+      "viewSha256": "c83464e4a573237735cd37a1c090d27381501490959f90fe2c71d25b05c281ad"
+    },
+    {
+      "index": 68,
+      "descriptor": {
+        "bufferView": 78,
+        "componentType": 5126,
+        "count": 11855,
+        "type": "VEC2"
+      },
+      "viewSha256": "413c91af9bc1876af58f310720f2ab684a99a4617355accf6d041d3c9f6396b3"
+    },
+    {
+      "index": 69,
+      "descriptor": {
+        "bufferView": 79,
+        "componentType": 5126,
+        "count": 11855,
+        "type": "VEC2"
+      },
+      "viewSha256": "535eb4539d7eb88b4ba2eadc38b194ac93a44b6efb0d03a35d06de675e48818b"
+    },
+    {
+      "index": 70,
+      "descriptor": {
+        "bufferView": 80,
+        "componentType": 5126,
+        "count": 11855,
+        "type": "VEC2"
+      },
+      "viewSha256": "535eb4539d7eb88b4ba2eadc38b194ac93a44b6efb0d03a35d06de675e48818b"
+    },
+    {
+      "index": 71,
+      "descriptor": {
+        "bufferView": 81,
+        "componentType": 5126,
+        "count": 11855,
+        "type": "VEC2"
+      },
+      "viewSha256": "535eb4539d7eb88b4ba2eadc38b194ac93a44b6efb0d03a35d06de675e48818b"
+    },
+    {
+      "index": 72,
+      "descriptor": {
+        "bufferView": 82,
+        "componentType": 5121,
+        "count": 11855,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "777881df4faad8213ec53310ab8f36e8dc163f1dfc1dc3633a8a8d843f42b543"
+    },
+    {
+      "index": 73,
+      "descriptor": {
+        "bufferView": 83,
+        "componentType": 5123,
+        "count": 11855,
+        "normalized": true,
+        "type": "VEC4"
+      },
+      "viewSha256": "b8cb1ed1db9c6523745aa675deec0f3c56d28f511fa6b1a433ea89e0942de69a"
+    },
+    {
+      "index": 74,
+      "descriptor": {
+        "bufferView": 84,
+        "componentType": 5121,
+        "count": 11855,
+        "type": "VEC4"
+      },
+      "viewSha256": "b812f4d214bad5a96baf4d90d0924d8fcf971aaaf581218667e6485bde05788f"
+    },
+    {
+      "index": 75,
+      "descriptor": {
+        "bufferView": 85,
+        "componentType": 5126,
+        "count": 11855,
+        "type": "VEC4"
+      },
+      "viewSha256": "0aed6edb76d612d264dc6cf038d57b2d204905ecda255d93ba5f17452391de3b"
+    },
+    {
+      "index": 76,
+      "descriptor": {
+        "bufferView": 86,
+        "componentType": 5123,
+        "count": 42456,
+        "type": "SCALAR"
+      },
+      "viewSha256": "9abcb528007542564e31fbb9843a02a3f90e50ace4f8b2e0d67324eb0362c384"
+    },
+    {
+      "index": 77,
+      "descriptor": {
+        "bufferView": 89,
+        "componentType": 5126,
+        "count": 225,
+        "type": "MAT4"
+      },
+      "viewSha256": "266a9226f245e1e292c296861fb367a802f4d137fca398acb185d3ae70c5ccb2"
+    }
+  ],
+  "sourceArchive": "D:/开源项目/Actorcore-Blender-0913-340614.zip",
+  "archiveMember": "Motion/stand-talk-378997.fbx"
+}

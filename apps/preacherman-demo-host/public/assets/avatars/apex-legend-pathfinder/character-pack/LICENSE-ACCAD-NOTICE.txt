@@ -1,0 +1,5 @@
+Open Motion Project by ACCAD / The Ohio State University.
+Official source: https://accad.osu.edu/research/motion-lab/mocap-system-and-data
+License: Creative Commons Attribution 3.0 Unported, https://creativecommons.org/licenses/by/3.0/
+Selected original BVH files extracted unchanged from Male1_bvh.zip and Male2_bvh.zip. No motion curve, skeleton or timing modifications. All source archives remain in downloads.
+This motion-data license does not cover Pathfinder character model, textures or other separately sourced animations.

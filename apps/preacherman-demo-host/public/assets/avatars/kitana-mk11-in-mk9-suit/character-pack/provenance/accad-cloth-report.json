@@ -1,0 +1,103 @@
+{
+  "passed": true,
+  "checkedAtUTC": "2026-10-03T19:54:03.743762+00:00",
+  "sourceAsset": "D:\\preacherman\\output\\kitana-ai-companion-v2-20261004\\Kitana-speech-suite.glb",
+  "sourceSHA256": "629a4f775fd17fca1e3a989613454ec0cf4ab23a48f95e9ccfe66279ab4bd1cb",
+  "asset": "D:\\preacherman\\output\\kitana-ai-companion-v2-20261004\\Kitana-speech-suite-cloth.glb",
+  "assetSHA256": "80d3b91c8bbcd1abee83814b26a686eb49ee7d65625ce90d03afdebc52d54f33",
+  "method": "Endpoint-padded damped spring driven only by captured cloth-root acceleration, with gravity drape and smooth clamped-edge leg-capsule clearance. One-shot body motion is not forced to loop. No generated wind, oscillators or micro-sway.",
+  "notCapturedCloth": "Secondary cloth simulation; input composed body channels remain unchanged. The new recorded female conversation clip is one-shot; body endpoints are retained and padded with held poses for filtering.",
+  "sourceBodyChannelsPreservedExactly": true,
+  "originalSixteenAnimationsPreservedExactly": true,
+  "originalBinaryPrefixPreserved": true,
+  "originalBinaryBytes": 72675800,
+  "selectedClips": [
+    "kitana.talk.accad.female_conversation_01.v1",
+    "kitana.talk.accad.female_conversation_02.v1",
+    "kitana.talk.accad.female_conversation_03.v1"
+  ],
+  "fps": 60,
+  "inertiaGain": 1.0,
+  "minimumAcceptedLegCapsuleClearanceMeters": 0.002,
+  "limitations": [
+    "Clearance uses a 10 cm cloth-width approximation and leg capsules, not evaluated cloth/body triangles.",
+    "No loop closure is required or imposed for this conversation take; 1.2-second runtime crossfades handle entry and return."
+  ],
+  "clips": [
+    {
+      "clip": "kitana.talk.accad.female_conversation_01.v1",
+      "frames": 521,
+      "durationSeconds": 8.666666984558105,
+      "maximumLocalTranslationErrorMeters": 2.300739288330078e-05,
+      "sourceBodyEndpointPositionDifferenceMeters": 0.01570442194354685,
+      "clothRootMotionRangeMeters": [
+        0.004726381157524884,
+        0.013869427144527435,
+        0.002154231071472168
+      ],
+      "clothTipWorldMotionRangeMeters": [
+        0.00417661655228585,
+        0.01557573676109314,
+        0.0021512210369110107
+      ],
+      "clothTipEndpointDifferenceMetricMetersPerSecond": 0.9577373535784919,
+      "maximumInertiaAnglesRadians": [
+        0.0012819783356643004,
+        0.004539784373772769
+      ],
+      "minimumLegCapsuleClearanceMeters": 0.09056899964198535,
+      "maximumContactAvoidanceSlope": 0.0,
+      "generatedWindOrMicroSway": false
+    },
+    {
+      "clip": "kitana.talk.accad.female_conversation_02.v1",
+      "frames": 311,
+      "durationSeconds": 5.166666507720947,
+      "maximumLocalTranslationErrorMeters": 2.300739288330078e-05,
+      "sourceBodyEndpointPositionDifferenceMeters": 0.0018288999244468716,
+      "clothRootMotionRangeMeters": [
+        0.004726381157524884,
+        0.013869427144527435,
+        0.002154231071472168
+      ],
+      "clothTipWorldMotionRangeMeters": [
+        0.00417661655228585,
+        0.015576094388961792,
+        0.0021510720252990723
+      ],
+      "clothTipEndpointDifferenceMetricMetersPerSecond": 0.15496917566801166,
+      "maximumInertiaAnglesRadians": [
+        0.0012819798271591202,
+        0.004539780696724344
+      ],
+      "minimumLegCapsuleClearanceMeters": 0.09056899964198535,
+      "maximumContactAvoidanceSlope": 0.0,
+      "generatedWindOrMicroSway": false
+    },
+    {
+      "clip": "kitana.talk.accad.female_conversation_03.v1",
+      "frames": 501,
+      "durationSeconds": 8.333333015441895,
+      "maximumLocalTranslationErrorMeters": 2.300739288330078e-05,
+      "sourceBodyEndpointPositionDifferenceMeters": 0.014376735797647278,
+      "clothRootMotionRangeMeters": [
+        0.004726381157524884,
+        0.013869427144527435,
+        0.002154231071472168
+      ],
+      "clothTipWorldMotionRangeMeters": [
+        0.00417661655228585,
+        0.015575781464576721,
+        0.0021512210369110107
+      ],
+      "clothTipEndpointDifferenceMetricMetersPerSecond": 0.8601963364010455,
+      "maximumInertiaAnglesRadians": [
+        0.0012819783394849556,
+        0.00453978402004613
+      ],
+      "minimumLegCapsuleClearanceMeters": 0.09056899964198535,
+      "maximumContactAvoidanceSlope": 0.0,
+      "generatedWindOrMicroSway": false
+    }
+  ]
+}

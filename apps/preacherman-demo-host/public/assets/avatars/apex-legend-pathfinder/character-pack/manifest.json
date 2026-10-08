@@ -1,0 +1,90 @@
+{
+  "format": "preacherman.character-kit",
+  "schemaVersion": 1,
+  "version": "1.2.1",
+  "character": {
+    "id": "apex-legend-pathfinder",
+    "name": "Pathfinder"
+  },
+  "model": {
+    "path": "assets/avatars/apex-legend-pathfinder/apex-legend-pathfinder-runtime.glb",
+    "sha256": "50c081c9f40fee69ae2deb48060a73720f8874b1a150332c28768005d112a50f",
+    "boneCount": 145,
+    "textureCount": 11,
+    "animationCount": 9,
+    "selfContained": true
+  },
+  "editableSource": "authoring/Pathfinder-screen-expressions.blend",
+  "entryPoint": "runtime/PathfinderAnimationAdapter.mjs",
+  "zipImporter": "runtime/import-kit.mjs",
+  "controller": "runtime/pathfinder-player.mjs",
+  "profile": "avatar-profile.json",
+  "behaviour": {
+    "completeIdleSeconds": 24,
+    "randomEventDelaySeconds": [
+      30,
+      55
+    ],
+    "randomEvents": [
+      "male swing arms",
+      "male look around",
+      "original Happy Idle"
+    ],
+    "avoidImmediateEventRepeats": true,
+    "originalHappyIdlePreserved": true,
+    "lookPlaybackRate": 0.65,
+    "safeEventWindowsSeconds": [
+      [
+        0,
+        4
+      ],
+      [
+        20,
+        24
+      ]
+    ],
+    "eventFadeSeconds": 1,
+    "footContactRuntimeIncluded": true,
+    "happyIdleFadeSeconds": 0.65,
+    "speakingRandomPool": [
+      "conversation",
+      "chatting",
+      "chatting02"
+    ],
+    "avoidImmediateSpeechRepeats": true,
+    "speakingFadeSeconds": 1.3,
+    "speakingEndReturnsToIdle": true,
+    "speechIdleTransitionHandClearance": {
+      "maximumOutwardMeters": 0.065,
+      "maximumForwardMeters": 0.03,
+      "envelope": "4 * speakingWeight * (1 - speakingWeight); zero endpoint displacement"
+    },
+    "screenExpressions": {
+      "count": 12,
+      "source": "Existing embedded Pathfinder game atlas",
+      "atlasPixelsModified": false,
+      "separateFromBodyAnimation": true,
+      "crossFadeSeconds": 0.24,
+      "manualOverride": true,
+      "AIEmotionAPI": true,
+      "audioLevelAPI": true,
+      "stateBindings": true,
+      "AIReplyProtocol": {
+        "choiceMadeBy": "AI model using conversation context, reply attitude and allowlisted expression IDs",
+        "schemaModule": "runtime/ai-reply.mjs",
+        "heldUntilReplyCompletion": true,
+        "staleTurnCallbacksIgnored": true,
+        "unknownExpressionFallback": "happy",
+        "providerAlreadyConnected": false
+      }
+    }
+  },
+  "notIncluded": [
+    "human face morphs or jaw lip sync",
+    "AI provider/login/voice service"
+  ],
+  "source": "ACCAD Male 1 + Rokoko Everyday Idles real mocap (Sam Lazarus credit; actor gender not explicitly labeled by official page)",
+  "appInstalled": false,
+  "desktopModified": false,
+  "existingAppZIPImportUIInstalled": false
+}

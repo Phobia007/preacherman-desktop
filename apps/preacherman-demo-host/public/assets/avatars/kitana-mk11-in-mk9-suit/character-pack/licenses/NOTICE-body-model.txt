@@ -1,0 +1,52 @@
+ACCAD Female 1 / Open Motion Project
+Attribution: Open Motion Project by ACCAD / The Ohio State University.
+Source: https://accad.osu.edu/research/motion-lab/mocap-system-and-data
+Original archive: https://accad.osu.edu/sites/accad/osu.edu/files/Female1_bvh.zip
+Motion list: https://accad.osu.edu/sites/accad/osu.edu/files/ACCAD_mocap_Data_Female_1.pdf
+License for ACCAD motion data: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+https://creativecommons.org/licenses/by/3.0/
+Legal text: https://creativecommons.org/licenses/by/3.0/legalcode
+Selected motions: Female1_A01_Stand.bvh and Female1_A02_Sway.bvh.
+Changes: retargeted and scaled to Kitana; character-specific foot contact and arm/hand clearance fit; interpolation to 60 FPS; short overlap for looping; body-driven secondary cloth animation. Finger articulation comes from the existing character. The source BVH files are unmodified. No endorsement by ACCAD or OSU is implied.
+Downloaded and adapted 2026-10-01/02. See metadata/accad-retarget-manifest.json and checksums.json for source and output hashes.
+
+Pre-existing content retained from this project's V4 export
+100STYLE: The 100STYLE Dataset — Ian Mason; related work by Ian Mason, Sebastian Starke and Taku Komura. CC BY 4.0. https://www.ianxmason.com/100style/ and https://creativecommons.org/licenses/by/4.0/ . Prior retargeted/looped/combined derivatives are preserved here. See source-credits/100STYLE-source-info.json and the historical V4 notes.
+CMU: Carnegie Mellon University Graphics Lab Motion Capture Database, Subject 139, Trial 03, Looking Around. https://mocap.cs.cmu.edu/search.php?subjectnumber=139 . BVH conversion by Bruce Hahne / Cgspeed, MotionBuilder-friendly 2010 release. See source-credits/Cgspeed-MotionBuilder2010-READMEFIRST.txt, USAGE RIGHTS. This content is not relicensed as CC0 or CC BY. Data collection supported by NSF EIA-0196217.
+Kitana character/model/textures and existing ActorCore speech motion retain their existing rights and project provenance. See source-credits/original-export-manifest.json and upstream-motion-provenance.json. The ACCAD license does not grant new rights to these separate assets.
+
+本包新增的 ACCAD 身体动捕可按 CC BY 3.0 使用与改编，须保留署名、许可链接并说明改动。该许可不覆盖 Kitana 模型、贴图、原有 ActorCore 动作以及其他独立来源。
+
+Suite revision — 2026-10-02
+The captured Stand/Sway derivatives are arranged into one 24-second loop using three-second quintic transitions. A shared Sway foot position/orientation is fitted with leg IK; captured knee planes and source body timing are preserved in the idle takes. Geometry-based hand clearance and twist distribution are fitted to the new shared support. Source-driven secondary cloth is baked over the whole loop, without generated wind or body gestures.
+An additional speech-compatible action retains the project's existing speech upper-body animation and adapts its lower body to quiet female Stand motion, 11 Stand cycles over the 28.133-second speech take. Quiet Stand is cleaned as described below; the other ten input animations remain unchanged. CMU head turns and speech are scheduled randomly by the included JS player and are not fixed events inside each loop.
+These adaptations do not change the distinct source licenses described above.
+V2 motion cleanup: quiet Stand local quaternions and pelvis translations are filtered with a centered periodic Gaussian (sigma 0.14 seconds) before leg contact constraints. Quiet support uses a five-degree minimum knee bend and a smooth reach-height constraint to avoid near-straight IK amplification. Compatible speech uses the same cleaned lower-body source; secondary cloth is rebaked.
+V2 head pacing: the original three CMU animation tracks in GLB/Blender remain at recorded timing. The included runtime player uses 0.55 playback speed (short clips are at least two displayed seconds), actual-time fade envelopes, and 18–35 second random delays. To reproduce this rhythm after importing GLB elsewhere, use the included HeadGestureLayer configuration. No new head-motion trajectory was authored.
+
+
+V3 recorded stretch — 2026-10-02
+Credit: Open Motion Project by ACCAD / The Ohio State University, Female 1.
+Official source: https://accad.osu.edu/research/motion-lab/mocap-system-and-data
+Source BVH: Female1_D2_Wait.bvh, unmodified source file and official Female1 ZIP included.
+License for this ACCAD motion data: Creative Commons Attribution 3.0, https://creativecommons.org/licenses/by/3.0/ . The license does not apply to Kitana model/texture rights or differently licensed motion sources.
+The source upper-body performance is the continuous zero-based frame 765–915 segment (approximately 25.5–30.5 seconds): arms raise above the head, stretch, then lower. It is resampled to 354 frames at 60 FPS, approximately 0.85 source speed, duration 5.883333 seconds. No new body-gesture trajectory is generated.
+Retargeting uses Kitana anatomical calibration and skin-bind correction. Cleaned V2 female Stand lower-body support is used as two complete cycles to retain planted feet; hands/fingers use the existing Kitana articulation and geometry-based clearance fitting. The maximum extra outward hand fit is approximately 7.55 cm. Secondary cloth is simulated from the composed body's inertia and gravity; it is not recorded cloth capture.
+The previous thirteen clips, original scene tables, original accessor/view prefix and original binary prefix are exactly preserved. The new full-body clip is kitana.gesture.accad.female_stretch.v1, a single non-looping event. The JS player schedules it occasionally in a body-event pool with existing speech and excludes overlapping head/body events. The occurrence timing is not baked into the 24-second idle loop.
+
+V6 replacement recorded female hand gesture — 2026-10-04
+Credit: Open Motion Project by ACCAD / The Ohio State University, Female 1.
+Official data: https://accad.osu.edu/research/motion-lab/mocap-system-and-data
+Motion-data license: CC BY 3.0, https://creativecommons.org/licenses/by/3.0/ . Kitana model, textures and other existing motions retain their separate original rights.
+Source: Female1_D2_Wait.bvh, zero-based frames 505–606, 16.8333–20.2000 seconds. Continuous original motion at original speed, resampled from 30 to 60 FPS. Actual movement is a chest-height raise, brief hand movement and lowering; it does not include touching the head or hair. The earlier candidate name touch_head was a provisional description; the original BVH channels were not edited to create a touch.
+New action: kitana.gesture.accad.female_hand_gesture.v1, 203 samples, 3.3667 seconds, one-shot. Recorded upper body is retargeted relative to the pelvis; wrist vectors and elbow planes are adapted to target arm length. Cleaned V3 female Stand support is retained, with thigh clearance and body-driven secondary cloth. Existing Kitana finger articulation is retained; this source has no finger mocap. Runtime crossfades are 0.8 seconds in and out.
+The former hands-on-hips action is absent from the new GLB, Blender project, player event pool and preview controls. This package is built directly from V3 and contains its fourteen unchanged animation definitions and original binary prefix. Archived V5 files remain available separately. Original random speech, stretch and paced head gestures remain, mutually exclusive with the new body event. Scheduling is in JavaScript, not baked into the base idle animation.
+
+V7 recorded female head/neck tilt — 2026-10-04
+Credit: Open Motion Project by ACCAD / The Ohio State University, Female 1.
+Official data: https://accad.osu.edu/research/motion-lab/mocap-system-and-data
+Motion-data license: CC BY 3.0, https://creativecommons.org/licenses/by/3.0/ . Model, textures and previous motions retain their separate original rights.
+Source: Female1_D2_Wait.bvh, continuous zero-based frames 510–590 (17.0–19.6666 seconds). Raw BVH channel rows preserved in source-clips. Resampled to 60 FPS and uniformly played at approximately two-thirds recorded speed: four seconds, 241 samples. New action kitana.gesture.accad.female_head_tilt.v1.
+Only the three calibrated local neck/head joint rotations are imported. The original quiet female Stand body, arm/finger articulation and foot support are retained; no captured shoulder/back bend is introduced. Source facial/finger motion is not provided. Cloth uses secondary body-driven inertia from the retained Stand support. No procedural head gesture trajectory or amplitude scaling is added. Runtime entry/exit blends each last one second.
+All fifteen previous V6 animations, original descriptors, accessors and binary prefix remain unchanged; the former hands-on-hips action remains absent. Tilt is a separate random event, mutually exclusive with the existing head-look layer, speech, stretch and hand gesture. Runtime scheduling is supplied in viewer-source, not baked into the base idle loop.
+The initially auditioned Wait frames 60–195 contain a deep bow and were excluded from this delivery. The replacement segment uses a small captured head/neck movement with the body held in existing relaxed Stand support.

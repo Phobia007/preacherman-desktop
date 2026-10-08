@@ -326,5 +326,5 @@ test("runtime animation disposal survives the StrictMode effect replay", async (
 
   assert.match(source, /disposeTimer = useRef/);
   assert.match(source, /clearTimeout\(disposeTimer\.current\)/);
-  assert.match(source, /setTimeout\(\(\) => controller\.dispose\(\), 0\)/);
+  assert.match(source, /setTimeout\(\(\) => afterCompilation\(\(\) => controller\.dispose\(\)\), 0\)/);
 });

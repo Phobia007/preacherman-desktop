@@ -42,6 +42,7 @@ export function InteractiveAvatarViewport({
   quality = "balanced",
   resetKey = 0,
   jawOpen = 0,
+  motionState,
   environment = "transparent",
   isolateCompanion = false,
   motionSource,
@@ -154,6 +155,7 @@ export function InteractiveAvatarViewport({
               pose={pose}
               resetKey={resetKey}
               jawOpen={jawOpen}
+              motionState={motionState}
               environment={environment}
               isolateCompanion={isolateCompanion}
               motionSource={motionSource}

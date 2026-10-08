@@ -1,0 +1,262 @@
+{
+  "assets/avatars/kitana-mk11-in-mk9-suit/kitana-mk11-in-mk9-suit-runtime.glb": {
+    "bytes": 75810740,
+    "sha256": "3c2c4d305e73dd84b59e69469b6518815c675e08bb8a3313a4d95bbeb14e93c0"
+  },
+  "authoring/Kitana-complete.blend": {
+    "bytes": 141222382,
+    "sha256": "d6f76aa78a03cf9b9be15c0dac872e0eb9b3a9e09a8d7ece9366f7370d7aaab0"
+  },
+  "avatar-profile.json": {
+    "bytes": 4676,
+    "sha256": "a2f282a1b238656defebcb08e5b3b7d439b046c98a0c488a1e91c27b76bcf00a"
+  },
+  "expressions/arkit-channel-order.json": {
+    "bytes": 1045,
+    "sha256": "adba7fd48b4fe956b0168df12d3ee1c7b912a7530cb35dc976e2740656830d15"
+  },
+  "expressions/captured-face-library.json": {
+    "bytes": 472309,
+    "sha256": "ae157d6bc96d229b631e328565ab919f2a195d3fa3bd6eb8d89144ea4d3c5934"
+  },
+  "expressions/raw/attentive.npy": {
+    "bytes": 43784,
+    "sha256": "9d43a125b57a08a20b965aeeae0c2fbc9291af83ef384bf260e8901126d8ca62"
+  },
+  "expressions/raw/curious_question.npy": {
+    "bytes": 58064,
+    "sha256": "9b514141e895734e6a7519a831f96a71f92f0d6982b5179ff01a08dc2e5ce308"
+  },
+  "expressions/raw/friendly_smile.npy": {
+    "bytes": 59288,
+    "sha256": "853d4f4a9ee110410d03d83e5c70fcb329110342ad93f66406ef30f29f0a5a6e"
+  },
+  "expressions/raw/gentle_smile.npy": {
+    "bytes": 66632,
+    "sha256": "484f7bde7a93ee077906652e2770bad59afb264a2f4a50099c4ee7296f57a8ec"
+  },
+  "expressions/raw/soft_concern.npy": {
+    "bytes": 58064,
+    "sha256": "b7c547556501f6da603c65963832785d769f299b98af795f0b5ab7271577bb86"
+  },
+  "expressions/raw/soft_surprise.npy": {
+    "bytes": 99680,
+    "sha256": "45f86a11e3f314bb290a8d84126359576ea3e7f5e25f52fe26f4662b91cb3a7d"
+  },
+  "integration/ai-expression-contract.json": {
+    "bytes": 2663,
+    "sha256": "068ea62e4c1ce9694928baf3a3b24b0ba2713bc357a28b0e4a890f897a13f72d"
+  },
+  "integration/import-example.mjs": {
+    "bytes": 701,
+    "sha256": "481bb0ddfb30d161bff27ae79aa608d34732ac56eccdc76e0135ecffb6eb1d9d"
+  },
+  "integration/Preacherman-integration.mjs": {
+    "bytes": 1223,
+    "sha256": "eb18b1c10674cb8641673d6b540d4ba9807a67a56be65f0b2cbf32e02643122e"
+  },
+  "integration/接入当前APP.md": {
+    "bytes": 4400,
+    "sha256": "10ae72cedede792cbffd3ba5d2bf0276933f468d8e14a23bbf12c31118a3a484"
+  },
+  "licenses/body-source-credits/100STYLE-source-info.json": {
+    "bytes": 3800,
+    "sha256": "5ee150520628a80f72bbe2cdb3ec4f4758a032901147b796855e39654e6a6b7c"
+  },
+  "licenses/body-source-credits/accad-original-retarget-manifest.json": {
+    "bytes": 20948,
+    "sha256": "26358e2f56e93b4f34de321e3fd504e4ccd305b5971f51634c82179cc440a97d"
+  },
+  "licenses/body-source-credits/Cgspeed-MotionBuilder2010-READMEFIRST.txt": {
+    "bytes": 13248,
+    "sha256": "8e6fe2e640b3728ef2e43e722cb5ae9cdf0010028c0517c4226ed165f9037930"
+  },
+  "licenses/body-source-credits/cmu-bvh-selected-provenance.json": {
+    "bytes": 3989,
+    "sha256": "c6dfc3f6ae80e52d6a726d6a4a83048693cf240f2fc8abd9ea2ab3a33cc364ec"
+  },
+  "licenses/body-source-credits/cmu-gesture-import-manifest.json": {
+    "bytes": 13711,
+    "sha256": "abeeb65ea1311a7a8fead3efb9aec97d2be9eb314aa9915adf3443d08f81d5f4"
+  },
+  "licenses/body-source-credits/cmu-official-provenance.json": {
+    "bytes": 1929,
+    "sha256": "54f39b9872316d48fcb09e9a62a470e2db59a35dabcb875b203df90de0aaf055"
+  },
+  "licenses/body-source-credits/original-export-manifest.json": {
+    "bytes": 19196,
+    "sha256": "964222ec623ab59260d16a2c829b5dfc8f32bbd7fd2d110a8a53d24dc136c601"
+  },
+  "licenses/body-source-credits/upstream-motion-provenance.json": {
+    "bytes": 26194,
+    "sha256": "c6adbfa125b3a8dfb155f8615d7d9d9de9b4b34c0ecd8678067aa2ba69293986"
+  },
+  "licenses/body-source-credits/V2-female-suite-motion-validation.json": {
+    "bytes": 17586,
+    "sha256": "e6cce7db44d838efcc47166ee5e244e3f1a5a43a3dd7b8c1423377a2580ecebc"
+  },
+  "licenses/body-source-credits/V2-final-visual-review.json": {
+    "bytes": 1177,
+    "sha256": "7c89188ca497d02e3fee8cd8b395d571579f8cd8506e0c709877499cadcc069f"
+  },
+  "licenses/body-source-credits/V6-hand-gesture-import-manifest.json": {
+    "bytes": 7934,
+    "sha256": "ed790fd788a71cb59d4c81f829975e1480a30b745f55845fe56c2f14418c3d6b"
+  },
+  "licenses/body-source-credits/旧版V4来源与说明.txt": {
+    "bytes": 4602,
+    "sha256": "57142896cfdaf5e6ef4819ebf3f7c004d91d434ff9380bd1df24f2528108ffff"
+  },
+  "licenses/LICENSE-SentiPulse.txt": {
+    "bytes": 3690,
+    "sha256": "194cf1214beb21ea314d0053355db802e92eeacf890f7929c8f99addff26c824"
+  },
+  "licenses/NOTICE-body-model.txt": {
+    "bytes": 9269,
+    "sha256": "da534fea2360a001ad740fbcb9c5a7cef78ccfbdbcacf22568e4e6537be24bfe"
+  },
+  "licenses/README-SuSuInterActs.md": {
+    "bytes": 9741,
+    "sha256": "7be32917ef0d923faf819c76e74312103020e481b4bc2724caf7bccb928e6d4b"
+  },
+  "manifest.json": {
+    "bytes": 3873,
+    "sha256": "236c8362aa65a3d85e3984363c4b9bc4ff95ffd67bbe2f15112ffa215c720b4f"
+  },
+  "package.json": {
+    "bytes": 604,
+    "sha256": "cf58f269a6eb11a2e9a09a5b02015f3fa0c547893843d1106969cf15dc0c5f47"
+  },
+  "playback.json": {
+    "bytes": 14029,
+    "sha256": "707c4bad64daebeb72312e54208226bc8a4458c91c80de082604a5477dae0ee4"
+  },
+  "provenance/accad-cloth-report.json": {
+    "bytes": 4406,
+    "sha256": "3f84661e893b237b8e1d8d6533aa980822361a637a3634ab4efd3acf9151be84"
+  },
+  "provenance/face-library-manifest.json": {
+    "bytes": 4127,
+    "sha256": "8867334ecd9409d18d0049ac27c070d432f0901fe162562d073807e99f756ff6"
+  },
+  "provenance/face-selected-sources.json": {
+    "bytes": 3433,
+    "sha256": "15e053f2dbe51bfb2b19fdc627bb89f0d55761d7907e334fc09b375c36173aa6"
+  },
+  "provenance/speech-arm-filter.json": {
+    "bytes": 1190,
+    "sha256": "60c49d1f0deaef0b9cde868780e03cba42354209b64368c5b7078ba102c0b8a6"
+  },
+  "provenance/speech-import-manifest.json": {
+    "bytes": 21417,
+    "sha256": "30bd82d0ee5e06df051d2229caeb2e53e1b02c16e03a5f6ba058ff74267c3d26"
+  },
+  "README-导入说明.md": {
+    "bytes": 3801,
+    "sha256": "6819dd343b10fa50f1e235329195aa9fb9dec83665427ebbdf58f401db606e5c"
+  },
+  "runtime/captured-face-clips.mjs": {
+    "bytes": 472453,
+    "sha256": "dc0c16c9156be34e4335284d4cf82c0727c78348fc2bb2909828ccd209d54b15"
+  },
+  "runtime/captured-face-player.mjs": {
+    "bytes": 2545,
+    "sha256": "c6ec26755b0b99451a66ae8218cb4450c64a1c5c5ab27a40903842711e1f5543"
+  },
+  "runtime/companion-motion.mjs": {
+    "bytes": 2098,
+    "sha256": "4b83d20a8eca542f63b391c5990a687e75e57b2763ac6440fa032fe9cc81b303"
+  },
+  "runtime/expression-catalog.mjs": {
+    "bytes": 738,
+    "sha256": "229614de45f6f474d6fe169be99070c3de0ec16b4a9174597e0994cd04efe036"
+  },
+  "runtime/hand-contact.mjs": {
+    "bytes": 3230,
+    "sha256": "ea7b6658b69feab6e3370048959d50261d7a438e70d2f2d8c209a6b3979974c0"
+  },
+  "runtime/head-gesture-layer.mjs": {
+    "bytes": 9446,
+    "sha256": "da7613e9fdd520d592ac82428ff7b3342e618f1f6304680e519af152664c806c"
+  },
+  "runtime/idle-talk-player-base.mjs": {
+    "bytes": 10746,
+    "sha256": "a3db7f45bf92ecfd3ba0c09ebf5eb7d0b1cc1640b53ea2a7abe08a524ba67795"
+  },
+  "runtime/idle-talk-player.mjs": {
+    "bytes": 4017,
+    "sha256": "24190a03bf37d04afc7a41bd15e359f7de4ce39ca335fe359adf52dcdcf87975"
+  },
+  "runtime/import-kit.d.mts": {
+    "bytes": 405,
+    "sha256": "0bd4f2adc3b11cadbf248373b395d6985b75642bdb812780427e26c6007bbec2"
+  },
+  "runtime/import-kit.mjs": {
+    "bytes": 2939,
+    "sha256": "202a4ee42165fe919fc6c448d7337efd69723f7af29afb39479ccc1ff43ce13a"
+  },
+  "runtime/index.d.ts": {
+    "bytes": 1949,
+    "sha256": "1a1861ded91e84be96cdd219336f648547d738cd530a51885a79498a768361db"
+  },
+  "runtime/kitana-config.mjs": {
+    "bytes": 9945,
+    "sha256": "149d0504d66c582a59e41f16e6d096c8de47063ba32d52a13da1e258a9589abb"
+  },
+  "runtime/kitana-face-layer.mjs": {
+    "bytes": 6360,
+    "sha256": "60c2aaf90fffc9d2426d380c1e30106edbf8bc22fe727fa06b603387bc448b61"
+  },
+  "runtime/kitana-runtime.mjs": {
+    "bytes": 8226,
+    "sha256": "02597eefe854e75a8933ecf9b898c067e5fbbbe905969bb9a8c0f620b3dfc073"
+  },
+  "runtime/planted-foot-contact.mjs": {
+    "bytes": 3216,
+    "sha256": "ee34cc8d3c1ecf8e931da19055128a4747cb10c33688783ef61943a35b8b9b6b"
+  },
+  "runtime/ThreeKitanaAnimationAdapter.d.mts": {
+    "bytes": 1949,
+    "sha256": "1a1861ded91e84be96cdd219336f648547d738cd530a51885a79498a768361db"
+  },
+  "runtime/ThreeKitanaAnimationAdapter.mjs": {
+    "bytes": 3755,
+    "sha256": "3cd33bfb9eda7c077b1d1ad5732eb55d7ae07c5fb53b9ec37a0110210049a73c"
+  },
+  "validation/app-contract-typecheck.json": {
+    "bytes": 242,
+    "sha256": "df60df8332b581d8d187f85b5e4047c23498edfd16bcb63cc8fae63ad612ee34"
+  },
+  "validation/package-runtime-test.json": {
+    "bytes": 1318,
+    "sha256": "4982c51b76ff4636894878a33d53c39dc074b468fce0baa2e9ca26419653445a"
+  },
+  "validation/source-blender-validation.json": {
+    "bytes": 280,
+    "sha256": "2b13e87ce797e781f474ae1945bc8dbf23d8258e5fc7f4428988087a44b40273"
+  },
+  "validation/source-hand-body-mesh-report.json": {
+    "bytes": 62086,
+    "sha256": "2e77d0ebbd175395ff3697d4c7fd4ced9e27bb073b01d12454ca336370b07b4a"
+  },
+  "validation/source-hand-thigh-mesh-report.json": {
+    "bytes": 187456,
+    "sha256": "ba63aebe1feaf9ed13d741411fe095c05b7f32f3468bcef290cf9976cbbda6a4"
+  },
+  "validation/source-speech-pool-validation.json": {
+    "bytes": 1143,
+    "sha256": "b2f875982f02087be2ce311b124ffeb611c04a296cb86d10955e788bdd2fd477"
+  },
+  "validation/source-transition-hand-body-mesh-report.json": {
+    "bytes": 44907,
+    "sha256": "7cc8c5306389a2b9ee5fb0cf311da944f4c7f4c0b60fde7abbaa3b7c2cf00b3f"
+  },
+  "validation/source-transition-hand-thigh-mesh-report.json": {
+    "bytes": 218283,
+    "sha256": "2ed9346603c2d79a43d2776f2aeafaddc3192249d3537ea4dc72059e685c8eb7"
+  },
+  "validation/zip-import-native-test.json": {
+    "bytes": 628,
+    "sha256": "3b029ba3b90f874e43dab1e27dd34b43192b7ebc8b38f4ac116c1dd7dcae7db0"
+  }
+}

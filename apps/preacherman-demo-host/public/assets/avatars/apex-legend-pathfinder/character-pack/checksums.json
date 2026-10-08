@@ -1,0 +1,150 @@
+{
+  "assets/avatars/apex-legend-pathfinder/apex-legend-pathfinder-runtime.glb": {
+    "sha256": "50c081c9f40fee69ae2deb48060a73720f8874b1a150332c28768005d112a50f",
+    "bytes": 52574408
+  },
+  "authoring/Pathfinder-screen-expressions.blend": {
+    "sha256": "d200f0dfb61c7eb0e758138e6c14021d19972c88a77e9cf8c1800ea2aa102ecb",
+    "bytes": 110530608
+  },
+  "avatar-profile.json": {
+    "sha256": "37c292f0ad2159a48ffcc2e8cf6fa57ae3a52a50494d8baf27b7dc27f4a250e5",
+    "bytes": 3247
+  },
+  "LICENSE-ACCAD-NOTICE.txt": {
+    "sha256": "10897e74e8714d9392bf07cd38fabca2b042b62fc54b1ee279272521fe66bc83",
+    "bytes": 536
+  },
+  "LICENSE-ROKOKO-NOTICE.txt": {
+    "sha256": "10b8742e4df348b66c5efb427291b7245e7d5738e918ebd172e4d0f20c651b02",
+    "bytes": 861
+  },
+  "manifest.json": {
+    "sha256": "e7035ae4504cbd8ae56a9d864f336dab4ec41d45dfd23df9959b28faac7212ac",
+    "bytes": 2805
+  },
+  "package.json": {
+    "sha256": "ee6c8cd965469c01c1f6f08cd541c444201630dc32749616e1bb262d6a7184d9",
+    "bytes": 332
+  },
+  "README-\u5bfc\u5165\u8bf4\u660e.md": {
+    "sha256": "e0bfc570b50049995eb1d91cf4e8cd73849b16cb56f0a3ba5d0b5eb210154219",
+    "bytes": 5780
+  },
+  "runtime/ai-reply.mjs": {
+    "sha256": "76cfa1240491802cceb2e023e49efbe5b1fa0a0150f806fc7df6738b4d1ba010",
+    "bytes": 2436
+  },
+  "runtime/foot-contact.mjs": {
+    "sha256": "4efa1e75ef5a44f03e265c7174a6e9e84baffb23a75fe0b0c57be751df2047f9",
+    "bytes": 5384
+  },
+  "runtime/import-kit.mjs": {
+    "sha256": "16faf8f69b1ff37191836a59ea2721504e4db1eeef0f6c4bf16a4877e428bc7a",
+    "bytes": 1996
+  },
+  "runtime/motion-player-base.mjs": {
+    "sha256": "a3db7f45bf92ecfd3ba0c09ebf5eb7d0b1cc1640b53ea2a7abe08a524ba67795",
+    "bytes": 10746
+  },
+  "runtime/pathfinder-player.mjs": {
+    "sha256": "c728ec6fb8dfbbbae04f90ec5f1dc7a89887127691a3a27c376daee8d77ed505",
+    "bytes": 5756
+  },
+  "runtime/PathfinderAnimationAdapter.d.mts": {
+    "sha256": "44d52bcfd739f307538591a53b15e206809f99cbfa05a61a691bab3c494b7455",
+    "bytes": 2076
+  },
+  "runtime/PathfinderAnimationAdapter.mjs": {
+    "sha256": "5d0f6bcd1e8249c994da70a0d58e117fd58e53835cb93517dc53c33e10c23d31",
+    "bytes": 5556
+  },
+  "runtime/profile.mjs": {
+    "sha256": "bed0fc0c610bcde9fd0241a5ccf68c8de35e35d01fbcde687eb41c512c9828d7",
+    "bytes": 3365
+  },
+  "runtime/screen-expressions.mjs": {
+    "sha256": "c821c5fd4fc87e7620f62e2e349cb7fc01febb967bff472fd99fa991096c9db3",
+    "bytes": 6593
+  },
+  "screen-expression-profile.json": {
+    "sha256": "35ee1ebc46ec7560430960d1be11d172593ebde44504c0ef9bd6ae2a378b3d38",
+    "bytes": 2145
+  },
+  "sources/Idle_Chatting02_MIXAMO_WHS.fbx": {
+    "sha256": "a0956bced339998764d88013df009a290a627e60890b6e20fc29cef82053bd46",
+    "bytes": 2579328
+  },
+  "sources/Idle_Chatting_MIXAMO_WHS.fbx": {
+    "sha256": "a8a7bd0b65a65ffe2fd65f50f339c96250fb24fd3895c38d63df581d9594db2c",
+    "bytes": 1955456
+  },
+  "sources/Idle_Conversation_Loop_MIXAMO_769_segment-2.fbx": {
+    "sha256": "67892a332df013461020b839c165a04bdc8e20552344d098962e587826dcd556",
+    "bytes": 1880368
+  },
+  "sources/Male1_A1_Stand.bvh": {
+    "sha256": "0f820d765d21e9748accbadfdd967e13b0ce71e182d03dc3129fc4d60b9271e2",
+    "bytes": 113134
+  },
+  "sources/Male1_A2_Sway.bvh": {
+    "sha256": "621e81232f23337b7f5942126b3d00801b1f1cbd1dc9c3cd7b86cf1b93295df1",
+    "bytes": 168795
+  },
+  "sources/Male1_A3_SwingArms.bvh": {
+    "sha256": "c60f4da38dfc551dfa649030547e9a2aee85324bb0beceea33d494d6c71d953c",
+    "bytes": 105299
+  },
+  "sources/Male1_A4_LookAround.bvh": {
+    "sha256": "0b758b20f06f9fe34e285edfb7f631913e1131941ced51e577e21a1cfc7b2d0f",
+    "bytes": 285341
+  },
+  "validation/ai-reply-validation.json": {
+    "sha256": "6b9596f847d8bd19ae6b265515f2ec3580d1ead177c664b8bdfc8d0d0f272c3f",
+    "bytes": 982
+  },
+  "validation/app-contract-typecheck.json": {
+    "sha256": "d61e7842fb7ed5db63205520f175dacf54e44e5f1287b190224da6d02bc7f230",
+    "bytes": 230
+  },
+  "validation/base-idle-manifest.json": {
+    "sha256": "1cbdd6d4d267d1aed62b6d12ce1317cd243c5b52a5c4d58991fbf1b98f2b7345",
+    "bytes": 20385
+  },
+  "validation/blender-validation.json": {
+    "sha256": "96defbc3b00b4041a7474cd0099097707653c189fcf727fc3d915d01a5a5b156",
+    "bytes": 104
+  },
+  "validation/hand-body-mesh-report.json": {
+    "sha256": "1439c2616178ff0c705de62f2922f709a986879479060580ea3f635f4dd15300",
+    "bytes": 171036
+  },
+  "validation/runtime-validation.json": {
+    "sha256": "f49e0f906fe9dc2b32d0931d7208920534827b9ae3b5e50f82dccc59f9d09ac5",
+    "bytes": 1203
+  },
+  "validation/screen-blender-validation.json": {
+    "sha256": "157e45dd29b8c58f662056c797e6aea37574b2891567a043daa6781fdc0fdd40",
+    "bytes": 1935
+  },
+  "validation/screen-runtime-validation.json": {
+    "sha256": "a1f311bcf5028548a9173b0a415f8e8ff191692a8a77c25b89061fab89a7c598",
+    "bytes": 855
+  },
+  "validation/talk-retarget-validation.json": {
+    "sha256": "3a5d6bf8c7e083201b62153e66e055e3a5f4cc31624a57074dd12c4f9e6410dd",
+    "bytes": 13088
+  },
+  "validation/theme-validation.json": {
+    "sha256": "02a7cf33bc7a7c501c9d6aa71aa3c0373bc76b4c9aff4ec6b07b0053087c0835",
+    "bytes": 689
+  },
+  "validation/transition-hand-body-mesh-report.json": {
+    "sha256": "7206a42d2dc51f77737e816ca3fe65114890fde23bf1221d0d237e6390ed2c26",
+    "bytes": 67122
+  },
+  "validation/zip-import-validation.json": {
+    "sha256": "93aecb72c86b8fc2d5e6a9323590d9e42c496d168999bcbb8c8e43027db88125",
+    "bytes": 711
+  }
+}

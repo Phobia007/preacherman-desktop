@@ -111,6 +111,7 @@ export function CortanaModelStage({
         pose="standby"
         quality="high"
         jawOpen={jawOpen}
+        motionState={interactionState}
         environment={environment}
         isolateCompanion={isolateCompanion}
         motionSource={speechMotionRuntime}

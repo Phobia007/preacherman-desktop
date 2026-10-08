@@ -1,0 +1,623 @@
+{
+  "originalSpeechClip": "kitana.talk.accad.compatible.v1",
+  "newTakes": [
+    {
+      "clip": "kitana.talk.accad.female_conversation_01.v1",
+      "label": "双手轻柔讲述",
+      "sourceWebsite": "https://accad.osu.edu/research/motion-lab/mocap-system-and-data",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "D:\\preacherman\\output\\kitana-ai-companion-v2-20261004\\source-mocap\\Female1_D3_ConversationGestures.bvh",
+      "sourceSHA256": "e04a5dfb68f58ef0d47bbbe062c7e021965b53d7d84c32fd43e7f0251256df66",
+      "sourceFramesZeroBased": [
+        0,
+        260
+      ],
+      "sourceTimeRangeSeconds": [
+        0.0,
+        8.666658
+      ],
+      "duration": 8.666666666666666,
+      "frames": 521,
+      "fps": 60,
+      "maximumFootContactError": 1.713982957687213e-05,
+      "maximumAdditionalHandOffsetMeters": 0.13598441392013486,
+      "poseSamples": [
+        {
+          "frame": 0,
+          "positions": {
+            "pelvis": [
+              0.0027608659584075212,
+              -0.008240027353167534,
+              0.9713130593299866
+            ],
+            "head neck upper": [
+              0.015265373513102531,
+              -0.017545072361826897,
+              1.6080232858657837
+            ],
+            "arm left wrist": [
+              0.27008503675460815,
+              -0.04301122948527336,
+              0.9039307236671448
+            ],
+            "arm right wrist": [
+              -0.27988529205322266,
+              -0.0563434399664402,
+              0.9129244089126587
+            ],
+            "leg left ankle": [
+              0.09874899685382843,
+              0.066907599568367,
+              0.12335829436779022
+            ],
+            "leg right ankle": [
+              -0.1114761233329773,
+              0.06417463719844818,
+              0.12335894256830215
+            ]
+          }
+        },
+        {
+          "frame": 130,
+          "positions": {
+            "pelvis": [
+              -0.0010182647965848446,
+              -0.011957290582358837,
+              0.9710463285446167
+            ],
+            "head neck upper": [
+              0.011132726445794106,
+              -0.00850008986890316,
+              1.6078016757965088
+            ],
+            "arm left wrist": [
+              0.2845439910888672,
+              -0.026416277512907982,
+              0.9584073424339294
+            ],
+            "arm right wrist": [
+              -0.29653388261795044,
+              -0.05608510971069336,
+              0.9590471982955933
+            ],
+            "leg left ankle": [
+              0.09874891489744186,
+              0.06690751016139984,
+              0.12335851788520813
+            ],
+            "leg right ankle": [
+              -0.11147606372833252,
+              0.06417462974786758,
+              0.12335940450429916
+            ]
+          }
+        },
+        {
+          "frame": 260,
+          "positions": {
+            "pelvis": [
+              -0.0029049022123217583,
+              -0.01778176985681057,
+              0.9704546928405762
+            ],
+            "head neck upper": [
+              0.002498934045433998,
+              -0.026090389117598534,
+              1.60817289352417
+            ],
+            "arm left wrist": [
+              0.2549879848957062,
+              -0.0663713663816452,
+              0.9021443128585815
+            ],
+            "arm right wrist": [
+              -0.2831089198589325,
+              -0.07237976789474487,
+              0.9104591012001038
+            ],
+            "leg left ankle": [
+              0.0987486019730568,
+              0.06690748035907745,
+              0.12335838377475739
+            ],
+            "leg right ankle": [
+              -0.11147619783878326,
+              0.06417454779148102,
+              0.12335897982120514
+            ]
+          }
+        },
+        {
+          "frame": 390,
+          "positions": {
+            "pelvis": [
+              -0.003041638294234872,
+              -0.02013714797794819,
+              0.9702819585800171
+            ],
+            "head neck upper": [
+              -0.02152586542069912,
+              -0.048726290464401245,
+              1.6051013469696045
+            ],
+            "arm left wrist": [
+              0.25317347049713135,
+              -0.08583690226078033,
+              0.9095941185951233
+            ],
+            "arm right wrist": [
+              -0.2985542118549347,
+              -0.06835705786943436,
+              0.9009304642677307
+            ],
+            "leg left ankle": [
+              0.09874854236841202,
+              0.06690743565559387,
+              0.12335813045501709
+            ],
+            "leg right ankle": [
+              -0.11147633194923401,
+              0.06417445838451385,
+              0.12335889786481857
+            ]
+          }
+        },
+        {
+          "frame": 520,
+          "positions": {
+            "pelvis": [
+              -0.0021509749349206686,
+              -0.022044338285923004,
+              0.9701641201972961
+            ],
+            "head neck upper": [
+              0.005412070080637932,
+              -0.06673920154571533,
+              1.5894825458526611
+            ],
+            "arm left wrist": [
+              0.2652474343776703,
+              -0.05411229282617569,
+              0.9026458263397217
+            ],
+            "arm right wrist": [
+              -0.2993720769882202,
+              -0.058346811681985855,
+              0.9101738333702087
+            ],
+            "leg left ankle": [
+              0.09874874353408813,
+              0.0669073536992073,
+              0.12335806339979172
+            ],
+            "leg right ankle": [
+              -0.1114763543009758,
+              0.06417438387870789,
+              0.12335899472236633
+            ]
+          }
+        }
+      ],
+      "sourceGLB": "D:\\preacherman\\output\\kitana-female-suite-v7-20261004\\Kitana-female-suite.glb",
+      "sourceGLBSHA256": "6c7a1510cd60aff7a290056a2b291d5150eeae39782cebd043f16167929874bf",
+      "previousSixteenAnimationsPreservedExactly": true,
+      "processing": "Contiguous female conversation recording from Female1_D3_ConversationGestures at original recorded speed; pelvis-relative upper-body retarget with recorded shoulder-relative wrist trajectory and elbow-plane IK, cleaned V3 female Stand support retained, fingers use existing character articulation. Hands fitted for thigh clearance; body-driven cloth to be added. No invented gesture trajectory."
+    },
+    {
+      "clip": "kitana.talk.accad.female_conversation_02.v1",
+      "label": "双手展开解释",
+      "sourceWebsite": "https://accad.osu.edu/research/motion-lab/mocap-system-and-data",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "D:\\preacherman\\output\\kitana-ai-companion-v2-20261004\\source-mocap\\Female1_D3_ConversationGestures.bvh",
+      "sourceSHA256": "e04a5dfb68f58ef0d47bbbe062c7e021965b53d7d84c32fd43e7f0251256df66",
+      "sourceFramesZeroBased": [
+        840,
+        995
+      ],
+      "sourceTimeRangeSeconds": [
+        27.999972000000003,
+        33.1666335
+      ],
+      "duration": 5.166666666666667,
+      "frames": 311,
+      "fps": 60,
+      "maximumFootContactError": 1.713982957687213e-05,
+      "maximumAdditionalHandOffsetMeters": 0.13931650508739138,
+      "poseSamples": [
+        {
+          "frame": 0,
+          "positions": {
+            "pelvis": [
+              0.0027608659584075212,
+              -0.008240027353167534,
+              0.9713130593299866
+            ],
+            "head neck upper": [
+              -0.004985904321074486,
+              -0.029716594144701958,
+              1.608798861503601
+            ],
+            "arm left wrist": [
+              0.2692030072212219,
+              -0.04457847401499748,
+              0.9115419387817383
+            ],
+            "arm right wrist": [
+              -0.31071868538856506,
+              -0.03345814719796181,
+              0.90877366065979
+            ],
+            "leg left ankle": [
+              0.09874899685382843,
+              0.066907599568367,
+              0.12335829436779022
+            ],
+            "leg right ankle": [
+              -0.1114761233329773,
+              0.06417463719844818,
+              0.12335894256830215
+            ]
+          }
+        },
+        {
+          "frame": 77,
+          "positions": {
+            "pelvis": [
+              -0.0024785324931144714,
+              -0.021838471293449402,
+              0.9701797962188721
+            ],
+            "head neck upper": [
+              -0.036055684089660645,
+              -0.1021551564335823,
+              1.599951982498169
+            ],
+            "arm left wrist": [
+              0.3190993070602417,
+              -0.1766340285539627,
+              1.0456700325012207
+            ],
+            "arm right wrist": [
+              -0.25417277216911316,
+              -0.22287888824939728,
+              1.0382696390151978
+            ],
+            "leg left ankle": [
+              0.09874866157770157,
+              0.06690719723701477,
+              0.12335879355669022
+            ],
+            "leg right ankle": [
+              -0.11147642135620117,
+              0.06417445838451385,
+              0.12335918098688126
+            ]
+          }
+        },
+        {
+          "frame": 155,
+          "positions": {
+            "pelvis": [
+              0.002971723908558488,
+              -0.008906496688723564,
+              0.97123783826828
+            ],
+            "head neck upper": [
+              -0.029045281931757927,
+              -0.060934439301490784,
+              1.6055400371551514
+            ],
+            "arm left wrist": [
+              0.33670100569725037,
+              -0.15696972608566284,
+              1.0599032640457153
+            ],
+            "arm right wrist": [
+              -0.2592977285385132,
+              -0.22016099095344543,
+              1.0616512298583984
+            ],
+            "leg left ankle": [
+              0.09874901920557022,
+              0.06690762937068939,
+              0.12335813045501709
+            ],
+            "leg right ankle": [
+              -0.11147609353065491,
+              0.06417472660541534,
+              0.12335950881242752
+            ]
+          }
+        },
+        {
+          "frame": 233,
+          "positions": {
+            "pelvis": [
+              -0.0028834366239607334,
+              -0.021158266812562943,
+              0.9702193140983582
+            ],
+            "head neck upper": [
+              -0.002756992354989052,
+              -0.06621646881103516,
+              1.6065263748168945
+            ],
+            "arm left wrist": [
+              0.2567100524902344,
+              -0.06649690866470337,
+              0.8995276689529419
+            ],
+            "arm right wrist": [
+              -0.18855178356170654,
+              -0.14213524758815765,
+              0.8902132511138916
+            ],
+            "leg left ankle": [
+              0.09874866157770157,
+              0.06690734624862671,
+              0.12335848063230515
+            ],
+            "leg right ankle": [
+              -0.11147624254226685,
+              0.06417455524206161,
+              0.12335865199565887
+            ]
+          }
+        },
+        {
+          "frame": 310,
+          "positions": {
+            "pelvis": [
+              0.0027807217556983232,
+              -0.010030589997768402,
+              0.971136748790741
+            ],
+            "head neck upper": [
+              0.00857737846672535,
+              -0.023498957976698875,
+              1.6086543798446655
+            ],
+            "arm left wrist": [
+              0.285968542098999,
+              0.025144260376691818,
+              0.9131126403808594
+            ],
+            "arm right wrist": [
+              -0.2996547818183899,
+              -0.035962965339422226,
+              0.9175564646720886
+            ],
+            "leg left ankle": [
+              0.09874889254570007,
+              0.06690756231546402,
+              0.12335824221372604
+            ],
+            "leg right ankle": [
+              -0.1114761084318161,
+              0.06417468935251236,
+              0.12335892766714096
+            ]
+          }
+        }
+      ],
+      "sourceGLB": "D:\\preacherman\\output\\kitana-female-suite-v7-20261004\\Kitana-female-suite.glb",
+      "sourceGLBSHA256": "6c7a1510cd60aff7a290056a2b291d5150eeae39782cebd043f16167929874bf",
+      "previousSixteenAnimationsPreservedExactly": true,
+      "processing": "Contiguous female conversation recording from Female1_D3_ConversationGestures at original recorded speed; pelvis-relative upper-body retarget with recorded shoulder-relative wrist trajectory and elbow-plane IK, cleaned V3 female Stand support retained, fingers use existing character articulation. Hands fitted for thigh clearance; body-driven cloth to be added. No invented gesture trajectory."
+    },
+    {
+      "clip": "kitana.talk.accad.female_conversation_03.v1",
+      "label": "抬手回应交流",
+      "sourceWebsite": "https://accad.osu.edu/research/motion-lab/mocap-system-and-data",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "D:\\preacherman\\output\\kitana-ai-companion-v2-20261004\\source-mocap\\Female1_D3_ConversationGestures.bvh",
+      "sourceSHA256": "e04a5dfb68f58ef0d47bbbe062c7e021965b53d7d84c32fd43e7f0251256df66",
+      "sourceFramesZeroBased": [
+        1200,
+        1450
+      ],
+      "sourceTimeRangeSeconds": [
+        39.99996,
+        48.333285000000004
+      ],
+      "duration": 8.333333333333334,
+      "frames": 501,
+      "fps": 60,
+      "maximumFootContactError": 1.713982957687213e-05,
+      "maximumAdditionalHandOffsetMeters": 0.11925113731941017,
+      "poseSamples": [
+        {
+          "frame": 0,
+          "positions": {
+            "pelvis": [
+              0.0027608659584075212,
+              -0.008240027353167534,
+              0.9713130593299866
+            ],
+            "head neck upper": [
+              -0.035106856375932693,
+              0.01853184774518013,
+              1.6057060956954956
+            ],
+            "arm left wrist": [
+              0.2707597315311432,
+              -0.03519626706838608,
+              0.9320048689842224
+            ],
+            "arm right wrist": [
+              -0.28371766209602356,
+              -0.05590810626745224,
+              0.894133448600769
+            ],
+            "leg left ankle": [
+              0.09874899685382843,
+              0.066907599568367,
+              0.12335829436779022
+            ],
+            "leg right ankle": [
+              -0.1114761233329773,
+              0.06417463719844818,
+              0.12335894256830215
+            ]
+          }
+        },
+        {
+          "frame": 125,
+          "positions": {
+            "pelvis": [
+              -0.0019311215728521347,
+              -0.014042963273823261,
+              0.9708417654037476
+            ],
+            "head neck upper": [
+              0.026216382160782814,
+              0.0013417252339422703,
+              1.603468656539917
+            ],
+            "arm left wrist": [
+              0.20803914964199066,
+              -0.08963563293218613,
+              0.8937497138977051
+            ],
+            "arm right wrist": [
+              -0.01274912990629673,
+              -0.5059837102890015,
+              1.5625661611557007
+            ],
+            "leg left ankle": [
+              0.09874885529279709,
+              0.06690755486488342,
+              0.12335845082998276
+            ],
+            "leg right ankle": [
+              -0.11147624254226685,
+              0.06417454779148102,
+              0.12335865199565887
+            ]
+          }
+        },
+        {
+          "frame": 250,
+          "positions": {
+            "pelvis": [
+              -0.003007036168128252,
+              -0.019049152731895447,
+              0.9703577160835266
+            ],
+            "head neck upper": [
+              0.01024150662124157,
+              -0.05582437664270401,
+              1.605710744857788
+            ],
+            "arm left wrist": [
+              0.2880306541919708,
+              0.010572209022939205,
+              0.9021353721618652
+            ],
+            "arm right wrist": [
+              -0.27464959025382996,
+              -0.08534189313650131,
+              0.9186564087867737
+            ],
+            "leg left ankle": [
+              0.09874881058931351,
+              0.06690743565559387,
+              0.1233588233590126
+            ],
+            "leg right ankle": [
+              -0.11147624999284744,
+              0.06417457014322281,
+              0.1233588457107544
+            ]
+          }
+        },
+        {
+          "frame": 375,
+          "positions": {
+            "pelvis": [
+              -0.0024785324931144714,
+              -0.021838471293449402,
+              0.9701797962188721
+            ],
+            "head neck upper": [
+              -0.0007852109847590327,
+              -0.05997453257441521,
+              1.6062283515930176
+            ],
+            "arm left wrist": [
+              0.2811756730079651,
+              -0.011316356249153614,
+              0.9103952646255493
+            ],
+            "arm right wrist": [
+              -0.3004203736782074,
+              -0.06251996010541916,
+              0.9107714891433716
+            ],
+            "leg left ankle": [
+              0.09874866157770157,
+              0.06690719723701477,
+              0.12335879355669022
+            ],
+            "leg right ankle": [
+              -0.11147642135620117,
+              0.06417445838451385,
+              0.12335918098688126
+            ]
+          }
+        },
+        {
+          "frame": 500,
+          "positions": {
+            "pelvis": [
+              -0.0006555498111993074,
+              -0.021113790571689606,
+              0.9701686501502991
+            ],
+            "head neck upper": [
+              0.0016444978537037969,
+              -0.05511507764458656,
+              1.6057509183883667
+            ],
+            "arm left wrist": [
+              0.28334271907806396,
+              -0.010332593694329262,
+              0.9115687608718872
+            ],
+            "arm right wrist": [
+              -0.30355310440063477,
+              -0.05951143801212311,
+              0.9116790890693665
+            ],
+            "leg left ankle": [
+              0.09874872118234634,
+              0.06690730899572372,
+              0.12335848063230515
+            ],
+            "leg right ankle": [
+              -0.11147622764110565,
+              0.06417448073625565,
+              0.12335914373397827
+            ]
+          }
+        }
+      ],
+      "sourceGLB": "D:\\preacherman\\output\\kitana-female-suite-v7-20261004\\Kitana-female-suite.glb",
+      "sourceGLBSHA256": "6c7a1510cd60aff7a290056a2b291d5150eeae39782cebd043f16167929874bf",
+      "previousSixteenAnimationsPreservedExactly": true,
+      "processing": "Contiguous female conversation recording from Female1_D3_ConversationGestures at original recorded speed; pelvis-relative upper-body retarget with recorded shoulder-relative wrist trajectory and elbow-plane IK, cleaned V3 female Stand support retained, fingers use existing character articulation. Hands fitted for thigh clearance; body-driven cloth to be added. No invented gesture trajectory."
+    }
+  ],
+  "originalSixteenAnimationsPreservedExactly": true,
+  "originalBinaryPrefixPreserved": true,
+  "assetSHA256": "3c2c4d305e73dd84b59e69469b6518815c675e08bb8a3313a4d95bbeb14e93c0",
+  "source": "ACCAD Female 1 D3 ConversationGestures; 3 excerpts of one genuine captured performance",
+  "license": "https://creativecommons.org/licenses/by/3.0/",
+  "attribution": "Open Motion Project by ACCAD / The Ohio State University",
+  "notThreeSeparatePerformances": true,
+  "selection": "0–8.67s, 28–33.17s, 40–48.33s; excludes large recorded torso bends around 14s and 38s",
+  "processing": "Original upper-body capture at original speed; shoulder-relative arm IK, thigh clearance, existing cleaned female lower-body support. Secondary cloth simulation is separate.",
+  "importStageSHA256": "629a4f775fd17fca1e3a989613454ec0cf4ab23a48f95e9ccfe66279ab4bd1cb",
+  "finalProcessing": "Arm quaternion denoise sigma 0.06s, body-driven cloth simulation. Runtime crossfades include planted-foot correction and blend-only hand/thigh contact fitting; body gestures remain recorded, not generated.",
+  "originalRuntimePlayback": "Full original 28.13s preserved in GLB and Blender. The random speech pool plays a copied first 20s portion to avoid known palm/torso contacts in the original tail; long replies crossfade to another take before the limit."
+}

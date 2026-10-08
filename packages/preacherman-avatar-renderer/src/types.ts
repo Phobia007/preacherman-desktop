@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { ImportedAvatarModelId } from "./avatarCatalog";
-import type { AvatarActionDescriptor } from "./avatar/types/avatarAnimation";
+import type { AvatarActionDescriptor, AvatarMotionState } from "./avatar/types/avatarAnimation";
 import type { AvatarMotionRigBinding, AvatarMotionStreamSource } from "./avatar/contracts/AvatarMotionStream";
 
 export type AvatarLoadState =
@@ -63,6 +63,8 @@ export interface InteractiveAvatarViewportProps extends AvatarViewportProps {
   readonly resetKey?: number;
   /** Procedural mouth opening driven by actual output audio (0 through 1). */
   readonly jawOpen?: number;
+  /** Live conversation state drives character-specific body and expression layers. */
+  readonly motionState?: AvatarMotionState;
   readonly environment?: AvatarSceneEnvironment;
   /** Keep cinematic lighting and the platform, but composite the companion over another scene. */
   readonly isolateCompanion?: boolean;

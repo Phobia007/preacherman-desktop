@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "sourceSHA256": "80d3b91c8bbcd1abee83814b26a686eb49ee7d65625ce90d03afdebc52d54f33",
+  "assetSHA256": "3c2c4d305e73dd84b59e69469b6518815c675e08bb8a3313a4d95bbeb14e93c0",
+  "sigmaSeconds": 0.06,
+  "method": "Hemisphere-consistent normalized Gaussian quaternion filter on newly retargeted arm tracks only. Original captured timing/gesture retained; lower body and original sixteen clips unchanged. Mesh clearance is checked after filtering.",
+  "clips": [
+    {
+      "clip": "kitana.talk.accad.female_conversation_01.v1",
+      "tracks": 66,
+      "maximumRawAdjacentArmRotationDegrees": 7.376150031272689,
+      "maximumFilteredAdjacentArmRotationDegrees": 4.504171510919029
+    },
+    {
+      "clip": "kitana.talk.accad.female_conversation_02.v1",
+      "tracks": 66,
+      "maximumRawAdjacentArmRotationDegrees": 7.618705780164668,
+      "maximumFilteredAdjacentArmRotationDegrees": 4.559655804606377
+    },
+    {
+      "clip": "kitana.talk.accad.female_conversation_03.v1",
+      "tracks": 66,
+      "maximumRawAdjacentArmRotationDegrees": 15.187837531682112,
+      "maximumFilteredAdjacentArmRotationDegrees": 8.268294821943494
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "retrievedAtUTC": "2026-10-01T15:12:31.521347+00:00",
+  "archive": "D:\\preacherman\\output\\kitana-continuous-idle-v4-20261001\\source-mocap\\cmuconvert-mb2-136-140.zip",
+  "archiveSHA256": "3185d31fb42d3b9665f9962d033b456f88b4e4c2297dff744ddc3af8924fe37f",
+  "conversion": "Bruce Hahne / Cgspeed MotionBuilder-friendly 2010",
+  "sourcePage": "https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/the-motionbuilder-friendly-bvh-conversion-release-of-cmus-motion-capture-database",
+  "downloadPage": "https://www.mediafire.com/file/u4yfyyvq8yyok93/cmuconvert-mb2-136-140.zip/file",
+  "motionIndexURL": "https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/the-motionbuilder-friendly-bvh-conversion-release-of-cmus-motion-capture-database/bvh-conversion-release-motions-list",
+  "licenseSourceURL": "https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/the-motionbuilder-friendly-bvh-conversion-release-of-cmus-motion-capture-database/readme-motionbuilder-2010-release",
+  "rightsSummary": "CMU permits worldwide research and commercial project use. Bruce Hahne adds no restrictions for the BVH conversion. Credit CMU source and NSF EIA-0196217; preserve conversion README. This is not a claim of CC0/CC-BY licensing.",
+  "description": "All five numbered files are listed as Looking Around in the CMU/Cgspeed index. Motion contents have not been modified.",
+  "files": [
+    {
+      "archiveEntry": "139/139_01.bvh",
+      "path": "D:\\preacherman\\output\\kitana-continuous-idle-v4-20261001\\source-mocap\\139_01.bvh",
+      "sha256": "12ac3c51f3c5d3411c7a31c1f53789579723a843c00679541521d07a8be85949",
+      "bytes": 836011,
+      "frames": 1091,
+      "frameTimeSeconds": 0.0083333,
+      "durationSeconds": 9.083297,
+      "firstFrame": "Cgspeed-added T-pose; remaining frames are source capture"
+    },
+    {
+      "archiveEntry": "139/139_03.bvh",
+      "path": "D:\\preacherman\\output\\kitana-continuous-idle-v4-20261001\\source-mocap\\139_03.bvh",
+      "sha256": "c639c5515f8b0c976ee760ff8854cee51598f14eeb1b8cacfe42c0d01885ef83",
+      "bytes": 752366,
+      "frames": 985,
+      "frameTimeSeconds": 0.0083333,
+      "durationSeconds": 8.1999672,
+      "firstFrame": "Cgspeed-added T-pose; remaining frames are source capture"
+    },
+    {
+      "archiveEntry": "139/139_04.bvh",
+      "path": "D:\\preacherman\\output\\kitana-continuous-idle-v4-20261001\\source-mocap\\139_04.bvh",
+      "sha256": "7d93254818acbc4926875eb313437f2b561ddab4f8f6490e14011948dfc58b7f",
+      "bytes": 676766,
+      "frames": 884,
+      "frameTimeSeconds": 0.0083333,
+      "durationSeconds": 7.3583039,
+      "firstFrame": "Cgspeed-added T-pose; remaining frames are source capture"
+    },
+    {
+      "archiveEntry": "139/139_26.bvh",
+      "path": "D:\\preacherman\\output\\kitana-continuous-idle-v4-20261001\\source-mocap\\139_26.bvh",
+      "sha256": "f108d5f8b268e01e3e9891de014d4158e40f3a50a590a0f3bedc7e91ea7b135c",
+      "bytes": 500948,
+      "frames": 652,
+      "frameTimeSeconds": 0.0083333,
+      "durationSeconds": 5.4249783,
+      "firstFrame": "Cgspeed-added T-pose; remaining frames are source capture"
+    },
+    {
+      "archiveEntry": "139/139_27.bvh",
+      "path": "D:\\preacherman\\output\\kitana-continuous-idle-v4-20261001\\source-mocap\\139_27.bvh",
+      "sha256": "90cb573f41df69f59330fe95b438026f4f01bf563fdec32d31527137e9a65544",
+      "bytes": 561020,
+      "frames": 728,
+      "frameTimeSeconds": 0.0083333,
+      "durationSeconds": 6.0583091,
+      "firstFrame": "Cgspeed-added T-pose; remaining frames are source capture"
+    },
+    {
+      "archiveEntry": "READMEFIRST.txt",
+      "path": "D:\\preacherman\\output\\kitana-continuous-idle-v4-20261001\\source-mocap\\Cgspeed-MotionBuilder2010-READMEFIRST.txt",
+      "sha256": "8e6fe2e640b3728ef2e43e722cb5ae9cdf0010028c0517c4226ed165f9037930",
+      "bytes": 13248,
+      "containsUsageRights": true
+    }
+  ]
+}

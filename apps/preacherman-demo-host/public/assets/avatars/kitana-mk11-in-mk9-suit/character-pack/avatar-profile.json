@@ -1,0 +1,178 @@
+{
+  "avatarId": "kitana-mk11-in-mk9-suit",
+  "rigId": "kitana-mk11-in-mk9-suit",
+  "modelFile": "kitana-mk11-in-mk9-suit-runtime.glb",
+  "defaultActionId": "idle.default",
+  "jawBone": "head jaw",
+  "actions": [
+    {
+      "id": "idle.default",
+      "clipName": "kitana.idle.accad.continuous.v1",
+      "category": "idle",
+      "loop": "repeat",
+      "fadeIn": 0.55,
+      "fadeOut": 0.55,
+      "timeScale": 1,
+      "priority": 10,
+      "interruptible": true
+    },
+    {
+      "id": "idle.female-sway",
+      "clipName": "kitana.idle.accad.sway.v1",
+      "category": "idle",
+      "loop": "repeat",
+      "fadeIn": 0.55,
+      "fadeOut": 0.55,
+      "timeScale": 1,
+      "priority": 10,
+      "interruptible": true
+    },
+    {
+      "id": "idle.female-stand",
+      "clipName": "kitana.idle.accad.stand.v1",
+      "category": "idle",
+      "loop": "repeat",
+      "fadeIn": 0.55,
+      "fadeOut": 0.55,
+      "timeScale": 1,
+      "priority": 10,
+      "interruptible": true
+    },
+    {
+      "id": "gesture.stretch",
+      "clipName": "kitana.gesture.accad.female_stretch.v1",
+      "category": "gesture",
+      "loop": "once",
+      "fadeIn": 1.2,
+      "fadeOut": 1.2,
+      "timeScale": 1,
+      "priority": 20,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "gesture.hand",
+      "clipName": "kitana.gesture.accad.female_hand_gesture.v1",
+      "category": "gesture",
+      "loop": "once",
+      "fadeIn": 0.8,
+      "fadeOut": 0.8,
+      "timeScale": 1,
+      "priority": 20,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "gesture.head-tilt",
+      "clipName": "kitana.gesture.accad.female_head_tilt.v1",
+      "category": "gesture",
+      "loop": "once",
+      "fadeIn": 1,
+      "fadeOut": 1,
+      "timeScale": 1,
+      "priority": 20,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "speech.original",
+      "clipName": "kitana.talk.accad.compatible.v1",
+      "category": "speaking",
+      "loop": "once",
+      "fadeIn": 1.5,
+      "fadeOut": 1.5,
+      "timeScale": 1,
+      "priority": 30,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "speech.female-1",
+      "clipName": "kitana.talk.accad.female_conversation_01.v1",
+      "category": "speaking",
+      "loop": "once",
+      "fadeIn": 1.5,
+      "fadeOut": 1.5,
+      "timeScale": 1,
+      "priority": 30,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "speech.female-2",
+      "clipName": "kitana.talk.accad.female_conversation_02.v1",
+      "category": "speaking",
+      "loop": "once",
+      "fadeIn": 1.5,
+      "fadeOut": 1.5,
+      "timeScale": 1,
+      "priority": 30,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "speech.female-3",
+      "clipName": "kitana.talk.accad.female_conversation_03.v1",
+      "category": "speaking",
+      "loop": "once",
+      "fadeIn": 1.5,
+      "fadeOut": 1.5,
+      "timeScale": 1,
+      "priority": 30,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "look.around",
+      "clipName": "kitana.gesture.look_around.cmu_139_03.v1",
+      "category": "head",
+      "loop": "once",
+      "fadeIn": 1,
+      "fadeOut": 1,
+      "timeScale": 0.55,
+      "priority": 20,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "look.left",
+      "clipName": "kitana.gesture.look_left.cmu_139_03.v1",
+      "category": "head",
+      "loop": "once",
+      "fadeIn": 1,
+      "fadeOut": 1,
+      "timeScale": 0.55,
+      "priority": 20,
+      "interruptible": true,
+      "fallback": "idle.default"
+    },
+    {
+      "id": "look.right",
+      "clipName": "kitana.gesture.look_right.cmu_139_03.v1",
+      "category": "head",
+      "loop": "once",
+      "fadeIn": 1,
+      "fadeOut": 1,
+      "timeScale": 0.55,
+      "priority": 20,
+      "interruptible": true,
+      "fallback": "idle.default"
+    }
+  ],
+  "stateMap": {
+    "idle": "idle.default",
+    "listening": "idle.default",
+    "thinking": "idle.default",
+    "speaking": "speech.original",
+    "success": "idle.default",
+    "error": "idle.default",
+    "sleeping": "idle.default",
+    "wakeup": "idle.default"
+  },
+  "transform": {
+    "rotationY": 0,
+    "scale": 1,
+    "verticalOffset": 0
+  },
+  "requiresAdapter": "ThreeKitanaAnimationAdapter; generic single-clip adapter cannot schedule the package behaviours"
+}

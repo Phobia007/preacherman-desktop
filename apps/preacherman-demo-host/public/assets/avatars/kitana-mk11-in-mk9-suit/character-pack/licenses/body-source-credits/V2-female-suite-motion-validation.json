@@ -1,0 +1,484 @@
+{
+  "generatedAt": "2026-10-01T16:51:15.200Z",
+  "model": "D:\\preacherman\\output\\kitana-female-suite-v2-20261002\\Kitana-female-suite.glb",
+  "assetSHA256": "c8eb96f78467f8dcff49e5d19750c794949a5801dfc33b64c0277e42d1f0ce68",
+  "previousAssetSHA256": "1c75624e7f2369992b41b0803c2321d4964821e5fefff8f3a18c111b48e45e5a",
+  "engine": "Three.js 185; actual GLB channels, 60 Hz; no browser or Blender",
+  "limits": {
+    "quaternionNormError": 0.00001,
+    "plantedAnkleDriftMeters": 0.001,
+    "kneeFlexionStepDegrees": 3,
+    "kneePoleAdjacentTurnDegreesWhenBothFlexionsOver2": 60,
+    "kneePoleForwardDotWhenFlexionOver2": -0.1,
+    "loopPositionValueDifferenceMeters": 0.000001,
+    "loopQuaternionValueDifferenceDegrees": 0.005,
+    "loopAngularVelocityDeltaDegreesPerSecond": 90,
+    "loopPositionVelocityDeltaMetersPerSecond": 0.1,
+    "continuousPelvisLateralRangeMeters": [
+      0.1,
+      0.35
+    ],
+    "soleVerticalExcursionReviewMeters": 0.01,
+    "interClipAnkleAnchorDifferenceMeters": 0.001,
+    "interClipAnkleHeadingDifferenceDegrees": 0.1
+  },
+  "failures": [],
+  "warnings": [],
+  "oldAsset": {
+    "unchangedTables": [
+      "nodes",
+      "meshes",
+      "skins",
+      "materials",
+      "textures",
+      "images",
+      "samplers",
+      "scenes",
+      "scene"
+    ],
+    "animationCount": 11,
+    "allowedReplacementAnimation": "kitana.idle.accad.stand.v1",
+    "preservedAnimations": [
+      "kitana.idle.neutral.mocap.v1",
+      "kitana.idle.arms_by_side.mocap.v1",
+      "kitana.idle.arms_folded.mocap.v1",
+      "kitana-mk11-in-mk9-suit.idle.actorcore_talk.v3",
+      "kitana.idle.continuous.v1",
+      "kitana.talk.compatible.v1",
+      "kitana.gesture.look_around.cmu_139_03.v1",
+      "kitana.gesture.look_left.cmu_139_03.v1",
+      "kitana.gesture.look_right.cmu_139_03.v1",
+      "kitana.idle.accad.sway.v1"
+    ],
+    "identicalOriginalAnimationsExceptStand": true,
+    "standWasReplaced": true,
+    "identicalOriginalAccessors": true,
+    "identicalOriginalBufferViews": true,
+    "binaryPrefixBytes": 37912376,
+    "binaryPrefixSHA256": "5bbda3f0c0798d359e6f68f72fa3de2c95f8dd30e21470d9225824f6331a835e",
+    "expectedBinarySHA256": "5bbda3f0c0798d359e6f68f72fa3de2c95f8dd30e21470d9225824f6331a835e"
+  },
+  "actions": [
+    {
+      "clip": "kitana.idle.accad.stand.v1",
+      "durationSeconds": 2.4833333492279053,
+      "frameCount": 150,
+      "sampledLocalTransformValues": 343500,
+      "finiteFailures": 0,
+      "maximumQuaternionNormError": 7.053954331759371e-8,
+      "maximumAdjacentBoneRotationDegrees": 0.11089420105075624,
+      "worstAdjacentBoneRotation": {
+        "bone": "leg right thigh",
+        "frame": 42
+      },
+      "knees": {
+        "left": {
+          "flexionRangeDegrees": [
+            4.9976795354217245,
+            5.0016824862375415
+          ],
+          "maximumFlexionStepDegrees": 0.002649390109951355,
+          "maximumPoleTurnDegreesAbove2Flexion": 0.12654905066286806,
+          "minimumPoleForwardDotAbove2Flexion": 0.9161918313445632,
+          "framesAbove2Flexion": 150
+        },
+        "right": {
+          "flexionRangeDegrees": [
+            9.051106599559091,
+            9.544269492455157
+          ],
+          "maximumFlexionStepDegrees": 0.023198326765566435,
+          "maximumPoleTurnDegreesAbove2Flexion": 0.12779281470064655,
+          "minimumPoleForwardDotAbove2Flexion": 0.9802397247734023,
+          "framesAbove2Flexion": 150
+        }
+      },
+      "ankles": {
+        "left": {
+          "maximumDriftMeters": 9.65619120437727e-7,
+          "maximumVerticalDriftMeters": 7.736986794293355e-7,
+          "firstFramePositionMeters": [
+            0.09874921735954403,
+            0.12334102082247081,
+            -0.0669043501109851
+          ],
+          "firstFrameWorldQuaternion": [
+            0.6957410565891514,
+            -0.6768562976315576,
+            0.20828993118545394,
+            0.12011026245818893
+          ]
+        },
+        "right": {
+          "maximumDriftMeters": 7.081209879423904e-7,
+          "maximumVerticalDriftMeters": 6.774080772431468e-7,
+          "firstFramePositionMeters": [
+            -0.11147920051552666,
+            0.12334186930792043,
+            -0.06417050632174391
+          ],
+          "firstFrameWorldQuaternion": [
+            -0.6663403174611847,
+            0.7085899291489359,
+            -0.16701415270219244,
+            -0.16124146347014912
+          ]
+        }
+      },
+      "soles": {
+        "left": {
+          "selectedVertices": 62,
+          "firstFrameMinimumY": -0.01368626946813098,
+          "minimumY": -0.013687039882779802,
+          "maximumFrameMinimumY": -0.013685776516031546,
+          "maximumY": -0.0009542897354659994,
+          "minimumContactHeightExcursionMeters": 0.0000012633667482563754
+        },
+        "right": {
+          "selectedVertices": 62,
+          "firstFrameMinimumY": -0.013762194569693992,
+          "minimumY": -0.013762883328143155,
+          "maximumFrameMinimumY": -0.013761577155801813,
+          "maximumY": -0.000730969958390698,
+          "minimumContactHeightExcursionMeters": 0.0000013061723413421156
+        }
+      },
+      "pelvis": {
+        "xRangeMeters": [
+          -0.0030438487852373613,
+          0.002971953621756138
+        ],
+        "yRangeMeters": [
+          0.9701444446146813,
+          0.9713419915386711
+        ],
+        "zRangeMeters": [
+          0.008137528970949208,
+          0.022104290511715183
+        ],
+        "lateralExcursionMeters": 0.0060158024069934994,
+        "verticalExcursionMeters": 0.0011975469239897674
+      },
+      "endpointDifference": {
+        "maximumPositionDifferenceMeters": 5.953179256479541e-10,
+        "maximumRotationDifferenceDegrees": 4.4559284718023477e-8,
+        "maximumPositionVelocityDeltaMetersPerSecond": 0.00342400444001799,
+        "maximumAngularVelocityDeltaDegreesPerSecond": 0.3440672273991876,
+        "worstAngularVelocityBone": "head neck lower",
+        "worstPositionVelocityBone": "unusedheadu13",
+        "worstPositionVelocityEntryMetersPerSecond": [
+          0.007623753816744369,
+          -0.000232603738936632,
+          0.0014331671490813713
+        ],
+        "worstPositionVelocityExitMetersPerSecond": [
+          0.009941758436589837,
+          -0.00025544525961151976,
+          -0.0010867811147866058
+        ]
+      },
+      "loop": {
+        "maximumPositionDifferenceMeters": 5.953179256479541e-10,
+        "maximumRotationDifferenceDegrees": 4.4559284718023477e-8,
+        "maximumPositionVelocityDeltaMetersPerSecond": 0.00342400444001799,
+        "maximumAngularVelocityDeltaDegreesPerSecond": 0.3440672273991876,
+        "worstAngularVelocityBone": "head neck lower",
+        "worstPositionVelocityBone": "unusedheadu13",
+        "worstPositionVelocityEntryMetersPerSecond": [
+          0.007623753816744369,
+          -0.000232603738936632,
+          0.0014331671490813713
+        ],
+        "worstPositionVelocityExitMetersPerSecond": [
+          0.009941758436589837,
+          -0.00025544525961151976,
+          -0.0010867811147866058
+        ]
+      },
+      "loopClosureRequired": true
+    },
+    {
+      "clip": "kitana.idle.accad.continuous.v1",
+      "durationSeconds": 24,
+      "frameCount": 1441,
+      "sampledLocalTransformValues": 3299890,
+      "finiteFailures": 0,
+      "maximumQuaternionNormError": 7.287282444146115e-8,
+      "maximumAdjacentBoneRotationDegrees": 3.0778433891530397,
+      "worstAdjacentBoneRotation": {
+        "bone": "arm right wrist",
+        "frame": 627
+      },
+      "knees": {
+        "left": {
+          "flexionRangeDegrees": [
+            3.7570908516684653,
+            43.44991665309104
+          ],
+          "maximumFlexionStepDegrees": 1.4564420171476513,
+          "maximumPoleTurnDegreesAbove2Flexion": 1.7565314355745312,
+          "minimumPoleForwardDotAbove2Flexion": 0.8606353038695627,
+          "framesAbove2Flexion": 1441
+        },
+        "right": {
+          "flexionRangeDegrees": [
+            5.096953582165668,
+            39.304099399402105
+          ],
+          "maximumFlexionStepDegrees": 1.9177974486010783,
+          "maximumPoleTurnDegreesAbove2Flexion": 2.4794634112216003,
+          "minimumPoleForwardDotAbove2Flexion": 0.9235351544096675,
+          "framesAbove2Flexion": 1441
+        }
+      },
+      "ankles": {
+        "left": {
+          "maximumDriftMeters": 0.000013613509846034623,
+          "maximumVerticalDriftMeters": 0.000012265137398381754,
+          "firstFramePositionMeters": [
+            0.09874921735954403,
+            0.12334102082247081,
+            -0.0669043501109851
+          ],
+          "firstFrameWorldQuaternion": [
+            0.6957410565891514,
+            -0.6768562976315576,
+            0.20828993118545394,
+            0.12011026245818893
+          ]
+        },
+        "right": {
+          "maximumDriftMeters": 0.000014887767360348016,
+          "maximumVerticalDriftMeters": 0.000011959466594768653,
+          "firstFramePositionMeters": [
+            -0.11147920051552666,
+            0.12334186930792043,
+            -0.06417050632174391
+          ],
+          "firstFrameWorldQuaternion": [
+            -0.6663403174611847,
+            0.7085899291489359,
+            -0.16701415270219244,
+            -0.16124146347014912
+          ]
+        }
+      },
+      "soles": {
+        "left": {
+          "selectedVertices": 62,
+          "firstFrameMinimumY": -0.01368626946813098,
+          "minimumY": -0.013698518912490852,
+          "maximumFrameMinimumY": -0.013684798933981198,
+          "maximumY": -0.0009535054783809697,
+          "minimumContactHeightExcursionMeters": 0.00001371997850965409
+        },
+        "right": {
+          "selectedVertices": 62,
+          "firstFrameMinimumY": -0.013762194569693992,
+          "minimumY": -0.013773903062361315,
+          "maximumFrameMinimumY": -0.013760040186510697,
+          "maximumY": -0.0007297022173903798,
+          "minimumContactHeightExcursionMeters": 0.000013862875850617629
+        }
+      },
+      "pelvis": {
+        "xRangeMeters": [
+          -0.1211773130104199,
+          0.0658015592622963
+        ],
+        "yRangeMeters": [
+          0.9285203310606779,
+          0.9718411535848424
+        ],
+        "zRangeMeters": [
+          -0.02645264286506742,
+          0.03886251871074015
+        ],
+        "lateralExcursionMeters": 0.1869788722727162,
+        "verticalExcursionMeters": 0.04332082252416447
+      },
+      "endpointDifference": {
+        "maximumPositionDifferenceMeters": 1.0487108964295357e-7,
+        "maximumRotationDifferenceDegrees": 9.065975439549778e-15,
+        "maximumPositionVelocityDeltaMetersPerSecond": 0.0034236483384772675,
+        "maximumAngularVelocityDeltaDegreesPerSecond": 0.3440574601856831,
+        "worstAngularVelocityBone": "head neck lower",
+        "worstPositionVelocityBone": "unusedheadu13",
+        "worstPositionVelocityEntryMetersPerSecond": [
+          0.007623753816744369,
+          -0.000232603738936632,
+          0.0014331671490813713
+        ],
+        "worstPositionVelocityExitMetersPerSecond": [
+          0.009941786042791433,
+          -0.0002553322545395531,
+          -0.0010862728599571325
+        ]
+      },
+      "loop": {
+        "maximumPositionDifferenceMeters": 1.0487108964295357e-7,
+        "maximumRotationDifferenceDegrees": 9.065975439549778e-15,
+        "maximumPositionVelocityDeltaMetersPerSecond": 0.0034236483384772675,
+        "maximumAngularVelocityDeltaDegreesPerSecond": 0.3440574601856831,
+        "worstAngularVelocityBone": "head neck lower",
+        "worstPositionVelocityBone": "unusedheadu13",
+        "worstPositionVelocityEntryMetersPerSecond": [
+          0.007623753816744369,
+          -0.000232603738936632,
+          0.0014331671490813713
+        ],
+        "worstPositionVelocityExitMetersPerSecond": [
+          0.009941786042791433,
+          -0.0002553322545395531,
+          -0.0010862728599571325
+        ]
+      },
+      "loopClosureRequired": true
+    },
+    {
+      "clip": "kitana.talk.accad.compatible.v1",
+      "durationSeconds": 28.133333206176758,
+      "frameCount": 1689,
+      "sampledLocalTransformValues": 3867810,
+      "finiteFailures": 0,
+      "maximumQuaternionNormError": 8.300487386314614e-8,
+      "maximumAdjacentBoneRotationDegrees": 7.439399295695076,
+      "worstAdjacentBoneRotation": {
+        "bone": "arm right wrist",
+        "frame": 134
+      },
+      "knees": {
+        "left": {
+          "flexionRangeDegrees": [
+            4.997599516587314,
+            5.00221621663286
+          ],
+          "maximumFlexionStepDegrees": 0.003463153154456222,
+          "maximumPoleTurnDegreesAbove2Flexion": 0.12299487767976533,
+          "minimumPoleForwardDotAbove2Flexion": 0.9161886737602537,
+          "framesAbove2Flexion": 1689
+        },
+        "right": {
+          "flexionRangeDegrees": [
+            9.050359729989083,
+            9.54472582408809
+          ],
+          "maximumFlexionStepDegrees": 0.02243663537930729,
+          "maximumPoleTurnDegreesAbove2Flexion": 0.12407289818155927,
+          "minimumPoleForwardDotAbove2Flexion": 0.980240589050027,
+          "framesAbove2Flexion": 1689
+        }
+      },
+      "ankles": {
+        "left": {
+          "maximumDriftMeters": 0.000001001935913006799,
+          "maximumVerticalDriftMeters": 7.79215742374717e-7,
+          "firstFramePositionMeters": [
+            0.09874921735954403,
+            0.12334102082247081,
+            -0.0669043501109851
+          ],
+          "firstFrameWorldQuaternion": [
+            0.6957410565891514,
+            -0.6768562976315576,
+            0.20828993118545394,
+            0.12011026245818893
+          ]
+        },
+        "right": {
+          "maximumDriftMeters": 0.0000010303514938314736,
+          "maximumVerticalDriftMeters": 9.973129729001773e-7,
+          "firstFramePositionMeters": [
+            -0.11147920051552666,
+            0.12334186930792043,
+            -0.06417050632174391
+          ],
+          "firstFrameWorldQuaternion": [
+            -0.6663403174611847,
+            0.7085899291489359,
+            -0.16701415270219244,
+            -0.16124146347014912
+          ]
+        }
+      },
+      "soles": {
+        "left": {
+          "selectedVertices": 62,
+          "firstFrameMinimumY": -0.01368626946813098,
+          "minimumY": -0.013687050562774764,
+          "maximumFrameMinimumY": -0.013685645591332406,
+          "maximumY": -0.0009541596302384695,
+          "minimumContactHeightExcursionMeters": 0.0000014049714423571003
+        },
+        "right": {
+          "selectedVertices": 62,
+          "firstFrameMinimumY": -0.013762194569693992,
+          "minimumY": -0.013763202249875373,
+          "maximumFrameMinimumY": -0.013761445172376596,
+          "maximumY": -0.0007308456519648419,
+          "minimumContactHeightExcursionMeters": 0.0000017570774987762938
+        }
+      },
+      "pelvis": {
+        "xRangeMeters": [
+          -0.0030438446360967816,
+          0.002971926440857987
+        ],
+        "yRangeMeters": [
+          0.9701443417604532,
+          0.9713418965422582
+        ],
+        "zRangeMeters": [
+          0.008137544059246885,
+          0.022104215674206635
+        ],
+        "lateralExcursionMeters": 0.0060157710769547686,
+        "verticalExcursionMeters": 0.0011975547818050547
+      },
+      "endpointDifference": {
+        "maximumPositionDifferenceMeters": 1.0487108964295357e-7,
+        "maximumRotationDifferenceDegrees": 1.1251985516962196e-14,
+        "maximumPositionVelocityDeltaMetersPerSecond": 0.031504731274488516,
+        "maximumAngularVelocityDeltaDegreesPerSecond": 5.608336747631282,
+        "worstAngularVelocityBone": "arm left shoulder 2",
+        "worstPositionVelocityBone": "arm left finger 4c",
+        "worstPositionVelocityEntryMetersPerSecond": [
+          -0.012684684495491982,
+          -0.0008725343679105713,
+          0.03209964729707443
+        ],
+        "worstPositionVelocityExitMetersPerSecond": [
+          0.0032853960663092874,
+          -0.0008981260124940604,
+          0.004942623075060715
+        ]
+      },
+      "loop": null,
+      "loopClosureRequired": false
+    }
+  ],
+  "interClipContact": {
+    "kitana.idle.accad.stand.v1": {
+      "left": {
+        "firstFrameAnkleAnchorDifferenceMeters": 0,
+        "firstFrameAnkleHeadingDifferenceDegrees": 0
+      },
+      "right": {
+        "firstFrameAnkleAnchorDifferenceMeters": 0,
+        "firstFrameAnkleHeadingDifferenceDegrees": 0
+      }
+    },
+    "kitana.talk.accad.compatible.v1": {
+      "left": {
+        "firstFrameAnkleAnchorDifferenceMeters": 0,
+        "firstFrameAnkleHeadingDifferenceDegrees": 0
+      },
+      "right": {
+        "firstFrameAnkleAnchorDifferenceMeters": 0,
+        "firstFrameAnkleHeadingDifferenceDegrees": 0
+      }
+    }
+  },
+  "status": "PASS",
+  "interpretation": "Positions and velocities use GLTF meters and Y-up. Pole-forward checks exclude nearly straight knees (<= 2 degrees), where pole direction is ill-conditioned. Sole bands are mesh vertices within 15 mm of the first-frame lowest foot-influenced vertex; this is a contact-height audit, not a claim of collision-free clothing. Stand and Continuous require value/velocity loop closure. Original Stand replacement is intentional; all other ten original clips and the original binary/accessor/view prefix must be unchanged. Talk is a one-shot clip and its endpoint differences are diagnostic only. Inter-clip anchor equality does not prove contact throughout a quaternion crossfade; validate runtime blends separately. No subjective visual assessment is implied."
+}

@@ -1,0 +1,7 @@
+Rokoko Everyday Idles / Sam Lazarus
+Official source: https://www.rokoko.com/resources/rokoko-mocap-10-free-everyday-idle-animations
+Official download: https://media.rokoko.com/EVERYDAY-IDLES-MOCAP.zip
+The official page describes free recorded full-body and finger mocap for personal and commercial animation/VFX/game/3D art projects. FBX, Mixamo skeleton, 30 FPS.
+This is free project-use material, not a declared open-source license. Keep the official source/permission; do not assume rights beyond the publisher's terms. This private editing kit includes the user's unchanged source takes for reproducibility.
+Actor credit: Sam Lazarus. The official download page does not explicitly label actor gender.
+Only captured upper-body conversation trajectories were mapped to Pathfinder. Mechanical finger grip retained; no facial capture or voice included.

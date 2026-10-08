@@ -1,0 +1,438 @@
+{
+  "revision": 4,
+  "assetSHA256": "b42573346b33437b7e68b61d2d02a93ee9aec6888fcda0564b23ecda0f63b761",
+  "sourceGLB": "D:\\preacherman\\output\\kitana-continuous-idle-v3-20261001\\Kitana-continuous-idle.glb",
+  "sourceGLBSHA256": "62c4a6a28777f5bc82fb5646e340849d495e281f4046dd03e23b78b595b756e2",
+  "originalSixActionsPreservedExactly": true,
+  "originalBinaryBytes": 31178440,
+  "mapping": {
+    "head neck lower": "Neck",
+    "head neck middle": "Neck1",
+    "head neck upper": "Head"
+  },
+  "sourceReference": "Cgspeed MotionBuilder 2010 frame 0 T-pose, excluded from every imported motion",
+  "targetReference": "V3 neutral t=0",
+  "sourceMotionProcessing": "Continuous source frames at their original BVH frame time; no procedural head motion, angle scaling, mirroring, retiming or looping. Only anatomical reference/torso-space retargeting. Body is sampled from existing V3 neutral for standalone clip editing; runtime extracts the three neck rotation tracks into an additive overlay.",
+  "actions": [
+    {
+      "source": "139_03",
+      "startSourceFrame": 1,
+      "endSourceFrame": 984,
+      "clip": "kitana.gesture.look_around.cmu_139_03.v1",
+      "label": "自然环顾 · CMU 139_03",
+      "sourceFPSApproximate": 120.00048000192001,
+      "sourceFrameTimeSeconds": 0.0083333,
+      "outputFrames": 984,
+      "durationSeconds": 8.1916339,
+      "sourceSHA256": "c639c5515f8b0c976ee760ff8854cee51598f14eeb1b8cacfe42c0d01885ef83",
+      "sourceWebsite": "https://mocap.cs.cmu.edu/search.php?subjectnumber=139",
+      "poseSamples": [
+        {
+          "sample": 0,
+          "time": 0.0,
+          "sourceFrame": 1,
+          "worldRotations": {
+            "head neck lower": [
+              0.5902506113052368,
+              -0.4606930911540985,
+              -0.4439082741737366,
+              -0.49225175380706787
+            ],
+            "head neck middle": [
+              0.6603370904922485,
+              -0.3669261634349823,
+              -0.375798761844635,
+              -0.5367453694343567
+            ],
+            "head neck upper": [
+              0.737409234046936,
+              -0.18361441791057587,
+              -0.19625252485275269,
+              -0.6196759939193726
+            ]
+          }
+        },
+        {
+          "sample": 246,
+          "time": 2.0499918,
+          "sourceFrame": 247,
+          "worldRotations": {
+            "head neck lower": [
+              0.6043960452079773,
+              -0.36653396487236023,
+              -0.5369318127632141,
+              -0.46050262451171875
+            ],
+            "head neck middle": [
+              0.7540274262428284,
+              -0.37477555871009827,
+              -0.43821653723716736,
+              -0.31456682085990906
+            ],
+            "head neck upper": [
+              0.8775189518928528,
+              -0.2494906634092331,
+              -0.22524431347846985,
+              -0.3420232832431793
+            ]
+          }
+        },
+        {
+          "sample": 492,
+          "time": 4.0999836,
+          "sourceFrame": 493,
+          "worldRotations": {
+            "head neck lower": [
+              0.5940597653388977,
+              -0.40923258662223816,
+              -0.5081382393836975,
+              -0.47055014967918396
+            ],
+            "head neck middle": [
+              0.7156230807304382,
+              -0.39711493253707886,
+              -0.4293581545352936,
+              -0.38188350200653076
+            ],
+            "head neck upper": [
+              0.8297260999679565,
+              -0.25944897532463074,
+              -0.23643042147159576,
+              -0.4339832663536072
+            ]
+          }
+        },
+        {
+          "sample": 738,
+          "time": 6.1499754,
+          "sourceFrame": 739,
+          "worldRotations": {
+            "head neck lower": [
+              0.5926266312599182,
+              -0.3845379948616028,
+              -0.5387330055236816,
+              -0.4590110778808594
+            ],
+            "head neck middle": [
+              0.7317329049110413,
+              -0.40165960788726807,
+              -0.4469958245754242,
+              -0.3216073513031006
+            ],
+            "head neck upper": [
+              0.8571849465370178,
+              -0.28007277846336365,
+              -0.24130892753601074,
+              -0.3585572838783264
+            ]
+          }
+        },
+        {
+          "sample": 983,
+          "time": 8.1916339,
+          "sourceFrame": 984,
+          "worldRotations": {
+            "head neck lower": [
+              0.5794543623924255,
+              -0.4763752520084381,
+              -0.45916688442230225,
+              -0.4758836030960083
+            ],
+            "head neck middle": [
+              0.6168593764305115,
+              -0.4748031198978424,
+              -0.4392452538013458,
+              -0.44845330715179443
+            ],
+            "head neck upper": [
+              0.7104973196983337,
+              -0.34727945923805237,
+              -0.29519766569137573,
+              -0.5361427664756775
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "139_03",
+      "startSourceFrame": 433,
+      "endSourceFrame": 614,
+      "clip": "kitana.gesture.look_left.cmu_139_03.v1",
+      "label": "向左察看 · CMU 139_03",
+      "sourceFPSApproximate": 120.00048000192001,
+      "sourceFrameTimeSeconds": 0.0083333,
+      "outputFrames": 182,
+      "durationSeconds": 1.5083273,
+      "sourceSHA256": "c639c5515f8b0c976ee760ff8854cee51598f14eeb1b8cacfe42c0d01885ef83",
+      "sourceWebsite": "https://mocap.cs.cmu.edu/search.php?subjectnumber=139",
+      "poseSamples": [
+        {
+          "sample": 0,
+          "time": 0.0,
+          "sourceFrame": 433,
+          "worldRotations": {
+            "head neck lower": [
+              0.566960334777832,
+              -0.5091701745986938,
+              -0.44732630252838135,
+              -0.4681890308856964
+            ],
+            "head neck middle": [
+              0.5896463394165039,
+              -0.4863525331020355,
+              -0.4367992579936981,
+              -0.4743257164955139
+            ],
+            "head neck upper": [
+              0.677614152431488,
+              -0.3433694839477539,
+              -0.29755884408950806,
+              -0.5782691836357117
+            ]
+          }
+        },
+        {
+          "sample": 45,
+          "time": 0.3749985,
+          "sourceFrame": 478,
+          "worldRotations": {
+            "head neck lower": [
+              0.5865271091461182,
+              -0.43879014253616333,
+              -0.4897961914539337,
+              -0.472809761762619
+            ],
+            "head neck middle": [
+              0.6625058054924011,
+              -0.4417118430137634,
+              -0.45190271735191345,
+              -0.40219494700431824
+            ],
+            "head neck upper": [
+              0.7720807194709778,
+              -0.3161065876483917,
+              -0.29045578837394714,
+              -0.4686187207698822
+            ]
+          }
+        },
+        {
+          "sample": 91,
+          "time": 0.7583303,
+          "sourceFrame": 524,
+          "worldRotations": {
+            "head neck lower": [
+              0.6000840663909912,
+              -0.36935582756996155,
+              -0.5228309035301208,
+              -0.4797115921974182
+            ],
+            "head neck middle": [
+              0.7493768334388733,
+              -0.3507756292819977,
+              -0.4268683195114136,
+              -0.3649305999279022
+            ],
+            "head neck upper": [
+              0.8682038187980652,
+              -0.20773060619831085,
+              -0.21630872786045074,
+              -0.3953234851360321
+            ]
+          }
+        },
+        {
+          "sample": 136,
+          "time": 1.1333288,
+          "sourceFrame": 569,
+          "worldRotations": {
+            "head neck lower": [
+              0.5976191759109497,
+              -0.4014910161495209,
+              -0.49717408418655396,
+              -0.48422548174858093
+            ],
+            "head neck middle": [
+              0.7232916355133057,
+              -0.3734159767627716,
+              -0.41410180926322937,
+              -0.40734443068504333
+            ],
+            "head neck upper": [
+              0.8322035074234009,
+              -0.22634297609329224,
+              -0.21955673396587372,
+              -0.45607125759124756
+            ]
+          }
+        },
+        {
+          "sample": 181,
+          "time": 1.5083273,
+          "sourceFrame": 614,
+          "worldRotations": {
+            "head neck lower": [
+              0.5834140777587891,
+              -0.48222362995147705,
+              -0.43237733840942383,
+              -0.4900391697883606
+            ],
+            "head neck middle": [
+              0.5833231210708618,
+              -0.4968327581882477,
+              -0.445128858089447,
+              -0.46341320872306824
+            ],
+            "head neck upper": [
+              0.6678112149238586,
+              -0.3757389783859253,
+              -0.32006996870040894,
+              -0.5571386814117432
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "139_03",
+      "startSourceFrame": 325,
+      "endSourceFrame": 433,
+      "clip": "kitana.gesture.look_right.cmu_139_03.v1",
+      "label": "向右短瞥 · CMU 139_03",
+      "sourceFPSApproximate": 120.00048000192001,
+      "sourceFrameTimeSeconds": 0.0083333,
+      "outputFrames": 109,
+      "durationSeconds": 0.8999964,
+      "sourceSHA256": "c639c5515f8b0c976ee760ff8854cee51598f14eeb1b8cacfe42c0d01885ef83",
+      "sourceWebsite": "https://mocap.cs.cmu.edu/search.php?subjectnumber=139",
+      "poseSamples": [
+        {
+          "sample": 0,
+          "time": 0.0,
+          "sourceFrame": 325,
+          "worldRotations": {
+            "head neck lower": [
+              0.5864361524581909,
+              -0.48645684123039246,
+              -0.42667967081069946,
+              -0.487233966588974
+            ],
+            "head neck middle": [
+              0.6056624054908752,
+              -0.4878976345062256,
+              -0.41255325078964233,
+              -0.47426673769950867
+            ],
+            "head neck upper": [
+              0.6849387288093567,
+              -0.35966089367866516,
+              -0.2748749852180481,
+              -0.570917546749115
+            ]
+          }
+        },
+        {
+          "sample": 27,
+          "time": 0.2249991,
+          "sourceFrame": 352,
+          "worldRotations": {
+            "head neck lower": [
+              0.5783255696296692,
+              -0.5016940236091614,
+              -0.431363582611084,
+              -0.4772507846355438
+            ],
+            "head neck middle": [
+              0.5776485204696655,
+              -0.5186434388160706,
+              -0.43894529342651367,
+              -0.4523918330669403
+            ],
+            "head neck upper": [
+              0.6602020263671875,
+              -0.39891770482063293,
+              -0.31276842951774597,
+              -0.5542327761650085
+            ]
+          }
+        },
+        {
+          "sample": 54,
+          "time": 0.4499982,
+          "sourceFrame": 379,
+          "worldRotations": {
+            "head neck lower": [
+              0.5734416246414185,
+              -0.5213111042976379,
+              -0.4173521101474762,
+              -0.4745701849460602
+            ],
+            "head neck middle": [
+              0.581575334072113,
+              -0.4890351891517639,
+              -0.41122305393218994,
+              -0.5034982562065125
+            ],
+            "head neck upper": [
+              0.6563850045204163,
+              -0.33716142177581787,
+              -0.2742389738559723,
+              -0.6166635751724243
+            ]
+          }
+        },
+        {
+          "sample": 81,
+          "time": 0.6749973,
+          "sourceFrame": 406,
+          "worldRotations": {
+            "head neck lower": [
+              0.575137197971344,
+              -0.5501849055290222,
+              -0.3576450049877167,
+              -0.48847100138664246
+            ],
+            "head neck middle": [
+              0.5200637578964233,
+              -0.5158891081809998,
+              -0.39006543159484863,
+              -0.5578896999359131
+            ],
+            "head neck upper": [
+              0.5675646662712097,
+              -0.35414937138557434,
+              -0.27474021911621094,
+              -0.6906272768974304
+            ]
+          }
+        },
+        {
+          "sample": 108,
+          "time": 0.8999964,
+          "sourceFrame": 433,
+          "worldRotations": {
+            "head neck lower": [
+              0.5741689801216125,
+              -0.4996486008167267,
+              -0.4363693296909332,
+              -0.4798573851585388
+            ],
+            "head neck middle": [
+              0.5963894724845886,
+              -0.4763411581516266,
+              -0.42585110664367676,
+              -0.4858699440956116
+            ],
+            "head neck upper": [
+              0.6812232136726379,
+              -0.33094337582588196,
+              -0.2853567898273468,
+              -0.5873523354530334
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

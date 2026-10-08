@@ -1,3 +1,4 @@
+import { createCharacterKit, PathfinderAnimationAdapter, ThreeKitanaAnimationAdapter } from "./avatar/kits/characterKits";
 import { importedAvatarProfiles, avatarUsesHologram } from "./avatarCatalog";
 import { addAfterEffect, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
@@ -36,6 +37,7 @@ import {
 } from "./avatar/manifests/zimaAnimationManifest";
 import { AvatarAnimationError as AnimationLoadError } from "./avatar/types/avatarAnimation";
 import type {
+  AvatarMotionState,
   AvatarActionDescriptor,
   AvatarAnimationDebugSnapshot,
   AvatarAnimationError,
@@ -105,6 +107,7 @@ interface AvatarModelProps {
   readonly onFirstFrame: (snapshot: AvatarPerformanceSnapshot) => void;
   readonly pose?: AvatarPose;
   readonly jawOpen?: number;
+  readonly motionState?: AvatarMotionState;
   readonly motionSource?: AvatarMotionStreamSource;
   readonly motionRigBinding?: AvatarMotionRigBinding;
   readonly modelId: AvatarModelId;
@@ -190,6 +193,7 @@ export function AvatarModel({
   onAnimationError,
   onFirstFrame,
   jawOpen = 0,
+  motionState = "idle",
   motionSource,
   motionRigBinding,
   modelId,
@@ -212,7 +216,7 @@ export function AvatarModel({
   const animationErrorHandler = useRef(onAnimationError);
   animationErrorHandler.current = onAnimationError;
   const adapter = useMemo(
-    () => new ThreeAvatarAnimationAdapter({
+    () => createCharacterKit(profile.avatarId, urls.model, error => animationErrorHandler.current(error)) ?? new ThreeAvatarAnimationAdapter({
       avatarId: profile.avatarId,
       rigId: profile.rigId,
       modelUrl: urls.model,
@@ -296,11 +300,32 @@ export function AvatarModel({
       .catch(() => undefined);
   }, [actionId, actionRequestKey, controller, invalidate, root]);
 
+  useEffect(() => {
+    if (!root || !(adapter instanceof PathfinderAnimationAdapter || adapter instanceof ThreeKitanaAnimationAdapter)) return;
+    const transition = adapter instanceof ThreeKitanaAnimationAdapter
+      ? adapter.setState(motionState, motionState === "listening" ? { expressionId: "attentive", intensity: 0.35 }
+        : motionState === "thinking" ? { expressionId: "curious_question", intensity: 0.3 } : undefined)
+      : adapter.setState(motionState);
+    void transition.then(async () => {
+      if (motionState === "thinking" && adapter instanceof ThreeKitanaAnimationAdapter) {
+        await adapter.playExpression("curious_question", 0.3);
+      }
+      invalidate();
+    }).catch(() => undefined);
+  }, [adapter, invalidate, motionState, root]);
+
+  useEffect(() => {
+    if (!root) return;
+    const energy = Number.isFinite(jawOpen) ? Math.max(0, Math.min(1, jawOpen)) : 0;
+    if (adapter instanceof ThreeKitanaAnimationAdapter) adapter.audioEnergy(energy);
+    if (adapter instanceof PathfinderAnimationAdapter) void adapter.setSpeechLevel(energy).catch(() => undefined);
+  }, [adapter, jawOpen, root]);
+
   useFrame((_, deltaSeconds) => {
     const animationDelta = Math.min(deltaSeconds, 0.1);
     adapter.update(animationDelta);
     motionPlayer?.update(animationDelta);
-    if (!root || jawOpen <= 0) return;
+    if (!root || jawOpen <= 0 || adapter instanceof ThreeKitanaAnimationAdapter) return;
     const jaw = profile.jawBone ? root.getObjectByName(profile.jawBone) : null;
     if (jaw) jaw.rotation.x += Math.min(1, jawOpen) * 0.22;
   });

@@ -17,7 +17,7 @@ async function componentHarness(file,exportName,extraServices={}){
  const memo=(fn,deps)=>{const i=index++;if(!slots[i]||deps.some((d,j)=>!Object.is(d,slots[i].deps[j])))slots[i]={deps,value:fn()};return slots[i].value;};
  const react={useState:state,useRef:init=>state(()=>({current:init}))[0],useCallback:(fn,deps)=>memo(()=>fn,deps),useMemo:memo,useEffect:effect,useLayoutEffect:effect};
  const jsx=(_,props)=>({type:_,props});const error=class extends Error{};
- const services={avatarModelName:id=>names[id],avatarDefaultActionId:()=> 'idle.default',useAvatarInteractionState:()=> 'idle',localAvatarAssetBaseUrl:id=>'/assets/avatars/'+id,...extraServices};
+ const services={createCharacterKit:()=>null,PathfinderAnimationAdapter:class {},ThreeKitanaAnimationAdapter:class {},avatarModelName:id=>names[id],avatarDefaultActionId:()=> 'idle.default',useAvatarInteractionState:()=> 'idle',localAvatarAssetBaseUrl:id=>'/assets/avatars/'+id,...extraServices};
  const require=name=>name==='react'?react:name==='react/jsx-runtime'?{jsx,jsxs:jsx,Fragment:'Fragment'}:new Proxy(services,{get:(o,key)=>key in o?o[key]:key==='normalizeAvatarError'?e=>e:key==='AvatarError'?error:String(key)});
  const exports={};const source=await readFile(file,'utf8');const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}}).outputText;
  const browser={addEventListener(){},removeEventListener(){},WebGLRenderingContext:{},devicePixelRatio:1};

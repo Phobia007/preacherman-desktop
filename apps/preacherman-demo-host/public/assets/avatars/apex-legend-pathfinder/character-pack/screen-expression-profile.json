@@ -1,0 +1,105 @@
+{
+  "material": "pathfinder_base_emotes",
+  "atlasImage": "pathfinder_base_emotes_albedoTexture",
+  "texturePixelsUnmodified": true,
+  "dimensions": [
+    2048,
+    1024
+  ],
+  "baseCell": [
+    0,
+    1
+  ],
+  "columnStride": 0.25,
+  "rowStride": 0.375,
+  "expressions": [
+    {
+      "id": "angry",
+      "label": "生气",
+      "column": 0,
+      "row": 0
+    },
+    {
+      "id": "defeated",
+      "label": "晕倒",
+      "column": 1,
+      "row": 0
+    },
+    {
+      "id": "alert",
+      "label": "警示",
+      "column": 2,
+      "row": 0
+    },
+    {
+      "id": "glitch",
+      "label": "故障",
+      "column": 3,
+      "row": 0
+    },
+    {
+      "id": "happy",
+      "label": "友好笑脸",
+      "column": 0,
+      "row": 1
+    },
+    {
+      "id": "ko",
+      "label": "KO！",
+      "column": 1,
+      "row": 1
+    },
+    {
+      "id": "love",
+      "label": "爱心眼",
+      "column": 2,
+      "row": 1
+    },
+    {
+      "id": "awkward",
+      "label": "害羞苦笑",
+      "column": 3,
+      "row": 1
+    },
+    {
+      "id": "curious",
+      "label": "疑惑",
+      "column": 0,
+      "row": 2
+    },
+    {
+      "id": "sad",
+      "label": "难过哭脸",
+      "column": 1,
+      "row": 2
+    },
+    {
+      "id": "blank",
+      "label": "休息空屏",
+      "column": 2,
+      "row": 2
+    },
+    {
+      "id": "portrait",
+      "label": "点赞机器人",
+      "column": 3,
+      "row": 2
+    }
+  ],
+  "stateExpressions": {
+    "idle": "happy",
+    "listening": "happy",
+    "thinking": "curious",
+    "speaking": "happy",
+    "success": "portrait",
+    "error": "alert",
+    "sleeping": "blank",
+    "wakeup": "happy"
+  },
+  "aiFeedbackExample": {
+    "emotion": "love",
+    "durationSeconds": 5
+  },
+  "reference": "https://www.dexerto.com/apex-legends/apex-legends-the-many-faces-of-pathfinder-revealed-447829/",
+  "notes": "Icons come from the model itself. State names/associations and 0.24s transition behaviour are companion-system choices; not claimed to reproduce official game triggering rules."
+}

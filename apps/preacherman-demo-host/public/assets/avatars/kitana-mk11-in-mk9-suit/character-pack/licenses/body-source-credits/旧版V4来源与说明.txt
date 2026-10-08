@@ -1,0 +1,43 @@
+Kitana 连贯待机 V4 — 导入现成环顾动作
+
+本次内容
+保留 V3 的完整待机、自然站立、自然垂手、抱臂、原始说话、适配说话六段动作，增加三段来自 CMU 真人动捕的头颈动作。三段都来自 CMU 139_03 “Looking Around”，不是三个不同的捕捉来源。
+
+导入片段（以角色自身的左右为准）
+1. 自然环顾：原始动捕帧 1–984，约 8.192 秒。
+2. 向左察看：原始动捕帧 433–614，约 1.508 秒。
+3. 向右短瞥：原始动捕帧 325–433，约 0.900 秒。
+帧范围包含首尾，编号排除了 BVH 转换者添加的第 0 帧 T-pose。三段均连续截取原始采样，保持原速度，没有镜像、倒放、缩放转头角度或手工制作转头曲线。原素材本身包含较快的短瞥，左右两段不是缓慢摆头。
+
+动作来源
+原始捕捉：Carnegie Mellon University Graphics Lab Motion Capture Database，Subject 139，Trial 03，Looking Around。
+官方动作页：https://mocap.cs.cmu.edu/search.php?subjectnumber=139
+官方库：https://mocap.cs.cmu.edu/
+BVH 转换：Bruce Hahne / Cgspeed，MotionBuilder-friendly 2010 release。
+转换主页：https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/the-motionbuilder-friendly-bvh-conversion-release-of-cmus-motion-capture-database
+原 BVH、官方 ASF/AMC、来源哈希和转换者 README 随资源包保存。许可详见 source-mocap/Cgspeed-MotionBuilder2010-READMEFIRST.txt 的 USAGE RIGHTS。CMU 允许用于研究和商业项目，转换作者没有增加限制；本包不将该素材另行标作 CC0 或 CC-BY。
+CMU 数据采集支持：NSF EIA-0196217。
+原待机基础为 100STYLE（Ian Mason、Sebastian Starke、Taku Komura，CC BY 4.0）；角色和原有 ActorCore 说话动作来自现有项目。
+
+预览
+打开“Kitana-连贯待机预览-V4.html”，默认完整待机，可切换中性站立。
+“偶尔环顾”和“偶尔插入说话”各自控制。环顾只在完整待机或中性站立中随机出现。
+随机环顾每次等待 12–25 秒有效待机时间，不连续重复同一片段；插入动作结束后至少有 8 秒安静间隔。
+完整待机只在第 0–5 秒或 23–36 秒启动环顾，中性站立随时可启动。这里限制的是开始时刻，环顾可以继续经过基础身体的后续动作，身体时间轴不停顿、不重置。
+随机说话保留原来的 45–90 秒计时与双手放松入口；环顾和说话不会同时播放，手动试播说话具有优先级。实际等待可能长于抽取的时间。
+暂停、隐藏页面或选其他参考动作会暂停相应调度，倍率同时作用于动作和有效播放计时。自动轮播与两种随机模式互斥。
+可直接试播环顾或选择左看、右瞥、完整环顾，不必等待随机触发。
+
+映射与文件
+只映射源 Neck、Neck1、Head，分别对应 Kitana 的 head neck lower、head neck middle、head neck upper。使用源参考姿态和 Kitana 中性站立进行骨骼坐标校准，并去掉源角色整体胸部转向。
+预览中将三条头颈旋转作为 additive 层叠加，原身体动作保持完整权重。淡入、淡出只用于播放衔接：每段各取 min(0.7 秒, 片段时长/4)，不改源帧时间。
+Kitana-continuous-idle.glb：全部九段动作。
+Kitana-idle-and-random-gestures.glb：连续待机、中性站立、适配说话和三段环顾，适合播放器接入。
+Kitana-continuous-idle.blend：可编辑工程，纹理已打包，默认 36 秒连续待机。在动作编辑器中选择 kitana.gesture.* 可单独编辑三个导入片段；为了方便观看，这些片段附带 V3 中性身体姿态。
+GLB 本身不执行随机逻辑。viewer-source/head-gesture-layer.mjs 提供头部调度及叠加，viewer-source/idle-talk-player.mjs 保留身体和说话播放器，viewer-source/viewer.js 展示接入。
+V3 目录完整保留。本次只更新导出资源及独立预览，不改桌面应用内的角色资源。
+
+验证范围
+检查原 V3 六段动画和模型数据保留、原 BVH 帧时间与来源哈希、映射方向和头颈轨道、Blender 工程，以及真实 Three.AnimationMixer 下的随机调度和身体隔离。检查结果与具体范围见 metadata 和 viewer-static-validation.json。
+已渲染查看最终模型的关键姿势；静态画面不能代表连续播放的全部观感，也没有对头发与肩部做全表面碰撞证明。
+浏览器工具此前禁止 file 导航，因此本次未自动复验 WebGL 实时画面与浏览器控制台，也未用其他服务器或浏览器绕过该限制。

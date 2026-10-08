@@ -1,0 +1,49 @@
+{
+  "source": "CMU Graphics Lab Motion Capture Database, Subject 139",
+  "sourcePage": "https://mocap.cs.cmu.edu/search.php?subjectnumber=139",
+  "retrieval": "Direct official downloads; no modification of captured AMC or ASF bytes",
+  "files": [
+    {
+      "file": "139.asf",
+      "url": "https://mocap.cs.cmu.edu/subjects/139/139.asf",
+      "bytes": 7260,
+      "sha256": "c72f244092c214c2c4fd496d214a20ec7bb58dbb626458dda2a2b953a465ae85",
+      "downloadedAtUTC": "2026-10-01T15:10:50.853603+00:00"
+    },
+    {
+      "file": "139_01.amc",
+      "url": "https://mocap.cs.cmu.edu/subjects/139/139_01.amc",
+      "bytes": 869406,
+      "sha256": "f49c9a5375da9db1f5c1e75d347a0c91ee7162d19736063fcd2bd6291520b776",
+      "downloadedAtUTC": "2026-10-01T15:10:53.724404+00:00"
+    },
+    {
+      "file": "139_03.amc",
+      "url": "https://mocap.cs.cmu.edu/subjects/139/139_03.amc",
+      "bytes": 789172,
+      "sha256": "c5b7def3ff4f07c75040d26d2d35e46750e5fb255ad04e991c4eb36f05364736",
+      "downloadedAtUTC": "2026-10-01T15:10:55.933234+00:00"
+    },
+    {
+      "file": "139_04.amc",
+      "url": "https://mocap.cs.cmu.edu/subjects/139/139_04.amc",
+      "bytes": 706029,
+      "sha256": "90c00a1c151565246d71eebdefc661753d63076245bcb5faacd7381c9876c543",
+      "downloadedAtUTC": "2026-10-01T15:10:58.485572+00:00"
+    },
+    {
+      "file": "139_26.amc",
+      "url": "https://mocap.cs.cmu.edu/subjects/139/139_26.amc",
+      "bytes": 520547,
+      "sha256": "a04b85c841bab2a94810e3f714181c93f07dfe08cd904c63ff46b9faf5461b15",
+      "downloadedAtUTC": "2026-10-01T15:11:00.455986+00:00"
+    },
+    {
+      "file": "139_27.amc",
+      "url": "https://mocap.cs.cmu.edu/subjects/139/139_27.amc",
+      "bytes": 581818,
+      "sha256": "01947668ee3f70b5053062d6e2c0d582fd4aaf595baddcc5234f4b98f851c804",
+      "downloadedAtUTC": "2026-10-01T15:11:02.471678+00:00"
+    }
+  ]
+}

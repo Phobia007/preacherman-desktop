@@ -1,3 +1,4 @@
+import { characterKitProfiles } from "./avatar/kits/characterKits";
 import type { AvatarModelId } from "./types";
 import type { AvatarActionDescriptor } from "./avatar/types/avatarAnimation";
 
@@ -82,14 +83,14 @@ interface ImportedAvatarProfile {
   readonly avatarId: string;
   readonly defaultActionId: string;
   readonly actions: readonly AvatarActionDescriptor[];
-  readonly jawBone: null;
+  readonly jawBone: string | null;
   readonly modelFile: string;
   readonly rigId: string;
   readonly stateMap: { readonly idle: string };
   readonly transform: { readonly rotationY: number; readonly scale: number; readonly verticalOffset: number };
 }
 export const importedAvatarProfiles = importedAvatarModels.reduce((profiles, { id }) => {
-  profiles[id] = {
+  profiles[id] = characterKitProfiles[id as keyof typeof characterKitProfiles] ?? {
   avatarId: id,
   defaultActionId: "idle.default",
   actions: [{ id: "idle.default", clipName: `${id}.idle.${importedIdleMotions[id]}.v${importedIdleVersions[id] ?? 2}`, category: "idle", loop: "repeat", fadeIn: 0.35, fadeOut: 0.35, timeScale: 1, priority: 10, interruptible: true }],

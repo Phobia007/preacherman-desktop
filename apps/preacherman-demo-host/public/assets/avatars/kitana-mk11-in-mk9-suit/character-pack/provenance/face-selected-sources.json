@@ -1,0 +1,68 @@
+{
+  "dataset": "SuSuInterActs",
+  "datasetURL": "https://huggingface.co/datasets/Chuhaojin/SuSuInterActs",
+  "channelOrderSource": "https://github.com/SentiAvatar/SentiAvatar/blob/main/motion_generation/susu_face_speech_align.py",
+  "license": "SentiPulse Non-Commercial Source License v1.0; dataset README additionally states CC BY-NC 4.0; use stricter noncommercial terms",
+  "clips": [
+    {
+      "id": "gentle_smile",
+      "label": "温和鼓励",
+      "emotion": "warm",
+      "sourceEntry": "SuSuInterActs/arkit_data/fbx_to_json_data_susu_retarget_maya/20250902/Human_0901_30-9_01.npy",
+      "sourceAnnotation": "【表情：温和地笑着，眼中带着鼓励】嗯……那以后我的安全感，就都交给你负责咯？",
+      "sourceSHA256": "484f7bde7a93ee077906652e2770bad59afb264a2f4a50099c4ee7296f57a8ec",
+      "bytes": 66632,
+      "fps": 20
+    },
+    {
+      "id": "friendly_smile",
+      "label": "亲切微笑",
+      "emotion": "warm",
+      "sourceEntry": "SuSuInterActs/arkit_data/fbx_to_json_data_susu_retarget_maya/20250901/Human_0829_81-9_01.npy",
+      "sourceAnnotation": "【表情：甜美微笑】【动作：翘起一脚】不然呢？我的世界里，好像也只有你一个人嘛。",
+      "sourceSHA256": "853d4f4a9ee110410d03d83e5c70fcb329110342ad93f66406ef30f29f0a5a6e",
+      "bytes": 59288,
+      "fps": 20
+    },
+    {
+      "id": "attentive",
+      "label": "认真倾听",
+      "emotion": "curious",
+      "sourceEntry": "SuSuInterActs/arkit_data/fbx_to_json_data_susu_retarget_maya/20250916/Human_0915_68-1_01.npy",
+      "sourceAnnotation": "【表情：认真中带着一点试探的意味】【动作：身体微微前倾，似乎在认真聆听。】我突然想到一个问题，想问问你。",
+      "sourceSHA256": "9d43a125b57a08a20b965aeeae0c2fbc9291af83ef384bf260e8901126d8ca62",
+      "bytes": 43784,
+      "fps": 20
+    },
+    {
+      "id": "soft_concern",
+      "label": "轻柔关心",
+      "emotion": "concerned",
+      "sourceEntry": "SuSuInterActs/arkit_data/fbx_to_json_data_susu_retarget_maya/20250902/Human_0901_67-3_01.npy",
+      "sourceAnnotation": "【表情：带着一丝关切】你的眼圈好像重了些，没休息好吗？",
+      "sourceSHA256": "b7c547556501f6da603c65963832785d769f299b98af795f0b5ab7271577bb86",
+      "bytes": 58064,
+      "fps": 20
+    },
+    {
+      "id": "curious_question",
+      "label": "好奇探询",
+      "emotion": "curious",
+      "sourceEntry": "SuSuInterActs/arkit_data/fbx_to_json_data_susu_retarget_maya/20250904/Human_0904_116-2_01.npy",
+      "sourceAnnotation": "【表情：眼睛微微睁大，带着天真的疑惑】【动作：歪头思考】我吗？我好像没什么东西可以忘掉的呀。",
+      "sourceSHA256": "9b514141e895734e6a7519a831f96a71f92f0d6982b5179ff01a08dc2e5ce308",
+      "bytes": 58064,
+      "fps": 20
+    },
+    {
+      "id": "soft_surprise",
+      "label": "轻微惊讶",
+      "emotion": "curious",
+      "sourceEntry": "SuSuInterActs/arkit_data/fbx_to_json_data_susu_retarget_maya/20250801/Human_599-7_01.npy",
+      "sourceAnnotation": "【表情：惊讶】啊？你还真的在考虑异地啊？我就是随口一说...你是不是要去很远的地方？",
+      "sourceSHA256": "45f86a11e3f314bb290a8d84126359576ea3e7f5e25f52fe26f4662b91cb3a7d",
+      "bytes": 99680,
+      "fps": 20
+    }
+  ]
+}

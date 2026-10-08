@@ -1,3 +1,4 @@
+import type { AvatarMotionState } from "./avatar/types/avatarAnimation";
 import { AvatarFrameMetrics } from "./AvatarFrameMetrics";
 import { OrbitControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -29,6 +30,7 @@ interface InteractiveAvatarSceneProps {
   readonly pose: AvatarPose;
   readonly resetKey: number;
   readonly jawOpen: number;
+  readonly motionState?: AvatarMotionState;
   readonly environment: AvatarSceneEnvironment;
   readonly isolateCompanion?: boolean;
   readonly motionSource?: AvatarMotionStreamSource;
@@ -156,6 +158,7 @@ export function InteractiveAvatarScene({
   pose,
   resetKey,
   jawOpen,
+  motionState,
   environment,
   isolateCompanion = false,
   motionSource,
@@ -189,6 +192,7 @@ export function InteractiveAvatarScene({
         onFirstFrame={onFirstFrame}
         pose={pose}
         jawOpen={jawOpen}
+        motionState={motionState}
         motionSource={motionSource}
         motionRigBinding={motionRigBinding}
         modelId={modelId}
