@@ -64,6 +64,8 @@ html[data-appearance="dark"] { color-scheme: dark; }
 html { --nav-height: 54px; }
 header[class*="NavBar"] { animation: none !important; background: var(--demo-theme-market-header-glass); backdrop-filter: blur(18px); }
 header [class*="SubNav"][class*="__inner"] { justify-content: center; }
+/* The host keeps one navigation bar while only the catalog frames transition. */
+html[data-preacherman-embedded="true"] header[class*="NavBar"] { visibility: hidden !important; pointer-events: none; }
 [class*="FilterHub"][class*="__hub"] { padding-top: calc(var(--section-spacing-page-top) - 84px); }
 [class*="MarketplaceHero"][class$="__hero"] { padding-top: calc(var(--section-spacing-page-top) - 84px); }
 main aside { top: 70px !important; }

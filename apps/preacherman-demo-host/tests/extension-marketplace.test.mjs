@@ -41,4 +41,6 @@ for (const mode of ['light', 'dark']) test(`Extension preserves the shared room 
   assert.match(bridge, /key === '--demo-font-primary'/);
   assert.match(bridge, /observer.disconnect\(\)/);
   assert.match(read('src/surfaces/FrostedSurface.tsx'), /<ExtensionMarketplace \/>/);
+  const navigationCss = read('src/surfaces/extension/extension-marketplace.css');
+  for (const token of ['text', 'muted', 'border', 'focus', 'loading', 'market-header-glass']) assert.ok(navigationCss.includes(`var(--demo-theme-${token})`));
 });

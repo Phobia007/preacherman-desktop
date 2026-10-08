@@ -3,6 +3,7 @@
   const sync = () => {
     const shell = parent.document.querySelector('.demo-app-shell');
     if (!shell) return;
+    document.documentElement.dataset.preachermanEmbedded = String(Boolean(parent.document.querySelector('.extension-marketplace')));
     const style = parent.getComputedStyle(shell);
     for (const key of style) if (key.startsWith('--demo-theme-') || key === '--demo-font-primary') document.documentElement.style.setProperty(key, style.getPropertyValue(key));
     document.documentElement.dataset.appearance = parent.document.documentElement.dataset.appearance || 'dark';

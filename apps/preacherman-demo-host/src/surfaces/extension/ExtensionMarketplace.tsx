@@ -4,6 +4,11 @@ import "./extension-marketplace.css";
 
 const pages = ["marketplace-agents.html", "claude-marketplace.html", "marketplace-home.html"] as const;
 type MarketplacePage = typeof pages[number];
+const navigation: readonly { page: MarketplacePage; label: string }[] = [
+  { page: "marketplace-home.html", label: "Home" },
+  { page: "claude-marketplace.html", label: "Connectors and plugins" },
+  { page: "marketplace-agents.html", label: "Agents and products" },
+];
 
 export function ExtensionMarketplace() {
   const frames = useRef<Partial<Record<MarketplacePage, HTMLIFrameElement>>>({});
@@ -27,6 +32,7 @@ export function ExtensionMarketplace() {
 
   useEffect(() => {
     if (requested === active) { setPhase("idle"); return; }
+    frames.current[active]?.contentDocument?.querySelectorAll<HTMLDialogElement>("dialog[open]").forEach(dialog => dialog.close());
     setMounted(current => current.includes(requested) ? current : [...current, requested]);
     if (!destinationReady) return;
     let cancelled = false;
@@ -57,6 +63,18 @@ export function ExtensionMarketplace() {
     return () => window.removeEventListener("message", receive);
   }, [active]);
   return <section className="extension-marketplace" aria-label="Extension marketplace" aria-busy={!ready} data-page={active} data-phase={phase}>
+    <nav className="extension-marketplace__nav" aria-label="Extension sections">
+      {navigation.map(({ page, label }) => <button key={page} type="button"
+        aria-current={page === active ? "page" : undefined} onClick={() => setRequested(page)}>{label}</button>)}
+      <button className="extension-marketplace__search" type="button" aria-label="Search extensions"
+        disabled={!ready}
+        onClick={() => {
+          setRequested(active);
+          frames.current[active]?.contentDocument?.querySelector<HTMLButtonElement>('header button[aria-label="Search"]')?.click();
+        }}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" /><path d="m16 16 5 5" /></svg>
+      </button>
+    </nav>
     {mounted.map(page => <iframe key={page} ref={element => {
       if (element) { frames.current[page] = element; element.toggleAttribute("inert", page !== active); }
       else delete frames.current[page];
