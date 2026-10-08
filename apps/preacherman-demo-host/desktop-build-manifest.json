@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "buildId": "home-backdrop-20261009",
+  "buildId": "account-guide-content-20261009",
   "productVersion": "0.1.0",
-  "sourceTask": "shared-original-website-statement-pm-logo-background",
+  "sourceTask": "account-guide-copy-framed-direct-toward-action",
   "sourceThread": null,
-  "sourceState": "All pages share one persistent original website Zodiak statement and PM background with We Bring a New. copy and original light/dark colors. The decorative glass ellipse is removed globally. Persistent avatar canvas is transparent so the shared background survives both modes. Home has no account guide; guest avatar remains hidden. Other account gates and authored content remain unchanged, and content may occlude the shared background.",
-  "sourceCommit": "20a94c2909f9eee63d56434d3a1d497663d1d5cd",
+  "sourceState": "Gallery, Asset, Extension and Market Studio guide cards display Become a preacherman before you preach and a direct toward action. Action uses the original website Try It northeast arrow, a persistent outlined pill and the navigation charge tracer. All four actions use existing Account route motion in both themes. The empty Gallery screen-page is omitted while its guide is mounted so it cannot intercept the button. Shared background, guest avatar rules and Home remain unchanged.",
+  "sourceCommit": "2e6b25a63a4e8d8501412742927297d69850c2e8",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-09T07:20:14.4662896+08:00",
-  "deployedAt": "2026-10-09T07:21:03.4906845+08:00",
-  "verifiedAt": "2026-10-09T07:24:32.2346611+08:00",
-  "sizeBytes": 675195392,
-  "sha256": "F421ADB9E9CB916660463E1F9F9C57F224D4D99A654563CDE2362379BCFFD7F8",
+  "builtAt": "2026-10-09T07:52:14.9344744+08:00",
+  "deployedAt": "2026-10-09T07:53:09.0246312+08:00",
+  "verifiedAt": "2026-10-09T07:57:12.5724810+08:00",
+  "sizeBytes": 675195904,
+  "sha256": "02F12B05884FF2992485F735F733B5E7925806EC1BFA1B08EE87D1BBBBD0DB9C",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009/preacherman-demo-host.exe",
-  "backupSha256": "39D541224B67EC257CBDADD66FBFDEE14E32D1DA3BCDC325E00BC57E1E1AE18F",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009/preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-guide-content-before-20261009/preacherman-demo-host.exe",
+  "backupSha256": "F421ADB9E9CB916660463E1F9F9C57F224D4D99A654563CDE2362379BCFFD7F8",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-guide-content-before-20261009/preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "2aa687eaf4a4d43df04b792897c07fa2e6c8316a",
-  "previousVerificationCommit": "2aa687eaf4a4d43df04b792897c07fa2e6c8316a",
+  "rollbackBaselineCommit": "20a94c2909f9eee63d56434d3a1d497663d1d5cd",
+  "previousVerificationCommit": "20a94c2909f9eee63d56434d3a1d497663d1d5cd",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
@@ -32,127 +32,89 @@
       "focusedFailures": 0,
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical desktop shortcut to logged-out Home. Persistent shared background across all eight routes, four remaining gated destinations, public Market, email demo sign-in, unlocked content and sign-out relocking verified in light and dark. Core Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension verified. Native controls and resource cleanup verified.",
-    "sharedBackdrop": {
-      "retainedAcrossRoutes": true,
-      "homeChecks": [
-        {
-          "appearance": "light",
-          "signedIn": false,
-          "text": "We Bring a New.",
-          "color": "rgb(222, 219, 214)",
-          "markColor": "rgb(17, 17, 15)",
-          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
-          "fontLoaded": true,
-          "ellipse": "none",
-          "sheen": "none",
-          "left": 92.9888916015625,
-          "right": 1826.9949951171875,
-          "width": 1920,
-          "backdropZ": "0",
-          "modelZ": null
-        },
-        {
-          "appearance": "light",
-          "signedIn": false,
-          "text": "We Bring a New.",
-          "color": "rgb(222, 219, 214)",
-          "markColor": "rgb(17, 17, 15)",
-          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
-          "fontLoaded": true,
-          "ellipse": "none",
-          "sheen": "none",
-          "left": 92.9888916015625,
-          "right": 1826.9949951171875,
-          "width": 1920,
-          "backdropZ": "0",
-          "modelZ": null
-        },
-        {
-          "appearance": "light",
-          "signedIn": true,
-          "text": "We Bring a New.",
-          "color": "rgb(222, 219, 214)",
-          "markColor": "rgb(17, 17, 15)",
-          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
-          "fontLoaded": true,
-          "ellipse": "none",
-          "sheen": "none",
-          "left": 92.9888916015625,
-          "right": 1826.9949951171875,
-          "width": 1920,
-          "backdropZ": "0",
-          "modelZ": "1"
-        },
-        {
-          "appearance": "light",
-          "signedIn": false,
-          "text": "We Bring a New.",
-          "color": "rgb(222, 219, 214)",
-          "markColor": "rgb(17, 17, 15)",
-          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
-          "fontLoaded": true,
-          "ellipse": "none",
-          "sheen": "none",
-          "left": 92.9888916015625,
-          "right": 1826.9949951171875,
-          "width": 1920,
-          "backdropZ": "0",
-          "modelZ": null
-        },
-        {
-          "appearance": "dark",
-          "signedIn": false,
-          "text": "We Bring a New.",
-          "color": "rgb(44, 43, 39)",
-          "markColor": "rgb(242, 239, 232)",
-          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
-          "fontLoaded": true,
-          "ellipse": "none",
-          "sheen": "none",
-          "left": 92.9888916015625,
-          "right": 1826.9949951171875,
-          "width": 1920,
-          "backdropZ": "0",
-          "modelZ": null,
-          "visibleLetterPixels": 25833
-        },
-        {
-          "appearance": "dark",
-          "signedIn": true,
-          "text": "We Bring a New.",
-          "color": "rgb(44, 43, 39)",
-          "markColor": "rgb(242, 239, 232)",
-          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
-          "fontLoaded": true,
-          "ellipse": "none",
-          "sheen": "none",
-          "left": 92.9888916015625,
-          "right": 1826.9949951171875,
-          "width": 1920,
-          "backdropZ": "0",
-          "modelZ": "1",
-          "visibleLetterPixels": 25831
-        },
-        {
-          "appearance": "dark",
-          "signedIn": false,
-          "text": "We Bring a New.",
-          "color": "rgb(44, 43, 39)",
-          "markColor": "rgb(242, 239, 232)",
-          "mask": "url(\"http://tauri.localhost/assets/preacherman-pm-BmJRqAp2.svg\")",
-          "fontLoaded": true,
-          "ellipse": "none",
-          "sheen": "none",
-          "left": 92.9888916015625,
-          "right": 1826.9949951171875,
-          "width": 1920,
-          "backdropZ": "0",
-          "modelZ": null,
-          "visibleLetterPixels": 25831
-        }
-      ]
-    },
+    "nativeFlow": "Cold launch through canonical desktop shortcut to logged-out Home. Persistent shared background across all eight routes, all four guide actions leading to Account through existing exit/entry motion, public Market, email demo sign-in, unlocked content and sign-out relocking verified in light and dark. Core Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension verified. Native controls and resource cleanup verified.",
+    "guideActions": [
+      {
+        "name": "gallery",
+        "appearance": "light",
+        "phases": [
+          "exiting",
+          "idle"
+        ],
+        "accountReady": true,
+        "keyboard": false
+      },
+      {
+        "name": "asset",
+        "appearance": "light",
+        "phases": [
+          "exiting",
+          "idle"
+        ],
+        "accountReady": true,
+        "keyboard": false
+      },
+      {
+        "name": "extension",
+        "appearance": "light",
+        "phases": [
+          "exiting",
+          "idle"
+        ],
+        "accountReady": true,
+        "keyboard": false
+      },
+      {
+        "name": "studio",
+        "appearance": "light",
+        "phases": [
+          "exiting",
+          "idle"
+        ],
+        "accountReady": true,
+        "keyboard": false
+      },
+      {
+        "name": "gallery",
+        "appearance": "dark",
+        "phases": [
+          "exiting",
+          "idle"
+        ],
+        "accountReady": true,
+        "keyboard": false
+      },
+      {
+        "name": "asset",
+        "appearance": "dark",
+        "phases": [
+          "exiting",
+          "idle"
+        ],
+        "accountReady": true,
+        "keyboard": false
+      },
+      {
+        "name": "extension",
+        "appearance": "dark",
+        "phases": [
+          "exiting",
+          "idle"
+        ],
+        "accountReady": true,
+        "keyboard": true
+      },
+      {
+        "name": "studio",
+        "appearance": "dark",
+        "phases": [
+          "exiting",
+          "idle"
+        ],
+        "accountReady": true,
+        "keyboard": false
+      }
+    ],
     "accountGate": [
       {
         "appearance": "light",
@@ -160,22 +122,26 @@
           {
             "name": "Gallery",
             "background": "rgb(243, 241, 235)",
-            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px"
+            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px",
+            "accountReady": true
           },
           {
             "name": "Asset",
             "background": "rgb(243, 241, 235)",
-            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px"
+            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px",
+            "accountReady": true
           },
           {
             "name": "Extension",
             "background": "rgb(243, 241, 235)",
-            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px"
+            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px",
+            "accountReady": true
           },
           {
             "name": "Studio",
             "background": "rgb(243, 241, 235)",
-            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px"
+            "shadow": "rgba(32, 35, 38, 0.14) 11.2px 11.2px 25.6px 0px, rgba(255, 255, 255, 0.9) -8.8px -8.8px 21.6px 0px",
+            "accountReady": true
           }
         ],
         "publicMarket": true,
@@ -188,22 +154,26 @@
           {
             "name": "Gallery",
             "background": "rgb(16, 16, 15)",
-            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px"
+            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px",
+            "accountReady": true
           },
           {
             "name": "Asset",
             "background": "rgb(16, 16, 15)",
-            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px"
+            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px",
+            "accountReady": true
           },
           {
             "name": "Extension",
             "background": "rgb(16, 16, 15)",
-            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px"
+            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px",
+            "accountReady": true
           },
           {
             "name": "Studio",
             "background": "rgb(16, 16, 15)",
-            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px"
+            "shadow": "rgba(0, 0, 0, 0.4) 11.2px 11.2px 25.6px 0px, rgba(255, 249, 224, 0.09) -8.8px -8.8px 21.6px 0px",
+            "accountReady": true
           }
         ],
         "publicMarket": true,
@@ -215,33 +185,25 @@
       "modes": [
         {
           "appearance": "light",
-          "text": "We Bring a New.",
-          "font": true,
-          "ink": "rgb(222, 219, 214)",
-          "logo": "rgb(17, 17, 15)",
-          "ellipse": "none",
-          "overlay": "none",
-          "left": 92.97940063476562,
-          "right": 1826.9894104003906,
-          "width": 1920,
-          "filter": "url(\"#home-statement-deboss\")",
+          "text": "rgb(80, 85, 90)",
+          "background": "rgb(243, 241, 235)",
+          "font": "\"Clash Display\", sans-serif",
+          "ring": "rgb(63, 74, 86)",
+          "opacity": "0.72",
           "responsive": true,
-          "sharedAcrossAllSurfaces": true
+          "keyboardActivates": true,
+          "reducedMotion": true
         },
         {
           "appearance": "dark",
-          "text": "We Bring a New.",
-          "font": true,
-          "ink": "rgb(44, 43, 39)",
-          "logo": "rgb(242, 239, 232)",
-          "ellipse": "none",
-          "overlay": "none",
-          "left": 92.97940063476562,
-          "right": 1826.9894104003906,
-          "width": 1920,
-          "filter": "url(\"#home-statement-deboss\")",
+          "text": "rgba(255, 255, 255, 0.68)",
+          "background": "rgb(16, 16, 15)",
+          "font": "\"Clash Display\", sans-serif",
+          "ring": "rgb(255, 255, 255)",
+          "opacity": "0.72",
           "responsive": true,
-          "sharedAcrossAllSurfaces": true
+          "keyboardActivates": true,
+          "reducedMotion": true
         }
       ],
       "errors": [],
@@ -347,41 +309,47 @@
     ],
     "windowControls": {
       "restore": true,
-      "resizedHome": {
-        "text": "We Bring a New.",
+      "resizedCard": {
         "windowWidth": 1280,
-        "left": 61.969390869140625,
-        "right": 1218.0306701660156
+        "windowHeight": 800,
+        "left": 480,
+        "right": 800,
+        "top": 215.11111450195312,
+        "bottom": 656,
+        "headingBottom": 416.4666748046875,
+        "buttonTop": 535.3333740234375,
+        "buttonBottom": 569.4666748046875
       },
+      "resizedAction": true,
       "maximize": true,
       "minimize": true,
       "closeRequested": true,
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-10-09T07:24:32.2346611+08:00",
-      "NativePid": 44932,
-      "StartedAt": "2026-10-09T07:24:14.2377745+08:00",
-      "WindowHandle": 4591804,
+      "SampledAt": "2026-10-09T07:57:12.5724810+08:00",
+      "NativePid": 26108,
+      "StartedAt": "2026-10-09T07:56:50.2294157+08:00",
+      "WindowHandle": 1971300,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        44932,
-        33580,
-        25956,
-        29968,
-        46708,
-        32628,
-        30788,
-        43876,
-        42036,
-        28756
+        26108,
+        38116,
+        40156,
+        9156,
+        45860,
+        47000,
+        44812,
+        44496,
+        35208,
+        46916
       ],
       "NormalizedCpuPercent": 1.99,
-      "WorkingSetMiB": 909.6,
-      "GpuDedicatedBytes": 406491136,
-      "MaxGpuEngineUtilization": 17,
-      "FreeRamKiB": 15479228,
+      "WorkingSetMiB": 905.5,
+      "GpuDedicatedBytes": 397492224,
+      "MaxGpuEngineUtilization": 7,
+      "FreeRamKiB": 15555028,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -391,20 +359,6 @@
     },
     "newErrors": [],
     "observedErrors": [
-      "Hydration completed but contains mismatches.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
@@ -546,12 +500,16 @@
       {
         "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
         "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token"
+      },
+      {
+        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
+        "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token"
       }
     ],
     "baselineErrorEvidence": [],
     "visualReview": {
       "reviewed": [
-        "Shared engraved statement and PM behind every page, no glass ellipse; guest and signed-in Home; unchanged other account gates",
+        "Guide copy, northeast arrow, continuous pill outline, hover trace and Account transition on Gallery, Asset, Extension and Market Studio",
         "Home",
         "Task",
         "Gallery",
@@ -568,15 +526,15 @@
       "blankOrMissingAuthoredContent": false
     },
     "limitations": [
-      "Background customization is not introduced. Existing account sign-in remains available from the account dock.",
+      "The guide uses existing Account sign-in options and does not duplicate the login form.",
       "This is presentation access for the existing demo; it does not add backend entitlements or purchases."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\final-resources.json",
-      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\production-build.log",
-      "D:\\preacherman\\output\\playwright\\home-backdrop-20261009\\preview-report.json"
+      "D:\\preacherman\\output\\playwright\\account-guide-content-20261009\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\account-guide-content-20261009\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\account-guide-content-20261009\\final-resources.json",
+      "D:\\preacherman\\output\\playwright\\account-guide-content-20261009\\production-build.log",
+      "D:\\preacherman\\output\\playwright\\account-guide-content-20261009\\preview-report.json"
     ]
   },
   "releaseAttempts": [
@@ -1725,9 +1683,18 @@
       "failedArtifact": "output\\playwright\\account-guide-content-20261009\\failed-pointer-layer.exe",
       "restoredSha256": "F421ADB9E9CB916660463E1F9F9C57F224D4D99A654563CDE2362379BCFFD7F8",
       "recordedAt": "2026-10-09T07:49:45.934464+08:00"
+    },
+    {
+      "buildId": "account-guide-content-20261009",
+      "sourceCommit": "2e6b25a63a4e8d8501412742927297d69850c2e8",
+      "sha256": "02F12B05884FF2992485F735F733B5E7925806EC1BFA1B08EE87D1BBBBD0DB9C",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-10-09T07:53:09.0246312+08:00",
+      "verifiedAt": "2026-10-09T07:57:12.5724810+08:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-guide-content-before-20261009"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\home-backdrop-before-20261009/desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-guide-content-before-20261009/desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
