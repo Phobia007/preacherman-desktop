@@ -19,22 +19,29 @@
   color: var(--demo-theme-text); font: 300 clamp(28px, 3vw, 36px)/1.3 var(--demo-font-primary);
   letter-spacing: -.035em; text-align: center;
 }
+.account-gate__logo {
+  grid-row: 3; place-self: center; width: 72px; aspect-ratio: 212 / 240;
+  background: var(--demo-theme-text);
+  mask: url("../home/assets/preacherman-pm.svg") center / contain no-repeat;
+}
 .account-gate__continue {
   grid-row: 4; position: relative; display: flex; align-items: center; justify-content: center; gap: 12px;
   width: 100%; min-height: 48px; padding: 10px 24px; border: 0; border-radius: 999px;
   background: transparent; color: var(--demo-theme-brand-menu-text); font: 300 20px/1.2 var(--demo-font-primary);
-  cursor: pointer; transition: color 220ms ease, background 220ms ease;
+  cursor: pointer; transition: color 220ms ease;
 }
 .account-gate__continue:hover, .account-gate__continue:focus-visible {
-  color: var(--demo-theme-brand-menu-text-hover); background: var(--demo-theme-control-hover-bg);
+  color: var(--demo-theme-brand-menu-text-hover);
 }
-.account-gate__continue:focus-visible { outline: 2px solid var(--demo-theme-focus); outline-offset: 5px; }
+.account-gate__continue:focus-visible { outline: none; }
 .account-gate__arrow { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; }
-.account-gate__continue .demo-app-shell__brand-menu-charge-ring { opacity: 1; }
-.account-gate__continue .demo-app-shell__brand-menu-charge-outline { opacity: .72; stroke-dasharray: none; stroke-dashoffset: 0; }
-.account-gate__continue:is(:hover, :focus-visible) .demo-app-shell__brand-menu-charge-tracer { animation: brand-menu-charge-tracer 680ms cubic-bezier(.65,0,.15,1) forwards; filter: drop-shadow(0 0 4px var(--demo-theme-brand-menu-focus)); }
+.account-gate__continue:is(:hover, :focus-visible) .demo-app-shell__brand-menu-label { animation: brand-menu-word-charge 680ms cubic-bezier(.65,0,.15,1) forwards; }
+.account-gate__continue:is(:hover, :focus-visible) .demo-app-shell__brand-menu-charge-ring { opacity: 1; }
+.account-gate__continue:is(:hover, :focus-visible) .demo-app-shell__brand-menu-charge-outline { animation: brand-menu-charge-outline 680ms cubic-bezier(.65,0,.15,1) forwards; }
+.account-gate__continue:is(:hover, :focus-visible) .demo-app-shell__brand-menu-charge-tracer { animation: brand-menu-charge-tracer 680ms cubic-bezier(.65,0,.15,1) forwards; }
 @media (prefers-reduced-motion: reduce) {
   .account-gate__continue, .account-gate__continue .demo-app-shell__brand-menu-charge-outline, .account-gate__continue .demo-app-shell__brand-menu-charge-tracer { transition: none; animation: none !important; }
+  .account-gate__continue:is(:hover, :focus-visible) .demo-app-shell__brand-menu-charge-outline { stroke-dashoffset: 0; opacity: .72; }
 }
 .account-gate__fold {
   position: absolute; top: 0; right: 0; width: 72px; height: 72px;

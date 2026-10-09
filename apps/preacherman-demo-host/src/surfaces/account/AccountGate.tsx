@@ -23,8 +23,9 @@ export function AccountGate({ surface, embedded = false, onSignIn }: { surface?:
     <div className="account-gate__card">
       <span className="account-gate__fold" aria-hidden="true" />
       <h1 className="account-gate__heading" id={headingId}>Become a<br />preacherman<br />before you preach</h1>
+      <span className="account-gate__logo" role="img" aria-label="Preacherman" />
       <button className="account-gate__continue" type="button" onClick={onSignIn}>
-        <span>direct toward</span>
+        <span className="demo-app-shell__brand-menu-label">direct toward</span>
         <svg className="account-gate__arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 12 12 4M5 4h7v7" /></svg>
         <svg className="demo-app-shell__brand-menu-charge-ring" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           <path className="demo-app-shell__brand-menu-charge-outline" d="M18 1H82A17 17 0 0 1 99 18V22A17 17 0 0 1 82 39H18A17 17 0 0 1 1 22V18A17 17 0 0 1 18 1Z" pathLength={100} vectorEffect="non-scaling-stroke" />
