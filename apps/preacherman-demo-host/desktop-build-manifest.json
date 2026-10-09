@@ -1772,5 +1772,50 @@
       }
     ],
     "oldWorktreePhysicalRetirement": "deferred: 6 different or unique local state files and independent runtime data; old worktree is no longer a release source"
+  },
+  "windowsInstaller": {
+    "releaseTag": "windows-v0.1.0",
+    "sourceCommit": "4626e62b5e4c62445a53826fdd502b36ab389260",
+    "releaseUrl": "https://github.com/Phobia007/preacherman-desktop/releases/tag/windows-v0.1.0",
+    "latestDownloadUrl": "https://github.com/Phobia007/preacherman-desktop/releases/latest/download/Preacherman-Setup.exe",
+    "versionDownloadUrl": "https://github.com/Phobia007/preacherman-desktop/releases/download/windows-v0.1.0/Preacherman-Setup.exe",
+    "fileName": "Preacherman-Setup.exe",
+    "sizeBytes": 696889586,
+    "sha256": "8144A294202E8831120328D433C909ED5691BACC2F2262A00DD2DF502ACE45DA",
+    "signatureStatus": "NotSigned",
+    "installedExecutableSha256": "23CFDAB7AFAA0F25F313C5F7CC609D6BB97A99B0BAD6EC3A8F6955937BE05B00",
+    "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
+    "payloadDifference": "Only the three-byte Tauri bundle type marker changes from UNK to NSS.",
+    "verification": {
+      "verifiedAt": "2026-10-09T01:16:21.662510+00:00",
+      "installation": "passed",
+      "nativeColdLaunch": "passed",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "surfaces": [
+        "Home",
+        "Task",
+        "Gallery",
+        "Market/Ledger",
+        "Settings",
+        "Account",
+        "Asset",
+        "Extension"
+      ],
+      "demoSignInAndSignOut": "passed",
+      "accountGuideActions": "passed",
+      "windowControls": "passed",
+      "uninstallation": "passed",
+      "priorInstallationAndShortcutPreserved": true,
+      "temporaryProcessesCleaned": true,
+      "console": "No new diagnostics relative to the recorded verified cold-launch baseline; existing blocked external-resource diagnostics remain."
+    },
+    "publicDownloadVerifiedAt": "2026-10-09T01:18:03.226087+00:00",
+    "canonicalShortcutRestoredAt": "2026-10-09T09:14:37.9732312+08:00",
+    "canonicalBinaryUnchanged": true,
+    "evidenceDirectory": "output/windows-installer-20261009",
+    "deliveryMethod": "Verified cached Tauri binaries bundled as NSIS and manually published; no automatic release pipeline added."
   }
 }
