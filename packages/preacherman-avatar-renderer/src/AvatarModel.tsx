@@ -1,4 +1,4 @@
-import { createCharacterKit, PathfinderAnimationAdapter, ThreeKitanaAnimationAdapter } from "./avatar/kits/characterKits";
+import { createCharacterKit, PathfinderAnimationAdapter, ThreeKitanaAnimationAdapter, TifaAnimationAdapter } from "./avatar/kits/characterKits";
 import { importedAvatarProfiles, avatarUsesHologram } from "./avatarCatalog";
 import { addAfterEffect, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
@@ -301,7 +301,7 @@ export function AvatarModel({
   }, [actionId, actionRequestKey, controller, invalidate, root]);
 
   useEffect(() => {
-    if (!root || !(adapter instanceof PathfinderAnimationAdapter || adapter instanceof ThreeKitanaAnimationAdapter)) return;
+    if (!root || !(adapter instanceof PathfinderAnimationAdapter || adapter instanceof ThreeKitanaAnimationAdapter || adapter instanceof TifaAnimationAdapter)) return;
     const transition = adapter instanceof ThreeKitanaAnimationAdapter
       ? adapter.setState(motionState, motionState === "listening" ? { expressionId: "attentive", intensity: 0.35 }
         : motionState === "thinking" ? { expressionId: "curious_question", intensity: 0.3 } : undefined)

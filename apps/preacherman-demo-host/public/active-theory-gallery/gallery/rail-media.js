@@ -1,5 +1,6 @@
 // Packaged silent 12-second previews; original full detail videos remain unchanged.
 window.PreachermanGalleryRailMedia = {
+  "/assets/gallery/tifa-card-video.mp4": "/assets/gallery/tifa-card-video.mp4",
   "/assets/gallery/cortana-intro.mp4": "/assets/gallery/rail-media/secret-sky.mp4",
   "../assets/gallery/microsoft-logo.png": "/assets/gallery/microsoft-logo.png",
   "/assets/gallery/zima-card-video.mp4": "/assets/gallery/rail-media/watson-masters.mp4",

@@ -250,5 +250,23 @@
     "cardImageHeight": 948,
     "detailFraming": "artwork",
     "cardSource": "Existing packaged Gallery model, rendered as transparent waist-up portrait"
+  },
+  {
+    "id": "tifa-ff7re",
+    "label": "Tifa",
+    "name": "Tifa",
+    "designation": "FINAL FANTASY VII",
+    "paragraphs": [
+      "Cheerful on the outside and more reserved within, Tifa values the people close to her but often keeps her worries to herself. Cloud's childhood friend and the proprietor of Seventh Heaven, she supports Avalanche while facing her own doubts. A skilled martial artist, she fights with agile punches, kicks and flowing combinations."
+    ],
+    "cardImage": "/asset-characters/busts/tifa-ff7re.png",
+    "image": "/asset-characters/cutouts/tifa-ff7re.png",
+    "imageWidth": 397,
+    "imageHeight": 1186,
+    "detailSource": "Supplied Tifa FFVII REMAKE model, transparent render",
+    "cardImageWidth": 590,
+    "cardImageHeight": 892,
+    "detailFraming": "artwork",
+    "cardSource": "Supplied packaged Gallery model, rendered as transparent waist-up portrait"
   }
 ]

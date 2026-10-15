@@ -138,5 +138,15 @@
     "bytes": 947921,
     "sha256": "0529e3058c1fbc9aa17da2d567122c194524614facdf92d65e45d7279cdc8cb8",
     "summary": "Friendly and curious, Pathfinder faces danger with optimism while searching for connection and belonging."
+  },
+  {
+    "id": "tifa-ff7re",
+    "name": "Tifa",
+    "image": "../asset-characters/busts/tifa-ff7re.png",
+    "width": 590,
+    "height": 892,
+    "bytes": 582553,
+    "sha256": "8346bb21412d14456dafdc3e117a2a2fb22cc2411c0f33d38098c870524493ce",
+    "summary": "Cheerful on the outside and more reserved within, Tifa values the people close to her but often keeps her worries to herself. Cloud's childhood friend and the proprietor of Seventh Heaven, she supports Avalanche while facing her own doubts. A skilled martial artist, she fights with agile punches, kicks and flowing combinations."
   }
 ]

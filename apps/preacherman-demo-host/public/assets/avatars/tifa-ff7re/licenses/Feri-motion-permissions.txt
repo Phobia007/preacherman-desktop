@@ -1,0 +1,6 @@
+Author: Feristal
+Source: https://heliosphere.app/mod/c6hb8a37k115s0jmx7fgaeb2mc
+Version: 1.2.1
+Permission summary: Editing, experimenting and posing permitted with author credit.
+Tifa-themed FFXIV mod; the original game animation provenance is not stated.
+Underlying game/character rights are separate. No commercial license is claimed.

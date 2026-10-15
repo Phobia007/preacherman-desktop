@@ -1,0 +1,33 @@
+{
+  "idle": "tifa.idle.feri.cbnm_id0.v1",
+  "events": [
+    {
+      "id": "awaiting",
+      "label": "等待",
+      "clip": "tifa.gesture.feri.awaiting.v1"
+    },
+    {
+      "id": "glove_check",
+      "label": "检查手套",
+      "clip": "tifa.gesture.feri.glove_check.v1"
+    },
+    {
+      "id": "thought",
+      "label": "思考",
+      "clip": "tifa.gesture.feri.thought.v1"
+    }
+  ],
+  "randomDelaySeconds": [
+    10,
+    10
+  ],
+  "avoidImmediateRepeats": true,
+  "eventLoop": false,
+  "returnsToIdle": true,
+  "timing": "active playback time; hidden/pause suspends scheduler",
+  "idleClipUnchanged": true,
+  "transitionSeconds": 1.5,
+  "transitionCurve": "smoothstep weights between unchanged real source clips",
+  "waitStartsAfter": "gesture has smoothly returned to idle",
+  "pauseHiddenAndSeekConsumeWaitingTime": false
+}

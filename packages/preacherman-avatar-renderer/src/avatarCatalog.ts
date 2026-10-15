@@ -3,6 +3,7 @@ import type { AvatarModelId } from "./types";
 import type { AvatarActionDescriptor } from "./avatar/types/avatarAnimation";
 
 export const importedAvatarModels = [
+  { id: "tifa-ff7re", name: "Tifa" },
   { id: "apex-legend-pathfinder", name: "Pathfinder" },
   { id: "jubilee-midnight-mutant", name: "Jubilee" },
   { id: "halo-mk-v-model", name: "Halo MK V" },
@@ -43,6 +44,7 @@ export const avatarUsesHologram = (id: AvatarModelId): boolean => id === "cortan
 export const avatarDefaultActionId = (id: AvatarModelId): string => id === "cortana" ? "idle.catwalk" : id === "zima" ? "idle.zima" : "idle.default";
 
 const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {
+  "tifa-ff7re": "feri.cbnm_id0",
   "apex-legend-pathfinder": "happy",
   "black-cat-coastal-cat": "female",
   "black-widow-aquatic-assassin": "breathing",

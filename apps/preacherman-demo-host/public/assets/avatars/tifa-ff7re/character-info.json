@@ -1,0 +1,38 @@
+{
+  "schema": "preacherman.character-info",
+  "schemaVersion": 1,
+  "characterId": "tifa-ff7re",
+  "displayName": { "en": "Tifa Lockhart", "zhCN": "蒂法·洛克哈特" },
+  "galleryName": "Tifa",
+  "publisher": "Square Enix",
+  "firstAppearance": {
+    "year": 1997,
+    "work": "FINAL FANTASY VII",
+    "note": "Year of the original game; not the release year of the Remake model depicted in this package.",
+    "sourceIds": ["original-game", "anniversary"]
+  },
+  "representation": {
+    "game": "FINAL FANTASY VII REMAKE",
+    "relatedEdition": "FINAL FANTASY VII REMAKE INTERGRADE",
+    "sourceId": "intergrade-tifa"
+  },
+  "galleryDescription": {
+    "en": "Cheerful on the outside and more reserved within, Tifa values the people close to her but often keeps her worries to herself. Cloud's childhood friend and the proprietor of Seventh Heaven, she supports Avalanche while facing her own doubts. A skilled martial artist, she fights with agile punches, kicks and flowing combinations.",
+    "zhCN": "蒂法待人开朗，内心却较为含蓄，珍视身边的人，也常把烦恼留给自己。她是克劳德的青梅竹马，在米德加经营第七天堂酒吧，并作为雪崩的一员面对自己的疑虑与抉择。身为格斗家，她以敏捷的拳脚和流畅的连击迎战。"
+  },
+  "identity": {
+    "en": ["Avalanche member", "Seventh Heaven proprietor", "Martial artist"],
+    "zhCN": ["雪崩成员", "第七天堂经营者", "格斗家"]
+  },
+  "combatStyle": { "en": "Zangan-style martial arts; agile punches, kicks and combinations.", "zhCN": "赞甘流格斗术，擅长敏捷的拳脚与连击。" },
+  "spoilers": false,
+  "editorialNote": "Original bilingual summaries based on the official sources below; not verbatim official localized copy. Animation scheduling and model licensing are documented separately from character lore.",
+  "sources": [
+    { "id": "intergrade-tifa", "title": "Square Enix — Tifa Lockhart / INTERGRADE character page", "url": "https://www.jp.square-enix.com/ffviir_ig/character/tifa.html", "supports": ["Avalanche", "Seventh Heaven", "Cloud childhood friend"] },
+    { "id": "intergrade-character", "title": "Square Enix — INTERGRADE / CHARACTER Tifa", "url": "https://www.jp.square-enix.com/ffviir_ig/", "supports": ["cheerful exterior and reserved inner character", "doubts about Avalanche activities", "Zangan-style martial arts"] },
+    { "id": "combat", "title": "Square Enix — FINAL FANTASY VII REMAKE screenshots: Red XIII, Hojo and more", "url": "https://www.square-enix-games.com/en_GB/news/final-fantasy-vii-remake-screenshots-red-xiii-hojo", "supports": ["agile punches and kicks", "quick combinations"] },
+    { "id": "original-game", "title": "Square Enix — original FINAL FANTASY VII / Tifa", "url": "https://finalfantasyviipc.square-enix-games.com/en%26lang%3Den", "supports": ["Tifa in the original game", "encourages others"] },
+    { "id": "anniversary", "title": "Square Enix — What Does Final Fantasy VII Mean to You?", "url": "https://www.square-enix-games.com/en_US/news/what-does-final-fantasy-vii-mean-to-you", "supports": ["original FINAL FANTASY VII release year 1997"] }
+  ],
+  "sourcesCheckedAt": "2026-10-15"
+}

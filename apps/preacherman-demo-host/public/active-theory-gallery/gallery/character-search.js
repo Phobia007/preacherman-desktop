@@ -1,5 +1,6 @@
 // Aliases only affect matching; displayed names come from the character catalog.
 const aliases = {
+  "tifa-ff7re": ["Tifa", "Tifa Lockhart", "蒂法", "蒂法洛克哈特"],
   "secret-sky": ["Cortana", "科塔娜", "可塔娜"],
   "watson-masters": ["Zima", "Zima Blue", "齐马"],
   "climatune": ["Jubilee", "李千欢"],

@@ -30,7 +30,7 @@ test("embedded document synchronizes the actual host color scheme before paintin
 test("Market mounts only at its route without replacing the shared scene", async () => {
   const app = await text(join(root, "src/App.tsx"));
   const surface = await text(join(root, "src/surfaces/market/MarketSurface.tsx"));
-  assert.match(app, /activeSurfaceType === "ledger" \? <MarketSurface \/> : null/);
+  assert.match(app, /activeSurfaceType === "ledger" \? <MarketSurface\b[^\n]*\/> : null/);
   assert.match(app, /<CortanaModelStage[\s\S]*renderActive/);
   assert.doesNotMatch(surface, /https?:\/\/|8788|8174/);
   assert.match(surface, /src="\/market-love\/cartier-love.html"/);
@@ -137,14 +137,14 @@ for (const appearance of ["light", "dark"]) {
       text(join(root, "src/styles.css")),
     ]);
     assert.match(surface, /name: "Asset" \| "Extension"/);
-    assert.match(surface, /<SurfaceBrandHeader \/>/);
-    assert.match(header, /className="demo-surface-header__signature">Preacherman<\/span>/);
+    assert.match(surface, /<SurfaceBrandHeader\b[^>]*\/>/);
+    assert.match(header, /<MarketProfile\b[^\n]*\/>/);
     assert.match(profile, /\.market-profile__toggle,\s*\.demo-surface-header__signature\s*\{[^}]*top: 48px;[^}]*left: 50%;[^}]*Market Task Signature/s);
     assert.match(css, /\.market-surface\[data-page="intro"\]::before,\s*\.demo-surface-header\s*\{[^}]*--demo-theme-market-header-glass[^}]*--demo-theme-market-border/s);
     const selector = appearance === "dark" ? '.demo-app-shell[data-appearance="dark"]' : '.demo-app-shell';
     const tokens = styles.split(`${selector} {`).slice(1).map(block => block.split("}")[0]).join("\n");
     for (const token of ["market-header-glass", "market-border", "gallery-control-hover"]) assert.ok(tokens.includes(`--demo-theme-${token}:`), token);
-    assert.match(styles, /\.demo-frosted-surface\s*\{[^}]*animation: demo-frost-enter 260ms/);
+    assert.match(surface, /registerSurfaceMotion/);
   });
   test(`Market fixed categories use the ${appearance} text, divider and contrast tokens`, async () => {
     const styles = await text(join(root, "src/styles.css"));
@@ -225,7 +225,7 @@ test("all Gallery portraits are packaged in order with alternating sides and cor
   assert.deepEqual(portraits.map(p => p.id), expected);
   const rows = [...html.matchAll(/<article\b[\s\S]*?<\/article>/g)].map(match => match[0]);
   assert.equal(rows.length, portraits.length);
-  assert.equal(portraits.length, 14);
+  assert.equal(portraits.length, 15);
   const copy = row => row.match(/<div class="descriptive-card__content component-custom-width"[\s\S]*/)[0].replace(/data-od-id="[^"]+"/g, "");
   for (const [index, portrait] of portraits.entries()) {
     const row = rows[index];

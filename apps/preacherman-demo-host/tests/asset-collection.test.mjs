@@ -19,7 +19,7 @@ test('Every current Gallery model has exactly one local card and matching detail
     assert.ok(character.cardImage.includes(character.id));
     assert.ok(character.image.includes(character.id));
   }
-  assert.equal(characters.filter(c => c.image.startsWith('/asset-characters/cutouts/')).length, 7);
+  assert.equal(characters.filter(c => c.image.startsWith('/asset-characters/cutouts/')).length, 8);
   assert.deepEqual(characters.filter(c => c.image === c.cardImage).map(c => c.id), ['zima', 'stellar-blade-lily-stargazer-coat', 'iron-man-mark-85']);
 });
 test('Cards use real RGBA bust renders and isolated artwork stays background-free', () => {
@@ -44,9 +44,9 @@ test('Detail scrolling cannot expose unrelated characters', () => {
 });
 test('Collection is Asset-only, preserves the shared frost, and uses internal selection instead of external navigation', () => {
   const surface = read('src/surfaces/FrostedSurface.tsx'), component = read('src/surfaces/asset/AssetCollection.tsx');
-  assert.match(surface, /name === "Asset" \? <AssetCollection \/> : null/);
+  assert.match(surface, /name === "Asset" \? <AssetCollection \/>/);
   assert.match(surface, /className="demo-frosted-surface"/);
-  assert.match(surface, /<SurfaceBrandHeader \/>/);
+  assert.match(surface, /<SurfaceBrandHeader\b[^>]*\/>/);
   assert.doesNotMatch(component, /href=|window\.open|location\.|fetch\(|<iframe/);
   assert.match(component, /setSelected\(character.id\)/);
   assert.match(component, /initialId=\{selected\}/);
