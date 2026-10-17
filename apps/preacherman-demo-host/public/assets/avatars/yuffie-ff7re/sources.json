@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "model": {
+    "author": "Kanbara914",
+    "sourcePage": "https://www.deviantart.com/kanbara914/art/FFVII-Remake-Yuffie-XPS-901232014",
+    "originalArchive": "01-original/Kanbara914-FF7R-Yuffie.7z",
+    "archiveSHA256": "3820c69162730adb9b3110de5eec18ebdc63079caaa0466c8e51da2072cb5656",
+    "originalFBX": "01-original/Yuffie-source.fbx",
+    "fbxSHA256": "00fc96117a8794e53cfa56dd1da9810a661849dfac62bfb9f332bbedd84fa07e",
+    "originalGameRights": "Square Enix and respective rights holders",
+    "license": "No open-source or public redistribution/commercial license asserted."
+  },
+  "motions": {
+    "author": "Feristal / FeristalJ / Feri",
+    "sourcePage": "https://www.xivmodarchive.com/modid/94295",
+    "previewPage": "https://twitter.com/FeristalJ/status/1733143991326032057",
+    "originalArchive": "01-original/Feri-Yuffie-Pack-source.ttmp2",
+    "archiveSHA256": "e6a3e44d8efbc8120036d37bdace73cd47d888e3473e9e9faf9a843cad3fa5de",
+    "websiteVersion": "1.0",
+    "packageVersion": "2.0.0",
+    "provenanceLimit": "Yuffie-themed FFXIV animation mod; original FF7R extraction or mocap not established. PAP/Havok converted using matching skeleton, selected main clips only; additive damage track not used.",
+    "license": "Explicit edit or public redistribution license not found on this separate Yuffie publication; other Feri-pack permissions not extended. Private personal testing.",
+    "selectedFBX": [
+      {
+        "key": "standing-idle",
+        "option": "Yuffie Idle 1",
+        "file": "source-motion/Feri-Yuffie-standing-idle.fbx",
+        "sha256": "e9f342d1f3c26fb8fbf5d9eb8bf122244678da5a467dd126826ceaafa5fe9c69",
+        "bytes": 3130608,
+        "sourcePAP_SHA256": "d3afa74db8e57ed4cdc9a9c416b2e5d286270d7f1621c97af9f937d7c6a7498e",
+        "selectedAnimation": {
+          "name": "cbnm_id0",
+          "havokIndex": 1
+        }
+      },
+      {
+        "key": "small-swing",
+        "option": "Small Swing [/paintyellow]",
+        "file": "source-motion/Feri-Yuffie-small-swing.fbx",
+        "sha256": "b8ec55527f293de1491f038d23905da22286606ccc8e77aa4cb9805d70cdad2f",
+        "bytes": 4400208,
+        "sourcePAP_SHA256": "2daf10522a00c233e981b936d124c8e82cedc112a39696ad8d111510598d3867",
+        "selectedAnimation": {
+          "name": "cbem_sp35",
+          "havokIndex": 0
+        }
+      },
+      {
+        "key": "hand-on-hip",
+        "option": "Hand on Hip [/paintblue]",
+        "file": "source-motion/Feri-Yuffie-hand-on-hip.fbx",
+        "sha256": "1febbb3db4e5543e2e498bed4a55747c6d0a73c63e200754db478ae26d8c268b",
+        "bytes": 3591184,
+        "sourcePAP_SHA256": "48c7425c5e823829c3c838cfffa5dd6fd284fc69e7e7f1aa8c4c16c1a83d1576",
+        "selectedAnimation": {
+          "name": "cbem_sp36",
+          "havokIndex": 0
+        }
+      },
+      {
+        "key": "in-the-balance",
+        "option": "In The Balance [/paintred]",
+        "file": "source-motion/Feri-Yuffie-in-the-balance.fbx",
+        "sha256": "6518c4fc54c878b57a215eb56912d3a724d6fc1b6dd5668dd2ed5765e17ed08e",
+        "bytes": 3431216,
+        "sourcePAP_SHA256": "3f4585d20326fce194c1b0b69d3fb47ed3280bc5ece8bd2a38de410752dc4429",
+        "selectedAnimation": {
+          "name": "cbem_sp34",
+          "havokIndex": 0
+        }
+      }
+    ]
+  },
+  "sourceSkeleton": {
+    "file": "source-motion/ffxiv-midlander-101.sklb",
+    "sha256": "53ef48cda75b2ad845e4a3a44cede2f34e821ebc611b2ed81d76848bad8c32ab",
+    "purpose": "Matching original FFXIV PAP skeleton for source FBX conversion."
+  }
+}

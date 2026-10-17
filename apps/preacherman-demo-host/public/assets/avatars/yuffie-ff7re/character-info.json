@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "yuffie-ff7re",
+  "name": "Yuffie Kisaragi",
+  "displayName": {
+    "zh-CN": "尤菲·如月",
+    "en": "Yuffie Kisaragi"
+  },
+  "sourceTitle": "FINAL FANTASY VII REMAKE INTERGRADE / FF7R EPISODE INTERmission",
+  "description": {
+    "zh-CN": "来自五台的忍者，活跃于《最终幻想 VII 重制版 INTERGRADE》的尤菲篇章。她潜入米德加，与雪崩成员合作，寻找神罗的究极魔晶石。擅长大型手里剑与忍术，能够灵活切换远程和近身战斗。",
+    "en": "A ninja from Wutai and the protagonist of FF7R EPISODE INTERmission. Yuffie infiltrates Midgar and works with Avalanche to seek Shinra’s ultimate materia. Her large throwing star and ninjutsu support agile close-range and ranged combat."
+  },
+  "tags": [
+    "FINAL FANTASY VII",
+    "Wutai",
+    "Ninja",
+    "Yuffie"
+  ],
+  "officialReferences": [
+    {
+      "title": "Square Enix — FINAL FANTASY VII REMAKE INTERGRADE",
+      "url": "https://www.square-enix.com/ffvii/en-us/games/remake-intergrade/"
+    },
+    {
+      "title": "Square Enix — Yuffie Kisaragi character profile",
+      "url": "https://www.square-enix.com/ffvii/en-us/games/rebirth/characters/yuffie-kisaragi/"
+    }
+  ],
+  "technicalNotes": {
+    "costume": "Supplied FF7RE default outfit. All 13 supplied parts retained.",
+    "equippedWeaponIncluded": false,
+    "nativeFaceBonesRetained": true,
+    "newFacialAnimationsProvided": false,
+    "voiceOrLipSyncProvided": false,
+    "motionClaim": "Yuffie-themed FFXIV animation mod by Feri; original FF7R extraction or motion capture not established."
+  },
+  "rights": "Character and underlying game assets belong to Square Enix and their respective owners. Source model conversion credited to Kanbara914; animation mod credited to Feristal. Private personal local testing; no open-source/commercial/public redistribution license asserted."
+}

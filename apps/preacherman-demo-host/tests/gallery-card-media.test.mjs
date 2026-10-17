@@ -17,7 +17,7 @@ test('Every authored Gallery video and logo has a packaged rail asset',()=>{
   const folder=new URL('../public/active-theory-gallery/gallery/',import.meta.url),window={};
   vm.runInNewContext(fs.readFileSync(new URL('rail-media.js',folder),'utf8'),{window});
   const projects=JSON.parse(fs.readFileSync(new URL('external/storage.googleapis.com/activetheory-v6.appspot.com/cms/projects-dev.json',folder),'utf8'));
-  assert.equal(projects.length,32);
+  assert.equal(projects.length,34);
   for(const p of projects){
     for(const src of [p.video.url,p.projectLogo?.url].filter(Boolean)){
       const local=window.PreachermanGalleryRailMedia[src];assert(local?.startsWith('/assets/gallery/'),p.slug);

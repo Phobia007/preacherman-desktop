@@ -1,0 +1,27 @@
+{
+  "schema": "preacherman.character-info",
+  "schemaVersion": 1,
+  "characterId": "aerith-ff7re",
+  "galleryName": "Aerith",
+  "displayName": {"en":"Aerith Gainsborough","zhCN":"艾莉丝·盖恩斯巴勒"},
+  "aliases": ["Aerith","Aeris","艾莉丝","爱丽丝","爱莉丝","爱丽丝·盖恩斯巴勒"],
+  "publisher": "Square Enix",
+  "firstAppearance": {"year":1997,"work":"FINAL FANTASY VII","note":"Original game year, distinct from the Remake appearance represented by this package.","sourceIds":["original-game"]},
+  "representation": {"game":"FINAL FANTASY VII REMAKE","relatedEdition":"FINAL FANTASY VII REMAKE INTERGRADE","sourceId":"remake-character"},
+  "galleryDescription": {
+    "en":"Bright and optimistic, Aerith brings an unguarded warmth to the people she meets. A flower seller from Midgar's Sector 5 slums, she tends the flowers at an old church and has an unusual ability to hear the planet's voice. Her gentle appearance is matched by a determined spirit, while her magic supports her companions in battle.",
+    "zhCN":"艾莉丝天真开朗，总能以积极的态度温暖身边的人。她是在米德加五番街贫民窟生活的花商，时常到旧教堂照料花朵，并拥有聆听星球声音的特殊能力。温柔的外表下有着坚定的内心，她也会在战斗中以魔法支援伙伴。"
+  },
+  "identity": {"en":["Flower seller","Sector 5 resident","Magic user"],"zhCN":["花商","五番街居民","魔法使用者"]},
+  "combatStyle": {"en":"Staff-wielding magic user who attacks with spells and supports allies.","zhCN":"以法杖和魔法攻击，并支援伙伴。"},
+  "spoilers": false,
+  "editorialNote":"Original bilingual paraphrases of the official sources below; not verbatim official localized text. This biography does not add any AI, voice, combat or facial-animation capability to the asset package.",
+  "sources": [
+    {"id":"remake-character","title":"Square Enix — Aerith / FINAL FANTASY VII REMAKE INTERGRADE","url":"https://www.jp.square-enix.com/ffviir_ig/character/aerith.html","supports":["Sector 5 flower seller","old church and flowers","hearing the planet's voice"]},
+    {"id":"intergrade-personality","title":"Square Enix — INTERGRADE CHARACTER Aerith","url":"https://www.jp.square-enix.com/ffviir_ig/","supports":["bright and optimistic personality"]},
+    {"id":"remake-combat","title":"Square Enix — Aerith character introduction video announcement","url":"https://www.jp.square-enix.com/ffviir_ig/news/information/17769.html","supports":["attacking with magic and supporting companions"]},
+    {"id":"staff","title":"Square Enix — Aerith / REBIRTH character page","url":"https://www.square-enix.com/ffvii/en-gb/games/rebirth/characters/aerith-gainsborough/","supports":["staff weapon; combat role corroboration only, not model version"]},
+    {"id":"original-game","title":"Square Enix — FINAL FANTASY VII title portal","url":"https://jp.finalfantasy.com/titles/finalfantasy7","supports":["Aerith in original FINAL FANTASY VII"]}
+  ],
+  "sourcesCheckedAt":"2026-10-15"
+}

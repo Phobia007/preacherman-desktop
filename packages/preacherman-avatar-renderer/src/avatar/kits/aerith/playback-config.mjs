@@ -1,0 +1,19 @@
+export const playbackConfig = Object.freeze({
+  "schemaVersion": 1,
+  "clips": {
+    "idle": "aerith.idle.feri.cbnm_id0.v1",
+    "awaiting": "aerith.gesture.feri.awaiting.v1",
+    "thought": "aerith.gesture.feri.thought.v1"
+  },
+  "labels": {
+    "idle": "自然待机",
+    "awaiting": "稍作等待",
+    "thought": "轻轻思考"
+  },
+  "autoEventKeys": [
+    "awaiting",
+    "thought"
+  ],
+  "randomGapPlaybackSeconds": 10,
+  "transitionSeconds": 1.5
+});

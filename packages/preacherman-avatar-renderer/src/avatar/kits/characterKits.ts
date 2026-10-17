@@ -5,9 +5,16 @@ import { PathfinderAnimationAdapter, pathfinderAvatarProfile } from "./pathfinde
 import { ThreeKitanaAnimationAdapter, kitanaAvatarProfile } from "./kitana/ThreeKitanaAnimationAdapter.mjs";
 import { TifaAnimationAdapter } from "./tifa/TifaAnimationAdapter.mjs";
 import { tifaAvatarProfile } from "./tifa/profile.mjs";
+import { AerithAnimationAdapter } from "./aerith/AerithAnimationAdapter.mjs";
+import { aerithAvatarProfile } from "./aerith/profile.mjs";
 
-export { PathfinderAnimationAdapter, ThreeKitanaAnimationAdapter, TifaAnimationAdapter };
+import { YuffieAnimationAdapter } from "./yuffie/YuffieAnimationAdapter.mjs";
+import { yuffieAvatarProfile } from "./yuffie/profile.mjs";
+
+export { YuffieAnimationAdapter, AerithAnimationAdapter, PathfinderAnimationAdapter, ThreeKitanaAnimationAdapter, TifaAnimationAdapter };
 export const characterKitProfiles = {
+  "yuffie-ff7re": yuffieAvatarProfile,
+  "aerith-ff7re": aerithAvatarProfile,
   "tifa-ff7re": tifaAvatarProfile,
   "apex-legend-pathfinder": pathfinderAvatarProfile,
   "kitana-mk11-in-mk9-suit": kitanaAvatarProfile,
@@ -20,6 +27,8 @@ async function loadGLTF(url: string) {
 
 export function createCharacterKit(modelId: string, modelUrl: string, onError: (error: AvatarAnimationError) => void) {
   const options = { modelUrl, loadGLTF, onError };
+  if (modelId === "yuffie-ff7re") return new YuffieAnimationAdapter({ modelUrl, loadModelFile: loadAvatarModelFile, onError });
+  if (modelId === "aerith-ff7re") return new AerithAnimationAdapter({ modelUrl, loadModelFile: loadAvatarModelFile, onError });
   if (modelId === "tifa-ff7re") return new TifaAnimationAdapter({ modelUrl, loadModelFile: loadAvatarModelFile, onError });
   if (modelId === "apex-legend-pathfinder") return new PathfinderAnimationAdapter(options);
   if (modelId === "kitana-mk11-in-mk9-suit") return new ThreeKitanaAnimationAdapter(options);

@@ -268,5 +268,41 @@
     "cardImageHeight": 892,
     "detailFraming": "artwork",
     "cardSource": "Supplied packaged Gallery model, rendered as transparent waist-up portrait"
+  },
+  {
+    "id": "aerith-ff7re",
+    "label": "Aerith",
+    "name": "Aerith",
+    "designation": "FINAL FANTASY VII",
+    "paragraphs": [
+      "Bright and optimistic, Aerith brings an unguarded warmth to the people she meets. A flower seller from Midgar's Sector 5 slums, she tends the flowers at an old church and has an unusual ability to hear the planet's voice. Her gentle appearance is matched by a determined spirit, while her magic supports her companions in battle."
+    ],
+    "cardImage": "/asset-characters/busts/aerith-ff7re.png",
+    "image": "/asset-characters/cutouts/aerith-ff7re.png",
+    "imageWidth": 391,
+    "imageHeight": 1169,
+    "detailSource": "Supplied Aerith FFVII REMAKE model, transparent render",
+    "cardImageWidth": 597,
+    "cardImageHeight": 868,
+    "detailFraming": "artwork",
+    "cardSource": "Supplied packaged Gallery model, rendered as transparent waist-up portrait"
+  },
+  {
+    "id": "yuffie-ff7re",
+    "label": "Yuffie",
+    "name": "Yuffie",
+    "designation": "FINAL FANTASY VII",
+    "paragraphs": [
+      "A ninja from Wutai and the protagonist of FF7R EPISODE INTERmission. Yuffie infiltrates Midgar and works with Avalanche to seek Shinra’s ultimate materia. Her large throwing star and ninjutsu support agile close-range and ranged combat."
+    ],
+    "cardImage": "/asset-characters/busts/yuffie-ff7re.png",
+    "image": "/asset-characters/cutouts/yuffie-ff7re.png",
+    "imageWidth": 438,
+    "imageHeight": 1139,
+    "detailSource": "Supplied Yuffie FFVII REMAKE model, transparent render",
+    "cardImageWidth": 682,
+    "cardImageHeight": 824,
+    "detailFraming": "artwork",
+    "cardSource": "Supplied packaged Gallery model, rendered as transparent waist-up portrait"
   }
 ]

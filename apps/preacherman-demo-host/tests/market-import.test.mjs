@@ -225,7 +225,7 @@ test("all Gallery portraits are packaged in order with alternating sides and cor
   assert.deepEqual(portraits.map(p => p.id), expected);
   const rows = [...html.matchAll(/<article\b[\s\S]*?<\/article>/g)].map(match => match[0]);
   assert.equal(rows.length, portraits.length);
-  assert.equal(portraits.length, 15);
+  assert.equal(portraits.length, 17);
   const copy = row => row.match(/<div class="descriptive-card__content component-custom-width"[\s\S]*/)[0].replace(/data-od-id="[^"]+"/g, "");
   for (const [index, portrait] of portraits.entries()) {
     const row = rows[index];

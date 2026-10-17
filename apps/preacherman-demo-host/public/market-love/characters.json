@@ -148,5 +148,25 @@
     "bytes": 582553,
     "sha256": "8346bb21412d14456dafdc3e117a2a2fb22cc2411c0f33d38098c870524493ce",
     "summary": "Cheerful on the outside and more reserved within, Tifa values the people close to her but often keeps her worries to herself. Cloud's childhood friend and the proprietor of Seventh Heaven, she supports Avalanche while facing her own doubts. A skilled martial artist, she fights with agile punches, kicks and flowing combinations."
+  },
+  {
+    "id": "aerith-ff7re",
+    "name": "Aerith",
+    "image": "../asset-characters/busts/aerith-ff7re.png",
+    "width": 597,
+    "height": 868,
+    "bytes": 582626,
+    "sha256": "ea20e4f394ed364a10dab0e7048bafa783c1ae7c563e9ca3534da0e8816f9efa",
+    "summary": "Bright and optimistic, Aerith brings an unguarded warmth to the people she meets. A flower seller from Midgar's Sector 5 slums, she tends the flowers at an old church and has an unusual ability to hear the planet's voice. Her gentle appearance is matched by a determined spirit, while her magic supports her companions in battle."
+  },
+  {
+    "id": "yuffie-ff7re",
+    "name": "Yuffie",
+    "image": "../asset-characters/busts/yuffie-ff7re.png",
+    "width": 682,
+    "height": 824,
+    "bytes": 682354,
+    "sha256": "8e1dea5a6e4107cf53b15edba527c1faa0304d9789012db92e21cca91ebabc2c",
+    "summary": "A ninja from Wutai and the protagonist of FF7R EPISODE INTERmission. Yuffie infiltrates Midgar and works with Avalanche to seek Shinra’s ultimate materia. Her large throwing star and ninjutsu support agile close-range and ranged combat."
   }
 ]
