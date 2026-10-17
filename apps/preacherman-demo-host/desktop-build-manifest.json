@@ -1,38 +1,38 @@
 {
   "schemaVersion": 1,
-  "buildId": "tifa-character-20261015",
+  "buildId": "ff7-characters-20261017",
   "productVersion": "0.1.0",
-  "sourceTask": "Import supplied Tifa character into Gallery, Asset and Market",
+  "sourceTask": "Import supplied Aerith and Yuffie characters into Gallery, Asset and Market",
   "sourceThread": null,
-  "sourceState": "Packaged Tifa model and four authored motions, Gallery card/search/biography/activation, transparent Asset portraits and detail, Market character and existing views/Purchase flow. Existing page transitions and light/dark styling retained.",
-  "sourceCommit": "5eaf15daa521523f8645fa8f930970b8a6ffc11b",
+  "sourceState": "Packaged Aerith and Yuffie models and seven authored motions, Gallery card/search/biography/activation, transparent Asset portraits and detail, Market character and existing views/Purchase flow. Existing page transitions and light/dark styling retained.",
+  "sourceCommit": "c4b8f92947e7edc170d59dbebbeff99b75bfd39b",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-15T23:30:00.6431061+08:00",
-  "deployedAt": "2026-10-15T23:32:09.4391349+08:00",
-  "verifiedAt": "2026-10-15T23:46:33.494304+08:00",
-  "sizeBytes": 737318912,
-  "sha256": "8CCBAB94CC9C958653822DA25E8C6B631582CA42CB6EEDA3A015E7689034A30D",
+  "builtAt": "2026-10-17T17:26:03.2212425+08:00",
+  "deployedAt": "2026-10-17T17:26:53.8430205+08:00",
+  "verifiedAt": "2026-10-17T17:31:21.941396+08:00",
+  "sizeBytes": 820790272,
+  "sha256": "11A74179D04C3DAB85182515BA374D0DEAAC154271A881C1CA1D667E7ED14454",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\tifa-before-20261015\\preacherman-demo-host.exe",
-  "backupSha256": "0F314DEEEA00293525BDD13E18B8676126E19300A78D990FD1F853B75B859CEB",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\tifa-before-20261015\\preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ff7-before-20261017\\preacherman-demo-host.exe",
+  "backupSha256": "8CCBAB94CC9C958653822DA25E8C6B631582CA42CB6EEDA3A015E7689034A30D",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ff7-before-20261017\\preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "fdc02c321f72770b5487c2e5eb06940583fd95c6",
-  "previousVerificationCommit": "fdc02c321f72770b5487c2e5eb06940583fd95c6",
+  "rollbackBaselineCommit": "5eaf15daa521523f8645fa8f930970b8a6ffc11b",
+  "previousVerificationCommit": "5eaf15daa521523f8645fa8f930970b8a6ffc11b",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 44,
+      "focusedTests": 50,
       "focusedFailures": 0,
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical shortcut; Tifa search, Gallery detail and activation, Asset card/detail, Market entry/detail/Front/Side/Back/Zoom In/Purchase 81 checked in both appearances. Core Home, Task, Gallery, Asset, Market/Ledger, Extension, Settings and Account verified. Existing account/preferences restored before normal final launch.",
+    "nativeFlow": "Cold launch through canonical shortcut; Aerith and Yuffie search, Gallery detail and activation, Asset card/detail, Market entry/detail/Front/Side/Back/Zoom In/Purchase 81 checked in both appearances. Core Home, Task, Gallery, Asset, Market/Ledger, Extension, Settings and Account verified. Existing account/preferences restored before normal final launch.",
     "routes": [
       {
         "appearance": "dark",
@@ -72,11 +72,6 @@
       {
         "appearance": "light",
         "name": "Task",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Home",
         "ready": true
       },
       {
@@ -122,20 +117,63 @@
     ],
     "animationChecks": [
       {
+        "modelId": "aerith-ff7re",
         "appearance": "light",
         "debug": {
-          "avatarId": "tifa-ff7re",
-          "rigId": "tifa-ff7re-def-runtime-v1",
+          "avatarId": "aerith-ff7re",
+          "rigId": "aerith-ff7re-game-runtime-v1",
           "loadedClips": [
-            "tifa.gesture.feri.awaiting.v1",
-            "tifa.gesture.feri.glove_check.v1",
-            "tifa.gesture.feri.thought.v1",
-            "tifa.idle.feri.cbnm_id0.v1"
+            "aerith.gesture.feri.awaiting.v1",
+            "aerith.gesture.feri.thought.v1",
+            "aerith.idle.feri.cbnm_id0.v1"
           ],
           "currentAction": "idle.default",
-          "currentDuration": 10.633333206176758,
+          "currentDuration": 10.666666984558105,
           "mixerState": "playing",
-          "boneCount": 354,
+          "boneCount": 769,
+          "missingClipErrors": [],
+          "registeredActions": 3
+        },
+        "allGestures": true,
+        "paused": true
+      },
+      {
+        "modelId": "aerith-ff7re",
+        "appearance": "dark",
+        "debug": {
+          "avatarId": "aerith-ff7re",
+          "rigId": "aerith-ff7re-game-runtime-v1",
+          "loadedClips": [
+            "aerith.gesture.feri.awaiting.v1",
+            "aerith.gesture.feri.thought.v1",
+            "aerith.idle.feri.cbnm_id0.v1"
+          ],
+          "currentAction": "idle.default",
+          "currentDuration": 10.666666984558105,
+          "mixerState": "playing",
+          "boneCount": 769,
+          "missingClipErrors": [],
+          "registeredActions": 3
+        },
+        "allGestures": true,
+        "paused": true
+      },
+      {
+        "modelId": "yuffie-ff7re",
+        "appearance": "light",
+        "debug": {
+          "avatarId": "yuffie-ff7re",
+          "rigId": "yuffie-ff7re-game-runtime-v1",
+          "loadedClips": [
+            "yuffie.gesture.feri.hand_on_hip.v1",
+            "yuffie.gesture.feri.in_the_balance.v1",
+            "yuffie.gesture.feri.small_swing.v1",
+            "yuffie.idle.feri.standing.v1"
+          ],
+          "currentAction": "idle.default",
+          "currentDuration": 8.300000190734863,
+          "mixerState": "playing",
+          "boneCount": 593,
           "missingClipErrors": [],
           "registeredActions": 4
         },
@@ -143,20 +181,21 @@
         "paused": true
       },
       {
+        "modelId": "yuffie-ff7re",
         "appearance": "dark",
         "debug": {
-          "avatarId": "tifa-ff7re",
-          "rigId": "tifa-ff7re-def-runtime-v1",
+          "avatarId": "yuffie-ff7re",
+          "rigId": "yuffie-ff7re-game-runtime-v1",
           "loadedClips": [
-            "tifa.gesture.feri.awaiting.v1",
-            "tifa.gesture.feri.glove_check.v1",
-            "tifa.gesture.feri.thought.v1",
-            "tifa.idle.feri.cbnm_id0.v1"
+            "yuffie.gesture.feri.hand_on_hip.v1",
+            "yuffie.gesture.feri.in_the_balance.v1",
+            "yuffie.gesture.feri.small_swing.v1",
+            "yuffie.idle.feri.standing.v1"
           ],
           "currentAction": "idle.default",
-          "currentDuration": 10.633333206176758,
+          "currentDuration": 8.300000190734863,
           "mixerState": "playing",
-          "boneCount": 354,
+          "boneCount": 593,
           "missingClipErrors": [],
           "registeredActions": 4
         },
@@ -165,60 +204,35 @@
       }
     ],
     "consoleErrors": [
-      "Hydration completed but contains mismatches.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "newConsoleErrors": [],
-    "baselineDiagnosticNote": "Existing Task Nuxt hydration diagnostic comes from unchanged public/gallery-v3/portfolio/_nuxt/D9b8F35K.js; legacy external CSP/network errors match the prior native baseline. No Tifa model or runtime errors.",
+    "baselineDiagnosticNote": "One existing net::ERR_CONNECTION_CLOSED diagnostic matches the previous native baseline. No new console errors and no Aerith or Yuffie model/runtime errors.",
     "resources": {
-      "SampledAt": "2026-10-15T23:44:49.7638657+08:00",
-      "NativePid": 9100,
-      "StartedAt": "2026-10-15T23:44:27.5619310+08:00",
-      "WindowHandle": 657756,
+      "SampledAt": "2026-10-17T17:30:30.5650484+08:00",
+      "NativePid": 34344,
+      "StartedAt": "2026-10-17T17:30:11.7635744+08:00",
+      "WindowHandle": 4066778,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        9100,
-        29836,
-        5480,
-        1896,
-        31652,
-        29784,
-        12912,
-        33132,
-        30084,
-        33304,
-        10512
+        34344,
+        18504,
+        35396,
+        27368,
+        36260,
+        36972,
+        4832,
+        33552,
+        19680,
+        24604,
+        28716
       ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2100.2,
-      "GpuDedicatedBytes": 3458879488,
-      "MaxGpuEngineUtilization": 7,
-      "FreeRamKiB": 17529376,
+      "NormalizedCpuPercent": 4,
+      "WorkingSetMiB": 2080.3,
+      "GpuDedicatedBytes": 3488411648,
+      "MaxGpuEngineUtilization": 20,
+      "FreeRamKiB": 13965220,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -233,7 +247,7 @@
       "closeRequested": true,
       "passed": true
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\tifa-import-20261015"
+    "evidenceDirectory": "D:\\preacherman\\output\\ff7-characters-20261017"
   },
   "releaseAttempts": [
     {
@@ -1406,9 +1420,16 @@
       "status": "verified",
       "sha256": "8CCBAB94CC9C958653822DA25E8C6B631582CA42CB6EEDA3A015E7689034A30D",
       "verifiedAt": "2026-10-15T23:46:33.494304+08:00"
+    },
+    {
+      "buildId": "ff7-characters-20261017",
+      "sourceCommit": "c4b8f92947e7edc170d59dbebbeff99b75bfd39b",
+      "status": "verified",
+      "sha256": "11A74179D04C3DAB85182515BA374D0DEAAC154271A881C1CA1D667E7ED14454",
+      "verifiedAt": "2026-10-17T17:31:21.941396+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\tifa-before-20261015\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ff7-before-20261017\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1425,7 +1446,7 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\tifa-import-20261015"
+    "verificationDirectory": "D:\\preacherman\\output\\ff7-characters-20261017"
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
