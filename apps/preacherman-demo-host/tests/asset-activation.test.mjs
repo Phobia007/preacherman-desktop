@@ -36,6 +36,15 @@ test('a full hold accelerates from the center and activates exactly once at comp
     f.tick(1599);assert.deepEqual(f.calls,[]);f.tick(1600);assert.deepEqual(f.calls,['cortana']);f.tick(3200);assert.deepEqual(f.calls,['cortana']);
   }finally{f.cleanup();}
 });
+
+test('Appearance Apply uses the same hold, rewind and single-confirm behavior',()=>{
+  const f=fixture({variant:'apply'});try{
+    assert.equal(f.button['aria-label'],'Hold to apply Cortana');
+    f.pointer();f.tick(800);f.button.onPointerUp(f.event());f.tick(1000);assert.ok(Number(f.styles['--asset-charge'])>0);assert.deepEqual(f.calls,[]);
+    f.tick(1600);f.pointer();f.tick(3200);assert.equal(f.phase,'confirmed');assert.deepEqual(f.calls,['cortana']);f.tick(3920);assert.equal(f.phase,'idle');
+  }finally{f.cleanup();}
+  const applied=fixture({variant:'apply',activated:true});try{assert.equal(applied.button['aria-label'],'Hold to remove Cortana');}finally{applied.cleanup();}
+});
 for(const reason of ['release','leave','pointercancel','lostcapture','blur','hidden','escape','unmount'])test(`unfinished hold cancels on ${reason}`,()=>{
   const f=fixture();try{
     f.pointer();f.tick(600);

@@ -633,3 +633,29 @@ final result: passed
 - Final native geometry at 1800px: sheet x60–1740, divider x900, chat starts x936, composer bottom y931 versus sheet bottom y985. Compact900px evidence checks the existing scaled desktop canvas, not full mobile usability.
 - Core Home, Task, Gallery, Market, Account and Settings screenshots and the native verification report are under `apps/preacherman-demo-host/output/playwright/task-chat-*`. Source checkpoint: `d4bdfb1`. Deployment/backup hashes and process cleanup are recorded in the desktop manifest.
 - Independent finish verdict: Approved for bounded frontend finish; no blocking findings. Existing compact desktop-canvas scaling is a limitation, not a mobile layout. Verification app and temporary processes were stopped; post-cleanup sample CPU3%, GPU12%, VRAM1300MiB.
+
+
+# Asset sections and Appearance — 2026-10-23
+
+- Source visual truth: `D:/Temp/Administrator/codex-clipboard-0b3f3a3c-e770-4e33-95c3-526d8eb1ae95.png` (1920 × 1032) and `C:/Users/Administrator/xwechat_files/wxid_evcq0kz9i3au22_2178/temp/RWTemp/2026-10/9e20f478899dc29eb19741386f9343c8/28741ca4a4f30c96eec7c72f2f4d2fb5.png` (1920 × 1080).
+- Implementation evidence directory: `D:/preacherman/output/playwright/asset-appearance-20261023/`. Primary captures: `preview-light-appearance.png`, `preview-dark-appearance.png`, the two `*-apply-check.png` and `*-applied.png`, section/category screenshots, and `preview-report.json`.
+- CSS viewport and screenshot pixels: 1920 × 1032, deviceScaleFactor 1. Full-view comparison: `comparison-full.jpg`, both sources reduced uniformly to 960px wide, preserving their differing aspect ratios. The 100px desktop brand header and retained close-up framing are intentional product requirements. Focused comparison: `comparison-details.jpg`, original-density tile crops plus equally enlarged navigation crops.
+
+## Fidelity and findings
+
+- Typography: existing Preacherman font, thin weights and restrained hierarchy retained. The main navigation uses text emphasis only; the smaller secondary labels share one thin capsule. No Marvel font or purple/yellow palette was introduced.
+- Layout: return arrow moved up 4 logical pixels. The slanted two-column selection frame follows the reference's 14-degree geometry and descending left edge. Model remains on the right with its title and Apply control alongside it. The same live viewport survives Overview, Appearance and Settings changes. Close-up zoom, wheel-to-full-body, bottom boundary and character rail are preserved.
+- Colors/tokens: every new foreground, background, border, focus, hover, loading and error treatment uses existing semantic theme variables. Authored model textures and renderer lights are unchanged. Light and dark were inspected and exercised.
+- Asset fidelity: real packaged character busts and real animated models; no generated costumes, synthetic recolors, decorative substitute avatars or copied Marvel artwork. Each current character exposes its shipped original costume and authored default idle. Voice, Accessories and Backgrounds truthfully show that no character packs are available. Empty grid cells are noninteractive visual continuation, not pretend inventory.
+- Content: Apply/Applied uses the same desktop-companion selection and reverse/hide semantics as Activate/Activated, including the 1.6s accelerating center-out hold, equivalent-time rewind and 720ms check confirmation. Skills and Info Map now have navigable, explicit not-yet-connected content; they do not claim backend configuration/history exists. Settings reuses the real API configuration and clearly labels it as a shared connection, not isolated character credentials.
+- [P2, resolved] The first 1100px capture placed the right title against the model shoulder and overly shrank the selection grid. Narrowed the right caption track and kept larger logical tile/title sizes. Post-fix evidence: `final-1100-appearance.png`, `final-700-appearance.png`; title, button and tiles remain separated.
+- Compact checks at 1100 × 740 and 700 × 850 preserve the application's existing scaled desktop canvas. They verify no overlap, inaccessible persistent controls or horizontal overflow; this is not a new mobile layout.
+
+## Interaction and verification
+
+- Browser screenshots came from the actual existing application. Both themes passed all five main tabs, all five Appearance categories, leftward departure/rightward arrival, model fade and render suspension, retained canvas identity, rapid target changes, form/subtab keyboard isolation, short-click rejection, partial-hold rewind, category-change cancellation, check-before-Applied, persistent desktop selection and unchanged Gallery preview-only behavior.
+- Reduced-motion section changes complete without waiting on animation events. Timers and held-button resources clean up on replacement/unmount.
+- Host TypeScript and 50 focused host tests passed. Eleven renderer material/resource regression tests passed. Preview: no page exceptions; only the already-recorded third-party hydration diagnostic.
+- Asset Appearance native delivery: pending. Production must be rebuilt, cold-launched through the canonical shortcut, verified in both themes and across core navigation, and recorded in the desktop manifest before handoff.
+
+final result: blocked

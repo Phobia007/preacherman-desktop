@@ -71,16 +71,16 @@ test('Overview previews the selected packaged model without changing the equippe
 for (const appearance of ['light', 'dark']) test(`Asset controls use deliberate semantic theme tokens in ${appearance}`, () => {
   const styles = read('src/styles.css');
   const block = [...styles.matchAll(/\.demo-app-shell([^{}]*)\{([^{}]*)\}/g)].filter(m => m[1].trim() === (appearance === 'dark' ? '[data-appearance="dark"]' : '')).map(m => m[2]).join('\n');
-  const css = read('src/surfaces/asset/asset-collection.css') + read('src/surfaces/asset/asset-detail-layout.css') + read('src/surfaces/asset/asset-activation.css');
+  const css = read('src/surfaces/asset/asset-collection.css') + read('src/surfaces/asset/asset-detail-layout.css') + read('src/surfaces/asset/asset-activation.css') + read('src/surfaces/asset/asset-sections.css');
   for (const token of new Set(css.match(/--demo-theme-[a-z-]+/g))) assert.ok(block.includes(token + ':'), token);
   assert.match(css, /:focus-visible/); assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /\.asset-detail__heading\s*\{[^}]*color: var\(--demo-theme-market-text\)/);
   assert.doesNotMatch(css, /https?:\/\/|background-color:\s*#|color:\s*#/);
   const component = read('src/surfaces/asset/AssetCollection.tsx');
   assert.match(component, /appearance=\{appearance\}/);
-  assert.match(component, /\["Overview", "Costume", "Skills", "Settings", "Info Map"\]/);
-  assert.match(component, /disabled=\{label !== "Overview"\}/);
-  assert.match(component, /role="tabpanel" aria-labelledby="asset-overview-tab"/);
+  assert.match(read('src/surfaces/asset/useAssetSection.ts'), /\["Overview", "Appearance", "Skills", "Settings", "Info Map"\]/);
+  assert.doesNotMatch(component, /disabled=\{label !== "Overview"\}/);
+  assert.match(component, /role="tabpanel" aria-labelledby=\{sectionId\(section.displayed\)\}/);
   assert.match(css, /asset-overview__status\[role="alert"\][^}]*var\(--demo-theme-error\)/);
   assert.match(css, /color: var\(--demo-theme-loading\)/);
   assert.match(css, /\.asset-details \.asset-details__back\s*\{[^}]*border: 0;[^}]*background: transparent;[^}]*color: var\(--demo-theme-market-text\)/);

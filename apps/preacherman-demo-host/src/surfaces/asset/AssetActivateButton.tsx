@@ -8,8 +8,9 @@ const CONFIRM_MS = 720;
 type HoldInput = { kind: "pointer"; id: number } | { kind: "key"; key: string };
 type Phase = "idle" | "charging" | "releasing" | "confirmed";
 
-export function AssetActivateButton({ modelId, activated, enabled, onActivate }: {
+export function AssetActivateButton({ modelId, activated, enabled, onActivate, variant = "activate" }: {
   modelId: ModelId; activated: boolean; enabled: boolean; onActivate: (modelId: ModelId) => void;
+  variant?: "activate" | "apply";
 }) {
   const button = useRef<HTMLButtonElement>(null);
   const input = useRef<HoldInput | null>(null);
@@ -21,7 +22,7 @@ export function AssetActivateButton({ modelId, activated, enabled, onActivate }:
   const [displayedActivated, setDisplayedActivated] = useState(activated);
   const hintId = useId();
   const name = avatarModelName(modelId);
-  const label = displayedActivated ? "Activated" : "Activate";
+  const label = variant === "apply" ? (displayedActivated ? "Applied" : "Apply") : (displayedActivated ? "Activated" : "Activate");
 
   const releasePointer = useCallback((previous: HoldInput | null) => {
     if (previous?.kind === "pointer" && button.current?.hasPointerCapture(previous.id)) button.current.releasePointerCapture(previous.id);
@@ -98,7 +99,7 @@ export function AssetActivateButton({ modelId, activated, enabled, onActivate }:
 
   return <>
     <button ref={button} type="button" className="asset-activate" disabled={!enabled}
-      aria-label={activated ? `Hold to deactivate ${name}` : `Hold to activate ${name}`} aria-pressed={activated} aria-describedby={hintId}
+      aria-label={activated ? `Hold to ${variant === "apply" ? "remove" : "deactivate"} ${name}` : `Hold to ${variant} ${name}`} aria-pressed={activated} aria-describedby={hintId}
       data-activated={activated} data-phase={phase} aria-busy={phase === "confirmed"} onBlur={cancel} onContextMenu={event => event.preventDefault()}
       onClick={event => event.preventDefault()}
       onPointerDown={event => {

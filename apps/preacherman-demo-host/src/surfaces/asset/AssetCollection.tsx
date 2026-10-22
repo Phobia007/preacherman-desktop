@@ -6,7 +6,11 @@ import { useThree } from "@react-three/fiber";
 import type { Appearance, ModelId } from "../../preferences";
 import characters from "./characters.json";
 import { AssetActivateButton } from "./AssetActivateButton";
+import { AssetAppearance, appearanceCategories, type AppearanceCategory } from "./AssetAppearance";
+import { AssetInfoSection, AssetSettings } from "./AssetSectionContent";
+import { assetSections, sectionHasModel, sectionId, useAssetSection } from "./useAssetSection";
 import "./asset-collection.css";
+import "./asset-sections.css";
 
 type Character = typeof characters[number];
 function ArrowLeft() {
@@ -109,39 +113,70 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
   const viewport = useRef<HTMLDivElement>(null);
   const back = useRef<HTMLButtonElement>(null);
   const [current, setCurrent] = useState(initialId);
+  const section = useAssetSection();
+  const [category, setCategory] = useState<AppearanceCategory>("Costume");
   const character = characters.find(character => character.id === current)!;
-  const choose = (id: string) => setCurrent(id);
+  const choose = (id: string) => { setCurrent(id); setCategory("Costume"); };
+  const modelVisible = sectionHasModel(section.requested);
   useLayoutEffect(() => { back.current?.focus({ preventScroll: true }); }, []);
   // Only the selected character is mounted; scrolling can never reveal another detail.
   useLayoutEffect(() => { viewport.current?.scrollTo({ top: 0, behavior: "instant" }); }, [current]);
-  return <div className="asset-details" data-current={current} onKeyDown={event => {
+  useLayoutEffect(() => { viewport.current?.scrollTo({ top: 0, behavior: "instant" }); }, [section.displayed]);
+  return <div className="asset-details" data-current={current} data-section={section.requested} data-transition={section.phase} onKeyDown={event => {
     if (event.key === "Escape") { event.stopPropagation(); onBack(); }
     if (event.altKey || event.ctrlKey || event.metaKey) return;
+    if ((event.target as HTMLElement).closest('[role="tablist"], input, textarea, select, .asset-settings, .asset-appearance__tiles')) return;
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       event.preventDefault(); const index = characters.findIndex(character => character.id === current);
       choose(characters[Math.max(0, Math.min(characters.length - 1, index + (event.key === "ArrowRight" ? 1 : -1)))].id);
     }
   }}>
     <button ref={back} type="button" className="asset-details__back" aria-label="Back to assets" title="Back to assets" onClick={onBack}><ArrowLeft /></button>
-    <div className="asset-details__tabs" role="tablist" aria-label="Character sections">
-      {["Overview", "Costume", "Skills", "Settings", "Info Map"].map(label => <button key={label} type="button" role="tab"
-        id={label === "Overview" ? "asset-overview-tab" : undefined} aria-selected={label === "Overview"}
-        aria-controls={label === "Overview" ? "asset-overview-panel" : undefined} disabled={label !== "Overview"}
-        title={label === "Overview" ? undefined : `${label} — Coming soon`}>{label}</button>)}
+    <div className="asset-details__tabs" role="tablist" aria-label="Character sections" onKeyDown={event => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault(); event.stopPropagation();
+      const index = assetSections.indexOf(section.requested);
+      const next = event.key === "Home" ? 0 : event.key === "End" ? assetSections.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + assetSections.length) % assetSections.length;
+      section.select(assetSections[next]); document.getElementById(sectionId(assetSections[next]))?.focus();
+    }}>
+      {assetSections.map(label => <button key={label} type="button" role="tab" id={sectionId(label)}
+        aria-selected={section.requested === label} tabIndex={section.requested === label ? 0 : -1}
+        aria-controls="asset-section-panel" onClick={() => section.select(label)}>{label}</button>)}
     </div>
+    {section.requested === "Appearance" && <div className="asset-details__subtabs" role="tablist" aria-label="Appearance categories" onKeyDown={event => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault(); event.stopPropagation();
+      const index = appearanceCategories.indexOf(category);
+      const next = event.key === "Home" ? 0 : event.key === "End" ? appearanceCategories.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + appearanceCategories.length) % appearanceCategories.length;
+      setCategory(appearanceCategories[next]); document.getElementById(`asset-category-${appearanceCategories[next]}`)?.focus();
+    }}>
+      {appearanceCategories.map(label => <button key={label} type="button" role="tab" id={`asset-category-${label}`}
+        aria-selected={category === label} tabIndex={category === label ? 0 : -1} aria-controls="asset-appearance-panel" onClick={() => setCategory(label)}>{label}</button>)}
+    </div>}
     <div className="asset-details__scroll" ref={viewport}>
       <div className="asset-details__inner">
         <div className="asset-details__list">
-          <article className="asset-detail" data-detail={character.id} key={character.id} aria-label={character.label}>
-            <div id="asset-overview-panel" role="tabpanel" aria-labelledby="asset-overview-tab" className="asset-overview">
-              <div className="asset-overview__copy">
+          <article className="asset-detail asset-detail--sections" data-detail={character.id} key={character.id} aria-label={character.label}>
+            <div className="asset-detail__model-slot" data-visible={modelVisible} aria-hidden={!modelVisible} ref={element => element?.toggleAttribute("inert", !modelVisible)}>
+              {isAvatarModelId(character.id) && <CharacterModel key={character.id} modelId={character.id} appearance={appearance} renderActive={renderActive && (modelVisible || section.phase !== "idle")} />}
+            </div>
+            <div id="asset-section-panel" role="tabpanel" aria-labelledby={sectionId(section.displayed)} aria-busy={section.phase !== "idle"}
+              className="asset-section-pane" data-pane={section.displayed} data-phase={section.phase} data-has-model={sectionHasModel(section.displayed)}
+              ref={element => element?.toggleAttribute("inert", section.phase === "leaving")}>
+              {section.displayed === "Overview" && <div className="asset-overview">
+                <div className="asset-overview__copy">
                 <CharacterHeading character={character} />
                 <div className="asset-detail__text"><div className="asset-detail__description">{character.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div></div>
-              </div>
-              {isAvatarModelId(character.id) && <CharacterModel key={character.id} modelId={character.id} appearance={appearance} renderActive={renderActive} />}
-              {isAvatarModelId(character.id) && <div className="asset-overview__activation">
-                <AssetActivateButton key={character.id} modelId={character.id} activated={activeModelId === character.id} enabled={activationEnabled} onActivate={onActivate} />
+                </div>
+                {isAvatarModelId(character.id) && <div className="asset-overview__activation">
+                  <AssetActivateButton key={character.id} modelId={character.id} activated={activeModelId === character.id} enabled={activationEnabled && section.phase === "idle"} onActivate={onActivate} />
+                </div>}
               </div>}
+              {section.displayed === "Appearance" && <div id="asset-appearance-panel" role="tabpanel" aria-labelledby={`asset-category-${category}`}>
+                <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} />
+              </div>}
+              {section.displayed === "Settings" && <AssetSettings name={character.name} />}
+              {(section.displayed === "Skills" || section.displayed === "Info Map") && <AssetInfoSection section={section.displayed} name={character.name} />}
             </div>
           </article>
         </div>
