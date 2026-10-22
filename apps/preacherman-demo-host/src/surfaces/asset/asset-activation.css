@@ -3,29 +3,43 @@
 .asset-collection .asset-activate {
   --asset-charge: 0;
   position: relative; display: grid; place-items: center; overflow: hidden; isolation: isolate;
-  width: 160px; height: 54px; padding: 0; border: 1px solid var(--demo-theme-activate-rest-border); border-radius: 0;
+  width: 160px; height: 54px; padding: 0; border: 0; border-radius: 999px;
   background: transparent; color: var(--demo-theme-activate-rest-text);
   font: 400 18px/1.2 var(--demo-font-primary); letter-spacing: .025em;
   touch-action: none; user-select: none; -webkit-user-select: none;
   transition: transform 220ms ease;
 }
 .asset-collection .asset-activate[data-activated="true"] { background: var(--demo-theme-activate-fill); color: var(--demo-theme-activate-fill-text); }
+.asset-activate__label { transition: opacity 180ms ease, transform 220ms ease; }
 .asset-activate__charge {
   position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
   background: var(--demo-theme-activate-fill); color: var(--demo-theme-activate-fill-text);
   clip-path: inset(0 calc((1 - var(--asset-charge)) * 50%));
 }
 .asset-activate[data-activated="true"] .asset-activate__charge { background: var(--demo-theme-home-canvas); color: var(--demo-theme-activate-rest-text); }
-.asset-activate:not([data-charging="true"]) .asset-activate__charge { visibility: hidden; }
-.asset-collection .asset-activate:hover { border-color: var(--demo-theme-market-focus); }
-.asset-collection .asset-activate:focus-visible { outline: 1px solid var(--demo-theme-market-focus); outline-offset: 5px; }
-.asset-collection .asset-activate[data-charging="true"] { transform: scale(.985); border-color: var(--demo-theme-activate-rest-border); }
+.asset-activate:not([data-phase="charging"]):not([data-phase="releasing"]) .asset-activate__charge { visibility: hidden; }
+.asset-activate__ring { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 180ms ease; }
+.asset-activate__ring path { fill: none; stroke: var(--demo-theme-brand-menu-focus); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.asset-activate:is(:hover, :focus-visible, [data-phase="charging"], [data-phase="releasing"], [data-phase="confirmed"]) .asset-activate__ring { opacity: 1; }
+.asset-activate:is(:hover, :focus-visible, [data-phase="charging"], [data-phase="releasing"], [data-phase="confirmed"]) .asset-activate__ring path { animation: asset-activate-outline 680ms cubic-bezier(.65, 0, .15, 1) forwards; }
+.asset-collection .asset-activate:focus-visible { outline: none; }
+.asset-collection .asset-activate[data-phase="charging"] { transform: scale(.985); }
+.asset-activate__check { position: absolute; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; opacity: 0; transform: scale(.85); transition: opacity 180ms ease, transform 220ms ease; }
+.asset-activate__check path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.asset-activate[data-phase="confirmed"] .asset-activate__label { opacity: 0; transform: translateY(-4px); }
+.asset-activate[data-phase="confirmed"] .asset-activate__check { opacity: 1; transform: scale(1); }
+.asset-activate[data-phase="confirmed"] .asset-activate__check path { animation: asset-activate-check 300ms ease-out forwards; }
 .asset-collection .asset-activate:disabled { opacity: .5; cursor: default; }
 .asset-activate__assistive { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@keyframes asset-activate-outline { from { stroke-dashoffset: 100; opacity: .18; } to { stroke-dashoffset: 0; opacity: .72; } }
+@keyframes asset-activate-check { to { stroke-dashoffset: 0; } }
 @media (max-width: 768px) {
   .asset-overview__activation { position: static; grid-row: 2; margin-block: 28px 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .asset-collection .asset-activate { transition: none; transform: none; }
-  .asset-collection .asset-activate[data-charging="true"] { transform: none; }
+  .asset-collection .asset-activate[data-phase="charging"] { transform: none; }
+  .asset-activate__label, .asset-activate__ring, .asset-activate__check { transition: none; }
+  .asset-activate:is(:hover, :focus-visible, [data-phase="charging"], [data-phase="releasing"], [data-phase="confirmed"]) .asset-activate__ring path,
+  .asset-activate[data-phase="confirmed"] .asset-activate__check path { animation: none; stroke-dashoffset: 0; }
 }

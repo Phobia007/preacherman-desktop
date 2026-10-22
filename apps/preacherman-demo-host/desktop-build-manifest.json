@@ -1412,6 +1412,14 @@
       "status": "verified",
       "sha256": "15959147FA308CCE0E292E2554A0A8227DABC2E66DF81A1BFD53D4B378A80305",
       "verifiedAt": "2026-10-23T02:45:16.681966+08:00"
+    },
+    {
+      "buildId": "asset-activation-20261023-initial",
+      "sourceCommit": "d43b55578658c4a7137a9978ae09356c70c2ce01",
+      "status": "superseded-before-handoff-baseline-restored",
+      "sha256": "4E16DED19FFA3582CA8755DE55FC327F02718A81E25BF11CE8B81D5A81E8C62D",
+      "restoredAt": "2026-10-23T03:27:48.5925044+08:00",
+      "reason": "User refined interaction during verification: hover-drawn capsule, gradual reverse, checkmark confirmation. Previous verified pair restored while implementing final scope. Background-window trace proved original charging curve works when foregrounded; native automation updated to explicitly foreground and await target page."
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-arrow-before-20261023\\desktop-build-manifest.json",
