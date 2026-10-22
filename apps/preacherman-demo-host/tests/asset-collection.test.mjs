@@ -44,7 +44,7 @@ test('Detail scrolling cannot expose unrelated characters', () => {
 });
 test('Collection is Asset-only, preserves the shared frost, and uses internal selection instead of external navigation', () => {
   const surface = read('src/surfaces/FrostedSurface.tsx'), component = read('src/surfaces/asset/AssetCollection.tsx');
-  assert.match(surface, /name === "Asset" \? <AssetCollection \/>/);
+  assert.match(surface, /name === "Asset" \? <AssetCollection\b[^>]*appearance=\{appearance\}/);
   assert.match(surface, /className="demo-frosted-surface"/);
   assert.match(surface, /<SurfaceBrandHeader\b[^>]*\/>/);
   assert.doesNotMatch(component, /href=|window\.open|location\.|fetch\(|<iframe/);
@@ -52,6 +52,20 @@ test('Collection is Asset-only, preserves the shared frost, and uses internal se
   assert.match(component, /initialId=\{selected\}/);
   assert.match(component, /onBack=\{\(\) => setSelected\(null\)\}/);
   assert.match(component, /observer.disconnect\(\)/);
+});
+test('Overview previews the selected packaged model without changing the equipped companion', () => {
+  const component = read('src/surfaces/asset/AssetCollection.tsx');
+  assert.match(component, /isAvatarModelId\(character.id\)/);
+  assert.match(component, /modelId=\{character.id\}/);
+  assert.match(component, /assetBaseUrl=\{localAvatarAssetBaseUrl\(modelId\)\}/);
+  assert.match(component, /actionId=\{avatarDefaultActionId\(modelId\)\}/);
+  assert.doesNotMatch(component, /setPreferences|localStorage|onActivate|character\.image\}/);
+  const app = read('src/App.tsx');
+  assert.match(app, /renderActive=\{windowActive && !\(activeSurfaceType === "asset" && assetDetailOpen\)\}/);
+  assert.match(component, /onDetailChange\(false\)/);
+  for (const character of characters) {
+    assert.ok(existsSync(new URL('../public/assets/avatars/' + character.id + '/', import.meta.url)), character.id);
+  }
 });
 for (const appearance of ['light', 'dark']) test(`Asset controls use deliberate semantic theme tokens in ${appearance}`, () => {
   const styles = read('src/styles.css');
@@ -61,4 +75,11 @@ for (const appearance of ['light', 'dark']) test(`Asset controls use deliberate 
   assert.match(css, /:focus-visible/); assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /\.asset-detail__heading\s*\{[^}]*color: var\(--demo-theme-market-text\)/);
   assert.doesNotMatch(css, /https?:\/\/|background-color:\s*#|color:\s*#/);
+  const component = read('src/surfaces/asset/AssetCollection.tsx');
+  assert.match(component, /appearance=\{appearance\}/);
+  assert.match(component, /\["Overview", "Costume", "Skills", "Settings", "Info Map"\]/);
+  assert.match(component, /disabled=\{label !== "Overview"\}/);
+  assert.match(component, /role="tabpanel" aria-labelledby="asset-overview-tab"/);
+  assert.match(css, /asset-overview__status\[role="alert"\][^}]*var\(--demo-theme-error\)/);
+  assert.match(css, /color: var\(--demo-theme-loading\)/);
 });

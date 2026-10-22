@@ -7,7 +7,7 @@ const intersect = (a: Box, b: Box): Box => ({
 });
 
 /** Capture only visible foreground elements, including local imported iframe content.
- * No cloned document, CSS serialization, screen permission or background/model capture.
+ * No cloned document, CSS serialization, screen permission or background capture.
  * Offscreen subtrees are pruned before collecting text or decoding icons.
  */
 export async function captureSurfaceContent(stage: HTMLElement, signal: AbortSignal): Promise<HTMLCanvasElement> {
@@ -61,6 +61,18 @@ export async function captureSurfaceContent(stage: HTMLElement, signal: AbortSig
           sx: map.sx * box.width / frame.clientWidth, sy: map.sy * box.height / frame.clientHeight,
         }, alpha);
       }
+      return;
+    }
+    if (element.tagName === "CANVAS") {
+      const source = element as HTMLCanvasElement;
+      if (!source.width || !source.height) return;
+      // WebGL clears its drawing buffer after presentation. Request a fresh frame
+      // and copy it synchronously before the spatial lens pauses the preview.
+      source.dispatchEvent(new Event("preacherman:capture-frame"));
+      const frame = document.createElement("canvas");
+      frame.width = source.width; frame.height = source.height;
+      frame.getContext("2d")?.drawImage(source, 0, 0);
+      paint(intersect(clip, rect), alpha, () => ctx.drawImage(frame, rect.x, rect.y, rect.width, rect.height));
       return;
     }
     if (element.tagName === "IMG") {

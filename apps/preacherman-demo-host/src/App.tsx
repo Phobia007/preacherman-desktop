@@ -150,6 +150,7 @@ const tabs = {
 
 export function App({ enteringOnMount = false }: AppProps = {}) {
   const windowActive = useWindowActivity();
+  const [assetDetailOpen, setAssetDetailOpen] = useState(false);
   const [requestedRoute, setRoute] = useState(currentRoute);
   const { route, phase: navigationPhase, target: navigationTarget } = useSurfaceNavigation(requestedRoute);
   const activeSurfaceType = route.kind === "surface" && route.surfaceType
@@ -428,7 +429,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           sceneContent={activeSurfaceType === "account" ? <AccountSceneCapture /> : galleryBridge ? <GalleryOrbitCards bridge={galleryBridge} active={activeSurfaceType === "market"} renderActive={windowActive} /> : null}
           prefetchModelId={activeSurfaceType === "market" && sceneModelId ? adjacentGalleryModel(sceneModelId) : undefined}
           variant="persistent"
-          renderActive={windowActive}
+          renderActive={windowActive && !(activeSurfaceType === "asset" && assetDetailOpen)}
         />
       ) : null}</>}
     >
@@ -465,7 +466,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       </div>}
       {accountRequired && !isFrostedSurface ? <AccountGate key={activeSurfaceType} surface={activeSurfaceType} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
       {activeSurfaceType === "ledger" ? <MarketSurface appearance={preferences.appearance} hasAccount={hasAccount} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
-      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} accountRequired={accountRequired} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
+      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} appearance={preferences.appearance} renderActive={windowActive} onAssetDetailChange={setAssetDetailOpen} accountRequired={accountRequired} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
       {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onNavigate={handleSurfaceNavigate} /> : null}
       {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface && !accountRequired ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>

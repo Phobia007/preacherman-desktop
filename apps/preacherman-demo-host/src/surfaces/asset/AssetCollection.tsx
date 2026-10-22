@@ -1,4 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { InteractiveAvatarViewport, avatarDefaultActionId, isAvatarModelId } from "@preacherman/avatar-renderer";
+import { localAvatarAssetBaseUrl } from "../../avatar/avatarAssets";
+import { zoomCompanion } from "../../gallery/homeCompanionControls";
+import { useThree } from "@react-three/fiber";
+import type { Appearance, ModelId } from "../../preferences";
 import characters from "./characters.json";
 import "./asset-collection.css";
 
@@ -7,10 +12,16 @@ function ArrowLeft() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 12H4m7-7-7 7 7 7" /></svg>;
 }
 
-export function AssetCollection() {
+export function AssetCollection({ appearance, renderActive, onDetailChange }: {
+  appearance: Appearance;
+  renderActive: boolean;
+  onDetailChange: (open: boolean) => void;
+}) {
   const [selected, setSelected] = useState<string | null>(null);
   const grid = useRef<HTMLDivElement>(null);
   const returnButton = useRef<HTMLButtonElement | null>(null);
+  useLayoutEffect(() => { onDetailChange(selected !== null); }, [selected, onDetailChange]);
+  useLayoutEffect(() => () => onDetailChange(false), [onDetailChange]);
   useEffect(() => {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) { (entry.target as HTMLElement).dataset.entered = "true"; observer.unobserve(entry.target); }
@@ -30,7 +41,7 @@ export function AssetCollection() {
         </button>)}
       </div>
     </div>
-    {selected && <CharacterDetails initialId={selected} onBack={() => setSelected(null)} />}
+    {selected && <CharacterDetails initialId={selected} appearance={appearance} renderActive={renderActive} onBack={() => setSelected(null)} />}
   </section>;
 }
 
@@ -42,7 +53,54 @@ function CharacterHeading({ character }: { character: Character }) {
   </header>;
 }
 
-function CharacterDetails({ initialId, onBack }: { initialId: string; onBack: () => void }) {
+function CharacterCapture() {
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    const capture = () => gl.render(scene, camera);
+    gl.domElement.addEventListener("preacherman:capture-frame", capture);
+    return () => gl.domElement.removeEventListener("preacherman:capture-frame", capture);
+  }, [gl, scene, camera]);
+  return null;
+}
+
+function CharacterModel({ modelId, appearance, renderActive }: { modelId: ModelId; appearance: Appearance; renderActive: boolean }) {
+  const model = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(1);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [attempt, setAttempt] = useState(0);
+  const ready = useCallback(() => setStatus("ready"), []);
+  const failed = useCallback(() => setStatus("error"), []);
+  useEffect(() => {
+    const target = model.current;
+    if (!target || !renderActive) return;
+    const wheel = (event: WheelEvent) => {
+      event.preventDefault();
+      setZoom(current => zoomCompanion(current, event.deltaY, event.deltaMode));
+    };
+    target.addEventListener("wheel", wheel, { passive: false });
+    return () => target.removeEventListener("wheel", wheel);
+  }, [renderActive]);
+  return <div ref={model} className="asset-overview__model" data-model-id={modelId} data-status={status} data-zoom={zoom}
+    role="group" tabIndex={0} aria-label="Character preview. Scroll down to view full body; scroll up for a close-up. Up and down arrow keys also zoom."
+    aria-busy={status === "loading"} onKeyDown={event => {
+      if (event.key !== "ArrowUp" && event.key !== "ArrowDown" && event.key !== "Home") return;
+      event.preventDefault(); event.stopPropagation();
+      if (event.key === "Home") setZoom(1);
+      else setZoom(current => zoomCompanion(current, event.key === "ArrowUp" ? -140 : 140));
+    }}>
+    <InteractiveAvatarViewport key={attempt} modelId={modelId} assetBaseUrl={localAvatarAssetBaseUrl(modelId)}
+      actionId={avatarDefaultActionId(modelId)} quality="high" pose="standby" environment="cinematic" isolateCompanion
+      appearance={appearance} platformStyle="ring" cameraFraming={zoom === 1 ? "portrait" : "full-body"} cameraZoom={zoom} renderActive={renderActive}
+      onReady={ready} onError={failed} sceneContent={<CharacterCapture />} />
+    {status === "loading" && <p className="asset-overview__status" role="status">Loading character…</p>}
+    {status === "error" && <div className="asset-overview__status" role="alert"><p>The character could not be loaded.</p>
+      <button type="button" onClick={() => { setStatus("loading"); setAttempt(value => value + 1); }}>Try again</button></div>}
+  </div>;
+}
+
+function CharacterDetails({ initialId, appearance, renderActive, onBack }: {
+  initialId: string; appearance: Appearance; renderActive: boolean; onBack: () => void;
+}) {
   const viewport = useRef<HTMLDivElement>(null);
   const back = useRef<HTMLButtonElement>(null);
   const [current, setCurrent] = useState(initialId);
@@ -60,16 +118,22 @@ function CharacterDetails({ initialId, onBack }: { initialId: string; onBack: ()
     }
   }}>
     <button ref={back} type="button" className="asset-details__back" aria-label="Back to assets" title="Back to assets" onClick={onBack}><ArrowLeft /></button>
+    <div className="asset-details__tabs" role="tablist" aria-label="Character sections">
+      {["Overview", "Costume", "Skills", "Settings", "Info Map"].map(label => <button key={label} type="button" role="tab"
+        id={label === "Overview" ? "asset-overview-tab" : undefined} aria-selected={label === "Overview"}
+        aria-controls={label === "Overview" ? "asset-overview-panel" : undefined} disabled={label !== "Overview"}
+        title={label === "Overview" ? undefined : `${label} — Coming soon`}>{label}</button>)}
+    </div>
     <div className="asset-details__scroll" ref={viewport}>
       <div className="asset-details__inner">
         <div className="asset-details__list">
-          <article className="asset-detail" data-detail={character.id} data-framing={character.detailFraming} key={character.id} aria-label={character.label}>
-            <CharacterHeading character={character} />
-            <div className="asset-detail__inner">
-              <div className="asset-detail__column">
+          <article className="asset-detail" data-detail={character.id} key={character.id} aria-label={character.label}>
+            <div id="asset-overview-panel" role="tabpanel" aria-labelledby="asset-overview-tab" className="asset-overview">
+              <div className="asset-overview__copy">
+                <CharacterHeading character={character} />
                 <div className="asset-detail__text"><div className="asset-detail__description">{character.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div></div>
-                <div className="asset-detail__art"><figure className="asset-detail__image"><img src={character.image} alt={`${character.label} — character artwork`} width={character.imageWidth} height={character.imageHeight} decoding="async" loading={character.id === initialId ? "eager" : "lazy"} /></figure></div>
               </div>
+              {isAvatarModelId(character.id) && <CharacterModel key={character.id} modelId={character.id} appearance={appearance} renderActive={renderActive} />}
             </div>
           </article>
         </div>

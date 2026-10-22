@@ -62,3 +62,25 @@ final result: passed
 - Focused regressions: 38/38 passed. Production build, `git diff --check`, and the Impeccable layout detector passed.
 
 Follow-up result: passed
+
+## Asset Overview — 2026-10-23
+
+Source: user-supplied Marvel Rivals layout (`914021eefd7e5130c8feb2e53d0e879c.png`, 1920 × 1080), existing Preacherman Asset screenshots, and the user's subsequent close-up, bottom-edge, and text-only-tab corrections. Only the layout hierarchy is transferred; existing Preacherman typography, semantic appearance tokens, character copy, and packaged models remain the visual source.
+
+Evidence directory: `D:/preacherman/output/playwright/asset-overview-20261023/`. Desktop browser captures are 1920 × 1032 (the available desktop client area); additional layouts checked at 1100 × 740 and 700 × 850. The app uses its existing scaled desktop coordinate system. Source and implementation were visually compared side by side.
+
+Five fidelity surfaces:
+
+- Layout: passed. Top navigation, left name/source/description, right live model, retained right character rail. Default portrait camera ends at the desktop bottom edge. Asset grid and normal Home startup retained.
+- Typography: passed. Existing thin Preacherman font, large character title, quieter source and description; long names have a smaller authored size. Tab selection changes text color only, with no border or underline.
+- Color and appearance: passed. Both light and dark chrome, text, loading/error states, focus, and desktop controls use existing semantic tokens. Model textures are preserved.
+- Assets: passed. Current packaged character models and original idle motions replace the old static detail portrait. Character descriptions and card thumbnails remain sourced from the existing catalog.
+- Interaction and motion: passed. Default close-up, scroll down to full body and up to portrait, keyboard zoom, character switch reset, back/focus restoration, and the existing spatial lens were exercised. Previewing does not change the equipped Home character. Hidden companion rendering pauses and resumes.
+
+Iteration record: corrected the initial full-body camera initialization; corrected viewport sizing to use the app's scaled height; removed bottom padding; removed tab rules/selection underline following user feedback; added synchronous model capture so the existing spatial lens preserves the live character. The four future tabs are visibly reserved and disabled; only Overview is implemented in this scope.
+
+Validation: TypeScript passed; 26 focused regressions passed. Browser checks had no page exceptions. Preview-only connection-refused messages occurred with the native backend intentionally stopped; native console verification is recorded separately in the desktop deployment manifest. Five failures in the older persistent-companion source-pattern suite were reproduced unchanged against pristine HEAD and are recorded in `baseline-tests.log`; they are not regressions from this change.
+
+Visual evidence: `preview-light-close.png`, `preview-light-full.png`, `preview-dark-close.png`, `preview-dark-full.png`, `preview-compact.png`, `preview-narrow.png`, `lens-capture.png`; native verification and screenshots are added before desktop handoff.
+
+Asset Overview visual result: passed. Desktop deployment verification: pending production build.
