@@ -4,9 +4,9 @@ import type { LocalSurfaceType } from "../demo/screenRoute";
 // workspace = Task, market = Gallery, ledger = Market.
 export const brandNavigationItems = [
   { label: "Home", surfaceType: "home" },
+  { label: "Asset", surfaceType: "asset" },
+  { label: "Market", surfaceType: "ledger" },
+  { label: "Extension", surfaceType: "extension" },
   { label: "Task", surfaceType: "workspace" },
   { label: "Gallery", surfaceType: "market" },
-  { label: "Market", surfaceType: "ledger" },
-  { label: "Asset", surfaceType: "asset" },
-  { label: "Extension", surfaceType: "extension" },
 ] as const satisfies readonly { label: string; surfaceType: LocalSurfaceType }[];

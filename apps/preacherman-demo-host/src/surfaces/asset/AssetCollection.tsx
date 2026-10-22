@@ -7,7 +7,8 @@ import type { Appearance, ModelId } from "../../preferences";
 import characters from "./characters.json";
 import { AssetActivateButton } from "./AssetActivateButton";
 import { AssetAppearance, appearanceCategories, type AppearanceCategory } from "./AssetAppearance";
-import { AssetInfoSection, AssetSettings } from "./AssetSectionContent";
+import { AssetSettings } from "./AssetSectionContent";
+import { AssetSkills, AssetInfoMap } from "./AssetProfilePanels";
 import { assetSections, sectionHasModel, sectionId, useAssetSection } from "./useAssetSection";
 import "./asset-collection.css";
 import "./asset-sections.css";
@@ -177,7 +178,8 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
                 <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} />
               </div>}
               {section.displayed === "Settings" && <AssetSettings onFocusChange={setSettingsFocused} />}
-              {(section.displayed === "Skills" || section.displayed === "Info Map") && <AssetInfoSection section={section.displayed} name={character.name} />}
+              {section.displayed === "Skills" && <AssetSkills character={character} />}
+              {section.displayed === "Info Map" && <AssetInfoMap character={character} />}
             </div>
           </article>
         </div>

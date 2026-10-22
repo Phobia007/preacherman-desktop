@@ -691,3 +691,27 @@ Validation: typecheck and 25 focused regression tests pass, including both appea
 Asset Settings focus native delivery: passed. Canonical shortcut cold launch, both themes, six entries, original Settings, all eight core routes, window controls and final normal Home verified. Matching rollback pair and deployed hashes recorded in the canonical manifest.
 
 final result: passed
+
+
+## Asset Skills, Info Map and navigation order — 2026-10-23
+
+- Source visual truth: user Skills reference `C:/Users/Administrator/xwechat_files/wxid_evcq0kz9i3au22_2178/temp/RWTemp/2026-10/9e20f478899dc29eb19741386f9343c8/ea8b06443d0d3ce1c48a9bf983863a85.png`; Info Map reference in the same directory, `187ff4daf804c10ea0d3670ab7835921.png`. User expressly requests existing Preacherman styling, Extension names/logos, transparent character imagery and blank right frames.
+- Material source: the supplied desktop shortcut resolves to `D:/web file`. Existing packaged `asset-characters` already contains background-removed versions of that artwork; transparent model busts cover ZIMA, Lily and Iron Man. All 17 existing images have real alpha; no authored texture or model is changed.
+- Implementation evidence: `D:/preacherman/output/playwright/asset-skills-info-20261023/preview-light-skills.png`, `preview-dark-skills.png`, `preview-light-info-map.png`, `preview-dark-info-map.png`; Jubilee, ZIMA and Tifa screenshots supplement Cortana. Navigation order captured in `preview-dark-navigation.png` after its full entrance animation.
+- Viewports: desktop 1920×1032 CSS/pixels at density 1. Reference 1920×1080, with game chrome; existing app header and character selector are intentionally retained. Compact captures at 1100×740 and 700×850; existing desktop shell scales with window width. Both pages remain usable without horizontal overflow.
+- Combined full-view evidence: `skills-comparison.png`, `info-map-comparison.png` in the evidence directory. Both sources scaled proportionally to 960px width in a 1920px combined input; height difference is preserved, not stretched.
+- Focused comparison: `skills-detail-comparison.png` compares the reference avatar/name/rows to implemented avatar/name/ten rows. Full-resolution Info Map previews show transparent hair/silhouette, native image colors, the rapport box and blank content frame clearly; no additional crop needed.
+- Typography: existing Clash Display light typography and semantic text hierarchy retained. CJK fallback shows 默契度; LV. 1 is readable. Existing labels and routes preserved.
+- Layout rhythm: Skills 35% left with a compact avatar/name header and ten ordered rows, wider right frame. Info Map 29% left portrait with bordered rapport level below, larger right frame. Column gutters, bottom margins and 1px outlines follow existing styling.
+- Colors/tokens: all new page chrome, text, border, hover, focus and selection colors use `--demo-theme-*`. Existing authored logo colors and transparent portraits remain unchanged in both modes.
+- Image quality: local Extension logos reused; original RGBA artwork and model busts render without opaque backgrounds. Images retain aspect ratio and character identity. No synthetic placeholders or alternate external assets.
+- Copy/content: ten existing entries (Google Drive, Gmail, Google Calendar, Canva, Microsoft 365, Notion, Figma, Slack, HubSpot, Asana). Right frames are intentionally empty. Rapport starts at level 1. No installed/connected claims, video spinner, unimplemented-history prose or fabricated progression data.
+- Findings: no actionable P0/P1/P2 visual differences from the requested composition and explicitly retained product style. Game-specific purple/yellow colors, ranks, attack icons and reward content are deliberately omitted.
+- Comparison history: first desktop light/dark combined comparison passed. A compact screenshot was captured during the previous pane's transition; verification was corrected to wait for the displayed pane identity and idle state, and compact screenshots were recaptured and reviewed. No product change was needed for the capture timing issue.
+- Validation: typecheck and 23 focused tests pass. Browser preview verifies 10 mouse selections, keyboard activation, all 27 packaged image assets, both themes, four characters, empty frames, unchanged active companion, retained canvas and Settings focus behavior, responsive layouts and reduced motion. No page errors. Existing preview-only console diagnostics remain recorded in `preview-report.json`.
+- Implementation checklist: source complete; preview and source checks complete; canonical production build and native delivery below.
+- Follow-up polish: none required; video and Info Map contents are explicitly reserved for future work.
+
+Asset Skills and Info Map native delivery: pending.
+
+final result: blocked

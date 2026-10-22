@@ -6,8 +6,8 @@ import { readDemoScreenRoute } from "../src/demo/screenRoute.ts";
 
 test("named destinations preserve existing deep links after source consolidation", () => {
   assert.deepEqual(brandNavigationItems.map(({ label, surfaceType }) => [label, surfaceType]), [
-    ["Home", "home"], ["Task", "workspace"], ["Gallery", "market"],
-    ["Market", "ledger"], ["Asset", "asset"], ["Extension", "extension"],
+    ["Home", "home"], ["Asset", "asset"], ["Market", "ledger"],
+    ["Extension", "extension"], ["Task", "workspace"], ["Gallery", "market"],
   ]);
   for (const { surfaceType } of brandNavigationItems) {
     assert.deepEqual(readDemoScreenRoute("/__surfaces/" + surfaceType), { kind: "surface", surfaceType });

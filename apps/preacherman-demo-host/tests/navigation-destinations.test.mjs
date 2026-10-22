@@ -7,10 +7,10 @@ test('Asset and Extension have independent local routes; Settings and Account re
  for(const surfaceType of ['asset','extension','settings','account']) assert.deepEqual(readDemoScreenRoute('/__surfaces/'+surfaceType),{kind:'surface',surfaceType});
  const shell=source('app-shell/AppShell.tsx');
  const items=source('app-shell/navigationDestinations.ts').match(/const brandNavigationItems = \[([\s\S]*?)\] as const/)[1];
- assert.deepEqual([...items.matchAll(/label: "([^"]+)"/g)].map(m=>m[1]),['Home','Task','Gallery','Market','Asset','Extension']);
+ assert.deepEqual([...items.matchAll(/label: "([^"]+)"/g)].map(m=>m[1]),['Home','Asset','Market','Extension','Task','Gallery']);
  assert.match(shell,/aria-label="Settings"[\s\S]*?tabIndex=\{brandNavigationOpen \? 0 : -1\}/);
  assert.match(shell,/demo-account-dock[\s\S]*?selectBrandDestination\("account"\)/);
- assert.match(source('App.tsx'),/activeSurfaceType !== "account" && !isFrostedSurface \? \(\s*<PreachermanDomObservationBridge/,'Empty reserved routes do not send unsupported observation snapshots to the unchanged service');
+ assert.match(source('App.tsx'),/activeSurfaceType !== "account" && !isFrostedSurface && !accountRequired \? \(\s*<PreachermanDomObservationBridge/,'Reserved routes and the account gate do not send unsupported observation snapshots to the unchanged service');
 });
 for(const appearance of ['light','dark']) test(`Reserved pages and Settings gear inherit semantic colors in ${appearance}`,()=>{
  const styles=source('styles.css'), page=source('surfaces/FrostedSurface.tsx');

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "google-drive",
+    "name": "Google Drive",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/a8994e05e594a562449127d44e0fe86c31d8e41c-41f12de1e0.svg",
+    "description": "Search, read, and upload files instantly"
+  },
+  {
+    "id": "gmail",
+    "name": "Gmail",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/53ca8822f4c024f9b358b1e44148a1dc3c616dbe-6349da9289.svg",
+    "description": "Draft replies, summarize threads, & search your inbox"
+  },
+  {
+    "id": "google-calendar",
+    "name": "Google Calendar",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/646945a1897f9146e5221ee6ace82001a2e52f4d-838cde1621.svg",
+    "description": "Manage your schedule and coordinate meetings effortlessly"
+  },
+  {
+    "id": "canva",
+    "name": "Canva",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/e476a6c2c2f961f5f2120482f37b1daafc1506d9-c0f22a8328.jpg",
+    "description": "Search, create, autofill, and export Canva designs"
+  },
+  {
+    "id": "microsoft-365",
+    "name": "Microsoft 365",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/20c8443aa72ae4e4d77f923e6c33314713f965e8-79dc16b821.svg",
+    "description": "Access your company's SharePoint, OneDrive, Outlook, and Teams directly in Claude"
+  },
+  {
+    "id": "notion",
+    "name": "Notion",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/517cb0a746dcf968ce8efda7613b69101b536a52-715062aaca.svg",
+    "description": "Connect your Notion workspace to search, update, and power workflows across tools"
+  },
+  {
+    "id": "figma",
+    "name": "Figma",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/58e9c84c9e164137b0e9f532e05cb242d46204f9-0135ce31e9.jpg",
+    "description": "Generate diagrams and better code from Figma context"
+  },
+  {
+    "id": "slack",
+    "name": "Slack",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/bdf25f3db0bfe9b74855f504c31bd8522659edae-2511470e61.svg",
+    "description": "Send messages, create canvases, and fetch Slack data"
+  },
+  {
+    "id": "hubspot",
+    "name": "HubSpot",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/cb89159037733bf1e8c66783990c1d38c53231d4-87c46cfc50.jpg",
+    "description": "CRM context for every answer, insight, and action"
+  },
+  {
+    "id": "asana",
+    "name": "Asana",
+    "icon": "/extension-marketplace/assets/images/assets.claude.com/afd2ecc5d1ddcedf60ce9d230297b84286373bdb-a40bc9c310.jpg",
+    "description": "Connect to Asana to coordinate tasks, projects, and goals"
+  }
+]
