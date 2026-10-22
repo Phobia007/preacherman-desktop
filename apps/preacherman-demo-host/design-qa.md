@@ -93,4 +93,6 @@ Reference: user screenshot `D:/Temp/Administrator/codex-clipboard-b80a4907-19e5-
 
 Preview captures at 1920 × 1032 in `D:/preacherman/output/playwright/asset-arrow-20261023/`: `preview-light-overview.png`, `preview-dark-overview.png`, and corresponding `*-header.png` crops. Both appearances were visually checked. The arrow and text vertical centers differ by 0.21px. Border, rounded shape, and background are absent in both modes; hover and focus use semantic colors. Pointer return, keyboard return, focus restoration, and existing portrait/full-body zoom passed. TypeScript and 11 focused theme/Asset regressions passed.
 
-Arrow follow-up visual result: passed. Arrow follow-up desktop verification: pending.
+Arrow follow-up visual result: passed. Arrow follow-up desktop verification: passed. The canonical shortcut was cold-launched, the arrow checked in both appearances, all eight navigation destinations verified, and window controls/resource cleanup checked. Evidence and hashes are in the desktop manifest.
+
+final result: passed
