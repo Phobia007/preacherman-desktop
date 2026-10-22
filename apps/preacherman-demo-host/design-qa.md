@@ -83,4 +83,6 @@ Validation: TypeScript passed; 26 focused regressions passed. Browser checks had
 
 Visual evidence: `preview-light-close.png`, `preview-light-full.png`, `preview-dark-close.png`, `preview-dark-full.png`, `preview-compact.png`, `preview-narrow.png`, `lens-capture.png`; native verification and screenshots are added before desktop handoff.
 
-Asset Overview visual result: passed. Desktop deployment verification: pending production build.
+Asset Overview visual result: passed. Desktop deployment verification: passed. The canonical shortcut was cold-launched; all 17 models and 8 navigation destinations passed in both modes, including bottom-edge bounds and text-only tab assertions. Native screenshots, console checks, window-control checks, resource samples, hashes, and backup pair are recorded in desktop-build-manifest.json and the evidence directory.
+
+final result: passed

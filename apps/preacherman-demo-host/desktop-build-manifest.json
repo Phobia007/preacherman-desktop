@@ -1,82 +1,43 @@
 {
   "schemaVersion": 1,
-  "buildId": "ff7-characters-20261017",
+  "buildId": "asset-overview-20261023",
   "productVersion": "0.1.0",
-  "sourceTask": "Import supplied Aerith and Yuffie characters into Gallery, Asset and Market",
+  "sourceTask": "Build Asset character Overview with live portrait model, wheel-to-full-body zoom, bottom-edge framing and text-only navigation",
   "sourceThread": null,
-  "sourceState": "Packaged Aerith and Yuffie models and seven authored motions, Gallery card/search/biography/activation, transparent Asset portraits and detail, Market character and existing views/Purchase flow. Existing page transitions and light/dark styling retained.",
-  "sourceCommit": "c4b8f92947e7edc170d59dbebbeff99b75bfd39b",
+  "sourceState": "Existing Asset grid preserved. Character detail uses left name/source/biography and right packaged animated model, starts in the authored portrait camera, scrolls smoothly to full body. Model viewport ends at desktop bottom; five top labels have text-only selection. Overview implemented; Costume, Skills, Settings and Info Map reserved. Both appearances and shared spatial lens supported; equipped Home model and default startup retained.",
+  "sourceCommit": "bce8dd92a17ba3a446939b8a12c923818dfd8d0a",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-17T17:26:03.2212425+08:00",
-  "deployedAt": "2026-10-17T17:26:53.8430205+08:00",
-  "verifiedAt": "2026-10-17T17:31:21.941396+08:00",
-  "sizeBytes": 820790272,
-  "sha256": "11A74179D04C3DAB85182515BA374D0DEAAC154271A881C1CA1D667E7ED14454",
+  "builtAt": "2026-10-23T02:25:48.8328069+08:00",
+  "deployedAt": "2026-10-23T02:26:16.8566756+08:00",
+  "verifiedAt": "2026-10-23T02:32:00.019631+08:00",
+  "sizeBytes": 820790784,
+  "sha256": "B24D783BEF6DD68CE7A129B50F837EB6DB46E87AF420B162339610890BBCBF29",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ff7-before-20261017\\preacherman-demo-host.exe",
-  "backupSha256": "8CCBAB94CC9C958653822DA25E8C6B631582CA42CB6EEDA3A015E7689034A30D",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ff7-before-20261017\\preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-overview-before-20261023\\preacherman-demo-host.exe",
+  "backupSha256": "11A74179D04C3DAB85182515BA374D0DEAAC154271A881C1CA1D667E7ED14454",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-overview-before-20261023\\preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "5eaf15daa521523f8645fa8f930970b8a6ffc11b",
-  "previousVerificationCommit": "5eaf15daa521523f8645fa8f930970b8a6ffc11b",
+  "rollbackBaselineCommit": "c4b8f92947e7edc170d59dbebbeff99b75bfd39b",
+  "previousVerificationCommit": "c4b8f92947e7edc170d59dbebbeff99b75bfd39b",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 50,
+      "focusedTests": 26,
       "focusedFailures": 0,
-      "gitDiffCheck": "passed"
+      "gitDiffCheck": "passed",
+      "baselineOnlyFailures": "Five stale source-pattern assertions in persistent-companion-scene.test.mjs reproduce against pristine HEAD; see baseline-tests.log."
     },
-    "nativeFlow": "Cold launch through canonical shortcut; Aerith and Yuffie search, Gallery detail and activation, Asset card/detail, Market entry/detail/Front/Side/Back/Zoom In/Purchase 81 checked in both appearances. Core Home, Task, Gallery, Asset, Market/Ledger, Extension, Settings and Account verified. Existing account/preferences restored before normal final launch.",
+    "nativeFlow": "Cold launch via canonical desktop shortcut. All 17 character previews, default portrait, wheel full-body and return, no bottom gap, text-only tabs, character switch, keyboard zoom, back/focus restoration and spatial lens checked in both appearances. Home, Task, Gallery, Asset, Market/Ledger, Extension, Settings and Account verified. Existing account/preferences restored, window controls exercised, and final normal shortcut launch without a preview server or debug port.",
     "routes": [
       {
-        "appearance": "dark",
-        "name": "Home",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Task",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Gallery",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Asset",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Market",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Extension",
-        "ready": true
-      },
-      {
         "appearance": "light",
-        "name": "Home",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Task",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Gallery",
+        "name": "Settings",
         "ready": true
       },
       {
@@ -86,153 +47,294 @@
       },
       {
         "appearance": "light",
+        "name": "Home",
+        "surface": "home",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Task",
+        "surface": "workspace",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Gallery",
+        "surface": "market",
+        "ready": true
+      },
+      {
+        "appearance": "light",
         "name": "Market",
+        "surface": "ledger",
         "ready": true
       },
       {
         "appearance": "light",
         "name": "Extension",
+        "surface": "extension",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Account",
+        "surface": "account",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Settings",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Asset",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Home",
+        "surface": "home",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Task",
+        "surface": "workspace",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Gallery",
+        "surface": "market",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Market",
+        "surface": "ledger",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Extension",
+        "surface": "extension",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Account",
+        "surface": "account",
         "ready": true
       }
     ],
-    "modes": [
+    "models": [
       {
-        "appearance": "dark",
-        "search": true,
-        "gallery": true,
-        "asset": true,
-        "market": true,
-        "purchase": true,
-        "activation": true
+        "appearance": "light",
+        "id": "cortana",
+        "ready": true
       },
       {
         "appearance": "light",
-        "search": true,
-        "gallery": true,
-        "asset": true,
-        "market": true,
-        "purchase": true,
-        "activation": true
+        "id": "zima",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "jubilee-midnight-mutant",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "halo-mk-v-model",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "kitana-mk11-in-mk9-suit",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "punk-magik",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "clove-t-pose",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "nier-automata-2b",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "stellar-blade-lily-stargazer-coat",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "iron-man-mark-85",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "the-twins-atomic-heart",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "spartan-armour-mkv-halo-reach",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "halloween-the-game-michael-myers-samhain",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "apex-legend-pathfinder",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "tifa-ff7re",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "aerith-ff7re",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "id": "yuffie-ff7re",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "cortana",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "zima",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "jubilee-midnight-mutant",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "halo-mk-v-model",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "kitana-mk11-in-mk9-suit",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "punk-magik",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "clove-t-pose",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "nier-automata-2b",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "stellar-blade-lily-stargazer-coat",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "iron-man-mark-85",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "the-twins-atomic-heart",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "spartan-armour-mkv-halo-reach",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "halloween-the-game-michael-myers-samhain",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "apex-legend-pathfinder",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "tifa-ff7re",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "aerith-ff7re",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "id": "yuffie-ff7re",
+        "ready": true
       }
     ],
     "animationChecks": [
-      {
-        "modelId": "aerith-ff7re",
-        "appearance": "light",
-        "debug": {
-          "avatarId": "aerith-ff7re",
-          "rigId": "aerith-ff7re-game-runtime-v1",
-          "loadedClips": [
-            "aerith.gesture.feri.awaiting.v1",
-            "aerith.gesture.feri.thought.v1",
-            "aerith.idle.feri.cbnm_id0.v1"
-          ],
-          "currentAction": "idle.default",
-          "currentDuration": 10.666666984558105,
-          "mixerState": "playing",
-          "boneCount": 769,
-          "missingClipErrors": [],
-          "registeredActions": 3
-        },
-        "allGestures": true,
-        "paused": true
-      },
-      {
-        "modelId": "aerith-ff7re",
-        "appearance": "dark",
-        "debug": {
-          "avatarId": "aerith-ff7re",
-          "rigId": "aerith-ff7re-game-runtime-v1",
-          "loadedClips": [
-            "aerith.gesture.feri.awaiting.v1",
-            "aerith.gesture.feri.thought.v1",
-            "aerith.idle.feri.cbnm_id0.v1"
-          ],
-          "currentAction": "idle.default",
-          "currentDuration": 10.666666984558105,
-          "mixerState": "playing",
-          "boneCount": 769,
-          "missingClipErrors": [],
-          "registeredActions": 3
-        },
-        "allGestures": true,
-        "paused": true
-      },
-      {
-        "modelId": "yuffie-ff7re",
-        "appearance": "light",
-        "debug": {
-          "avatarId": "yuffie-ff7re",
-          "rigId": "yuffie-ff7re-game-runtime-v1",
-          "loadedClips": [
-            "yuffie.gesture.feri.hand_on_hip.v1",
-            "yuffie.gesture.feri.in_the_balance.v1",
-            "yuffie.gesture.feri.small_swing.v1",
-            "yuffie.idle.feri.standing.v1"
-          ],
-          "currentAction": "idle.default",
-          "currentDuration": 8.300000190734863,
-          "mixerState": "playing",
-          "boneCount": 593,
-          "missingClipErrors": [],
-          "registeredActions": 4
-        },
-        "allGestures": true,
-        "paused": true
-      },
-      {
-        "modelId": "yuffie-ff7re",
-        "appearance": "dark",
-        "debug": {
-          "avatarId": "yuffie-ff7re",
-          "rigId": "yuffie-ff7re-game-runtime-v1",
-          "loadedClips": [
-            "yuffie.gesture.feri.hand_on_hip.v1",
-            "yuffie.gesture.feri.in_the_balance.v1",
-            "yuffie.gesture.feri.small_swing.v1",
-            "yuffie.idle.feri.standing.v1"
-          ],
-          "currentAction": "idle.default",
-          "currentDuration": 8.300000190734863,
-          "mixerState": "playing",
-          "boneCount": 593,
-          "missingClipErrors": [],
-          "registeredActions": 4
-        },
-        "allGestures": true,
-        "paused": true
-      }
+      "Default portrait, wheel full body and return, no page scroll, inactive companion paused",
+      "Character switch resets close-up; equipped model unchanged; responsive layouts; back restores focus and rendering"
     ],
     "consoleErrors": [
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
+    "pageErrors": [],
     "newConsoleErrors": [],
-    "baselineDiagnosticNote": "One existing net::ERR_CONNECTION_CLOSED diagnostic matches the previous native baseline. No new console errors and no Aerith or Yuffie model/runtime errors.",
+    "baselineDiagnosticNote": "Existing connection-closed/hydration diagnostics are compared with the recorded baseline. No new model or runtime errors.",
     "resources": {
-      "SampledAt": "2026-10-17T17:30:30.5650484+08:00",
-      "NativePid": 34344,
-      "StartedAt": "2026-10-17T17:30:11.7635744+08:00",
-      "WindowHandle": 4066778,
+      "SampledAt": "2026-10-23T02:31:24.6227254+08:00",
+      "NativePid": 16228,
+      "StartedAt": "2026-10-23T02:31:07.0745637+08:00",
+      "WindowHandle": 2361168,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        34344,
-        18504,
-        35396,
-        27368,
-        36260,
-        36972,
-        4832,
-        33552,
-        19680,
-        24604,
-        28716
+        16228,
+        29836,
+        6076,
+        2916,
+        17132,
+        29928,
+        24024,
+        11236,
+        26820,
+        2320,
+        28340
       ],
-      "NormalizedCpuPercent": 4,
-      "WorkingSetMiB": 2080.3,
-      "GpuDedicatedBytes": 3488411648,
-      "MaxGpuEngineUtilization": 20,
-      "FreeRamKiB": 13965220,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 2077.7,
+      "GpuDedicatedBytes": 3459174400,
+      "MaxGpuEngineUtilization": 25,
+      "FreeRamKiB": 19139024,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -247,7 +349,8 @@
       "closeRequested": true,
       "passed": true
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\ff7-characters-20261017"
+    "harnessNote": "All 34 character and 16 route checks passed in the initial run. The final preference-restoration pointer helper lost the auto-closing drawer; the bounded continuation used keyboard menu navigation, verified Settings and Home, and restored original preferences. Initial report retained.",
+    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\asset-overview-20261023"
   },
   "releaseAttempts": [
     {
@@ -1427,9 +1530,16 @@
       "status": "verified",
       "sha256": "11A74179D04C3DAB85182515BA374D0DEAAC154271A881C1CA1D667E7ED14454",
       "verifiedAt": "2026-10-17T17:31:21.941396+08:00"
+    },
+    {
+      "buildId": "asset-overview-20261023",
+      "sourceCommit": "bce8dd92a17ba3a446939b8a12c923818dfd8d0a",
+      "status": "verified",
+      "sha256": "B24D783BEF6DD68CE7A129B50F837EB6DB46E87AF420B162339610890BBCBF29",
+      "verifiedAt": "2026-10-23T02:32:00.019631+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ff7-before-20261017\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-overview-before-20261023\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1446,7 +1556,7 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\ff7-characters-20261017"
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\asset-overview-20261023"
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
