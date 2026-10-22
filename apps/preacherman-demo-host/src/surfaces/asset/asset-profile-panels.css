@@ -1,49 +1,49 @@
 /* Reference composition with the existing Preacherman typography and thin frames. */
 .asset-skills, .asset-info-map {
   display: grid; grid-template-columns: minmax(0, 35%) minmax(0, 1fr);
-  gap: clamp(28px, 2.5vw, 48px); height: calc(var(--demo-app-height) - 182px);
-  min-height: 740px; padding: 30px 0 100px;
+  gap: clamp(32px, 3vw, 58px); height: calc(var(--demo-app-height) - 182px);
+  min-height: 740px; padding: 44px 32px 104px 56px;
   color: var(--demo-theme-market-text); pointer-events: auto;
 }
-.asset-skills__sidebar { display: flex; flex-direction: column; gap: 18px; min-height: 0; }
+.asset-skills__sidebar { display: flex; flex-direction: column; gap: 26px; min-height: 0; }
 .asset-skills__character {
-  display: flex; align-items: center; gap: 26px; flex: 0 0 104px;
-  border: 1px solid var(--demo-theme-market-border); background: var(--demo-theme-market-control);
-  padding: 0 26px 0 18px; overflow: hidden;
+  display: flex; align-items: center; gap: 28px; flex: 0 0 104px;
+  border: 1px solid color-mix(in srgb, var(--demo-theme-market-border) 70%, transparent); background: transparent;
+  padding: 0 28px 0 24px; overflow: hidden;
 }
 .asset-collection .asset-skills__character img { width: 104px; height: 104px; object-fit: cover; object-position: center top; align-self: end; }
-.asset-skills__character h2 { margin: 0; font-size: clamp(24px, 1.8vw, 36px); line-height: 1.1; font-weight: 400; }
+.asset-skills__character h2 { margin: 0; font-size: clamp(24px, 1.7vw, 32px); line-height: 1.2; font-weight: 400; letter-spacing: .02em; }
 .asset-skills__character p { margin: 8px 0 0; font-size: 15px; line-height: 1.4; color: var(--demo-theme-market-muted); }
 .asset-skills__list {
-  display: grid; grid-template-rows: repeat(10, minmax(48px, 1fr)); gap: 6px;
+  display: grid; grid-template-rows: repeat(10, minmax(46px, 1fr)); gap: 8px;
   min-height: 0; flex: 1; overflow-y: auto; overscroll-behavior: contain;
   scrollbar-width: thin; scrollbar-color: var(--demo-theme-market-border) transparent;
 }
 .asset-collection .asset-skills__option {
-  display: grid; grid-template-columns: 34px 40px minmax(0, 1fr); align-items: center; gap: clamp(14px, 1.5vw, 28px);
-  width: 100%; padding: 4px 22px; text-align: left; border: 1px solid var(--demo-theme-market-border); border-radius: 0;
-  background: var(--demo-theme-market-control); color: var(--demo-theme-market-muted);
+  display: grid; grid-template-columns: 28px 32px minmax(0, 1fr); align-items: center; gap: clamp(14px, 1.4vw, 26px);
+  width: 100%; padding: 6px 24px; text-align: left; border: 1px solid color-mix(in srgb, var(--demo-theme-market-border) 70%, transparent); border-radius: 0;
+  background: transparent; color: var(--demo-theme-market-text);
   transition: border-color 220ms ease, color 220ms ease, background-color 220ms ease;
 }
-.asset-skills__number { font-size: 14px; font-variant-numeric: tabular-nums; }
-.asset-collection .asset-skills__option img { width: 40px; height: 40px; object-fit: contain; border-radius: 8px; }
-.asset-skills__name { padding-left: 24px; border-left: 1px solid var(--demo-theme-market-border); font-size: clamp(17px, 1.25vw, 24px); line-height: 1.3; }
+.asset-skills__number { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--demo-theme-market-muted); }
+.asset-collection .asset-skills__option img { width: 32px; height: 32px; object-fit: contain; border-radius: 7px; }
+.asset-skills__name { padding-left: 24px; border-left: 1px solid var(--demo-theme-market-border); font-size: clamp(17px, 1.1vw, 21px); line-height: 1.4; letter-spacing: .015em; }
 .asset-collection .asset-skills__option:is([aria-pressed="true"], :hover) {
   color: var(--demo-theme-market-text); border-color: var(--demo-theme-market-focus); background: var(--demo-theme-control-hover-bg);
 }
 .asset-collection .asset-skills__option:focus-visible { outline: 1px solid var(--demo-theme-market-focus); outline-offset: -4px; }
-.asset-profile__empty { min-width: 0; border: 1px solid var(--demo-theme-market-border); background: transparent; }
-.asset-info-map { grid-template-columns: minmax(0, 29%) minmax(0, 1fr); gap: clamp(36px, 3vw, 58px); }
-.asset-info-map__identity { display: flex; flex-direction: column; min-height: 0; gap: 28px; }
+.asset-profile__empty { min-width: 0; border: 1px solid color-mix(in srgb, var(--demo-theme-market-border) 70%, transparent); background: transparent; }
+.asset-info-map { grid-template-columns: minmax(0, 30%) minmax(0, 1fr); gap: clamp(40px, 3.8vw, 72px); }
+.asset-info-map__identity { display: flex; flex-direction: column; min-height: 0; gap: 36px; }
 .asset-info-map__portrait { display: flex; align-items: end; justify-content: center; flex: 1; min-height: 0; }
 .asset-collection .asset-info-map__portrait img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; }
 .asset-info-map__rapport {
   display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 28px;
-  border: 1px solid var(--demo-theme-market-border); background: var(--demo-theme-market-control); font-size: 22px;
+  border: 1px solid color-mix(in srgb, var(--demo-theme-market-border) 70%, transparent); background: transparent; font-size: 22px; letter-spacing: .03em;
 }
-.asset-info-map__rapport [lang="zh-CN"] { font-family: var(--demo-font-primary), sans-serif; font-weight: 300; letter-spacing: .12em; }
 .asset-info-map__level { color: var(--demo-theme-market-muted); font-size: 18px; white-space: nowrap; }
 @media (max-width: 1100px) {
+  .asset-skills, .asset-info-map { padding-inline: 20px; }
   .asset-skills { grid-template-columns: minmax(0, 43%) minmax(0, 1fr); gap: 24px; }
   .asset-skills__character { gap: 14px; padding-inline: 8px 16px; }
   .asset-collection .asset-skills__option { padding-inline: 12px; grid-template-columns: 22px 32px minmax(0, 1fr); gap: 12px; }
@@ -53,7 +53,7 @@
   .asset-info-map__rapport { padding-inline: 18px; font-size: 18px; }
 }
 @media (max-width: 768px) {
-  .asset-skills, .asset-info-map { height: auto; grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 24px 0 100px; }
+  .asset-skills, .asset-info-map { height: auto; grid-template-columns: minmax(0, 1fr); gap: 32px; padding: 32px 12px 100px; }
   .asset-skills__list { grid-template-rows: repeat(10, 58px); overflow: visible; }
   .asset-skills__character h2 { font-size: 30px; }
   .asset-profile__empty { min-height: 340px; }

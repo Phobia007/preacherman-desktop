@@ -40,13 +40,14 @@ for (const appearance of ['light', 'dark']) test(`Skills and Info Map preserve e
     assert.doesNotMatch(skillHtml, /<video|<iframe|Connected|Installed|Play demo/);
     const infoHtml = renderToStaticMarkup(createElement('div', { 'data-appearance': appearance }, createElement(AssetInfoMap, { character })));
     assert.ok(infoHtml.includes(character.image));
-    assert.ok(infoHtml.includes('默契度'));
+    assert.ok(infoHtml.includes('Rapport'));
+    assert.doesNotMatch(infoHtml + skillHtml, /[\u3400-\u9fff]/, 'New interface copy stays English');
     assert.ok(infoHtml.includes('LV. 1'));
     assert.match(infoHtml, /class="asset-profile__empty"[^>]+><\/section>/);
     await access(new URL('../public' + character.image, import.meta.url));
   }
   const css = await read('src/surfaces/asset/asset-profile-panels.css');
-  for (const token of ['market-text', 'market-muted', 'market-border', 'market-focus', 'market-control', 'control-hover-bg']) {
+  for (const token of ['market-text', 'market-muted', 'market-border', 'market-focus', 'control-hover-bg']) {
     assert.ok(css.includes(`var(--demo-theme-${token})`));
   }
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);

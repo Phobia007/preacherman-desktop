@@ -40,8 +40,8 @@ export function AssetInfoMap({ character }: { character: ProfileCharacter }) {
       <div className="asset-info-map__portrait">
         <img src={character.image} alt={character.name} width={character.imageWidth} height={character.imageHeight} decoding="async" />
       </div>
-      <div className="asset-info-map__rapport" aria-label="默契度，等级 1">
-        <span lang="zh-CN">默契度</span><span className="asset-info-map__level">LV. 1</span>
+      <div className="asset-info-map__rapport" aria-label="Rapport, level 1">
+        <span>Rapport</span><span className="asset-info-map__level">LV. 1</span>
       </div>
     </div>
     <section className="asset-profile__empty" aria-label={`${character.name} info map`} />
