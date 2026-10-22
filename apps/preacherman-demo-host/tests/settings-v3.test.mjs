@@ -73,6 +73,29 @@ test("Settings delegates Execution Mode without restoring legacy artwork or muta
   assert.match(app, /activeSurfaceType === "settings"[\s\S]*<SettingsScreen/);
 });
 
+test("Asset renders only the six requested original preferences through the shared Settings menu", async () => {
+  const nativeRequire = createRequire(import.meta.url);
+  async function load(file, imports = {}) {
+    const { code } = await transform(await readFile(file, "utf8"), { loader: "tsx", format: "cjs", jsx: "automatic" });
+    const context = { module: { exports: {} }, require: id => id.endsWith(".css") ? {} : imports[id] ?? nativeRequire(id) };
+    vm.runInNewContext(code, context);
+    return context.module.exports;
+  }
+  const settings = await load(componentPath, { "./ExecutionModeSettings": { ExecutionModeSettings: () => null } });
+  for (const appearance of ["light", "dark"]) {
+    const asset = await load(join(hostRoot, "src/surfaces/asset/AssetSectionContent.tsx"), {
+      "../../settings/SettingsScreen": settings,
+      "../../preferences": { readPreferences: () => ({ appearance, locale: "en" }) },
+    });
+    const html = renderToStaticMarkup(createElement(asset.AssetSettings, { onFocusChange: () => {} }));
+    const labels = [...html.matchAll(/class="settings-menu__item"[^>]*>([^<]+)<\/button>/g)].map(match => match[1]);
+    assert.deepEqual(labels, ["Execution Mode", "Instructions / Rules", "Memory", "External MCP", "Connectors", "MCP Servers"]);
+    for (const label of labels) assert.ok(settings.settingsMenuItems.includes(label));
+    assert.ok(html.startsWith('<section aria-label="Settings" class="settings-menu asset-settings"'));
+    assert.doesNotMatch(html, /AI Providers|Shared API connections|settings-menu__appearance|settings-v3__detail-content/);
+  }
+});
+
 test("Settings reuses Gallery portrait and starts a bounded top-to-bottom wave after framing", async () => {
   const app = await readFile(join(hostRoot, "src", "App.tsx"), "utf8");
   const source = await readFile(componentPath, "utf8");
@@ -99,7 +122,7 @@ test("selected preference doubles above a frosted body without changing shared c
   assert.match(css, /filter: blur\(12px\)/);
   assert.match(css, /:has\(.settings-menu\[data-settings-focused="true"\]\) .demo-app-shell__scene/);
   assert.match(source, /event.key === "Escape"/);
-  assert.match(source, /removeEventListener\("keydown", onEscape\)/);
+  assert.match(source, /removeEventListener\("keydown", onEscape, true\)/);
   assert.match(source, /surface.offsetWidth - width \* 2 - 40/);
   assert.doesNotMatch(css, /__chrome[^}]*filter/);
 });

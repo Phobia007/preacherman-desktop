@@ -659,3 +659,19 @@ final result: passed
 - Asset Appearance native delivery: passed. The new self-contained executable was deployed with a verified matching rollback pair, cold-launched through the canonical shortcut and tested in both themes across all eight navigation destinations. Native captures and reports are in the evidence directory. Window controls, restored original preferences, final normal Home launch, hashes/timestamps and process cleanup passed. The desktop manifest records the deployed pair and source commit.
 
 final result: passed
+
+
+## Asset Settings menu correction — 2026-10-23
+
+Task: replace the left-hand API form with exactly the six boxed original Settings entries, preserving their order, typography and behavior. Show selected content over a deeply blurred right-hand model.
+
+Evidence directory: `output/playwright/asset-settings-menu-20261023/`.
+Source references: `D:/Temp/Administrator/codex-clipboard-47f596b3-42a7-4a94-ab63-22bd0dd72b68.png` (menu) and `D:/Temp/Administrator/codex-clipboard-23dc9c48-d571-4c9e-bb29-4156b5db96e4.png` (target region). Full 1920 × 1032 reference/implementation comparison: `reference-full-comparison.png`; focused menu comparison: `reference-menu-comparison.png`. Both appearances, each preference, Execution Mode API and Local CLI, original Settings and compact desktop captures are retained.
+
+Fidelity: exact six labels and ordering; original 32px/300 Clash Display typography, line height, letter spacing and 30px menu gap shared from Settings. Menu fits the user-marked left region. No old breadcrumb, introductory copy or provider form remains on the resting page. Existing navigation, authored model and theme remain intact. Selected title and unchanged real Execution Mode controls appear over the right model; 38px blur and semantic frost preserve foreground text contrast in both themes. Menu typography is measured equal to original Settings in browser regression. Other five items retain the original focused-title behavior; no new backend or character-specific scope is claimed.
+
+Interaction: six entries, focus restoration, Escape priority, backdrop/title dismissal, same-canvas retention, tab and character cleanup, keyboard isolation, unchanged equipped companion, original Settings and compact/reduced-motion checks. Typecheck and 58 focused tests pass. Browser harness refreshes its canvas reference when deliberately opening a different character; completed two-theme results retained, responsive/reduced-motion scope rerun.
+
+Asset Settings menu native delivery: pending.
+
+final result: blocked

@@ -115,6 +115,7 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
   const [current, setCurrent] = useState(initialId);
   const section = useAssetSection();
   const [category, setCategory] = useState<AppearanceCategory>("Costume");
+  const [settingsFocused, setSettingsFocused] = useState(false);
   const character = characters.find(character => character.id === current)!;
   const choose = (id: string) => { setCurrent(id); setCategory("Costume"); };
   const modelVisible = sectionHasModel(section.requested);
@@ -157,7 +158,7 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
       <div className="asset-details__inner">
         <div className="asset-details__list">
           <article className="asset-detail asset-detail--sections" data-detail={character.id} key={character.id} aria-label={character.label}>
-            <div className="asset-detail__model-slot" data-visible={modelVisible} aria-hidden={!modelVisible} ref={element => element?.toggleAttribute("inert", !modelVisible)}>
+            <div className="asset-detail__model-slot" data-visible={modelVisible} data-settings-focused={settingsFocused} aria-hidden={!modelVisible || settingsFocused} ref={element => element?.toggleAttribute("inert", !modelVisible || settingsFocused)}>
               {isAvatarModelId(character.id) && <CharacterModel key={character.id} modelId={character.id} appearance={appearance} renderActive={renderActive && (modelVisible || section.phase !== "idle")} />}
             </div>
             <div id="asset-section-panel" role="tabpanel" aria-labelledby={sectionId(section.displayed)} aria-busy={section.phase !== "idle"}
@@ -175,7 +176,7 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
               {section.displayed === "Appearance" && <div id="asset-appearance-panel" role="tabpanel" aria-labelledby={`asset-category-${category}`}>
                 <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} />
               </div>}
-              {section.displayed === "Settings" && <AssetSettings name={character.name} />}
+              {section.displayed === "Settings" && <AssetSettings onFocusChange={setSettingsFocused} />}
               {(section.displayed === "Skills" || section.displayed === "Info Map") && <AssetInfoSection section={section.displayed} name={character.name} />}
             </div>
           </article>

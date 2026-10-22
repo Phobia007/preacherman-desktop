@@ -1,0 +1,42 @@
+/* Original Settings typography and interactions, arranged beside this model. */
+.asset-settings .settings-menu__list {
+  top: 46px;
+  left: -22px;
+  bottom: 100px;
+  width: 43%;
+}
+.asset-detail--sections .asset-detail__model-slot {
+  transition: filter 420ms ease, opacity 520ms ease, visibility 0s;
+}
+.asset-detail__model-slot[data-settings-focused="true"] {
+  filter: blur(38px);
+  pointer-events: none;
+}
+.asset-settings .settings-menu__frost {
+  background: color-mix(in srgb, var(--demo-theme-home-canvas) 58%, transparent);
+  transition-duration: 420ms, 0s;
+}
+.asset-settings .settings-menu__focused-item[aria-pressed="true"] {
+  left: 46%;
+  top: 30%;
+  animation: asset-setting-focus 420ms cubic-bezier(.16, 1, .3, 1) both;
+}
+.asset-settings[data-settings-selection="Execution Mode"] .settings-menu__focused-item {
+  top: 46px;
+}
+.asset-settings .execution-mode {
+  top: 178px;
+  left: 46%;
+  bottom: 68px;
+  width: 54%;
+  padding-inline: 32px 18px;
+}
+@keyframes asset-setting-focus {
+  from { opacity: 0; transform: translateY(18px) scale(1.85); }
+  to { opacity: 1; transform: translateY(0) scale(2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .asset-detail--sections .asset-detail__model-slot,
+  .asset-settings .settings-menu__frost { transition: none; }
+  .asset-settings .settings-menu__focused-item[aria-pressed="true"] { animation: none; transform: scale(2); }
+}

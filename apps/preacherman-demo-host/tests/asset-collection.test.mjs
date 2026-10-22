@@ -71,7 +71,7 @@ test('Overview previews the selected packaged model without changing the equippe
 for (const appearance of ['light', 'dark']) test(`Asset controls use deliberate semantic theme tokens in ${appearance}`, () => {
   const styles = read('src/styles.css');
   const block = [...styles.matchAll(/\.demo-app-shell([^{}]*)\{([^{}]*)\}/g)].filter(m => m[1].trim() === (appearance === 'dark' ? '[data-appearance="dark"]' : '')).map(m => m[2]).join('\n');
-  const css = read('src/surfaces/asset/asset-collection.css') + read('src/surfaces/asset/asset-detail-layout.css') + read('src/surfaces/asset/asset-activation.css') + read('src/surfaces/asset/asset-sections.css');
+  const css = read('src/surfaces/asset/asset-collection.css') + read('src/surfaces/asset/asset-detail-layout.css') + read('src/surfaces/asset/asset-activation.css') + read('src/surfaces/asset/asset-sections.css') + read('src/surfaces/asset/asset-settings.css') + read('src/settings/settings-menu.css') + read('src/settings/execution-mode.css');
   for (const token of new Set(css.match(/--demo-theme-[a-z-]+/g))) assert.ok(block.includes(token + ':'), token);
   assert.match(css, /:focus-visible/); assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /\.asset-detail__heading\s*\{[^}]*color: var\(--demo-theme-market-text\)/);

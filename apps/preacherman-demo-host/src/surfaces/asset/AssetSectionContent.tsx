@@ -1,12 +1,13 @@
-import { AIProvidersSettings } from "../../settings/AIProvidersSettings";
+import { SettingsMenu } from "../../settings/SettingsScreen";
 import { readPreferences } from "../../preferences";
+import "./asset-settings.css";
 
-export function AssetSettings({ name }: { name: string }) {
-  return <div className="asset-settings settings-v3__detail-content">
-    <p className="asset-section__eyebrow">{name} / Settings</p>
-    <p className="asset-settings__scope">Shared API connections for your characters.</p>
-    <AIProvidersSettings locale={readPreferences().locale} />
-  </div>;
+export const assetSettingsItems = [
+  "Execution Mode", "Instructions / Rules", "Memory", "External MCP", "Connectors", "MCP Servers",
+] as const;
+
+export function AssetSettings({ onFocusChange }: { onFocusChange: (focused: boolean) => void }) {
+  return <SettingsMenu locale={readPreferences().locale} layout="asset" items={assetSettingsItems} onFocusChange={onFocusChange} />;
 }
 
 export function AssetInfoSection({ section, name }: { section: "Skills" | "Info Map"; name: string }) {

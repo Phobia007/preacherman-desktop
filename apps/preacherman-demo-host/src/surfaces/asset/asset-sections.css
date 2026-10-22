@@ -55,17 +55,6 @@
 .asset-appearance__empty h2 { font-size: 44px; font-weight: 400; margin: 0 0 20px; }
 .asset-appearance__empty p { font-size: 17px; line-height: 1.9; color: var(--demo-theme-market-muted); }
 .asset-section__eyebrow { color: var(--demo-theme-market-muted); font-size: 14px; letter-spacing: .06em; margin: 0 0 28px; }
-.asset-settings { position: relative; width: 40%; max-height: calc(var(--demo-app-height) - 205px); overflow-y: auto; overscroll-behavior: contain; padding: 46px 22px 100px 0; pointer-events: auto; scrollbar-width: thin; scrollbar-color: var(--demo-theme-market-border) transparent; }
-.asset-settings__scope { color: var(--demo-theme-market-muted); font-size: 14px; line-height: 1.7; margin: 0 0 24px; }
-.asset-settings .ai-provider-settings { background: transparent; font-family: var(--demo-font-primary); }
-.asset-settings.settings-v3__detail-content .ai-provider-settings h2 { font-size: 36px; font-weight: 400; letter-spacing: .02em; }
-.asset-settings .ai-provider-settings__header { flex-wrap: wrap; gap: 12px; }
-.asset-settings .ai-provider-settings__advanced > summary > span { display: block; margin: 8px 0 0; }
-.asset-settings .ai-provider-settings__presets button { border-radius: 0; }
-.asset-settings .ai-provider-settings__presets button[aria-pressed="true"], .asset-settings .ai-provider-settings button.ai-provider-settings__primary { background: var(--demo-theme-activate-fill); color: var(--demo-theme-activate-fill-text); }
-.asset-settings .ai-provider-settings__presets button[aria-pressed="true"] span { color: inherit; }
-.asset-settings .ai-provider-settings__presets button[aria-pressed="true"]:hover, .asset-settings .ai-provider-settings button.ai-provider-settings__primary:hover { background: var(--demo-theme-activate-fill); }
-.asset-settings .ai-provider-settings input { color-scheme: inherit; }
 .asset-section-info { width: min(960px, 88%); padding-top: clamp(65px, 12vh, 130px); color: var(--demo-theme-market-text); pointer-events: auto; }
 .asset-section-info h2 { margin: 0; font-size: clamp(42px, 4vw, 76px); font-weight: 400; letter-spacing: .02em; }
 .asset-section-info__intro { margin: 24px 0 70px; color: var(--demo-theme-market-muted); font-size: 20px; line-height: 1.8; }
@@ -82,8 +71,6 @@
   .asset-appearance__tiles { width: 280px; margin-left: 100px; }
   .asset-collection .asset-appearance__tile, .asset-appearance__slot { height: 200px; }
   .asset-appearance__count { margin-left: 100px; }
-  .asset-settings { width: 43%; }
-  .asset-settings .ai-provider-settings__presets > div { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
   .asset-details .asset-details__tabs { gap: 20px; }
@@ -110,9 +97,6 @@
   .asset-appearance__empty { margin-top: 100px; }
   .asset-appearance__empty h2 { font-size: 28px; }
   .asset-appearance__empty p { font-size: 14px; }
-  .asset-settings { width: 45%; padding-right: 12px; }
-  .asset-settings.settings-v3__detail-content .ai-provider-settings h2 { font-size: 28px; }
-  .asset-settings .ai-provider-settings__presets > div { grid-template-columns: 1fr; }
   .asset-section-info { width: 100%; padding-bottom: 100px; }
   .asset-section-info h2 { font-size: 38px; }
   .asset-section-info__intro { font-size: 16px; margin-bottom: 45px; }
