@@ -5,6 +5,7 @@ import { zoomCompanion } from "../../gallery/homeCompanionControls";
 import { useThree } from "@react-three/fiber";
 import type { Appearance, ModelId } from "../../preferences";
 import characters from "./characters.json";
+import { AssetActivateButton } from "./AssetActivateButton";
 import "./asset-collection.css";
 
 type Character = typeof characters[number];
@@ -12,10 +13,13 @@ function ArrowLeft() {
   return <svg viewBox="0 0 40 20" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M37 10H3m6-6-6 6 6 6" /></svg>;
 }
 
-export function AssetCollection({ appearance, renderActive, onDetailChange }: {
+export function AssetCollection({ appearance, renderActive, onDetailChange, activeModelId, onActivate, activationEnabled }: {
   appearance: Appearance;
   renderActive: boolean;
   onDetailChange: (open: boolean) => void;
+  activeModelId: ModelId | null;
+  onActivate: (modelId: ModelId) => void;
+  activationEnabled: boolean;
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const grid = useRef<HTMLDivElement>(null);
@@ -41,7 +45,7 @@ export function AssetCollection({ appearance, renderActive, onDetailChange }: {
         </button>)}
       </div>
     </div>
-    {selected && <CharacterDetails initialId={selected} appearance={appearance} renderActive={renderActive} onBack={() => setSelected(null)} />}
+    {selected && <CharacterDetails initialId={selected} appearance={appearance} renderActive={renderActive} activeModelId={activeModelId} onActivate={onActivate} activationEnabled={activationEnabled} onBack={() => setSelected(null)} />}
   </section>;
 }
 
@@ -98,8 +102,9 @@ function CharacterModel({ modelId, appearance, renderActive }: { modelId: ModelI
   </div>;
 }
 
-function CharacterDetails({ initialId, appearance, renderActive, onBack }: {
+function CharacterDetails({ initialId, appearance, renderActive, onBack, activeModelId, onActivate, activationEnabled }: {
   initialId: string; appearance: Appearance; renderActive: boolean; onBack: () => void;
+  activeModelId: ModelId | null; onActivate: (modelId: ModelId) => void; activationEnabled: boolean;
 }) {
   const viewport = useRef<HTMLDivElement>(null);
   const back = useRef<HTMLButtonElement>(null);
@@ -134,6 +139,9 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack }: {
                 <div className="asset-detail__text"><div className="asset-detail__description">{character.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div></div>
               </div>
               {isAvatarModelId(character.id) && <CharacterModel key={character.id} modelId={character.id} appearance={appearance} renderActive={renderActive} />}
+              {isAvatarModelId(character.id) && <div className="asset-overview__activation">
+                <AssetActivateButton key={character.id} modelId={character.id} activated={activeModelId === character.id} enabled={activationEnabled} onActivate={onActivate} />
+              </div>}
             </div>
           </article>
         </div>

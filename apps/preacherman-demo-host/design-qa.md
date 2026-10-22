@@ -96,3 +96,17 @@ Preview captures at 1920 × 1032 in `D:/preacherman/output/playwright/asset-arro
 Arrow follow-up visual result: passed. Arrow follow-up desktop verification: passed. The canonical shortcut was cold-launched, the arrow checked in both appearances, all eight navigation destinations verified, and window controls/resource cleanup checked. Evidence and hashes are in the desktop manifest.
 
 final result: passed
+
+## Asset activation follow-up — 2026-10-23
+
+Reference: user screenshot `D:/Temp/Administrator/codex-clipboard-0aa05098-63e6-4472-9241-5aff17567ca7.png` and requested relocation from Gallery to the lower-left of Asset Overview. Gallery activation markup, props, and styles are removed; its character preview and navigation remain.
+
+The 160 × 54px outlined button aligns with the existing left copy at the marked position. Its resting background is transparent. A continuous 1600ms hold fills symmetrically from the center, using progress raised to 2.4 for a slow start and accelerating finish, plus a slight pressed scale for resistance. Light appearance fills dark with light lettering; dark appearance fills light with dark lettering, using existing semantic theme tokens. Completed text reads Activated. The previous hide action is preserved behind another hold.
+
+Evidence: `D:/preacherman/output/playwright/asset-activation-20261023/`. Preview captures at 1920 × 1032 include both themes at rest, 300/800/1250ms charging, and activated. Position, unchanged typography, center-out text inversion, and contrast were visually checked against the reference. Tifa's longer copy was checked at 1100 × 740 and 700 × 850; the narrow layout places the button between copy and model without overlap.
+
+Interaction checks passed in both themes: quick clicks and short keypresses do not activate; release, pointer leave, character change, and navigation cancel unfinished holds; full pointer and Space holds change the persisted companion; Home loads that companion; Gallery preview never changes it. Reduced-motion mode retains the hold requirement. Unit coverage additionally checks focus loss, hidden document, pointer cancellation/lost capture, Escape, unmount cleanup, and repeated keydown events.
+
+Validation: TypeScript and 41 focused regressions passed. Preview passed both themes with no page exceptions; its backend connection-refused messages occur because the native backend is intentionally stopped. Native console diagnostics are checked against previously verified records before release.
+
+Asset activation visual result: passed. Asset activation desktop verification: pending.

@@ -59,7 +59,8 @@ test('Overview previews the selected packaged model without changing the equippe
   assert.match(component, /modelId=\{character.id\}/);
   assert.match(component, /assetBaseUrl=\{localAvatarAssetBaseUrl\(modelId\)\}/);
   assert.match(component, /actionId=\{avatarDefaultActionId\(modelId\)\}/);
-  assert.doesNotMatch(component, /setPreferences|localStorage|onActivate|character\.image\}/);
+  assert.doesNotMatch(component, /setPreferences|localStorage|character\.image\}/);
+  assert.match(component, /<AssetActivateButton[^>]*activated=\{activeModelId === character.id\}/);
   const app = read('src/App.tsx');
   assert.match(app, /renderActive=\{windowActive && !\(activeSurfaceType === "asset" && assetDetailOpen\)\}/);
   assert.match(component, /onDetailChange\(false\)/);
@@ -70,7 +71,7 @@ test('Overview previews the selected packaged model without changing the equippe
 for (const appearance of ['light', 'dark']) test(`Asset controls use deliberate semantic theme tokens in ${appearance}`, () => {
   const styles = read('src/styles.css');
   const block = [...styles.matchAll(/\.demo-app-shell([^{}]*)\{([^{}]*)\}/g)].filter(m => m[1].trim() === (appearance === 'dark' ? '[data-appearance="dark"]' : '')).map(m => m[2]).join('\n');
-  const css = read('src/surfaces/asset/asset-collection.css') + read('src/surfaces/asset/asset-detail-layout.css');
+  const css = read('src/surfaces/asset/asset-collection.css') + read('src/surfaces/asset/asset-detail-layout.css') + read('src/surfaces/asset/asset-activation.css');
   for (const token of new Set(css.match(/--demo-theme-[a-z-]+/g))) assert.ok(block.includes(token + ':'), token);
   assert.match(css, /:focus-visible/); assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /\.asset-detail__heading\s*\{[^}]*color: var\(--demo-theme-market-text\)/);
@@ -84,4 +85,6 @@ for (const appearance of ['light', 'dark']) test(`Asset controls use deliberate 
   assert.match(css, /color: var\(--demo-theme-loading\)/);
   assert.match(css, /\.asset-details \.asset-details__back\s*\{[^}]*border: 0;[^}]*background: transparent;[^}]*color: var\(--demo-theme-market-text\)/);
   assert.match(css, /\.asset-details \.asset-details__back:focus-visible\s*\{[^}]*color: var\(--demo-theme-market-focus\)/);
+  assert.match(css, /background: transparent; color: var\(--demo-theme-activate-rest-text\)/);
+  assert.match(css, /background: var\(--demo-theme-activate-fill\); color: var\(--demo-theme-activate-fill-text\)/);
 });

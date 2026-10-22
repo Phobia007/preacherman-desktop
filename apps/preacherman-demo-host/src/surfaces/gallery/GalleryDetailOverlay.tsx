@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import type { ModelId } from "../../preferences";
-import { GalleryActivateButton } from "./GalleryActivateButton";
 
 export interface GalleryRailCard { id: string; title: string; client: string; thumbnail: string; video?: string; logo?: string; color?: string; }
 export type GalleryRailInput = { type: "focus"; id: string } | { type: "wheel"; delta: number } | { type: "key"; key: string } | { type: "move" | "down" | "up" | "click"; x: number; y: number };
@@ -33,14 +31,11 @@ export interface GalleryDetailBridge {
   geometry(): { left: number; top: number; width: number; height: number; backBottom: number; backHeight: number } | null;
 }
 
-export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, activeModelId, onActivate, onNavigate, switching, navigating = false, navigationError }: {
+export function GalleryDetailOverlay({ bridge, detail, portal, onBack, onNavigate, switching, navigating = false, navigationError }: {
   bridge: GalleryDetailBridge;
   detail: GalleryDetailState;
   portal: Element;
   onBack: () => void;
-  modelId: ModelId | null;
-  activeModelId: ModelId | null;
-  onActivate: (modelId: ModelId) => void;
   onNavigate: (direction: -1 | 1) => void;
   switching: boolean;
   navigating?: boolean;
@@ -76,13 +71,6 @@ export function GalleryDetailOverlay({ bridge, detail, portal, onBack, modelId, 
     <div ref={element => element?.toggleAttribute("inert", navigating)} className="gallery-detail" data-phase={detail.phase} data-project={detail.project} data-switching={switching} data-navigation-entry={detail.navigationEntry}>
       <div className="gallery-detail__content">
         <div className="gallery-detail__actions" ref={actionsRef}>
-          {modelId ? <GalleryActivateButton
-            key={detail.project}
-            modelId={modelId}
-            activated={activeModelId === modelId}
-            enabled={detail.phase === "open" && !switching}
-            onActivate={onActivate}
-          /> : null}
           <button aria-label="Back to Gallery cards" className="gallery-detail__control gallery-detail__back" disabled={detail.phase !== "open" || switching} onClick={onBack} ref={backRef} type="button">
             <svg viewBox="0 0 48 24" aria-hidden="true"><path d="M43 12H5m8-8-8 8 8 8" /></svg>
           </button>

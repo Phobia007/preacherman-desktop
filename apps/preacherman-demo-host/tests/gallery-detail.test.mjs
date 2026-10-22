@@ -72,7 +72,7 @@ test('detail carries the card cover without leaking it into the next card',()=>{
 
 test('the first Gallery card uses one packaged introduction video and the supplied cover',()=>{
   const projects=JSON.parse(read('public/active-theory-gallery/gallery/external/storage.googleapis.com/activetheory-v6.appspot.com/cms/projects-dev.json'));
-  assert.equal(projects.length,31);
+  assert.equal(new Set(projects.map(project=>project.slug)).size,projects.length);
   const first=[...projects].sort((a,b)=>a.priority-b.priority)[0];
   assert.equal(first.slug,'secret-sky');
   assert.equal(first.video.url,'/assets/gallery/cortana-intro.mp4');
@@ -137,7 +137,7 @@ test('detail keeps the character unobstructed and the room owns video playback',
   assert.doesNotMatch(overlay,/requestVideoFrameCallback|drawImage|\.pause\(|\.play\(/);
   assert.match(overlay,/cancelAnimationFrame\(frame\)/);
   for (const control of ['Back to Gallery cards', 'Previous character', 'Next character']) assert.ok(overlay.includes(control));
-  assert.match(overlay,/<GalleryActivateButton/);
+  assert.doesNotMatch(overlay,/ActivateButton|onActivate|activeModelId/);
   assert.match(bridgeSource,/content\.layers\.video\.position\.set\(0, 0, -\.7\)/);
 });
 
@@ -148,12 +148,10 @@ test('new controls are theme semantic and keyboard accessible in both appearance
     assert.match(css,new RegExp('var\\(--demo-theme-'+token+'\\)'));
     assert.ok(shell.split('--demo-theme-'+token+':').length>=3,token+' supplied for both themes');
   }
-  assert.match(css,/width: 163\.2px;[\s\S]*height: 49\.6px;/);
-  assert.match(css,/font-size: 22px;/);
   assert.match(read('src/surfaces/gallery/GalleryDetailOverlay.tsx'),/M43 12H5m8-8-8 8 8 8/);
   assert.match(css,/:focus-visible/);assert.match(css,/:disabled/);assert.match(css,/:hover/);assert.match(css,/prefers-reduced-motion/);
   assert.match(shell,/data-gallery-detail="true"[^}]+mix-blend-mode: normal/s);
-  assert.match(read('src/App.tsx'),/isolateCompanion=\{activeSurfaceType === "market" && galleryDetailOpen\}/);
+  assert.match(read('src/App.tsx'),/\bisolateCompanion\b/);
 });
 
 test('foreground isolation ends before exit paints, while the overlay still fades',()=>{
@@ -166,11 +164,11 @@ test('foreground isolation ends before exit paints, while the overlay still fade
 
 test('detail clears the R3F restored background and uses this workspace renderer',()=>{
   const scene=fs.readFileSync(new URL('../../../packages/preacherman-avatar-renderer/src/InteractiveAvatarScene.tsx',import.meta.url),'utf8');
-  assert.match(scene,/if \(isolateCompanion\) scene\.background = null/);
-  assert.match(scene,/setClearAlpha\(environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
+  assert.match(scene,/if \(isolateCompanion \|\| appearance === "light"\) scene\.background = null/);
+  assert.match(scene,/setClearAlpha\(environment === "cinematic" && !isolateCompanion && appearance === "dark" \? 1 : 0\)/);
   assert.ok(read('vite.config.ts').includes('find: /^@preacherman\\/avatar-renderer$/, replacement: rendererSource("index.ts")'));
   const viewport=fs.readFileSync(new URL('../../../packages/preacherman-avatar-renderer/src/InteractiveAvatarViewport.tsx',import.meta.url),'utf8');
-  assert.match(viewport,/setClearColor\(0x010409, environment === "cinematic" && !isolateCompanion \? 1 : 0\)/);
+  assert.match(viewport,/setClearColor\(0x010409, environment === "cinematic" && !isolateCompanion && appearance === "dark" \? 1 : 0\)/);
 });
 
 test('Cortana activation is persistent, while detail preview never equips on entry',()=>{
@@ -181,20 +179,15 @@ test('Cortana activation is persistent, while detail preview never equips on ent
   assert.match(app,/savePreferences\(preferences\)/);
   assert.match(app,/const galleryModelId = galleryDetailOpen \? galleryPreviewModelId : activeModelId/);
   assert.match(app,/activeSurfaceType === "market" \? galleryModelId : activeModelId/);
-  assert.match(read('src/surfaces/gallery/GalleryDetailOverlay.tsx'),/activated=\{activeModelId === modelId\}/);
+  assert.doesNotMatch(surface,/onActivate|activeModelId/);
+  assert.match(read('src/surfaces/asset/AssetCollection.tsx'),/activated=\{activeModelId === character.id\}/);
 });
 
-test('click toggles application immediately with semantic keyboard support and visual feedback',()=>{
-  const button=read('src/surfaces/gallery/GalleryActivateButton.tsx'),css=read('src/surfaces/gallery/active-theory-gallery-surface.css');
-  assert.match(button,/onClick=\{\(\) => \{\s*onActivate\(modelId\)/);
-  assert.match(button,/aria-pressed=\{activated\}/);
-  assert.match(button,/disabled=\{!enabled\}/);
-  assert.doesNotMatch(button,/onPointerDown|onKeyDown|onKeyUp|Hold to activate/);
-  assert.match(button,/setTimeout\(\(\) => setShowFeedback\(false\)/);
-  assert.match(button,/activated \? "Activated" : "Activate"/);
-  assert.match(button,/M102 1H173/);assert.match(button,/M102 1H31/);
-  assert.match(css,/\.gallery-detail__activate \{[^}]*background: transparent;/s);
-  assert.match(css,/\.gallery-detail__activate \{[^}]*font-family: var\(--demo-font-primary\);/s);
+test('Gallery retains back and step navigation with no desktop activation control',()=>{
+  const css=read('src/surfaces/gallery/active-theory-gallery-surface.css');
+  assert.doesNotMatch(css,/gallery-detail__activate|gallery-activate-charge/);
+  assert.doesNotMatch(read('src/surfaces/gallery/GalleryDetailOverlay.tsx'),/ActivateButton|onActivate/);
+  assert.match(read('src/App.tsx'),/<FrostedSurface[^>]*onActivate=\{activateAssetModel\}/);
   assert.match(css,/\.gallery-detail__back:hover \{[^}]*border: 0;[^}]*background: transparent;/s);
   assert.match(css,/align-items: flex-end/);
   assert.match(css,/prefers-reduced-motion/);

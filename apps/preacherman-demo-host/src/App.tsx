@@ -174,7 +174,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
   const [galleryView, setGalleryView] = useState("characters");
   const [galleryDetailOpen, setGalleryDetailOpen] = useState(false);
   const [galleryPreviewModelId, setGalleryPreviewModelId] = useState<ModelId | null>(null);
-  const activateGalleryModel = useCallback((modelId: ModelId) => {
+  const activateAssetModel = useCallback((modelId: ModelId) => {
     setPreferences((current) => ({ ...current, activeModelId: current.activeModelId === modelId ? null : modelId }));
   }, []);
   const [testView, setTestView] = useState("diagnostics");
@@ -458,15 +458,13 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
           navigating={navigationPhase !== "idle"}
           onBridgeChange={setGalleryBridge}
           renderActive={windowActive}
-          activeModelId={activeModelId}
-          onActivate={activateGalleryModel}
           onDetailChange={setGalleryDetailOpen}
           onPreviewModelChange={setGalleryPreviewModelId}
         />
       </div>}
       {accountRequired && !isFrostedSurface ? <AccountGate key={activeSurfaceType} surface={activeSurfaceType} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
       {activeSurfaceType === "ledger" ? <MarketSurface appearance={preferences.appearance} hasAccount={hasAccount} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
-      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} appearance={preferences.appearance} renderActive={windowActive} onAssetDetailChange={setAssetDetailOpen} accountRequired={accountRequired} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
+      {isFrostedSurface ? <FrostedSurface name={activeSurfaceType === "asset" ? "Asset" : "Extension"} key={activeSurfaceType} appearance={preferences.appearance} renderActive={windowActive} onAssetDetailChange={setAssetDetailOpen} activeModelId={activeModelId} onActivate={activateAssetModel} activationEnabled={navigationPhase === "idle"} accountRequired={accountRequired} onSignIn={() => handleSurfaceNavigate("account")} /> : null}
       {activeSurfaceType === "account" ? <AccountSurface appearance={preferences.appearance} onNavigate={handleSurfaceNavigate} /> : null}
       {activeSurfaceType !== "ledger" && activeSurfaceType !== "account" && !isFrostedSurface && !accountRequired ? (
         <div className="demo-app-shell__screen-page" key={contentKey}>

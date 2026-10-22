@@ -2,14 +2,15 @@ import { SurfaceBrandHeader } from "./SurfaceBrandHeader";
 import { AssetCollection } from "./asset/AssetCollection";
 import { ExtensionMarketplace } from "./extension/ExtensionMarketplace";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import type { Appearance } from "../preferences";
+import type { Appearance, ModelId } from "../preferences";
 import { registerSurfaceMotion } from "../app-shell/surfaceMotion";
 import { AccountGate } from "./account/AccountGate";
 
 /** Both destinations retain the same continuous glass over the Home scene. */
-export function FrostedSurface({ name, appearance, renderActive, onAssetDetailChange, accountRequired = false, onSignIn }: {
+export function FrostedSurface({ name, appearance, renderActive, onAssetDetailChange, activeModelId, onActivate, activationEnabled, accountRequired = false, onSignIn }: {
   readonly name: "Asset" | "Extension"; readonly appearance: Appearance; readonly renderActive: boolean;
   readonly onAssetDetailChange: (open: boolean) => void; readonly accountRequired?: boolean; readonly onSignIn: () => void;
+  readonly activeModelId: ModelId | null; readonly onActivate: (modelId: ModelId) => void; readonly activationEnabled: boolean;
 }) {
   const surfaceRef = useRef<HTMLElement>(null);
   const [lensActive, setLensActive] = useState(false);
@@ -34,7 +35,7 @@ export function FrostedSurface({ name, appearance, renderActive, onAssetDetailCh
   return <main ref={surfaceRef} className="demo-frosted-surface" aria-label={name} data-lens-active={lensActive} data-asset-detail={assetDetailOpen}>
     <SurfaceBrandHeader surfaceRef={surfaceRef} onLensActiveChange={setLensActive} />
     <div className="demo-frosted-surface__content" ref={element => element?.toggleAttribute("inert", lensActive)}>
-      {accountRequired ? <AccountGate embedded onSignIn={onSignIn} /> : name === "Asset" ? <AssetCollection appearance={appearance} renderActive={renderActive && !lensActive} onDetailChange={detailChanged} /> : <ExtensionMarketplace />}
+      {accountRequired ? <AccountGate embedded onSignIn={onSignIn} /> : name === "Asset" ? <AssetCollection appearance={appearance} renderActive={renderActive && !lensActive} onDetailChange={detailChanged} activeModelId={activeModelId} onActivate={onActivate} activationEnabled={activationEnabled && renderActive && !lensActive} /> : <ExtensionMarketplace />}
     </div>
   </main>;
 }

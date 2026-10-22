@@ -10,15 +10,13 @@ import "./active-theory-gallery-surface.css";
 
 const gallerySource = "/active-theory-gallery/gallery/work.html";
 
-export function ActiveTheoryGallerySurface({ active = true, navigating = false, renderActive = true, onBridgeChange, onDetailChange, onPreviewModelChange, activeModelId, onActivate }: {
+export function ActiveTheoryGallerySurface({ active = true, navigating = false, renderActive = true, onBridgeChange, onDetailChange, onPreviewModelChange }: {
   readonly active?: boolean;
   readonly navigating?: boolean;
   readonly onBridgeChange: (bridge: GalleryDetailBridge | undefined) => void;
   readonly renderActive?: boolean;
   readonly onDetailChange?: (open: boolean) => void;
   readonly onPreviewModelChange: (modelId: ModelId | null) => void;
-  readonly activeModelId: ModelId | null;
-  readonly onActivate: (modelId: ModelId) => void;
 }) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   useExecutionFrameBridge(frameRef, false);
@@ -65,7 +63,7 @@ export function ActiveTheoryGallerySurface({ active = true, navigating = false, 
       className="active-theory-gallery-surface"
       data-loaded={loaded ? "true" : "false"}
     >
-      {portal && bridge && active && detail.phase !== "closed" ? <GalleryDetailOverlay bridge={bridge} detail={detail} portal={portal} onBack={back} modelId={modelId} activeModelId={activeModelId} onActivate={onActivate} onNavigate={navigation.navigate} switching={navigation.switching} navigating={navigating} navigationError={navigation.error} /> : null}
+      {portal && bridge && active && detail.phase !== "closed" ? <GalleryDetailOverlay bridge={bridge} detail={detail} portal={portal} onBack={back} onNavigate={navigation.navigate} switching={navigation.switching} navigating={navigating} navigationError={navigation.error} /> : null}
       <iframe
         ref={frameRef}
         className="active-theory-gallery-surface__frame"

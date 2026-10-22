@@ -1,0 +1,31 @@
+.asset-overview { position: relative; }
+.asset-overview__activation { position: absolute; left: 0; bottom: 120px; z-index: 2; }
+.asset-collection .asset-activate {
+  --asset-charge: 0;
+  position: relative; display: grid; place-items: center; overflow: hidden; isolation: isolate;
+  width: 160px; height: 54px; padding: 0; border: 1px solid var(--demo-theme-activate-rest-border); border-radius: 0;
+  background: transparent; color: var(--demo-theme-activate-rest-text);
+  font: 400 18px/1.2 var(--demo-font-primary); letter-spacing: .025em;
+  touch-action: none; user-select: none; -webkit-user-select: none;
+  transition: transform 220ms ease;
+}
+.asset-collection .asset-activate[data-activated="true"] { background: var(--demo-theme-activate-fill); color: var(--demo-theme-activate-fill-text); }
+.asset-activate__charge {
+  position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+  background: var(--demo-theme-activate-fill); color: var(--demo-theme-activate-fill-text);
+  clip-path: inset(0 calc((1 - var(--asset-charge)) * 50%));
+}
+.asset-activate[data-activated="true"] .asset-activate__charge { background: var(--demo-theme-home-canvas); color: var(--demo-theme-activate-rest-text); }
+.asset-activate:not([data-charging="true"]) .asset-activate__charge { visibility: hidden; }
+.asset-collection .asset-activate:hover { border-color: var(--demo-theme-market-focus); }
+.asset-collection .asset-activate:focus-visible { outline: 1px solid var(--demo-theme-market-focus); outline-offset: 5px; }
+.asset-collection .asset-activate[data-charging="true"] { transform: scale(.985); border-color: var(--demo-theme-activate-rest-border); }
+.asset-collection .asset-activate:disabled { opacity: .5; cursor: default; }
+.asset-activate__assistive { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 768px) {
+  .asset-overview__activation { position: static; grid-row: 2; margin-block: 28px 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .asset-collection .asset-activate { transition: none; transform: none; }
+  .asset-collection .asset-activate[data-charging="true"] { transform: none; }
+}
