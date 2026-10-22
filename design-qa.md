@@ -712,6 +712,6 @@ final result: passed
 - Implementation checklist: source complete; preview and source checks complete; canonical production build and native delivery below.
 - Follow-up polish: none required; video and Info Map contents are explicitly reserved for future work.
 
-Asset Skills and Info Map native delivery: pending.
+Asset Skills and Info Map native delivery: passed. Canonical shortcut cold launch, both themes, current character imagery, all local assets, selection interaction, original Settings, all eight core routes, window controls and final normal Home verified. Matching rollback pair and deployed hashes recorded in the canonical manifest.
 
-final result: blocked
+final result: passed
