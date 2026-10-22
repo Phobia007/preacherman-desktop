@@ -112,3 +112,12 @@ Interaction checks passed in both themes: quick clicks and short keypresses do n
 Validation: TypeScript and 45 focused regressions passed. Preview checks both themes for hover outline, reverse progress, check-before-label in both directions, and persistent activation, with no page exceptions. Backend connection-refused messages in preview occur because the native backend is intentionally stopped. Native console diagnostics are checked against previously verified records before release. The first temporary build was superseded by the user's additional interaction requirements before handoff; its previous verified pair was restored and recorded in the manifest. Native automation explicitly foregrounds the owned window and awaits its target page so background frame throttling is not mistaken for a failed charge animation.
 
 Asset activation visual result: passed. Asset activation desktop verification: pending.
+
+
+## Hologram color regression during activation - 2026-10-23
+
+The user reported Cortana losing contrast and authored body/hair colors after activation. Reproduced with the actual Asset flow: a closing shared viewport evicted shader textures still used by the detail model. On its next render, new bindings cloned the already-converted materials before the previous effect cleanup. Runtime names became `viewer_hologram:viewer_hologram:rt_body`; control-map lookup and family matching then failed. This was a resource lifecycle error, not a requested palette or appearance change.
+
+The renderer now keeps an authored-material snapshot per loaded model. Rebinding always reads that snapshot. Shared shader textures are reference-counted and released/evicted only after the last live viewport and pending compilation finish. Source images, grade, lights and camera framing are unchanged.
+
+Validation: both renderer and host TypeScript checks passed; 45 host regressions and 11 focused renderer regressions passed, including four new tests covering rebind-before-cleanup, overlapping viewport ownership, pending compilation, and independent Cortana/Zima resources. The existing readiness fixture now mocks all current character adapter classes. Browser/native evidence is recorded with the final desktop deployment.

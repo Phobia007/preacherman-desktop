@@ -7,11 +7,7 @@ import {
   Group,
   LinearFilter,
   LinearMipmapLinearFilter,
-  Material,
-  Mesh,
-  MeshStandardMaterial,
   NoColorSpace,
-  Object3D,
   RepeatWrapping,
   SRGBColorSpace,
   Texture,
@@ -43,9 +39,9 @@ import type {
   AvatarAnimationError,
 } from "./avatar/types/avatarAnimation";
 import {
-  createHologramMaterial,
   updateHologramResolution,
 } from "./hologramMaterial";
+import { buildHologramBindings, captureAvatarMaterials, retainHologramTextures } from "./hologramResources";
 import type { AvatarModelId, AvatarPerformanceSnapshot } from "./types";
 import type { AvatarPose } from "./types";
 
@@ -114,12 +110,6 @@ interface AvatarModelProps {
   readonly rotationOffsetY?: number;
 }
 
-interface MaterialBindings {
-  readonly originals: Map<Mesh, Material | Material[]>;
-  readonly holograms: Map<Mesh, Material | Material[]>;
-  readonly clonedMaterials: Set<MeshStandardMaterial>;
-}
-
 function withTrailingSlash(value: string): string {
   return value.endsWith("/") ? value : `${value}/`;
 }
@@ -143,45 +133,6 @@ export function createAvatarAssetUrls(
       shaderUrl(SHADER_FILES[5]),
     ] : [],
   };
-}
-
-function buildMaterialBindings(
-  root: Object3D,
-  scanlineMap: Texture,
-  irisNormalMap: Texture,
-  controlMaps: Readonly<Record<string, Texture>>,
-  avatarGain: number,
-): MaterialBindings {
-  const originals = new Map<Mesh, Material | Material[]>();
-  const holograms = new Map<Mesh, Material | Material[]>();
-  const clonedMaterials = new Set<MeshStandardMaterial>();
-  const cloneBySource = new Map<MeshStandardMaterial, MeshStandardMaterial>();
-
-  root.traverse((object) => {
-    if (!(object instanceof Mesh)) return;
-    const original = object.material;
-    originals.set(object, original);
-    const sourceMaterials = Array.isArray(original) ? original : [original];
-    const nextMaterials = sourceMaterials.map((material) => {
-      if (!(material instanceof MeshStandardMaterial)) return material;
-      let clone = cloneBySource.get(material);
-      if (!clone) {
-        clone = createHologramMaterial(
-          material,
-          scanlineMap,
-          irisNormalMap,
-          controlMaps[material.name],
-          avatarGain,
-        );
-        cloneBySource.set(material, clone);
-        clonedMaterials.add(clone);
-      }
-      return clone;
-    });
-    holograms.set(object, Array.isArray(original) ? nextMaterials : nextMaterials[0]);
-  });
-
-  return { originals, holograms, clonedMaterials };
 }
 
 export function AvatarModel({
@@ -259,17 +210,18 @@ export function AvatarModel({
     }),
     [bodyControlMap, eyeControlMap, faceControlMap, hairControlMap],
   );
+  const originals = useMemo(() => root && holographic ? captureAvatarMaterials(root) : null, [root, holographic]);
   const bindings = useMemo(
-    () => root && holographic
-      ? buildMaterialBindings(
-        root,
+    () => originals && holographic
+      ? buildHologramBindings(
+        originals,
         scanlineMap,
         irisNormalMap,
         controlMaps,
         modelId === "zima" ? 2.25 : 1,
       )
       : null,
-    [controlMaps, holographic, irisNormalMap, modelId, root, scanlineMap],
+    [controlMaps, holographic, irisNormalMap, modelId, originals, scanlineMap],
   );
 
   useEffect(() => {
@@ -450,24 +402,14 @@ export function AvatarModel({
     return removeAfterEffect;
   }, [gl, invalidate, onFirstFrame, preparedRoot, root]);
 
-  useEffect(
-    () => () => {
-      if (!holographic) return;
-      afterCompilation(() => {
-        scanlineMap.dispose();
-        irisNormalMap.dispose();
-        for (const controlMap of new Set(Object.values(controlMaps))) controlMap.dispose();
-      });
-      useTexture.clear([...urls.textures]);
-    },
-    [
-      controlMaps,
-      holographic,
-      irisNormalMap,
-      scanlineMap,
-      urls.textures,
-    ],
-  );
+  useEffect(() => {
+    if (!holographic) return;
+    const release = retainHologramTextures(
+      [scanlineMap, irisNormalMap, ...Object.values(controlMaps)],
+      () => useTexture.clear([...urls.textures]),
+    );
+    return () => afterCompilation(release);
+  }, [controlMaps, holographic, irisNormalMap, scanlineMap, urls.textures]);
 
   useEffect(() => {
     if (disposeTimer.current !== undefined) {

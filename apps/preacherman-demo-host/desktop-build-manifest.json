@@ -1420,6 +1420,14 @@
       "sha256": "4E16DED19FFA3582CA8755DE55FC327F02718A81E25BF11CE8B81D5A81E8C62D",
       "restoredAt": "2026-10-23T03:27:48.5925044+08:00",
       "reason": "User refined interaction during verification: hover-drawn capsule, gradual reverse, checkmark confirmation. Previous verified pair restored while implementing final scope. Background-window trace proved original charging curve works when foregrounded; native automation updated to explicitly foreground and await target page."
+    },
+    {
+      "buildId": "asset-activation-20261023-color-investigation",
+      "sourceCommit": "0f9ba6969b61dcd5168bdfb8946ec7871fd208e5",
+      "status": "held-for-color-regression-baseline-restored",
+      "sha256": "67A833768260455A88B2D3662A075F25B08509D5C4C623834CA85272DB972295",
+      "restoredAt": "2026-10-23T03:51:06.0351542+08:00",
+      "reason": "Button native checks passed in both themes. User reported Cortana material discoloration; hold release and restore verified pair while investigating render-state regression."
     }
   ],
   "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-arrow-before-20261023\\desktop-build-manifest.json",
