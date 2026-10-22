@@ -114,6 +114,31 @@ test("Settings reuses Gallery portrait and starts a bounded top-to-bottom wave a
   assert.match(css, /::-webkit-scrollbar/);
 });
 
+for (const appearance of ["light", "dark"]) test(`Asset selection keeps one clear enlarged label at its left-hand origin in ${appearance}`, async () => {
+  const source = await readFile(componentPath, "utf8");
+  const { code } = await transform(source, { loader: "tsx", format: "cjs", jsx: "automatic" });
+  const nativeRequire = createRequire(import.meta.url);
+  const selected = { label: "Execution Mode", x: 140, y: 106, width: 280, height: 56 };
+  const context = { module: { exports: {} }, require: id => {
+    if (id.endsWith(".css")) return {};
+    if (id === "./ExecutionModeSettings") return { ExecutionModeSettings: () => createElement("section", { "data-execution-settings": true }) };
+    if (id === "react") return { ...nativeRequire(id), useState: initial => [typeof initial === "boolean" ? true : selected, () => {}] };
+    return nativeRequire(id);
+  } };
+  vm.runInNewContext(code, context);
+  const html = renderToStaticMarkup(createElement("div", { "data-appearance": appearance }, createElement(context.module.exports.SettingsMenu, {
+    locale: "en", layout: "asset", items: ["Execution Mode", "Memory"],
+  })));
+  assert.ok(html.includes('data-settings-focused="true"'));
+  assert.ok(html.includes('data-focused="true"'));
+  assert.equal((html.match(/settings-menu__focused-item/g) ?? []).length, 1);
+  assert.match(html, /settings-menu__focused-item[^>]*style="left:140px;top:106px;width:280px;height:56px"/);
+  assert.ok(html.includes('data-execution-settings="true"'));
+  assert.match(html, /<nav aria-hidden="true"/);
+  const css = await readFile(join(hostRoot, "src/surfaces/asset/asset-settings.css"), "utf8");
+  assert.doesNotMatch(css, /\.settings-menu__focused-item/);
+});
+
 test("selected preference doubles above a frosted body without changing shared chrome", async () => {
   const source = await readFile(componentPath, "utf8");
   const css = await readFile(join(hostRoot, "src", "settings", "settings-menu.css"), "utf8");

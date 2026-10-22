@@ -675,3 +675,19 @@ Interaction: six entries, focus restoration, Escape priority, backdrop/title dis
 Asset Settings menu native delivery: passed. Canonical shortcut cold launch, both themes, six entries, original Settings, all eight core routes, window controls and final normal Home verified. Matching rollback pair and deployed hashes recorded in the canonical manifest.
 
 final result: passed
+
+
+## Asset Settings left-side focus and menu inset — 2026-10-23
+
+User corrections supersede the earlier right-side title. Keep the selected entry enlarged and clear at its left menu origin; blur all other entries and the model; remove the repeated right-side title. Move all six resting entries into the marked x250–812, y268–912 region of the 1920 × 1032 reference.
+
+Sources: `D:/Temp/Administrator/codex-clipboard-df6a0609-16d4-46f2-b128-75b2c1732d59.png` and `D:/Temp/Administrator/codex-clipboard-0b703e14-94e5-4d80-b157-96391bab0d10.png`.
+Evidence: `output/playwright/asset-settings-focus-20261023/`, including full-resolution `menu-position-comparison.png` and `focus-position-comparison.png`, individual selected states, both appearances, original Settings and compact/reduced-motion captures.
+
+Fidelity: six existing labels, original typography and 30px row spacing retained. Resting menu moves inward and down (left 8%, top 100 logical pixels). Focus uses the original Settings 1× to 2× scale animation at the clicked origin; only one foreground label exists, outside the menu blur. No right-side heading remains. The real configuration controls retain their position and behavior. Background model remains blurred 38px, other menu entries 12px. Authored textures and semantic theme colors are unchanged.
+
+Validation: typecheck and 25 focused regression tests pass, including both appearance states for selected-label placement and shared Settings behavior. Browser checks measure all six bounds inside the requested region, doubled label size and retained origin, selected clarity, remaining-menu blur, model blur, no duplicate title, dismissal/focus restoration and tab/character cleanup. Native verification follows the production build.
+
+Asset Settings focus native delivery: pending.
+
+final result: blocked

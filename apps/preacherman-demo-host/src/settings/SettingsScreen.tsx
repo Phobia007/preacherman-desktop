@@ -56,8 +56,8 @@ export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desk
     returnButtonRef.current = button;
     setSelected({
       label,
-      x: Math.max(40, Math.min((rect.left - frame.left) / scale, surface.offsetWidth - width * 2 - 40)),
-      y: Math.max(120, Math.min((rect.top - frame.top) / scale, surface.offsetHeight - height * 2 - 40)),
+      x: Math.max(layout === "asset" ? 0 : 40, Math.min((rect.left - frame.left) / scale, surface.offsetWidth - width * 2 - 40)),
+      y: Math.max(layout === "asset" ? 0 : 120, Math.min((rect.top - frame.top) / scale, surface.offsetHeight - height * 2 - 40)),
       width,
       height,
     });
@@ -126,7 +126,7 @@ export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desk
           className="settings-menu__item settings-menu__focused-item"
           onClick={closeFocus}
           ref={focusedButtonRef}
-          style={layout === "desktop" ? { left: selected.x, top: selected.y, width: selected.width, height: selected.height } : undefined}
+          style={{ left: selected.x, top: selected.y, width: selected.width, height: selected.height }}
           title="Back to settings · Esc"
           type="button"
         >
