@@ -1,68 +1,130 @@
 {
   "schemaVersion": 1,
-  "buildId": "asset-arrow-20261023",
+  "buildId": "asset-activation-color-20261023",
   "productVersion": "0.1.0",
-  "sourceTask": "Refine Asset Overview return control to a single thin elongated arrow aligned with navigation text",
+  "sourceTask": "Asset hold activation with reversible capsule motion and stable hologram colors across shared viewports",
   "sourceThread": null,
-  "sourceState": "Removed the circular return-button border and surface; uses a single 1px-stroke elongated arrow with theme-aware text-color hover/focus and the same vertical content alignment as Overview navigation. Existing portrait/full-body zoom, character content, routes, and Home startup retained.",
-  "sourceCommit": "949f2920da66e2d338fd7e02541d5d205063bc97",
+  "sourceState": "Gallery remains preview-only. The lower-left Asset button shows text at rest and draws a capsule outline on hover/focus. A 1600ms hold fills from center to both edges, slowly then accelerating. Early release smoothly retraces the same timing curve; repressing resumes the remaining charge. Completion shows a check for 720ms before Activated, and the reverse action follows the same sequence before Activate. Light fills dark and dark fills light through semantic tokens. Home persists the model only on completion. Keyboard holds and cancellation on focus loss, character change and navigation are supported. Authored material snapshots prevent repeated hologram conversion during texture reloads; reference-counted shader textures stay alive until the final viewport releases them. Cortana and Zima palettes remain stable through activation, appearance changes and navigation.",
+  "sourceCommit": "0e0acc53acfc689aa4a10510e915eb44d6bd2b59",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-23T02:41:04.3043235+08:00",
-  "deployedAt": "2026-10-23T02:41:33.5024654+08:00",
-  "verifiedAt": "2026-10-23T02:45:16.681966+08:00",
-  "sizeBytes": 820790784,
-  "sha256": "15959147FA308CCE0E292E2554A0A8227DABC2E66DF81A1BFD53D4B378A80305",
+  "builtAt": "2026-10-23T04:07:01.1030885+08:00",
+  "deployedAt": "2026-10-23T04:07:37.1293841+08:00",
+  "verifiedAt": "2026-10-23T04:15:36.657110+08:00",
+  "sizeBytes": 820791296,
+  "sha256": "178CAA562B6167D7B17E61EFF2B9B2ED380F5AA35E941E1FFA15E8DFC4CE3172",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-arrow-before-20261023\\preacherman-demo-host.exe",
-  "backupSha256": "B24D783BEF6DD68CE7A129B50F837EB6DB46E87AF420B162339610890BBCBF29",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-arrow-before-20261023\\preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-activation-before-20261023\\preacherman-demo-host.exe",
+  "backupSha256": "15959147FA308CCE0E292E2554A0A8227DABC2E66DF81A1BFD53D4B378A80305",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-activation-before-20261023\\preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "bce8dd92a17ba3a446939b8a12c923818dfd8d0a",
-  "previousVerificationCommit": "bce8dd92a17ba3a446939b8a12c923818dfd8d0a",
+  "rollbackBaselineCommit": "949f2920da66e2d338fd7e02541d5d205063bc97",
+  "previousVerificationCommit": "949f2920da66e2d338fd7e02541d5d205063bc97",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 11,
+      "focusedTests": 56,
       "focusedFailures": 0,
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical shortcut. Return-arrow shape, borderless transparent control, alignment with tab text, focus, pointer and keyboard return, portrait and full-body wheel zoom verified in light and dark. Core Home, Task, Gallery, Asset, Market/Ledger, Extension, Settings and Account checked on first entry. Original preferences restored. Window controls exercised and final normal shortcut launch verified without preview or debug services.",
+    "nativeFlow": "Cold launch through canonical shortcut with the owned native window explicitly foregrounded. Asset button placement, text-only rest state, hover-drawn capsule, accelerating center-out fill, gradual reverse on release, check-before-label in both directions, keyboard holds, cancellation, persistence, and Gallery removal verified in light and dark. Core Home, Task, Gallery, Asset, Market/Ledger, Extension, Settings and Account checked on first entry. Original preferences restored. Window controls exercised and final normal shortcut launch verified without preview or debug services.",
     "modes": [
       {
         "appearance": "light",
-        "geometry": {
-          "border": "0px",
-          "radius": "0px",
+        "style": {
           "background": "rgba(0, 0, 0, 0)",
-          "stroke": "1",
-          "arrowCenter": 138.80399322509766,
-          "textCenter": 138.59436798095703,
-          "ratio": 2
+          "border": "0px",
+          "color": "rgb(17, 17, 17)",
+          "radius": "999px",
+          "ringOpacity": "0"
         },
-        "pointerReturn": true,
-        "keyboardReturn": true,
-        "zoomPreserved": true
+        "activeStyle": {
+          "background": "rgb(17, 17, 17)",
+          "color": "rgb(255, 255, 255)"
+        },
+        "samples": [
+          {
+            "progress": 0.019971789929489024,
+            "clip": "inset(0px 49.0014%)",
+            "activated": "false"
+          },
+          {
+            "progress": 0.1947937142228782,
+            "clip": "inset(0px 40.2603%)",
+            "activated": "false"
+          },
+          {
+            "progress": 0.5718332374737063,
+            "clip": "inset(0px 21.4083%)",
+            "activated": "false"
+          }
+        ],
+        "hoverOutline": true,
+        "rewind": {
+          "charged": 0.19214701620106803,
+          "released": 0.1897488920169297,
+          "rewound": 0.07584848714193335
+        },
+        "checkThenLabel": true,
+        "reverseCheckThenLabel": true,
+        "clickRejected": true,
+        "releaseCanceled": true,
+        "pointerLeaveCanceled": true,
+        "keyboardHold": true,
+        "characterSwitchCanceled": true,
+        "navigationCanceled": true,
+        "persistence": true
       },
       {
         "appearance": "dark",
-        "geometry": {
-          "border": "0px",
-          "radius": "0px",
+        "style": {
           "background": "rgba(0, 0, 0, 0)",
-          "stroke": "1",
-          "arrowCenter": 138.80399322509766,
-          "textCenter": 138.59436798095703,
-          "ratio": 2
+          "border": "0px",
+          "color": "rgb(255, 255, 255)",
+          "radius": "999px",
+          "ringOpacity": "0"
         },
-        "pointerReturn": true,
-        "keyboardReturn": true,
-        "zoomPreserved": true
+        "activeStyle": {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)"
+        },
+        "samples": [
+          {
+            "progress": 0.021937878838020782,
+            "clip": "inset(0px 48.9031%)",
+            "activated": "false"
+          },
+          {
+            "progress": 0.19962280800616372,
+            "clip": "inset(0px 40.0189%)",
+            "activated": "false"
+          },
+          {
+            "progress": 0.5718332374753133,
+            "clip": "inset(0px 21.4083%)",
+            "activated": "false"
+          }
+        ],
+        "hoverOutline": true,
+        "rewind": {
+          "charged": 0.19775281647413165,
+          "released": 0.1951983251233522,
+          "rewound": 0.07901853869137732
+        },
+        "checkThenLabel": true,
+        "reverseCheckThenLabel": true,
+        "clickRejected": true,
+        "releaseCanceled": true,
+        "pointerLeaveCanceled": true,
+        "keyboardHold": true,
+        "characterSwitchCanceled": true,
+        "navigationCanceled": true,
+        "persistence": true
       }
     ],
     "routes": [
@@ -73,22 +135,25 @@
       },
       {
         "appearance": "light",
+        "name": "Home",
+        "ready": true,
+        "activatedModel": "cortana"
+      },
+      {
+        "appearance": "light",
+        "name": "Gallery",
+        "ready": true,
+        "activationRemoved": true,
+        "previewOnly": true
+      },
+      {
+        "appearance": "light",
         "name": "Asset",
         "ready": true
       },
       {
         "appearance": "light",
-        "name": "Home",
-        "ready": true
-      },
-      {
-        "appearance": "light",
         "name": "Task",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Gallery",
         "ready": true
       },
       {
@@ -113,22 +178,25 @@
       },
       {
         "appearance": "dark",
+        "name": "Home",
+        "ready": true,
+        "activatedModel": "cortana"
+      },
+      {
+        "appearance": "dark",
+        "name": "Gallery",
+        "ready": true,
+        "activationRemoved": true,
+        "previewOnly": true
+      },
+      {
+        "appearance": "dark",
         "name": "Asset",
         "ready": true
       },
       {
         "appearance": "dark",
-        "name": "Home",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
         "name": "Task",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Gallery",
         "ready": true
       },
       {
@@ -149,20 +217,6 @@
     ],
     "pageErrors": [],
     "consoleErrors": [
-      "Hydration completed but contains mismatches.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
@@ -177,32 +231,31 @@
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "newConsoleErrors": [],
-    "baselineDiagnosticNote": "All 26 observed diagnostics exactly match previously verified native reports; see console-audit.json. The initial comparison only consulted the most recent launch, which attached after these cold-start messages. No runtime source or CSP changes were made.",
     "resources": {
-      "SampledAt": "2026-10-23T02:44:42.4919495+08:00",
-      "NativePid": 29036,
-      "StartedAt": "2026-10-23T02:44:25.8752540+08:00",
-      "WindowHandle": 3475140,
+      "SampledAt": "2026-10-23T04:15:00.8211425+08:00",
+      "NativePid": 29772,
+      "StartedAt": "2026-10-23T04:14:44.4318485+08:00",
+      "WindowHandle": 1574638,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        29036,
-        29220,
-        22116,
-        30200,
-        29344,
-        24808,
-        8420,
-        22048,
-        532,
-        30184,
-        29228
+        29772,
+        6260,
+        6796,
+        16848,
+        27480,
+        31624,
+        9044,
+        5052,
+        26916,
+        30872,
+        18684
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2050.1,
-      "GpuDedicatedBytes": 3502198784,
-      "MaxGpuEngineUtilization": 23,
-      "FreeRamKiB": 19427724,
+      "WorkingSetMiB": 2087.9,
+      "GpuDedicatedBytes": 3482599424,
+      "MaxGpuEngineUtilization": 25,
+      "FreeRamKiB": 20140364,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -217,8 +270,41 @@
       "closeRequested": true,
       "passed": true
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\asset-arrow-20261023",
-    "baselineAuditPath": "D:\\preacherman\\output\\playwright\\asset-arrow-20261023\\console-audit.json"
+    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\asset-activation-20261023",
+    "colorRegression": {
+      "status": "passed",
+      "cases": 16,
+      "models": [
+        "cortana",
+        "zima"
+      ],
+      "modes": [
+        "light",
+        "dark"
+      ],
+      "checks": "Authored material names, control maps and families remain stable through activate/deactivate/reactivate; return from Home remains correct. Four new resource ownership and material snapshot tests.",
+      "evidenceDirectory": "D:\\preacherman\\output\\playwright\\asset-color-20261023"
+    },
+    "settledLabelChecks": [
+      {
+        "appearance": "light",
+        "color": "rgb(255, 255, 255)",
+        "opacity": "1"
+      },
+      {
+        "appearance": "dark",
+        "color": "rgb(0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    "baselineDiagnosticNote": "Every captured console diagnostic matched the previously verified arrow or Tifa native report exactly; no new console or runtime errors.",
+    "baselineReports": [
+      "output/playwright/asset-arrow-20261023/native-report.json",
+      "output/tifa-import-20261015/native-report.json"
+    ],
+    "nativeCaptureMethod": "Full-frame Page.captureScreenshot without a clip and with captureBeyondViewport=false on the foreground native window; presentation crops are made offline. Playwright viewport resets and clipped native screenshots were traced to an OS pointer-leave during a hold; full-frame capture preserves input, as confirmed by the event trace, and the final complete native pass uses it throughout.",
+    "normalShortcutHomeScreenshot": "output/playwright/asset-activation-20261023/native-final-shortcut.png",
+    "normalShortcutHomeVisual": "Verified authored Home and original companion after a normal shortcut launch without debug or preview services."
   },
   "releaseAttempts": [
     {
@@ -1428,9 +1514,16 @@
       "sha256": "67A833768260455A88B2D3662A075F25B08509D5C4C623834CA85272DB972295",
       "restoredAt": "2026-10-23T03:51:06.0351542+08:00",
       "reason": "Button native checks passed in both themes. User reported Cortana material discoloration; hold release and restore verified pair while investigating render-state regression."
+    },
+    {
+      "buildId": "asset-activation-color-20261023",
+      "sourceCommit": "0e0acc53acfc689aa4a10510e915eb44d6bd2b59",
+      "status": "verified",
+      "sha256": "178CAA562B6167D7B17E61EFF2B9B2ED380F5AA35E941E1FFA15E8DFC4CE3172",
+      "verifiedAt": "2026-10-23T04:15:36.657110+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-arrow-before-20261023\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-activation-before-20261023\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1447,7 +1540,13 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\asset-arrow-20261023"
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\asset-activation-20261023",
+    "backupRetention": {
+      "applied": true,
+      "completeBackupsKept": 3,
+      "oldEntriesRemoved": 1,
+      "reclaimedGiB": 0.77
+    }
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",

@@ -111,7 +111,9 @@ Interaction checks passed in both themes: quick clicks and short keypresses do n
 
 Validation: TypeScript and 45 focused regressions passed. Preview checks both themes for hover outline, reverse progress, check-before-label in both directions, and persistent activation, with no page exceptions. Backend connection-refused messages in preview occur because the native backend is intentionally stopped. Native console diagnostics are checked against previously verified records before release. The first temporary build was superseded by the user's additional interaction requirements before handoff; its previous verified pair was restored and recorded in the manifest. Native automation explicitly foregrounds the owned window and awaits its target page so background frame throttling is not mistaken for a failed charge animation.
 
-Asset activation visual result: passed. Asset activation desktop verification: pending.
+Asset activation visual result: passed. Asset activation desktop verification: passed. Cortana and Zima retain their authored materials through repeated activation, appearance changes and navigation. The canonical shortcut was cold-launched; both themes passed hold completion/cancellation, selected-model persistence, Gallery preview-only behavior, all eight navigation destinations, and native window-control checks. The final normal Home launch and resource cleanup passed. Hashes, matching rollback pair, and evidence are recorded in desktop-build-manifest.json.
+
+final result: passed
 
 
 ## Hologram color regression during activation - 2026-10-23
