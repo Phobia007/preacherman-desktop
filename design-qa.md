@@ -688,6 +688,6 @@ Fidelity: six existing labels, original typography and 30px row spacing retained
 
 Validation: typecheck and 25 focused regression tests pass, including both appearance states for selected-label placement and shared Settings behavior. Browser checks measure all six bounds inside the requested region, doubled label size and retained origin, selected clarity, remaining-menu blur, model blur, no duplicate title, dismissal/focus restoration and tab/character cleanup. Native verification follows the production build.
 
-Asset Settings focus native delivery: pending.
+Asset Settings focus native delivery: passed. Canonical shortcut cold launch, both themes, six entries, original Settings, all eight core routes, window controls and final normal Home verified. Matching rollback pair and deployed hashes recorded in the canonical manifest.
 
-final result: blocked
+final result: passed
