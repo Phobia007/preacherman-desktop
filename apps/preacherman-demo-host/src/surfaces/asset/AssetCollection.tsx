@@ -9,7 +9,7 @@ import "./asset-collection.css";
 
 type Character = typeof characters[number];
 function ArrowLeft() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 12H4m7-7-7 7 7 7" /></svg>;
+  return <svg viewBox="0 0 40 20" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M37 10H3m6-6-6 6 6 6" /></svg>;
 }
 
 export function AssetCollection({ appearance, renderActive, onDetailChange }: {

@@ -86,3 +86,11 @@ Visual evidence: `preview-light-close.png`, `preview-light-full.png`, `preview-d
 Asset Overview visual result: passed. Desktop deployment verification: passed. The canonical shortcut was cold-launched; all 17 models and 8 navigation destinations passed in both modes, including bottom-edge bounds and text-only tab assertions. Native screenshots, console checks, window-control checks, resource samples, hashes, and backup pair are recorded in desktop-build-manifest.json and the evidence directory.
 
 final result: passed
+
+## Asset return arrow follow-up — 2026-10-23
+
+Reference: user screenshot `D:/Temp/Administrator/codex-clipboard-b80a4907-19e5-479c-925b-61e95cc61f35.png` and explicit request for a single thin elongated arrow aligned with the adjacent navigation text. The circular border/background is removed; the SVG uses a 1px stroke and a 34px shaft. The existing 44 × 48px pointer target remains.
+
+Preview captures at 1920 × 1032 in `D:/preacherman/output/playwright/asset-arrow-20261023/`: `preview-light-overview.png`, `preview-dark-overview.png`, and corresponding `*-header.png` crops. Both appearances were visually checked. The arrow and text vertical centers differ by 0.21px. Border, rounded shape, and background are absent in both modes; hover and focus use semantic colors. Pointer return, keyboard return, focus restoration, and existing portrait/full-body zoom passed. TypeScript and 11 focused theme/Asset regressions passed.
+
+Arrow follow-up visual result: passed. Arrow follow-up desktop verification: pending.

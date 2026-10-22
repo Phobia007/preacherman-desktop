@@ -82,4 +82,6 @@ for (const appearance of ['light', 'dark']) test(`Asset controls use deliberate 
   assert.match(component, /role="tabpanel" aria-labelledby="asset-overview-tab"/);
   assert.match(css, /asset-overview__status\[role="alert"\][^}]*var\(--demo-theme-error\)/);
   assert.match(css, /color: var\(--demo-theme-loading\)/);
+  assert.match(css, /\.asset-details \.asset-details__back\s*\{[^}]*border: 0;[^}]*background: transparent;[^}]*color: var\(--demo-theme-market-text\)/);
+  assert.match(css, /\.asset-details \.asset-details__back:focus-visible\s*\{[^}]*color: var\(--demo-theme-market-focus\)/);
 });

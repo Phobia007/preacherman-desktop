@@ -3,13 +3,14 @@
 .asset-details .asset-details__scroll { inset: 82px 0 0; }
 .asset-details__inner { position: relative; width: 100%; min-height: 100%; }
 .asset-details__list { padding: 0 clamp(88px, 8vw, 150px) 0 clamp(40px, 6vw, 116px); }
-.asset-details__back {
+.asset-details .asset-details__back {
   position: absolute; left: clamp(18px, 2.5vw, 48px); top: 18px; z-index: 4; display: grid; place-items: center;
-  width: 44px; height: 44px; padding: 10px; border: 1px solid var(--demo-theme-border); border-radius: 50%;
-  background: var(--demo-theme-market-control); transition: background-color 180ms, border-color 180ms;
+  width: 44px; height: 48px; padding: 0 0 15px; border: 0; border-radius: 0;
+  background: transparent; color: var(--demo-theme-market-text); transition: color 180ms;
 }
-.asset-details__back svg { width: 24px; height: 24px; }
-.asset-details__back:hover { background: var(--demo-theme-control-hover-bg); border-color: var(--demo-theme-market-focus); }
+.asset-details__back svg { width: 40px; height: 20px; }
+.asset-details .asset-details__back:hover { color: var(--demo-theme-control-hover); }
+.asset-details .asset-details__back:focus-visible { outline: none; color: var(--demo-theme-market-focus); }
 .asset-details__tabs {
   position: absolute; top: 18px; left: clamp(86px, 6vw, 116px); z-index: 3;
   display: flex; gap: clamp(20px, 3vw, 58px); height: 48px; max-width: calc(100% - 116px);
