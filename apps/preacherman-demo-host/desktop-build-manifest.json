@@ -1,84 +1,68 @@
 {
   "schemaVersion": 1,
-  "buildId": "asset-appearance-20261023",
+  "buildId": "asset-settings-menu-20261023",
   "productVersion": "0.1.0",
-  "sourceTask": "Asset Appearance layout, working character sections and persistent model transitions",
+  "sourceTask": "Replace Asset Settings API form with six original Settings entries and deeply blurred model focus",
   "sourceThread": null,
-  "sourceState": "Back arrow raised by 4 logical pixels. Costume renamed Appearance. All five main tabs work with outgoing leftward movement, incoming movement from the model-side edge, and fade-only arrival for pages without a model. Overview, Appearance and Settings retain the same live model and zoom. Skills and Info Map fade it out and suspend rendering. Appearance adds the five requested small categories in a single thin capsule, slanted original-costume/default-idle selection, right-side character name and Apply/Applied hold control. Apply reuses the existing desktop companion toggle and its hover outline, accelerating fill, release rewind and check confirmation. Voice/accessories/background categories truthfully show no available packs. Settings reuses real shared API settings. Skills and Info Map are navigable explicit not-yet-connected states; per-character capability/history backends were not introduced. Authored model materials, normal startup and Gallery preview-only behavior remain intact.",
-  "sourceCommit": "f69c22b25a34f02d7ebd939839ae23eaeb783e4b",
+  "sourceState": "Asset Settings now reuses the original Settings menu with only Execution Mode, Instructions / Rules, Memory, External MCP, Connectors and MCP Servers. The former API provider form and all introductory copy were removed. Menu type, spacing and interaction are shared with original Settings. Selection floats above the same live model with a deep 38px blur and theme-aware frost. Execution Mode reuses the unchanged real API/BYOK and Local CLI configuration. Escape dismisses the focused preference before exiting Asset; backdrop and heading clicks also restore focus. Tab/character changes clear blur and release pending configuration requests. Original Settings, appearance categories, activation, authored textures, Home startup and packaged assets are preserved.",
+  "sourceCommit": "2ea61f456f205eed494f7bc9c678d5ee44ab53ae",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-23T04:52:24.6668804+08:00",
-  "deployedAt": "2026-10-23T04:52:45.0668108+08:00",
-  "verifiedAt": "2026-10-23T04:56:44.816656+08:00",
-  "sizeBytes": 820798464,
-  "sha256": "F3375C141A1AED00E6FDE2F274CDDD1E82BEF338890F22C4DA2CD5AE1F2252E7",
+  "builtAt": "2026-10-23T05:16:20.2118223+08:00",
+  "deployedAt": "2026-10-23T05:16:57.5529224+08:00",
+  "verifiedAt": "2026-10-23T05:22:06.679673+08:00",
+  "sizeBytes": 820794368,
+  "sha256": "67D997F69D35E4C3ADEFEDCCC90E4D7FE6A73254F75683F2719B3EC826955C6F",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
   "sidecarSizeBytes": 93183488,
   "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-appearance-before-20261023\\preacherman-demo-host.exe",
-  "backupSha256": "178CAA562B6167D7B17E61EFF2B9B2ED380F5AA35E941E1FFA15E8DFC4CE3172",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-appearance-before-20261023\\preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-settings-menu-before-20261023\\preacherman-demo-host.exe",
+  "backupSha256": "F3375C141A1AED00E6FDE2F274CDDD1E82BEF338890F22C4DA2CD5AE1F2252E7",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-settings-menu-before-20261023\\preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "0e0acc53acfc689aa4a10510e915eb44d6bd2b59",
-  "previousVerificationCommit": "0e0acc53acfc689aa4a10510e915eb44d6bd2b59",
+  "rollbackBaselineCommit": "f69c22b25a34f02d7ebd939839ae23eaeb783e4b",
+  "previousVerificationCommit": "f69c22b25a34f02d7ebd939839ae23eaeb783e4b",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 61,
+      "focusedTests": 58,
       "focusedFailures": 0,
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical desktop shortcut, both appearances, all five main tabs and five subcategories. Same-canvas preservation, model fading and render suspension, retained zoom, leftward exit/rightward entry, latest-request switching, input keyboard isolation, Apply check/rewind/cancellation and persistent companion selection. Cortana remained correct after repeated apply/remove and model-hidden transitions. Core Home, Task, Gallery, Asset, Market/Ledger, Extension, Settings and Account verified. Original preferences restored. Window controls exercised; final normal shortcut launch checked without preview/debug services.",
+    "nativeFlow": "Cold launch from canonical shortcut in both appearances. All six original menu entries, identical typography, real Execution Mode API/BYOK and Local CLI, deep model blur, retained canvas, focus restoration, Escape priority, heading/backdrop dismissal, tab/character cleanup and unchanged desktop selection verified. Original Settings and eight core destinations passed. Final normal Home launch, window controls, hashes and resource cleanup passed.",
     "modes": [
       {
         "appearance": "light",
-        "arrow": "matrix(1, 0, 0, 1, 0, -4)",
-        "leaving": {
-          "x": -23.2462,
-          "opacity": 0.741709
-        },
-        "entering": 380,
-        "fade": 0.352205,
+        "exactSixItems": true,
+        "originalTypography": true,
+        "allEntries": true,
+        "realExecutionMode": true,
+        "apiAndLocalCli": true,
+        "modelBlur": 38,
         "canvasRetained": true,
-        "allTabs": true,
-        "subcategories": true,
-        "rewind": {
-          "charged": 0.19485148579811276,
-          "rewind": 0.09370264265704625
-        },
-        "applyCheck": true,
-        "appliedDesktop": true,
-        "categoryCancelsHold": true,
-        "keyboard": true,
-        "rapidSwitching": true,
-        "modelPausedWhenHidden": true
+        "escapeClosesPreferenceFirst": true,
+        "focusRestored": true,
+        "backdropAndHeadingClose": true,
+        "characterAndTabCleanup": true,
+        "desktopSelectionUnchanged": true
       },
       {
         "appearance": "dark",
-        "arrow": "matrix(1, 0, 0, 1, 0, -4)",
-        "leaving": {
-          "x": -18.1533,
-          "opacity": 0.798297
-        },
-        "entering": 380,
-        "fade": 0.352006,
+        "exactSixItems": true,
+        "originalTypography": true,
+        "allEntries": true,
+        "realExecutionMode": true,
+        "apiAndLocalCli": true,
+        "modelBlur": 38,
         "canvasRetained": true,
-        "allTabs": true,
-        "subcategories": true,
-        "rewind": {
-          "charged": 0.19490926736553554,
-          "rewind": 0.09362727102679268
-        },
-        "applyCheck": true,
-        "appliedDesktop": true,
-        "categoryCancelsHold": true,
-        "keyboard": true,
-        "rapidSwitching": true,
-        "modelPausedWhenHidden": true
+        "escapeClosesPreferenceFirst": true,
+        "focusRestored": true,
+        "backdropAndHeadingClose": true,
+        "characterAndTabCleanup": true,
+        "desktopSelectionUnchanged": true
       }
     ],
     "routes": [
@@ -90,8 +74,7 @@
       {
         "appearance": "light",
         "name": "Home",
-        "ready": true,
-        "applied": "jubilee-midnight-mutant"
+        "ready": true
       },
       {
         "appearance": "light",
@@ -133,8 +116,7 @@
       {
         "appearance": "dark",
         "name": "Home",
-        "ready": true,
-        "applied": "jubilee-midnight-mutant"
+        "ready": true
       },
       {
         "appearance": "dark",
@@ -175,30 +157,30 @@
     ],
     "newConsoleErrors": [],
     "resources": {
-      "SampledAt": "2026-10-23T04:56:20.5257661+08:00",
-      "NativePid": 23632,
-      "StartedAt": "2026-10-23T04:56:04.6533370+08:00",
-      "WindowHandle": 2164458,
+      "SampledAt": "2026-10-23T05:20:07.0205310+08:00",
+      "NativePid": 27256,
+      "StartedAt": "2026-10-23T05:19:49.2700295+08:00",
+      "WindowHandle": 3738168,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        23632,
-        12016,
-        30064,
-        30348,
-        25292,
-        7340,
-        18328,
-        27988,
-        3684,
-        15036,
-        14580
+        27256,
+        29596,
+        26916,
+        27700,
+        16104,
+        11704,
+        10416,
+        10696,
+        13756,
+        26448,
+        22004
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2064.3,
-      "GpuDedicatedBytes": 3501940736,
-      "MaxGpuEngineUtilization": 24,
-      "FreeRamKiB": 20117180,
+      "WorkingSetMiB": 2056.1,
+      "GpuDedicatedBytes": 3430576128,
+      "MaxGpuEngineUtilization": 6,
+      "FreeRamKiB": 19424524,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -213,18 +195,16 @@
       "closeRequested": true,
       "passed": true
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\asset-appearance-20261023",
+    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\asset-settings-menu-20261023",
     "baselineReports": [
-      "output/playwright/asset-activation-20261023/native-report.json",
+      "output/playwright/asset-appearance-20261023/native-report.json",
       "output/tifa-import-20261015/native-report.json"
     ],
     "baselineDiagnosticNote": "All native diagnostics match the previously verified reports exactly; no new console or runtime errors.",
     "nativeCaptureMethod": "Full-frame Page.captureScreenshot without clipping or viewport reset on the owned foreground native window, preserving active hold input.",
     "scopeLimits": [
-      "One shipped original costume and default idle per current character.",
-      "No added voice, accessory or background packs.",
-      "API connections remain shared.",
-      "Skills and Info Map configuration/history remain explicitly unavailable."
+      "Reuses current original Settings behavior: Execution Mode has a connected configuration view; the other five entries retain the original focused-title interaction.",
+      "Configuration scope remains shared, matching original Settings."
     ]
   },
   "releaseAttempts": [
@@ -1449,9 +1429,16 @@
       "status": "verified",
       "sha256": "F3375C141A1AED00E6FDE2F274CDDD1E82BEF338890F22C4DA2CD5AE1F2252E7",
       "verifiedAt": "2026-10-23T04:56:44.816656+08:00"
+    },
+    {
+      "buildId": "asset-settings-menu-20261023",
+      "sourceCommit": "2ea61f456f205eed494f7bc9c678d5ee44ab53ae",
+      "status": "verified",
+      "sha256": "67D997F69D35E4C3ADEFEDCCC90E4D7FE6A73254F75683F2719B3EC826955C6F",
+      "verifiedAt": "2026-10-23T05:22:06.679673+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-appearance-before-20261023\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-settings-menu-before-20261023\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1468,7 +1455,7 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\asset-appearance-20261023"
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\asset-settings-menu-20261023"
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",

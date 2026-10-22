@@ -672,6 +672,6 @@ Fidelity: exact six labels and ordering; original 32px/300 Clash Display typogra
 
 Interaction: six entries, focus restoration, Escape priority, backdrop/title dismissal, same-canvas retention, tab and character cleanup, keyboard isolation, unchanged equipped companion, original Settings and compact/reduced-motion checks. Typecheck and 58 focused tests pass. Browser harness refreshes its canvas reference when deliberately opening a different character; completed two-theme results retained, responsive/reduced-motion scope rerun.
 
-Asset Settings menu native delivery: pending.
+Asset Settings menu native delivery: passed. Canonical shortcut cold launch, both themes, six entries, original Settings, all eight core routes, window controls and final normal Home verified. Matching rollback pair and deployed hashes recorded in the canonical manifest.
 
-final result: blocked
+final result: passed
