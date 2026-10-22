@@ -656,6 +656,6 @@ final result: passed
 - Browser screenshots came from the actual existing application. Both themes passed all five main tabs, all five Appearance categories, leftward departure/rightward arrival, model fade and render suspension, retained canvas identity, rapid target changes, form/subtab keyboard isolation, short-click rejection, partial-hold rewind, category-change cancellation, check-before-Applied, persistent desktop selection and unchanged Gallery preview-only behavior.
 - Reduced-motion section changes complete without waiting on animation events. Timers and held-button resources clean up on replacement/unmount.
 - Host TypeScript and 50 focused host tests passed. Eleven renderer material/resource regression tests passed. Preview: no page exceptions; only the already-recorded third-party hydration diagnostic.
-- Asset Appearance native delivery: pending. Production must be rebuilt, cold-launched through the canonical shortcut, verified in both themes and across core navigation, and recorded in the desktop manifest before handoff.
+- Asset Appearance native delivery: passed. The new self-contained executable was deployed with a verified matching rollback pair, cold-launched through the canonical shortcut and tested in both themes across all eight navigation destinations. Native captures and reports are in the evidence directory. Window controls, restored original preferences, final normal Home launch, hashes/timestamps and process cleanup passed. The desktop manifest records the deployed pair and source commit.
 
-final result: blocked
+final result: passed
