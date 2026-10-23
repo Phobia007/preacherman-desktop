@@ -715,3 +715,8 @@ final result: passed
 Asset Skills and Info Map native delivery: passed. Canonical shortcut cold launch, both themes, current character imagery, all local assets, selection interaction, original Settings, all eight core routes, window controls and final normal Home verified. Matching rollback pair and deployed hashes recorded in the canonical manifest.
 
 final result: passed
+
+
+## Character voice conversation — 2026-10-23
+
+Delivered through the canonical desktop shortcut with a rebuilt matching sidecar. The existing waveform is the only conversation control. Native microphone access, synthetic spoken input → real character reply → non-silent audio playback, continuous listening and stop were verified in both appearances without visible dialogue text. Sixteen core route/theme checks and native window controls passed; resources settled and temporary workers exited. Existing layout/source-regex diagnostics are recorded in the manifest. Generic Windows voices and installed Chinese dictation are the first supported voice path; personal accent quality requires a user trial. Info Map remains unchanged.

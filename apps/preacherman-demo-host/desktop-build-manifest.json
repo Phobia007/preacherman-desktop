@@ -1,64 +1,85 @@
 {
   "schemaVersion": 1,
-  "buildId": "asset-skills-info-20261023",
+  "buildId": "character-voice-20261023",
   "productVersion": "0.1.0",
-  "sourceTask": "Build character Skills and Info Map layouts and reorder the main navigation",
+  "sourceTask": "Connect the existing waveform button to real, audio-only character conversation",
   "sourceThread": null,
-  "sourceState": "Skills uses the current character avatar/name and ten local Extension catalog items with selection, alongside an intentionally empty demonstration frame. Info Map reuses all seventeen existing transparent character portraits, displays Rapport at level 1 in English, and reserves an empty content frame. Main navigation is Home, Asset, Market, Extension, Task, Gallery; labels and route identities remain unchanged. Inset composition, wider column gutters, smaller icons, quiet outlines and fully visible row borders refine the existing design language. Existing tab transitions, model textures, activation and Settings interaction are preserved.",
-  "sourceCommit": "5df5997782f28d85eb173080a179f3229751b9a0",
+  "sourceState": "Activated characters have server-owned identities and independently persisted execution selections. The existing waveform button captures a spoken phrase with the selected microphone, uses installed Windows dictation, requests a real Codex or configured API reply, and plays locally synthesized audio through the selected output. No transcript, reply text, subtitles or chat input are rendered. Capture pauses during reply processing/playback, then resumes. Stop, character changes and execution changes cancel pending work. Info Map and existing model assets remain unchanged.",
+  "sourceCommit": "cc43ad4d1b4d1cff3c58f1d6ce7e6bf52e65e8e1",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-23T06:04:46.6658108+08:00",
-  "deployedAt": "2026-10-23T06:05:08.7348450+08:00",
-  "verifiedAt": "2026-10-23T06:09:28.133879+08:00",
-  "sizeBytes": 820795392,
-  "sha256": "A1FE48BEFC534DA0BD26A24EAEC1CEA4778BFAE2CFC23B9D821CC0D061FCA438",
+  "builtAt": "2026-10-23T15:28:03.6753104+08:00",
+  "deployedAt": "2026-10-23T15:28:52.9220387+08:00",
+  "verifiedAt": "2026-10-23T15:38:13.763013+08:00",
+  "sizeBytes": 820797952,
+  "sha256": "C3563359498B4481B150ADD8AB957BA09D06C8DE89AFBBFC786657B867BB0AF5",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-09-06T14:26:08.9928691+08:00",
-  "sidecarSizeBytes": 93183488,
-  "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-skills-info-before-20261023\\preacherman-demo-host.exe",
-  "backupSha256": "9062188F9593E577E6F4C8275BF4ECA955250A622404108D29F2AFC18241E2FD",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-skills-info-before-20261023\\preacherman-service.exe",
+  "sidecarBuiltAt": "2026-10-23T15:25:39.444975+08:00",
+  "sidecarSizeBytes": 93199360,
+  "sidecarSha256": "62D8C6D23298B201A2F139C592E8535509539A33513A848D293C39F6B6642793",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-voice-before-20261023\\preacherman-demo-host.exe",
+  "backupSha256": "A1FE48BEFC534DA0BD26A24EAEC1CEA4778BFAE2CFC23B9D821CC0D061FCA438",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-voice-before-20261023\\preacherman-service.exe",
   "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "d39960ed71ba995a469a90b521f6788c8d0fc815",
-  "previousVerificationCommit": "d39960ed71ba995a469a90b521f6788c8d0fc815",
+  "rollbackBaselineCommit": "5df5997782f28d85eb173080a179f3229751b9a0",
+  "previousVerificationCommit": "5df5997782f28d85eb173080a179f3229751b9a0",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 23,
+      "focusedTests": 33,
       "focusedFailures": 0,
-      "gitDiffCheck": "passed"
+      "gitDiffCheck": "passed",
+      "excludedPreExistingAssertions": [
+        "execution-connections: old Task composer focus selector",
+        "voice-avatar-closed-loop: old App scene shape",
+        "voice-avatar-closed-loop: old thinking animation selector"
+      ]
     },
-    "nativeFlow": "Cold canonical-shortcut Home launch, Skills selections with mouse/keyboard, current character identity, all 17 portrait and 10 logo assets decoded, empty demonstration and Info Map frames, rapport level, four displayed character portraits, retained model canvas and Settings regression verified in light and dark. New main menu order and eight core destinations passed. Window controls and final normal shortcut launch verified with resource cleanup.",
+    "nativeFlow": "Canonical shortcut cold Home launch; eight core destinations in both appearances; selected hardware microphone open/stop; deterministic spoken input through the production worklet, Windows recognition, real model and non-silent playback; automatic listening restart; stop during startup; no visible dialogue text; per-character Execution Mode panel; native window controls; final normal shortcut restart and resource checks.",
     "modes": [
       {
         "appearance": "light",
-        "skillsCount": 10,
-        "selectionAndKeyboard": true,
-        "emptyDemonstration": true,
-        "transparentPortraits": true,
-        "rapportLevel": 1,
-        "emptyInfoMap": true,
-        "allLocalAssetsDecoded": true,
-        "canvasRetained": true,
-        "settingsRegression": true,
-        "navigationOrder": true
+        "voiceOnly": true,
+        "resumedListening": true,
+        "stages": [
+          "idle",
+          "idle",
+          "idle",
+          "listening",
+          "thinking",
+          "speaking",
+          "idle",
+          "idle",
+          "listening",
+          "idle"
+        ],
+        "jawMax": 0.9663484509563732,
+        "characterId": "halo-mk-v-model",
+        "provider": "codex-cli",
+        "nonSilentReplyVerified": true
       },
       {
         "appearance": "dark",
-        "skillsCount": 10,
-        "selectionAndKeyboard": true,
-        "emptyDemonstration": true,
-        "transparentPortraits": true,
-        "rapportLevel": 1,
-        "emptyInfoMap": true,
-        "allLocalAssetsDecoded": true,
-        "canvasRetained": true,
-        "settingsRegression": true,
-        "navigationOrder": true
+        "voiceOnly": true,
+        "resumedListening": true,
+        "stages": [
+          "idle",
+          "idle",
+          "idle",
+          "listening",
+          "thinking",
+          "speaking",
+          "idle",
+          "idle",
+          "listening",
+          "idle"
+        ],
+        "jawMax": 1,
+        "characterId": "halo-mk-v-model",
+        "provider": "codex-cli",
+        "nonSilentReplyVerified": true
       }
     ],
     "routes": [
@@ -153,30 +174,30 @@
     ],
     "newConsoleErrors": [],
     "resources": {
-      "SampledAt": "2026-10-23T06:08:00.5055931+08:00",
-      "NativePid": 33784,
-      "StartedAt": "2026-10-23T06:07:38.2417155+08:00",
-      "WindowHandle": 2362456,
+      "SampledAt": "2026-10-23T15:37:02.7826682+08:00",
+      "NativePid": 1328,
+      "StartedAt": "2026-10-23T15:36:46.9385001+08:00",
+      "WindowHandle": 329262,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        33784,
-        31324,
-        9676,
-        34788,
-        34392,
-        29992,
-        30456,
-        34708,
-        34800,
-        32620,
-        32036
+        1328,
+        13588,
+        27120,
+        19848,
+        5436,
+        26652,
+        27112,
+        9960,
+        27164,
+        13024,
+        27040
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2077.4,
-      "GpuDedicatedBytes": 3455033344,
-      "MaxGpuEngineUtilization": 20,
-      "FreeRamKiB": 19486956,
+      "WorkingSetMiB": 2095.1,
+      "GpuDedicatedBytes": 3497230336,
+      "MaxGpuEngineUtilization": 6,
+      "FreeRamKiB": 18775440,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -191,17 +212,18 @@
       "closeRequested": true,
       "passed": true
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\asset-skills-info-20261023",
+    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\character-voice-20261023",
     "baselineReports": [
       "output/playwright/asset-settings-focus-20261023/native-report.json",
       "output/tifa-import-20261015/native-report.json"
     ],
-    "baselineDiagnosticNote": "All native diagnostics match the previously verified reports exactly; no new console or runtime errors.",
-    "nativeCaptureMethod": "Full-frame Page.captureScreenshot without clipping or viewport reset on the owned foreground native window, plus final Win32 PrintWindow capture.",
+    "baselineDiagnosticNote": "No new console errors. Three existing source-regex assertions fail on the unchanged baseline layout; they are explicitly excluded from the passing focused run.",
     "scopeLimits": [
-      "Demonstration video and Info Map contents are intentionally empty, as requested.",
-      "Skills selection previews a catalog item; it does not install extensions or claim a live connection. Rapport level 1 is the requested initial display, without a progression backend."
-    ]
+      "Windows built-in Chinese dictation and generic installed Chinese/English voices; personal microphone/accent accuracy still needs the user trial.",
+      "Voice dialogue context is bounded in-process memory and is not displayed in Info Map.",
+      "No skill execution, approvals or external actions are enabled by conversation."
+    ],
+    "finalShortcutCapture": "output/playwright/character-voice-20261023/native-final-shortcut.png"
   },
   "releaseAttempts": [
     {
@@ -1446,9 +1468,17 @@
       "status": "verified",
       "sha256": "A1FE48BEFC534DA0BD26A24EAEC1CEA4778BFAE2CFC23B9D821CC0D061FCA438",
       "verifiedAt": "2026-10-23T06:09:28.133879+08:00"
+    },
+    {
+      "buildId": "character-voice-20261023",
+      "sourceCommit": "cc43ad4d1b4d1cff3c58f1d6ce7e6bf52e65e8e1",
+      "status": "verified",
+      "sha256": "C3563359498B4481B150ADD8AB957BA09D06C8DE89AFBBFC786657B867BB0AF5",
+      "sidecarSha256": "62D8C6D23298B201A2F139C592E8535509539A33513A848D293C39F6B6642793",
+      "verifiedAt": "2026-10-23T15:38:13.763013+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-skills-info-before-20261023\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-voice-before-20261023\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1465,7 +1495,8 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\asset-skills-info-20261023"
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\character-voice-20261023",
+    "backupPruningNote": "Passed after making the UTF-8 manifest ASCII-safe for Windows PowerShell. Three verified backup sets retained; one older set removed (0.85 GiB)."
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
