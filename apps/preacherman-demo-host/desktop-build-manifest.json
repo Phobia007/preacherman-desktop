@@ -1,34 +1,34 @@
 {
   "schemaVersion": 1,
-  "buildId": "character-voice-20261023",
+  "buildId": "voice-recognition-20261023",
   "productVersion": "0.1.0",
-  "sourceTask": "Connect the existing waveform button to real, audio-only character conversation",
+  "sourceTask": "Fix repeated recognition rejection with the installed offline Whisper model",
   "sourceThread": null,
-  "sourceState": "Activated characters have server-owned identities and independently persisted execution selections. The existing waveform button captures a spoken phrase with the selected microphone, uses installed Windows dictation, requests a real Codex or configured API reply, and plays locally synthesized audio through the selected output. No transcript, reply text, subtitles or chat input are rendered. Capture pauses during reply processing/playback, then resumes. Stop, character changes and execution changes cancel pending work. Info Map and existing model assets remain unchanged.",
-  "sourceCommit": "cc43ad4d1b4d1cff3c58f1d6ce7e6bf52e65e8e1",
+  "sourceState": "Activated characters have server-owned identities and independently persisted execution selections. The existing waveform button captures a spoken phrase with the selected microphone, uses the installed offline Whisper base model, requests a real Codex or configured API reply, and plays locally synthesized audio through the selected output. No transcript, reply text, subtitles or chat input are rendered. Capture pauses during reply processing/playback, then resumes. Stop, character changes and execution changes cancel pending work. Info Map and existing model assets remain unchanged.",
+  "sourceCommit": "ab0e64069b7400dbbe8f70c34b6b3427d2dcfa70",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-23T15:28:03.6753104+08:00",
-  "deployedAt": "2026-10-23T15:28:52.9220387+08:00",
-  "verifiedAt": "2026-10-23T15:38:13.763013+08:00",
-  "sizeBytes": 820797952,
-  "sha256": "C3563359498B4481B150ADD8AB957BA09D06C8DE89AFBBFC786657B867BB0AF5",
+  "builtAt": "2026-10-23T16:59:44.8115376+08:00",
+  "deployedAt": "2026-10-23T17:00:46.8719292+08:00",
+  "verifiedAt": "2026-10-23T17:10:02.633015+08:00",
+  "sizeBytes": 820798464,
+  "sha256": "7D5556CBB17D501776F5DCDBCFEF59D6ACE33ED67078DBB6834E2652E96A9F54",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-10-23T15:25:39.444975+08:00",
-  "sidecarSizeBytes": 93199360,
-  "sidecarSha256": "62D8C6D23298B201A2F139C592E8535509539A33513A848D293C39F6B6642793",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-voice-before-20261023\\preacherman-demo-host.exe",
-  "backupSha256": "A1FE48BEFC534DA0BD26A24EAEC1CEA4778BFAE2CFC23B9D821CC0D061FCA438",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-voice-before-20261023\\preacherman-service.exe",
-  "sidecarBackupSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-  "rollbackBaselineCommit": "5df5997782f28d85eb173080a179f3229751b9a0",
-  "previousVerificationCommit": "5df5997782f28d85eb173080a179f3229751b9a0",
+  "sidecarBuiltAt": "2026-10-23T16:58:01.326909+08:00",
+  "sidecarSizeBytes": 93205504,
+  "sidecarSha256": "59DD876E1C156AFE90CEC9D02217728690CE34E5BA8EDB403D93C23B536A76F6",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-recognition-before-20261023\\preacherman-demo-host.exe",
+  "backupSha256": "C3563359498B4481B150ADD8AB957BA09D06C8DE89AFBBFC786657B867BB0AF5",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-recognition-before-20261023\\preacherman-service.exe",
+  "sidecarBackupSha256": "62D8C6D23298B201A2F139C592E8535509539A33513A848D293C39F6B6642793",
+  "rollbackBaselineCommit": "cc43ad4d1b4d1cff3c58f1d6ce7e6bf52e65e8e1",
+  "previousVerificationCommit": "cc43ad4d1b4d1cff3c58f1d6ce7e6bf52e65e8e1",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 33,
+      "focusedTests": 35,
       "focusedFailures": 0,
       "gitDiffCheck": "passed",
       "excludedPreExistingAssertions": [
@@ -37,7 +37,7 @@
         "voice-avatar-closed-loop: old thinking animation selector"
       ]
     },
-    "nativeFlow": "Canonical shortcut cold Home launch; eight core destinations in both appearances; selected hardware microphone open/stop; deterministic spoken input through the production worklet, Windows recognition, real model and non-silent playback; automatic listening restart; stop during startup; no visible dialogue text; per-character Execution Mode panel; native window controls; final normal shortcut restart and resource checks.",
+    "nativeFlow": "Canonical shortcut cold Home launch; eight core destinations in both appearances; selected hardware microphone open/stop; deterministic spoken input through the production worklet, offline Whisper recognition, real model and non-silent playback; automatic listening restart; stop during startup; no visible dialogue text; per-character Execution Mode panel; native window controls; final normal shortcut restart and resource checks.",
     "modes": [
       {
         "appearance": "light",
@@ -55,10 +55,7 @@
           "listening",
           "idle"
         ],
-        "jawMax": 0.9663484509563732,
-        "characterId": "halo-mk-v-model",
-        "provider": "codex-cli",
-        "nonSilentReplyVerified": true
+        "jawMax": 0.6561368181644371
       },
       {
         "appearance": "dark",
@@ -76,10 +73,7 @@
           "listening",
           "idle"
         ],
-        "jawMax": 1,
-        "characterId": "halo-mk-v-model",
-        "provider": "codex-cli",
-        "nonSilentReplyVerified": true
+        "jawMax": 0.8255871254823801
       }
     ],
     "routes": [
@@ -174,30 +168,30 @@
     ],
     "newConsoleErrors": [],
     "resources": {
-      "SampledAt": "2026-10-23T15:37:02.7826682+08:00",
-      "NativePid": 1328,
-      "StartedAt": "2026-10-23T15:36:46.9385001+08:00",
-      "WindowHandle": 329262,
+      "SampledAt": "2026-10-23T17:09:18.3454472+08:00",
+      "NativePid": 20880,
+      "StartedAt": "2026-10-23T17:09:01.8423236+08:00",
+      "WindowHandle": 657004,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        1328,
-        13588,
-        27120,
-        19848,
-        5436,
-        26652,
-        27112,
-        9960,
-        27164,
-        13024,
-        27040
+        20880,
+        28260,
+        13544,
+        23236,
+        24628,
+        11420,
+        4568,
+        28128,
+        23088,
+        4104,
+        18632
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2095.1,
-      "GpuDedicatedBytes": 3497230336,
+      "WorkingSetMiB": 2086.8,
+      "GpuDedicatedBytes": 3469676544,
       "MaxGpuEngineUtilization": 6,
-      "FreeRamKiB": 18775440,
+      "FreeRamKiB": 18627672,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -212,18 +206,113 @@
       "closeRequested": true,
       "passed": true
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\character-voice-20261023",
+    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\voice-recognition-20261023",
     "baselineReports": [
       "output/playwright/asset-settings-focus-20261023/native-report.json",
       "output/tifa-import-20261015/native-report.json"
     ],
     "baselineDiagnosticNote": "No new console errors. Three existing source-regex assertions fail on the unchanged baseline layout; they are explicitly excluded from the passing focused run.",
     "scopeLimits": [
-      "Windows built-in Chinese dictation and generic installed Chinese/English voices; personal microphone/accent accuracy still needs the user trial.",
+      "Local Python, Whisper and its cached base model are required and already installed on this desktop. Windows still supplies the generic synthesis voice. Recognition accuracy varies with audio and accent.",
       "Voice dialogue context is bounded in-process memory and is not displayed in Info Map.",
       "No skill execution, approvals or external actions are enabled by conversation."
     ],
-    "finalShortcutCapture": "output/playwright/character-voice-20261023/native-final-shortcut.png"
+    "microphoneComparison": {
+      "legacy": {
+        "status": 200,
+        "confidence": 0.00485184463,
+        "characters": 2
+      },
+      "whisper": {
+        "accepted": true,
+        "confidence": 0.5412,
+        "characters": 8,
+        "audio": {
+          "durationMs": 2240,
+          "rms": 0.013737,
+          "peak": 0.108241
+        },
+        "expectedPhrase": false
+      }
+    },
+    "recognitionApi": {
+      "status": {
+        "engine": "whisper",
+        "model": "base",
+        "language": "zh-CN",
+        "languages": [
+          "zh-CN",
+          "en-US"
+        ],
+        "voices": [
+          "zh-CN",
+          "en-US"
+        ]
+      },
+      "samples": [
+        {
+          "kind": "normal",
+          "accepted": true,
+          "confidence": 0.727,
+          "audio": {
+            "durationMs": 3543,
+            "rms": 0.059024,
+            "peak": 0.767734
+          },
+          "elapsedMs": 3608
+        },
+        {
+          "kind": "quiet",
+          "accepted": true,
+          "confidence": 0.7283,
+          "audio": {
+            "durationMs": 3543,
+            "rms": 0.005902,
+            "peak": 0.076777
+          },
+          "elapsedMs": 3616
+        },
+        {
+          "kind": "silence",
+          "accepted": false,
+          "confidence": 0,
+          "audio": {
+            "durationMs": 3543,
+            "rms": 0,
+            "peak": 0
+          },
+          "elapsedMs": 2425
+        }
+      ],
+      "realReply": {
+        "characters": 21,
+        "audioBytes": 271604
+      },
+      "passed": true
+    },
+    "liveMicrophone": {
+      "recognition": {
+        "status": 200,
+        "engine": "whisper",
+        "accepted": true,
+        "characters": 10,
+        "confidence": 0.6247,
+        "audio": {
+          "durationMs": 3424,
+          "rms": 0.050578,
+          "peak": 0.684372
+        }
+      },
+      "reply": {
+        "status": 200,
+        "characters": 19
+      },
+      "playback": true,
+      "noVisibleDialogue": true,
+      "resumedListening": true,
+      "passed": true,
+      "userConfirmedNormalReply": true
+    }
   },
   "releaseAttempts": [
     {
@@ -1476,9 +1565,17 @@
       "sha256": "C3563359498B4481B150ADD8AB957BA09D06C8DE89AFBBFC786657B867BB0AF5",
       "sidecarSha256": "62D8C6D23298B201A2F139C592E8535509539A33513A848D293C39F6B6642793",
       "verifiedAt": "2026-10-23T15:38:13.763013+08:00"
+    },
+    {
+      "buildId": "voice-recognition-20261023",
+      "sourceCommit": "ab0e64069b7400dbbe8f70c34b6b3427d2dcfa70",
+      "status": "verified",
+      "sha256": "7D5556CBB17D501776F5DCDBCFEF59D6ACE33ED67078DBB6834E2652E96A9F54",
+      "sidecarSha256": "59DD876E1C156AFE90CEC9D02217728690CE34E5BA8EDB403D93C23B536A76F6",
+      "verifiedAt": "2026-10-23T17:10:02.633015+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-voice-before-20261023\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-recognition-before-20261023\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1495,8 +1592,13 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\character-voice-20261023",
-    "backupPruningNote": "Passed after making the UTF-8 manifest ASCII-safe for Windows PowerShell. Three verified backup sets retained; one older set removed (0.85 GiB)."
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\voice-recognition-20261023",
+    "backupRetention": {
+      "status": "passed",
+      "retainedSets": 3,
+      "removedSets": 1,
+      "freedGiB": 0.85
+    }
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
