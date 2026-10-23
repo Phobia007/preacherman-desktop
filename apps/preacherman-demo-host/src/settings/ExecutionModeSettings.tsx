@@ -24,7 +24,8 @@ const toDraft = (connection: Connection): Draft => ({ ...connection, apiKey: "",
 
 // Existing-world extension: Clash Display, transparent rounded controls and the
 // protected focus stage. No competing panel chrome or replacement visual world.
-export function ExecutionModeSettings() {
+export function ExecutionModeSettings({ characterId }: { characterId?: string }) {
+  const settingsPath = characterId ? `/api/characters/${encodeURIComponent(characterId)}/execution` : "/api/settings/execution";
   const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
   const [mode, setMode] = useState<Mode>("api");
   const [draft, setDraft] = useState<Draft>(blank);
@@ -53,7 +54,7 @@ export function ExecutionModeSettings() {
     finally { operating.current = false; if (mounted.current) setBusy(""); }
   };
   const load = (initial = false) => run("load", async () => {
-    const state = await request<Snapshot>("/api/settings/execution");
+    const state = await request<Snapshot>(settingsPath);
     if (!mounted.current) return;
     setSnapshot(state);
     if (initial) {
@@ -82,7 +83,7 @@ export function ExecutionModeSettings() {
     setMode(next); setNotice(""); setError("");
     if (next === "cli" && !scanned) void scan();
   };
-  const post = <T,>(action: string) => request<T>("/api/settings/execution/" + action, { method: "POST", body: JSON.stringify(draft) });
+  const post = <T,>(action: string) => request<T>((action === "save" ? settingsPath : "/api/settings/execution") + "/" + action, { method: "POST", body: JSON.stringify(draft) });
   const complete = Boolean(draft.name.trim() && draft.baseUrl.trim() && draft.model.trim() && (draft.apiKey.trim() || draft.keySaved));
   const selectedAgent = agents.find(agent => agent.id === agentId);
   const canConnect = (agent: Agent) => agent.execution?.supported && agent.installed && agent.auth.state === "ready";
@@ -91,12 +92,12 @@ export function ExecutionModeSettings() {
     setAgentId(agent.id);
     setNotice("");
     void run("local", async () => {
-      const state = await request<Snapshot>("/api/settings/execution/local", { method: "POST", body: JSON.stringify({ agentId: agent.id }) });
-      if (mounted.current) { setSnapshot(state); setNotice(agent.label + " connected. Chat in Task or Gallery — no workspace needed."); window.dispatchEvent(new Event("preacherman-execution-changed")); }
+      const state = await request<Snapshot>(settingsPath + "/local", { method: "POST", body: JSON.stringify({ agentId: agent.id }) });
+      if (mounted.current) { setSnapshot(state); setNotice(agent.label + (characterId ? " connected to this character. Activate the character, then use the voice button." : " connected. New characters can use this connection.")); window.dispatchEvent(new Event("preacherman-execution-changed")); }
     });
   };
   const disconnect = () => void run("local", async () => {
-    const state = await request<Snapshot>("/api/settings/execution/local", { method: "DELETE" });
+    const state = await request<Snapshot>(settingsPath + "/local", { method: "DELETE" });
     if (mounted.current) { setSnapshot(state); setNotice("Agent disconnected. Existing tasks are not cancelled."); window.dispatchEvent(new Event("preacherman-execution-changed")); }
   });
   return <section className="execution-mode" aria-label="Execution Mode configuration" aria-busy={Boolean(busy)} lang="en">
@@ -111,7 +112,7 @@ export function ExecutionModeSettings() {
       event.preventDefault();
       void run("save", async () => {
         await post("save");
-        const state = await request<Snapshot>("/api/settings/execution");
+        const state = await request<Snapshot>(settingsPath);
         if (!mounted.current) return;
         setSnapshot(state);
         const saved = state.connections.find(item => item.id === state.active?.connectionId);
@@ -159,7 +160,7 @@ export function ExecutionModeSettings() {
     </form> : null}
     {mode === "cli" ? <div id="execution-panel-cli" role="tabpanel" aria-labelledby="execution-tab-cli">
       <div className="execution-mode__row"><h3>Local agents</h3><button type="button" disabled={Boolean(busy)} onClick={() => void scan()}>{busy === "scan" ? "Scanning…" : "Rescan"}</button></div>
-      <p className="execution-mode__hint">Connect your signed-in Codex to chat and plan in Task or Gallery. No project folder or execution approval required.</p>
+      <p className="execution-mode__hint">{characterId ? "Connect your signed-in Codex to this character. Use the voice button to speak and hear replies." : "Connect your signed-in Codex to chat and plan. New characters start with this connection."} No project folder or execution approval required.</p>
       {scanned && !agents.length ? <p role="status">No local Agents detected. Install a supported CLI, then rescan.</p> : null}
       <div className="execution-mode__agent-list">
         {agents.filter(agent => agent.id !== "preacherman-native").map(agent => {

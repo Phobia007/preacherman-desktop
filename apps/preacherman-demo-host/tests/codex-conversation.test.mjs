@@ -48,6 +48,14 @@ async function fixture(t, behavior = "reply") {
   return {runtime,calls,children,get launch(){return launch;}};
 }
 const messages=[{role:"user",content:"Remember ORBIT"},{role:"assistant",content:"Okay"},{role:"user",content:"Which word?"}];
+test("server-owned character identity reaches the model without enabling tools", async t => {
+  const f = await fixture(t);
+  await f.runtime.chat({ messages, personaInstructions: "You are Cortana. Speak naturally." });
+  const start = f.calls.find(call => call.method === "thread/start").params;
+  assert.match(start.developerInstructions, /You are Cortana/);
+  assert.match(start.developerInstructions, /Do not execute commands/);
+  assert.equal(start.config["features.shell_tool"], false);
+});
 test("Codex uses ephemeral full-context conversation, isolated cwd and CLI-managed auth",async t=>{
   const f=await fixture(t);
   assert.equal((await f.runtime.chat({messages})).text,"记得 ORBIT");

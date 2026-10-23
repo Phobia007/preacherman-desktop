@@ -11,6 +11,7 @@ import { brandNavigationItems } from "./navigationDestinations";
 import { DrawerSocial, type DrawerView } from "./DrawerSocial";
 
 interface AppShellProps {
+  readonly activeCharacterId?: string | null;
   readonly activeSurfaceType: string;
   readonly navigationPhase?: "idle" | "exiting" | "returning";
   readonly navigationTarget?: string;
@@ -26,6 +27,7 @@ interface AppShellProps {
 }
 
 export function AppShell({
+  activeCharacterId = null,
   activeSurfaceType,
   navigationPhase = "idle",
   navigationTarget = activeSurfaceType,
@@ -234,7 +236,7 @@ export function AppShell({
         onClick={() => { selectBrandDestination("account"); setBrandNavigationOpen(false); }}>
         <AccountBadge user={auth.user} member={member} />
       </button>
-      <AudioDock />
+      <AudioDock characterId={activeCharacterId} />
       <WindowResizeHandles dispatch={dispatch} />
     </div>
     </div>

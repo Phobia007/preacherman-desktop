@@ -48,6 +48,10 @@
 .demo-app-shell:not([data-active-surface="account"]) .demo-audio-dock__options svg { filter: drop-shadow(0 0 1px var(--demo-theme-home-canvas)); }
 .demo-audio-dock[data-state="listening"] .demo-audio-dock__listen { color: var(--audio-active); }
 .demo-audio-dock[data-state="requesting"] .demo-audio-dock__listen { color: var(--audio-loading); }
+.demo-audio-dock[data-state="speaking"] .demo-audio-dock__listen { color: var(--audio-active); }
+.demo-audio-dock[data-state="thinking"] .demo-audio-dock__listen { color: var(--audio-loading); }
+.demo-audio-dock:is([data-state="thinking"], [data-state="requesting"]) .demo-audio-dock__wave { animation: demo-voice-breathe 1.7s ease-in-out infinite; }
+@keyframes demo-voice-breathe { 50% { opacity: 0.4; transform: scaleY(0.75); } }
 .demo-audio-dock[data-state="error"] .demo-audio-dock__listen { color: var(--audio-error); }
 .demo-audio-dock__panel {
   position: absolute;
@@ -98,5 +102,6 @@
 .demo-audio-dock__panel :disabled { color: var(--demo-theme-muted); cursor: wait; }
 .demo-audio-dock__error { margin: 6px 0 0; color: var(--demo-theme-error); font: 300 13px/1.5 var(--demo-font-primary); }
 @media (prefers-reduced-motion: reduce) {
+  .demo-audio-dock__wave { animation: none !important; }
   .demo-audio-dock > button, .demo-audio-dock__wave i { transition: none; }
 }

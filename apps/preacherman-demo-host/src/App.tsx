@@ -307,7 +307,6 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       data-model-active={isCompanionActive}
       data-view={homeView}
     >
-      {isCompanionActive ? <VoiceSessionControl headless locale={preferences.locale} /> : null}
     </main>
   );
   const labContent = (
@@ -404,6 +403,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
 
   const appShell = (
     <AppShell
+      activeCharacterId={activeModelId}
       activeSurfaceType={activeSurfaceType}
       navigationPhase={navigationPhase}
       navigationTarget={routeSurface(navigationTarget)}

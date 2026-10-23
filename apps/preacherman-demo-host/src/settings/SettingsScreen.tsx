@@ -21,6 +21,7 @@ export const settingsMenuItems = [
 ] as const;
 
 interface SettingsMenuProps {
+  readonly characterId?: string;
   readonly locale: Locale;
   readonly items?: readonly (typeof settingsMenuItems[number])[];
   readonly layout?: "desktop" | "asset";
@@ -29,7 +30,7 @@ interface SettingsMenuProps {
 }
 
 // Both destinations share the menu, focus lifecycle and real configuration view.
-export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desktop", onFocusChange, children }: SettingsMenuProps) {
+export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desktop", onFocusChange, children, characterId }: SettingsMenuProps) {
   const [ready, setReady] = useState(false);
   const [selected, setSelected] = useState<{ label: string; x: number; y: number; width: number; height: number } | null>(null);
   const surfaceRef = useRef<HTMLElement>(null);
@@ -133,7 +134,7 @@ export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desk
           {selected.label}
         </button>
       ) : null}
-      {selected?.label === "Execution Mode" ? <ExecutionModeSettings /> : null}
+      {selected?.label === "Execution Mode" ? <ExecutionModeSettings key={characterId || "global"} characterId={characterId} /> : null}
     </Root>
   );
 }

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useWindowActivity } from "../app-shell/useWindowActivity";
-import { MicrophoneMeter, REST_HEIGHTS, selectOutput, type MicrophoneState, type OutputContext } from "./microphoneMeter";
+import { REST_HEIGHTS, selectOutput, type OutputContext } from "./microphoneMeter";
+import { SpokenConversation, type ConversationVoiceState } from "./SpokenConversation";
+import { useAvatarInteractionController } from "../live/LiveCoordinatorContext";
 import "./audio-dock.css";
 
 const DEVICE_KEY = "preacherman.audio-devices";
@@ -12,16 +14,19 @@ function readDevices(): Devices {
   } catch { return { input: "", output: "" }; }
 }
 
-export function AudioDock() {
+export function AudioDock({ characterId = null }: { characterId?: string | null }) {
+  const avatar = useAvatarInteractionController();
+  const characterRef = useRef(characterId);
+  characterRef.current = characterId;
   const root = useRef<HTMLDivElement>(null);
   const wave = useRef<HTMLSpanElement>(null);
   const optionsButton = useRef<HTMLButtonElement>(null);
   const inputSelect = useRef<HTMLSelectElement>(null);
-  const meter = useRef<MicrophoneMeter | null>(null);
+  const meter = useRef<SpokenConversation | null>(null);
   const alive = useRef(false);
   const outputContext = useRef<OutputContext | null>(null);
   const outputRevision = useRef(0);
-  const [state, setState] = useState<MicrophoneState>("idle");
+  const [state, setState] = useState<ConversationVoiceState>("idle");
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
@@ -51,17 +56,18 @@ export function AudioDock() {
 
   useEffect(() => {
     alive.current = true;
-    const current = new MicrophoneMeter(frame => {
+    const current = new SpokenConversation(frame => {
       if (!wave.current) return;
       wave.current.dataset.speaking = String(frame.speaking);
       Array.from(wave.current.children).forEach((bar, index) => {
         (bar as HTMLElement).style.height = frame.heights[index] + "px";
       });
-    }, (next, message) => {
+    }, next => {
       if (!alive.current) return;
       setState(next);
-      if (message) showError(message);
-      else setError("");
+    }, () => characterRef.current, () => selectedRef.current, next => {
+      avatar.setState(next);
+      window.dispatchEvent(new CustomEvent("preacherman:avatar-state", { detail: next }));
     });
     meter.current = current;
     const changed = () => { void refreshDevices(); };
@@ -75,6 +81,13 @@ export function AudioDock() {
       outputContext.current = null;
       navigator.mediaDevices?.removeEventListener("devicechange", changed);
     };
+  }, [avatar]);
+
+  useEffect(() => { meter.current?.stop(); }, [characterId]);
+  useEffect(() => {
+    const stop = () => meter.current?.stop();
+    window.addEventListener("preacherman-execution-changed", stop);
+    return () => window.removeEventListener("preacherman-execution-changed", stop);
   }, []);
 
   useEffect(() => { meter.current?.setVisible(visible); }, [visible]);
@@ -100,14 +113,15 @@ export function AudioDock() {
   }, [open]);
 
   const toggle = async () => {
-    if (state === "listening" || state === "requesting") { meter.current?.stop(); return; }
-    if (await meter.current?.start(selectedRef.current.input)) await refreshDevices();
+    if (meter.current?.active) { meter.current.stop(); return; }
+    setOpen(false);
+    if (await meter.current?.start()) await refreshDevices();
   };
   const changeInput = async (id: string) => {
-    if (state === "listening" || state === "requesting") {
-      if (!await meter.current?.start(id)) return;
-    }
+    const restart = meter.current?.active;
+    if (restart) meter.current?.stop();
     if (alive.current) save({ ...selectedRef.current, input: id });
+    if (restart) await meter.current?.start();
   };
   const revealDevices = async () => {
     if (refreshing) return;
@@ -168,8 +182,8 @@ export function AudioDock() {
   const missingOutput = selected.output && !outputs.some(device => device.deviceId === selected.output);
 
   return <div ref={root} className="demo-audio-dock" data-state={state}>
-    <button type="button" className="demo-audio-dock__listen" aria-label={state === "listening" || state === "requesting" ? "Stop microphone" : "Start microphone"}
-      aria-pressed={state === "listening" || state === "requesting"} aria-busy={state === "requesting"} onClick={() => { void toggle(); }}>
+    <button type="button" className="demo-audio-dock__listen" aria-label={state !== "idle" && state !== "error" ? "Stop voice conversation" : state === "error" ? "Retry voice conversation" : "Start voice conversation"}
+      aria-pressed={state !== "idle" && state !== "error"} aria-busy={state === "requesting" || state === "thinking"} onClick={() => { void toggle(); }}>
       <span ref={wave} className="demo-audio-dock__wave" aria-hidden="true" data-speaking="false">
         {REST_HEIGHTS.map((height, index) => <i key={index} style={{ height }} />)}
       </span>

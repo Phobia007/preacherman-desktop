@@ -177,7 +177,7 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
               {section.displayed === "Appearance" && <div id="asset-appearance-panel" role="tabpanel" aria-labelledby={`asset-category-${category}`}>
                 <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} />
               </div>}
-              {section.displayed === "Settings" && <AssetSettings onFocusChange={setSettingsFocused} />}
+              {section.displayed === "Settings" && <AssetSettings characterId={character.id} onFocusChange={setSettingsFocused} />}
               {section.displayed === "Skills" && <AssetSkills character={character} />}
               {section.displayed === "Info Map" && <AssetInfoMap character={character} />}
             </div>

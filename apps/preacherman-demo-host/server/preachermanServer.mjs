@@ -1,6 +1,8 @@
 import { createHash, randomUUID } from "node:crypto";
 import { createExecutionConnections } from "./executionConnections.mjs";
 import { createCodexConversation } from "./codexConversation.mjs";
+import { createCharacterConversation } from "./characterConversation.mjs";
+import { createWindowsSpeech } from "./windowsSpeech.mjs";
 import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
@@ -1363,6 +1365,8 @@ export function createPreachermanServer(options = {}) {
     ...(options.executionConnectionRequest ? { request: options.executionConnectionRequest } : {}),
   });
   const codexConversation = options.codexConversation ?? createCodexConversation({ directory: join(dataDirectory, "chat-session") });
+  const characterConversation = createCharacterConversation({ file: join(dataDirectory, "characters.v1.json"), connections: executionConnections, codex: codexConversation, listAgents: () => agentAccessRuntime.listLocalAgents() });
+  const windowsSpeech = options.windowsSpeech ?? createWindowsSpeech();
   const workspaceSelection = createWorkspaceSelection({
     file: join(dataDirectory, "local-agent-workspaces.v1.json"),
     ...(options.workspacePicker ? { picker: options.workspacePicker } : {}),
@@ -1390,6 +1394,38 @@ export function createPreachermanServer(options = {}) {
 
     try {
       const url = new URL(request.url, "http://127.0.0.1");
+      const characterRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/(execution(?:\/local|\/save)?|conversation)$/);
+      if (characterRoute) {
+        const [, id, action] = characterRoute;
+        if (action === "execution" && request.method === "GET") { json(response, 200, await characterConversation.settings(id), origin); return; }
+        if (action === "execution/local" && ["POST", "DELETE"].includes(request.method)) {
+          const body = request.method === "POST" ? await readJson(request) : {};
+          json(response, 200, await characterConversation.local(id, request.method === "DELETE" ? null : body.agentId), origin); return;
+        }
+        if (action === "execution/save" && request.method === "POST") { json(response, 200, await characterConversation.save(id, await readJson(request)), origin); return; }
+        if (action === "conversation" && request.method === "POST") {
+          const body = await readJson(request);
+          const cancellation = new AbortController();
+          const disconnected = () => { if (!response.writableEnded) cancellation.abort(); };
+          response.once("close", disconnected);
+          try { json(response, 200, await characterConversation.chat(id, body, cancellation.signal), origin); }
+          finally { response.removeListener("close", disconnected); }
+          return;
+        }
+      }
+      const speechRoute = url.pathname.match(/^\/api\/voice\/local\/(status|recognize|synthesize)$/);
+      if (speechRoute && ((request.method === "GET" && speechRoute[1] === "status") || (request.method === "POST" && speechRoute[1] !== "status"))) {
+        const body = request.method === "POST" ? await readJson(request, 2 * 1024 * 1024) : null;
+        const cancellation = new AbortController();
+        const disconnected = () => { if (!response.writableEnded) cancellation.abort(); };
+        response.once("close", disconnected);
+        try {
+          const result = body ? await windowsSpeech[speechRoute[1]](body, cancellation.signal) : await windowsSpeech.status(cancellation.signal);
+          response.setHeader("Cache-Control", "no-store");
+          json(response, 200, result, origin);
+        } finally { response.removeListener("close", disconnected); }
+        return;
+      }
       if (url.pathname === "/api/settings/execution" && request.method === "GET") {
         json(response, 200, await executionConnections.status(), origin);
         return;
@@ -1413,7 +1449,8 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (url.pathname === "/api/execution/chat" && request.method === "POST") {
-        json(response, 200, await executionConnections.chat(await readJson(request, 512 * 1024)), origin);
+        const { connectionId, model, messages } = await readJson(request, 512 * 1024);
+        json(response, 200, await executionConnections.chat({ connectionId, model, messages }), origin);
         return;
       }
       if (url.pathname === "/api/execution/codex-chat" && request.method === "POST") {
@@ -2525,6 +2562,7 @@ export function createPreachermanServer(options = {}) {
       faceProxy.close();
       await preachermanPluginRuntime.close();
       codexConversation.close();
+      windowsSpeech.close();
       await agentAccessRuntime.close();
       ecosystemFacade.close();
       await Promise.all([

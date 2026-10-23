@@ -33,7 +33,7 @@ export function publicIpv4(address) {
     (a === 100 && b >= 64 && b <= 127) || (a === 198 && (b === 18 || b === 19)));
 }
 
-export async function connectionRequest(url, { method = "GET", headers, body } = {}) {
+export async function connectionRequest(url, { method = "GET", headers, body, signal } = {}) {
   const parsed = new URL(url);
   let timer;
   let addresses;
@@ -47,7 +47,7 @@ export async function connectionRequest(url, { method = "GET", headers, body } =
   if (!addresses.length || addresses.some(({ address }) => !publicIpv4(address))) throw fail("The gateway must resolve to a public address.");
   return new Promise((resolve, reject) => {
     const req = httpsRequest(parsed, {
-      method, headers, agent: false,
+      method, headers, agent: false, signal,
       lookup: (_hostname, options, callback) => options.all ? callback(null, [addresses[0]]) : callback(null, addresses[0].address, 4),
     }, response => {
       let size = 0;
@@ -140,19 +140,23 @@ export function createExecutionConnections({ file, request = connectionRequest, 
   const headers = profile => profile.protocol === "anthropic" ?
     { "content-type": "application/json", "x-api-key": profile.apiKey, "anthropic-version": "2023-06-01" } :
     { "content-type": "application/json", Authorization: "Bearer " + profile.apiKey };
-  async function complete(profile, messages, toolProbe = false) {
+  async function complete(profile, messages, toolProbe = false, personaInstructions = "", signal) {
     required(profile.model, "model ID");
     const anthropic = profile.protocol === "anthropic";
     const schema = { type: "object", properties: { ok: { type: "boolean" } }, required: ["ok"], additionalProperties: false };
     const body = { model: profile.model, messages, ...(anthropic ? { max_tokens: profile.maxTokens || 4096 } :
       profile.maxTokens ? { [profile.baseUrl.startsWith("https://api.openai.com/") ? "max_completion_tokens" : "max_tokens"]: profile.maxTokens } : {}) };
+    if (personaInstructions) {
+      if (anthropic) body.system = personaInstructions;
+      else body.messages = [{ role: "system", content: personaInstructions }, ...messages];
+    }
     if (!anthropic && profile.reasoning) body.reasoning_effort = profile.reasoning;
     if (toolProbe) {
       body.tools = anthropic ? [{ name: "connection_probe", description: "A harmless connection probe; no action is executed.", input_schema: schema }] :
         [{ type: "function", function: { name: "connection_probe", description: "A harmless probe; no action is executed.", parameters: schema } }];
       body.tool_choice = anthropic ? { type: "tool", name: "connection_probe" } : { type: "function", function: { name: "connection_probe" } };
     }
-    const payload = await request(profile.baseUrl + (anthropic ? "/messages" : "/chat/completions"), { method: "POST", headers: headers(profile), body });
+    const payload = await request(profile.baseUrl + (anthropic ? "/messages" : "/chat/completions"), { method: "POST", headers: headers(profile), body, signal });
     const text = anthropic ? (payload.content || []).filter(item => item.type === "text").map(item => item.text).join("\n") : payload.choices?.[0]?.message?.content;
     const tools = anthropic ? payload.content?.some(item => item.type === "tool_use" && item.name === "connection_probe") :
       payload.choices?.[0]?.message?.tool_calls?.some(item => item.function?.name === "connection_probe");
@@ -188,18 +192,20 @@ export function createExecutionConnections({ file, request = connectionRequest, 
       tested.set(fingerprint(profile), { at: Date.now(), tools });
       return { connected: true, response: true, tools, checkedAt: new Date().toISOString() };
     },
-    async save(draft) {
+    async save(draft, { activate = true } = {}) {
       const profile = await resolveDraft(draft);
       const verification = tested.get(fingerprint(profile));
       if (!verification || Date.now() - verification.at > 600000) throw fail("Test this exact configuration before saving and using it.", 409);
-      const next = await mutate(state => {
+      let selected;
+      await mutate(state => {
         const id = profile.id || "connection-" + randomUUID();
         const models = modelLists.get(modelKey(profile)) || [];
         const saved = { ...profile, id, tested: true, tools: verification.tools, models: models.some(model => model.id === profile.model)
           ? models : [{ id: profile.model, label: profile.model }, ...models] };
-        return { ...state, connections: [...state.connections.filter(item => item.id !== id), saved], active: { mode: "api", connectionId: id, model: profile.model } };
+        selected = { mode: "api", connectionId: id, model: profile.model };
+        return { ...state, connections: [...state.connections.filter(item => item.id !== id), saved], active: activate ? selected : state.active };
       });
-      return { active: next.active };
+      return { active: selected };
     },
     async activateLocal(agentId, workspaceId, label = agentId) {
       const local = { mode: "cli", agentId, label, workspaceId, model: "default" };
@@ -208,14 +214,14 @@ export function createExecutionConnections({ file, request = connectionRequest, 
     async disconnectLocal() {
       await mutate(state => ({ ...state, local: null, active: state.active?.mode === "cli" ? null : state.active }));
     },
-    async chat({ connectionId, model, messages }) {
+    async chat({ connectionId, model, messages, personaInstructions = "", signal }) {
       messages = validateChatMessages(messages);
       const state = await read();
       let profile = state.connections.find(item => item.id === connectionId);
       if (!profile && connectionId === "legacy-deepseek") profile = await resolveDraft({ id: connectionId, name: "DeepSeek", protocol: "openai", baseUrl: "https://api.deepseek.com", model });
       if (!profile) throw fail("Save this connection before sending a message.", 409);
       // Snapshot credentials and model before awaiting any network call.
-      return complete({ ...profile, model: required(model || profile.model, "model ID") }, messages.map(({ role, content }) => ({ role, content })));
+      return complete({ ...profile, model: required(model || profile.model, "model ID") }, messages.map(({ role, content }) => ({ role, content })), false, personaInstructions, signal);
     },
   };
 }

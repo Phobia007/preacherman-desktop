@@ -23,7 +23,7 @@ export function createCodexConversation({ directory, adapter = createCodexCliAda
   const active = new Set();
   let closed = false;
   return {
-    async chat({ messages, model = "default", signal } = {}) {
+    async chat({ messages, model = "default", signal, personaInstructions = "" } = {}) {
       const context = validateChatMessages(messages);
       if (context.at(-1).role !== "user") throw fail("A user message is required.", 400);
       if (model !== "default") throw fail("Codex chat currently follows the CLI's configured model.", 400);
@@ -105,7 +105,8 @@ export function createCodexConversation({ directory, adapter = createCodexCliAda
         const settings = await rpc("config/read", { includeLayers: false });
         const config = { ...chatConfig };
         for (const name of Object.keys(settings.config?.mcp_servers || {})) config["mcp_servers." + name + ".enabled"] = false;
-        const started = await rpc("thread/start", { cwd: directory, ephemeral: true, sandbox: "read-only", approvalPolicy: "never", baseInstructions: instructions, developerInstructions: instructions, config });
+        const characterInstructions = instructions + (personaInstructions ? "\n" + personaInstructions : "");
+        const started = await rpc("thread/start", { cwd: directory, ephemeral: true, sandbox: "read-only", approvalPolicy: "never", baseInstructions: characterInstructions, developerInstructions: characterInstructions, config });
         threadId = started.thread.id;
         if (context.length > 1) await rpc("thread/inject_items", { threadId, items: context.slice(0, -1).map(({ role, content }) => ({ type: "message", role, ...(role === "assistant" ? { phase: "final_answer" } : {}), content: [{ type: role === "assistant" ? "output_text" : "input_text", text: content }] })) });
         await rpc("turn/start", { threadId, input: [{ type: "text", text: context.at(-1).content }], approvalPolicy: "never", sandboxPolicy: { type: "readOnly", networkAccess: false } });

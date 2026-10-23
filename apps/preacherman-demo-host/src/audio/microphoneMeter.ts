@@ -32,6 +32,7 @@ type Capture = {
   analyser: AnalyserNode;
   samples: Float32Array<ArrayBuffer>;
   ended: () => void;
+  releaseCapture?: () => void;
 };
 
 export class MicrophoneMeter {
@@ -44,6 +45,7 @@ export class MicrophoneMeter {
   constructor(
     private onFrame: (frame: ReturnType<typeof voiceFrame>) => void,
     private onState: (state: MicrophoneState, error?: string) => void,
+    private onCapture?: (source: MediaStreamAudioSourceNode, context: AudioContext) => Promise<() => void>,
   ) {}
 
   private release() {
@@ -52,6 +54,7 @@ export class MicrophoneMeter {
     const capture = this.capture;
     this.capture = null;
     if (!capture) return;
+    capture.releaseCapture?.();
     capture.stream.getTracks().forEach(track => {
       track.removeEventListener("ended", capture.ended);
       track.stop();
@@ -101,7 +104,9 @@ export class MicrophoneMeter {
       source.connect(analyser); // Analyse only; never echo the microphone to speakers.
       const ended = () => { if (current()) this.stop("Microphone disconnected. Choose an available input."); };
       stream.getAudioTracks().forEach(track => track.addEventListener("ended", ended));
-      this.capture = { stream, context, source, analyser, samples: new Float32Array(analyser.fftSize), ended };
+      const releaseCapture = await this.onCapture?.(source, context);
+      if (!current()) { releaseCapture?.(); source.disconnect(); analyser.disconnect(); stream.getTracks().forEach(track => track.stop()); await context.close(); return false; }
+      this.capture = { stream, context, source, analyser, samples: new Float32Array(analyser.fftSize), ended, releaseCapture };
       this.lastFrame = -Infinity;
       this.onState("listening");
       this.schedule();
