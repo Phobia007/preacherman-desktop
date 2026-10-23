@@ -3,6 +3,7 @@ import { createExecutionConnections } from "./executionConnections.mjs";
 import { createCodexConversation } from "./codexConversation.mjs";
 import { createCharacterConversation } from "./characterConversation.mjs";
 import { createWindowsSpeech } from "./windowsSpeech.mjs";
+import { createLocalSpeechRecognition } from "./localSpeechRecognition.mjs";
 import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
@@ -1367,6 +1368,7 @@ export function createPreachermanServer(options = {}) {
   const codexConversation = options.codexConversation ?? createCodexConversation({ directory: join(dataDirectory, "chat-session") });
   const characterConversation = createCharacterConversation({ file: join(dataDirectory, "characters.v1.json"), connections: executionConnections, codex: codexConversation, listAgents: () => agentAccessRuntime.listLocalAgents() });
   const windowsSpeech = options.windowsSpeech ?? createWindowsSpeech();
+  const speechRecognition = options.speechRecognition ?? createLocalSpeechRecognition();
   const workspaceSelection = createWorkspaceSelection({
     file: join(dataDirectory, "local-agent-workspaces.v1.json"),
     ...(options.workspacePicker ? { picker: options.workspacePicker } : {}),
@@ -1420,7 +1422,14 @@ export function createPreachermanServer(options = {}) {
         const disconnected = () => { if (!response.writableEnded) cancellation.abort(); };
         response.once("close", disconnected);
         try {
-          const result = body ? await windowsSpeech[speechRoute[1]](body, cancellation.signal) : await windowsSpeech.status(cancellation.signal);
+          let result;
+          if (speechRoute[1] === "recognize") result = await speechRecognition.recognize(body, cancellation.signal);
+          else if (speechRoute[1] === "synthesize") result = await windowsSpeech.synthesize(body, cancellation.signal);
+          else {
+            const recognition = await speechRecognition.status(cancellation.signal);
+            const { voices } = await windowsSpeech.status(cancellation.signal);
+            result = { ...recognition, voices };
+          }
           response.setHeader("Cache-Control", "no-store");
           json(response, 200, result, origin);
         } finally { response.removeListener("close", disconnected); }
@@ -2563,6 +2572,7 @@ export function createPreachermanServer(options = {}) {
       await preachermanPluginRuntime.close();
       codexConversation.close();
       windowsSpeech.close();
+      speechRecognition.close();
       await agentAccessRuntime.close();
       ecosystemFacade.close();
       await Promise.all([

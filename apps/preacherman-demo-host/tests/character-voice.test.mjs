@@ -9,6 +9,7 @@ import { EventEmitter } from "node:events";
 import { PassThrough, Writable } from "node:stream";
 import { createCharacterConversation } from "../server/characterConversation.mjs";
 import { validateSpeechAudio, createWindowsSpeech } from "../server/windowsSpeech.mjs";
+import { createLocalSpeechRecognition } from "../server/localSpeechRecognition.mjs";
 
 const sessionId = "test-session-00000001";
 async function fixture(t) {
@@ -107,4 +108,65 @@ test("voice chrome covers both themes without rendering transcript or reply cont
   assert.match(dock, /Start voice conversation/); assert.doesNotMatch(dock, /\{(?:transcript|reply|recognized)\}/);
   for (const token of ["text", "muted", "border-strong", "focus", "error", "member-loading"]) assert.ok(css.includes("--demo-theme-" + token));
   assert.match(css, /data-appearance="dark"/); assert.match(css, /prefers-reduced-motion/);
+});
+
+test("offline recognition validates input, bounds workers and cancels without leaking children", async () => {
+  const children = [], inputs = [], launches = [];
+  let respond = true;
+  const speech = createLocalSpeechRecognition({ timeoutMs: 30, spawnImpl(executable, args, options) {
+    launches.push({ executable, args, options });
+    const child = new EventEmitter(); children.push(child); child.stdout = new PassThrough(); child.stderr = new PassThrough();
+    child.kill = () => { child.stopped = true; queueMicrotask(() => child.emit("close", 0)); };
+    child.stdin = new Writable({ write(chunk, encoding, done) {
+      const input = JSON.parse(String(chunk)); inputs.push(input); done();
+      if (respond) queueMicrotask(() => { child.stdout.write(JSON.stringify(input.action === "status" ? { available: true } : { accepted: true, text: "Hello", confidence: 0.7 })); child.emit("close", 0); });
+    } }); return child;
+  } });
+  try {
+    await assert.rejects(speech.recognize({ audio: "!invalid" }), /Invalid speech audio/); assert.equal(children.length, 0);
+    assert.equal((await speech.status()).engine, "whisper");
+    assert.equal(launches[0].options.shell, false); assert.equal(launches[0].options.windowsHide, true);
+    assert.equal(launches[0].options.env.OMP_NUM_THREADS, "4");
+    respond = false;
+    const cancelled = new AbortController();
+    const wav = Buffer.alloc(46); wav.write("RIFF"); wav.write("WAVEfmt ", 8); wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20); wav.writeUInt16LE(1, 22); wav.writeUInt32LE(16000, 24); wav.writeUInt16LE(16, 34); wav.write("data", 36); wav.writeUInt32LE(2, 40);
+    const audio = wav.toString("base64");
+    const running = speech.recognize({ audio }, cancelled.signal); await new Promise(resolve => setImmediate(resolve));
+    await assert.rejects(speech.recognize({ audio }), /busy/);
+    cancelled.abort(); await assert.rejects(running, /cancelled/); assert.equal(children.at(-1).stopped, true);
+    await assert.rejects(speech.recognize({ audio }), /timed out/); assert.equal(children.at(-1).stopped, true);
+    respond = true; assert.equal((await speech.recognize({ audio })).text, "Hello");
+    assert.equal(inputs.at(-1).audio, audio); assert.ok(!launches.at(-1).args.join(" ").includes(audio));
+  } finally { speech.close(); }
+});
+
+test("voice conversation uses engine acceptance and stops after repeated recognition misses", async () => {
+  let source = await readFile(new URL("../src/audio/SpokenConversation.ts", import.meta.url), "utf8");
+  source = source.replace('new URL("./voiceCapture.worklet.js?no-inline", import.meta.url)', '"capture.js"');
+  const exports = {}, states = [], spoken = [], chats = [];
+  class Meter { start() { return Promise.resolve(true); } stop() {} dispose() {} }
+  runInNewContext(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, {
+    exports, require: () => ({ MicrophoneMeter: Meter, speechWav: () => "audio" }),
+    AbortController, AbortSignal, crypto: { randomUUID: () => "session" }, setTimeout, clearTimeout,
+    cancelAnimationFrame() {}, window: { dispatchEvent() {} }, CustomEvent: class {},
+  });
+  const voice = new exports.SpokenConversation(() => {}, state => states.push(state), () => "cortana", () => ({ input: "", output: "" }), () => {});
+  let recognized = { text: "Quiet speech", accepted: true, confidence: 0.1 };
+  voice.request = async (path, body) => {
+    if (path.endsWith("/execution")) return { active: {} };
+    if (path.endsWith("/status")) return { language: "zh-CN" };
+    if (path.endsWith("/recognize")) return recognized;
+    chats.push(body); return { text: "Real reply" };
+  };
+  voice.speak = async text => { spoken.push(text); };
+  const blocks = [new Float32Array(512)], signal = new AbortController().signal;
+  try {
+    await voice.start(); await voice.reply(blocks, signal);
+    assert.equal(chats.length, 1); assert.equal(spoken.at(-1), "Real reply");
+    recognized = { text: "", accepted: false, confidence: 0 };
+    await voice.reply(blocks, signal); assert.equal(voice.active, true);
+    await voice.reply(blocks, signal); assert.equal(voice.active, false); assert.equal(states.at(-1), "error");
+    assert.match(spoken.at(-1), /麦克风/); assert.equal(chats.length, 1);
+    await voice.start(); await voice.reply(blocks, signal); assert.equal(voice.active, true);
+  } finally { voice.dispose(); }
 });

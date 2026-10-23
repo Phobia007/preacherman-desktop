@@ -16,6 +16,7 @@ export class SpokenConversation {
   private language = "";
   private disposed = false;
   private hearing = false;
+  private missedPhrases = 0;
   constructor(
     private onFrame: (frame: ReturnType<typeof voiceFrame>) => void,
     private onState: (state: ConversationVoiceState) => void,
@@ -38,6 +39,7 @@ export class SpokenConversation {
     if (this.disposed) return false;
     const cancellation = new AbortController(); this.cancellation = cancellation;
     this.sessionId = crypto.randomUUID();
+    this.missedPhrases = 0;
     this.onState("requesting");
     try {
       const id = this.character();
@@ -45,7 +47,7 @@ export class SpokenConversation {
       const config = await this.request<{ active: unknown }>(`/api/characters/${id}/execution`, undefined, cancellation.signal);
       if (!config.active) throw new Error("Choose Execution Mode in your character's Settings before starting a conversation.");
       const status = await this.request<{ language: string | null }>("/api/voice/local/status", undefined, cancellation.signal);
-      if (!status.language) throw new Error("Install a Windows speech recognition language before starting a conversation.");
+      if (!status.language) throw new Error("Local speech recognition is unavailable. Check the speech model installation.");
       cancellation.signal.throwIfAborted(); this.language = status.language;
       return await this.listen(cancellation.signal);
     } catch (error) { if (!cancellation.signal.aborted) await this.failed(error instanceof Error ? error.message : "Voice conversation is unavailable."); return false; }
@@ -74,13 +76,23 @@ export class SpokenConversation {
     this.onState("thinking"); this.avatar("thinking");
     try {
       if (blocks.length) {
-        const recognized = await this.request<{ text: string; confidence: number }>("/api/voice/local/recognize", { audio: speechWav(blocks), language: this.language }, signal);
+        const recognized = await this.request<{ text: string; accepted: boolean }>("/api/voice/local/recognize", { audio: speechWav(blocks), language: this.language }, signal);
         signal.throwIfAborted();
-        if (recognized.text.trim() && recognized.confidence >= 0.15) {
+        if (recognized.accepted && recognized.text.trim()) {
+          this.missedPhrases = 0;
           const result = await this.request<{ text: string }>(`/api/characters/${id}/conversation`, { text: recognized.text, sessionId: this.sessionId }, signal, 130000);
           signal.throwIfAborted();
           await this.speak(result.text, signal);
-        } else await this.speak(this.language === "zh-CN" ? "我没有听清楚，请再说一遍。" : "I didn't catch that. Please say it again.", signal);
+        } else {
+          this.missedPhrases++;
+          if (this.missedPhrases >= 2) {
+            await this.failed(this.language === "zh-CN"
+              ? "连续两次没能识别清楚。请在右下角的三个点里检查麦克风，再点语音按钮重试。"
+              : "I couldn't recognize the last two attempts. Check the microphone in the audio menu, then start voice conversation again.");
+            return;
+          }
+          await this.speak(this.language === "zh-CN" ? "我没有听清楚，请再说一遍。" : "I didn't catch that. Please say it again.", signal);
+        }
       }
       signal.throwIfAborted();
       await this.listen(signal);
