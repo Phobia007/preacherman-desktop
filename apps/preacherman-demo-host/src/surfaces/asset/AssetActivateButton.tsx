@@ -6,11 +6,13 @@ import "./asset-activation.css";
 const HOLD_MS = 1600;
 const CONFIRM_MS = 720;
 type HoldInput = { kind: "pointer"; id: number } | { kind: "key"; key: string };
-type Phase = "idle" | "charging" | "releasing" | "confirmed";
+type Phase = "idle" | "charging" | "releasing" | "confirmed" | "saving";
 
-export function AssetActivateButton({ modelId, activated, enabled, onActivate, variant = "activate" }: {
+export function AssetActivateButton({ modelId, activated, enabled, onActivate, variant = "activate", commit, labelName }: {
   modelId: ModelId; activated: boolean; enabled: boolean; onActivate: (modelId: ModelId) => void;
   variant?: "activate" | "apply";
+  commit?: () => Promise<boolean>;
+  labelName?: string;
 }) {
   const button = useRef<HTMLButtonElement>(null);
   const input = useRef<HoldInput | null>(null);
@@ -21,8 +23,9 @@ export function AssetActivateButton({ modelId, activated, enabled, onActivate, v
   const [phase, setPhase] = useState<Phase>("idle");
   const [displayedActivated, setDisplayedActivated] = useState(activated);
   const hintId = useId();
-  const name = avatarModelName(modelId);
-  const label = variant === "apply" ? (displayedActivated ? "Applied" : "Apply") : (displayedActivated ? "Activated" : "Activate");
+  const mounted = useRef(true);
+  const name = labelName || avatarModelName(modelId);
+  const label = phase === "saving" ? "Applying…" : variant === "apply" ? (displayedActivated ? "Applied" : "Apply") : (displayedActivated ? "Activated" : "Activate");
 
   const releasePointer = useCallback((previous: HoldInput | null) => {
     if (previous?.kind === "pointer" && button.current?.hasPointerCapture(previous.id)) button.current.releasePointerCapture(previous.id);
@@ -48,13 +51,13 @@ export function AssetActivateButton({ modelId, activated, enabled, onActivate, v
   }, [releasePointer]);
 
   const start = (source: HoldInput) => {
-    if (!enabled || input.current || confirming.current) return false;
+    if (!enabled || input.current || confirming.current || (commit && activated)) return false;
     cancelAnimationFrame(frame.current);
     input.current = source;
     setPhase("charging");
     const from = elapsed.current;
     const started = performance.now();
-    const tick = (now: number) => {
+    const tick = async (now: number) => {
       if (!input.current) return;
       elapsed.current = Math.min(from + now - started, HOLD_MS);
       const progress = elapsed.current / HOLD_MS;
@@ -67,8 +70,15 @@ export function AssetActivateButton({ modelId, activated, enabled, onActivate, v
         frame.current = 0;
         elapsed.current = 0;
         confirming.current = true;
-        setPhase("confirmed");
         releasePointer(previous);
+        if (commit) {
+          setPhase("saving");
+          let applied = false;
+          try { applied = await commit(); } catch { /* Caller owns the visible error. */ }
+          if (!mounted.current) return;
+          if (!applied) { confirming.current = false; button.current?.style.setProperty("--asset-charge", "0"); setPhase("idle"); return; }
+        }
+        setPhase("confirmed");
         onActivate(modelId);
         confirmationTimer.current = setTimeout(() => {
           confirming.current = false;
@@ -85,10 +95,12 @@ export function AssetActivateButton({ modelId, activated, enabled, onActivate, v
   useLayoutEffect(() => { if (!enabled) cancel(); }, [enabled, cancel]);
   useLayoutEffect(() => { if (!confirming.current) setDisplayedActivated(activated); }, [activated]);
   useEffect(() => {
+    mounted.current = true;
     const hidden = () => { if (document.hidden) cancel(); };
     window.addEventListener("blur", cancel);
     document.addEventListener("visibilitychange", hidden);
     return () => {
+      mounted.current = false;
       cancelAnimationFrame(frame.current);
       clearTimeout(confirmationTimer.current);
       input.current = null;
@@ -99,8 +111,8 @@ export function AssetActivateButton({ modelId, activated, enabled, onActivate, v
 
   return <>
     <button ref={button} type="button" className="asset-activate" disabled={!enabled}
-      aria-label={activated ? `Hold to ${variant === "apply" ? "remove" : "deactivate"} ${name}` : `Hold to ${variant} ${name}`} aria-pressed={activated} aria-describedby={hintId}
-      data-activated={activated} data-phase={phase} aria-busy={phase === "confirmed"} onBlur={cancel} onContextMenu={event => event.preventDefault()}
+      aria-label={commit && activated ? `${name} applied` : activated ? `Hold to ${variant === "apply" ? "remove" : "deactivate"} ${name}` : `Hold to ${variant} ${name}`} aria-pressed={activated} aria-describedby={hintId}
+      data-activated={activated} data-phase={phase} aria-busy={phase === "confirmed" || phase === "saving"} onBlur={cancel} onContextMenu={event => event.preventDefault()}
       onClick={event => event.preventDefault()}
       onPointerDown={event => {
         if (event.button !== 0 || !event.isPrimary || input.current) return;
@@ -132,7 +144,7 @@ export function AssetActivateButton({ modelId, activated, enabled, onActivate, v
       </svg>
       <svg className="asset-activate__check" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="m5 12 4.5 4.5L19 7" /></svg>
     </button>
-    <span id={hintId} className="asset-activate__assistive">Hold for 1.6 seconds to {activated ? "hide this desktop companion" : "apply this desktop companion"}. Release or move away to cancel.</span>
+    <span id={hintId} className="asset-activate__assistive">{commit ? "Hold for 1.6 seconds to apply this voice." : `Hold for 1.6 seconds to ${activated ? "hide this desktop companion" : "apply this desktop companion"}.`} Release or move away to cancel.</span>
     <span className="asset-activate__assistive" aria-live="polite">{activated ? `${name} activated.` : ""}</span>
   </>;
 }

@@ -117,8 +117,11 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
   const section = useAssetSection();
   const [category, setCategory] = useState<AppearanceCategory>("Costume");
   const [settingsFocused, setSettingsFocused] = useState(false);
+  const [requestedSetting, setRequestedSetting] = useState<string | null>(null);
   const character = characters.find(character => character.id === current)!;
-  const choose = (id: string) => { setCurrent(id); setCategory("Costume"); };
+  const choose = (id: string) => { setCurrent(id); setCategory("Costume"); setRequestedSetting(null); };
+  const openVoice = () => { setRequestedSetting(null); setCategory("Voice"); section.select("Appearance"); };
+  const openVoiceService = () => { setRequestedSetting("Voice Service"); section.select("Settings"); };
   const modelVisible = sectionHasModel(section.requested);
   useLayoutEffect(() => { back.current?.focus({ preventScroll: true }); }, []);
   // Only the selected character is mounted; scrolling can never reveal another detail.
@@ -127,7 +130,7 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
   return <div className="asset-details" data-current={current} data-section={section.requested} data-transition={section.phase} onKeyDown={event => {
     if (event.key === "Escape") { event.stopPropagation(); onBack(); }
     if (event.altKey || event.ctrlKey || event.metaKey) return;
-    if ((event.target as HTMLElement).closest('[role="tablist"], input, textarea, select, .asset-settings, .asset-appearance__tiles')) return;
+    if ((event.target as HTMLElement).closest('[role="tablist"], input, textarea, select, .asset-settings, .asset-appearance__tiles, .asset-pack-grid')) return;
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       event.preventDefault(); const index = characters.findIndex(character => character.id === current);
       choose(characters[Math.max(0, Math.min(characters.length - 1, index + (event.key === "ArrowRight" ? 1 : -1)))].id);
@@ -143,7 +146,7 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
     }}>
       {assetSections.map(label => <button key={label} type="button" role="tab" id={sectionId(label)}
         aria-selected={section.requested === label} tabIndex={section.requested === label ? 0 : -1}
-        aria-controls="asset-section-panel" onClick={() => section.select(label)}>{label}</button>)}
+        aria-controls="asset-section-panel" onClick={() => { setRequestedSetting(null); section.select(label); }}>{label}</button>)}
     </div>
     {section.requested === "Appearance" && <div className="asset-details__subtabs" role="tablist" aria-label="Appearance categories" onKeyDown={event => {
       if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
@@ -175,9 +178,9 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
                 </div>}
               </div>}
               {section.displayed === "Appearance" && <div id="asset-appearance-panel" role="tabpanel" aria-labelledby={`asset-category-${category}`}>
-                <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} />
+                <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} onOpenVoiceService={openVoiceService} />
               </div>}
-              {section.displayed === "Settings" && <AssetSettings characterId={character.id} onFocusChange={setSettingsFocused} />}
+              {section.displayed === "Settings" && <AssetSettings key={character.id} characterId={character.id} onFocusChange={setSettingsFocused} requestedItem={requestedSetting} onOpenVoice={openVoice} />}
               {section.displayed === "Skills" && <AssetSkills character={character} />}
               {section.displayed === "Info Map" && <AssetInfoMap character={character} />}
             </div>

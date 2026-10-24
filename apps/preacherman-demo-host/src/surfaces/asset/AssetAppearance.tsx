@@ -1,6 +1,7 @@
 import type { ModelId } from "../../preferences";
 import { AssetActivateButton } from "./AssetActivateButton";
 import characters from "./characters.json";
+import { AssetVoice, AssetAccessories } from "./AssetVoice";
 
 export const appearanceCategories = ["Costume", "Action", "Voice", "Accessories", "Backgrounds"] as const;
 export type AppearanceCategory = typeof appearanceCategories[number];
@@ -11,10 +12,13 @@ const emptyCopy = {
   Backgrounds: "No character backgrounds have been added yet.",
 };
 
-export function AssetAppearance({ character, category, activeModelId, onApply, enabled }: {
+export function AssetAppearance({ character, category, activeModelId, onApply, enabled, onOpenVoiceService }: {
   character: Character; category: AppearanceCategory; activeModelId: ModelId | null;
   onApply: (modelId: ModelId) => void; enabled: boolean;
+  onOpenVoiceService: () => void;
 }) {
+  if (category === "Voice") return <AssetVoice character={character} enabled={enabled} onOpenService={onOpenVoiceService} />;
+  if (category === "Accessories") return <AssetAccessories character={character} />;
   // Only advertise the shipped costume and its authored default action. New packs can
   // extend this catalogue later without pretending a recolor is a different costume.
   const available = category === "Costume" || category === "Action";

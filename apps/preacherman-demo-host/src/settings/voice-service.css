@@ -1,0 +1,6 @@
+.voice-service__heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.voice-service__status { color: var(--demo-theme-settings-muted); font-size: 17px; white-space: nowrap; }
+.voice-service__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.voice-service__next { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 44px; padding-top: 26px; border-top: 1px solid var(--demo-theme-settings-border); }
+.voice-service__next button { flex: 0 0 auto; }
+@media (max-width: 768px) { .voice-service__pair { grid-template-columns: 1fr; } .voice-service__heading, .voice-service__next { align-items: flex-start; flex-direction: column; } }

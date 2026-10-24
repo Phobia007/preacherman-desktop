@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import type { Appearance, Locale } from "../preferences";
 import "./settings-menu.css";
 import { ExecutionModeSettings } from "./ExecutionModeSettings";
+import { VoiceServiceSettings } from "./VoiceServiceSettings";
 
 interface SettingsScreenProps {
   readonly appearance: Appearance;
@@ -23,14 +24,16 @@ export const settingsMenuItems = [
 interface SettingsMenuProps {
   readonly characterId?: string;
   readonly locale: Locale;
-  readonly items?: readonly (typeof settingsMenuItems[number])[];
+  readonly items?: readonly (typeof settingsMenuItems[number] | "Voice Service")[];
   readonly layout?: "desktop" | "asset";
   readonly onFocusChange?: (focused: boolean) => void;
   readonly children?: ReactNode;
+  readonly requestedItem?: string | null;
+  readonly onOpenVoice?: () => void;
 }
 
 // Both destinations share the menu, focus lifecycle and real configuration view.
-export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desktop", onFocusChange, children, characterId }: SettingsMenuProps) {
+export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desktop", onFocusChange, children, characterId, requestedItem, onOpenVoice }: SettingsMenuProps) {
   const [ready, setReady] = useState(false);
   const [selected, setSelected] = useState<{ label: string; x: number; y: number; width: number; height: number } | null>(null);
   const surfaceRef = useRef<HTMLElement>(null);
@@ -69,6 +72,12 @@ export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desk
     const timer = window.setTimeout(() => setReady(true), reducedMotion.matches ? 0 : 650);
     return () => window.clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!ready || !requestedItem) return;
+    const button = Array.from(surfaceRef.current?.querySelectorAll<HTMLButtonElement>(".settings-menu__list button") || []).find(item => item.textContent === requestedItem);
+    if (button) focusItem(requestedItem, button);
+  }, [ready, requestedItem]);
 
   useEffect(() => {
     if (!selected) {
@@ -135,6 +144,7 @@ export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desk
         </button>
       ) : null}
       {selected?.label === "Execution Mode" ? <ExecutionModeSettings key={characterId || "global"} characterId={characterId} /> : null}
+      {selected?.label === "Voice Service" && characterId ? <VoiceServiceSettings key={characterId} characterId={characterId} onOpenVoice={onOpenVoice} /> : null}
     </Root>
   );
 }

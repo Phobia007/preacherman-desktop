@@ -1,5 +1,15 @@
 # Character voice conversation
 
+## Voice configuration draft
+
+Asset → Settings → Voice Service stores each character's future provider, model, region and optional workspace identifier. It is deliberately marked **Not connected**: this screen does not save credentials or call a realtime provider. The existing conversation runtime below remains unchanged until provider selection and integration.
+
+Appearance → Voice shows a three-column slanted collection. Import a finished WAV, MP3, OGG or M4A preview (up to 30 seconds and 3 MB), optionally attach its provider voice ID, and click the tile to audition through the selected output device. Auditioning never applies a voice. Hold Apply for 1.6 seconds to persist the character's selection; confirmation appears only after saving succeeds. The saved selection is a draft for the future runtime, not an active voice-cloning connection. No default or substitute Master Chief voice is assigned.
+
+Preview files are stored separately under the local service's `voice-previews` directory; `characters.v1.json` contains only metadata and the selected ID. Remove preview deletes the file and clears its selection. Appearance → Accessories uses the same collection frames with an honest empty state until assets are supplied. Both screens retain the existing 3D model and support light/dark appearance.
+
+## Existing conversation runtime
+
 Activate a character in Asset. In that character's Settings → Execution Mode, connect a signed-in Codex CLI or save a tested API connection. The bottom-right waveform starts voice conversation; click it again to stop. The three-dot audio menu retains microphone and speaker selection. No transcript, reply, input field or subtitles are rendered.
 
 Speech recognition uses the installed offline Whisper runtime and cached multilingual base model. Windows supplies Chinese/English speech synthesis; this is not a cloned character voice. Recognition language is independent of the English interface. No speech API key is needed; model replies use the selected CLI login or API account. The old Windows dictation route is no longer used for conversation after a real microphone rejection report.

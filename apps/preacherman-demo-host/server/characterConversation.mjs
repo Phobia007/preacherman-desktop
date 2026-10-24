@@ -1,5 +1,6 @@
-import { mkdir, readFile, writeFile, rename } from "node:fs/promises";
-import { dirname } from "node:path";
+import { mkdir, readFile, writeFile, rename, unlink } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { randomUUID } from "node:crypto";
 import characters from "../src/surfaces/asset/characters.json" with { type: "json" };
 
 const fail = (message, statusCode = 400) => Object.assign(new Error(message), { statusCode });
@@ -8,6 +9,7 @@ export function createCharacterConversation({ file, connections, codex, listAgen
   let queue = Promise.resolve();
   const sessions = new Map();
   const busy = new Set();
+  const previewDirectory = join(dirname(file), "voice-previews");
   function identity(id) {
     const character = characters.find(item => item.id === id);
     if (!character) throw fail("Unknown character.", 404);
@@ -49,8 +51,79 @@ export function createCharacterConversation({ file, connections, codex, listAgen
     for (const key of sessions.keys()) if (key.startsWith(id + ":")) sessions.delete(key);
     return settings(id);
   }
+  const voiceSettings = async id => {
+    const saved = await profile(id);
+    return {
+      characterId: id,
+      service: saved.voiceService || { provider: "", model: "", region: "", workspaceId: "" },
+      connectionStatus: "not-connected",
+      selectedVoiceId: saved.selectedVoiceId || null,
+      voices: (saved.voices || []).map(({ preview, ...voice }) => ({ ...voice, hasPreview: Boolean(preview) })),
+    };
+  };
+  const voiceField = (value, label, max = 160) => {
+    if (typeof value !== "string" || value.length > max || /[\x00-\x1f]/.test(value)) throw fail(`Enter a valid ${label}.`);
+    return value.trim();
+  };
   return {
-    profile, settings,
+    profile, settings, voiceSettings,
+    async saveVoiceService(id, input) {
+      await profile(id);
+      const service = {
+        provider: voiceField(input.provider, "provider", 80), model: voiceField(input.model, "model"),
+        region: voiceField(input.region, "region", 80), workspaceId: voiceField(input.workspaceId, "workspace ID"),
+      };
+      // Draft metadata only. Credentials and provider calls are deliberately not
+      // accepted until a realtime provider has been selected and integrated.
+      await update(state => { state[id].voiceService = service; });
+      return voiceSettings(id);
+    },
+    async addVoice(id, input) {
+      await profile(id);
+      const name = voiceField(input.name, "voice name", 60);
+      const voiceId = voiceField(input.voiceId || "", "provider voice ID", 256);
+      if (!name) throw fail("Give this voice a name.");
+      const preview = input.preview;
+      if (typeof preview !== "string" || preview.length > 4 * 1024 * 1024 || !/^data:audio\/(wav|x-wav|mpeg|mp3|ogg|mp4|x-m4a);base64,[A-Za-z0-9+/]+=*$/.test(preview)) throw fail("Choose a WAV, MP3, OGG or M4A preview under 3 MB.");
+      const audio = Buffer.from(preview.split(",")[1], "base64");
+      const signature = audio.subarray(0, 12).toString("latin1");
+      if (audio.length < 32 || !(signature.startsWith("RIFF") && signature.endsWith("WAVE") || signature.startsWith("ID3") || signature.startsWith("OggS") || signature.slice(4, 8) === "ftyp" || audio[0] === 0xff && (audio[1] & 0xe0) === 0xe0)) throw fail("The preview is not a supported audio file.");
+      await update(async state => {
+        const voices = state[id].voices ||= [];
+        if (voices.length >= 12) throw fail("This character can hold up to 12 voice previews. Remove one before adding another.");
+        const optionId = `voice-${randomUUID()}`;
+        await mkdir(previewDirectory, { recursive: true });
+        await writeFile(join(previewDirectory, optionId), audio, { mode: 0o600 });
+        voices.push({ id: optionId, name, voiceId, preview: { mime: preview.slice(5, preview.indexOf(";")) },
+          provider: state[id].voiceService?.provider || "", model: state[id].voiceService?.model || "" });
+      });
+      return voiceSettings(id);
+    },
+    async previewVoice(id, voiceId) {
+      const voice = (await profile(id)).voices?.find(item => item.id === voiceId);
+      if (!voice) throw fail("Voice preview not found.", 404);
+      const audio = await readFile(join(previewDirectory, voice.id)).catch(() => { throw fail("This preview is missing. Remove it and add the audio file again.", 404); });
+      return { audio: `data:${voice.preview.mime};base64,${audio.toString("base64")}` };
+    },
+    async applyVoice(id, voiceId) {
+      await profile(id);
+      await update(state => {
+        if (!state[id].voices?.some(item => item.id === voiceId)) throw fail("Choose an available voice first.");
+        state[id].selectedVoiceId = voiceId;
+      });
+      return voiceSettings(id);
+    },
+    async removeVoice(id, voiceId) {
+      await profile(id);
+      let removed;
+      await update(state => {
+        removed = state[id].voices?.find(item => item.id === voiceId);
+        state[id].voices = (state[id].voices || []).filter(item => item.id !== voiceId);
+        if (state[id].selectedVoiceId === voiceId) state[id].selectedVoiceId = null;
+      });
+      if (removed) await unlink(join(previewDirectory, removed.id)).catch(error => { if (error.code !== "ENOENT") throw error; });
+      return voiceSettings(id);
+    },
     async local(id, agentId) {
       identity(id);
       if (agentId === null) return select(id, null);

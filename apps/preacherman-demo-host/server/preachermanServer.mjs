@@ -1396,6 +1396,22 @@ export function createPreachermanServer(options = {}) {
 
     try {
       const url = new URL(request.url, "http://127.0.0.1");
+      const voiceDraftRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/voice(?:\/(service|options|preview|apply))?$/);
+      if (voiceDraftRoute) {
+        const [, id, action] = voiceDraftRoute;
+        response.setHeader("Cache-Control", "no-store");
+        if (!action && request.method === "GET") { json(response, 200, await characterConversation.voiceSettings(id), origin); return; }
+        if (action === "preview" && request.method === "GET") { json(response, 200, await characterConversation.previewVoice(id, url.searchParams.get("id")), origin); return; }
+        if (request.method === "POST") {
+          const body = await readJson(request, action === "options" ? 4 * 1024 * 1024 + 4096 : 8192);
+          const result = action === "service" ? await characterConversation.saveVoiceService(id, body) :
+            action === "options" ? await characterConversation.addVoice(id, body) :
+            action === "apply" ? await characterConversation.applyVoice(id, body.id) : null;
+          if (result) { json(response, 200, result, origin); return; }
+        }
+        if (action === "options" && request.method === "DELETE") { json(response, 200, await characterConversation.removeVoice(id, url.searchParams.get("id")), origin); return; }
+        json(response, 405, { error: "Method not allowed." }, origin); return;
+      }
       const characterRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/(execution(?:\/local|\/save)?|conversation)$/);
       if (characterRoute) {
         const [, id, action] = characterRoute;
