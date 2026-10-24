@@ -1,79 +1,55 @@
 {
   "schemaVersion": 1,
-  "buildId": "voice-recognition-20261023",
+  "buildId": "voice-ui-20261025",
   "productVersion": "0.1.0",
-  "sourceTask": "Fix repeated recognition rejection with the installed offline Whisper model",
+  "sourceTask": "Build per-character voice configuration drafts, audition/apply tiles and accessory frames; defer realtime API integration",
   "sourceThread": null,
-  "sourceState": "Activated characters have server-owned identities and independently persisted execution selections. The existing waveform button captures a spoken phrase with the selected microphone, uses the installed offline Whisper base model, requests a real Codex or configured API reply, and plays locally synthesized audio through the selected output. No transcript, reply text, subtitles or chat input are rendered. Capture pauses during reply processing/playback, then resumes. Stop, character changes and execution changes cancel pending work. Info Map and existing model assets remain unchanged.",
-  "sourceCommit": "ab0e64069b7400dbbe8f70c34b6b3427d2dcfa70",
+  "sourceState": "Asset Settings adds Voice Service with independent provider/model/region/workspace drafts and explicit Not connected status. Appearance Voice imports finished local previews, auditions on tile click and saves the character choice after a successful long-press Apply. Accessories has the matching three-column slanted empty frames. Both themes preserve existing 3D content and focused Settings interaction. No provider credentials, external speech API or substitute Master Chief voice are introduced; the existing conversation runtime is unchanged.",
+  "sourceCommit": "5672d8ace3205e7607261abea1ab471e5736a6c5",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-23T16:59:44.8115376+08:00",
-  "deployedAt": "2026-10-23T17:00:46.8719292+08:00",
-  "verifiedAt": "2026-10-23T17:10:02.633015+08:00",
-  "sizeBytes": 820798464,
-  "sha256": "7D5556CBB17D501776F5DCDBCFEF59D6ACE33ED67078DBB6834E2652E96A9F54",
+  "builtAt": "2026-10-25T06:48:49.6039204+08:00",
+  "deployedAt": "2026-10-25T06:49:46.9957045+08:00",
+  "verifiedAt": "2026-10-25T06:58:57.785539+08:00",
+  "sizeBytes": 820802560,
+  "sha256": "D9DB94CA9A75929846C2E97957AA17546BDDEB2A997103C4D39578B03C61417E",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-10-23T16:58:01.326909+08:00",
-  "sidecarSizeBytes": 93205504,
-  "sidecarSha256": "59DD876E1C156AFE90CEC9D02217728690CE34E5BA8EDB403D93C23B536A76F6",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-recognition-before-20261023\\preacherman-demo-host.exe",
-  "backupSha256": "C3563359498B4481B150ADD8AB957BA09D06C8DE89AFBBFC786657B867BB0AF5",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-recognition-before-20261023\\preacherman-service.exe",
-  "sidecarBackupSha256": "62D8C6D23298B201A2F139C592E8535509539A33513A848D293C39F6B6642793",
-  "rollbackBaselineCommit": "cc43ad4d1b4d1cff3c58f1d6ce7e6bf52e65e8e1",
-  "previousVerificationCommit": "cc43ad4d1b4d1cff3c58f1d6ce7e6bf52e65e8e1",
+  "sidecarBuiltAt": "2026-10-25T06:46:41.050902+08:00",
+  "sidecarSizeBytes": 93211648,
+  "sidecarSha256": "7B5372155636F0368BEF4205739249CAC93417C9F3AD1FBD45BA226C3D55D20E",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-ui-before-20261025\\preacherman-demo-host.exe",
+  "backupSha256": "7D5556CBB17D501776F5DCDBCFEF59D6ACE33ED67078DBB6834E2652E96A9F54",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-ui-before-20261025\\preacherman-service.exe",
+  "sidecarBackupSha256": "59DD876E1C156AFE90CEC9D02217728690CE34E5BA8EDB403D93C23B536A76F6",
+  "rollbackBaselineCommit": "ab0e64069b7400dbbe8f70c34b6b3427d2dcfa70",
+  "previousVerificationCommit": "ab0e64069b7400dbbe8f70c34b6b3427d2dcfa70",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 35,
+      "focusedTests": 33,
       "focusedFailures": 0,
       "gitDiffCheck": "passed",
-      "excludedPreExistingAssertions": [
-        "execution-connections: old Task composer focus selector",
-        "voice-avatar-closed-loop: old App scene shape",
-        "voice-avatar-closed-loop: old thinking animation selector"
-      ]
+      "designDetector": []
     },
-    "nativeFlow": "Canonical shortcut cold Home launch; eight core destinations in both appearances; selected hardware microphone open/stop; deterministic spoken input through the production worklet, offline Whisper recognition, real model and non-silent playback; automatic listening restart; stop during startup; no visible dialogue text; per-character Execution Mode panel; native window controls; final normal shortcut restart and resource checks.",
+    "nativeFlow": "Cold launch through the canonical shortcut; eight core destinations in both appearances; import, audition, incomplete hold rewind, Apply confirmation, persisted per-character selection, voice service draft save, focus/blur and model retention. Native window controls, final normal shortcut restart and resource cleanup verified. Test previews removed and prior voice metadata restored.",
     "modes": [
       {
         "appearance": "light",
-        "voiceOnly": true,
-        "resumedListening": true,
-        "stages": [
-          "idle",
-          "idle",
-          "idle",
-          "listening",
-          "thinking",
-          "speaking",
-          "idle",
-          "idle",
-          "listening",
-          "idle"
-        ],
-        "jawMax": 0.6561368181644371
+        "threeColumnFrames": true,
+        "serviceDraft": true,
+        "modelAndFocus": true,
+        "auditionSeparateFromApply": true,
+        "english": true
       },
       {
         "appearance": "dark",
-        "voiceOnly": true,
-        "resumedListening": true,
-        "stages": [
-          "idle",
-          "idle",
-          "idle",
-          "listening",
-          "thinking",
-          "speaking",
-          "idle",
-          "idle",
-          "listening",
-          "idle"
-        ],
-        "jawMax": 0.8255871254823801
+        "threeColumnFrames": true,
+        "serviceDraft": true,
+        "modelAndFocus": true,
+        "auditionSeparateFromApply": true,
+        "english": true
       }
     ],
     "routes": [
@@ -94,14 +70,12 @@
       },
       {
         "appearance": "light",
-        "name": "Gallery",
-        "ready": true,
-        "activationRemoved": true,
-        "previewOnly": true
+        "name": "Task",
+        "ready": true
       },
       {
         "appearance": "light",
-        "name": "Task",
+        "name": "Gallery",
         "ready": true
       },
       {
@@ -136,14 +110,12 @@
       },
       {
         "appearance": "dark",
-        "name": "Gallery",
-        "ready": true,
-        "activationRemoved": true,
-        "previewOnly": true
+        "name": "Task",
+        "ready": true
       },
       {
         "appearance": "dark",
-        "name": "Task",
+        "name": "Gallery",
         "ready": true
       },
       {
@@ -164,34 +136,59 @@
     ],
     "pageErrors": [],
     "consoleErrors": [
+      "Hydration completed but contains mismatches.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "newConsoleErrors": [],
     "resources": {
-      "SampledAt": "2026-10-23T17:09:18.3454472+08:00",
-      "NativePid": 20880,
-      "StartedAt": "2026-10-23T17:09:01.8423236+08:00",
-      "WindowHandle": 657004,
+      "SampledAt": "2026-10-25T06:57:38.0482735+08:00",
+      "NativePid": 12084,
+      "StartedAt": "2026-10-25T06:57:15.7666292+08:00",
+      "WindowHandle": 395368,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        20880,
-        28260,
-        13544,
-        23236,
-        24628,
-        11420,
-        4568,
-        28128,
-        23088,
-        4104,
-        18632
+        12084,
+        29408,
+        12996,
+        7812,
+        360,
+        20120,
+        29288,
+        11876,
+        27124,
+        2452,
+        7504
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 2086.8,
-      "GpuDedicatedBytes": 3469676544,
+      "WorkingSetMiB": 2080.8,
+      "GpuDedicatedBytes": 3435577344,
       "MaxGpuEngineUtilization": 6,
-      "FreeRamKiB": 18627672,
+      "FreeRamKiB": 19302968,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -206,113 +203,17 @@
       "closeRequested": true,
       "passed": true
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\voice-recognition-20261023",
+    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\voice-ui-20261025",
+    "responsive": true,
     "baselineReports": [
       "output/playwright/asset-settings-focus-20261023/native-report.json",
       "output/tifa-import-20261015/native-report.json"
     ],
-    "baselineDiagnosticNote": "No new console errors. Three existing source-regex assertions fail on the unchanged baseline layout; they are explicitly excluded from the passing focused run.",
     "scopeLimits": [
-      "Local Python, Whisper and its cached base model are required and already installed on this desktop. Windows still supplies the generic synthesis voice. Recognition accuracy varies with audio and accent.",
-      "Voice dialogue context is bounded in-process memory and is not displayed in Info Map.",
-      "No skill execution, approvals or external actions are enabled by conversation."
-    ],
-    "microphoneComparison": {
-      "legacy": {
-        "status": 200,
-        "confidence": 0.00485184463,
-        "characters": 2
-      },
-      "whisper": {
-        "accepted": true,
-        "confidence": 0.5412,
-        "characters": 8,
-        "audio": {
-          "durationMs": 2240,
-          "rms": 0.013737,
-          "peak": 0.108241
-        },
-        "expectedPhrase": false
-      }
-    },
-    "recognitionApi": {
-      "status": {
-        "engine": "whisper",
-        "model": "base",
-        "language": "zh-CN",
-        "languages": [
-          "zh-CN",
-          "en-US"
-        ],
-        "voices": [
-          "zh-CN",
-          "en-US"
-        ]
-      },
-      "samples": [
-        {
-          "kind": "normal",
-          "accepted": true,
-          "confidence": 0.727,
-          "audio": {
-            "durationMs": 3543,
-            "rms": 0.059024,
-            "peak": 0.767734
-          },
-          "elapsedMs": 3608
-        },
-        {
-          "kind": "quiet",
-          "accepted": true,
-          "confidence": 0.7283,
-          "audio": {
-            "durationMs": 3543,
-            "rms": 0.005902,
-            "peak": 0.076777
-          },
-          "elapsedMs": 3616
-        },
-        {
-          "kind": "silence",
-          "accepted": false,
-          "confidence": 0,
-          "audio": {
-            "durationMs": 3543,
-            "rms": 0,
-            "peak": 0
-          },
-          "elapsedMs": 2425
-        }
-      ],
-      "realReply": {
-        "characters": 21,
-        "audioBytes": 271604
-      },
-      "passed": true
-    },
-    "liveMicrophone": {
-      "recognition": {
-        "status": 200,
-        "engine": "whisper",
-        "accepted": true,
-        "characters": 10,
-        "confidence": 0.6247,
-        "audio": {
-          "durationMs": 3424,
-          "rms": 0.050578,
-          "peak": 0.684372
-        }
-      },
-      "reply": {
-        "status": 200,
-        "characters": 19
-      },
-      "playback": true,
-      "noVisibleDialogue": true,
-      "resumedListening": true,
-      "passed": true,
-      "userConfirmedNormalReply": true
-    }
+      "Realtime provider/API credentials and live character synthesis await provider selection. The new Applied state saves a future runtime preference only.",
+      "The user will supply the cloned Master Chief voice; no substitute preset is assigned.",
+      "Accessories remain empty until authored assets are supplied."
+    ]
   },
   "releaseAttempts": [
     {
@@ -1573,9 +1474,17 @@
       "sha256": "7D5556CBB17D501776F5DCDBCFEF59D6ACE33ED67078DBB6834E2652E96A9F54",
       "sidecarSha256": "59DD876E1C156AFE90CEC9D02217728690CE34E5BA8EDB403D93C23B536A76F6",
       "verifiedAt": "2026-10-23T17:10:02.633015+08:00"
+    },
+    {
+      "buildId": "voice-ui-20261025",
+      "sourceCommit": "5672d8ace3205e7607261abea1ab471e5736a6c5",
+      "status": "verified",
+      "sha256": "D9DB94CA9A75929846C2E97957AA17546BDDEB2A997103C4D39578B03C61417E",
+      "sidecarSha256": "7B5372155636F0368BEF4205739249CAC93417C9F3AD1FBD45BA226C3D55D20E",
+      "verifiedAt": "2026-10-25T06:58:57.785539+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-recognition-before-20261023\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-ui-before-20261025\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1592,13 +1501,7 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\voice-recognition-20261023",
-    "backupRetention": {
-      "status": "passed",
-      "retainedSets": 3,
-      "removedSets": 1,
-      "freedGiB": 0.85
-    }
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\voice-ui-20261025"
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
