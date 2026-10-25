@@ -1,13 +1,18 @@
-import { access } from "node:fs/promises";
+import { access, stat } from "node:fs/promises";
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
+import { join } from "node:path";
+import { describeBreezeVoice } from "./voiceIdentity.mjs";
+import { createVoicePreviewCache } from "./voicePreviewCache.mjs";
 
 export const BREEZE_URL = "http://127.0.0.1:18760";
 const fail = (message, statusCode = 503) => Object.assign(new Error(message), { statusCode });
 
 // The installed service owns its model and lifetime. Never accept executable paths or URLs from the browser.
-export function createBreezeSpeech({ request = fetch, platform = process.platform, spawnImpl = spawn } = {}) {
+export function createBreezeSpeech({ request = fetch, platform = process.platform, spawnImpl = spawn, previewDirectory, previewTimeoutMs = 15000 } = {}) {
   let starting = null;
   const children = new Set();
+  const previews = createVoicePreviewCache({ directory: previewDirectory });
   async function call(path, options = {}, timeout = 2000) {
     const signal = AbortSignal.any([options.signal || new AbortController().signal, AbortSignal.timeout(timeout)]);
     try {
@@ -26,16 +31,20 @@ export function createBreezeSpeech({ request = fetch, platform = process.platfor
   async function voices(signal) {
     const list = await (await call("/v1/voices", { signal })).json();
     if (!Array.isArray(list)) throw fail("Breeze returned an invalid voice library.");
-    return list.filter(v => v.saved && typeof v.id === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(v.id)).map(v => ({
+    return Promise.all(list.filter(v => v.saved && typeof v.id === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(v.id)).map(async v => ({
       id: `breeze:${v.id}`, voiceId: v.id, name: v.id, description: typeof v.description === "string" ? v.description : "",
+      ...describeBreezeVoice(v),
+      revision: createHash("sha256").update(JSON.stringify([v.frames, v.ref_text, v.metadata,
+        platform === "win32" ? await stat(join("D:\\AI\\Breeze-TTS-2\\voices", v.id + ".breeze")).then(s => [s.size, s.mtimeMs]).catch(() => null) : null])).digest("hex"),
       provider: "breeze", model: "Breeze-TTS-2", hasPreview: true, source: "breeze",
-    }));
+    })));
   }
-  async function synthesize({ text, voiceId }, signal) {
+  async function synthesize({ text, voiceId, maxNewTokens }, signal) {
     if (typeof text !== "string" || !text.trim() || text.length > 6000) throw fail("Enter between 1 and 6000 characters to speak.", 400);
     if (typeof voiceId !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(voiceId)) throw fail("Select a saved Breeze voice first.", 400);
     const response = await call("/v1/audio/speech", { method: "POST", signal, headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ input: text, voice: voiceId, instructions: "", response_format: "wav", seed: 42 }) }, 90000);
+      body: JSON.stringify({ input: text, voice: voiceId, instructions: "", response_format: "wav", seed: 42,
+        ...(maxNewTokens ? { max_new_tokens: maxNewTokens } : {}) }) }, 90000);
     const chunks = []; let length = 0;
     try {
       for await (const chunk of response.body) {
@@ -52,6 +61,19 @@ export function createBreezeSpeech({ request = fetch, platform = process.platfor
   }
   return {
     voices, synthesize,
+    async preview(voice, signal) {
+      const text = "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.";
+      return previews.get(JSON.stringify([voice.voiceId, voice.revision, text]), async cancellation => {
+        const deadline = AbortSignal.timeout(previewTimeoutMs);
+        const combined = AbortSignal.any([cancellation, deadline]);
+        try { return await synthesize({ text, voiceId: voice.voiceId, maxNewTokens: 125 }, combined); }
+        catch (error) {
+          cancellation.throwIfAborted();
+          if (deadline.aborted) throw fail("Voice preview timed out. Try again after the current generation finishes.", 504);
+          throw error;
+        }
+      }, signal);
+    },
     async connect(signal) {
       try { return await voices(signal); } catch (error) { signal?.throwIfAborted(); if (error.statusCode !== 503) throw error; }
       if (platform !== "win32") throw fail("Start Breeze TTS 2 before connecting.");
@@ -68,6 +90,6 @@ export function createBreezeSpeech({ request = fetch, platform = process.platfor
       })().finally(() => { starting = null; });
       await starting; signal?.throwIfAborted(); return voices(signal);
     },
-    close() { for (const child of children) child.kill(); children.clear(); },
+    close() { for (const child of children) child.kill(); children.clear(); return previews.close(); },
   };
 }

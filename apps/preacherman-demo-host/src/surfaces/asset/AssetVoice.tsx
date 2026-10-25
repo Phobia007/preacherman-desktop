@@ -6,6 +6,11 @@ import { AssetActivateButton } from "./AssetActivateButton";
 import "./asset-voice.css";
 
 type Character = { id: string; name: string };
+const voiceLanguages = {
+  zh: { label: "ZH", description: "Chinese reference voice" },
+  en: { label: "EN", description: "English reference voice" },
+  unknown: { label: "?", description: "Voice language unknown" },
+};
 function VoiceMark() {
   return <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 20v8m8-15v22m8-29v36m8-29v22m8-15v8" /></svg>;
 }
@@ -118,9 +123,9 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
         <div className="asset-voice__form-actions"><button type="button" disabled={Boolean(busy)} onClick={() => { setAdding(false); setError(""); }}>Cancel</button><button type="submit" disabled={Boolean(busy) || !file || !name.trim()}>{busy === "add" ? "Adding…" : "Add preview"}</button></div>
       </form> : <>
         <div className="asset-pack-grid" aria-label="Voice previews">
-          {voices.map(voice => <button key={voice.id} type="button" className="asset-pack-tile" aria-label={`Preview ${voice.name}`} aria-pressed={selected === voice.id} data-playing={playing === voice.id} disabled={!enabled || Boolean(busy)} onClick={() => void listen(voice)}>
+          {voices.map(voice => <button key={voice.id} type="button" className="asset-pack-tile" aria-label={`Preview ${voice.name} · ${voiceLanguages[voice.language || "unknown"].description}`} aria-pressed={selected === voice.id} data-playing={playing === voice.id} disabled={!enabled || Boolean(busy)} onClick={() => void listen(voice)}>
             <span className="asset-pack-tile__content"><VoiceMark /><span className="asset-pack-tile__name">{voice.name}</span></span>
-            {snapshot?.selectedVoiceId === voice.id && <span className="asset-pack-tile__check" aria-label="Applied"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10" /></svg></span>}
+            <span className="asset-voice__language" title={voiceLanguages[voice.language || "unknown"].description} aria-label={voiceLanguages[voice.language || "unknown"].description}>{voiceLanguages[voice.language || "unknown"].label}</span>
           </button>)}
           {snapshot && importedCount < 12 && <button type="button" className="asset-pack-tile asset-pack-tile--add" aria-label="Add voice preview" disabled={!enabled || Boolean(busy)} onClick={() => { stop(); setAdding(true); setError(""); setNotice(""); }}><span className="asset-pack-tile__content"><Plus /><span className="asset-pack-tile__name">Add voice</span></span></button>}
           {Array.from({ length: Math.max(0, 12 - voices.length - (snapshot && importedCount < 12 ? 1 : 0)) }, (_, index) => <span className="asset-pack-tile asset-pack-tile--empty" aria-hidden="true" key={`empty-${index}`} />)}

@@ -55,7 +55,7 @@ export function createCharacterConversation({ file, connections, codex, listAgen
     const saved = await profile(id);
     let localVoices = [], breezeStatus = "offline";
     if (breeze) {
-      try { localVoices = await breeze.voices(signal); breezeStatus = "connected"; }
+      try { localVoices = (await breeze.voices(signal)).filter(voice => voice.characterId === id); breezeStatus = "connected"; }
       catch { signal?.throwIfAborted(); }
     }
     return {
@@ -63,7 +63,7 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       service: saved.voiceService || { provider: "", model: "", region: "", workspaceId: "" },
       connectionStatus: saved.voiceService?.provider === "breeze" ? breezeStatus : "not-connected",
       breezeStatus,
-      selectedVoiceId: saved.selectedVoiceId || null,
+      selectedVoiceId: saved.selectedVoiceId?.startsWith("breeze:") && breezeStatus === "connected" && !localVoices.some(voice => voice.id === saved.selectedVoiceId) ? null : saved.selectedVoiceId || null,
       voices: [...(saved.voices || []).map(({ preview, ...voice }) => ({ ...voice, hasPreview: Boolean(preview) })), ...localVoices],
     };
   };
@@ -84,6 +84,7 @@ export function createCharacterConversation({ file, connections, codex, listAgen
         const imported = saved.voices?.find(v => v.id === key && v.provider === "breeze");
         const voiceId = key?.startsWith("breeze:") ? key.slice(7) : imported?.voiceId;
         if (!voiceId) throw fail("Choose a Breeze voice in Appearance → Voice and hold Apply first.", 409);
+        if (key?.startsWith("breeze:") && !(await breeze.voices(signal)).some(voice => voice.voiceId === voiceId && voice.characterId === id)) throw fail("Choose a voice assigned to this character in Appearance → Voice.", 409);
         return breeze.synthesize({ text: input.text, voiceId }, signal);
       }
       return windowsSpeech.synthesize(input, signal);
@@ -122,7 +123,9 @@ export function createCharacterConversation({ file, connections, codex, listAgen
     async previewVoice(id, voiceId, signal) {
       await profile(id);
       if (typeof voiceId === "string" && voiceId.startsWith("breeze:")) {
-        const result = await breeze.synthesize({ text: "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.", voiceId: voiceId.slice(7) }, signal);
+        const voice = (await breeze.voices(signal)).find(item => item.id === voiceId && item.characterId === id);
+        if (!voice) throw fail("This voice is not assigned to this character.", 404);
+        const result = await breeze.preview(voice, signal);
         return { audio: `data:audio/wav;base64,${result.audio}` };
       }
       const voice = (await profile(id)).voices?.find(item => item.id === voiceId);
@@ -133,7 +136,7 @@ export function createCharacterConversation({ file, connections, codex, listAgen
     async applyVoice(id, voiceId) {
       await profile(id);
       const localVoice = typeof voiceId === "string" && voiceId.startsWith("breeze:")
-        ? (await breeze.voices()).find(v => v.id === voiceId) : null;
+        ? (await breeze.voices()).find(v => v.id === voiceId && v.characterId === id) : null;
       await update(state => {
         if (!localVoice && !state[id].voices?.some(item => item.id === voiceId)) throw fail("Choose an available voice first.");
         state[id].selectedVoiceId = voiceId;

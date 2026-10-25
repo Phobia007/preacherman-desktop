@@ -11,14 +11,14 @@
 .asset-collection button.asset-pack-tile { cursor: pointer; transition: border-color 180ms ease, background 180ms ease; }
 .asset-collection button.asset-pack-tile:hover { background: var(--demo-theme-market-hover); border-color: var(--demo-theme-market-text); }
 .asset-collection button.asset-pack-tile[aria-pressed="true"] { border-color: var(--demo-theme-market-text); box-shadow: inset 0 0 0 .5px var(--demo-theme-market-text); }
+.asset-collection .asset-voice button.asset-pack-tile[aria-pressed="true"] { background: var(--demo-theme-activate-fill); color: var(--demo-theme-activate-fill-text); border-color: var(--demo-theme-activate-fill); box-shadow: none; }
 .asset-pack-tile__content { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 8px 10px; box-sizing: border-box; transform: skewX(12deg); }
 .asset-pack-tile svg { width: 38px; height: 38px; fill: none; stroke: currentColor; stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
 .asset-pack-tile__name { max-width: 100%; font-size: 12px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .asset-pack-tile--add .asset-pack-tile__content { opacity: .8; }
 .asset-collection .asset-pack-tile--empty { opacity: .36; background: transparent; }
 .asset-pack-tile--empty:nth-child(n+10) { opacity: .18; }
-.asset-pack-tile__check { position: absolute; right: 0; top: 0; width: 21px; height: 21px; background: var(--demo-theme-activate-fill); color: var(--demo-theme-activate-fill-text); }
-.asset-pack-tile__check svg { width: 18px; height: 18px; transform: skewX(12deg); }
+.asset-voice__language { position: absolute; right: 5px; top: 5px; font-size: 9px; line-height: 1; letter-spacing: .04em; color: inherit; transform: skewX(12deg); }
 .asset-pack-tile[data-playing="true"] .asset-pack-tile__content > svg { animation: asset-voice-listening 850ms ease-in-out infinite alternate; }
 .asset-pack-browser__description { margin-top: 24px; }
 .asset-pack-browser__description h3, .asset-voice__form h3 { margin: 0 0 12px; font-size: 24px; font-weight: 400; line-height: 1.3; overflow-wrap: anywhere; }

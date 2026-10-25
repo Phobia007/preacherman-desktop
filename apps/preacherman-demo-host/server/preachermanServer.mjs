@@ -1368,7 +1368,7 @@ export function createPreachermanServer(options = {}) {
   });
   const codexConversation = options.codexConversation ?? createCodexConversation({ directory: join(dataDirectory, "chat-session") });
   const windowsSpeech = options.windowsSpeech ?? createWindowsSpeech();
-  const breezeSpeech = options.breezeSpeech ?? createBreezeSpeech();
+  const breezeSpeech = options.breezeSpeech ?? createBreezeSpeech({ previewDirectory: join(dataDirectory, "breeze-previews") });
   const characterConversation = createCharacterConversation({ file: join(dataDirectory, "characters.v1.json"), connections: executionConnections, codex: codexConversation, listAgents: () => agentAccessRuntime.listLocalAgents(), breeze: breezeSpeech, windowsSpeech });
   const speechRecognition = options.speechRecognition ?? createLocalSpeechRecognition();
   const workspaceSelection = createWorkspaceSelection({
@@ -2600,7 +2600,7 @@ export function createPreachermanServer(options = {}) {
       await preachermanPluginRuntime.close();
       codexConversation.close();
       windowsSpeech.close();
-      breezeSpeech.close();
+      await breezeSpeech.close();
       speechRecognition.close();
       await agentAccessRuntime.close();
       ecosystemFacade.close();

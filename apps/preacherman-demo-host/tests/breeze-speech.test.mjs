@@ -14,17 +14,19 @@ function wav() {
   for (let i = 44; i < b.length; i += 2) b.writeInt16LE(500, i);
   return b;
 }
-function adapter() {
+function adapter(previewDirectory) {
   const requests = [];
-  const service = createBreezeSpeech({ request: async (url, options) => {
+  const service = createBreezeSpeech({ previewDirectory, request: async (url, options) => {
     requests.push({ url, ...options });
-    if (url.endsWith("/v1/voices")) return Response.json([{ id: "warm", saved: true, description: "Warm voice" }, { id: "temporary", saved: false }]);
+    if (url.endsWith("/v1/voices")) return Response.json([{ id: "warm", saved: true, description: "Warm voice", metadata: { characterId: "cortana", language: "en" } }, { id: "temporary", saved: false }]);
     return new Response(wav());
   } });
   return { service, requests };
 }
-test("Breeze exposes saved voices only and completes streaming WAV headers without changing PCM", async () => {
-  const { service, requests } = adapter();
+test("Breeze exposes saved voices only and completes streaming WAV headers without changing PCM", async t => {
+  const directory = await mkdtemp(join(tmpdir(), "preacherman-breeze-adapter-"));
+  const { service, requests } = adapter(directory);
+  t.after(async () => { service.close(); await rm(directory, { recursive: true, force: true }); });
   assert.deepEqual((await service.voices()).map(v => v.id), ["breeze:warm"]);
   const audio = Buffer.from((await service.synthesize({ text: "你好", voiceId: "warm" })).audio, "base64");
   assert.equal(audio.readUInt32LE(4), audio.length - 8); assert.equal(audio.readUInt32LE(40), audio.length - 44);
@@ -33,36 +35,56 @@ test("Breeze exposes saved voices only and completes streaming WAV headers witho
   assert.equal(requests[1].redirect, "error");
   await assert.rejects(service.synthesize({ text: "hi", voiceId: "../../other" }), /Select a saved/);
 });
-test("Breeze fails on removed voices, malformed audio and cancellation without falling back to another voice", async () => {
-  const missing = createBreezeSpeech({ request: async () => new Response("missing", { status: 404 }) });
+test("Breeze fails on removed voices, malformed audio and cancellation without falling back to another voice", async t => {
+  const directory = await mkdtemp(join(tmpdir(), "preacherman-breeze-errors-"));
+  const missing = createBreezeSpeech({ previewDirectory: join(directory, "missing"), request: async () => new Response("missing", { status: 404 }) });
   await assert.rejects(missing.synthesize({ text: "hi", voiceId: "gone" }), /no longer available/);
-  const broken = createBreezeSpeech({ request: async () => new Response("not audio") });
+  const broken = createBreezeSpeech({ previewDirectory: join(directory, "broken"), request: async () => new Response("not audio") });
   await assert.rejects(broken.synthesize({ text: "hi", voiceId: "warm" }), /invalid WAV/);
   const cancellation = new AbortController();
-  const pending = createBreezeSpeech({ request: async (_, { signal }) => new Promise((resolve, reject) => signal.addEventListener("abort", () => reject(signal.reason), { once: true })) });
+  const pending = createBreezeSpeech({ previewDirectory: join(directory, "pending"), request: async (_, { signal }) => new Promise((resolve, reject) => signal.addEventListener("abort", () => reject(signal.reason), { once: true })) });
+  t.after(async () => { missing.close(); broken.close(); pending.close(); await rm(directory, { recursive: true, force: true }); });
   const output = pending.synthesize({ text: "hi", voiceId: "warm" }, cancellation.signal); cancellation.abort();
   await assert.rejects(output, { name: "AbortError" });
 });
-test("shared Breeze library displays every voice while Apply, playback and restart preserve each character's independent choice", async t => {
+test("Breeze voices stay with their character while Apply, playback and restart preserve independent choices", async t => {
   const directory = await mkdtemp(join(tmpdir(), "preacherman-breeze-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const calls = []; let offline = false;
-  const voices = Array.from({ length: 15 }, (_, i) => ({ id: `breeze:voice_${i}`, voiceId: `voice_${i}`, name: `Voice ${i}`, provider: "breeze", source: "breeze", model: "Breeze-TTS-2", hasPreview: true }));
-  const breeze = { voices: async () => { if (offline) throw Error("offline"); return voices; }, synthesize: async input => { if (offline) throw Error("offline"); calls.push(input); return { audio: wav().toString("base64") }; } };
+  const voices = Array.from({ length: 15 }, (_, i) => ({ id: `breeze:voice_${i}`, voiceId: `voice_${i}`, name: `Voice ${i}`, characterId: "cortana", language: "en", provider: "breeze", source: "breeze", model: "Breeze-TTS-2", hasPreview: true }));
+  voices.push({ ...voices[0], id: "breeze:zima", voiceId: "zima", name: "ZIMA", characterId: "zima" });
+  voices.push({ ...voices[0], id: "breeze:unassigned", voiceId: "unassigned", characterId: null });
+  const breeze = {
+    voices: async () => { if (offline) throw Error("offline"); return voices; },
+    synthesize: async input => { if (offline) throw Error("offline"); calls.push(input); return { audio: wav().toString("base64") }; },
+    preview: async (voice, signal) => breeze.synthesize({ text: "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.", voiceId: voice.voiceId }, signal),
+  };
   const args = { file: join(directory, "characters.json"), connections: { status: async () => ({ active: null }) }, breeze, windowsSpeech: { synthesize: async () => ({ audio: "windows" }) } };
   const service = createCharacterConversation(args);
   const imported = (await service.addVoice("cortana", { name: "Existing preview", preview: `data:audio/wav;base64,${wav().toString("base64")}` })).voices.find(v => v.provider !== "breeze");
   assert.equal((await service.voiceSettings("cortana")).voices.length, 16);
+  assert.deepEqual((await service.voiceSettings("zima")).voices.map(v => v.id), ["breeze:zima"]);
+  assert.equal((await service.voiceSettings("clove-t-pose")).voices.length, 0);
+  assert.ok(!(await service.voiceSettings("cortana")).voices.some(v => ["breeze:zima", "breeze:unassigned"].includes(v.id)));
+  for (const unavailable of ["breeze:zima", "breeze:unassigned"]) {
+    await assert.rejects(service.previewVoice("cortana", unavailable), /not assigned/);
+    await assert.rejects(service.applyVoice("cortana", unavailable), /available voice/);
+  }
+  assert.equal(calls.length, 0, "foreign or unassigned previews never reach synthesis");
   await service.previewVoice("cortana", "breeze:voice_0");
   assert.deepEqual(calls.at(-1), { text: "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.", voiceId: "voice_0" });
   assert.equal((await service.voiceSettings("cortana")).selectedVoiceId, null);
-  await service.applyVoice("cortana", "breeze:voice_0"); await service.applyVoice("zima", "breeze:voice_1");
+  await service.applyVoice("cortana", "breeze:voice_0"); await service.applyVoice("zima", "breeze:zima");
   const restarted = createCharacterConversation(args);
   await restarted.synthesize("cortana", { text: "one" }); await restarted.synthesize("zima", { text: "two" });
-  assert.deepEqual(calls.slice(-2), [{ text: "one", voiceId: "voice_0" }, { text: "two", voiceId: "voice_1" }]);
+  assert.deepEqual(calls.slice(-2), [{ text: "one", voiceId: "voice_0" }, { text: "two", voiceId: "zima" }]);
   assert.equal((await restarted.voiceSettings("cortana")).connectionStatus, "connected");
   await assert.rejects(service.applyVoice("cortana", "breeze:missing"), /available voice/);
   await assert.rejects(service.removeVoice("cortana", "breeze:voice_0"), /Shared Breeze/);
+  voices[0].characterId = "zima";
+  assert.equal((await service.voiceSettings("cortana")).selectedVoiceId, null, "a reassigned voice is not presented as this character's active choice");
+  await assert.rejects(service.synthesize("cortana", { text: "Do not use a reassigned voice" }), /assigned to this character/);
+  voices[0].characterId = "cortana";
   offline = true;
   const state = await service.voiceSettings("cortana"); assert.equal(state.selectedVoiceId, "breeze:voice_0"); assert.equal(state.connectionStatus, "offline");
   await assert.rejects(service.synthesize("cortana", { text: "No fallback" }), /offline/);
@@ -72,7 +94,7 @@ test("shared Breeze library displays every voice while Apply, playback and resta
 });
 test("desktop HTTP routes apply a Breeze voice and return its audio using the character's stored selection", async t => {
   const directory = await mkdtemp(join(tmpdir(), "preacherman-breeze-http-"));
-  const { service: breeze, requests } = adapter();
+  const { service: breeze, requests } = adapter(join(directory, "cache"));
   const server = createPreachermanServer({ env: { PREACHERMAN_DATA_DIR: directory }, breezeSpeech: breeze });
   t.after(async () => { await server.close(); await rm(directory, { recursive: true, force: true }); });
   const address = await server.listen(0);
@@ -87,4 +109,22 @@ test("desktop HTTP routes apply a Breeze voice and return its audio using the ch
   assert.equal((await call("/synthesize", { text: "A desktop reply" })).provider, "breeze");
   assert.equal(JSON.parse(requests.at(-1).body).voice, "warm");
   assert.equal(JSON.parse(requests.at(-1).body).input, "A desktop reply");
+});
+
+test("a stalled preview times out, releases the request and can be retried without caching a failure", async t => {
+  let stalled = true, aborted = false;
+  const service = createBreezeSpeech({ previewTimeoutMs: 20, request: async (_, { signal, body }) => {
+    assert.equal(JSON.parse(body).max_new_tokens, 125);
+    if (!stalled) return new Response(wav());
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => resolve(new Response(wav())), 1000);
+      signal.addEventListener("abort", () => { aborted = true; clearTimeout(timer); reject(signal.reason); }, { once: true });
+    });
+  } });
+  t.after(() => service.close());
+  const voice = { voiceId: "cortana", revision: "one" };
+  await assert.rejects(service.preview(voice), error => error.statusCode === 504 && /timed out/.test(error.message));
+  assert.equal(aborted, true);
+  stalled = false;
+  assert.ok((await service.preview(voice)).audio);
 });
