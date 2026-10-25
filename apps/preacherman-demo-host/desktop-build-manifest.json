@@ -1,101 +1,71 @@
 {
   "schemaVersion": 1,
-  "buildId": "voice-grid-20261026",
+  "buildId": "voice-english-20261026",
   "productVersion": "0.1.0",
-  "sourceTask": "Remove surrounding copy from Voice and move Breeze service controls into Settings",
+  "sourceTask": "Speak voice preview self-introductions in English",
   "sourceThread": "01a16ffc-d6e2-74f3-91f2-29c34ae244df",
-  "sourceState": "Voice opens directly on the slanted tile grid and Apply control. Headings, selected-voice description and tutorial copy are removed. Breeze connection and management controls move to Voice Service settings. All remaining UI copy stays English; packaged assets, TTS service and character assignments remain unchanged.",
-  "sourceCommit": "75bba0eaed853a4e3c6cb9a8c356666890c3ac11",
+  "sourceState": "Breeze voice tiles now synthesize their short self-introduction in English. Only preview text changed; conversation replies retain the original language and selected voice. User authorized background restart with no Computer Use.",
+  "sourceCommit": "9d2bc2de65ce0a6c12065b12b989205fb495eb77",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-26T01:48:51.9651869+08:00",
-  "deployedAt": "2026-10-26T01:49:34.0543406+08:00",
-  "verifiedAt": "2026-10-26T02:01:22.7437481+08:00",
+  "builtAt": "2026-10-26T02:07:56.8814076+08:00",
+  "deployedAt": "2026-10-26T02:09:22.1175926+08:00",
+  "verifiedAt": "2026-10-26T02:10:23.8942077+08:00",
   "sizeBytes": 820804096,
-  "sha256": "816D67AC16848533F96AE35DD6DFA5DFF43713E7019FCE70A0C829DECFAF32EF",
+  "sha256": "BE7C3C0F22432E3576241A7794D9E6D91DA47F2B6B740015DB5524CF09F25B00",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-10-26T01:01:05.5010187+08:00",
+  "sidecarBuiltAt": "2026-10-26T02:05:27.6705153+08:00",
   "sidecarSizeBytes": 93219840,
-  "sidecarSha256": "B0E77ACD83C7620FE5B92537E3525DE17B9D80FC7DE8A4CA84835380A5E5F188",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-grid-before-20261026\\preacherman-demo-host.exe",
-  "backupSha256": "7B71D2463D99C6A0E1AEB8EE830F739DA7B646CFF23DB804946E83B6563EC5A2",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-grid-before-20261026\\preacherman-service.exe",
+  "sidecarSha256": "E38541EE4AD6610D9ED85F0A19064772C361E1AF1DF2A272D8C8768417CD1245",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-english-before-20261026\\preacherman-demo-host.exe",
+  "backupSha256": "816D67AC16848533F96AE35DD6DFA5DFF43713E7019FCE70A0C829DECFAF32EF",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-english-before-20261026\\preacherman-service.exe",
   "sidecarBackupSha256": "B0E77ACD83C7620FE5B92537E3525DE17B9D80FC7DE8A4CA84835380A5E5F188",
-  "rollbackBaselineCommit": "fe9d78b91416b7ab89b4b230ae3462f6249a8558",
-  "previousVerificationCommit": "fe9d78b91416b7ab89b4b230ae3462f6249a8558",
+  "rollbackBaselineCommit": "75bba0eaed853a4e3c6cb9a8c356666890c3ac11",
+  "previousVerificationCommit": "75bba0eaed853a4e3c6cb9a8c356666890c3ac11",
   "verification": {
-    "diagnostics": "26 normalized console diagnostics match the preceding verified release, with zero additions. Existing external-resource CSP, Gallery hydration and online account refresh diagnostics remain; no new voice UI errors.",
-    "routes": [
-      "Home",
-      "Task",
-      "Gallery",
-      "Market / legacy Ledger",
-      "Asset / Appearance / Voice",
-      "Asset / Settings / Voice Service",
-      "Account",
-      "Settings"
-    ],
-    "windowControls": {
-      "maximize": true,
-      "restore": true,
-      "close": true
+    "nativeFlow": "User explicitly approved a background restart without Computer Use. Restarted through the canonical shortcut; exact host and matching child sidecar verified. Actual deployed preview endpoint returned both saved voices, byte-identical to English synthesis samples. Original graceful close timed out after 15 seconds; only the confirmed old native host and its exact child sidecar were stopped before replacement.",
+    "windowStarted": true,
+    "evidenceDirectory": "D:\\preacherman\\output\\voice-english-20261026",
+    "realSpeech": {
+      "value": [
+        {
+          "voice": "demo_zh_warm",
+          "identicalToEnglishSample": true,
+          "sha256": "27043215b7daa4360e7e582731e0f7f04ba5d63a3881a4274f2c7e3ae1f3e860",
+          "seconds": 4.72
+        },
+        {
+          "voice": "cortana",
+          "identicalToEnglishSample": true,
+          "sha256": "5aa66dda8dcb5f1143f2da2fbbbcc5cb1a6a073d1a427e225bfbc6755490b3ff",
+          "seconds": 5.36
+        }
+      ],
+      "Count": 2
     },
-    "consoleErrors": [
-      "\"AuthRetryableFetchError: Failed to fetch\", source: http://tauri.localhost/assets/index-CGDQviyk.js (4193)",
-      "\"Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (17)",
-      "\"Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (17)",
-      "\"Hydration completed but contains mismatches.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (7)",
-      "\"Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)",
-      "\"Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)",
-      "\"Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)",
-      "\"Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)",
-      "\"Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)",
-      "\"Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)",
-      "\"Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)",
-      "\"Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/_nuxt/D9b8F35K.js (9)",
-      "\"Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.\", source: http://tauri.localhost/gallery-v3/portfolio/ (0)"
+    "languageVerification": "Existing local Whisper base model on CPU transcribed the English Cortana sample as English. Deployed sample SHA-256 matches. ASR omitted Hello and heard chat as chop; this is language confirmation, not a word-perfect listening review.",
+    "nativeVisualVerification": "Not repeated: user requested no Computer Use and no mouse/keyboard control. No frontend, appearance, asset or navigation code changed; previous verified layout remains packaged unchanged.",
+    "resources": {
+      "nativeTreeCpuPercent": 4.92,
+      "workingSetMiB": 1751,
+      "sampleSeconds": 4.06
+    },
+    "previewText": "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.",
+    "scopeLimits": [
+      "Only generated Breeze preview introductions use English. Imported audio and normal conversation text are unchanged.",
+      "Native visual and manual listening checks were not repeated. Both real generated WAV responses and source routing tests passed."
     ],
+    "status": "passed-background-verification",
     "sourceChecks": {
-      "focusedTests": 25,
-      "productionBuild": "passed; one incremental production build; verified unchanged sidecar reused",
+      "focusedTests": 4,
+      "productionBuild": "passed; one incremental Tauri production build; matching sidecar rebuilt",
       "focusedFailures": 0,
       "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "responsive": "Verified at 1284x804 and 1920x1032",
-    "modes": [
-      "light",
-      "dark"
-    ],
-    "newVoiceErrors": [],
-    "scopeLimits": [
-      "Existing Apply hold behavior and TTS backend unchanged; no new native hold or full microphone conversation test claimed.",
-      "Account was checked in light mode; changed surfaces and core navigation were checked in both modes."
-    ],
-    "status": "passed-with-recorded-diagnostics",
-    "resources": {
-      "gpu": "15% and 8127 / 16303 MiB including the independent Breeze service and other user applications",
-      "nativeTreeCpuPercent": 4.92,
-      "workingSetMiB": 1760.2,
-      "sampleSeconds": 4.07
-    },
-    "evidenceDirectory": "D:\\preacherman\\output\\voice-grid-20261026",
-    "nativeFlow": "Canonical shortcut cold launch passed. Voice opens directly on tiles with Apply; headings, connection text and selected-voice description are absent. Native audition passed. Voice Service refresh succeeded. Changed Voice and Voice Service surfaces visually verified in light and dark; Home, Task, Gallery, Market/legacy Ledger and Settings navigation passed in both appearances. Account passed in light. Original light preference restored. Final normal shortcut cold launch displayed the Home model and motion without the diagnostic console.",
-    "deployedLastWriteTime": "2026-10-26T01:48:51.9651869+08:00"
+    "consoleVerification": "No new console capture or UI automation in this release, per user request."
   },
   "releaseAttempts": [
     {
@@ -1380,9 +1350,17 @@
       "sha256": "816D67AC16848533F96AE35DD6DFA5DFF43713E7019FCE70A0C829DECFAF32EF",
       "sidecarSha256": "B0E77ACD83C7620FE5B92537E3525DE17B9D80FC7DE8A4CA84835380A5E5F188",
       "verifiedAt": "2026-10-26T02:01:22.7437481+08:00"
+    },
+    {
+      "buildId": "voice-english-20261026",
+      "sourceCommit": "9d2bc2de65ce0a6c12065b12b989205fb495eb77",
+      "status": "verified-background-only-per-user",
+      "sha256": "BE7C3C0F22432E3576241A7794D9E6D91DA47F2B6B740015DB5524CF09F25B00",
+      "sidecarSha256": "E38541EE4AD6610D9ED85F0A19064772C361E1AF1DF2A272D8C8768417CD1245",
+      "verifiedAt": "2026-10-26T02:10:23.8942077+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-grid-before-20261026\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-english-before-20261026\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1398,12 +1376,12 @@
   ],
   "cleanup": {
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\voice-grid-20261026",
-    "breeze": "Independent existing service retained on 127.0.0.1:18760; Stop-Breeze.cmd stops it",
-    "browser": "No automated browser, preview server or watcher started for this change. Diagnostic native instance exited. Final normal shortcut instance retained.",
-    "sidecarPid": 2068,
+    "verificationDirectory": "D:\\preacherman\\output\\voice-english-20261026",
+    "breeze": "Existing Breeze service retained at 127.0.0.1:18760; Stop-Breeze.cmd stops it",
+    "browser": "No browser, Computer Use session, preview server or watcher started. Offline transcription process exited.",
+    "sidecarPid": 16584,
     "status": "passed",
-    "nativePid": 38616
+    "nativePid": 33388
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
@@ -1451,10 +1429,10 @@
     "deliveryMethod": "Verified cached Tauri binaries bundled as NSIS and manually published; no automatic release pipeline added."
   },
   "backupRetention": {
-    "verifiedAt": "2026-10-26T02:01:27.7671394+08:00",
+    "verifiedAt": "2026-10-26T02:10:28.7753645+08:00",
     "applied": true,
     "retainedSets": 3,
     "removedSets": 1,
-    "report": "D:/preacherman/output/voice-grid-20261026/backup-prune.json"
+    "report": "D:/preacherman/output/voice-english-20261026/backup-prune.json"
   }
 }
