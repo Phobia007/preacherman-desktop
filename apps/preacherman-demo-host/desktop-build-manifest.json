@@ -1,205 +1,174 @@
 {
   "schemaVersion": 1,
-  "buildId": "voice-latency-20261026",
+  "buildId": "conversation-voice-20261026",
   "productVersion": "0.1.0",
-  "sourceTask": "Fix slow voice previews, assign named voices to characters, and show language badges with full-tile selection",
+  "sourceTask": "Use each character clone and its language in live voice conversations; reduce speech and Codex reply latency",
   "sourceThread": "01a16ffc-d6e2-74f3-91f2-29c34ae244df",
-  "sourceState": "Short original-speaker references eliminate long model prefill; English previews persist in a bounded cache. Named voices are restricted to matching characters. EN/ZH reference-language badges occupy the upper-right corner; selected Voice tiles use a full contrasting fill without checkmarks.",
-  "sourceCommit": "2520de687f6c7bcb3e01fc393f389113fdd5689a",
+  "sourceState": "Auto-bind unique owned clones; validate voice selection through generation/playback; reply in English or Chinese according to voice. Reuse Whisper CPU worker for 90 seconds; use low reasoning for voice-only Codex turns; 650ms silence detection and sentence-by-sentence synthesis with one sentence prefetched. Fail promptly without recursive error synthesis.",
+  "sourceCommit": "65849a1a6484431ff1ec3a99999e1dead76f33f2",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-26T03:07:16.1924417+08:00",
-  "deployedAt": "2026-10-26T03:07:36.8489709+08:00",
-  "verifiedAt": "2026-10-26T03:07:45.7663883+08:00",
+  "builtAt": "2026-10-26T03:21:39.4864658+08:00",
+  "deployedAt": "2026-10-26T03:21:52.4645480+08:00",
+  "verifiedAt": "2026-10-26T03:22:53.7550894+08:00",
   "sizeBytes": 820804096,
-  "sha256": "0E3AD96B90DB8DEB1A5E560B073D17591019C3D5DC09403C7E95890C84CC083B",
+  "sha256": "0A93D725745A775339BB70DC90EF5E7F0376FA62D9DA7C99EE67EFD1122664F5",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-10-26T03:04:38.4241736+08:00",
-  "sidecarSizeBytes": 93231616,
-  "sidecarSha256": "071A0E793471AECEA762B093E3EF7740A2D071218157D4BF1A3B770B14247801",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-latency-before-20261026\\preacherman-demo-host.exe",
-  "backupSha256": "BE7C3C0F22432E3576241A7794D9E6D91DA47F2B6B740015DB5524CF09F25B00",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-latency-before-20261026\\preacherman-service.exe",
-  "sidecarBackupSha256": "E38541EE4AD6610D9ED85F0A19064772C361E1AF1DF2A272D8C8768417CD1245",
-  "rollbackBaselineCommit": "9d2bc2de65ce0a6c12065b12b989205fb495eb77",
-  "previousVerificationCommit": "9d2bc2de65ce0a6c12065b12b989205fb495eb77",
+  "sidecarBuiltAt": "2026-10-26T03:20:03.8701513+08:00",
+  "sidecarSizeBytes": 93237248,
+  "sidecarSha256": "2F3EE4C24DF370AB85668C045D22282BE6DDD86F3E1F954695B84D01871A0DDA",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\conversation-voice-before-20261026\\preacherman-demo-host.exe",
+  "backupSha256": "0E3AD96B90DB8DEB1A5E560B073D17591019C3D5DC09403C7E95890C84CC083B",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\conversation-voice-before-20261026\\preacherman-service.exe",
+  "sidecarBackupSha256": "071A0E793471AECEA762B093E3EF7740A2D071218157D4BF1A3B770B14247801",
+  "rollbackBaselineCommit": "2520de687f6c7bcb3e01fc393f389113fdd5689a",
+  "previousVerificationCommit": "2520de687f6c7bcb3e01fc393f389113fdd5689a",
   "verification": {
-    "performance": {
-      "value": [
+    "nativeFlow": "Restarted through canonical shortcut in background. Native main window exists and responds. Canonical executable/sidecar hashes match build. Five owned clones auto-selected and synthesized; live Cortana/Codex English and Clove/Codex Chinese replies verified through deployed HTTP APIs. Incorrect expected voice ID rejected.",
+    "asrPerformance": {
+      "measuredAt": "2026-10-25T19:17:04.063Z",
+      "source": "clove-short.wav",
+      "language": "zh-CN",
+      "engine": "local Whisper base CPU, 4 threads",
+      "conversion": "in-memory PCM16 mono linear resampling 24000 to 16000 Hz",
+      "durationMs": 6700,
+      "calls": [
         {
-          "voiceId": "clove",
-          "characterId": "clove-t-pose",
-          "language": "zh",
-          "coldMs": 2554,
-          "warmMs": 0.07,
-          "audioSeconds": 6.72,
-          "afterRestartMs": 3.97
+          "phase": "cold",
+          "elapsedMs": 4914,
+          "accepted": true,
+          "confidence": 0.6184,
+          "characters": 30,
+          "audio": {
+            "durationMs": 6700,
+            "rms": 0.092119,
+            "peak": 0.755153
+          }
         },
         {
-          "voiceId": "cortana",
-          "characterId": "cortana",
-          "language": "en",
-          "coldMs": 2582,
-          "warmMs": 0.1,
-          "audioSeconds": 7.6,
-          "afterRestartMs": 4.11
-        },
-        {
-          "voiceId": "master-chief",
-          "characterId": "halo-mk-v-model",
-          "language": "en",
-          "coldMs": 1544,
-          "warmMs": 0.09,
-          "audioSeconds": 4.24,
-          "afterRestartMs": 2.63
-        },
-        {
-          "voiceId": "pathfinder",
-          "characterId": "apex-legend-pathfinder",
-          "language": "en",
-          "coldMs": 1835,
-          "warmMs": 0.09,
-          "audioSeconds": 5.36,
-          "afterRestartMs": 2.56
-        },
-        {
-          "voiceId": "zima",
-          "characterId": "zima",
-          "language": "en",
-          "coldMs": 2057,
-          "warmMs": 0.15,
-          "audioSeconds": 5.92,
-          "afterRestartMs": 2.35
+          "phase": "warm",
+          "elapsedMs": 2058,
+          "accepted": true,
+          "confidence": 0.6184,
+          "characters": 30,
+          "audio": {
+            "durationMs": 6700,
+            "rms": 0.092119,
+            "peak": 0.755153
+          }
         }
       ],
-      "Count": 5
+      "statusMs": 76,
+      "workerReused": true,
+      "reductionMs": 2856,
+      "children": [
+        {
+          "pid": 32336,
+          "exited": true,
+          "exitCode": null,
+          "signal": "SIGTERM"
+        }
+      ],
+      "cleanupPassed": true
     },
+    "evidenceDirectory": "D:\\preacherman\\output\\conversation-voice-20261026",
+    "nativeVisualVerification": "No Computer Use or desktop mouse/keyboard actions per explicit user instruction. Full native navigation and visual checks not performed this round. Layout/styles/assets unchanged; existing light/dark semantic regression tests passed.",
+    "realConversations": {
+      "at": "2026-10-25T19:21:58.646Z",
+      "bindings": [
+        {
+          "characterId": "cortana",
+          "voiceId": "cortana",
+          "language": "en",
+          "selected": true
+        },
+        {
+          "characterId": "halo-mk-v-model",
+          "voiceId": "master-chief",
+          "language": "en",
+          "selected": true
+        },
+        {
+          "characterId": "apex-legend-pathfinder",
+          "voiceId": "pathfinder",
+          "language": "en",
+          "selected": true
+        },
+        {
+          "characterId": "zima",
+          "voiceId": "zima",
+          "language": "en",
+          "selected": true
+        },
+        {
+          "characterId": "clove-t-pose",
+          "voiceId": "clove",
+          "language": "zh",
+          "selected": true
+        }
+      ],
+      "conversations": [
+        {
+          "characterId": "cortana",
+          "voiceId": "cortana",
+          "language": "en",
+          "reply": "I’m Cortana, your virtual companion, here to help you think clearly and plan your next move.",
+          "replyMs": 6937,
+          "synthesisMs": 2264,
+          "totalMs": 9201
+        },
+        {
+          "characterId": "clove-t-pose",
+          "voiceId": "clove",
+          "language": "zh",
+          "reply": "你好，我是暮蝶，你在这里的虚拟伙伴，随时陪你聊聊，找点乐子。",
+          "replyMs": 7188,
+          "synthesisMs": 1860,
+          "totalMs": 9048
+        }
+      ],
+      "synthesis": [
+        {
+          "characterId": "halo-mk-v-model",
+          "voiceId": "master-chief",
+          "milliseconds": 992
+        },
+        {
+          "characterId": "apex-legend-pathfinder",
+          "voiceId": "pathfinder",
+          "milliseconds": 945
+        },
+        {
+          "characterId": "zima",
+          "voiceId": "zima",
+          "milliseconds": 976
+        }
+      ],
+      "inputLanguage": "zh-CN",
+      "staleVoiceRejected": true,
+      "passed": true
+    },
+    "resources": {
+      "nativeTreeCpuPercent": 2.42,
+      "workingSetMiB": 1961.8,
+      "sampleSeconds": 4.13
+    },
+    "scopeLimits": [
+      "Network and Codex load still affect latency; timings are samples, not a maximum guarantee.",
+      "Codex still returns complete text before first synthesis; subsequent sentences synthesize during playback.",
+      "Only characters with a saved corresponding clone receive automatic clone binding.",
+      "First recognition after worker exit remains a cold model load; worker releases after 90 seconds idle."
+    ],
+    "status": "passed-background-verification",
     "sourceChecks": {
-      "focusedTests": 24,
-      "productionBuild": "passed; one incremental complete Tauri production build and matching rebuilt sidecar",
+      "focusedTests": 42,
+      "productionBuild": "passed; single incremental complete Tauri build and rebuilt matching sidecar",
       "focusedFailures": 0,
       "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "rootCause": "Breeze log recorded a 252237ms prefill and 253703ms first audio for an oversized reference prompt; old references were 77.6 to 176.4 seconds with document headings, timestamps and translated lines mixed into transcripts.",
-    "modes": [
-      "light",
-      "dark"
-    ],
-    "scopeLimits": [
-      "Latency fix targets voice-tile previews; no claim about LLM conversation reply latency.",
-      "EN/ZH labels identify reference-recording language, not a guarantee of multilingual voice quality.",
-      "Preview introductions remain English as requested previously; normal conversation text is unchanged."
-    ],
-    "realPreview": {
-      "results": [
-        {
-          "voiceId": "cortana",
-          "characterId": "cortana",
-          "language": "en",
-          "previewMs": 8.89,
-          "sha256": "87fc811b8e27a90d49178751581d364e9e17adfb7d6da588cb937833879ea1da",
-          "cached": true
-        },
-        {
-          "voiceId": "master-chief",
-          "characterId": "halo-mk-v-model",
-          "language": "en",
-          "previewMs": 6.97,
-          "sha256": "7af4be5c30e51d816c4bd2af36572cf7d13dd6b21ec892a29541f2e7b2f1bbbd",
-          "cached": true
-        },
-        {
-          "voiceId": "pathfinder",
-          "characterId": "apex-legend-pathfinder",
-          "language": "en",
-          "previewMs": 10.57,
-          "sha256": "74e14163d4a58d192a5df69fc6bb9fc8fc4c4736e76bfc7256da8a815c03215f",
-          "cached": true
-        },
-        {
-          "voiceId": "zima",
-          "characterId": "zima",
-          "language": "en",
-          "previewMs": 4.82,
-          "sha256": "5d6b0a3770c9450b2d3acbe1649612de0731eb4fe9724c24e155d0b04f921064",
-          "cached": true
-        },
-        {
-          "voiceId": "clove",
-          "characterId": "clove-t-pose",
-          "language": "zh",
-          "previewMs": 11.1,
-          "sha256": "1090d5909757b4e8062bc8a139d23b878ea95eb2ab16023af45c310ab997a26f",
-          "cached": true
-        }
-      ],
-      "crossCharacterRejected": true
-    },
-    "headlessVisual": "Real AssetVoice and theme styles tested in isolated headless Edge: light/dark at 1280/1920, click changes full tile fill, no checkmarks, language badge stays top right without overflow, zero console/page errors. All test browser/context/page/server processes closed in finally.",
-    "status": "passed-background-and-headless-verification",
-    "nativeVisualVerification": "No Computer Use or desktop mouse/keyboard actions, per user request. Native full-navigation visual checks were not repeated; changed UI was verified headlessly. Normal startup route and packaged content remain unchanged.",
-    "evidenceDirectory": "D:\\preacherman\\output\\voice-latency-20261026",
-    "resources": {
-      "gpu": "9% and about 9804 / 16303 MiB after synthesis, including independent Breeze and other user applications",
-      "nativeTreeCpuPercent": 14.63,
-      "workingSetMiB": 1824.8,
-      "sampleSeconds": 4.1
-    },
-    "referenceVerification": "Original files in E:/闊宠壊 preserved. Extracted complete 6.7鈥? second single-speaker clips checked with existing offline Whisper; registered with same voice IDs and exact original-language text. Before-state .breeze backups hash verified.",
-    "referenceOptimization": {
-      "value": [
-        {
-          "id": "cortana",
-          "beforeSeconds": 77.6,
-          "afterSeconds": 6.88,
-          "registrationMs": 599,
-          "backup": "D:/AI/Breeze-TTS-2/voice-backups/before-short-references-20261026",
-          "characterId": "cortana",
-          "language": "en"
-        },
-        {
-          "id": "master-chief",
-          "beforeSeconds": 102.96,
-          "afterSeconds": 8.88,
-          "registrationMs": 737,
-          "backup": "D:/AI/Breeze-TTS-2/voice-backups/before-short-references-20261026",
-          "characterId": "halo-mk-v-model",
-          "language": "en"
-        },
-        {
-          "id": "pathfinder",
-          "beforeSeconds": 176.4,
-          "afterSeconds": 7.36,
-          "registrationMs": 615,
-          "backup": "D:/AI/Breeze-TTS-2/voice-backups/before-short-references-20261026",
-          "characterId": "apex-legend-pathfinder",
-          "language": "en"
-        },
-        {
-          "id": "zima",
-          "beforeSeconds": 101.92,
-          "afterSeconds": 8.96,
-          "registrationMs": 739,
-          "backup": "D:/AI/Breeze-TTS-2/voice-backups/before-short-references-20261026",
-          "characterId": "zima",
-          "language": "en"
-        },
-        {
-          "id": "clove",
-          "beforeSeconds": 120.4,
-          "afterSeconds": 6.64,
-          "registrationMs": 574,
-          "backup": "D:/AI/Breeze-TTS-2/voice-backups/before-short-references-20261026",
-          "characterId": "clove-t-pose",
-          "language": "zh"
-        }
-      ],
-      "Count": 5
-    },
-    "referenceBackup": "D:/AI/Breeze-TTS-2/voice-backups/before-short-references-20261026",
-    "nativeFlow": "Background restart through canonical shortcut, as previously authorized. Exact native executable and child sidecar hashes verified. Deployed APIs showed each of five saved voices only under its matching character, provided expected EN/ZH metadata, returned byte-identical prewarmed preview audio, and rejected a cross-character preview."
+    "appearance": "Existing theme styles unchanged; light/dark regression tests passed."
   },
   "releaseAttempts": [
     {
@@ -1500,9 +1469,17 @@
       "sha256": "0E3AD96B90DB8DEB1A5E560B073D17591019C3D5DC09403C7E95890C84CC083B",
       "sidecarSha256": "071A0E793471AECEA762B093E3EF7740A2D071218157D4BF1A3B770B14247801",
       "verifiedAt": "2026-10-26T03:07:45.7663883+08:00"
+    },
+    {
+      "buildId": "conversation-voice-20261026",
+      "sourceCommit": "65849a1a6484431ff1ec3a99999e1dead76f33f2",
+      "status": "verified-background-per-user",
+      "sha256": "0A93D725745A775339BB70DC90EF5E7F0376FA62D9DA7C99EE67EFD1122664F5",
+      "sidecarSha256": "2F3EE4C24DF370AB85668C045D22282BE6DDD86F3E1F954695B84D01871A0DDA",
+      "verifiedAt": "2026-10-26T03:22:53.7550894+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-latency-before-20261026\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\conversation-voice-before-20261026\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1517,13 +1494,13 @@
     }
   ],
   "cleanup": {
+    "computerUse": "Not used",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\voice-latency-20261026",
-    "breeze": "Existing installed Breeze service restarted without browser at 127.0.0.1:18760, with owned PID recorded in D:/AI/Breeze-TTS-2/server-process.json; stop via Stop-Breeze.cmd",
-    "browser": "Isolated headless verifier closed all owned processes; no Computer Use or user browser interaction.",
-    "sidecarPid": 29400,
+    "whisper": "One sidecar-owned Python worker, no port; exits 90 seconds idle or on sidecar close/cancel/timeout. Local benchmark worker exit verified.",
+    "breeze": "Existing local Breeze at 127.0.0.1:18760; owner and stop method in D:/AI/Breeze-TTS-2/server-process.json and Stop-Breeze.ps1",
+    "sidecarPid": 3572,
     "status": "passed",
-    "nativePid": 41168
+    "nativePid": 38320
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
@@ -1571,10 +1548,11 @@
     "deliveryMethod": "Verified cached Tauri binaries bundled as NSIS and manually published; no automatic release pipeline added."
   },
   "backupRetention": {
-    "verifiedAt": "2026-10-26T03:07:50.8597133+08:00",
-    "applied": true,
-    "retainedSets": 3,
-    "removedSets": 1,
-    "report": "D:/preacherman/output/voice-latency-20261026/backup-prune.json"
+    "status": "passed",
+    "kept": 3,
+    "removed": 1,
+    "reclaimedBytes": 914123211,
+    "report": "D:/preacherman/output/conversation-voice-20261026/backup-prune.json",
+    "verifiedAt": "2026-10-26T03:23:05.2397873+08:00"
   }
 }
