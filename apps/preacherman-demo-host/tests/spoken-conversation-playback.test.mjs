@@ -1,0 +1,162 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { readFile } from "node:fs/promises";
+import { runInNewContext } from "node:vm";
+import ts from "typescript";
+
+const tick = () => new Promise(resolve => setImmediate(resolve));
+const deferred = () => { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; };
+async function fixture() {
+  const audio = {};
+  runInNewContext(ts.transpileModule(await readFile(new URL("../src/audio/spokenAudio.ts", import.meta.url), "utf8"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  }).outputText, { exports: audio, Intl });
+  let source = await readFile(new URL("../src/audio/SpokenConversation.ts", import.meta.url), "utf8");
+  source = source.replace('new URL("./voiceCapture.worklet.js?no-inline", import.meta.url)', '"capture.js"');
+  const exports = {}, states = [], contexts = [], frames = new Set();
+  let character = "cortana", sequence = 0;
+  class Meter { start() { return Promise.resolve(true); } stop() {} dispose() {} }
+  class Context {
+    state = "running";
+    destination = {};
+    sources = [];
+    constructor() { contexts.push(this); }
+    async resume() {}
+    async close() { this.state = "closed"; }
+    async decodeAudioData() { return { duration: 1 }; }
+    createBufferSource() {
+      const source = { connect() {}, disconnect() { this.disconnected = true; }, start() { this.started = true; }, stop() { this.stopped = true; this.onended?.(); } };
+      this.sources.push(source); return source;
+    }
+    createAnalyser() { return { fftSize: 512, connect() {}, disconnect() {}, getFloatTimeDomainData() {} }; }
+  }
+  runInNewContext(ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  }).outputText, {
+    exports, require: name => name === "./spokenAudio" ? { ...audio, speechWav: () => "audio" } : {
+      MicrophoneMeter: Meter, selectOutput: async () => {}, voiceFrame: () => ({}),
+    },
+    AbortController, AbortSignal, crypto: { randomUUID: () => "session" }, setTimeout, clearTimeout,
+    requestAnimationFrame() { frames.add(++sequence); return sequence; }, cancelAnimationFrame(id) { frames.delete(id); },
+    window: { dispatchEvent() {} }, CustomEvent: class {}, AudioContext: Context,
+    atob: value => Buffer.from(value, "base64").toString("binary"), performance,
+  });
+  const voice = new exports.SpokenConversation(() => {}, state => states.push(state), () => character, () => ({ input: "", output: "" }), () => {});
+  return { voice, audio, states, contexts, frames, setCharacter(value) { character = value; } };
+}
+
+test("sentence chunks preserve English sentences, decimal values and Chinese punctuation", async () => {
+  const { audio } = await fixture();
+  assert.deepEqual(Array.from(audio.spokenSentences("Ready now. I can help you next!", "en")), ["Ready now.", "I can help you next!"]);
+  assert.deepEqual(Array.from(audio.spokenSentences("你好。我们开始吧！", "zh")), ["你好。", "我们开始吧！"]);
+  assert.equal(audio.spokenSentences("The value is 1.25 today.", "en").length, 1);
+  assert.equal(audio.spokenSentences("  ", "unknown").length, 0);
+});
+
+test("first sentence plays before later synthesis completes with only one following request", async () => {
+  const { voice, contexts } = await fixture();
+  const requests = [], playback = [];
+  voice.request = (path, body, signal) => {
+    const pending = deferred(); requests.push({ path, body, signal, ...pending }); return pending.promise;
+  };
+  voice.playAudio = (audio, _context, signal) => {
+    const pending = deferred(); playback.push({ audio, signal, ...pending }); return pending.promise;
+  };
+  const cancel = new AbortController();
+  const running = voice.speak("First sentence. Second sentence. Third sentence.", cancel.signal, "cortana", "cortana-en");
+  try {
+    assert.equal(requests.length, 1);
+    requests[0].resolve({ audio: "first" }); await tick();
+    assert.equal(playback[0].audio, "first"); assert.equal(requests.length, 2);
+    assert.equal(requests[1].body.text, "Second sentence.");
+    requests[1].resolve({ audio: "second" }); await tick();
+    assert.equal(requests.length, 2); assert.equal(playback.length, 1);
+    playback[0].resolve(); await tick();
+    assert.equal(playback[1].audio, "second"); assert.equal(requests.length, 3);
+    requests[2].resolve({ audio: "third" }); playback[1].resolve(); await tick();
+    assert.equal(playback[2].audio, "third"); playback[2].resolve();
+    await running;
+    assert.ok(requests.every(request => request.path.includes("/cortana/")));
+    assert.ok(requests.every(request => request.body.voiceId === "cortana-en"));
+    assert.equal(contexts.length, 1); assert.equal(contexts[0].state, "closed");
+  } finally { cancel.abort(); requests.forEach(request => request.resolve({ audio: "cancel" })); playback.forEach(part => part.resolve()); await running.catch(() => {}); voice.dispose(); }
+});
+
+test("cancel stops active playback, aborts prefetched synthesis and releases audio resources", async () => {
+  const { voice, contexts, frames } = await fixture();
+  const requests = [];
+  voice.request = (_path, _body, signal) => {
+    requests.push(signal);
+    if (requests.length === 1) return Promise.resolve({ audio: "YXVkaW8=" });
+    return new Promise((_resolve, reject) => signal.addEventListener("abort", () => reject(signal.reason), { once: true }));
+  };
+  const cancel = new AbortController();
+  const running = voice.speak("First sentence. Second sentence. Third sentence.", cancel.signal, "cortana");
+  try {
+    await tick();
+    assert.equal(requests.length, 2); assert.equal(contexts[0].sources[0].started, true);
+    cancel.abort(); await assert.rejects(running, /abort/i);
+    assert.equal(requests[1].aborted, true); assert.equal(contexts[0].sources[0].stopped, true);
+    assert.equal(contexts[0].sources[0].disconnected, true); assert.equal(contexts[0].state, "closed");
+    assert.equal(frames.size, 0); assert.equal(voice.playback, null);
+  } finally { cancel.abort(); await running.catch(() => {}); voice.dispose(); }
+});
+
+test("a failed prefetched sentence is consumed after playback without starting another request", async () => {
+  const { voice, contexts } = await fixture();
+  const playing = deferred();
+  let requests = 0;
+  voice.request = async () => {
+    requests++;
+    if (requests === 1) return { audio: "first" };
+    throw new Error("Next sentence failed");
+  };
+  voice.playAudio = () => playing.promise;
+  const cancel = new AbortController();
+  const running = voice.speak("First sentence. Second sentence. Third sentence.", cancel.signal, "cortana");
+  try {
+    await tick(); assert.equal(requests, 2);
+    playing.resolve(); await assert.rejects(running, /Next sentence failed/);
+    assert.equal(requests, 2); assert.equal(contexts[0].state, "closed");
+  } finally { cancel.abort(); playing.resolve(); await running.catch(() => {}); voice.dispose(); }
+});
+
+test("a synthesis failure produces one error state without synthesizing the error again", async () => {
+  const { voice, states } = await fixture();
+  let synthesis = 0;
+  voice.request = async path => {
+    if (path.endsWith("/execution")) return { active: {} };
+    if (path.includes("/status?")) return { language: "zh-CN", voiceLanguage: "en" };
+    if (path.endsWith("/recognize")) return { accepted: true, text: "你好" };
+    if (path.endsWith("/conversation")) return { text: "Hello there.", voiceLanguage: "en" };
+    if (path.endsWith("/synthesize")) { synthesis++; throw new Error("Breeze unavailable"); }
+    throw new Error("Unexpected request");
+  };
+  try {
+    await voice.start(); await voice.reply([new Float32Array(512)], voice.cancellation.signal);
+    assert.equal(synthesis, 1); assert.equal(voice.active, false); assert.equal(states.at(-1), "error");
+  } finally { voice.dispose(); }
+});
+
+test("session character and output language stay independent of the recognition language", async () => {
+  const { voice, setCharacter } = await fixture();
+  const chats = [], spoken = [];
+  let accepted = true;
+  voice.request = async (path, body) => {
+    if (path.endsWith("/execution")) return { active: {} };
+    if (path.includes("/status?")) return { language: "zh-CN", voiceLanguage: "en" };
+    if (path.endsWith("/recognize")) { assert.equal(body.language, "zh-CN"); return { accepted, text: accepted ? "你好" : "" }; }
+    chats.push(path); return { text: "Hello from Cortana.", voiceLanguage: "en", voiceId: "cortana-en" };
+  };
+  voice.speak = async (text, _signal, id, voiceId) => spoken.push({ text, id, voiceId });
+  try {
+    await voice.start(); setCharacter("clove-t-pose");
+    await voice.reply([new Float32Array(512)], voice.cancellation.signal);
+    assert.equal(chats[0], "/api/characters/cortana/conversation");
+    assert.equal(spoken[0].id, "cortana");
+    assert.equal(spoken[0].voiceId, "cortana-en");
+    accepted = false; await voice.reply([new Float32Array(512)], voice.cancellation.signal);
+    assert.match(spoken[1].text, /didn't catch/); assert.equal(spoken[1].id, "cortana");
+    assert.equal(spoken[1].voiceId, undefined);
+  } finally { voice.dispose(); }
+});

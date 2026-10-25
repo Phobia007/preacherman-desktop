@@ -51,18 +51,45 @@ export function createCharacterConversation({ file, connections, codex, listAgen
     for (const key of sessions.keys()) if (key.startsWith(id + ":")) sessions.delete(key);
     return settings(id);
   }
-  const voiceSettings = async (id, signal) => {
-    const saved = await profile(id);
+  async function resolveVoice(id, signal) {
+    let saved = await profile(id);
     let localVoices = [], breezeStatus = "offline";
     if (breeze) {
       try { localVoices = (await breeze.voices(signal)).filter(voice => voice.characterId === id); breezeStatus = "connected"; }
       catch { signal?.throwIfAborted(); }
     }
+    const selected = value => localVoices.find(voice => voice.id === value.selectedVoiceId ||
+      value.voices?.some(item => item.id === value.selectedVoiceId && item.provider === "breeze" && item.voiceId === voice.voiceId));
+    const imported = saved.voices?.find(voice => voice.id === saved.selectedVoiceId);
+    // A unique, named clone belongs to the character immediately, including older
+    // profiles that never pressed Apply. Never guess between several own voices.
+    if (localVoices.length === 1 && !selected(saved) && (!imported || imported.provider === "breeze")) {
+      const priorSelection = saved.selectedVoiceId;
+      saved = await update(state => {
+        if (state[id].selectedVoiceId === priorSelection) {
+          state[id].selectedVoiceId = localVoices[0].id;
+          state[id].voiceService = { provider: "breeze", model: "Breeze-TTS-2", region: "local", workspaceId: "" };
+        }
+        return structuredClone(state[id]);
+      });
+    }
+    const voice = selected(saved);
+    const usesBreeze = Boolean(voice || saved.voiceService?.provider === "breeze" || (!saved.selectedVoiceId && localVoices.length));
+    return { saved, localVoices, breezeStatus, voice, usesBreeze };
+  }
+  function requireSelectedVoice({ usesBreeze, breezeStatus, voice }) {
+    if (!usesBreeze) return;
+    if (breezeStatus !== "connected") throw fail("Breeze is offline. Start Breeze TTS 2 or reconnect it in Appearance → Voice.", 503);
+    if (!voice) throw fail("Choose a voice assigned to this character in Appearance → Voice.", 409);
+  }
+  const voiceSettings = async (id, signal) => {
+    const { saved, localVoices, breezeStatus, voice, usesBreeze } = await resolveVoice(id, signal);
     return {
       characterId: id,
-      service: saved.voiceService || { provider: "", model: "", region: "", workspaceId: "" },
-      connectionStatus: saved.voiceService?.provider === "breeze" ? breezeStatus : "not-connected",
+      service: usesBreeze ? { provider: "breeze", model: "Breeze-TTS-2", region: "local", workspaceId: "" } : saved.voiceService || { provider: "", model: "", region: "", workspaceId: "" },
+      connectionStatus: usesBreeze ? breezeStatus : "not-connected",
       breezeStatus,
+      voiceLanguage: voice?.language || "unknown",
       selectedVoiceId: saved.selectedVoiceId?.startsWith("breeze:") && breezeStatus === "connected" && !localVoices.some(voice => voice.id === saved.selectedVoiceId) ? null : saved.selectedVoiceId || null,
       voices: [...(saved.voices || []).map(({ preview, ...voice }) => ({ ...voice, hasPreview: Boolean(preview) })), ...localVoices],
     };
@@ -78,14 +105,12 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       return voiceSettings(id, signal);
     },
     async synthesize(id, input, signal) {
-      const saved = await profile(id);
-      if (saved.voiceService?.provider === "breeze") {
-        const key = saved.selectedVoiceId;
-        const imported = saved.voices?.find(v => v.id === key && v.provider === "breeze");
-        const voiceId = key?.startsWith("breeze:") ? key.slice(7) : imported?.voiceId;
-        if (!voiceId) throw fail("Choose a Breeze voice in Appearance → Voice and hold Apply first.", 409);
-        if (key?.startsWith("breeze:") && !(await breeze.voices(signal)).some(voice => voice.voiceId === voiceId && voice.characterId === id)) throw fail("Choose a voice assigned to this character in Appearance → Voice.", 409);
-        return breeze.synthesize({ text: input.text, voiceId }, signal);
+      const resolved = await resolveVoice(id, signal);
+      requireSelectedVoice(resolved);
+      const { voice, usesBreeze } = resolved;
+      if (input.voiceId && input.voiceId !== voice?.voiceId) throw fail("Voice selection changed. Start a new conversation.", 409);
+      if (usesBreeze) {
+        return breeze.synthesize({ text: input.text, voiceId: voice.voiceId }, signal);
       }
       return windowsSpeech.synthesize(input, signal);
     },
@@ -187,21 +212,33 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       while (messages.length > 1 && messages.reduce((size, message) => size + message.content.length, 0) > 60000) messages.splice(0, 2);
       const personaInstructions = `You are ${character.name}, the user's virtual companion in Preacherman. ` +
         `Character background: ${character.designation}. ${character.paragraphs.join(" ")} ` +
-        "Speak naturally in first person, in the user's language. This is a voice-only conversation. " +
+        "Speak naturally in first person. Follow the spoken output language below. This is a voice-only conversation. " +
         "Keep replies to one to three short spoken sentences unless more detail is requested. No Markdown or stage directions. " +
         "You can converse and help plan; you cannot execute tools or claim to have performed actions. " +
         "Be honest that you are a virtual character if asked. " + saved.rules.join("\n");
       busy.add(key);
       try {
         signal?.throwIfAborted();
+        const resolved = await resolveVoice(id, signal);
+        requireSelectedVoice(resolved);
+        const { voice } = resolved;
+        const voiceLanguage = voice?.language || "unknown";
+        const spokenLanguage = voiceLanguage === "en"
+          ? "Reply in English only, even when the user speaks Chinese. This character's selected voice supports English. "
+          : voiceLanguage === "zh"
+            ? "Reply in Simplified Chinese only, even when the user speaks English. This character's selected voice supports Chinese. "
+            : "Reply in the user's language. ";
+        const spokenPersona = personaInstructions + "\nSpoken output language: " + spokenLanguage;
         const result = execution.mode === "cli"
-          ? await codex.chat({ messages, model: execution.model, personaInstructions, signal })
-          : await connections.chat({ connectionId: execution.connectionId, model: execution.model, messages, personaInstructions, signal });
+          ? await codex.chat({ messages, model: execution.model, personaInstructions: spokenPersona, voiceConversation: true, signal })
+          : await connections.chat({ connectionId: execution.connectionId, model: execution.model, messages, personaInstructions: spokenPersona, signal });
         signal?.throwIfAborted();
-        if (JSON.stringify((await profile(id)).execution) !== stamp) throw fail("Execution mode changed. Start a new conversation.", 409);
+        const latest = await profile(id);
+        if (JSON.stringify(latest.execution) !== stamp) throw fail("Execution mode changed. Start a new conversation.", 409);
+        if (latest.selectedVoiceId !== resolved.saved.selectedVoiceId) throw fail("Voice selection changed. Start a new conversation.", 409);
         if (typeof result.text !== "string" || !result.text.trim() || result.text.length > 6000) throw fail("The reply cannot be spoken. Please ask for a shorter answer.", 502);
         sessions.set(key, { execution: stamp, at: Date.now(), messages: [...messages, { role: "assistant", content: result.text }].slice(-20) });
-        return { text: result.text, characterId: id, source: result.source || "api" };
+        return { text: result.text, characterId: id, voiceLanguage, voiceId: voice?.voiceId || null, source: result.source || "api" };
       } finally { busy.delete(key); }
     },
   };

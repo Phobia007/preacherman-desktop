@@ -62,12 +62,13 @@ test("spoken phrases preserve lead-in, wait for silence, reject clicks and bound
   const phrase = new exports.SpokenPhrase();
   for (let i = 0; i < 100; i++) assert.equal(phrase.push(silence()), null);
   for (let i = 0; i < 15; i++) assert.equal(phrase.push(voice()), null);
-  let result; for (let i = 0; i < 32; i++) result = phrase.push(silence());
+  for (let i = 0; i < 20; i++) assert.equal(phrase.push(silence()), null);
+  let result = phrase.push(silence());
   assert.ok(result.length > 15);
   const audio = exports.speechWav(result); assert.equal(validateSpeechAudio(audio), audio);
   assert.equal(phrase.push(voice()), null);
   const click = new exports.SpokenPhrase(); click.push(voice());
-  for (let i = 0; i < 32; i++) result = click.push(silence());
+  for (let i = 0; i < 21; i++) result = click.push(silence());
   assert.equal(result.length, 0);
   const long = new exports.SpokenPhrase();
   for (let i = 0; i < 625; i++) result = long.push(voice());
@@ -119,7 +120,7 @@ test("offline recognition validates input, bounds workers and cancels without le
     child.kill = () => { child.stopped = true; queueMicrotask(() => child.emit("close", 0)); };
     child.stdin = new Writable({ write(chunk, encoding, done) {
       const input = JSON.parse(String(chunk)); inputs.push(input); done();
-      if (respond) queueMicrotask(() => { child.stdout.write(JSON.stringify(input.action === "status" ? { available: true } : { accepted: true, text: "Hello", confidence: 0.7 })); child.emit("close", 0); });
+      if (respond) queueMicrotask(() => child.stdout.write(JSON.stringify({ id: input.id, result: input.action === "status" ? { available: true } : { accepted: true, text: "Hello", confidence: 0.7 } }) + "\n"));
     } }); return child;
   } });
   try {
@@ -166,7 +167,7 @@ test("voice conversation uses engine acceptance and stops after repeated recogni
     recognized = { text: "", accepted: false, confidence: 0 };
     await voice.reply(blocks, signal); assert.equal(voice.active, true);
     await voice.reply(blocks, signal); assert.equal(voice.active, false); assert.equal(states.at(-1), "error");
-    assert.match(spoken.at(-1), /麦克风/); assert.equal(chats.length, 1);
+    assert.match(spoken.at(-1), /没有听清楚/); assert.equal(spoken.length, 2); assert.equal(chats.length, 1);
     await voice.start(); await voice.reply(blocks, signal); assert.equal(voice.active, true);
   } finally { voice.dispose(); }
 });

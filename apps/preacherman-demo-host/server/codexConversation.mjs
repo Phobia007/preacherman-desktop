@@ -15,7 +15,7 @@ const chatConfig = {
 };
 const instructions = "You are the conversational assistant in Preacherman. Answer questions and help plan. " +
   "Use the supplied conversation only. Do not execute commands, inspect files, use tools, create tasks, or request a workspace. " +
-  "If asked to act on a project, explain that this surface supports conversation and planning only. Reply in the user's language.";
+  "If asked to act on a project, explain that this surface supports conversation and planning only.";
 
 // A bounded, ephemeral app-server conversation. Normal Codex authentication stays
 // inside Codex; this service never reads, copies or converts login credentials.
@@ -23,7 +23,7 @@ export function createCodexConversation({ directory, adapter = createCodexCliAda
   const active = new Set();
   let closed = false;
   return {
-    async chat({ messages, model = "default", signal, personaInstructions = "" } = {}) {
+    async chat({ messages, model = "default", signal, personaInstructions = "", voiceConversation = false } = {}) {
       const context = validateChatMessages(messages);
       if (context.at(-1).role !== "user") throw fail("A user message is required.", 400);
       if (model !== "default") throw fail("Codex chat currently follows the CLI's configured model.", 400);
@@ -105,11 +105,16 @@ export function createCodexConversation({ directory, adapter = createCodexCliAda
         const settings = await rpc("config/read", { includeLayers: false });
         const config = { ...chatConfig };
         for (const name of Object.keys(settings.config?.mcp_servers || {})) config["mcp_servers." + name + ".enabled"] = false;
-        const characterInstructions = instructions + (personaInstructions ? "\n" + personaInstructions : "");
+        const replyLanguage = voiceConversation
+          ? "Follow the character's spoken-language instructions for every reply."
+          : "Reply in the user's language.";
+        const characterInstructions = instructions + " " + replyLanguage + (personaInstructions ? "\n" + personaInstructions : "");
         const started = await rpc("thread/start", { cwd: directory, ephemeral: true, sandbox: "read-only", approvalPolicy: "never", baseInstructions: characterInstructions, developerInstructions: characterInstructions, config });
         threadId = started.thread.id;
         if (context.length > 1) await rpc("thread/inject_items", { threadId, items: context.slice(0, -1).map(({ role, content }) => ({ type: "message", role, ...(role === "assistant" ? { phase: "final_answer" } : {}), content: [{ type: role === "assistant" ? "output_text" : "input_text", text: content }] })) });
-        await rpc("turn/start", { threadId, input: [{ type: "text", text: context.at(-1).content }], approvalPolicy: "never", sandboxPolicy: { type: "readOnly", networkAccess: false } });
+        // Short spoken turns should not inherit a coding task's high reasoning setting.
+        // Keep the CLI's selected model and leave ordinary text conversations unchanged.
+        await rpc("turn/start", { threadId, input: [{ type: "text", text: context.at(-1).content }], ...(voiceConversation ? { effort: "low" } : {}), approvalPolicy: "never", sandboxPolicy: { type: "readOnly", networkAccess: false } });
         return await completed;
       } finally {
         finished = true; active.delete(cancellation); combined.removeEventListener("abort", abort);

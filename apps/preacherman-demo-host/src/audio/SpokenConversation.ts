@@ -1,9 +1,10 @@
 import { MicrophoneMeter, selectOutput, voiceFrame, type MicrophoneState, type OutputContext } from "./microphoneMeter";
-import { SpokenPhrase, speechWav } from "./spokenAudio";
+import { SpokenPhrase, speechWav, spokenSentences } from "./spokenAudio";
 import { preachermanServiceRequest } from "../preacherman/capabilityClient";
 
 export type ConversationVoiceState = MicrophoneState | "thinking" | "speaking";
 type Devices = { input: string; output: string };
+type VoiceLanguage = "en" | "zh" | "unknown";
 
 /** Audio-only controller. Transcripts and replies never enter React state or the DOM. */
 export class SpokenConversation {
@@ -13,7 +14,9 @@ export class SpokenConversation {
   private animation = 0;
   private idleTimer: ReturnType<typeof setTimeout> | undefined;
   private sessionId = "";
+  private characterId: string | null = null;
   private language = "";
+  private voiceLanguage: VoiceLanguage = "unknown";
   private disposed = false;
   private hearing = false;
   private missedPhrases = 0;
@@ -44,11 +47,15 @@ export class SpokenConversation {
     try {
       const id = this.character();
       if (!id) throw new Error("Activate a character in Asset before starting a conversation.");
-      const config = await this.request<{ active: unknown }>(`/api/characters/${id}/execution`, undefined, cancellation.signal);
+      this.characterId = id;
+      const [config, status] = await Promise.all([
+        this.request<{ active: unknown }>(`/api/characters/${id}/execution`, undefined, cancellation.signal),
+        this.request<{ language: string | null; voiceLanguage?: VoiceLanguage }>(`/api/voice/local/status?characterId=${encodeURIComponent(id)}`, undefined, cancellation.signal),
+      ]);
       if (!config.active) throw new Error("Choose Execution Mode in your character's Settings before starting a conversation.");
-      const status = await this.request<{ language: string | null }>(`/api/voice/local/status?characterId=${encodeURIComponent(id)}`, undefined, cancellation.signal);
       if (!status.language) throw new Error("Local speech recognition is unavailable. Check the speech model installation.");
       cancellation.signal.throwIfAborted(); this.language = status.language;
+      this.voiceLanguage = status.voiceLanguage || "unknown";
       return await this.listen(cancellation.signal);
     } catch (error) { if (!cancellation.signal.aborted) await this.failed(error instanceof Error ? error.message : "Voice conversation is unavailable."); return false; }
   }
@@ -71,18 +78,21 @@ export class SpokenConversation {
     return () => { node.port.onmessage = null; node.port.close(); node.disconnect(); mute.disconnect(); };
   }
   private async reply(blocks: Float32Array[], signal: AbortSignal) {
-    const id = this.character();
+    const id = this.characterId;
     this.hearing = false; clearTimeout(this.idleTimer); this.meter.stop();
     this.onState("thinking"); this.avatar("thinking");
     try {
+      signal.throwIfAborted();
+      if (!id) throw new Error("Select a character before speaking.");
       if (blocks.length) {
         const recognized = await this.request<{ text: string; accepted: boolean }>("/api/voice/local/recognize", { audio: speechWav(blocks), language: this.language }, signal);
         signal.throwIfAborted();
         if (recognized.accepted && recognized.text.trim()) {
           this.missedPhrases = 0;
-          const result = await this.request<{ text: string }>(`/api/characters/${id}/conversation`, { text: recognized.text, sessionId: this.sessionId }, signal, 130000);
+          const result = await this.request<{ text: string; voiceLanguage?: VoiceLanguage; voiceId?: string | null }>(`/api/characters/${id}/conversation`, { text: recognized.text, sessionId: this.sessionId }, signal, 130000);
           signal.throwIfAborted();
-          await this.speak(result.text, signal);
+          if (result.voiceLanguage) this.voiceLanguage = result.voiceLanguage;
+          await this.speak(result.text, signal, id, result.voiceId);
         } else {
           this.missedPhrases++;
           if (this.missedPhrases >= 2) {
@@ -91,22 +101,47 @@ export class SpokenConversation {
               : "I couldn't recognize the last two attempts. Check the microphone in the audio menu, then start voice conversation again.");
             return;
           }
-          await this.speak(this.language === "zh-CN" ? "我没有听清楚，请再说一遍。" : "I didn't catch that. Please say it again.", signal);
+          const chineseVoice = this.voiceLanguage === "zh" || (this.voiceLanguage === "unknown" && this.language === "zh-CN");
+          await this.speak(chineseVoice ? "我没有听清楚，请再说一遍。" : "I didn't catch that. Please say it again.", signal, id);
         }
       }
       signal.throwIfAborted();
       await this.listen(signal);
     } catch (error) { if (!signal.aborted) await this.failed(error instanceof Error ? error.message : "The conversation failed. Please try again."); }
   }
-  private async speak(text: string, signal: AbortSignal) {
-    const id = this.character();
-    if (!id) throw new Error("Select a character before speaking.");
-    const result = await this.request<{ audio: string }>(`/api/characters/${encodeURIComponent(id)}/voice/synthesize`, { text }, signal, 95000);
+  private async speak(text: string, signal: AbortSignal, id: string, voiceId?: string | null) {
     signal.throwIfAborted();
-    const context: OutputContext = new AudioContext(); this.playback = context;
+    const sentences = spokenSentences(text, this.voiceLanguage);
+    if (!sentences.length) return;
+    const cancellation = new AbortController();
+    const speaking = AbortSignal.any([signal, cancellation.signal]);
+    // Store rejected prefetches as values until consumed, so a failure during playback
+    // cannot become an unhandled rejection. Only one following request is in flight.
+    const synthesize = (sentence: string) => this.request<{ audio: string }>(
+      `/api/characters/${encodeURIComponent(id)}/voice/synthesize`, { text: sentence, ...(voiceId ? { voiceId } : {}) }, speaking, 95000,
+    ).then(result => ({ result, error: undefined }), error => ({ result: undefined, error }));
+    let pending = synthesize(sentences[0]);
+    let context: OutputContext | undefined;
     try {
+      context = new AudioContext(); this.playback = context;
       await selectOutput(context, this.devices().output); await context.resume();
-      const bytes = Uint8Array.from(atob(result.audio), char => char.charCodeAt(0));
+      for (let index = 0; index < sentences.length; index++) {
+        const { result, error } = await pending;
+        speaking.throwIfAborted();
+        if (!result) throw error;
+        if (index + 1 < sentences.length) pending = synthesize(sentences[index + 1]);
+        await this.playAudio(result.audio, context, speaking);
+      }
+    } finally {
+      cancellation.abort();
+      if (context && context.state !== "closed") await context.close().catch(() => {});
+      if (this.playback === context) this.playback = null;
+    }
+  }
+  private async playAudio(audio: string, context: OutputContext, signal: AbortSignal) {
+    let animation = 0;
+    try {
+      const bytes = Uint8Array.from(atob(audio), char => char.charCodeAt(0));
       const buffer = await context.decodeAudioData(bytes.buffer); signal.throwIfAborted();
       const source = context.createBufferSource(), analyser = context.createAnalyser(); analyser.fftSize = 512;
       source.buffer = buffer; source.connect(analyser); analyser.connect(context.destination);
@@ -117,32 +152,39 @@ export class SpokenConversation {
         analyser.getFloatTimeDomainData(samples); this.onFrame(voiceFrame(samples, performance.now()));
         let power = 0; for (const sample of samples) power += sample * sample;
         window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: Math.min(1, Math.sqrt(power / samples.length) * 3.2) }));
-        this.animation = requestAnimationFrame(animate);
+        animation = requestAnimationFrame(animate); this.animation = animation;
       };
       await new Promise<void>((resolve, reject) => {
-        const abort = () => { try { source.stop(); } catch { /* Not started. */ } reject(signal.reason); };
+        let settled = false;
+        const finish = (error?: unknown) => {
+          if (settled) return;
+          settled = true; clearTimeout(timer); signal.removeEventListener("abort", abort); source.onended = null;
+          if (error) { try { source.stop(); } catch { /* Not started. */ } }
+          source.disconnect(); analyser.disconnect();
+          if (error) reject(error); else resolve();
+        };
+        const abort = () => finish(signal.reason || new Error("Audio playback cancelled."));
+        const timer = setTimeout(() => finish(new Error("Audio playback timed out.")), Math.min(90000, buffer.duration * 1000 + 4000));
         signal.addEventListener("abort", abort, { once: true });
-        const timer = setTimeout(() => { source.stop(); reject(new Error("Audio playback timed out.")); }, Math.min(90000, buffer.duration * 1000 + 4000));
-        source.onended = () => { clearTimeout(timer); signal.removeEventListener("abort", abort); resolve(); };
-        source.start(); animate();
+        source.onended = () => finish();
+        if (signal.aborted) abort();
+        else { try { source.start(); animate(); } catch (error) { finish(error); } }
       });
     } finally {
-      cancelAnimationFrame(this.animation); window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
-      if (context.state !== "closed") await context.close().catch(() => {});
-      if (this.playback === context) this.playback = null;
+      cancelAnimationFrame(animation);
+      if (this.animation === animation) this.animation = 0;
+      if (this.playback === context) window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
     }
   }
-  private async failed(message: string) {
+  private async failed(_message: string) {
     const signal = this.cancellation?.signal;
     this.hearing = false; this.meter.stop(); clearTimeout(this.idleTimer);
-    if (signal && !signal.aborted) {
-      try { await this.speak(message, signal); } catch { /* The error state remains available if audio output itself fails. */ }
-    }
+    // Do not send a second synthesis request to a possibly failing speech service.
     if (signal?.aborted) return;
     this.stop(); if (!this.disposed) this.onState("error");
   }
   stop() {
-    this.cancellation?.abort(); this.cancellation = null; this.hearing = false;
+    this.cancellation?.abort(); this.cancellation = null; this.hearing = false; this.characterId = null;
     clearTimeout(this.idleTimer); this.meter.stop(); cancelAnimationFrame(this.animation);
     void this.playback?.close().catch(() => {}); this.playback = null;
     this.avatar("idle"); window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));

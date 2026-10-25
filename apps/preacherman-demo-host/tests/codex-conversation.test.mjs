@@ -56,6 +56,22 @@ test("server-owned character identity reaches the model without enabling tools",
   assert.match(start.developerInstructions, /Do not execute commands/);
   assert.equal(start.config["features.shell_tool"], false);
 });
+test("voice conversations use low reasoning and the character's spoken language without changing the model", async t => {
+  const f = await fixture(t);
+  await f.runtime.chat({ messages, voiceConversation: true, personaInstructions: "You are Cortana. Reply only in English." });
+  const start = f.calls.find(call => call.method === "thread/start").params;
+  const turn = f.calls.find(call => call.method === "turn/start").params;
+  assert.equal(turn.effort, "low");
+  assert.equal(turn.model, undefined);
+  assert.equal(start.config.model, undefined);
+  assert.match(start.developerInstructions, /Follow the character's spoken-language instructions/);
+  assert.match(start.developerInstructions, /Reply only in English/);
+  assert.doesNotMatch(start.developerInstructions, /Reply in the user's language/);
+  assert.equal(turn.approvalPolicy, "never");
+  assert.deepEqual(turn.sandboxPolicy, { type: "readOnly", networkAccess: false });
+  assert.equal(start.config["features.shell_tool"], false);
+  assert.ok(f.children.every(child => child.exitCode === 0));
+});
 test("Codex uses ephemeral full-context conversation, isolated cwd and CLI-managed auth",async t=>{
   const f=await fixture(t);
   assert.equal((await f.runtime.chat({messages})).text,"记得 ORBIT");
@@ -63,6 +79,8 @@ test("Codex uses ephemeral full-context conversation, isolated cwd and CLI-manag
   assert.equal(start.ephemeral,true); assert.equal(start.sandbox,"read-only"); assert.equal(start.approvalPolicy,"never");
   assert.equal(start.config["mcp_servers.example.enabled"],false);
   assert.equal(start.config["features.shell_tool"],false);assert.equal(start.config["features.hooks"],false);
+  assert.match(start.developerInstructions, /Reply in the user's language/);
+  assert.equal(f.calls.find(call=>call.method==="turn/start").params.effort, undefined);
   assert.equal(f.launch.options.shell,false); assert.equal(f.launch.options.windowsHide,true);
   assert.equal(f.launch.options.env.OPENAI_API_KEY,undefined);
   const history=f.calls.find(call=>call.method==="thread/inject_items").params.items;

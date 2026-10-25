@@ -15,12 +15,20 @@ export class SpokenPhrase {
     if (voiced) { this.heard = true; this.speechSamples += block.length; this.silence = 0; }
     else this.silence += block.length;
     if (!this.heard) while (this.samples > 4800 && this.blocks.length > 1) this.samples -= this.blocks.shift()!.length;
-    if (this.heard && (this.silence >= 16000 || this.samples >= 320000)) {
+    if (this.heard && (this.silence >= 10400 || this.samples >= 320000)) {
       this.done = true;
       return this.speechSamples >= 3200 ? this.blocks : [];
     }
     return null;
   }
+}
+
+/** Sentence-sized requests let playback begin while the following sentence is synthesized. */
+export function spokenSentences(text: string, language: "en" | "zh" | "unknown" = "unknown") {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+  const segmenter = new Intl.Segmenter(language === "unknown" ? undefined : language, { granularity: "sentence" });
+  return Array.from(segmenter.segment(trimmed), part => part.segment.trim()).filter(Boolean);
 }
 
 export function speechWav(blocks: Float32Array[]) {

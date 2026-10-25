@@ -1455,8 +1455,9 @@ export function createPreachermanServer(options = {}) {
             const characterId = url.searchParams.get("characterId");
             const voice = characterId ? await characterConversation.voiceSettings(characterId, cancellation.signal) : null;
             if (voice?.service.provider === "breeze" && voice.connectionStatus !== "connected") throw Object.assign(new Error("Start Breeze TTS 2 or reconnect it in Appearance → Voice."), { statusCode: 503 });
+            if (voice?.service.provider === "breeze" && !voice.selectedVoiceId) throw Object.assign(new Error("Choose a voice assigned to this character in Appearance → Voice."), { statusCode: 409 });
             const { voices } = voice?.service.provider === "breeze" ? { voices: ["breeze"] } : await windowsSpeech.status(cancellation.signal);
-            result = { ...recognition, voices };
+            result = { ...recognition, voices, voiceLanguage: voice?.voiceLanguage || "unknown" };
           }
           response.setHeader("Cache-Control", "no-store");
           json(response, 200, result, origin);
