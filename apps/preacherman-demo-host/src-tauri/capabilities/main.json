@@ -19,6 +19,9 @@
       "identifier": "opener:allow-open-url",
       "allow": [
         {
+          "url": "http://127.0.0.1:18760/"
+        },
+        {
           "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/authorize?*"
         }
       ]

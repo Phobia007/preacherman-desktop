@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { openUrl } from "@tauri-apps/plugin-opener";
+import { isTauri } from "@tauri-apps/api/core";
 import type { ModelId } from "../../preferences";
 import { characterVoiceRequest, type CharacterVoiceOption, type CharacterVoiceSettings } from "../../audio/characterVoice";
 import { selectOutput, type OutputContext } from "../../audio/microphoneMeter";
@@ -33,14 +35,32 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
     setBusy("load"); setError("");
     try {
       const state = await characterVoiceRequest<CharacterVoiceSettings>(character.id, "", undefined, signal);
-      if (!signal.aborted) { setSnapshot(state); setSelected(state.selectedVoiceId || state.voices[0]?.id || null); }
+      if (!signal.aborted) { setSnapshot(state); setSelected(previous => state.voices.some(v => v.id === previous) ? previous : state.selectedVoiceId || state.voices[0]?.id || null); }
     } catch (reason) { if (!signal.aborted) setError(reason instanceof Error ? reason.message : "Could not load voices. Try again."); }
     finally { if (!signal.aborted) setBusy(""); }
   };
   useEffect(() => {
+    setSnapshot(null); setSelected(null);
     life.current = new AbortController(); void load();
-    return () => { life.current.abort(); preview.current?.abort(); void playback.current?.close().catch(() => {}); };
+    const refresh = () => { if (!preview.current) void load(); };
+    window.addEventListener("focus", refresh);
+    return () => { window.removeEventListener("focus", refresh); life.current.abort(); preview.current?.abort(); void playback.current?.close().catch(() => {}); };
   }, [character.id]);
+  const connectBreeze = async (open = false) => {
+    const signal = life.current.signal;
+    stop(); setBusy("connect"); setError(""); setNotice("");
+    try {
+      const state = await characterVoiceRequest<CharacterVoiceSettings>(character.id, "/connect", {}, signal);
+      if (signal.aborted) return;
+      setSnapshot(state);
+      if (open) {
+        if (isTauri()) await openUrl("http://127.0.0.1:18760/");
+        else window.open("http://127.0.0.1:18760/", "_blank", "noopener,noreferrer");
+      }
+      else setNotice("Breeze voices refreshed. Click a voice to listen, then hold Apply.");
+    } catch (reason) { if (!signal.aborted) setError(reason instanceof Error ? reason.message : "Could not connect to Breeze."); }
+    finally { if (!signal.aborted) setBusy(""); }
+  };
   const listen = async (voice: CharacterVoiceOption) => {
     const wasPlaying = playing === voice.id;
     stop(); setSelected(voice.id); setError(""); setNotice("");
@@ -69,7 +89,7 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
     try {
       const state = await characterVoiceRequest<CharacterVoiceSettings>(character.id, "/apply", { id: selected }, life.current.signal);
       if (life.current.signal.aborted) return false;
-      setSnapshot(state); setNotice("Voice saved for this character. Live voice connection is pending."); return true;
+      setSnapshot(state); setNotice(selectedVoice?.provider === "breeze" ? "Breeze voice applied. This character will use it in voice conversations." : "Voice saved for this character. Live voice connection is pending."); return true;
     } catch (reason) { if (!life.current.signal.aborted) setError(reason instanceof Error ? reason.message : "Could not apply this voice."); return false; }
     finally { if (!life.current.signal.aborted) setBusy(""); }
   };
@@ -89,7 +109,7 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
       for (let index = 0; index < data.length; index += 8192) binary += String.fromCharCode(...data.subarray(index, index + 8192));
       const state = await characterVoiceRequest<CharacterVoiceSettings>(character.id, "/options", { name, voiceId, preview: `data:${mime};base64,${btoa(binary)}` }, life.current.signal);
       if (life.current.signal.aborted) return;
-      setSnapshot(state); setSelected(state.voices.at(-1)?.id || null); setAdding(false); setName(""); setVoiceId(""); setFile(null);
+      setSnapshot(state); setSelected(state.voices.find(voice => voice.source !== "breeze" && !snapshot?.voices.some(previous => previous.id === voice.id))?.id || null); setAdding(false); setName(""); setVoiceId(""); setFile(null);
       setNotice("Preview added. Click its tile to listen, then hold Apply.");
     } catch (reason) { if (!life.current.signal.aborted) setError(reason instanceof Error ? reason.message : "Could not add this voice preview."); }
     finally { if (context && context.state !== "closed") void context.close(); if (!life.current.signal.aborted) setBusy(""); }
@@ -104,11 +124,17 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
     finally { if (!life.current.signal.aborted) setBusy(""); }
   };
   const voices = snapshot?.voices || [];
+  const importedCount = voices.filter(voice => voice.source !== "breeze").length;
   return <section className="asset-pack-browser asset-voice" aria-label={`${character.name} voices`} aria-busy={Boolean(busy)} lang="en">
     <div className="asset-pack-browser__scroll">
-      <div className="asset-pack-browser__heading"><h2>Voice</h2><span>{voices.length} / 12</span></div>
+      <div className="asset-pack-browser__heading"><h2>Voice</h2><span>{voices.length} voices</span></div>
+      <div className="asset-voice__breeze" aria-label="Local Breeze voice library">
+        <p role="status">{busy === "connect" ? "Starting / connecting to Breeze…" : snapshot?.breezeStatus === "connected" ? "Breeze · Connected on this computer" : "Breeze · Not connected"}</p>
+        <div><button type="button" className="asset-voice__text-button" disabled={Boolean(busy)} onClick={() => void connectBreeze()}>Refresh Breeze voices</button>
+          <button type="button" className="asset-voice__text-button" disabled={Boolean(busy)} onClick={() => void connectBreeze(true)}>Create / manage in Breeze</button></div>
+      </div>
       {adding ? <form className="asset-voice__form" onSubmit={event => { event.preventDefault(); void add(); }}>
-        <h3>Add a voice preview</h3><p>Bring your finished voice sample. Cloning happens with your chosen provider.</p>
+        <h3>Add a voice preview</h3><p>Import a finished audio preview below. Saved Breeze voices appear automatically in this collection.</p>
         <label>Name<input autoFocus value={name} onChange={event => setName(event.target.value)} maxLength={60} required disabled={Boolean(busy)} placeholder="Your voice name" /></label>
         <label>Voice ID <span className="asset-voice__optional">Optional</span><input value={voiceId} onChange={event => setVoiceId(event.target.value)} maxLength={256} disabled={Boolean(busy)} placeholder="From your voice provider" spellCheck={false} autoComplete="off" /></label>
         <label className="asset-voice__file">Audio preview<input type="file" accept=".wav,.mp3,.ogg,.m4a" disabled={Boolean(busy)} onChange={event => setFile(event.target.files?.[0] || null)} /><small>Up to 30 seconds · 3 MB · Stored on this device</small></label>
@@ -120,15 +146,16 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
             <span className="asset-pack-tile__content"><VoiceMark /><span className="asset-pack-tile__name">{voice.name}</span></span>
             {snapshot?.selectedVoiceId === voice.id && <span className="asset-pack-tile__check" aria-label="Applied"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10" /></svg></span>}
           </button>)}
-          {snapshot && voices.length < 12 && <button type="button" className="asset-pack-tile asset-pack-tile--add" aria-label="Add voice preview" disabled={!enabled || Boolean(busy)} onClick={() => { stop(); setAdding(true); setError(""); setNotice(""); }}><span className="asset-pack-tile__content"><Plus /><span className="asset-pack-tile__name">Add voice</span></span></button>}
-          {Array.from({ length: Math.max(0, 12 - voices.length - (snapshot && voices.length < 12 ? 1 : 0)) }, (_, index) => <span className="asset-pack-tile asset-pack-tile--empty" aria-hidden="true" key={`empty-${index}`} />)}
+          {snapshot && importedCount < 12 && <button type="button" className="asset-pack-tile asset-pack-tile--add" aria-label="Add voice preview" disabled={!enabled || Boolean(busy)} onClick={() => { stop(); setAdding(true); setError(""); setNotice(""); }}><span className="asset-pack-tile__content"><Plus /><span className="asset-pack-tile__name">Add voice</span></span></button>}
+          {Array.from({ length: Math.max(0, 12 - voices.length - (snapshot && importedCount < 12 ? 1 : 0)) }, (_, index) => <span className="asset-pack-tile asset-pack-tile--empty" aria-hidden="true" key={`empty-${index}`} />)}
         </div>
         <div className="asset-pack-browser__description">
           {busy === "load" ? <p role="status">Loading voices…</p> : !snapshot ? <button type="button" className="asset-voice__text-button" onClick={() => void load()}>Try again</button> :
             selectedVoice ? <><h3>{selectedVoice.name}</h3><p>{playing === selected ? "Playing preview · Click again to stop" : "Click a tile to listen. Hold Apply to save your choice."}</p>
+              {selectedVoice.source === "breeze" && <p>Breeze · {selectedVoice.description || "Saved local voice. Shared across characters; Apply changes only this character."}</p>}
               <div className="asset-voice__apply"><AssetActivateButton key={selectedVoice.id} modelId={character.id as ModelId} labelName={selectedVoice.name} variant="apply" activated={applied} enabled={enabled && !busy} commit={apply} onActivate={() => {}} />
-                <button type="button" className="asset-voice__text-button" disabled={Boolean(busy)} onClick={() => void remove()}>Remove preview</button></div>
-            </> : <><h3>No voices yet</h3><p>Add a finished voice preview when it is ready.</p></>}
+                {selectedVoice.source !== "breeze" && <button type="button" className="asset-voice__text-button" disabled={Boolean(busy)} onClick={() => void remove()}>Remove preview</button>}</div>
+            </> : <><h3>No voices yet</h3><p>Create and save a voice in Breeze, then refresh this collection. You can also import an audio preview.</p></>}
           <button type="button" className="asset-voice__text-button" onClick={() => { stop(); onOpenService(); }}>Voice Service settings</button>
         </div>
       </>}

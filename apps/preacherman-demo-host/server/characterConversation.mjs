@@ -5,7 +5,7 @@ import characters from "../src/surfaces/asset/characters.json" with { type: "jso
 
 const fail = (message, statusCode = 400) => Object.assign(new Error(message), { statusCode });
 
-export function createCharacterConversation({ file, connections, codex, listAgents }) {
+export function createCharacterConversation({ file, connections, codex, listAgents, breeze, windowsSpeech }) {
   let queue = Promise.resolve();
   const sessions = new Map();
   const busy = new Set();
@@ -51,14 +51,20 @@ export function createCharacterConversation({ file, connections, codex, listAgen
     for (const key of sessions.keys()) if (key.startsWith(id + ":")) sessions.delete(key);
     return settings(id);
   }
-  const voiceSettings = async id => {
+  const voiceSettings = async (id, signal) => {
     const saved = await profile(id);
+    let localVoices = [], breezeStatus = "offline";
+    if (breeze) {
+      try { localVoices = await breeze.voices(signal); breezeStatus = "connected"; }
+      catch { signal?.throwIfAborted(); }
+    }
     return {
       characterId: id,
       service: saved.voiceService || { provider: "", model: "", region: "", workspaceId: "" },
-      connectionStatus: "not-connected",
+      connectionStatus: saved.voiceService?.provider === "breeze" ? breezeStatus : "not-connected",
+      breezeStatus,
       selectedVoiceId: saved.selectedVoiceId || null,
-      voices: (saved.voices || []).map(({ preview, ...voice }) => ({ ...voice, hasPreview: Boolean(preview) })),
+      voices: [...(saved.voices || []).map(({ preview, ...voice }) => ({ ...voice, hasPreview: Boolean(preview) })), ...localVoices],
     };
   };
   const voiceField = (value, label, max = 160) => {
@@ -67,14 +73,28 @@ export function createCharacterConversation({ file, connections, codex, listAgen
   };
   return {
     profile, settings, voiceSettings,
+    async connectBreeze(id, signal) {
+      await profile(id); await breeze.connect(signal);
+      return voiceSettings(id, signal);
+    },
+    async synthesize(id, input, signal) {
+      const saved = await profile(id);
+      if (saved.voiceService?.provider === "breeze") {
+        const key = saved.selectedVoiceId;
+        const imported = saved.voices?.find(v => v.id === key && v.provider === "breeze");
+        const voiceId = key?.startsWith("breeze:") ? key.slice(7) : imported?.voiceId;
+        if (!voiceId) throw fail("Choose a Breeze voice in Appearance → Voice and hold Apply first.", 409);
+        return breeze.synthesize({ text: input.text, voiceId }, signal);
+      }
+      return windowsSpeech.synthesize(input, signal);
+    },
     async saveVoiceService(id, input) {
       await profile(id);
       const service = {
         provider: voiceField(input.provider, "provider", 80), model: voiceField(input.model, "model"),
         region: voiceField(input.region, "region", 80), workspaceId: voiceField(input.workspaceId, "workspace ID"),
       };
-      // Draft metadata only. Credentials and provider calls are deliberately not
-      // accepted until a realtime provider has been selected and integrated.
+      // Other providers remain drafts; Breeze is the installed local output service.
       await update(state => { state[id].voiceService = service; });
       return voiceSettings(id);
     },
@@ -99,7 +119,12 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       });
       return voiceSettings(id);
     },
-    async previewVoice(id, voiceId) {
+    async previewVoice(id, voiceId, signal) {
+      await profile(id);
+      if (typeof voiceId === "string" && voiceId.startsWith("breeze:")) {
+        const result = await breeze.synthesize({ text: "你好，很高兴见到你。这是我的声音，我们现在可以开始聊天了。", voiceId: voiceId.slice(7) }, signal);
+        return { audio: `data:audio/wav;base64,${result.audio}` };
+      }
       const voice = (await profile(id)).voices?.find(item => item.id === voiceId);
       if (!voice) throw fail("Voice preview not found.", 404);
       const audio = await readFile(join(previewDirectory, voice.id)).catch(() => { throw fail("This preview is missing. Remove it and add the audio file again.", 404); });
@@ -107,14 +132,20 @@ export function createCharacterConversation({ file, connections, codex, listAgen
     },
     async applyVoice(id, voiceId) {
       await profile(id);
+      const localVoice = typeof voiceId === "string" && voiceId.startsWith("breeze:")
+        ? (await breeze.voices()).find(v => v.id === voiceId) : null;
       await update(state => {
-        if (!state[id].voices?.some(item => item.id === voiceId)) throw fail("Choose an available voice first.");
+        if (!localVoice && !state[id].voices?.some(item => item.id === voiceId)) throw fail("Choose an available voice first.");
         state[id].selectedVoiceId = voiceId;
+        const voice = localVoice || state[id].voices.find(item => item.id === voiceId);
+        if (voice.provider === "breeze") state[id].voiceService = { provider: "breeze", model: "Breeze-TTS-2", region: "local", workspaceId: "" };
+        else if (state[id].voiceService?.provider === "breeze") state[id].voiceService = { provider: voice.provider || "", model: voice.model || "", region: "", workspaceId: "" };
       });
       return voiceSettings(id);
     },
     async removeVoice(id, voiceId) {
       await profile(id);
+      if (typeof voiceId === "string" && voiceId.startsWith("breeze:")) throw fail("Shared Breeze voices are managed in the Breeze voice library.");
       let removed;
       await update(state => {
         removed = state[id].voices?.find(item => item.id === voiceId);

@@ -46,7 +46,7 @@ export class SpokenConversation {
       if (!id) throw new Error("Activate a character in Asset before starting a conversation.");
       const config = await this.request<{ active: unknown }>(`/api/characters/${id}/execution`, undefined, cancellation.signal);
       if (!config.active) throw new Error("Choose Execution Mode in your character's Settings before starting a conversation.");
-      const status = await this.request<{ language: string | null }>("/api/voice/local/status", undefined, cancellation.signal);
+      const status = await this.request<{ language: string | null }>(`/api/voice/local/status?characterId=${encodeURIComponent(id)}`, undefined, cancellation.signal);
       if (!status.language) throw new Error("Local speech recognition is unavailable. Check the speech model installation.");
       cancellation.signal.throwIfAborted(); this.language = status.language;
       return await this.listen(cancellation.signal);
@@ -99,7 +99,9 @@ export class SpokenConversation {
     } catch (error) { if (!signal.aborted) await this.failed(error instanceof Error ? error.message : "The conversation failed. Please try again."); }
   }
   private async speak(text: string, signal: AbortSignal) {
-    const result = await this.request<{ audio: string }>("/api/voice/local/synthesize", { text }, signal);
+    const id = this.character();
+    if (!id) throw new Error("Select a character before speaking.");
+    const result = await this.request<{ audio: string }>(`/api/characters/${encodeURIComponent(id)}/voice/synthesize`, { text }, signal, 95000);
     signal.throwIfAborted();
     const context: OutputContext = new AudioContext(); this.playback = context;
     try {

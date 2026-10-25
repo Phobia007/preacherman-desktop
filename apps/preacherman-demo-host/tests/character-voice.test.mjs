@@ -154,7 +154,7 @@ test("voice conversation uses engine acceptance and stops after repeated recogni
   let recognized = { text: "Quiet speech", accepted: true, confidence: 0.1 };
   voice.request = async (path, body) => {
     if (path.endsWith("/execution")) return { active: {} };
-    if (path.endsWith("/status")) return { language: "zh-CN" };
+    if (path.split("?")[0].endsWith("/status")) return { language: "zh-CN" };
     if (path.endsWith("/recognize")) return recognized;
     chats.push(body); return { text: "Real reply" };
   };

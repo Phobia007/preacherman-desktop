@@ -3,6 +3,7 @@ import { createExecutionConnections } from "./executionConnections.mjs";
 import { createCodexConversation } from "./codexConversation.mjs";
 import { createCharacterConversation } from "./characterConversation.mjs";
 import { createWindowsSpeech } from "./windowsSpeech.mjs";
+import { createBreezeSpeech } from "./breezeSpeech.mjs";
 import { createLocalSpeechRecognition } from "./localSpeechRecognition.mjs";
 import { existsSync } from "node:fs";
 import { createServer } from "node:http";
@@ -1366,8 +1367,9 @@ export function createPreachermanServer(options = {}) {
     ...(options.executionConnectionRequest ? { request: options.executionConnectionRequest } : {}),
   });
   const codexConversation = options.codexConversation ?? createCodexConversation({ directory: join(dataDirectory, "chat-session") });
-  const characterConversation = createCharacterConversation({ file: join(dataDirectory, "characters.v1.json"), connections: executionConnections, codex: codexConversation, listAgents: () => agentAccessRuntime.listLocalAgents() });
   const windowsSpeech = options.windowsSpeech ?? createWindowsSpeech();
+  const breezeSpeech = options.breezeSpeech ?? createBreezeSpeech();
+  const characterConversation = createCharacterConversation({ file: join(dataDirectory, "characters.v1.json"), connections: executionConnections, codex: codexConversation, listAgents: () => agentAccessRuntime.listLocalAgents(), breeze: breezeSpeech, windowsSpeech });
   const speechRecognition = options.speechRecognition ?? createLocalSpeechRecognition();
   const workspaceSelection = createWorkspaceSelection({
     file: join(dataDirectory, "local-agent-workspaces.v1.json"),
@@ -1396,21 +1398,28 @@ export function createPreachermanServer(options = {}) {
 
     try {
       const url = new URL(request.url, "http://127.0.0.1");
-      const voiceDraftRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/voice(?:\/(service|options|preview|apply))?$/);
+      const voiceDraftRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/voice(?:\/(service|options|preview|apply|connect|synthesize))?$/);
       if (voiceDraftRoute) {
         const [, id, action] = voiceDraftRoute;
+        const cancellation = new AbortController();
+        const disconnected = () => { if (!response.writableEnded) cancellation.abort(); };
+        response.once("close", disconnected);
+        try {
         response.setHeader("Cache-Control", "no-store");
-        if (!action && request.method === "GET") { json(response, 200, await characterConversation.voiceSettings(id), origin); return; }
-        if (action === "preview" && request.method === "GET") { json(response, 200, await characterConversation.previewVoice(id, url.searchParams.get("id")), origin); return; }
+        if (!action && request.method === "GET") { json(response, 200, await characterConversation.voiceSettings(id, cancellation.signal), origin); return; }
+        if (action === "preview" && request.method === "GET") { json(response, 200, await characterConversation.previewVoice(id, url.searchParams.get("id"), cancellation.signal), origin); return; }
         if (request.method === "POST") {
           const body = await readJson(request, action === "options" ? 4 * 1024 * 1024 + 4096 : 8192);
           const result = action === "service" ? await characterConversation.saveVoiceService(id, body) :
             action === "options" ? await characterConversation.addVoice(id, body) :
+            action === "connect" ? await characterConversation.connectBreeze(id, cancellation.signal) :
+            action === "synthesize" ? await characterConversation.synthesize(id, body, cancellation.signal) :
             action === "apply" ? await characterConversation.applyVoice(id, body.id) : null;
           if (result) { json(response, 200, result, origin); return; }
         }
         if (action === "options" && request.method === "DELETE") { json(response, 200, await characterConversation.removeVoice(id, url.searchParams.get("id")), origin); return; }
         json(response, 405, { error: "Method not allowed." }, origin); return;
+        } finally { response.removeListener("close", disconnected); }
       }
       const characterRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/(execution(?:\/local|\/save)?|conversation)$/);
       if (characterRoute) {
@@ -1443,7 +1452,10 @@ export function createPreachermanServer(options = {}) {
           else if (speechRoute[1] === "synthesize") result = await windowsSpeech.synthesize(body, cancellation.signal);
           else {
             const recognition = await speechRecognition.status(cancellation.signal);
-            const { voices } = await windowsSpeech.status(cancellation.signal);
+            const characterId = url.searchParams.get("characterId");
+            const voice = characterId ? await characterConversation.voiceSettings(characterId, cancellation.signal) : null;
+            if (voice?.service.provider === "breeze" && voice.connectionStatus !== "connected") throw Object.assign(new Error("Start Breeze TTS 2 or reconnect it in Appearance → Voice."), { statusCode: 503 });
+            const { voices } = voice?.service.provider === "breeze" ? { voices: ["breeze"] } : await windowsSpeech.status(cancellation.signal);
             result = { ...recognition, voices };
           }
           response.setHeader("Cache-Control", "no-store");
@@ -2588,6 +2600,7 @@ export function createPreachermanServer(options = {}) {
       await preachermanPluginRuntime.close();
       codexConversation.close();
       windowsSpeech.close();
+      breezeSpeech.close();
       speechRecognition.close();
       await agentAccessRuntime.close();
       ecosystemFacade.close();
