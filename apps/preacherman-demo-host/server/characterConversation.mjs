@@ -122,7 +122,7 @@ export function createCharacterConversation({ file, connections, codex, listAgen
     async previewVoice(id, voiceId, signal) {
       await profile(id);
       if (typeof voiceId === "string" && voiceId.startsWith("breeze:")) {
-        const result = await breeze.synthesize({ text: "你好，很高兴见到你。这是我的声音，我们现在可以开始聊天了。", voiceId: voiceId.slice(7) }, signal);
+        const result = await breeze.synthesize({ text: "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.", voiceId: voiceId.slice(7) }, signal);
         return { audio: `data:audio/wav;base64,${result.audio}` };
       }
       const voice = (await profile(id)).voices?.find(item => item.id === voiceId);

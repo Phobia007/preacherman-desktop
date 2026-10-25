@@ -54,11 +54,12 @@ test("shared Breeze library displays every voice while Apply, playback and resta
   const imported = (await service.addVoice("cortana", { name: "Existing preview", preview: `data:audio/wav;base64,${wav().toString("base64")}` })).voices.find(v => v.provider !== "breeze");
   assert.equal((await service.voiceSettings("cortana")).voices.length, 16);
   await service.previewVoice("cortana", "breeze:voice_0");
+  assert.deepEqual(calls.at(-1), { text: "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.", voiceId: "voice_0" });
   assert.equal((await service.voiceSettings("cortana")).selectedVoiceId, null);
   await service.applyVoice("cortana", "breeze:voice_0"); await service.applyVoice("zima", "breeze:voice_1");
   const restarted = createCharacterConversation(args);
   await restarted.synthesize("cortana", { text: "one" }); await restarted.synthesize("zima", { text: "two" });
-  assert.equal(calls.at(-2).voiceId, "voice_0"); assert.equal(calls.at(-1).voiceId, "voice_1");
+  assert.deepEqual(calls.slice(-2), [{ text: "one", voiceId: "voice_0" }, { text: "two", voiceId: "voice_1" }]);
   assert.equal((await restarted.voiceSettings("cortana")).connectionStatus, "connected");
   await assert.rejects(service.applyVoice("cortana", "breeze:missing"), /available voice/);
   await assert.rejects(service.removeVoice("cortana", "breeze:voice_0"), /Shared Breeze/);
@@ -80,7 +81,10 @@ test("desktop HTTP routes apply a Breeze voice and return its audio using the ch
     assert.equal(res.status, 200); return res.json();
   };
   assert.equal((await call("")).voices[0].id, "breeze:warm");
+  assert.match((await call("/preview?id=breeze%3Awarm")).audio, /^data:audio\/wav;base64,/);
+  assert.equal(JSON.parse(requests.at(-1).body).input, "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.");
   assert.equal((await call("/apply", { id: "breeze:warm" })).service.provider, "breeze");
   assert.equal((await call("/synthesize", { text: "A desktop reply" })).provider, "breeze");
   assert.equal(JSON.parse(requests.at(-1).body).voice, "warm");
+  assert.equal(JSON.parse(requests.at(-1).body).input, "A desktop reply");
 });
