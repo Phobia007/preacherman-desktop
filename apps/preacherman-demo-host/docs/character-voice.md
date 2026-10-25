@@ -4,7 +4,7 @@
 
 ### Local Breeze TTS 2
 
-Appearance → Voice is the voice management entry point. Every saved voice returned by the installed Breeze server appears as a tile, alongside imported previews; the 12-preview limit does not truncate the shared Breeze library. Re-entering the page, returning focus from Breeze, or pressing **Refresh Breeze voices** reloads the library. **Create / manage in Breeze** opens its local Chinese interface for voice design, cloning and metadata management.
+Appearance → Voice opens directly on the voice grid, without headings, connection text or voice descriptions. Every saved voice returned by the installed Breeze server appears as a tile, alongside imported previews; the 12-preview limit does not truncate the shared Breeze library. Re-entering the page or returning focus reloads the library. Connection status, **Refresh Breeze voices** and **Create / manage in Breeze** are in Settings → Voice Service. The management button opens the separate local Breeze interface for voice design, cloning and metadata management. Desktop controls and feedback remain English.
 
 Clicking a Breeze tile synthesizes a short preview without applying it. Holding Apply saves that voice ID for the current character and selects the local Breeze provider. Conversation replies then use that character's voice through the existing playback, output device and avatar audio path. Selections are independent per character and persist across restart. Missing voices or an offline selected Breeze service produce an error; they never silently substitute another voice. Other providers remain drafts.
 

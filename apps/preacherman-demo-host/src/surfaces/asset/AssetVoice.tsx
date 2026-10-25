@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { openUrl } from "@tauri-apps/plugin-opener";
-import { isTauri } from "@tauri-apps/api/core";
 import type { ModelId } from "../../preferences";
 import { characterVoiceRequest, type CharacterVoiceOption, type CharacterVoiceSettings } from "../../audio/characterVoice";
 import { selectOutput, type OutputContext } from "../../audio/microphoneMeter";
@@ -46,21 +44,6 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
     window.addEventListener("focus", refresh);
     return () => { window.removeEventListener("focus", refresh); life.current.abort(); preview.current?.abort(); void playback.current?.close().catch(() => {}); };
   }, [character.id]);
-  const connectBreeze = async (open = false) => {
-    const signal = life.current.signal;
-    stop(); setBusy("connect"); setError(""); setNotice("");
-    try {
-      const state = await characterVoiceRequest<CharacterVoiceSettings>(character.id, "/connect", {}, signal);
-      if (signal.aborted) return;
-      setSnapshot(state);
-      if (open) {
-        if (isTauri()) await openUrl("http://127.0.0.1:18760/");
-        else window.open("http://127.0.0.1:18760/", "_blank", "noopener,noreferrer");
-      }
-      else setNotice("Breeze voices refreshed. Click a voice to listen, then hold Apply.");
-    } catch (reason) { if (!signal.aborted) setError(reason instanceof Error ? reason.message : "Could not connect to Breeze."); }
-    finally { if (!signal.aborted) setBusy(""); }
-  };
   const listen = async (voice: CharacterVoiceOption) => {
     const wasPlaying = playing === voice.id;
     stop(); setSelected(voice.id); setError(""); setNotice("");
@@ -127,12 +110,6 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
   const importedCount = voices.filter(voice => voice.source !== "breeze").length;
   return <section className="asset-pack-browser asset-voice" aria-label={`${character.name} voices`} aria-busy={Boolean(busy)} lang="en">
     <div className="asset-pack-browser__scroll">
-      <div className="asset-pack-browser__heading"><h2>Voice</h2><span>{voices.length} voices</span></div>
-      <div className="asset-voice__breeze" aria-label="Local Breeze voice library">
-        <p role="status">{busy === "connect" ? "Starting / connecting to Breeze…" : snapshot?.breezeStatus === "connected" ? "Breeze · Connected on this computer" : "Breeze · Not connected"}</p>
-        <div><button type="button" className="asset-voice__text-button" disabled={Boolean(busy)} onClick={() => void connectBreeze()}>Refresh Breeze voices</button>
-          <button type="button" className="asset-voice__text-button" disabled={Boolean(busy)} onClick={() => void connectBreeze(true)}>Create / manage in Breeze</button></div>
-      </div>
       {adding ? <form className="asset-voice__form" onSubmit={event => { event.preventDefault(); void add(); }}>
         <h3>Add a voice preview</h3><p>Import a finished audio preview below. Saved Breeze voices appear automatically in this collection.</p>
         <label>Name<input autoFocus value={name} onChange={event => setName(event.target.value)} maxLength={60} required disabled={Boolean(busy)} placeholder="Your voice name" /></label>
@@ -140,7 +117,6 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
         <label className="asset-voice__file">Audio preview<input type="file" accept=".wav,.mp3,.ogg,.m4a" disabled={Boolean(busy)} onChange={event => setFile(event.target.files?.[0] || null)} /><small>Up to 30 seconds · 3 MB · Stored on this device</small></label>
         <div className="asset-voice__form-actions"><button type="button" disabled={Boolean(busy)} onClick={() => { setAdding(false); setError(""); }}>Cancel</button><button type="submit" disabled={Boolean(busy) || !file || !name.trim()}>{busy === "add" ? "Adding…" : "Add preview"}</button></div>
       </form> : <>
-        <p className="asset-pack-browser__group">{character.name}<span>Voice collection</span></p>
         <div className="asset-pack-grid" aria-label="Voice previews">
           {voices.map(voice => <button key={voice.id} type="button" className="asset-pack-tile" aria-label={`Preview ${voice.name}`} aria-pressed={selected === voice.id} data-playing={playing === voice.id} disabled={!enabled || Boolean(busy)} onClick={() => void listen(voice)}>
             <span className="asset-pack-tile__content"><VoiceMark /><span className="asset-pack-tile__name">{voice.name}</span></span>
@@ -151,16 +127,14 @@ export function AssetVoice({ character, enabled, onOpenService }: { character: C
         </div>
         <div className="asset-pack-browser__description">
           {busy === "load" ? <p role="status">Loading voices…</p> : !snapshot ? <button type="button" className="asset-voice__text-button" onClick={() => void load()}>Try again</button> :
-            selectedVoice ? <><h3>{selectedVoice.name}</h3><p>{playing === selected ? "Playing preview · Click again to stop" : "Click a tile to listen. Hold Apply to save your choice."}</p>
-              {selectedVoice.source === "breeze" && <p>Breeze · {selectedVoice.description || "Saved local voice. Shared across characters; Apply changes only this character."}</p>}
+            selectedVoice ? <>
               <div className="asset-voice__apply"><AssetActivateButton key={selectedVoice.id} modelId={character.id as ModelId} labelName={selectedVoice.name} variant="apply" activated={applied} enabled={enabled && !busy} commit={apply} onActivate={() => {}} />
                 {selectedVoice.source !== "breeze" && <button type="button" className="asset-voice__text-button" disabled={Boolean(busy)} onClick={() => void remove()}>Remove preview</button>}</div>
-            </> : <><h3>No voices yet</h3><p>Create and save a voice in Breeze, then refresh this collection. You can also import an audio preview.</p></>}
-          <button type="button" className="asset-voice__text-button" onClick={() => { stop(); onOpenService(); }}>Voice Service settings</button>
+            </> : null}
         </div>
       </>}
       {notice && <p className="asset-voice__notice" role="status">{notice}</p>}
-      {error && <p className="asset-voice__error" role="alert">{error}</p>}
+      {error && <><p className="asset-voice__error" role="alert">{error}</p><button type="button" className="asset-voice__text-button" onClick={() => { stop(); onOpenService(); }}>Voice Service settings</button></>}
     </div>
   </section>;
 }
