@@ -11,6 +11,7 @@ apps/*/.macos-service-build/
 apps/preacherman-demo-host/public/local-avatar/
 .playwright-cli/
 .runtime-tmp/
+/.cache/
 output/
 apps/*/output/
 /.codex-worktrees/

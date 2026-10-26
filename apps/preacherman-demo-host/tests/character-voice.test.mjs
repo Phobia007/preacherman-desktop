@@ -54,6 +54,33 @@ test("failed, cancelled and changed-provider replies cannot contaminate memory",
   await assert.rejects(f.service.chat("cortana", { text: "Switch", sessionId }), /Execution mode changed/);
   await assert.rejects(f.service.profile("../../private"), /Unknown character/);
 });
+
+test("interrupted replies retain completed speech only, including replies cancelled before delivery", async t => {
+  const f = await fixture(t);
+  f.args.codex.chat = async input => { f.calls.push(input); return { text: "Heard sentence. Secret unheard continuation." }; };
+  const first = await f.service.chat("cortana", { text: "First", sessionId });
+  await f.service.chat("cortana", { text: "Interrupt", sessionId, playback: { replyId: first.replyId, heardCharacters: 15, interrupted: true } });
+  assert.match(f.calls[1].messages[1].content, /^Heard sentence\./);
+  assert.doesNotMatch(f.calls[1].messages[1].content, /Secret unheard/);
+  assert.match(f.calls[1].messages[1].content, /interrupted/);
+  const replyId = "client-turn-0000000001";
+  await f.service.chat("cortana", { text: "Lost response", sessionId, replyId });
+  await f.service.chat("cortana", { text: "Next", sessionId, playback: { replyId, heardCharacters: 0, interrupted: true } });
+  assert.doesNotMatch(f.calls.at(-1).messages.at(-2).content, /Heard sentence|Secret unheard/);
+  await assert.rejects(f.service.chat("cortana", { text: "Invalid", sessionId, playback: { replyId, heardCharacters: -1, interrupted: true } }), /acknowledgement/);
+});
+
+test("playback acknowledgement survives cancellation of the following provider request", async t => {
+  const f = await fixture(t);
+  const first = await f.service.chat("cortana", { text: "First", sessionId });
+  const cancel = new AbortController();
+  f.args.codex.chat = async () => { cancel.abort(); return { text: "Discard this" }; };
+  await assert.rejects(f.service.chat("cortana", { text: "Second", sessionId, playback: { replyId: first.replyId, heardCharacters: 0, interrupted: true } }, cancel.signal));
+  f.args.codex.chat = async input => { f.calls.push(input); return { text: "New reply" }; };
+  await f.service.chat("cortana", { text: "Third", sessionId });
+  assert.doesNotMatch(f.calls.at(-1).messages[1].content, /A real provider reply/);
+  assert.match(f.calls.at(-1).messages[1].content, /interrupted/);
+});
 test("spoken phrases preserve lead-in, wait for silence, reject clicks and bound long utterances", async () => {
   const source = await readFile(new URL("../src/audio/spokenAudio.ts", import.meta.url), "utf8");
   const exports = {};

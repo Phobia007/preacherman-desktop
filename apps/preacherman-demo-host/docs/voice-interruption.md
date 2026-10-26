@@ -1,0 +1,13 @@
+# Local voice interruption
+
+The microphone remains open throughout an audio-only conversation, including thinking and playback. Its existing WebRTC echo cancellation and noise suppression stay enabled. A dedicated worker runs Silero VAD 5.1.2 using ONNX Runtime Web 1.22.0, WASM, and one CPU thread. DeepSeek, Whisper, character identity and selected Breeze clones are unchanged.
+
+All new model/runtime assets live in `D:\preacherman\apps\preacherman-demo-host\public\speech\silero` and are embedded in the canonical desktop executable on D:. No model download or CDN is used at runtime. Installation and verification temporary files use `D:\preacherman\.cache`. See the adjacent model manifest for pinned hashes and both MIT licenses. Replacing the ONNX runtime requires updating the dependency, both packaged WASM files, hashes and browser verification together.
+
+The detector receives 512-sample frames at 16 kHz. Six consecutive frames with speech probability at least 0.65 trigger interruption (192 ms of confirmed speech). A 300 ms lead-in preserves initial consonants. Silence below 0.35 for 650 ms ends the phrase; utterances are bounded to 20 seconds. These are tunable engineering thresholds, not a guarantee of physical microphone latency.
+
+Interruption synchronously stops the output audio source, aborts current recognition/provider/synthesis requests, discards prefetched audio and returns to listening without reopening the microphone. Late replies cannot resume playback. A cancelled Breeze HTTP stream is discarded; the service owns cancellation of its inference. Stopping the conversation, switching characters or changing execution closes capture, detector and playback resources.
+
+The next request acknowledges completed spoken sentences by reply ID and prefix length. The server removes unheard continuation from conversation context and marks the interruption. A partly spoken sentence is conservatively unconfirmed: no word timestamp is guessed. Acknowledgements survive cancellation of the following provider request. No transcript is rendered or newly persisted to disk.
+
+Focused tests cover repeated interruption, cancellation while thinking, stale responses, context trimming, detector cleanup and packaged hashes. Browser/native verification uses a pre-existing synthetic speech reference as microphone input with real AudioWorklet capture and real Silero inference, while mocking recognition/LLM/TTS responses to keep the checks deterministic. Physical speaker echo rejection still depends on microphone placement, volume and the device's WebRTC echo cancellation; do not claim that synthetic loopback tests establish hardware echo performance.

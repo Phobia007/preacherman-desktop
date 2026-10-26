@@ -1,5 +1,6 @@
 import { MicrophoneMeter, selectOutput, voiceFrame, type MicrophoneState, type OutputContext } from "./microphoneMeter";
-import { SpokenPhrase, speechWav, spokenSentences } from "./spokenAudio";
+import { ConversationPhrase, speechWav, spokenSentences } from "./spokenAudio";
+import { SileroVad } from "./SileroVad";
 import { preachermanServiceRequest } from "../preacherman/capabilityClient";
 
 export type ConversationVoiceState = MicrophoneState | "thinking" | "speaking";
@@ -10,6 +11,8 @@ type VoiceLanguage = "en" | "zh" | "unknown";
 export class SpokenConversation {
   private meter: MicrophoneMeter;
   private cancellation: AbortController | null = null;
+  private turn: AbortController | null = null;
+  private previousPlayback: { replyId: string; heardCharacters: number; interrupted: boolean } | undefined;
   private playback: OutputContext | null = null;
   private animation = 0;
   private idleTimer: ReturnType<typeof setTimeout> | undefined;
@@ -27,7 +30,7 @@ export class SpokenConversation {
     private devices: () => Devices,
     private avatar: (state: "idle" | "listening" | "thinking" | "speaking") => void,
   ) {
-    this.meter = new MicrophoneMeter(onFrame, (state, error) => {
+    this.meter = new MicrophoneMeter(frame => { if (this.hearing) onFrame(frame); }, (state, error) => {
       if (!this.cancellation || this.disposed) return;
       if (state === "error") { void this.failed(error || "Could not open the microphone."); return; }
       if (this.hearing) { this.onState(state); this.avatar(state === "listening" ? "listening" : "idle"); }
@@ -66,20 +69,45 @@ export class SpokenConversation {
     return ready;
   }
   private async capture(source: MediaStreamAudioSourceNode, context: AudioContext) {
-    await context.audioWorklet.addModule(new URL("./voiceCapture.worklet.js?no-inline", import.meta.url));
-    const node = new AudioWorkletNode(context, "preacherman-voice-capture");
-    const mute = context.createGain(); mute.gain.value = 0;
-    source.connect(node); node.connect(mute); mute.connect(context.destination);
-    const phrase = new SpokenPhrase();
-    node.port.onmessage = (event: MessageEvent<Float32Array>) => {
-      const blocks = phrase.push(event.data);
-      if (blocks && this.hearing && this.cancellation) void this.reply(blocks, this.cancellation.signal);
+    const signal = this.cancellation!.signal;
+    const phrase = new ConversationPhrase(() => this.interrupt(), blocks => {
+      if (!signal.aborted) void this.reply(blocks, signal);
+    });
+    const detector = new SileroVad((block, probability) => {
+      if (!signal.aborted) phrase.push(block, probability);
+    }, message => { if (!signal.aborted) void this.failed(message); });
+    let node: AudioWorkletNode | undefined, mute: GainNode | undefined;
+    const release = () => {
+      detector.close();
+      if (node) { node.port.onmessage = null; node.port.close(); node.disconnect(); }
+      mute?.disconnect();
     };
-    return () => { node.port.onmessage = null; node.port.close(); node.disconnect(); mute.disconnect(); };
+    try {
+      await detector.start(signal);
+      await context.audioWorklet.addModule(new URL("./voiceCapture.worklet.js?no-inline", import.meta.url));
+      signal.throwIfAborted();
+      node = new AudioWorkletNode(context, "preacherman-voice-capture");
+      mute = context.createGain(); mute.gain.value = 0;
+      source.connect(node); node.connect(mute); mute.connect(context.destination);
+      node.port.onmessage = (event: MessageEvent<Float32Array>) => detector.push(event.data);
+      return release;
+    } catch (error) { release(); throw error; }
   }
-  private async reply(blocks: Float32Array[], signal: AbortSignal) {
+  private interrupt() {
+    if (!this.cancellation || this.cancellation.signal.aborted) return;
+    clearTimeout(this.idleTimer);
+    if (this.turn && this.previousPlayback) this.previousPlayback.interrupted = true;
+    this.turn?.abort(); this.turn = null;
+    // Abort listeners stop the current audio source synchronously. Capture stays live.
+    this.hearing = true; this.onState("listening"); this.avatar("listening");
+    window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
+  }
+  private async reply(blocks: Float32Array[], sessionSignal: AbortSignal) {
+    this.turn?.abort();
+    const turn = new AbortController(); this.turn = turn;
+    const signal = AbortSignal.any([sessionSignal, turn.signal]);
     const id = this.characterId;
-    this.hearing = false; clearTimeout(this.idleTimer); this.meter.stop();
+    this.hearing = false; clearTimeout(this.idleTimer);
     this.onState("thinking"); this.avatar("thinking");
     try {
       signal.throwIfAborted();
@@ -89,10 +117,13 @@ export class SpokenConversation {
         signal.throwIfAborted();
         if (recognized.accepted && recognized.text.trim()) {
           this.missedPhrases = 0;
-          const result = await this.request<{ text: string; voiceLanguage?: VoiceLanguage; voiceId?: string | null }>(`/api/characters/${id}/conversation`, { text: recognized.text, sessionId: this.sessionId }, signal, 130000);
+          const previousPlayback = this.previousPlayback;
+          const playback = { replyId: crypto.randomUUID(), heardCharacters: 0, interrupted: true };
+          this.previousPlayback = playback;
+          const result = await this.request<{ text: string; voiceLanguage?: VoiceLanguage; voiceId?: string | null }>(`/api/characters/${id}/conversation`, { text: recognized.text, sessionId: this.sessionId, replyId: playback.replyId, playback: previousPlayback }, signal, 130000);
           signal.throwIfAborted();
           if (result.voiceLanguage) this.voiceLanguage = result.voiceLanguage;
-          await this.speak(result.text, signal, id, result.voiceId);
+          await this.speak(result.text, signal, id, result.voiceId, playback);
         } else {
           this.missedPhrases++;
           if (this.missedPhrases >= 2) {
@@ -106,10 +137,12 @@ export class SpokenConversation {
         }
       }
       signal.throwIfAborted();
-      await this.listen(signal);
+      this.hearing = true; this.onState("listening"); this.avatar("listening");
+      this.idleTimer = setTimeout(() => this.stop(), 45000);
     } catch (error) { if (!signal.aborted) await this.failed(error instanceof Error ? error.message : "The conversation failed. Please try again."); }
+    finally { if (this.turn === turn) this.turn = null; }
   }
-  private async speak(text: string, signal: AbortSignal, id: string, voiceId?: string | null) {
+  private async speak(text: string, signal: AbortSignal, id: string, voiceId?: string | null, playback?: { heardCharacters: number; interrupted: boolean }) {
     signal.throwIfAborted();
     const sentences = spokenSentences(text, this.voiceLanguage);
     if (!sentences.length) return;
@@ -131,7 +164,10 @@ export class SpokenConversation {
         if (!result) throw error;
         if (index + 1 < sentences.length) pending = synthesize(sentences[index + 1]);
         await this.playAudio(result.audio, context, speaking);
+        // Conservatively acknowledge completed sentences; never guess where a word was cut.
+        if (playback) playback.heardCharacters = text.indexOf(sentences[index], playback.heardCharacters) + sentences[index].length;
       }
+      if (playback) { playback.heardCharacters = text.length; playback.interrupted = false; }
     } finally {
       cancellation.abort();
       if (context && context.state !== "closed") await context.close().catch(() => {});
@@ -185,6 +221,7 @@ export class SpokenConversation {
   }
   stop() {
     this.cancellation?.abort(); this.cancellation = null; this.hearing = false; this.characterId = null;
+    this.turn?.abort(); this.turn = null; this.previousPlayback = undefined;
     clearTimeout(this.idleTimer); this.meter.stop(); cancelAnimationFrame(this.animation);
     void this.playback?.close().catch(() => {}); this.playback = null;
     this.avatar("idle"); window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));

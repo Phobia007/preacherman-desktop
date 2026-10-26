@@ -1,4 +1,30 @@
-/** Bounded phrase detection, retaining a short lead-in so initial consonants survive. */
+/** Continuous neural speech segmentation; quiet gaps and clicks never start a turn. */
+export class ConversationPhrase {
+  private blocks: Float32Array[] = [];
+  private samples = 0;
+  private onset = 0;
+  private silence = 0;
+  private speaking = false;
+  constructor(private started: () => void, private ended: (blocks: Float32Array[]) => void) {}
+  push(block: Float32Array, probability: number) {
+    this.blocks.push(block); this.samples += block.length;
+    if (!this.speaking) {
+      this.onset = probability >= 0.65 ? this.onset + block.length : 0;
+      // 192 ms of sustained speech rejects short impacts while keeping interruption prompt.
+      if (this.onset >= 3072) { this.speaking = true; this.silence = 0; this.started(); }
+      else while (this.samples > 4800 && this.blocks.length > 1) this.samples -= this.blocks.shift()!.length;
+    } else {
+      this.silence = probability < 0.35 ? this.silence + block.length : 0;
+      if (this.silence >= 10400 || this.samples >= 320000) {
+        const result = this.blocks;
+        this.blocks = []; this.samples = 0; this.onset = 0; this.silence = 0; this.speaking = false;
+        this.ended(result);
+      }
+    }
+  }
+}
+
+/** Legacy energy segmenter retained for non-conversation consumers. */
 export class SpokenPhrase {
   private blocks: Float32Array[] = [];
   private speechSamples = 0;

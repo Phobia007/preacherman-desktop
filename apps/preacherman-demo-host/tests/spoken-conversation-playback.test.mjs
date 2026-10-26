@@ -15,7 +15,7 @@ async function fixture() {
   source = source.replace('new URL("./voiceCapture.worklet.js?no-inline", import.meta.url)', '"capture.js"');
   const exports = {}, states = [], contexts = [], frames = new Set();
   let character = "cortana", sequence = 0;
-  class Meter { start() { return Promise.resolve(true); } stop() {} dispose() {} }
+  class Meter { starts = 0; stops = 0; start() { this.starts++; return Promise.resolve(true); } stop() { this.stops++; } dispose() {} }
   class Context {
     state = "running";
     destination = {};
@@ -158,5 +158,69 @@ test("session character and output language stay independent of the recognition 
     accepted = false; await voice.reply([new Float32Array(512)], voice.cancellation.signal);
     assert.match(spoken[1].text, /didn't catch/); assert.equal(spoken[1].id, "cortana");
     assert.equal(spoken[1].voiceId, undefined);
+  } finally { voice.dispose(); }
+});
+
+test("neural segmentation rejects clicks, preserves onset and accepts repeated interrupted turns", async () => {
+  const { audio } = await fixture();
+  let starts = 0; const phrases = [];
+  const detector = new audio.ConversationPhrase(() => starts++, blocks => phrases.push(blocks));
+  const push = (probability, frames) => { for (let n = 0; n < frames; n++) detector.push(new Float32Array(512), probability); };
+  push(0, 100); push(0.95, 2); push(0, 25);
+  assert.equal(starts, 0); assert.equal(phrases.length, 0);
+  for (let turn = 0; turn < 3; turn++) {
+    push(0.9, 5); assert.equal(starts, turn);
+    push(0.9, 1); assert.equal(starts, turn + 1);
+    push(0.5, 5); push(0, 20); assert.equal(phrases.length, turn);
+    push(0, 1); assert.equal(phrases.length, turn + 1);
+    assert.ok(phrases[turn].length >= 32);
+  }
+});
+
+test("barge-in stops sound and pending synthesis without reopening the mic or losing the next turn", async () => {
+  const { voice, contexts, states, frames } = await fixture();
+  const chats = [], syntheses = [];
+  voice.request = async (path, body, signal) => {
+    if (path.endsWith("/execution")) return { active: {} };
+    if (path.includes("/status?")) return { language: "zh-CN", voiceLanguage: "en" };
+    if (path.endsWith("/recognize")) return { accepted: true, text: "A new spoken turn" };
+    if (path.endsWith("/conversation")) { chats.push(body); return { text: "First sentence. Unheard sentence.", voiceLanguage: "en" }; }
+    syntheses.push(signal);
+    if (syntheses.length % 2) return { audio: "YXVkaW8=" };
+    return new Promise((_resolve, reject) => signal.addEventListener("abort", () => reject(signal.reason), { once: true }));
+  };
+  try {
+    await voice.start();
+    const stops = voice.meter.stops;
+    for (let n = 0; n < 3; n++) {
+      const running = voice.reply([new Float32Array(512)], voice.cancellation.signal);
+      await tick(); assert.equal(states.at(-1), "speaking");
+      voice.interrupt();
+      assert.equal(contexts.at(-1).sources[0].stopped, true);
+      assert.equal(states.at(-1), "listening");
+      await running;
+      assert.equal(voice.active, true); assert.equal(voice.meter.starts, 1); assert.equal(voice.meter.stops, stops);
+      assert.equal(syntheses.at(-1).aborted, true); assert.equal(frames.size, 0);
+    }
+    assert.equal(chats[1].playback.interrupted, true); assert.equal(chats[1].playback.heardCharacters, 0);
+    assert.equal(states.includes("error"), false);
+  } finally { voice.dispose(); }
+  assert.equal(voice.active, false); assert.ok(contexts.every(context => context.state === "closed"));
+});
+
+test("an aborted provider response arriving late never starts playback or changes the new turn", async () => {
+  const { voice, states } = await fixture();
+  const provider = deferred(); let spoken = 0;
+  voice.request = async path => {
+    if (path.endsWith("/execution")) return { active: {} };
+    if (path.includes("/status?")) return { language: "zh-CN" };
+    if (path.endsWith("/recognize")) return { accepted: true, text: "Hello" };
+    return provider.promise;
+  };
+  voice.speak = async () => { spoken++; };
+  try {
+    await voice.start(); const running = voice.reply([new Float32Array(512)], voice.cancellation.signal);
+    await tick(); voice.interrupt(); provider.resolve({ text: "Stale reply" }); await running;
+    assert.equal(spoken, 0); assert.equal(states.at(-1), "listening"); assert.equal(voice.active, true);
   } finally { voice.dispose(); }
 });

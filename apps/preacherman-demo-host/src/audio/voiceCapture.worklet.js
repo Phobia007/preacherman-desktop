@@ -1,4 +1,4 @@
-// Average resampling to mono 16 kHz. Only active while the voice button listens.
+// Average resampling to mono 16 kHz. Active throughout the voice session, including playback.
 class VoiceCapture extends AudioWorkletProcessor {
   constructor() { super(); this.sum = 0; this.count = 0; this.position = 0; this.buffer = []; }
   process(inputs) {

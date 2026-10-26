@@ -195,10 +195,11 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       const { active } = await connections.save(draft, { activate: false });
       return select(id, active);
     },
-    async chat(id, { text, sessionId }, signal) {
+    async chat(id, { text, sessionId, playback, replyId = randomUUID() }, signal) {
       const character = identity(id);
       if (typeof text !== "string" || !text.trim() || text.length > 4000) throw fail("A spoken message is required.");
       if (typeof sessionId !== "string" || !/^[\w-]{16,80}$/.test(sessionId)) throw fail("A valid voice session is required.");
+      if (typeof replyId !== "string" || !/^[\w-]{16,80}$/.test(replyId)) throw fail("A valid reply identifier is required.");
       const saved = await profile(id); const execution = saved.execution;
       if (!execution) throw fail("Choose an execution mode in this character's Settings first.", 409);
       const key = id + ":" + sessionId;
@@ -208,7 +209,23 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       if (sessions.size >= 64) sessions.delete(sessions.keys().next().value);
       const stamp = JSON.stringify(execution);
       const previous = sessions.get(key);
-      const messages = [...(previous?.execution === stamp ? previous.messages : []), { role: "user", content: text.trim() }];
+      const history = previous?.execution === stamp ? [...previous.messages] : [];
+      if (playback !== undefined && (!playback || typeof playback.replyId !== "string" ||
+        !Number.isInteger(playback.heardCharacters) || playback.heardCharacters < 0 || typeof playback.interrupted !== "boolean")) {
+        throw fail("Invalid spoken playback acknowledgement.");
+      }
+      if (playback && previous?.replyId === playback.replyId && history.at(-1)?.role === "assistant") {
+        const last = history.at(-1);
+        if (playback.heardCharacters > last.content.length) throw fail("Invalid spoken playback acknowledgement.");
+        if (playback.interrupted) {
+          const heard = last.content.slice(0, playback.heardCharacters).trimEnd();
+          history[history.length - 1] = { role: "assistant", content: (heard ? heard + "\n" : "") +
+            "[Voice playback was interrupted. Only the completed sentences above are confirmed heard; do not assume the rest was delivered.]" };
+        }
+        // Playback is a fact even if the next provider request is itself interrupted.
+        sessions.set(key, { ...previous, messages: history, replyId: null, at: now });
+      }
+      const messages = [...history, { role: "user", content: text.trim() }];
       while (messages.length > 1 && messages.reduce((size, message) => size + message.content.length, 0) > 60000) messages.splice(0, 2);
       const personaInstructions = `You are ${character.name}, the user's virtual companion in Preacherman. ` +
         `Character background: ${character.designation}. ${character.paragraphs.join(" ")} ` +
@@ -237,8 +254,8 @@ export function createCharacterConversation({ file, connections, codex, listAgen
         if (JSON.stringify(latest.execution) !== stamp) throw fail("Execution mode changed. Start a new conversation.", 409);
         if (latest.selectedVoiceId !== resolved.saved.selectedVoiceId) throw fail("Voice selection changed. Start a new conversation.", 409);
         if (typeof result.text !== "string" || !result.text.trim() || result.text.length > 6000) throw fail("The reply cannot be spoken. Please ask for a shorter answer.", 502);
-        sessions.set(key, { execution: stamp, at: Date.now(), messages: [...messages, { role: "assistant", content: result.text }].slice(-20) });
-        return { text: result.text, characterId: id, voiceLanguage, voiceId: voice?.voiceId || null, source: result.source || "api" };
+        sessions.set(key, { execution: stamp, at: Date.now(), replyId, messages: [...messages, { role: "assistant", content: result.text }].slice(-20) });
+        return { text: result.text, replyId, characterId: id, voiceLanguage, voiceId: voice?.voiceId || null, source: result.source || "api" };
       } finally { busy.delete(key); }
     },
   };

@@ -1,0 +1,15 @@
+{
+  "model": "Silero VAD",
+  "version": "5.1.2",
+  "source": "https://github.com/snakers4/silero-vad/tree/v5.1.2",
+  "runtime": "onnxruntime-web 1.22.0 (WASM, one CPU thread)",
+  "license": "MIT",
+  "sampleRate": 16000,
+  "frameSamples": 512,
+  "contextSamples": 64,
+  "files": {
+    "silero_vad.onnx": "2623a2953f6ff3d2c1e61740c6cdb7168133479b267dfef114a4a3cc5bdd788f",
+    "ort-wasm-simd-threaded.mjs": "30dd851d9c00622940500f71ddd2ff8820c5cb65270816080175b958705385a8",
+    "ort-wasm-simd-threaded.wasm": "71aef04959c5c1b6de461b6538e2058e306610034a85aad2742d0c7fd4533fe4"
+  }
+}
