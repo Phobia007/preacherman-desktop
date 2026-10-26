@@ -23,14 +23,25 @@ export function connectionUrl(value) {
   return url.href.replace(/\/+$/, "");
 }
 
-// Resolve once, reject non-public IPv4 addresses, and pin that address to the TLS
-// request. No redirects, ambient proxy credentials, or DNS rebinding.
+// Resolve once and pin that address to the TLS request. Custom gateways must
+// resolve publicly; the fixed DeepSeek origin also supports TUN fake-IP DNS.
 export function publicIpv4(address) {
   if (isIP(address) !== 4) return false;
   const [a, b] = address.split(".").map(Number);
   return !([0, 10, 127].includes(a) || a >= 224 || (a === 169 && b === 254) ||
     (a === 172 && b >= 16 && b <= 31) || (a === 192 && (b === 168 || b === 0)) ||
     (a === 100 && b >= 64 && b <= 127) || (a === 198 && (b === 18 || b === 19)));
+}
+
+export function connectionAddressAllowed(url, address) {
+  if (publicIpv4(address)) return true;
+  // Clash/mihomo TUN replaces public DNS answers with 198.18.0.0/15.
+  // This exception is for the exact official HTTPS origin only, never a
+  // user-chosen gateway. TLS must still authenticate api.deepseek.com before
+  // any Authorization header is sent. No redirects or relaxed certificates.
+  const [first, second] = address.split(".").map(Number);
+  return url.origin === "https://api.deepseek.com" && !url.username && !url.password &&
+    isIP(address) === 4 && first === 198 && (second === 18 || second === 19);
 }
 
 export async function connectionRequest(url, { method = "GET", headers, body, signal } = {}) {
@@ -44,10 +55,10 @@ export async function connectionRequest(url, { method = "GET", headers, body, si
     ]);
   } catch { throw fail("Gateway DNS lookup failed. Check its hostname.", 502); }
   finally { clearTimeout(timer); }
-  if (!addresses.length || addresses.some(({ address }) => !publicIpv4(address))) throw fail("The gateway must resolve to a public address.");
+  if (!addresses.length || addresses.some(({ address }) => !connectionAddressAllowed(parsed, address))) throw fail("The gateway must resolve to a public address.");
   return new Promise((resolve, reject) => {
     const req = httpsRequest(parsed, {
-      method, headers, agent: false, signal,
+      method, headers, agent: false, signal, rejectUnauthorized: true, servername: parsed.hostname,
       lookup: (_hostname, options, callback) => options.all ? callback(null, [addresses[0]]) : callback(null, addresses[0].address, 4),
     }, response => {
       let size = 0;
