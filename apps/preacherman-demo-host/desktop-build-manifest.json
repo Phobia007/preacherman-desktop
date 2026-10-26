@@ -1,174 +1,199 @@
 {
   "schemaVersion": 1,
-  "buildId": "conversation-voice-20261026",
+  "buildId": "deepseek-dns-20261026",
   "productVersion": "0.1.0",
-  "sourceTask": "Use each character clone and its language in live voice conversations; reduce speech and Codex reply latency",
-  "sourceThread": "01a16ffc-d6e2-74f3-91f2-29c34ae244df",
-  "sourceState": "Auto-bind unique owned clones; validate voice selection through generation/playback; reply in English or Chinese according to voice. Reuse Whisper CPU worker for 90 seconds; use low reasoning for voice-only Codex turns; 650ms silence detection and sentence-by-sentence synthesis with one sentence prefetched. Fail promptly without recursive error synthesis.",
-  "sourceCommit": "65849a1a6484431ff1ec3a99999e1dead76f33f2",
+  "sourceTask": "Fix official DeepSeek connection blocked by TUN proxy fake-IP DNS",
+  "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
+  "sourceState": "Permit 198.18.0.0/15 fake-IP DNS only for the exact https://api.deepseek.com origin. Preserve public-address requirements for custom gateways, pinned DNS, hostname/certificate verification and rejection of redirects. No frontend, model, character or voice changes.",
+  "sourceCommit": "4ec54a4c465a64f6867d6e3b0c0f1e7838c6b51e",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-26T03:21:39.4864658+08:00",
-  "deployedAt": "2026-10-26T03:21:52.4645480+08:00",
-  "verifiedAt": "2026-10-26T03:22:53.7550894+08:00",
+  "builtAt": "2026-10-26T16:00:46.4831003+08:00",
+  "deployedAt": "2026-10-26T16:03:35.503077+08:00",
+  "verifiedAt": "2026-10-26T16:08:37.966634+08:00",
   "sizeBytes": 820804096,
-  "sha256": "0A93D725745A775339BB70DC90EF5E7F0376FA62D9DA7C99EE67EFD1122664F5",
+  "sha256": "87EBE533043AC2524301A2D7FE3482F61CFCAA311CF9DD6F77965BFCD010D98F",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-10-26T03:20:03.8701513+08:00",
-  "sidecarSizeBytes": 93237248,
-  "sidecarSha256": "2F3EE4C24DF370AB85668C045D22282BE6DDD86F3E1F954695B84D01871A0DDA",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\conversation-voice-before-20261026\\preacherman-demo-host.exe",
-  "backupSha256": "0E3AD96B90DB8DEB1A5E560B073D17591019C3D5DC09403C7E95890C84CC083B",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\conversation-voice-before-20261026\\preacherman-service.exe",
-  "sidecarBackupSha256": "071A0E793471AECEA762B093E3EF7740A2D071218157D4BF1A3B770B14247801",
-  "rollbackBaselineCommit": "2520de687f6c7bcb3e01fc393f389113fdd5689a",
-  "previousVerificationCommit": "2520de687f6c7bcb3e01fc393f389113fdd5689a",
+  "sidecarBuiltAt": "2026-10-26T15:57:45.436677+08:00",
+  "sidecarSizeBytes": 93237760,
+  "sidecarSha256": "171DBCB4628A00C26205737F0F5C06B57A344764EADEA8A01C5D57C16F2DB09E",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\deepseek-dns-before-20261026\\preacherman-demo-host.exe",
+  "backupSha256": "0A93D725745A775339BB70DC90EF5E7F0376FA62D9DA7C99EE67EFD1122664F5",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\deepseek-dns-before-20261026\\preacherman-service.exe",
+  "sidecarBackupSha256": "2F3EE4C24DF370AB85668C045D22282BE6DDD86F3E1F954695B84D01871A0DDA",
+  "rollbackBaselineCommit": "65849a1a6484431ff1ec3a99999e1dead76f33f2",
+  "previousVerificationCommit": "65849a1a6484431ff1ec3a99999e1dead76f33f2",
   "verification": {
-    "nativeFlow": "Restarted through canonical shortcut in background. Native main window exists and responds. Canonical executable/sidecar hashes match build. Five owned clones auto-selected and synthesized; live Cortana/Codex English and Clove/Codex Chinese replies verified through deployed HTTP APIs. Incorrect expected voice ID rejected.",
-    "asrPerformance": {
-      "measuredAt": "2026-10-25T19:17:04.063Z",
-      "source": "clove-short.wav",
-      "language": "zh-CN",
-      "engine": "local Whisper base CPU, 4 threads",
-      "conversion": "in-memory PCM16 mono linear resampling 24000 to 16000 Hz",
-      "durationMs": 6700,
-      "calls": [
-        {
-          "phase": "cold",
-          "elapsedMs": 4914,
-          "accepted": true,
-          "confidence": 0.6184,
-          "characters": 30,
-          "audio": {
-            "durationMs": 6700,
-            "rms": 0.092119,
-            "peak": 0.755153
-          }
-        },
-        {
-          "phase": "warm",
-          "elapsedMs": 2058,
-          "accepted": true,
-          "confidence": 0.6184,
-          "characters": 30,
-          "audio": {
-            "durationMs": 6700,
-            "rms": 0.092119,
-            "peak": 0.755153
-          }
-        }
-      ],
-      "statusMs": 76,
-      "workerReused": true,
-      "reductionMs": 2856,
-      "children": [
-        {
-          "pid": 32336,
-          "exited": true,
-          "exitCode": null,
-          "signal": "SIGTERM"
-        }
-      ],
-      "cleanupPassed": true
+    "status": "passed-with-recorded-baseline-diagnostics",
+    "sourceChecks": {
+      "typecheck": "passed",
+      "focusedTests": 15,
+      "focusedFailures": 0,
+      "gitDiffCheck": "passed",
+      "excludedBaselineTest": "conversation preserves unavailable selections and a visible keyboard focus: pre-existing Task CSS selector assertion; both files unchanged from HEAD."
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\conversation-voice-20261026",
-    "nativeVisualVerification": "No Computer Use or desktop mouse/keyboard actions per explicit user instruction. Full native navigation and visual checks not performed this round. Layout/styles/assets unchanged; existing light/dark semantic regression tests passed.",
-    "realConversations": {
-      "at": "2026-10-25T19:21:58.646Z",
-      "bindings": [
-        {
-          "characterId": "cortana",
-          "voiceId": "cortana",
-          "language": "en",
-          "selected": true
-        },
-        {
-          "characterId": "halo-mk-v-model",
-          "voiceId": "master-chief",
-          "language": "en",
-          "selected": true
-        },
-        {
-          "characterId": "apex-legend-pathfinder",
-          "voiceId": "pathfinder",
-          "language": "en",
-          "selected": true
-        },
-        {
-          "characterId": "zima",
-          "voiceId": "zima",
-          "language": "en",
-          "selected": true
-        },
-        {
-          "characterId": "clove-t-pose",
-          "voiceId": "clove",
-          "language": "zh",
-          "selected": true
-        }
+    "nativeFlow": "Cold launch through canonical shortcut. Official DeepSeek Test Connection with a deliberately invalid test key reached provider authentication in light and dark appearances, replacing the previous DNS block. No real credential read or saved. Saved character execution configuration unchanged. Core eight destinations and window controls verified, then restarted normally without debug port.",
+    "nativeVisualVerification": "Reviewed captured native light/dark connection states and core routes; readable controls, complete authored content and no new appearance changes.",
+    "modes": [
+      {
+        "appearance": "light",
+        "reachedProvider": true,
+        "expectedInvalidKeyRejected": true,
+        "dnsBlockRemoved": true,
+        "errorMessage": "Provider rejected the API key or model access."
+      },
+      {
+        "appearance": "dark",
+        "reachedProvider": true,
+        "expectedInvalidKeyRejected": true,
+        "dnsBlockRemoved": true,
+        "errorMessage": "Provider rejected the API key or model access."
+      }
+    ],
+    "routes": [
+      {
+        "appearance": "light",
+        "name": "Settings",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Asset",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Home",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Task",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Gallery",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Market",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Extension",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Account",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Settings",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Asset",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Home",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Task",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Gallery",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Market",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Extension",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Account",
+        "ready": true
+      }
+    ],
+    "pageErrors": [],
+    "consoleErrors": [
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+    ],
+    "newConsoleErrors": [],
+    "expectedTestDiagnostics": [
+      "Failed to load resource: the server responded with a status of 502 (Bad Gateway)",
+      "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+    ],
+    "resources": {
+      "SampledAt": "2026-10-26T16:07:30.4755134+08:00",
+      "NativePid": 3744,
+      "StartedAt": "2026-10-26T16:07:08.2040718+08:00",
+      "WindowHandle": 265044,
+      "Responding": true,
+      "NativeVisualVerified": true,
+      "ProcessIds": [
+        3744,
+        7812,
+        15112,
+        1608,
+        7876,
+        28688,
+        1264,
+        528,
+        26996,
+        2884,
+        25332
       ],
-      "conversations": [
-        {
-          "characterId": "cortana",
-          "voiceId": "cortana",
-          "language": "en",
-          "reply": "I’m Cortana, your virtual companion, here to help you think clearly and plan your next move.",
-          "replyMs": 6937,
-          "synthesisMs": 2264,
-          "totalMs": 9201
-        },
-        {
-          "characterId": "clove-t-pose",
-          "voiceId": "clove",
-          "language": "zh",
-          "reply": "你好，我是暮蝶，你在这里的虚拟伙伴，随时陪你聊聊，找点乐子。",
-          "replyMs": 7188,
-          "synthesisMs": 1860,
-          "totalMs": 9048
-        }
-      ],
-      "synthesis": [
-        {
-          "characterId": "halo-mk-v-model",
-          "voiceId": "master-chief",
-          "milliseconds": 992
-        },
-        {
-          "characterId": "apex-legend-pathfinder",
-          "voiceId": "pathfinder",
-          "milliseconds": 945
-        },
-        {
-          "characterId": "zima",
-          "voiceId": "zima",
-          "milliseconds": 976
-        }
-      ],
-      "inputLanguage": "zh-CN",
-      "staleVoiceRejected": true,
+      "NormalizedCpuPercent": 3.99,
+      "WorkingSetMiB": 1915.4,
+      "GpuDedicatedBytes": 3279265792.0,
+      "MaxGpuEngineUtilization": 25.0,
+      "FreeRamKiB": 17461876,
+      "TemporaryProcesses": [],
+      "Listeners": [],
+      "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
+      "ShortcutArguments": "",
+      "CloseReleasedPair": true,
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time. Pre-existing unrelated Open Design browsers and services preserved."
+    },
+    "windowControls": {
+      "restore": true,
+      "maximize": true,
+      "minimize": true,
+      "closeRequested": true,
       "passed": true
     },
-    "resources": {
-      "nativeTreeCpuPercent": 2.42,
-      "workingSetMiB": 1961.8,
-      "sampleSeconds": 4.13
-    },
-    "scopeLimits": [
-      "Network and Codex load still affect latency; timings are samples, not a maximum guarantee.",
-      "Codex still returns complete text before first synthesis; subsequent sentences synthesize during playback.",
-      "Only characters with a saved corresponding clone receive automatic clone binding.",
-      "First recognition after worker exit remains a cold model load; worker releases after 90 seconds idle."
+    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\deepseek-dns-20261026",
+    "baselineReports": [
+      "output/playwright/asset-settings-focus-20261023/native-report.json",
+      "output/tifa-import-20261015/native-report.json",
+      "output/playwright/voice-ui-20261025/native-report.json"
     ],
-    "status": "passed-background-verification",
-    "sourceChecks": {
-      "focusedTests": 42,
-      "productionBuild": "passed; single incremental complete Tauri build and rebuilt matching sidecar",
-      "focusedFailures": 0,
-      "typecheck": "passed",
-      "gitDiffCheck": "passed"
-    },
-    "appearance": "Existing theme styles unchanged; light/dark regression tests passed."
+    "scopeLimits": [
+      "User must re-enter their actual API key and run Test Connection, then Save & Use. Provider authentication/model entitlement with the real key was not tested."
+    ],
+    "buildNotes": [
+      "Windows PowerShell 5.1 misread the previous UTF-8 manifest before any compilation began; the existing build ran successfully under PowerShell 7.",
+      "An approval-service token refresh interruption delayed read-only resource inspection. Retried successfully after user continuation; no approval bypass."
+    ]
   },
   "releaseAttempts": [
     {
@@ -941,7 +966,7 @@
       "sourceCommit": "097bf8b63a96ab5de6e626c86bd4cfe77c53ac59",
       "sha256": "FE91C1FDA4655C44E9D9547D8DD7A15A2DE805BDFCEA8EEF57FBC74CE9FB0764",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-10-02T05:01:50.7719650+08:00",
+      "deployedAt": "2026-10-02T05:01:50.771965+08:00",
       "verifiedAt": "2026-10-02T05:12:01.7443445+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\market-brain-search-before-20261002"
     },
@@ -968,7 +993,7 @@
       "sourceCommit": "4ce3b34f78fd9a526c604349fcdb9a5ff6d204b6",
       "sha256": "98B2AAC5669D32FD31C32CCF5B0A5CCFD2696751AAF11A48A1EB67ADEA599283",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-10-04T06:00:16.3365500+08:00",
+      "deployedAt": "2026-10-04T06:00:16.33655+08:00",
       "verifiedAt": "2026-10-04T06:02:24.9302896+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-extension-header-before-20261004"
     },
@@ -978,7 +1003,7 @@
       "sha256": "82D4573B37D46EDFEE691C128273D267F6A3D3583EE259F30E5D8368BC0400EE",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-10-04T12:03:03.7532923+08:00",
-      "verifiedAt": "2026-10-04T12:05:19.4347320+08:00",
+      "verifiedAt": "2026-10-04T12:05:19.434732+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-home-transition-before-20261004"
     },
     {
@@ -1050,7 +1075,7 @@
       "sourceCommit": "e06d7af2df0ce5c0fab25d774eb3efaeda29105f",
       "sha256": "7B07C426876E89911AD4C986FB2E2095387942C111665E3FBBB229DB0C3CB5A6",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-10-06T05:41:45.0165270+08:00",
+      "deployedAt": "2026-10-06T05:41:45.016527+08:00",
       "verifiedAt": "2026-10-06T05:44:50.6682533+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\asset-cutouts-before-20261006"
     },
@@ -1140,7 +1165,7 @@
       "sourceCommit": "dadd41aaaaefead37afd6851b0befa6ccca9a015",
       "sha256": "D9ECA7FE561F524390B55E9AD0865A53B55427B3E83ABD02E0C12FDA008FF7D7",
       "status": "passed-with-recorded-baseline-diagnostics",
-      "deployedAt": "2026-10-08T04:36:47.5803120+08:00",
+      "deployedAt": "2026-10-08T04:36:47.580312+08:00",
       "verifiedAt": "2026-10-08T04:39:13.3365176+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-credit-before-20261008"
     },
@@ -1157,7 +1182,7 @@
       "sha256": "3FD7C6D05F5EE8C241F5C2E63794E395B10FC19260BDC6AB95E53DBFE7374303",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-10-08T05:14:33.2023058+08:00",
-      "verifiedAt": "2026-10-08T05:19:41.3538830+08:00",
+      "verifiedAt": "2026-10-08T05:19:41.353883+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-topup-before-20261008"
     },
     {
@@ -1166,7 +1191,7 @@
       "sha256": "9C07C96176B47ECC1FC1BE39950060079BAF1A660CB0CA92E5F51491D8C14DEC",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-10-08T05:55:05.6802539+08:00",
-      "verifiedAt": "2026-10-08T06:03:12.8333070+08:00",
+      "verifiedAt": "2026-10-08T06:03:12.833307+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\daylight-home-before-20261008"
     },
     {
@@ -1184,7 +1209,7 @@
       "sha256": "EB1B08486C399974F8197F3B833A4B26A066E6E9A3B2D1ED2B65FC99BF607A08",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-10-08T06:34:10.4816208+08:00",
-      "verifiedAt": "2026-10-08T06:37:03.2487080+08:00",
+      "verifiedAt": "2026-10-08T06:37:03.248708+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\gallery-daylight-before-20261008"
     },
     {
@@ -1249,7 +1274,7 @@
       "sha256": "FA0E34702A882281349155748F7D5CC294AB485EC67DF411CCDAB6134A954DD9",
       "status": "passed-with-recorded-external-diagnostics",
       "deployedAt": "2026-10-08T23:21:43.0354272+08:00",
-      "verifiedAt": "2026-10-08T23:32:28.3681780+08:00",
+      "verifiedAt": "2026-10-08T23:32:28.368178+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-packs-before-20261008"
     },
     {
@@ -1323,7 +1348,7 @@
       "sha256": "02F12B05884FF2992485F735F733B5E7925806EC1BFA1B08EE87D1BBBBD0DB9C",
       "status": "passed-with-recorded-baseline-diagnostics",
       "deployedAt": "2026-10-09T07:53:09.0246312+08:00",
-      "verifiedAt": "2026-10-09T07:57:12.5724810+08:00",
+      "verifiedAt": "2026-10-09T07:57:12.572481+08:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\account-guide-content-before-20261009"
     },
     {
@@ -1384,7 +1409,7 @@
       "sourceCommit": "0e0acc53acfc689aa4a10510e915eb44d6bd2b59",
       "status": "verified",
       "sha256": "178CAA562B6167D7B17E61EFF2B9B2ED380F5AA35E941E1FFA15E8DFC4CE3172",
-      "verifiedAt": "2026-10-23T04:15:36.657110+08:00"
+      "verifiedAt": "2026-10-23T04:15:36.65711+08:00"
     },
     {
       "buildId": "asset-appearance-20261023",
@@ -1444,7 +1469,7 @@
       "status": "verified",
       "sha256": "7B71D2463D99C6A0E1AEB8EE830F739DA7B646CFF23DB804946E83B6563EC5A2",
       "sidecarSha256": "B0E77ACD83C7620FE5B92537E3525DE17B9D80FC7DE8A4CA84835380A5E5F188",
-      "verifiedAt": "2026-10-26T01:25:36.8441880+08:00"
+      "verifiedAt": "2026-10-26T01:25:36.844188+08:00"
     },
     {
       "buildId": "voice-grid-20261026",
@@ -1477,9 +1502,17 @@
       "sha256": "0A93D725745A775339BB70DC90EF5E7F0376FA62D9DA7C99EE67EFD1122664F5",
       "sidecarSha256": "2F3EE4C24DF370AB85668C045D22282BE6DDD86F3E1F954695B84D01871A0DDA",
       "verifiedAt": "2026-10-26T03:22:53.7550894+08:00"
+    },
+    {
+      "buildId": "deepseek-dns-20261026",
+      "sourceCommit": "4ec54a4c465a64f6867d6e3b0c0f1e7838c6b51e",
+      "status": "verified",
+      "sha256": "87EBE533043AC2524301A2D7FE3482F61CFCAA311CF9DD6F77965BFCD010D98F",
+      "sidecarSha256": "171DBCB4628A00C26205737F0F5C06B57A344764EADEA8A01C5D57C16F2DB09E",
+      "verifiedAt": "2026-10-26T16:08:37.966634+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\conversation-voice-before-20261026\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\deepseek-dns-before-20261026\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1494,13 +1527,11 @@
     }
   ],
   "cleanup": {
-    "computerUse": "Not used",
-    "temporaryProcesses": [],
-    "whisper": "One sidecar-owned Python worker, no port; exits 90 seconds idle or on sidecar close/cancel/timeout. Local benchmark worker exit verified.",
-    "breeze": "Existing local Breeze at 127.0.0.1:18760; owner and stop method in D:/AI/Breeze-TTS-2/server-process.json and Stop-Breeze.ps1",
-    "sidecarPid": 3572,
     "status": "passed",
-    "nativePid": 38320
+    "temporaryProcesses": [],
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\deepseek-dns-20261026",
+    "nativePid": 3744,
+    "breeze": "Existing independent Breeze service preserved; no voice API or clone changes."
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
@@ -1516,7 +1547,7 @@
     "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
     "payloadDifference": "Only the three-byte Tauri bundle type marker changes from UNK to NSS.",
     "verification": {
-      "verifiedAt": "2026-10-09T01:16:21.662510+00:00",
+      "verifiedAt": "2026-10-09T09:16:21.66251+08:00",
       "installation": "passed",
       "nativeColdLaunch": "passed",
       "themes": [
@@ -1541,7 +1572,7 @@
       "temporaryProcessesCleaned": true,
       "console": "No new diagnostics relative to the recorded verified cold-launch baseline; existing blocked external-resource diagnostics remain."
     },
-    "publicDownloadVerifiedAt": "2026-10-09T01:18:03.226087+00:00",
+    "publicDownloadVerifiedAt": "2026-10-09T09:18:03.226087+08:00",
     "canonicalShortcutRestoredAt": "2026-10-09T09:14:37.9732312+08:00",
     "canonicalBinaryUnchanged": true,
     "evidenceDirectory": "output/windows-installer-20261009",
@@ -1551,8 +1582,8 @@
     "status": "passed",
     "kept": 3,
     "removed": 1,
-    "reclaimedBytes": 914123211,
-    "report": "D:/preacherman/output/conversation-voice-20261026/backup-prune.json",
-    "verifiedAt": "2026-10-26T03:23:05.2397873+08:00"
+    "reclaimedBytes": 914122347,
+    "report": "D:/preacherman/output/playwright/deepseek-dns-20261026/backup-prune.json",
+    "verifiedAt": "2026-10-26T16:09:07.8073458+08:00"
   }
 }
