@@ -1,54 +1,63 @@
 {
   "schemaVersion": 1,
-  "buildId": "deepseek-dns-20261026",
+  "buildId": "voice-barge-in-20261026",
   "productVersion": "0.1.0",
-  "sourceTask": "Fix official DeepSeek connection blocked by TUN proxy fake-IP DNS",
+  "sourceTask": "Enable local voice interruption with Silero installed on D drive",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Permit 198.18.0.0/15 fake-IP DNS only for the exact https://api.deepseek.com origin. Preserve public-address requirements for custom gateways, pinned DNS, hostname/certificate verification and rejection of redirects. No frontend, model, character or voice changes.",
-  "sourceCommit": "4ec54a4c465a64f6867d6e3b0c0f1e7838c6b51e",
+  "sourceState": "Package Silero VAD 5.1.2 and ONNX WASM on D drive. Keep microphone open during replies, synchronously stop playback on speech onset, cancel old work, preserve heard context, and release detector/audio resources. Preserve DeepSeek, Whisper and Breeze clone assignments.",
+  "sourceCommit": "5fb2694a1ff90b8db788ff609bd2eecce734824f",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-26T16:00:46.4831003+08:00",
-  "deployedAt": "2026-10-26T16:03:35.503077+08:00",
-  "verifiedAt": "2026-10-26T16:08:37.966634+08:00",
-  "sizeBytes": 820804096,
-  "sha256": "87EBE533043AC2524301A2D7FE3482F61CFCAA311CF9DD6F77965BFCD010D98F",
+  "builtAt": "2026-10-26T18:45:33.7989868+08:00",
+  "deployedAt": "2026-10-26T18:45:57.3232587+08:00",
+  "verifiedAt": "2026-10-26T18:49:47.359039+08:00",
+  "sizeBytes": 824756736,
+  "sha256": "F6614D296B34AE81B2B2DD84EF7DCE5F208BBD4DC367785387BE8C8590AC6C3E",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-10-26T15:57:45.436677+08:00",
-  "sidecarSizeBytes": 93237760,
-  "sidecarSha256": "171DBCB4628A00C26205737F0F5C06B57A344764EADEA8A01C5D57C16F2DB09E",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\deepseek-dns-before-20261026\\preacherman-demo-host.exe",
-  "backupSha256": "0A93D725745A775339BB70DC90EF5E7F0376FA62D9DA7C99EE67EFD1122664F5",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\deepseek-dns-before-20261026\\preacherman-service.exe",
-  "sidecarBackupSha256": "2F3EE4C24DF370AB85668C045D22282BE6DDD86F3E1F954695B84D01871A0DDA",
-  "rollbackBaselineCommit": "65849a1a6484431ff1ec3a99999e1dead76f33f2",
-  "previousVerificationCommit": "65849a1a6484431ff1ec3a99999e1dead76f33f2",
+  "sidecarBuiltAt": "2026-10-26T18:43:45.228052+08:00",
+  "sidecarSizeBytes": 93238784,
+  "sidecarSha256": "C1F3939E43F6EC675FDAE8158526BF261CBC6B3107B5EEE98D24E6A090169C13",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-barge-in-before-20261026\\preacherman-demo-host.exe",
+  "backupSha256": "87EBE533043AC2524301A2D7FE3482F61CFCAA311CF9DD6F77965BFCD010D98F",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-barge-in-before-20261026\\preacherman-service.exe",
+  "sidecarBackupSha256": "171DBCB4628A00C26205737F0F5C06B57A344764EADEA8A01C5D57C16F2DB09E",
+  "rollbackBaselineCommit": "4ec54a4c465a64f6867d6e3b0c0f1e7838c6b51e",
+  "previousVerificationCommit": "4ec54a4c465a64f6867d6e3b0c0f1e7838c6b51e",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "typecheck": "passed",
-      "focusedTests": 15,
+      "focusedTests": 32,
       "focusedFailures": 0,
-      "gitDiffCheck": "passed",
-      "excludedBaselineTest": "conversation preserves unavailable selections and a visible keyboard focus: pre-existing Task CSS selector assertion; both files unchanged from HEAD."
+      "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical shortcut. Official DeepSeek Test Connection with a deliberately invalid test key reached provider authentication in light and dark appearances, replacing the previous DNS block. No real credential read or saved. Saved character execution configuration unchanged. Core eight destinations and window controls verified, then restarted normally without debug port.",
-    "nativeVisualVerification": "Reviewed captured native light/dark connection states and core routes; readable controls, complete authored content and no new appearance changes.",
+    "nativeFlow": "Cold launch through canonical shortcut. Real packaged Silero and AudioWorklet with synthetic microphone speech. Two interruptions followed by new replies in each appearance; one capture per conversation; microphone released on stop; no transcript rendered. Recognition/provider/TTS responses mocked for deterministic testing. Core eight destinations and window controls verified; restarted normally without debug port.",
+    "nativeVisualVerification": "Reviewed native light/dark interrupted states and core route screenshots; preserved layout and readable controls.",
     "modes": [
       {
         "appearance": "light",
-        "reachedProvider": true,
-        "expectedInvalidKeyRejected": true,
-        "dnsBlockRemoved": true,
-        "errorMessage": "Provider rejected the API key or model access."
+        "cuts": [
+          257.90000000037253,
+          257.30000000074506
+        ],
+        "conversations": 3,
+        "passed": true,
+        "captures": 1,
+        "microphoneReleased": true,
+        "noTranscriptRendered": true
       },
       {
         "appearance": "dark",
-        "reachedProvider": true,
-        "expectedInvalidKeyRejected": true,
-        "dnsBlockRemoved": true,
-        "errorMessage": "Provider rejected the API key or model access."
+        "cuts": [
+          246.40000000037253,
+          258.3999999985099
+        ],
+        "conversations": 3,
+        "passed": true,
+        "captures": 1,
+        "microphoneReleased": true,
+        "noTranscriptRendered": true
       }
     ],
     "routes": [
@@ -138,35 +147,32 @@
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "newConsoleErrors": [],
-    "expectedTestDiagnostics": [
-      "Failed to load resource: the server responded with a status of 502 (Bad Gateway)",
-      "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
-    ],
+    "expectedTestDiagnostics": [],
     "resources": {
-      "SampledAt": "2026-10-26T16:07:30.4755134+08:00",
-      "NativePid": 3744,
-      "StartedAt": "2026-10-26T16:07:08.2040718+08:00",
-      "WindowHandle": 265044,
+      "SampledAt": "2026-10-26T18:48:45.3930183+08:00",
+      "NativePid": 15000,
+      "StartedAt": "2026-10-26T18:48:28.9152745+08:00",
+      "WindowHandle": 396132,
       "Responding": true,
       "NativeVisualVerified": true,
       "ProcessIds": [
-        3744,
-        7812,
-        15112,
-        1608,
-        7876,
-        28688,
-        1264,
-        528,
-        26996,
-        2884,
-        25332
+        15000,
+        6256,
+        26148,
+        3952,
+        15948,
+        9536,
+        3580,
+        30420,
+        8892,
+        31200,
+        9080
       ],
       "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1915.4,
-      "GpuDedicatedBytes": 3279265792.0,
-      "MaxGpuEngineUtilization": 25.0,
-      "FreeRamKiB": 17461876,
+      "WorkingSetMiB": 1891.2,
+      "GpuDedicatedBytes": 3243229184.0,
+      "MaxGpuEngineUtilization": 21.0,
+      "FreeRamKiB": 18189940,
       "TemporaryProcesses": [],
       "Listeners": [],
       "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
@@ -181,19 +187,124 @@
       "closeRequested": true,
       "passed": true
     },
-    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\deepseek-dns-20261026",
+    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\voice-barge-in-20261026",
     "baselineReports": [
       "output/playwright/asset-settings-focus-20261023/native-report.json",
       "output/tifa-import-20261015/native-report.json",
       "output/playwright/voice-ui-20261025/native-report.json"
     ],
     "scopeLimits": [
-      "User must re-enter their actual API key and run Test Connection, then Save & Use. Provider authentication/model entitlement with the real key was not tested."
+      "Synthetic microphone tests measure interruption timing, not acoustic echo rejection on the user microphone/speakers. Existing WebRTC echo cancellation remains enabled. Partially spoken sentences are conservatively unconfirmed in context."
     ],
     "buildNotes": [
-      "Windows PowerShell 5.1 misread the previous UTF-8 manifest before any compilation began; the existing build ran successfully under PowerShell 7.",
-      "An approval-service token refresh interruption delayed read-only resource inspection. Retried successfully after user continuation; no approval bypass."
-    ]
+      "One cache-reusing production build; model and runtime assets packaged locally, no CDN or additional speech service."
+    ],
+    "preview": {
+      "result": {
+        "cuts": [
+          224.40000000037253,
+          243.19999999925494
+        ],
+        "snapshots": [
+          {
+            "active": true,
+            "mic": "live",
+            "closedOutput": "closed"
+          },
+          {
+            "active": true,
+            "mic": "live",
+            "closedOutput": "closed"
+          }
+        ],
+        "captures": 1,
+        "conversations": 3,
+        "recognitions": 3,
+        "states": [
+          {
+            "state": "idle",
+            "at": 2244.5999999996275
+          },
+          {
+            "state": "requesting",
+            "at": 2244.699999999255
+          },
+          {
+            "state": "idle",
+            "at": 2244.800000000745
+          },
+          {
+            "state": "requesting",
+            "at": 2244.800000000745
+          },
+          {
+            "state": "listening",
+            "at": 7534.4000000003725
+          },
+          {
+            "state": "listening",
+            "at": 7765.5
+          },
+          {
+            "state": "thinking",
+            "at": 10485.400000000373
+          },
+          {
+            "state": "speaking",
+            "at": 10567.300000000745
+          },
+          {
+            "state": "listening",
+            "at": 10805.5
+          },
+          {
+            "state": "thinking",
+            "at": 13455.599999999627
+          },
+          {
+            "state": "speaking",
+            "at": 13488.400000000373
+          },
+          {
+            "state": "listening",
+            "at": 13745.099999999627
+          },
+          {
+            "state": "thinking",
+            "at": 16435.199999999255
+          },
+          {
+            "state": "speaking",
+            "at": 16472.900000000373
+          },
+          {
+            "state": "idle",
+            "at": 16491.5
+          },
+          {
+            "state": "idle",
+            "at": 16592.699999999255
+          }
+        ],
+        "stoppedTrack": "ended",
+        "activeAfterStop": false
+      },
+      "passed": true
+    },
+    "breezeCancellation": {
+      "oldRequestAbortedMs": 708,
+      "nextSynthesisAfterMs": 554,
+      "passed": true
+    },
+    "finalShortcutScreenshot": "D:\\preacherman\\output\\playwright\\voice-barge-in-20261026\\native-final-shortcut.png",
+    "newModelInstallation": {
+      "model": "Silero VAD 5.1.2",
+      "directory": "D:\\preacherman\\apps\\preacherman-demo-host\\public\\speech\\silero",
+      "packageCache": "D:\\preacherman\\.cache\\npm",
+      "temporaryDirectory": "D:\\preacherman\\.cache\\tmp",
+      "installedOnCDrive": false,
+      "selfContainedDesktop": true
+    }
   },
   "releaseAttempts": [
     {
@@ -1510,9 +1621,17 @@
       "sha256": "87EBE533043AC2524301A2D7FE3482F61CFCAA311CF9DD6F77965BFCD010D98F",
       "sidecarSha256": "171DBCB4628A00C26205737F0F5C06B57A344764EADEA8A01C5D57C16F2DB09E",
       "verifiedAt": "2026-10-26T16:08:37.966634+08:00"
+    },
+    {
+      "buildId": "voice-barge-in-20261026",
+      "sourceCommit": "5fb2694a1ff90b8db788ff609bd2eecce734824f",
+      "status": "verified",
+      "sha256": "F6614D296B34AE81B2B2DD84EF7DCE5F208BBD4DC367785387BE8C8590AC6C3E",
+      "sidecarSha256": "C1F3939E43F6EC675FDAE8158526BF261CBC6B3107B5EEE98D24E6A090169C13",
+      "verifiedAt": "2026-10-26T18:49:47.359039+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\deepseek-dns-before-20261026\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-barge-in-before-20261026\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1529,9 +1648,15 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\deepseek-dns-20261026",
-    "nativePid": 3744,
-    "breeze": "Existing independent Breeze service preserved; no voice API or clone changes."
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\voice-barge-in-20261026",
+    "nativePid": 15000,
+    "breeze": "Existing independent Breeze service preserved. Live cancellation and next synthesis verified; clone choices unchanged.",
+    "backupRetention": {
+      "status": "passed",
+      "completeSetsKept": 3,
+      "evidence": "D:\\preacherman\\output\\playwright\\voice-barge-in-20261026\\backup-retention.json"
+    },
+    "temporaryProfileDirectoriesRemoved": true
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
