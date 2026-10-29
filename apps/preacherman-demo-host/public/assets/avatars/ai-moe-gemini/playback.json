@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "avatarId": "ai-moe-gemini",
+  "defaultActionId": "idle.default",
+  "clipName": "ai-moe-gemini.idle.female.v2",
+  "loop": "repeat",
+  "timeScale": 1,
+  "bones": 209,
+  "sourceClipName": "gemini.idle.female.v2.fitted",
+  "authoredSpeed": 0.894
+}

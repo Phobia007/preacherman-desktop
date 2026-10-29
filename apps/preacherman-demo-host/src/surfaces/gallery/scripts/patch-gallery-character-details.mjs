@@ -11,6 +11,6 @@ function replace(before, after) {
 // Full metadata must retain company commas and all supplied debut years.
 replace("seo:data.name,title:data.name,subhead:data.description,", "seo:data.name,title:data.name,detailTitle:data.detailTitle,detailMeta:data.detailMeta,subhead:data.description,");
 replace("(({title:title,date:date,body:body,tags:tags,caseStudyURL:caseStudyURL,projectURL:projectURL,ai:ai,color:color})=>{const animateEntry=", "(({title:title,detailTitle:detailTitle,detailMeta:detailMeta,date:date,body:body,tags:tags,caseStudyURL:caseStudyURL,projectURL:projectURL,ai:ai,color:color})=>{const animateEntry=");
-replace("let text=date.replace(/\\n/g,\" / \");text=text.split(\",\")[0];", "let text=detailMeta||date.replace(/\\n/g,\" / \");if(!detailMeta)text=text.split(\",\")[0];");
+replace("let text=date.replace(/\\n/g,\" / \");text=text.split(\",\")[0];", "let text=detailMeta??date.replace(/\\n/g,\" / \");if(detailMeta==null)text=text.split(\",\")[0];");
 replace("text:`${title}`,color:col.getHexString(),animated:animateEntry", "text:`${detailTitle||title}`,color:col.getHexString(),animated:animateEntry");
 fs.writeFileSync(file, source);

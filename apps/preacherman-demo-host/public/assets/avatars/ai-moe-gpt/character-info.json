@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "ai-moe-gpt",
+  "name": "GPT",
+  "displayName": {
+    "en": "GPT"
+  },
+  "sourceTitle": "",
+  "description": {
+    "en": ""
+  },
+  "biographyStatus": "pending",
+  "sourceCollection": "AI Moe — 10 Characters",
+  "attributionFile": null
+}

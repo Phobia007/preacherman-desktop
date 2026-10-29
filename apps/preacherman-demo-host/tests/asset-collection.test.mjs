@@ -10,7 +10,8 @@ test('Every current Gallery model has exactly one local card and matching detail
   assert.deepEqual(characters.map(c => c.id), modelIds);
   assert.equal(new Set(characters.map(c => c.id)).size, characters.length);
   for (const character of characters) {
-    assert.ok(character.label && character.paragraphs.length);
+    assert.ok(character.label);
+    assert.ok(character.paragraphs.length || character.biographyStatus === 'pending');
     assert.ok(character.imageWidth > 0 && character.imageHeight > 0);
     for (const key of ['cardImage', 'image']) {
       assert.ok(character[key].startsWith('/'));
@@ -19,7 +20,7 @@ test('Every current Gallery model has exactly one local card and matching detail
     assert.ok(character.cardImage.includes(character.id));
     assert.ok(character.image.includes(character.id));
   }
-  assert.equal(characters.filter(c => c.image.startsWith('/asset-characters/cutouts/')).length, 10);
+  assert.equal(characters.filter(c => c.image.startsWith('/asset-characters/cutouts/') && c.biographyStatus !== 'pending').length, 10);
   assert.deepEqual(characters.filter(c => c.image === c.cardImage).map(c => c.id), ['zima', 'stellar-blade-lily-stargazer-coat', 'iron-man-mark-85']);
 });
 test('Cards use real RGBA bust renders and isolated artwork stays background-free', () => {

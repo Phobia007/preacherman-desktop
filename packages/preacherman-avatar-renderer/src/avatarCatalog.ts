@@ -31,6 +31,16 @@ export const importedAvatarModels = [
   { id: "scifi-girl-v01", name: "Sci-fi Girl" },
   { id: "proxima", name: "Proxima" },
   { id: "halloween-the-game-michael-myers-samhain", name: "Michael Myers · Samhain" },
+  { id: "ai-moe-deepseek", name: "DeepSeek" },
+  { id: "ai-moe-claude", name: "Claude" },
+  { id: "ai-moe-gpt", name: "GPT" },
+  { id: "ai-moe-gemini", name: "Gemini" },
+  { id: "ai-moe-glm", name: "GLM" },
+  { id: "ai-moe-grok", name: "Grok" },
+  { id: "ai-moe-qwen", name: "Qwen" },
+  { id: "ai-moe-kimi", name: "Kimi" },
+  { id: "ai-moe-minimax", name: "MiniMax" },
+  { id: "ai-moe-doubao", name: "Doubao" },
 ] as const;
 export type ImportedAvatarModelId = typeof importedAvatarModels[number]["id"];
 
@@ -46,6 +56,16 @@ export const avatarUsesHologram = (id: AvatarModelId): boolean => id === "cortan
 export const avatarDefaultActionId = (id: AvatarModelId): string => id === "cortana" ? "idle.catwalk" : id === "zima" ? "idle.zima" : "idle.default";
 
 const importedIdleMotions: Readonly<Record<ImportedAvatarModelId, string>> = {
+  "ai-moe-deepseek": "breathing",
+  "ai-moe-claude": "female",
+  "ai-moe-gpt": "breathing",
+  "ai-moe-gemini": "female",
+  "ai-moe-glm": "weight_shift",
+  "ai-moe-grok": "breathing",
+  "ai-moe-qwen": "weight_shift",
+  "ai-moe-kimi": "female",
+  "ai-moe-minimax": "weight_shift",
+  "ai-moe-doubao": "female",
   "yuffie-ff7re": "feri.standing",
   "aerith-ff7re": "feri.cbnm_id0",
   "tifa-ff7re": "feri.cbnm_id0",

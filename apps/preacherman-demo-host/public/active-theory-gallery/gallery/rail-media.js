@@ -1,5 +1,15 @@
 // Packaged silent 12-second previews; original full detail videos remain unchanged.
 window.PreachermanGalleryRailMedia = {
+  "/assets/gallery/ai-moe-deepseek-card-video.mp4": "/assets/gallery/ai-moe-deepseek-card-video.mp4",
+  "/assets/gallery/ai-moe-claude-card-video.mp4": "/assets/gallery/ai-moe-claude-card-video.mp4",
+  "/assets/gallery/ai-moe-gpt-card-video.mp4": "/assets/gallery/ai-moe-gpt-card-video.mp4",
+  "/assets/gallery/ai-moe-gemini-card-video.mp4": "/assets/gallery/ai-moe-gemini-card-video.mp4",
+  "/assets/gallery/ai-moe-glm-card-video.mp4": "/assets/gallery/ai-moe-glm-card-video.mp4",
+  "/assets/gallery/ai-moe-grok-card-video.mp4": "/assets/gallery/ai-moe-grok-card-video.mp4",
+  "/assets/gallery/ai-moe-qwen-card-video.mp4": "/assets/gallery/ai-moe-qwen-card-video.mp4",
+  "/assets/gallery/ai-moe-kimi-card-video.mp4": "/assets/gallery/ai-moe-kimi-card-video.mp4",
+  "/assets/gallery/ai-moe-minimax-card-video.mp4": "/assets/gallery/ai-moe-minimax-card-video.mp4",
+  "/assets/gallery/ai-moe-doubao-card-video.mp4": "/assets/gallery/ai-moe-doubao-card-video.mp4",
   "/assets/gallery/aerith-card-video.mp4": "/assets/gallery/aerith-card-video.mp4",
   "/assets/gallery/yuffie-card-video.mp4": "/assets/gallery/yuffie-card-video.mp4",
   "/assets/gallery/tifa-card-video.mp4": "/assets/gallery/tifa-card-video.mp4",

@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "sourceCollection": "AI Moe — 10 Characters",
+  "sourceRoot": "D:\\preacherman\\output\\ai-moe-rigged-20261029",
+  "biographyStatus": "pending",
+  "models": [
+    {
+      "id": "ai-moe-deepseek",
+      "name": "DeepSeek",
+      "motion": "breathing",
+      "source": "ready/01-DeepSeek/DeepSeek_Rigged_Idle.glb",
+      "sourceSha256": "7edb1e99f84b61fdac85883bd93e024cf9cf39c2008fe1afc08618974f7eb6b6",
+      "runtime": "assets/avatars/ai-moe-deepseek/ai-moe-deepseek-runtime.glb",
+      "sha256": "2639686ec4176adabdbf70099140030e1a382da8eb7ea239c8514462f67d7bdc",
+      "bytes": 9914552,
+      "clip": "ai-moe-deepseek.idle.breathing.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        3.9987550156640503e-16,
+        0,
+        1.800879159849052,
+        0,
+        0,
+        1.800879159849052,
+        0,
+        0,
+        -1.800879159849052,
+        0,
+        3.9987550156640503e-16,
+        0,
+        -3.669403781861374e-8,
+        8.080519884890536e-9,
+        0.2298973910824408,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.5148383437748341,
+          -4.4869861704479035e-9,
+          -0.2741699379671384
+        ],
+        "max": [
+          0.259521500526217,
+          0.9995118118143778,
+          0.274169897215889
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-claude",
+      "name": "Claude",
+      "motion": "female",
+      "source": "ready/02-Claude/Claude_Rigged_Idle.glb",
+      "sourceSha256": "48276c37a70f7d6b0cde086aa338bc30d371e384f563b44ded80a2c2585ff810",
+      "runtime": "assets/avatars/ai-moe-claude/ai-moe-claude-runtime.glb",
+      "sha256": "d19b8b1dd2737950f358d4d261d228cc73453545406a61415f79dc2d215858ee",
+      "bytes": 5826684,
+      "clip": "ai-moe-claude.idle.female.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        3.9987555492885423e-16,
+        0,
+        1.8008794001721582,
+        0,
+        0,
+        1.8008794001721582,
+        0,
+        0,
+        -1.8008794001721582,
+        0,
+        3.9987555492885423e-16,
+        0,
+        0.003517235743092828,
+        0.9000001923487105,
+        1.3365258939421258e-7,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.2687989482844518,
+          -0.4997559482676483,
+          -0.29418926417517893
+        ],
+        "max": [
+          0.26879879985409116,
+          0.4997557346512223,
+          0.2980953955271802
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-gpt",
+      "name": "GPT",
+      "motion": "breathing",
+      "source": "ready/03-GPT/GPT_Rigged_Idle.glb",
+      "sourceSha256": "af02dc4fbc6bab129183a019a43e219ea97361a83450d2b540484cb94016f1da",
+      "runtime": "assets/avatars/ai-moe-gpt/ai-moe-gpt-runtime.glb",
+      "sha256": "297014bef1ddbf5b6351d2591787f7a710df70e78aa1161d406edf9f357010d2",
+      "bytes": 6464728,
+      "clip": "ai-moe-gpt.idle.breathing.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        3.998755951926618e-16,
+        0,
+        1.800879581504227,
+        0,
+        0,
+        1.800879581504227,
+        0,
+        0,
+        -1.800879581504227,
+        0,
+        3.998755951926618e-16,
+        0,
+        -0.017766749121651923,
+        0.8999999566033277,
+        1.8155053431657066e-8,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.24487304434103302,
+          -0.4997557670411153,
+          -0.3103027452041404
+        ],
+        "max": [
+          0.24487302417860393,
+          0.49975581523608936,
+          0.2905715546191355
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-gemini",
+      "name": "Gemini",
+      "motion": "female",
+      "source": "ready/04-Gemini/Gemini_Rigged_Idle.glb",
+      "sourceSha256": "838bc42d8cfc92c1422c198dc876f23fa075c8c3d8ef671dcf1a5353a86373df",
+      "runtime": "assets/avatars/ai-moe-gemini/ai-moe-gemini-runtime.glb",
+      "sha256": "3ee9f50b44f379a8bb2b1a36a8b3277e53868c1f1756fa70a6908a4e608f99fc",
+      "bytes": 13274568,
+      "clip": "ai-moe-gemini.idle.female.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        4.0123970091423856e-16,
+        0,
+        1.807022967523614,
+        0,
+        0,
+        1.807022967523614,
+        0,
+        0,
+        -1.807022967523614,
+        0,
+        4.0123970091423856e-16,
+        0,
+        0.00044122007252936054,
+        0.9005470017041451,
+        -0.0004283520576819446,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.17691200975756585,
+          -0.4983594663095376,
+          -0.3065040900464326
+        ],
+        "max": [
+          0.17738610672852906,
+          0.49775404876479573,
+          0.3069924292435088
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-glm",
+      "name": "GLM",
+      "motion": "weight_shift",
+      "source": "ready/05-GLM/GLM_Rigged_Idle.glb",
+      "sourceSha256": "916c4ce5685f1b86c367c369ff1604df52e1007a61766cf7ea8788367a5babb0",
+      "runtime": "assets/avatars/ai-moe-glm/ai-moe-glm-runtime.glb",
+      "sha256": "0357cd39222d7045ddf183f51af2dc33801935944e5ee81698859f837625cd2e",
+      "bytes": 6355960,
+      "clip": "ai-moe-glm.idle.weight_shift.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        3.998755457619298e-16,
+        0,
+        1.8008793588880008,
+        0,
+        0,
+        1.8008793588880008,
+        0,
+        0,
+        -1.8008793588880008,
+        0,
+        3.998755457619298e-16,
+        0,
+        -4.770094681837678e-8,
+        0.9000000040062902,
+        4.038705653822629e-8,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.2873535714660722,
+          -0.4997558551406899,
+          -0.3161621204893032
+        ],
+        "max": [
+          0.2873535266134769,
+          0.4997558506914301,
+          0.3161620675141313
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-grok",
+      "name": "Grok",
+      "motion": "breathing",
+      "source": "ready/06-Grok/Grok_Rigged_Idle.glb",
+      "sourceSha256": "2a2937cf28dcd5f826f21a2137923d5b375ee96f97a526adf397dbcfc0b78eb8",
+      "runtime": "assets/avatars/ai-moe-grok/ai-moe-grok-runtime.glb",
+      "sha256": "e3a06d138bec6a6da6a983126393657d7fd3597c65eedc4fe113dd1bcb30e45f",
+      "bytes": 6811444,
+      "clip": "ai-moe-grok.idle.breathing.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        3.9987549859579714e-16,
+        0,
+        1.8008791464706233,
+        0,
+        0,
+        1.8008791464706233,
+        0,
+        0,
+        -1.8008791464706233,
+        0,
+        3.9987549859579714e-16,
+        0,
+        1.7067397988477908e-7,
+        0.8999999292616992,
+        8.804630124717799e-9,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.26928713781134966,
+          -0.4997558725834135,
+          -0.3220211035627655
+        ],
+        "max": [
+          0.2692871280332031,
+          0.49975595114315574,
+          0.32202129310794425
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-qwen",
+      "name": "Qwen",
+      "motion": "weight_shift",
+      "source": "ready/07-Qwen/Qwen_Rigged_Idle.glb",
+      "sourceSha256": "93c81923d0022710b9b7c5ead08c192617e68178ca3a4bfc333a3f1b980e93b2",
+      "runtime": "assets/avatars/ai-moe-qwen/ai-moe-qwen-runtime.glb",
+      "sha256": "148aff282b40a773924765b4ddf0b88d4d9e2f54ac63033b819da3e465c9925b",
+      "bytes": 6497284,
+      "clip": "ai-moe-qwen.idle.weight_shift.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        3.9987546889503906e-16,
+        0,
+        1.8008790127103003,
+        0,
+        0,
+        1.8008790127103003,
+        0,
+        0,
+        -1.8008790127103003,
+        0,
+        3.9987546889503906e-16,
+        0,
+        -1.7211259338421632e-8,
+        0.9000000502531642,
+        -6.193608507219941e-9,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.26586911292399285,
+          -0.499755976887462,
+          -0.30053714423246364
+        ],
+        "max": [
+          0.26586911980242106,
+          0.499755921077867,
+          0.30053712511817643
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-kimi",
+      "name": "Kimi",
+      "motion": "female",
+      "source": "ready/08-Kimi/Kimi_Rigged_Idle.glb",
+      "sourceSha256": "5c447e7e7d25393c633a679c27bceb116e1fb3980cc16e57b617026c03ad966d",
+      "runtime": "assets/avatars/ai-moe-kimi/ai-moe-kimi-runtime.glb",
+      "sha256": "5850acc8c107bdf57b44d486c65caa5df566c73a73a39fb3dd942dfa0143d234",
+      "bytes": 13754092,
+      "clip": "ai-moe-kimi.idle.female.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        4.017610424869249e-16,
+        0,
+        1.809370881236097,
+        0,
+        0,
+        1.809370881236097,
+        0,
+        0,
+        -1.809370881236097,
+        0,
+        4.017610424869249e-16,
+        0,
+        0.00034210183492233053,
+        0.9040124492330844,
+        -0.003697451734271285,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.20495994818232596,
+          -0.4996280522738908,
+          -0.2928720973987695
+        ],
+        "max": [
+          0.20904695076716398,
+          0.4951928651326637,
+          0.29325024191128496
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-minimax",
+      "name": "MiniMax",
+      "motion": "weight_shift",
+      "source": "ready/09-MiniMax/MiniMax_Rigged_Idle.glb",
+      "sourceSha256": "5933e5f1de10069e47927d38b1a542d24ece8316be747dbaae57fe6da070b18f",
+      "runtime": "assets/avatars/ai-moe-minimax/ai-moe-minimax-runtime.glb",
+      "sha256": "0a5541ccb480bd98c732d2cb5bda17f5561cf72ea663bba02ff351bb140dc15f",
+      "bytes": 12797396,
+      "clip": "ai-moe-minimax.idle.weight_shift.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        4.0002771091094056e-16,
+        0,
+        1.8015646497963844,
+        0,
+        0,
+        1.8015646497963844,
+        0,
+        0,
+        -1.8015646497963844,
+        0,
+        4.0002771091094056e-16,
+        0,
+        -0.00016759854007426258,
+        0.9006044489342839,
+        -0.00018205167265662633,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.1283735465780552,
+          -0.4999012658447043,
+          -0.23858002128924158
+        ],
+        "max": [
+          0.1285756505354982,
+          0.49923023920755055,
+          0.2383939624208094
+        ]
+      }
+    },
+    {
+      "id": "ai-moe-doubao",
+      "name": "Doubao",
+      "motion": "female",
+      "source": "ready/10-Doubao/Doubao_Rigged_Idle.glb",
+      "sourceSha256": "998d59262b15cf416d5221bbd47fae7eb0321d34526163a0eee208f659235117",
+      "runtime": "assets/avatars/ai-moe-doubao/ai-moe-doubao-runtime.glb",
+      "sha256": "1190729ddf5edce1b6f5b5325632d19e96a765a4d9f359d4ecbf35259b6494f8",
+      "bytes": 10326260,
+      "clip": "ai-moe-doubao.idle.female.v2",
+      "bones": 209,
+      "displayHeight": 1.8,
+      "rootMatrix": [
+        3.9990807039584323e-16,
+        0,
+        1.8010258368171737,
+        0,
+        0,
+        1.8010258368171737,
+        0,
+        0,
+        -1.8010258368171737,
+        0,
+        3.9990807039584323e-16,
+        0,
+        -0.00006625031052076185,
+        0.8997577885596317,
+        -0.00005874280307573664,
+        1
+      ],
+      "sourceBounds": {
+        "min": [
+          -0.10184251334872112,
+          -0.4995807223674872,
+          -0.20659796839938635
+        ],
+        "max": [
+          0.1019077459532456,
+          0.4998496929012984,
+          0.20652439887121363
+        ]
+      }
+    }
+  ]
+}

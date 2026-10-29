@@ -1,0 +1,2 @@
+Doubao face/hair reference: official avatar from https://www.doubao.com/chat/ ; image: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao/web/doubao_avatar.png . Full-body black dress and shoes are generated extrapolation, not an official full-body design. Character/logo rights remain with original owner.
+Generated A-pose reference: built-in imagegen. Model: Tripo H3.1. This is an unofficial derivative model. Back view is inferred.

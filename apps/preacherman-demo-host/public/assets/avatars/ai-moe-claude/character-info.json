@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "ai-moe-claude",
+  "name": "Claude",
+  "displayName": {
+    "en": "Claude"
+  },
+  "sourceTitle": "",
+  "description": {
+    "en": ""
+  },
+  "biographyStatus": "pending",
+  "sourceCollection": "AI Moe — 10 Characters",
+  "attributionFile": null
+}

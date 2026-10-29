@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "ai-moe-grok",
+  "name": "Grok",
+  "displayName": {
+    "en": "Grok"
+  },
+  "sourceTitle": "",
+  "description": {
+    "en": ""
+  },
+  "biographyStatus": "pending",
+  "sourceCollection": "AI Moe — 10 Characters",
+  "attributionFile": "ATTRIBUTION.md"
+}

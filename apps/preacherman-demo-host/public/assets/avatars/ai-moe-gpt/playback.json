@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "avatarId": "ai-moe-gpt",
+  "defaultActionId": "idle.default",
+  "clipName": "ai-moe-gpt.idle.breathing.v2",
+  "loop": "repeat",
+  "timeScale": 1,
+  "bones": 209,
+  "sourceClipName": "gpt.idle.breathing.v2.fitted",
+  "authoredSpeed": 0.986
+}

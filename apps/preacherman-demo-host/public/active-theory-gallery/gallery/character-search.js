@@ -1,5 +1,15 @@
 // Aliases only affect matching; displayed names come from the character catalog.
 const aliases = {
+  "ai-moe-deepseek": ["DeepSeek"],
+  "ai-moe-claude": ["Claude"],
+  "ai-moe-gpt": ["GPT"],
+  "ai-moe-gemini": ["Gemini"],
+  "ai-moe-glm": ["GLM"],
+  "ai-moe-grok": ["Grok"],
+  "ai-moe-qwen": ["Qwen"],
+  "ai-moe-kimi": ["Kimi"],
+  "ai-moe-minimax": ["MiniMax"],
+  "ai-moe-doubao": ["Doubao"],
   "aerith-ff7re": ["Aerith", "Aerith Gainsborough", "Aeris", "艾莉丝", "爱丽丝", "爱莉丝", "艾莉丝盖恩斯巴勒"],
   "yuffie-ff7re": ["Yuffie", "Yuffie Kisaragi", "尤菲", "尤菲如月"],
   "tifa-ff7re": ["Tifa", "Tifa Lockhart", "蒂法", "蒂法洛克哈特"],

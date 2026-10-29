@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "avatarId": "ai-moe-doubao",
+  "defaultActionId": "idle.default",
+  "clipName": "ai-moe-doubao.idle.female.v2",
+  "loop": "repeat",
+  "timeScale": 1,
+  "bones": 209,
+  "sourceClipName": "doubao.idle.female.v2.fitted",
+  "authoredSpeed": 0.951
+}

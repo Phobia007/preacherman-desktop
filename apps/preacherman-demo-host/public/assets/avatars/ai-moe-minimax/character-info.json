@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "ai-moe-minimax",
+  "name": "MiniMax",
+  "displayName": {
+    "en": "MiniMax"
+  },
+  "sourceTitle": "",
+  "description": {
+    "en": ""
+  },
+  "biographyStatus": "pending",
+  "sourceCollection": "AI Moe — 10 Characters",
+  "attributionFile": "ATTRIBUTION.md"
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "avatarId": "ai-moe-glm",
+  "defaultActionId": "idle.default",
+  "clipName": "ai-moe-glm.idle.weight_shift.v2",
+  "loop": "repeat",
+  "timeScale": 1,
+  "bones": 209,
+  "sourceClipName": "glm.idle.weight_shift.v2.fitted",
+  "authoredSpeed": 0.992
+}

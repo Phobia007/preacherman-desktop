@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "avatarId": "ai-moe-deepseek",
+  "defaultActionId": "idle.default",
+  "clipName": "ai-moe-deepseek.idle.breathing.v2",
+  "loop": "repeat",
+  "timeScale": 1,
+  "bones": 209,
+  "sourceClipName": "deepseek.idle.breathing.v2",
+  "authoredSpeed": 0.995
+}

@@ -1,0 +1,2 @@
+MiniMax character design: ZipZipPipe. Original: https://www.pixiv.net/artworks/148186519 ; archive: https://selinlee.github.io/ai-moe-atlas/zh/characters/zipzippipe-minimax/ . Credit and non-commercial restrictions stated by source; this package grants no additional rights.
+Generated A-pose reference: built-in imagegen. Model: Tripo H3.1. This is an unofficial derivative model. Back view is inferred.

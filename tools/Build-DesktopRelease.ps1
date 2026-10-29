@@ -10,7 +10,8 @@ if(@($processes | Where-Object {$_.Name -match '^(cargo|rustc|rust-lld|link|node
 git -C $repository diff --quiet HEAD -- apps/preacherman-demo-host packages tools/Build-DesktopRelease.ps1
 if($LASTEXITCODE -ne 0){throw 'Commit the verified source before building a desktop release.'}
 $sourceCommit=(git -C $repository rev-parse HEAD).Trim()
-git -C $repository diff --quiet $manifest.sourceCommit $sourceCommit -- apps/preacherman-demo-host/server apps/preacherman-demo-host/scripts/build-windows-sidecar.mjs apps/preacherman-demo-host/package-lock.json
+# Character identities are imported into the service bundle from the shared UI catalog.
+git -C $repository diff --quiet $manifest.sourceCommit $sourceCommit -- apps/preacherman-demo-host/server apps/preacherman-demo-host/src/surfaces/asset/characters.json apps/preacherman-demo-host/scripts/build-windows-sidecar.mjs apps/preacherman-demo-host/package-lock.json
 $serviceChanged=$LASTEXITCODE -ne 0
 $node=(Get-Command node.exe -ErrorAction Stop).Source
 $savedTarget=$env:CARGO_TARGET_DIR

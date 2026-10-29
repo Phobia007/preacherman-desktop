@@ -19,6 +19,16 @@ export const galleryModelBindings = {
   "tifa-ff7re": "tifa-ff7re",
   "aerith-ff7re": "aerith-ff7re",
   "yuffie-ff7re": "yuffie-ff7re",
+  "ai-moe-deepseek": "ai-moe-deepseek",
+  "ai-moe-claude": "ai-moe-claude",
+  "ai-moe-gpt": "ai-moe-gpt",
+  "ai-moe-gemini": "ai-moe-gemini",
+  "ai-moe-glm": "ai-moe-glm",
+  "ai-moe-grok": "ai-moe-grok",
+  "ai-moe-qwen": "ai-moe-qwen",
+  "ai-moe-kimi": "ai-moe-kimi",
+  "ai-moe-minimax": "ai-moe-minimax",
+  "ai-moe-doubao": "ai-moe-doubao",
 } as const satisfies Readonly<Record<string, ModelId | null>>;
 export function galleryModelForProject(project: string): ModelId | null {
   return (galleryModelBindings as Readonly<Record<string, ModelId | null>>)[project] ?? null;

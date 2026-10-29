@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "avatarId": "ai-moe-qwen",
+  "defaultActionId": "idle.default",
+  "clipName": "ai-moe-qwen.idle.weight_shift.v2",
+  "loop": "repeat",
+  "timeScale": 1,
+  "bones": 209,
+  "sourceClipName": "qwen.idle.weight_shift.v2.fitted",
+  "authoredSpeed": 0.914
+}
