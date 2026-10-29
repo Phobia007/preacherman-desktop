@@ -1,63 +1,199 @@
 {
   "schemaVersion": 1,
-  "buildId": "voice-barge-in-20261026",
+  "buildId": "ai-moe-import-20261029",
   "productVersion": "0.1.0",
-  "sourceTask": "Enable local voice interruption with Silero installed on D drive",
+  "sourceTask": "Import ten rigged AI Moe characters into Home, Asset and Gallery using the existing character pipeline",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Package Silero VAD 5.1.2 and ONNX WASM on D drive. Keep microphone open during replies, synchronously stop playback on speech onset, cancel old work, preserve heard context, and release detector/audio resources. Preserve DeepSeek, Whisper and Breeze clone assignments.",
-  "sourceCommit": "5fb2694a1ff90b8db788ff609bd2eecce734824f",
+  "sourceState": "Ten 209-joint models with embedded textures and assigned idle clips; normalized display roots; transparent Asset portraits; local Gallery covers; empty biography slots; matching service catalog. Existing selection, hold activation, per-character execution and theme behavior preserved.",
+  "sourceCommit": "2632a17da1f8309774e0130bd7cfc280c121a28c",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-26T18:45:33.7989868+08:00",
-  "deployedAt": "2026-10-26T18:45:57.3232587+08:00",
-  "verifiedAt": "2026-10-26T18:49:47.359039+08:00",
-  "sizeBytes": 824756736,
-  "sha256": "F6614D296B34AE81B2B2DD84EF7DCE5F208BBD4DC367785387BE8C8590AC6C3E",
+  "builtAt": "2026-10-29T16:52:38.5864233+08:00",
+  "deployedAt": "2026-10-29T16:54:17.6710533+08:00",
+  "verifiedAt": "2026-10-29T17:09:31.1472128+08:00",
+  "sizeBytes": 872737280,
+  "sha256": "576C9E62F9D0BE791D022821806B851D667128A88D948FE712A1153CE6F2C08D",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-10-26T18:43:45.228052+08:00",
-  "sidecarSizeBytes": 93238784,
-  "sidecarSha256": "C1F3939E43F6EC675FDAE8158526BF261CBC6B3107B5EEE98D24E6A090169C13",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-barge-in-before-20261026\\preacherman-demo-host.exe",
-  "backupSha256": "87EBE533043AC2524301A2D7FE3482F61CFCAA311CF9DD6F77965BFCD010D98F",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-barge-in-before-20261026\\preacherman-service.exe",
-  "sidecarBackupSha256": "171DBCB4628A00C26205737F0F5C06B57A344764EADEA8A01C5D57C16F2DB09E",
-  "rollbackBaselineCommit": "4ec54a4c465a64f6867d6e3b0c0f1e7838c6b51e",
-  "previousVerificationCommit": "4ec54a4c465a64f6867d6e3b0c0f1e7838c6b51e",
+  "sidecarBuiltAt": "2026-10-29T16:48:47.3828634+08:00",
+  "sidecarSizeBytes": 93243904,
+  "sidecarSha256": "1A6F94CC4BB0CDC3A991C3A18643CEBDCB00A8F66D2B80A6989E40F061455857",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ai-moe-import-before-20261029\\preacherman-demo-host.exe",
+  "backupSha256": "F6614D296B34AE81B2B2DD84EF7DCE5F208BBD4DC367785387BE8C8590AC6C3E",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ai-moe-import-before-20261029\\preacherman-service.exe",
+  "sidecarBackupSha256": "C1F3939E43F6EC675FDAE8158526BF261CBC6B3107B5EEE98D24E6A090169C13",
+  "rollbackBaselineCommit": "4b5c1834630b187d01e457eab4ecc541947c0f54",
+  "previousVerificationCommit": "5fb2694a1ff90b8db788ff609bd2eecce734824f",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "typecheck": "passed",
-      "focusedTests": 32,
+      "focusedTests": 64,
       "focusedFailures": 0,
+      "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical shortcut. Real packaged Silero and AudioWorklet with synthetic microphone speech. Two interruptions followed by new replies in each appearance; one capture per conversation; microphone released on stop; no transcript rendered. Recognition/provider/TTS responses mocked for deterministic testing. Core eight destinations and window controls verified; restarted normally without debug port.",
-    "nativeVisualVerification": "Reviewed native light/dark interrupted states and core route screenshots; preserved layout and readable controls.",
-    "modes": [
+    "nativeFlow": "Cold launch through canonical shortcut; all ten characters selected in Asset, activated onto Home, opened in Gallery, and resolved by the real local execution-profile service in both appearances. Biographies empty. Original active companion and appearance restored.",
+    "nativeVisualVerification": "Reviewed all ten real-model screenshots in light/dark, transparent Asset card grid, Gallery model detail and core navigation screenshots. After normal shortcut relaunch, visually confirmed Home and Task in the foreground. Further optional checks stopped at user request. Models retain authored materials and assigned idle clips.",
+    "models": [
       {
         "appearance": "light",
-        "cuts": [
-          257.90000000037253,
-          257.30000000074506
-        ],
-        "conversations": 3,
-        "passed": true,
-        "captures": 1,
-        "microphoneReleased": true,
-        "noTranscriptRendered": true
+        "id": "ai-moe-deepseek",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-claude",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-gpt",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-gemini",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-glm",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-grok",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-qwen",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-kimi",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-minimax",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "light",
+        "id": "ai-moe-doubao",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
       },
       {
         "appearance": "dark",
-        "cuts": [
-          246.40000000037253,
-          258.3999999985099
-        ],
-        "conversations": 3,
-        "passed": true,
-        "captures": 1,
-        "microphoneReleased": true,
-        "noTranscriptRendered": true
+        "id": "ai-moe-deepseek",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-claude",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-gpt",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-gemini",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-glm",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-grok",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-qwen",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-kimi",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-minimax",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
+      },
+      {
+        "appearance": "dark",
+        "id": "ai-moe-doubao",
+        "asset": true,
+        "home": true,
+        "execution": true,
+        "gallery": true
       }
     ],
     "routes": [
@@ -73,17 +209,17 @@
       },
       {
         "appearance": "light",
+        "name": "Gallery",
+        "ready": true
+      },
+      {
+        "appearance": "light",
         "name": "Home",
         "ready": true
       },
       {
         "appearance": "light",
         "name": "Task",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Gallery",
         "ready": true
       },
       {
@@ -113,17 +249,17 @@
       },
       {
         "appearance": "dark",
+        "name": "Gallery",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
         "name": "Home",
         "ready": true
       },
       {
         "appearance": "dark",
         "name": "Task",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Gallery",
         "ready": true
       },
       {
@@ -142,169 +278,13 @@
         "ready": true
       }
     ],
-    "pageErrors": [],
-    "consoleErrors": [
+    "console": [
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
-    "newConsoleErrors": [],
-    "expectedTestDiagnostics": [],
-    "resources": {
-      "SampledAt": "2026-10-26T18:48:45.3930183+08:00",
-      "NativePid": 15000,
-      "StartedAt": "2026-10-26T18:48:28.9152745+08:00",
-      "WindowHandle": 396132,
-      "Responding": true,
-      "NativeVisualVerified": true,
-      "ProcessIds": [
-        15000,
-        6256,
-        26148,
-        3952,
-        15948,
-        9536,
-        3580,
-        30420,
-        8892,
-        31200,
-        9080
-      ],
-      "NormalizedCpuPercent": 3.99,
-      "WorkingSetMiB": 1891.2,
-      "GpuDedicatedBytes": 3243229184.0,
-      "MaxGpuEngineUtilization": 21.0,
-      "FreeRamKiB": 18189940,
-      "TemporaryProcesses": [],
-      "Listeners": [],
-      "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
-      "ShortcutArguments": "",
-      "CloseReleasedPair": true,
-      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time. Pre-existing unrelated Open Design browsers and services preserved."
-    },
-    "windowControls": {
-      "restore": true,
-      "maximize": true,
-      "minimize": true,
-      "closeRequested": true,
-      "passed": true
-    },
-    "evidenceDirectory": "D:\\preacherman\\output\\playwright\\voice-barge-in-20261026",
-    "baselineReports": [
-      "output/playwright/asset-settings-focus-20261023/native-report.json",
-      "output/tifa-import-20261015/native-report.json",
-      "output/playwright/voice-ui-20261025/native-report.json"
-    ],
-    "scopeLimits": [
-      "Synthetic microphone tests measure interruption timing, not acoustic echo rejection on the user microphone/speakers. Existing WebRTC echo cancellation remains enabled. Partially spoken sentences are conservatively unconfirmed in context."
-    ],
-    "buildNotes": [
-      "One cache-reusing production build; model and runtime assets packaged locally, no CDN or additional speech service."
-    ],
-    "preview": {
-      "result": {
-        "cuts": [
-          224.40000000037253,
-          243.19999999925494
-        ],
-        "snapshots": [
-          {
-            "active": true,
-            "mic": "live",
-            "closedOutput": "closed"
-          },
-          {
-            "active": true,
-            "mic": "live",
-            "closedOutput": "closed"
-          }
-        ],
-        "captures": 1,
-        "conversations": 3,
-        "recognitions": 3,
-        "states": [
-          {
-            "state": "idle",
-            "at": 2244.5999999996275
-          },
-          {
-            "state": "requesting",
-            "at": 2244.699999999255
-          },
-          {
-            "state": "idle",
-            "at": 2244.800000000745
-          },
-          {
-            "state": "requesting",
-            "at": 2244.800000000745
-          },
-          {
-            "state": "listening",
-            "at": 7534.4000000003725
-          },
-          {
-            "state": "listening",
-            "at": 7765.5
-          },
-          {
-            "state": "thinking",
-            "at": 10485.400000000373
-          },
-          {
-            "state": "speaking",
-            "at": 10567.300000000745
-          },
-          {
-            "state": "listening",
-            "at": 10805.5
-          },
-          {
-            "state": "thinking",
-            "at": 13455.599999999627
-          },
-          {
-            "state": "speaking",
-            "at": 13488.400000000373
-          },
-          {
-            "state": "listening",
-            "at": 13745.099999999627
-          },
-          {
-            "state": "thinking",
-            "at": 16435.199999999255
-          },
-          {
-            "state": "speaking",
-            "at": 16472.900000000373
-          },
-          {
-            "state": "idle",
-            "at": 16491.5
-          },
-          {
-            "state": "idle",
-            "at": 16592.699999999255
-          }
-        ],
-        "stoppedTrack": "ended",
-        "activeAfterStop": false
-      },
-      "passed": true
-    },
-    "breezeCancellation": {
-      "oldRequestAbortedMs": 708,
-      "nextSynthesisAfterMs": 554,
-      "passed": true
-    },
-    "finalShortcutScreenshot": "D:\\preacherman\\output\\playwright\\voice-barge-in-20261026\\native-final-shortcut.png",
-    "newModelInstallation": {
-      "model": "Silero VAD 5.1.2",
-      "directory": "D:\\preacherman\\apps\\preacherman-demo-host\\public\\speech\\silero",
-      "packageCache": "D:\\preacherman\\.cache\\npm",
-      "temporaryDirectory": "D:\\preacherman\\.cache\\tmp",
-      "installedOnCDrive": false,
-      "selfContainedDesktop": true
-    }
+    "newErrors": [],
+    "preferencesRestored": true,
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\ai-moe-import-20261029",
+    "temporaryProcesses": []
   },
   "releaseAttempts": [
     {
@@ -1631,7 +1611,7 @@
       "verifiedAt": "2026-10-26T18:49:47.359039+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-barge-in-before-20261026\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ai-moe-import-before-20261029\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1648,15 +1628,21 @@
   "cleanup": {
     "status": "passed",
     "temporaryProcesses": [],
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\voice-barge-in-20261026",
-    "nativePid": 15000,
-    "breeze": "Existing independent Breeze service preserved. Live cancellation and next synthesis verified; clone choices unchanged.",
+    "verificationDirectory": "D:/preacherman/output/playwright/ai-moe-import-20261029",
+    "nativePid": 10700,
+    "sidecarPid": 39372,
+    "normalShortcutRelaunch": true,
+    "runtimeEvidence": "D:/preacherman/output/playwright/ai-moe-import-20261029/final-runtime.json",
     "backupRetention": {
       "status": "passed",
-      "completeSetsKept": 3,
-      "evidence": "D:\\preacherman\\output\\playwright\\voice-barge-in-20261026\\backup-retention.json"
+      "kept": 3,
+      "removed": 1,
+      "reclaimedBytes": 914137088,
+      "report": "D:/preacherman/output/playwright/ai-moe-import-20261029/backup-retention.json",
+      "verifiedAt": "2026-10-29T17:03:02.9536591+08:00",
+      "encodingRepair": "Added a UTF-8 BOM to three retained JSON manifests for Windows PowerShell 5 compatibility; JSON content and executable hashes unchanged."
     },
-    "temporaryProfileDirectoriesRemoved": true
+    "scope": "Build and native verifier exited. Only the canonical desktop and matching local service remain from this task. Further optional visual checks stopped at user request."
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
@@ -1707,8 +1693,9 @@
     "status": "passed",
     "kept": 3,
     "removed": 1,
-    "reclaimedBytes": 914122347,
-    "report": "D:/preacherman/output/playwright/deepseek-dns-20261026/backup-prune.json",
-    "verifiedAt": "2026-10-26T16:09:07.8073458+08:00"
+    "reclaimedBytes": 914137088,
+    "report": "D:/preacherman/output/playwright/ai-moe-import-20261029/backup-retention.json",
+    "verifiedAt": "2026-10-29T17:03:02.9536591+08:00",
+    "encodingRepair": "Added a UTF-8 BOM to three retained JSON manifests for Windows PowerShell 5 compatibility; JSON content and executable hashes unchanged."
   }
 }
