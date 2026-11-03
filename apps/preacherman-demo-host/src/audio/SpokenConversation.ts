@@ -181,6 +181,7 @@ export class SpokenConversation {
   }
   private async playAudio(audio: string, context: OutputContext, signal: AbortSignal, text: string) {
     let animation = 0;
+    let completed = false;
     const motion = new SpokenMotionPlayback(() => context.currentTime, signal);
     try {
       const bytes = Uint8Array.from(atob(audio), char => char.charCodeAt(0));
@@ -214,8 +215,9 @@ export class SpokenConversation {
         if (signal.aborted) abort();
         else { try { motion.start(); source.start(); animate(); } catch (error) { finish(error); } }
       });
+      completed = true;
     } finally {
-      motion.stop();
+      motion.stop(completed ? "audio-ended" : "audio-stopped");
       cancelAnimationFrame(animation);
       if (this.animation === animation) this.animation = 0;
       if (this.playback === context) window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));

@@ -13,13 +13,13 @@ async function fixture() {
   }).outputText, { exports: audio, Intl });
   let source = await readFile(new URL("../src/audio/SpokenConversation.ts", import.meta.url), "utf8");
   source = source.replace('new URL("./voiceCapture.worklet.js?no-inline", import.meta.url)', '"capture.js"');
-  const motions = [], faces = [], stoppedMotions = [];
+  const motions = [], faces = [], stoppedMotions = [], stopReasons = [];
   const motion = {};
   runInNewContext(ts.transpileModule(await readFile(new URL("../src/motion/SpokenMotionPlayback.ts", import.meta.url), "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText, { exports: motion, require: () => ({ speechMotionRuntime: { start: async options => { motions.push(options); return true; },
     startFaceStream(options) { const record = { ...options, chunks: [] }; faces.push(record); return { firstFrame: Promise.resolve(true), append(pcm) { record.chunks.push(pcm); }, finish() { record.finished = true; } }; },
-    cancel: epoch => stoppedMotions.push(epoch) }, motionStrength: { natural: 0.55 } }), AbortController, setTimeout, clearTimeout });
+    cancel: (epoch, reason) => { stoppedMotions.push(epoch); stopReasons.push(reason); } }, motionStrength: { natural: 0.55 } }), AbortController, setTimeout, clearTimeout });
   const exports = {}, states = [], contexts = [], frames = new Set();
   let character = "cortana", sequence = 0;
   class Meter { starts = 0; stops = 0; start() { this.starts++; return Promise.resolve(true); } stop() { this.stops++; } dispose() {} }
@@ -50,8 +50,24 @@ async function fixture() {
     atob: value => Buffer.from(value, "base64").toString("binary"), performance,
   });
   const voice = new exports.SpokenConversation(() => {}, state => states.push(state), () => character, () => ({ input: "", output: "" }), () => {});
-  return { voice, audio, states, contexts, frames, motions, faces, stoppedMotions, setCharacter(value) { character = value; } };
+  return { voice, audio, states, contexts, frames, motions, faces, stoppedMotions, stopReasons, setCharacter(value) { character = value; } };
 }
+
+test("natural audio completion and barge-in select different motion release envelopes", async () => {
+  for (const interrupted of [false, true]) {
+    const { voice, contexts, stopReasons } = await fixture();
+    const cancel = new AbortController();
+    voice.request = async () => ({ audio: "YXVkaW8=" });
+    const running = voice.speak("Hello there.", cancel.signal, "cortana");
+    try {
+      await tick();
+      if (interrupted) { cancel.abort(); await assert.rejects(running); }
+      else { contexts[0].sources[0].onended(); await running; }
+      assert.ok(stopReasons.length > 0);
+      assert.ok(stopReasons.every(reason => reason === (interrupted ? "audio-stopped" : "audio-ended")));
+    } finally { cancel.abort(); await running.catch(() => {}); voice.dispose(); }
+  }
+});
 
 test("sentence chunks preserve English sentences, decimal values and Chinese punctuation", async () => {
   const { audio } = await fixture();

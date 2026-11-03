@@ -15,6 +15,7 @@ characterBindings.set("cortana", {
   ...cortanaRig,
   id: "speech2motion-cortana-anatomical-v2",
   faceRig: "cortana-jaw-eyes",
+  motionTransitions: { enter: 0.65, release: 0.85, interrupt: 0.45 },
   bones: { ...cortanaRig.bones, Spine: "b_spine0", Neck: "b_neck1" },
   calibration: {
     sourceToAvatar: [0, Math.SQRT1_2, 0, Math.SQRT1_2],

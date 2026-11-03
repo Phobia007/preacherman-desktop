@@ -66,4 +66,10 @@ export interface AvatarMotionRigBinding {
   readonly faceChannels?: Readonly<Record<string, string>>;
   /** Reduced ARKit mapping for Cortana's existing jaw and eyeball bones. */
   readonly faceRig?: "cortana-jaw-eyes";
+  /** Body-only blending; the audio clock and facial response remain immediate. */
+  readonly motionTransitions?: {
+    readonly enter: number;
+    readonly release: number;
+    readonly interrupt: number;
+  };
 }

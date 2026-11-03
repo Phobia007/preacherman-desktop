@@ -51,9 +51,9 @@ export class SpokenMotionPlayback {
     finally { clearTimeout(timer); }
   }
   start() { this.startedAt = this.clock(); }
-  stop() {
+  stop(reason = "audio-stopped") {
     this.signal.removeEventListener("abort", this.abort);
+    speechMotionRuntime.cancel(this.epoch, reason);
     this.cancellation.abort();
-    speechMotionRuntime.cancel(this.epoch, "audio-stopped");
   }
 }

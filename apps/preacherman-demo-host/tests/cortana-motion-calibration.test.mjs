@@ -18,7 +18,7 @@ const conversion = new Quaternion().fromArray(binding.calibration.sourceToAvatar
   .multiply(new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -Math.PI / 2));
 function matrix(values) { return new Matrix4().fromArray(values).transpose(); }
 
-function fixture() {
+function fixture(transitions = false) {
   const bytes = readFileSync(new URL("../public/assets/avatars/cortana/cortana-runtime.glb", import.meta.url));
   const gltf = JSON.parse(bytes.subarray(20, 20 + bytes.readUInt32LE(12)));
   const joints = new Set(gltf.skins.flatMap(s => s.joints));
@@ -32,10 +32,10 @@ function fixture() {
   const root = new Group(); for (const index of gltf.scenes[gltf.scene ?? 0].nodes) root.add(nodes[index]);
   root.updateMatrixWorld(true);
   const original = new Map(nodes.map(n => [n, n.quaternion.clone()]));
-  const player = new ThreeAvatarMotionStreamPlayer(root, binding);
+  const player = new ThreeAvatarMotionStreamPlayer(root, transitions ? binding : { ...binding, motionTransitions: undefined });
   return { root, player, original, nodes: new Map(nodes.map(n => [n.name, n])) };
 }
-function play(f, rotations = {}, time = .5) {
+function play(f, rotations = {}, time = .5, streamId = "calibration") {
   const stride = rest.length * 9 + 6, values = new Float32Array(stride * 32);
   for (let frame = 0; frame < 32; frame++) rest.forEach((j, index) => {
     const q = typeof rotations[j.name] === "function" ? rotations[j.name](frame) : rotations[j.name] ?? new Quaternion();
@@ -43,9 +43,9 @@ function play(f, rotations = {}, time = .5) {
     values.set([m[0], m[4], m[8], m[1], m[5], m[9], m[2], m[6], m[10]], frame * stride + index * 9);
   });
   f.player.beginFrame();
-  f.player.receive({ type: "started", metadata: { streamId: "calibration", characterId: "cortana", interactionEpoch: 1, frameRate: 30,
+  f.player.receive({ type: "started", metadata: { streamId, characterId: "cortana", interactionEpoch: 1, frameRate: 30,
     jointNames: rest.map(j => j.name), restJoints: rest, blendshapeNames: [], restPoseId: "KQ-default", timelineStartFrame: 0, strength: 1, playbackTime: () => time } });
-  f.player.receive({ type: "frames", streamId: "calibration", values }); f.player.update(0); f.root.updateMatrixWorld(true);
+  f.player.receive({ type: "frames", streamId, values }); f.player.update(0); f.root.updateMatrixWorld(true);
 }
 function sourcePose(name, rotations) {
   const joint = restByName.get(name), parent = restByName.get(joint.parent);
@@ -54,6 +54,49 @@ function sourcePose(name, rotations) {
   return (parent ? sourcePose(parent.name, rotations).multiply(local) : local).multiply(basis);
 }
 function direction(a, b) { return b.getWorldPosition(new Vector3()).sub(a.getWorldPosition(new Vector3())).normalize(); }
+
+test("late Cortana gestures ease in from idle and finish with a gradual return", () => {
+  const f = fixture(true), raw = fixture();
+  const step = dt => { f.player.beginFrame(); f.player.update(dt); };
+  const head = f.nodes.get("b_head"), idle = head.quaternion.clone().normalize();
+  const pose = () => head.quaternion.clone().normalize();
+  const rotation = { Head: new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), .4) };
+  try {
+    play(raw, rotation, .8); const target = raw.nodes.get("b_head").quaternion.clone().normalize();
+    play(f, rotation, .8); // Audio is already playing before the first motion arrives.
+    assert.ok(pose().angleTo(idle) < 1e-5, "late frames cannot skip entry blending");
+    step(1 / 60); assert.ok(pose().angleTo(idle) < .001);
+    step(.65); assert.ok(pose().angleTo(target) < 1e-5);
+    f.player.receive({ type: "cancelled", streamId: "calibration", reason: "audio-ended" });
+    step(0); assert.ok(pose().angleTo(target) < 1e-5, "release starts at the last displayed pose");
+    let previous = pose().angleTo(idle);
+    for (let i = 0; i < 20; i++) { step(1 / 60); const distance = pose().angleTo(idle); assert.ok(distance <= previous + 1e-5); previous = distance; }
+    assert.ok(previous > .1, "normal finish must not collapse into a 160ms stop");
+    step(.6); assert.ok(pose().angleTo(idle) < 1e-5);
+    for (let i = 0; i < 120; i++) step(1 / 60);
+    assert.ok(pose().angleTo(idle) < 1e-5, "idle remains drift-free");
+  } finally { f.player.dispose(); raw.player.dispose(); }
+});
+
+test("Cortana interrupted and consecutive gestures continue from the visible pose", () => {
+  const f = fixture(true);
+  const step = dt => { f.player.beginFrame(); f.player.update(dt); };
+  const head = f.nodes.get("b_head"), idle = head.quaternion.clone().normalize();
+  const pose = () => head.quaternion.clone().normalize();
+  try {
+    play(f, { Head: frame => new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), frame < 20 ? .4 : -.4) }, .5);
+    step(.7); const heard = pose();
+    f.player.receive({ type: "cancelled", streamId: "calibration", reason: "barge-in" });
+    step(1 / 60); assert.ok(pose().angleTo(heard) < .001, "unheard buffered poses cannot replace the visible pose");
+    step(.15); const returning = pose();
+    play(f, { Head: new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), -.3) }, .7, "next-sentence");
+    assert.ok(pose().angleTo(returning) < 1e-5, "new sentence must not jump through idle");
+    step(1 / 60); assert.ok(pose().angleTo(returning) < .001);
+    step(.65);
+    f.player.receive({ type: "cancelled", streamId: "next-sentence", reason: "barge-in" });
+    step(.46); assert.ok(pose().angleTo(idle) < 1e-5, "interruption returns promptly but smoothly");
+  } finally { f.player.dispose(); }
+});
 
 test("Cortana face uses actual jaw and eye axes, holds until audio, and never accumulates on idle", () => {
   const f = fixture(); let clock = null;

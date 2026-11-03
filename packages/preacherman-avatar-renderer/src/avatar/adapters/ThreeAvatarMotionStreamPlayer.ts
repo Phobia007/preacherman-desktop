@@ -94,6 +94,10 @@ export class ThreeAvatarMotionStreamPlayer {
   private faceClock?: () => number | null;
   private readonly faceDriver?: CortanaFaceDriver;
   private readonly morphBase = new Map<MorphTargetState, number>();
+  private readonly displayedBodyPose = new Map<Bone, Quaternion>();
+  private bodyStreamId: string | null = null;
+  private bodyBlend: { from: Map<Bone, Quaternion>; elapsed: number; duration: number } | null = null;
+  private bodyReleaseSeconds = 0;
 
   constructor(
     private readonly root: Object3D,
@@ -171,6 +175,7 @@ export class ThreeAvatarMotionStreamPlayer {
       this.elapsed = Math.max(0, -event.metadata.timelineStartFrame / event.metadata.frameRate);
       this.ended = false;
       this.cancelled = false;
+      this.bodyReleaseSeconds = this.binding.motionTransitions?.release ?? 0;
       this.fade = 1;
       this.lastFrame = -1;
       this.sourceRest = new Map(event.metadata.restJoints.map((joint) => [joint.name, joint]));
@@ -188,13 +193,17 @@ export class ThreeAvatarMotionStreamPlayer {
     } else {
       this.ended = true;
       this.cancelled = true;
+      this.bodyReleaseSeconds = event.type === "cancelled" && event.reason === "audio-ended"
+        ? this.binding.motionTransitions?.release ?? 0
+        : this.binding.motionTransitions?.interrupt ?? 0;
       this.fade = Math.min(this.fade, 0.999);
     }
   }
 
   update(deltaSeconds: number, jawEnergy = 0): void {
     const metadata = this.metadata;
-    if (metadata && this.fade > 0) this.updateBody(metadata, deltaSeconds);
+    const applied = metadata && this.fade > 0 ? this.updateBody(metadata, deltaSeconds) : false;
+    if (this.binding.motionTransitions) this.blendBody(applied ? metadata!.streamId : null, deltaSeconds);
     this.updateFace(deltaSeconds, jawEnergy);
   }
 
@@ -207,20 +216,25 @@ export class ThreeAvatarMotionStreamPlayer {
     this.basePose.clear();
   }
 
-  private updateBody(metadata: AvatarMotionStreamMetadata, deltaSeconds: number): void {
+  private updateBody(metadata: AvatarMotionStreamMetadata, deltaSeconds: number): boolean {
     const valuesPerFrame = metadata.jointNames.length * 9 + 6 + metadata.blendshapeNames.length;
     const frameCount = Math.floor(this.values.length / valuesPerFrame);
-    if (frameCount === 0) { if (this.cancelled) this.metadata = null; return; }
+    if (frameCount === 0) { if (this.cancelled) this.metadata = null; return false; }
 
     const audioTime = metadata.playbackTime?.();
     if (!this.cancelled) {
-      if (metadata.playbackTime && audioTime === null) return;
+      if (metadata.playbackTime && audioTime === null) return false;
       this.elapsed = metadata.playbackTime
         ? Math.max(0, (audioTime ?? 0) - metadata.timelineStartFrame / metadata.frameRate)
         : this.elapsed + Math.max(0, deltaSeconds);
     }
     const requestedFrame = Math.floor(this.elapsed * metadata.frameRate);
     const frame = Math.min(requestedFrame, frameCount - 1);
+    if (this.binding.motionTransitions && (this.cancelled || (this.ended && requestedFrame >= frameCount))) {
+      // Return from the last displayed pose, never an unheard buffered frame.
+      this.metadata = null;
+      return false;
+    }
     if (this.cancelled || (this.ended && requestedFrame >= frameCount)) {
       this.fade = Math.max(0, this.fade - deltaSeconds / (this.cancelled ? 0.16 : 0.28));
     }
@@ -228,9 +242,41 @@ export class ThreeAvatarMotionStreamPlayer {
     const strength = Math.max(0, Math.min(1, metadata.strength ?? 1));
     const fraction = this.binding.calibration && !this.cancelled
       ? this.elapsed * metadata.frameRate - requestedFrame : 0;
-    this.applyFrame(frame, valuesPerFrame, this.fade * fadeIn * strength, fraction);
+    this.applyFrame(frame, valuesPerFrame, this.binding.motionTransitions ? strength : this.fade * fadeIn * strength, fraction);
     this.lastFrame = frame;
     if (this.fade === 0) this.metadata = null;
+    return true;
+  }
+
+  private blendBody(streamId: string | null, deltaSeconds: number): void {
+    if (streamId !== this.bodyStreamId) {
+      const from = new Map<Bone, Quaternion>();
+      for (const { bone } of this.targetBones.values()) {
+        // Capture the visible pose, including an unfinished return or previous sentence.
+        from.set(bone, (this.displayedBodyPose.get(bone) ?? this.basePose.get(bone) ?? bone.quaternion).clone());
+      }
+      this.bodyBlend = { from, elapsed: 0,
+        duration: streamId ? this.binding.motionTransitions!.enter : this.bodyReleaseSeconds };
+      this.bodyStreamId = streamId;
+    }
+    const blend = this.bodyBlend;
+    if (!streamId && !blend) return;
+    if (blend) blend.elapsed += Math.max(0, deltaSeconds);
+    const t = blend ? Math.min(1, blend.elapsed / Math.max(0.001, blend.duration)) : 1;
+    // Zero velocity and acceleration at both ends avoids the old linear snap.
+    const weight = t * t * t * (t * (t * 6 - 15) + 10);
+    for (const { bone } of this.targetBones.values()) {
+      if (!this.basePose.has(bone)) this.basePose.set(bone, bone.quaternion.clone());
+      if (blend) {
+        const target = bone.quaternion.clone();
+        bone.quaternion.copy(blend.from.get(bone)!).slerp(target, weight);
+      }
+      this.displayedBodyPose.set(bone, bone.quaternion.clone());
+    }
+    if (t === 1) {
+      this.bodyBlend = null;
+      if (!streamId) this.displayedBodyPose.clear();
+    }
   }
 
   dispose(): void {
@@ -241,6 +287,9 @@ export class ThreeAvatarMotionStreamPlayer {
     this.morphTargets.clear();
     this.faceValues = new Float32Array();
     this.faceStreamId = null;
+    this.displayedBodyPose.clear();
+    this.bodyBlend = null;
+    this.bodyStreamId = null;
   }
 
   private calibrateReferencePose(): void {
