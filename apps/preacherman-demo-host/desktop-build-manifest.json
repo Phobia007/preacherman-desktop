@@ -1,48 +1,57 @@
 {
   "schemaVersion": 1,
-  "buildId": "cortana-calibration-20261103",
+  "buildId": "cortana-face-20261103",
   "productVersion": "0.1.0",
-  "sourceTask": "Calibrate Cortana anatomical speech-motion retargeting",
+  "sourceTask": "Adapt Cortana jaw and eye bones to synchronized Audio2Face speech",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Cortana-only source coordinate correction, anatomical arm references, pelvis-relative upper-body motion, joint limits and subframe interpolation; model assets and other rigs unchanged.",
-  "sourceCommit": "72df99121a6b9583e8ecc7ecd5894ec17a3bd19a",
+  "sourceState": "Cortana reduced ARKit jaw/gaze mapping, float16 decoding, shared audio clock, interruption cleanup, bounded energy fallback and managed Audio2Face autostart from D drive.",
+  "sourceCommit": "349cbc04661b9b21d12a7220d8e71a91e6677657",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-03T21:40:26.2136907+08:00",
-  "deployedAt": "2026-11-03T21:41:18.1949373+08:00",
-  "verifiedAt": "2026-11-03T21:43:43.171687+08:00",
-  "sizeBytes": 872741888,
-  "sha256": "5792F3B72FA255237AACE49C3119B19B2F134BD1BAAB847F9D80674F5C596103",
+  "builtAt": "2026-11-03T22:45:20.6249413+08:00",
+  "deployedAt": "2026-11-03T22:46:26.8071253+08:00",
+  "verifiedAt": "2026-11-03T22:50:28.8067633+08:00",
+  "sizeBytes": 872742400,
+  "sha256": "F30A672F76F9DC0C8C4B05B09739B2F3484370FBBC24ED8886D69E73320EDB50",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-11-03T18:58:54.5555325+08:00",
+  "sidecarBuiltAt": "2026-11-03T22:42:17.4490049+08:00",
   "sidecarSizeBytes": 93270016,
-  "sidecarSha256": "EA2181E8C716DDB6E3B24B24C511371EDBD99BDA54C1CD88A351057A6644F89D",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-calibration-before-20261103\\preacherman-demo-host.exe",
-  "backupSha256": "D6FEE52F976A2A85F5416331875950059A82F48319BAF51904A89209BB4A89F1",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-calibration-before-20261103\\preacherman-service.exe",
+  "sidecarSha256": "9089B3D3E68AA8FC9C73B03574FB6F8F273F64D01493F5B237B65F09FD54BE11",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-face-before-20261103\\preacherman-demo-host.exe",
+  "backupSha256": "5792F3B72FA255237AACE49C3119B19B2F134BD1BAAB847F9D80674F5C596103",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-face-before-20261103\\preacherman-service.exe",
   "sidecarBackupSha256": "EA2181E8C716DDB6E3B24B24C511371EDBD99BDA54C1CD88A351057A6644F89D",
-  "rollbackBaselineCommit": "0f9de50ccf6b03c1be78ee048db6c3bbc1371a9e",
-  "previousVerificationCommit": "0f9de50ccf6b03c1be78ee048db6c3bbc1371a9e",
+  "rollbackBaselineCommit": "72df99121a6b9583e8ecc7ecd5894ec17a3bd19a",
+  "previousVerificationCommit": "72df99121a6b9583e8ecc7ecd5894ec17a3bd19a",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "focusedTests": 17,
+      "focusedTests": 25,
       "focusedFailures": 0,
       "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical shortcut. Live calibrated motion streams preview on Cortana in both themes, hold Apply persists per-character choice, Motion Service refreshes. Breeze preview and core navigation pass in both themes. Original preferences and motion settings restored.",
-    "nativeVisualVerification": "Cortana Action viewed in light and dark. Fixed service captures compared before/after. Home, Voice, Motion Service and core navigation visually checked; Task confirmed after authored entry motion. No new console errors.",
+    "nativeFlow": "Cold canonical shortcut launch restarts the stopped Audio2Face container. Real Breeze synthesis through the packaged AudioDock controller produces synchronized facial streams in both themes; abort stops speech and returns to rest. Core navigation and voice preview pass. Original preferences restored.",
+    "nativeVisualVerification": "Reviewed native Cortana speaking and interrupted poses in both themes plus core navigation. Authored holographic material remains intact. Isolated rig closeups verify jaw direction and no distortion.",
     "voiceService": {
       "status": 200,
       "breezeStatus": "connected",
       "voiceCount": 1,
       "selectedVoiceId": "breeze:cortana",
-      "waitMs": 10
+      "waitMs": 11
     },
     "previewAudioBytes": 486482,
     "motionFrames": 14,
+    "faceFrames": 34,
+    "faceService": {
+      "state": "ready",
+      "endpoint": "http://127.0.0.1:18083/health",
+      "starting": false,
+      "phase": "ready",
+      "message": "",
+      "managed": true
+    },
     "routes": [
       {
         "appearance": "light",
@@ -57,15 +66,9 @@
       },
       {
         "appearance": "light",
-        "name": "Asset / Appearance / Action",
+        "name": "Cortana real voice / face / interruption",
         "ready": true,
-        "character": "cortana",
-        "frames": 7
-      },
-      {
-        "appearance": "light",
-        "name": "Asset / Settings / Motion Service",
-        "ready": true
+        "faceFrames": 17
       },
       {
         "appearance": "light",
@@ -105,15 +108,9 @@
       },
       {
         "appearance": "dark",
-        "name": "Asset / Appearance / Action",
+        "name": "Cortana real voice / face / interruption",
         "ready": true,
-        "character": "cortana",
-        "frames": 7
-      },
-      {
-        "appearance": "dark",
-        "name": "Asset / Settings / Motion Service",
-        "ready": true
+        "faceFrames": 17
       },
       {
         "appearance": "dark",
@@ -146,8 +143,9 @@
     ],
     "newErrors": [],
     "preferencesRestored": true,
-    "verificationDirectory": "D:\\preacherman\\output\\cortana-calibration-20261103",
-    "temporaryProcesses": []
+    "verificationDirectory": "D:\\preacherman\\output\\cortana-face-20261103",
+    "temporaryProcesses": [],
+    "harnessNotes": "An automation hover/keyboard menu toggle raced during dark navigation. Corrected the test driver and completed only the outstanding navigation checks; application remained responsive."
   },
   "releaseAttempts": [
     {
@@ -1474,7 +1472,7 @@
       "verifiedAt": "2026-10-26T18:49:47.359039+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-calibration-before-20261103\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-face-before-20261103\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1490,9 +1488,11 @@
   ],
   "cleanup": {
     "status": "verified",
-    "verifiedAt": "2026-11-03T21:48:58.3638835+08:00",
-    "report": "D:/preacherman/output/cortana-calibration-20261103/cleanup-report.json",
-    "scope": "Normal canonical desktop and matching sidecar plus shared Breeze and Speech2Motion. Debug, preview, browser and build children exited."
+    "verificationDirectory": "D:\\preacherman\\output\\cortana-face-20261103",
+    "scope": "Desktop and matching sidecar plus shared D-drive Breeze and Docker Speech2Motion/Audio2Face services remain intentionally running.",
+    "backupPruning": "Applied; newest three verified matching pairs retained; one older 0.9 GiB set removed.",
+    "normalShortcutLaunch": "PID 35184; title Preacherman Desktop Demo; normal Home flow; temporary CDP port 9237 closed.",
+    "processAudit": "Temporary face harness, Playwright and release build exited. Pre-existing preview PID 32212 on port 5188 preserved. Shared Breeze, motion, face and viewer services preserved. Audio2Face idle CPU 0.15%, memory 997 MiB."
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
