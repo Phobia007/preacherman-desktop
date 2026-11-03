@@ -45,6 +45,7 @@ test("idle recognizer releases its model worker and starts a fresh worker when n
   assert.equal(f.children[0].stopped, true);
   await f.speech.recognize({ audio: f.audio });
   assert.equal(f.children.length, 2);
+  assert.deepEqual(f.inputs.map(input => input.action), ["status", "recognize", "status", "recognize"]);
 });
 
 test("closing during recognition rejects promptly and cannot admit new work", async t => {

@@ -3,6 +3,8 @@ import { ConversationPhrase, speechWav, spokenSentences } from "./spokenAudio";
 import { SileroVad } from "./SileroVad";
 import { preachermanServiceRequest } from "../preacherman/capabilityClient";
 import { SpokenMotionPlayback } from "../motion/SpokenMotionPlayback";
+import { localServiceUrl } from "../serviceConfig";
+import { PcmSpeechPlayer } from "./PcmSpeechPlayer";
 import { defaultCharacterMotion, type CharacterMotionSettings } from "../motion/characterMotion";
 
 export type ConversationVoiceState = MicrophoneState | "thinking" | "speaking";
@@ -151,6 +153,7 @@ export class SpokenConversation {
     signal.throwIfAborted();
     const sentences = spokenSentences(text, this.voiceLanguage);
     if (!sentences.length) return;
+    if (voiceId) return this.speakStreaming(text, sentences, signal, id, voiceId, playback);
     const cancellation = new AbortController();
     const speaking = AbortSignal.any([signal, cancellation.signal]);
     // Store rejected prefetches as values until consumed, so a failure during playback
@@ -177,6 +180,63 @@ export class SpokenConversation {
       cancellation.abort();
       if (context && context.state !== "closed") await context.close().catch(() => {});
       if (this.playback === context) this.playback = null;
+    }
+  }
+  private async speakStreaming(text: string, sentences: string[], signal: AbortSignal, id: string, voiceId: string, playback?: { heardCharacters: number; interrupted: boolean }) {
+    const cancellation = new AbortController();
+    const speaking = AbortSignal.any([signal, cancellation.signal, AbortSignal.timeout(180000)]);
+    const request = (sentence: string) => fetch(localServiceUrl(`/api/characters/${encodeURIComponent(id)}/voice/stream`), {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: sentence, voiceId }), signal: speaking,
+    }).then(async response => {
+      if (!response.ok) throw new Error((await response.json()).error || "Speech is unavailable.");
+      if (!response.body || !response.headers.get("content-type")?.startsWith("audio/pcm")) throw new Error("Invalid speech stream.");
+      return { response, error: undefined };
+    }).catch(error => ({ response: undefined, error }));
+    let pending = request(sentences[0]);
+    const context: OutputContext = new AudioContext(); this.playback = context;
+    try {
+      await selectOutput(context, this.devices().output); await context.resume();
+      for (let index = 0; index < sentences.length; index++) {
+        const { response, error } = await pending; speaking.throwIfAborted();
+        if (!response) throw error;
+        await this.playStream(response.body!, context, speaking, sentences[index], () => {
+          // Breeze accepts one generation at a time. Prefetch only after its current
+          // stream reaches EOF, while the remaining audio is still playing.
+          if (index + 1 < sentences.length) pending = request(sentences[index + 1]);
+        });
+        if (playback) playback.heardCharacters = text.indexOf(sentences[index], playback.heardCharacters) + sentences[index].length;
+      }
+      if (playback) { playback.heardCharacters = text.length; playback.interrupted = false; }
+    } finally {
+      cancellation.abort();
+      if (context.state !== "closed") await context.close().catch(() => {});
+      if (this.playback === context) this.playback = null;
+    }
+  }
+  private async playStream(body: ReadableStream<Uint8Array>, context: OutputContext, signal: AbortSignal, text: string, inputEnded: () => void) {
+    const analyser = context.createAnalyser(); analyser.fftSize = 512; analyser.connect(context.destination);
+    const player = new PcmSpeechPlayer(context, analyser);
+    const motion = new SpokenMotionPlayback(() => player.time, signal);
+    let animation = 0, completed = false;
+    try {
+      const face = motion.prepareStream(text, this.sessionId, this.motion);
+      const samples = new Float32Array(analyser.fftSize);
+      const animate = () => {
+        if (signal.aborted) return;
+        analyser.getFloatTimeDomainData(samples); this.onFrame(voiceFrame(samples, performance.now()));
+        let power = 0; for (const sample of samples) power += sample * sample;
+        window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: Math.min(1, Math.sqrt(power / samples.length) * 3.2) }));
+        animation = requestAnimationFrame(animate); this.animation = animation;
+      };
+      await player.play(body, signal, { samples: face.append,
+        start: () => { motion.start(); this.onState("speaking"); this.avatar("speaking"); animate(); },
+        inputEnded: () => { face.finish(); inputEnded(); },
+      });
+      completed = true;
+    } finally {
+      motion.stop(completed ? "audio-ended" : "audio-stopped"); analyser.disconnect(); cancelAnimationFrame(animation);
+      if (this.animation === animation) this.animation = 0;
+      if (this.playback === context) window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));
     }
   }
   private async playAudio(audio: string, context: OutputContext, signal: AbortSignal, text: string) {

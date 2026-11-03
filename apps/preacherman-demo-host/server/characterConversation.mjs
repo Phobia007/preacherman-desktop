@@ -118,6 +118,13 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       await profile(id); await breeze.connect(signal);
       return voiceSettings(id, signal);
     },
+    async streamSpeech(id, input, signal) {
+      const resolved = await resolveVoice(id, signal);
+      requireSelectedVoice(resolved);
+      if (!resolved.usesBreeze || !resolved.voice) throw fail("Streaming requires a selected Breeze voice.", 409);
+      if (input.voiceId !== resolved.voice.voiceId) throw fail("Voice selection changed. Start a new conversation.", 409);
+      return breeze.stream({ text: input.text, voiceId: resolved.voice.voiceId }, signal);
+    },
     async synthesize(id, input, signal) {
       const resolved = await resolveVoice(id, signal);
       requireSelectedVoice(resolved);

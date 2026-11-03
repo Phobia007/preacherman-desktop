@@ -1,9 +1,14 @@
 import { spawn } from "node:child_process";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { existsSync } from "node:fs";
 import { validateSpeechAudio } from "./windowsSpeech.mjs";
 
 const fail = (message, statusCode = 503) => Object.assign(new Error(message), { statusCode });
+const acceleratedRoot = "D:\\AI\\PreachermanSpeech";
+const acceleratedPython = join(acceleratedRoot, "venv", "Scripts", "python.exe");
+const acceleratedModel = join(acceleratedRoot, "models", "base");
+const acceleratedInstalled = process.platform === "win32" && existsSync(acceleratedPython) && existsSync(join(acceleratedModel, "model.bin"));
 
 // An installed, offline capability, like the local CLI. Never download a model or save microphone audio.
 // The program is bundled in the sidecar; all input is JSON on stdin, never executable code.
@@ -16,33 +21,50 @@ configured_threads = False
 def handle(data):
     global model, loaded_path, configured_threads
     model_path = data["model"]
-    if not os.path.isfile(model_path) or any(importlib.util.find_spec(name) is None for name in ["whisper", "torch", "numpy"]):
+    fast = data["engine"] == "faster-whisper"
+    modules = ["faster_whisper", "numpy"] if fast else ["whisper", "torch", "numpy"]
+    if not os.path.exists(model_path) or any(importlib.util.find_spec(name) is None for name in modules):
         return {"available": False}
-    if data["action"] == "status":
-        return {"available": True, "engine": "whisper", "model": "base"}
     import io, wave, base64, math
     import numpy as np
-    import torch, whisper
-    if not configured_threads:
-        torch.set_num_threads(4)
-        torch.set_num_interop_threads(1)
-        configured_threads = True
+    if model is None or loaded_path != model_path:
+        if fast:
+            from faster_whisper import WhisperModel
+            model = WhisperModel(model_path, device="cpu", compute_type="int8", cpu_threads=4,
+                num_workers=1, local_files_only=True)
+            # Initialize inference while opening voice mode, before the first spoken turn.
+            warm, _ = model.transcribe(np.zeros(16000, dtype=np.float32), language="en",
+                beam_size=5, condition_on_previous_text=False)
+            list(warm)
+        else:
+            import torch, whisper
+            if not configured_threads:
+                torch.set_num_threads(4)
+                torch.set_num_interop_threads(1)
+                configured_threads = True
+            model = whisper.load_model(model_path, device="cpu")
+        loaded_path = model_path
+    if data["action"] == "status":
+        return {"available": True, "engine": data["engine"], "model": "base"}
     with wave.open(io.BytesIO(base64.b64decode(data["audio"])), "rb") as wav:
         audio = np.frombuffer(wav.readframes(wav.getnframes()), dtype="<i2").astype(np.float32) / 32768.0
     audio -= np.mean(audio)
     rms = float(np.sqrt(np.mean(audio * audio)))
     peak = float(np.max(np.abs(audio)))
     metrics = {"durationMs": round(len(audio) / 16), "rms": round(rms, 6), "peak": round(peak, 6)}
-    result = {"engine": "whisper", "text": "", "accepted": False, "confidence": 0, "audio": metrics}
+    result = {"engine": data["engine"], "text": "", "accepted": False, "confidence": 0, "audio": metrics}
     if rms >= 0.002 and peak >= 0.01:
         # Bring quiet recordings into range without clipping or amplifying noise without bound.
         audio *= min(8.0, 0.8 / peak)
-        if model is None or loaded_path != model_path:
-            model = whisper.load_model(model_path, device="cpu")
-            loaded_path = model_path
-        decoded = model.transcribe(audio, language=data["language"], fp16=False, verbose=None,
-            temperature=0, beam_size=5, condition_on_previous_text=False)
-        segments = [s for s in decoded["segments"] if s["compression_ratio"] <= 2.4 and
+        if fast:
+            decoded, _ = model.transcribe(audio, language=data["language"], temperature=0,
+                beam_size=5, condition_on_previous_text=False, vad_filter=False)
+            decoded = [{"text": s.text, "compression_ratio": s.compression_ratio,
+                "no_speech_prob": s.no_speech_prob, "avg_logprob": s.avg_logprob} for s in decoded]
+        else:
+            decoded = model.transcribe(audio, language=data["language"], fp16=False, verbose=None,
+                temperature=0, beam_size=5, condition_on_previous_text=False)["segments"]
+        segments = [s for s in decoded if s["compression_ratio"] <= 2.4 and
             not (s["no_speech_prob"] > 0.6 and s["avg_logprob"] < -1.0)]
         text = "".join(s["text"] for s in segments).strip()
         if text and segments:
@@ -65,7 +87,10 @@ for line in sys.stdin:
 
 // One owned Python worker, no listening port. It reuses the CPU model across turns;
 // close(), a failed/cancelled request, or 90 seconds idle stop this exact child.
-export function createLocalSpeechRecognition({ spawnImpl = spawn, python = "python.exe", modelPath = join(homedir(), ".cache", "whisper", "base.pt"), timeoutMs = 35000, idleMs = 90000 } = {}) {
+export function createLocalSpeechRecognition({ spawnImpl = spawn, engine = acceleratedInstalled ? "faster-whisper" : "whisper",
+  python = engine === "faster-whisper" ? acceleratedPython : "python.exe",
+  modelPath = engine === "faster-whisper" ? acceleratedModel : join(homedir(), ".cache", "whisper", "base.pt"),
+  timeoutMs = 35000, idleMs = 90000 } = {}) {
   let closed = false, available = false, worker = null, sequence = 0;
   function stop(current, error) {
     if (current.stopping) return;
@@ -106,7 +131,7 @@ export function createLocalSpeechRecognition({ spawnImpl = spawn, python = "pyth
       clearTimeout(current.idleTimer);
       current.stopping = true;
       current.pending?.finish(fail("Local speech recognition could not run. Check the Whisper installation."));
-      if (worker === current) worker = null;
+      if (worker === current) { worker = null; available = false; }
     });
     return current;
   }
@@ -127,7 +152,7 @@ export function createLocalSpeechRecognition({ spawnImpl = spawn, python = "pyth
       };
       current.pending = { id, finish };
       signal?.addEventListener("abort", abort, { once: true });
-      try { current.child.stdin.write(JSON.stringify({ ...input, model: modelPath, id }) + "\n"); }
+      try { current.child.stdin.write(JSON.stringify({ ...input, engine, model: modelPath, id }) + "\n"); }
       catch { stop(current, fail("Speech recognition connection closed.")); }
       if (signal?.aborted) abort();
     });
@@ -141,7 +166,7 @@ export function createLocalSpeechRecognition({ spawnImpl = spawn, python = "pyth
         if (!status.available) throw fail("Local speech recognition requires Python and Whisper with the base model installed.");
         available = true;
       }
-      return { engine: "whisper", model: "base", language: "zh-CN", languages: ["zh-CN", "en-US"] };
+      return { engine, model: "base", language: "zh-CN", languages: ["zh-CN", "en-US"] };
     },
     async recognize({ audio, language = "zh-CN" }, signal) {
       validateSpeechAudio(audio);

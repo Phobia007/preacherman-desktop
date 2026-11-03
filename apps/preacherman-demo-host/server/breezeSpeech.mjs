@@ -78,12 +78,25 @@ export function createBreezeSpeech({ request = fetch, platform = process.platfor
     })().finally(() => { starting = null; });
     return waitForStartup(starting, signal);
   }
-  async function synthesize({ text, voiceId, maxNewTokens }, signal) {
+  async function speechResponse({ text, voiceId, maxNewTokens }, signal, format) {
     if (typeof text !== "string" || !text.trim() || text.length > 6000) throw fail("Enter between 1 and 6000 characters to speak.", 400);
     if (typeof voiceId !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(voiceId)) throw fail("Select a saved Breeze voice first.", 400);
-    const response = await call("/v1/audio/speech", { method: "POST", signal, headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ input: text, voice: voiceId, instructions: "", response_format: "wav", seed: 42,
+    return call("/v1/audio/speech", { method: "POST", signal, headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input: text, voice: voiceId, instructions: "", response_format: format, seed: 42,
         ...(maxNewTokens ? { max_new_tokens: maxNewTokens } : {}) }) }, 90000);
+  }
+  async function* stream(input, signal) {
+    const response = await speechResponse(input, signal, "pcm");
+    let length = 0;
+    for await (const chunk of response.body) {
+      signal?.throwIfAborted(); length += chunk.length;
+      if (length > 12 * 1024 * 1024) throw fail("Breeze audio is too long. Ask for a shorter reply.", 502);
+      yield chunk;
+    }
+    if (!length || length % 2) throw fail("Breeze returned incomplete PCM audio.", 502);
+  }
+  async function synthesize(input, signal) {
+    const response = await speechResponse(input, signal, "wav");
     const chunks = []; let length = 0;
     try {
       for await (const chunk of response.body) {
@@ -96,10 +109,10 @@ export function createBreezeSpeech({ request = fetch, platform = process.platfor
     if (audio.length < 46 || audio.toString("ascii", 0, 4) !== "RIFF" || audio.toString("ascii", 8, 12) !== "WAVE" || audio.toString("ascii", 36, 40) !== "data" || audio.readUInt32LE(24) !== 24000 || (audio.length - 44) % 2) throw fail("Breeze returned invalid WAV audio.", 502);
     // The streaming API uses unknown-length WAV headers; browsers need the completed length for decoding.
     audio.writeUInt32LE(audio.length - 8, 4); audio.writeUInt32LE(audio.length - 44, 40);
-    return { audio: audio.toString("base64"), provider: "breeze", voiceId };
+    return { audio: audio.toString("base64"), provider: "breeze", voiceId: input.voiceId };
   }
   return {
-    voices, synthesize, connect,
+    voices, synthesize, stream, connect,
     async preview(voice, signal) {
       const text = "Hello, it's nice to meet you. This is my voice. I'm ready to chat whenever you are.";
       return previews.get(JSON.stringify([voice.voiceId, voice.revision, text]), async cancellation => {

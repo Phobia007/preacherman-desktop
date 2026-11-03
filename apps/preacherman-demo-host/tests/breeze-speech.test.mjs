@@ -200,3 +200,32 @@ test("a stalled preview times out, releases the request and can be retried witho
   stalled = false;
   assert.ok((await service.preview(voice)).audio);
 });
+
+test("desktop streams the selected voice before synthesis ends and disconnect cancels upstream", async t => {
+  const directory = await mkdtemp(join(tmpdir(), "preacherman-pcm-http-"));
+  let input, upstream, generated = 0;
+  const breeze = createBreezeSpeech({ platform: "test", request: async (url, options = {}) => {
+    if (url.endsWith("/v1/voices")) return Response.json([{ id: "cortana", saved: true, metadata: { characterId: "cortana" } }]);
+    input = JSON.parse(options.body); generated++;
+    return new Response(new ReadableStream({ start(controller) {
+      upstream = controller; controller.enqueue(new Uint8Array([1, 2, 3, 4]));
+      options.signal.addEventListener("abort", () => controller.error(options.signal.reason), { once: true });
+    } }));
+  } });
+  const server = createPreachermanServer({ env: { PREACHERMAN_DATA_DIR: directory }, breezeSpeech: breeze });
+  t.after(async () => { await server.close(); await rm(directory, { recursive: true, force: true }); });
+  const address = await server.listen(0), abort = new AbortController();
+  const url = `http://127.0.0.1:${address.port}/api/characters/cortana/voice/stream`;
+  const post = voiceId => fetch(url, { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: "Streaming reply", voiceId }), signal: AbortSignal.any([abort.signal, AbortSignal.timeout(3000)]) });
+  const wrong = await post("zima"); assert.equal(wrong.status, 409); await wrong.json(); assert.equal(generated, 0);
+  const response = await post("cortana"), reader = response.body.getReader();
+  try {
+    assert.equal(response.status, 200); assert.match(response.headers.get("content-type"), /audio\/pcm/);
+    assert.equal(input.response_format, "pcm"); assert.equal(input.voice, "cortana");
+    assert.deepEqual(Array.from((await reader.read()).value), [1, 2, 3, 4]);
+    upstream.enqueue(new Uint8Array([5, 6]));
+    assert.deepEqual(Array.from((await reader.read()).value), [5, 6]);
+    abort.abort(); await assert.rejects(reader.read());
+  } finally { abort.abort(); await reader.cancel().catch(() => {}); reader.releaseLock(); }
+});

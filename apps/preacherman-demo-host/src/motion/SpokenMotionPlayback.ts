@@ -50,6 +50,35 @@ export class SpokenMotionPlayback {
     } catch { /* Motion is optional; voice remains available. */ }
     finally { clearTimeout(timer); }
   }
+  prepareStream(text: string, sessionId: string, config: CharacterMotionSettings) {
+    const playbackTime = () => this.startedAt === null ? null : Math.max(0, this.clock() - this.startedAt);
+    // PCM has no final duration yet. Estimate only the body gesture span; audio controls
+    // the actual end and release envelope. Face animation always uses the real samples.
+    const duration = Math.max(1, Math.min(45, text.match(/[\u3400-\u9fff]/u) ? text.length / 4 : text.trim().split(/\s+/u).length / 2.6));
+    if (config.enabled && config.supported) void speechMotionRuntime.start({ text, duration, sessionId,
+      characterId: config.characterId, interactionEpoch: this.epoch, signal: this.cancellation.signal,
+      strength: motionStrength[config.style], playbackTime }).catch(() => {});
+    const face = config.characterId === "cortana" ? speechMotionRuntime.startFaceStream({ sampleRate: 16000,
+      profile: "preacherman-arkit", characterId: config.characterId, interactionEpoch: this.epoch,
+      signal: this.cancellation.signal, playbackTime }) : null;
+    // Every three 24 kHz samples produce two 16 kHz samples. Carry incomplete groups
+    // between network chunks so the face clock never accumulates resampling drift.
+    let tail: number[] = [];
+    return {
+      append: (pcm: Float32Array) => {
+        if (!face || this.cancellation.signal.aborted) return;
+        const input = new Float32Array(tail.length + pcm.length); input.set(tail); input.set(pcm, tail.length);
+        const groups = Math.floor(input.length / 3), output = new Int16Array(groups * 2);
+        for (let i = 0; i < groups; i++) {
+          output[i * 2] = Math.round(input[i * 3] * 32767);
+          output[i * 2 + 1] = Math.round((input[i * 3 + 1] + input[i * 3 + 2]) * .5 * 32767);
+        }
+        tail = Array.from(input.subarray(groups * 3));
+        for (let i = 0; i < output.length; i += 8000) face.append(output.subarray(i, i + 8000));
+      },
+      finish: () => { if (face && tail.length > 1) face.append(new Int16Array([Math.round(tail[0] * 32767)])); face?.finish(); },
+    };
+  }
   start() { this.startedAt = this.clock(); }
   stop(reason = "audio-stopped") {
     this.signal.removeEventListener("abort", this.abort);

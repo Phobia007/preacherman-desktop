@@ -6,7 +6,7 @@ import ts from "typescript";
 
 const tick = () => new Promise(resolve => setImmediate(resolve));
 const deferred = () => { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; };
-async function fixture() {
+async function fixture(fetchImpl) {
   const audio = {};
   runInNewContext(ts.transpileModule(await readFile(new URL("../src/audio/spokenAudio.ts", import.meta.url), "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
@@ -41,7 +41,7 @@ async function fixture() {
   runInNewContext(ts.transpileModule(source, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText, {
-    exports, require: name => name.endsWith("/SpokenMotionPlayback") ? motion : name.endsWith("/characterMotion") ? { defaultCharacterMotion: id => ({ characterId: id, supported: true, enabled: true, style: "natural" }) } : name === "./spokenAudio" ? { ...audio, speechWav: () => "audio" } : {
+    exports, fetch: fetchImpl, require: name => name.endsWith("/serviceConfig") ? { localServiceUrl: path => path } : name.endsWith("/SpokenMotionPlayback") ? motion : name.endsWith("/characterMotion") ? { defaultCharacterMotion: id => ({ characterId: id, supported: true, enabled: true, style: "natural" }) } : name === "./spokenAudio" ? { ...audio, speechWav: () => "audio" } : {
       MicrophoneMeter: Meter, selectOutput: async () => {}, voiceFrame: () => ({}),
     },
     AbortController, AbortSignal, crypto: { randomUUID: () => "session" }, setTimeout, clearTimeout,
@@ -50,7 +50,7 @@ async function fixture() {
     atob: value => Buffer.from(value, "base64").toString("binary"), performance,
   });
   const voice = new exports.SpokenConversation(() => {}, state => states.push(state), () => character, () => ({ input: "", output: "" }), () => {});
-  return { voice, audio, states, contexts, frames, motions, faces, stoppedMotions, stopReasons, setCharacter(value) { character = value; } };
+  return { voice, audio, states, contexts, frames, motions, faces, stoppedMotions, stopReasons, Motion: motion.SpokenMotionPlayback, setCharacter(value) { character = value; } };
 }
 
 test("natural audio completion and barge-in select different motion release envelopes", async () => {
@@ -87,7 +87,7 @@ test("first sentence plays before later synthesis completes with only one follow
     const pending = deferred(); playback.push({ audio, signal, ...pending }); return pending.promise;
   };
   const cancel = new AbortController();
-  const running = voice.speak("First sentence. Second sentence. Third sentence.", cancel.signal, "cortana", "cortana-en");
+  const running = voice.speak("First sentence. Second sentence. Third sentence.", cancel.signal, "cortana");
   try {
     assert.equal(requests.length, 1);
     requests[0].resolve({ audio: "first" }); await tick();
@@ -101,9 +101,55 @@ test("first sentence plays before later synthesis completes with only one follow
     assert.equal(playback[2].audio, "third"); playback[2].resolve();
     await running;
     assert.ok(requests.every(request => request.path.includes("/cortana/")));
-    assert.ok(requests.every(request => request.body.voiceId === "cortana-en"));
     assert.equal(contexts.length, 1); assert.equal(contexts[0].state, "closed");
   } finally { cancel.abort(); requests.forEach(request => request.resolve({ audio: "cancel" })); playback.forEach(part => part.resolve()); await running.catch(() => {}); voice.dispose(); }
+});
+
+test("streaming speech starts on headers, prefetches only at PCM EOF, and aborts the queued generation", async () => {
+  const requests = [], playing = [];
+  const { voice, contexts } = await fixture((path, options) => {
+    const pending = deferred(); requests.push({ path, options, ...pending }); return pending.promise;
+  });
+  voice.playStream = (body, context, signal, text, inputEnded) => {
+    const pending = deferred(); playing.push({ body, signal, text, inputEnded, ...pending }); return pending.promise;
+  };
+  const cancel = new AbortController(), progress = { heardCharacters: 0, interrupted: true };
+  const running = voice.speak("First. Second. Third.", cancel.signal, "cortana", "cortana-en", progress);
+  try {
+    requests[0].resolve({ ok: true, body: "stream one", headers: new Headers({ "content-type": "audio/pcm" }) }); await tick();
+    assert.equal(playing[0].body, "stream one"); assert.equal(requests.length, 1);
+    playing[0].inputEnded(); assert.equal(requests.length, 2);
+    requests[1].resolve({ ok: true, body: "stream two", headers: new Headers({ "content-type": "audio/pcm" }) }); await tick();
+    assert.equal(playing.length, 1);
+    playing[0].resolve(); await tick(); assert.equal(playing[1].body, "stream two");
+    assert.equal(progress.heardCharacters, 6);
+    playing[1].inputEnded(); assert.equal(requests.length, 3);
+    assert.ok(requests.every(r => r.path.endsWith("/cortana/voice/stream") && JSON.parse(r.options.body).voiceId === "cortana-en"));
+    cancel.abort(); playing[1].reject(cancel.signal.reason); await assert.rejects(running);
+    assert.ok(requests[2].options.signal.aborted); assert.equal(contexts[0].state, "closed");
+    assert.equal(progress.heardCharacters, 6); assert.equal(progress.interrupted, true);
+  } finally { cancel.abort(); requests.forEach(r => r.reject(new Error("cancel"))); playing.forEach(p => p.resolve()); await running.catch(() => {}); voice.dispose(); }
+});
+
+test("streaming facial samples preserve resampling phase across network chunks and use the played media clock", async () => {
+  const f = await fixture(); const cancel = new AbortController(); let time = 0;
+  const motion = new f.Motion(() => time, cancel.signal);
+  try {
+    const face = motion.prepareStream("Hello there.", "session", { characterId: "cortana", enabled: true, supported: true, style: "natural" });
+    assert.equal(f.faces[0].playbackTime(), null);
+    const pcm = Float32Array.from({ length: 24002 }, (_, i) => (i % 100) / 200);
+    for (let i = 0; i < pcm.length; i += 997) face.append(pcm.subarray(i, i + 997));
+    face.finish();
+    const actual = f.faces[0].chunks.flatMap(a => Array.from(a));
+    assert.equal(actual.length, Math.floor(pcm.length * 2 / 3));
+    for (let i = 0; i < actual.length; i++) {
+      const pos = i * 1.5, left = Math.floor(pos);
+      assert.equal(actual[i], Math.round((pcm[left] + (pcm[Math.min(left + 1, pcm.length - 1)] - pcm[left]) * (pos - left)) * 32767));
+    }
+    motion.start(); time = .5; assert.equal(f.faces[0].playbackTime(), .5);
+    const count = f.faces[0].chunks.length; cancel.abort(); face.append(pcm); assert.equal(f.faces[0].chunks.length, count);
+    assert.equal(f.stopReasons.at(-1), "audio-stopped"); assert.equal(f.faces[0].finished, true);
+  } finally { cancel.abort(); f.voice.dispose(); }
 });
 
 test("cancel stops active playback, aborts prefetched synthesis and releases audio resources", async () => {

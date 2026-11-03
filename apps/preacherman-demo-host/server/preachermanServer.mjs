@@ -12,6 +12,7 @@ import { homedir } from "node:os";
 import { mkdir, readFile, rename, writeFile, chmod } from "node:fs/promises";
 import { delimiter, dirname, join, resolve } from "node:path";
 import { Readable } from "node:stream";
+import { once } from "node:events";
 import { WebSocket, WebSocketServer } from "ws";
 import {
   createPitchProposal,
@@ -1417,7 +1418,7 @@ export function createPreachermanServer(options = {}) {
         void speechMotionService.start();
         json(response, 202, await speechMotionService.status(), origin); return;
       }
-      const voiceDraftRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/voice(?:\/(service|options|preview|apply|connect|synthesize))?$/);
+      const voiceDraftRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/voice(?:\/(service|options|preview|apply|connect|synthesize|stream))?$/);
       if (voiceDraftRoute) {
         const [, id, action] = voiceDraftRoute;
         const cancellation = new AbortController();
@@ -1429,6 +1430,26 @@ export function createPreachermanServer(options = {}) {
         if (action === "preview" && request.method === "GET") { json(response, 200, await characterConversation.previewVoice(id, url.searchParams.get("id"), cancellation.signal), origin); return; }
         if (request.method === "POST") {
           const body = await readJson(request, action === "options" ? 4 * 1024 * 1024 + 4096 : 8192);
+          if (action === "stream") {
+            try {
+              const audio = await characterConversation.streamSpeech(id, body, cancellation.signal);
+              // Do not commit headers until the first audio bytes, so startup errors remain JSON.
+              for await (const chunk of audio) {
+                cancellation.signal.throwIfAborted();
+                if (!response.headersSent) {
+                  response.setHeader("Access-Control-Allow-Origin", origin);
+                  response.setHeader("Vary", "Origin");
+                  response.setHeader("Content-Type", "audio/pcm;rate=24000;channels=1;format=s16le");
+                }
+                if (!response.write(chunk)) await once(response, "drain", { signal: cancellation.signal });
+              }
+              response.end();
+            } catch (error) {
+              if (!response.headersSent && !response.destroyed) throw error;
+              response.destroy();
+            }
+            return;
+          }
           const result = action === "service" ? await characterConversation.saveVoiceService(id, body) :
             action === "options" ? await characterConversation.addVoice(id, body) :
             action === "connect" ? await characterConversation.connectBreeze(id, cancellation.signal) :
