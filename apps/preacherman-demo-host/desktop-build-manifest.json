@@ -1,49 +1,89 @@
 {
   "schemaVersion": 1,
-  "buildId": "cortana-transitions-20261103",
+  "buildId": "voice-speed-20261104",
   "productVersion": "0.1.0",
-  "sourceTask": "Smooth Cortana idle-to-speech and speech-to-idle body transitions",
+  "sourceTask": "Reduce voice reply latency with streaming audio and accelerated offline recognition",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Cortana body-only smootherstep entry 650ms, natural release 850ms, interrupted release 450ms, visible-pose sentence continuity and explicit audio completion reasons. Existing facial synchronization preserved.",
-  "sourceCommit": "afc79c60cba61b3f7ee1289f92ded08d5068837a",
+  "sourceState": "Character-scoped Breeze PCM streaming with immediate cancellation, underrun-aware audio clock and incremental Audio2Face. D-drive faster-whisper base CPU INT8 model warmed on voice activation; existing voice identity and Cortana transition envelopes preserved.",
+  "sourceCommit": "98c6ee60b7f20e3b9ea26b43e7e872c23e8016d0",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-03T23:16:07.5853565+08:00",
-  "deployedAt": "2026-11-03T23:17:17.0293315+08:00",
-  "verifiedAt": "2026-11-03T23:21:39.1533906+08:00",
-  "sizeBytes": 872742912,
-  "sha256": "E671E5C12508E6844AB932D484CE520B0B96E48BB8E16F876E49158547EFBABD",
+  "builtAt": "2026-11-04T00:30:57.272363+08:00",
+  "deployedAt": "2026-11-04T00:31:51.0120747+08:00",
+  "verifiedAt": "2026-11-04T00:36:40.3722416+08:00",
+  "sizeBytes": 872743936,
+  "sha256": "534B443D5180E19C7D4927E13AA782BC0CB3A44402F18DB6F631E1C7BCC45E78",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-11-03T22:42:17.4490049+08:00",
-  "sidecarSizeBytes": 93270016,
-  "sidecarSha256": "9089B3D3E68AA8FC9C73B03574FB6F8F273F64D01493F5B237B65F09FD54BE11",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-transitions-before-20261103\\preacherman-demo-host.exe",
-  "backupSha256": "F30A672F76F9DC0C8C4B05B09739B2F3484370FBBC24ED8886D69E73320EDB50",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-transitions-before-20261103\\preacherman-service.exe",
+  "sidecarBuiltAt": "2026-11-04T00:27:56.1258042+08:00",
+  "sidecarSizeBytes": 93274112,
+  "sidecarSha256": "3C64FCD5EAED5245137DDE931B8CA69567EFE0AD07C057CDEFFED1EF7AB4D0DA",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-speed-before-20261104\\preacherman-demo-host.exe",
+  "backupSha256": "E671E5C12508E6844AB932D484CE520B0B96E48BB8E16F876E49158547EFBABD",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-speed-before-20261104\\preacherman-service.exe",
   "sidecarBackupSha256": "9089B3D3E68AA8FC9C73B03574FB6F8F273F64D01493F5B237B65F09FD54BE11",
-  "rollbackBaselineCommit": "349cbc04661b9b21d12a7220d8e71a91e6677657",
-  "previousVerificationCommit": "349cbc04661b9b21d12a7220d8e71a91e6677657",
+  "rollbackBaselineCommit": "afc79c60cba61b3f7ee1289f92ded08d5068837a",
+  "previousVerificationCommit": "afc79c60cba61b3f7ee1289f92ded08d5068837a",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "focusedTests": 28,
+      "focusedTests": 47,
       "focusedFailures": 0,
       "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold canonical shortcut launch. Real Breeze speech and body/face streams verify natural multi-sentence completion in light mode and immediate audio interruption with smooth body release in dark mode. Core navigation and voice preview pass; preferences restored.",
-    "nativeVisualVerification": "Reviewed native Cortana speaking and sequential release frames in both themes plus core navigation. Authored materials remain unchanged; actual-rig regression tests cover late entry, gradual release and consecutive pose continuity.",
+    "nativeFlow": "Cold canonical shortcut launch. Real streaming Breeze speech plays before generation EOF, supports consecutive sentences and immediate interruption. Body and facial motion verified in both modes, core navigation and voice preview pass, preferences restored.",
+    "nativeVisualVerification": "Reviewed native Cortana speaking and release states in light and dark modes plus core navigation screenshots. Existing materials, appearance, and transition behavior preserved.",
     "voiceService": {
       "status": 200,
       "breezeStatus": "connected",
       "voiceCount": 1,
       "selectedVoiceId": "breeze:cortana",
-      "waitMs": 12
+      "waitMs": 7
     },
     "previewAudioBytes": 486482,
-    "motionFrames": 18,
-    "faceFrames": 36,
+    "firstAudio": [
+      {
+        "appearance": "light",
+        "ms": 210,
+        "streamRequests": 1,
+        "streamCompleted": 0
+      },
+      {
+        "appearance": "dark",
+        "ms": 222,
+        "streamRequests": 3,
+        "streamCompleted": 1
+      }
+    ],
+    "latency": {
+      "rounds": [
+        {
+          "recognitionMs": 515,
+          "chatMs": 1705,
+          "firstPcmMs": 342,
+          "playablePcmMs": 342,
+          "totalTtsMs": 1664,
+          "audioSeconds": 4.64,
+          "endOfSpeechToAudioEstimateMs": 3227
+        },
+        {
+          "recognitionMs": 475,
+          "chatMs": 1788,
+          "firstPcmMs": 241,
+          "playablePcmMs": 241,
+          "totalTtsMs": 1362,
+          "audioSeconds": 4,
+          "endOfSpeechToAudioEstimateMs": 3169
+        }
+      ],
+      "recognizer": {
+        "engine": "faster-whisper",
+        "warmupMs": 1503
+      }
+    },
+    "motionFrames": 14,
+    "faceFrames": 29,
     "faceService": {
       "state": "ready",
       "endpoint": "http://127.0.0.1:18083/health",
@@ -69,7 +109,7 @@
         "name": "Cortana natural finish and consecutive sentences",
         "ready": true,
         "faceFrames": 20,
-        "motionFrames": 9
+        "motionFrames": 10
       },
       {
         "appearance": "light",
@@ -111,8 +151,8 @@
         "appearance": "dark",
         "name": "Cortana interrupted finish",
         "ready": true,
-        "faceFrames": 16,
-        "motionFrames": 9
+        "faceFrames": 9,
+        "motionFrames": 4
       },
       {
         "appearance": "dark",
@@ -140,15 +180,11 @@
         "ready": true
       }
     ],
-    "console": [
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED",
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
-    ],
+    "console": [],
     "newErrors": [],
     "preferencesRestored": true,
-    "verificationDirectory": "D:\\preacherman\\output\\cortana-transitions-20261103",
-    "temporaryProcesses": [],
-    "normalShortcutRelaunch": "Native window responsive; canonical shortcut opens normal Home; temporary CDP port closed."
+    "verificationDirectory": "D:\\preacherman\\output\\voice-speed-20261104",
+    "temporaryProcesses": []
   },
   "releaseAttempts": [
     {
@@ -1475,7 +1511,7 @@
       "verifiedAt": "2026-10-26T18:49:47.359039+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-transitions-before-20261103\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-speed-before-20261104\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1491,16 +1527,22 @@
   ],
   "cleanup": {
     "status": "verified",
-    "verificationDirectory": "D:\\preacherman\\output\\cortana-transitions-20261103",
+    "verificationDirectory": "D:\\preacherman\\output\\voice-speed-20261104",
     "scope": "Desktop and matching sidecar plus shared D-drive Breeze and Docker Speech2Motion/Audio2Face services remain intentionally running.",
     "resources": {
-      "desktopPid": 24940,
+      "desktopPid": 12352,
       "responding": true,
-      "cpuPercent": 4.63,
-      "workingSetMB": 1845.0,
+      "windowTitle": "Preacherman Desktop Demo",
+      "cpuPercent": 3.08,
+      "workingSetMB": 1805.6,
       "temporaryProcesses": [],
       "debugPortClosed": true,
       "sharedPreviewPid": 32212
+    },
+    "retention": {
+      "backupsKept": 3,
+      "status": "pruned",
+      "removedGiB": 0.9
     }
   },
   "windowsInstaller": {
