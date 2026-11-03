@@ -6,7 +6,7 @@ import motionRigs from "../src/motion/characterMotionRigs.json" with { type: "js
 
 const fail = (message, statusCode = 400) => Object.assign(new Error(message), { statusCode });
 
-export function createCharacterConversation({ file, connections, codex, listAgents, breeze, windowsSpeech }) {
+export function createCharacterConversation({ file, connections, codex, listAgents, breeze, windowsSpeech, stateEngine }) {
   let queue = Promise.resolve();
   const sessions = new Map();
   const busy = new Set();
@@ -225,37 +225,44 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       if (!execution) throw fail("Choose an execution mode in this character's Settings first.", 409);
       const key = id + ":" + sessionId;
       if (busy.has(key)) throw fail("Wait for this character's reply.", 409);
-      const now = Date.now();
-      for (const [key, value] of sessions) if (now - value.at > 30 * 60000) sessions.delete(key);
-      if (sessions.size >= 64) sessions.delete(sessions.keys().next().value);
-      const stamp = JSON.stringify(execution);
-      const previous = sessions.get(key);
-      const history = previous?.execution === stamp ? [...previous.messages] : [];
-      if (playback !== undefined && (!playback || typeof playback.replyId !== "string" ||
-        !Number.isInteger(playback.heardCharacters) || playback.heardCharacters < 0 || typeof playback.interrupted !== "boolean")) {
-        throw fail("Invalid spoken playback acknowledgement.");
-      }
-      if (playback && previous?.replyId === playback.replyId && history.at(-1)?.role === "assistant") {
-        const last = history.at(-1);
-        if (playback.heardCharacters > last.content.length) throw fail("Invalid spoken playback acknowledgement.");
-        if (playback.interrupted) {
-          const heard = last.content.slice(0, playback.heardCharacters).trimEnd();
-          history[history.length - 1] = { role: "assistant", content: (heard ? heard + "\n" : "") +
-            "[Voice playback was interrupted. Only the completed sentences above are confirmed heard; do not assume the rest was delivered.]" };
-        }
-        // Playback is a fact even if the next provider request is itself interrupted.
-        sessions.set(key, { ...previous, messages: history, replyId: null, at: now });
-      }
-      const messages = [...history, { role: "user", content: text.trim() }];
-      while (messages.length > 1 && messages.reduce((size, message) => size + message.content.length, 0) > 60000) messages.splice(0, 2);
-      const personaInstructions = `You are ${character.name}, the user's virtual companion in Preacherman. ` +
-        `Character background: ${character.designation}. ${character.paragraphs.join(" ")} ` +
-        "Speak naturally in first person. Follow the spoken output language below. This is a voice-only conversation. " +
-        "Keep replies to one to three short spoken sentences unless more detail is requested. No Markdown or stage directions. " +
-        "You can converse and help plan; you cannot execute tools or claim to have performed actions. " +
-        "Be honest that you are a virtual character if asked. " + saved.rules.join("\n");
       busy.add(key);
       try {
+        const now = Date.now();
+        for (const [key, value] of sessions) if (now - value.at > 30 * 60000) sessions.delete(key);
+        if (sessions.size >= 64) sessions.delete(sessions.keys().next().value);
+        const stamp = JSON.stringify(execution);
+        const previous = sessions.get(key);
+        const history = previous?.execution === stamp ? [...previous.messages] : [];
+        if (playback !== undefined && (!playback || typeof playback.replyId !== "string" ||
+          !Number.isInteger(playback.heardCharacters) || playback.heardCharacters < 0 || typeof playback.interrupted !== "boolean")) {
+          throw fail("Invalid spoken playback acknowledgement.");
+        }
+        if (stateEngine) {
+          await stateEngine.ensure(id, saved.rules);
+          if (playback) await stateEngine.acknowledge(id, sessionId, playback);
+          if (await stateEngine.hasTurn(id, replyId)) throw fail("This voice turn was already accepted. Use a new reply identifier.", 409);
+        }
+        if (playback && previous?.replyId === playback.replyId && history.at(-1)?.role === "assistant") {
+          const last = history.at(-1);
+          if (playback.heardCharacters > last.content.length) throw fail("Invalid spoken playback acknowledgement.");
+          if (playback.interrupted) {
+            const heard = last.content.slice(0, playback.heardCharacters).trimEnd();
+            history[history.length - 1] = { role: "assistant", content: (heard ? heard + "\n" : "") +
+              "[Voice playback was interrupted. Only the completed sentences above are confirmed heard; do not assume the rest was delivered.]" };
+          }
+          // Playback is a fact even if the next provider request is itself interrupted.
+          sessions.set(key, { ...previous, messages: history, replyId: null, at: now });
+        }
+        const messages = [...history, { role: "user", content: text.trim() }];
+        while (messages.length > 1 && messages.reduce((size, message) => size + message.content.length, 0) > 60000) messages.splice(0, 2);
+        const characterState = stateEngine ? await stateEngine.context(id, text.trim(), saved.rules) : null;
+        const persona = characterState?.persona ?? { ...character, rules: saved.rules };
+        const personaInstructions = `You are ${persona.name}, the user's virtual companion in Preacherman. ` +
+          `Character background: ${persona.designation}. ${persona.paragraphs.join(" ")} ` +
+          "Speak naturally in first person. Follow the spoken output language below. This is a voice-only conversation. " +
+          "Keep replies to one to three short spoken sentences unless more detail is requested. No Markdown or stage directions. " +
+          "You can converse and help plan; you cannot execute tools or claim to have performed actions. " +
+          "Be honest that you are a virtual character if asked. " + persona.rules.join("\n");
         signal?.throwIfAborted();
         const resolved = await resolveVoice(id, signal);
         requireSelectedVoice(resolved);
@@ -266,7 +273,8 @@ export function createCharacterConversation({ file, connections, codex, listAgen
           : voiceLanguage === "zh"
             ? "Reply in Simplified Chinese only, even when the user speaks English. This character's selected voice supports Chinese. "
             : "Reply in the user's language. ";
-        const spokenPersona = personaInstructions + "\nSpoken output language: " + spokenLanguage;
+        const spokenPersona = personaInstructions + "\nSpoken output language: " + spokenLanguage +
+          (characterState ? "\n" + characterState.contextText : "");
         const result = execution.mode === "cli"
           ? await codex.chat({ messages, model: execution.model, personaInstructions: spokenPersona, voiceConversation: true, signal })
           : await connections.chat({ connectionId: execution.connectionId, model: execution.model, messages, personaInstructions: spokenPersona, signal });
@@ -275,6 +283,8 @@ export function createCharacterConversation({ file, connections, codex, listAgen
         if (JSON.stringify(latest.execution) !== stamp) throw fail("Execution mode changed. Start a new conversation.", 409);
         if (latest.selectedVoiceId !== resolved.saved.selectedVoiceId) throw fail("Voice selection changed. Start a new conversation.", 409);
         if (typeof result.text !== "string" || !result.text.trim() || result.text.length > 6000) throw fail("The reply cannot be spoken. Please ask for a shorter answer.", 502);
+        if (stateEngine) await stateEngine.recordTurn(id, { replyId, sessionId, userText: text.trim(), replyText: result.text,
+          personaRevision: characterState.persona.revision, recalledIds: characterState.recalledIds });
         sessions.set(key, { execution: stamp, at: Date.now(), replyId, messages: [...messages, { role: "assistant", content: result.text }].slice(-20) });
         return { text: result.text, replyId, characterId: id, voiceLanguage, voiceId: voice?.voiceId || null, source: result.source || "api" };
       } finally { busy.delete(key); }

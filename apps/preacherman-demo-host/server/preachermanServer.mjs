@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { createExecutionConnections } from "./executionConnections.mjs";
 import { createCodexConversation } from "./codexConversation.mjs";
 import { createCharacterConversation } from "./characterConversation.mjs";
+import { createStateEngineDecoupled } from "./stateEngineDecoupled.mjs";
 import { createSpeechMotionService } from "./speechMotionService.mjs";
 import { createWindowsSpeech } from "./windowsSpeech.mjs";
 import { createBreezeSpeech } from "./breezeSpeech.mjs";
@@ -143,6 +144,7 @@ export function createPreachermanServer(options = {}) {
 
   const taskStore = createTaskStore({ file: taskStoreFile() });
   const taskService = createTaskService({ taskStore });
+  const characterState = createStateEngineDecoupled({ file: join(dataDirectory, "state-engine-decoupled.v1.json") });
   const configuredWorkspaceRoots = typeof env.PREACHERMAN_LOCAL_AGENT_ROOTS === "string"
     ? env.PREACHERMAN_LOCAL_AGENT_ROOTS.split(delimiter).map((entry) => resolve(entry.trim())).filter(Boolean)
     : [resolve(process.cwd(), "../..")];
@@ -377,7 +379,12 @@ export function createPreachermanServer(options = {}) {
   async function executePluginToolAsTask(name, args, {
     callerPluginId: callerId = "preacherman-runtime",
     approved = false,
+    characterId = null,
   } = {}) {
+    if (characterId) {
+      if (!approved) throw Object.assign(new Error("Character skills require task approval."), { statusCode: 403 });
+      await characterState.requireSkill(characterId, name);
+    }
     const separator = name.indexOf("::");
     if (separator < 1) {
       const error = new Error("Plugin tool name must include its plugin id.");
@@ -398,6 +405,7 @@ export function createPreachermanServer(options = {}) {
     await taskService.update(taskId, (task) => {
       task.providerPluginId = providerPluginId;
       task.toolCall.qualifiedName = name;
+      if (characterId) { task.characterId = characterId; task.characterApproval = true; }
     });
     let terminal = false;
     try {
@@ -438,6 +446,7 @@ export function createPreachermanServer(options = {}) {
           artifactPath: completed.task?.artifact?.path || completed.ledger?.artifact?.path || `${toolName}-result.json`,
         },
       }).catch(() => undefined);
+      if (characterId) await characterState.recordSkillResult(characterId, await taskService.get(taskId)).catch(stateError => console.warn("Character skill state:", stateError.message));
       return { ...result, task: completed.task, ledger: completed.ledger };
     } catch (error) {
       if (!terminal) {
@@ -446,6 +455,7 @@ export function createPreachermanServer(options = {}) {
           error: error instanceof Error ? error.message : String(error),
         }, { pluginId: callerId }).catch(() => undefined);
       }
+      if (characterId) await characterState.recordSkillResult(characterId, await taskService.get(taskId)).catch(stateError => console.warn("Character skill state:", stateError.message));
       await preachermanCapabilityRuntime.record("agent.plugin-tools", {
         surface: "work",
         execution: {
@@ -1166,6 +1176,7 @@ export function createPreachermanServer(options = {}) {
     const result = await executePluginToolAsTask(proposal.toolName || "preacherman-runtime::task_summary", proposal.toolArguments ?? {}, {
       callerPluginId: "preacherman-runtime",
       approved: true,
+      characterId: proposal.characterId ?? null,
     });
     const stored = await taskService.update(result.task.taskId, (task) => {
       task.proposalId = proposal.proposalId;
@@ -1378,7 +1389,7 @@ export function createPreachermanServer(options = {}) {
   const codexConversation = options.codexConversation ?? createCodexConversation({ directory: join(dataDirectory, "chat-session") });
   const windowsSpeech = options.windowsSpeech ?? createWindowsSpeech();
   const breezeSpeech = options.breezeSpeech ?? createBreezeSpeech({ previewDirectory: join(dataDirectory, "breeze-previews") });
-  const characterConversation = createCharacterConversation({ file: join(dataDirectory, "characters.v1.json"), connections: executionConnections, codex: codexConversation, listAgents: () => agentAccessRuntime.listLocalAgents(), breeze: breezeSpeech, windowsSpeech });
+  const characterConversation = createCharacterConversation({ file: join(dataDirectory, "characters.v1.json"), connections: executionConnections, codex: codexConversation, listAgents: () => agentAccessRuntime.listLocalAgents(), breeze: breezeSpeech, windowsSpeech, stateEngine: characterState });
   const speechRecognition = options.speechRecognition ?? createLocalSpeechRecognition();
   const workspaceSelection = createWorkspaceSelection({
     file: join(dataDirectory, "local-agent-workspaces.v1.json"),
@@ -1407,6 +1418,42 @@ export function createPreachermanServer(options = {}) {
 
     try {
       const url = new URL(request.url, "http://127.0.0.1");
+      const characterStateRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/state(?:\/(persona|policy|memories|skills|skill-results|info-map|playback)(?:\/([\w.-]+))?)?$/);
+      if (characterStateRoute) {
+        const [, id, action, itemId] = characterStateRoute;
+        const profile = await characterConversation.profile(id);
+        await characterState.ensure(id, profile.rules);
+        response.setHeader("Cache-Control", "no-store");
+        if (!action && request.method === "GET") { json(response, 200, { ...(await characterState.snapshot(id)), runtime: characterState.status() }, origin); return; }
+        if (action === "persona" && !itemId && request.method === "PUT") { json(response, 200, { persona: await characterState.updatePersona(id, await readJson(request, 32768)) }, origin); return; }
+        if (action === "policy" && !itemId && request.method === "PUT") { json(response, 200, { policy: await characterState.updatePolicy(id, await readJson(request, 2048)) }, origin); return; }
+        if (action === "memories" && !itemId && request.method === "GET") {
+          json(response, 200, await characterState.memories(id, { offset: Number(url.searchParams.get("offset") ?? 0), limit: Number(url.searchParams.get("limit") ?? 50), includeForgotten: url.searchParams.get("includeForgotten") === "true" }), origin); return;
+        }
+        if (action === "memories" && !itemId && request.method === "POST") { json(response, 201, { memory: await characterState.addMemory(id, await readJson(request, 16384)) }, origin); return; }
+        if (action === "memories" && itemId && ["PUT", "DELETE"].includes(request.method)) {
+          json(response, 200, await characterState.editMemory(id, itemId, request.method === "DELETE" ? { deleted: true } : await readJson(request, 2048)), origin); return;
+        }
+        if (action === "info-map" && !itemId && request.method === "GET") { json(response, 200, await characterState.infoMap(id, { after: Number(url.searchParams.get("after") ?? 0), limit: Number(url.searchParams.get("limit") ?? 50) }), origin); return; }
+        if (action === "skills" && !itemId && request.method === "GET") { json(response, 200, { skills: (await characterState.snapshot(id)).skills, available: await preachermanPluginRuntime.listTools() }, origin); return; }
+        if (action === "skills" && !itemId && request.method === "PUT") {
+          const body = await readJson(request, 2048);
+          if (Object.keys(body).some(key => !["skillId", "enabled"].includes(key))) throw Object.assign(new Error("Unsupported skill input."), { statusCode: 400 });
+          if (!(await preachermanPluginRuntime.listTools()).some(tool => tool.name === body.skillId)) throw Object.assign(new Error("Plugin tool is unavailable."), { statusCode: 404 });
+          json(response, 200, { skill: await characterState.setSkill(id, body.skillId, body.enabled) }, origin); return;
+        }
+        if (action === "skill-results" && !itemId && request.method === "POST") {
+          const body = await readJson(request, 2048);
+          if (Object.keys(body).some(key => key !== "taskId")) throw Object.assign(new Error("Only a TaskRun id is accepted."), { statusCode: 400 });
+          json(response, 200, await characterState.recordSkillResult(id, await taskService.get(body.taskId)), origin); return;
+        }
+        if (action === "playback" && !itemId && request.method === "POST") {
+          const body = await readJson(request, 2048);
+          if (Object.keys(body).some(key => !["sessionId", "playback"].includes(key))) throw Object.assign(new Error("Unsupported playback input."), { statusCode: 400 });
+          json(response, 200, await characterState.acknowledge(id, body.sessionId, body.playback), origin); return;
+        }
+        json(response, 405, { error: "Method not allowed." }, origin); return;
+      }
       const characterMotionRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/motion$/);
       if (characterMotionRoute) {
         response.setHeader("Cache-Control", "no-store");
@@ -2143,6 +2190,10 @@ export function createPreachermanServer(options = {}) {
       }
       if (request.method === "POST" && url.pathname === "/api/agent/turn") {
         const body = await readJson(request);
+        if (body.characterId !== undefined) {
+          const profile = await characterConversation.profile(body.characterId);
+          await characterState.ensure(body.characterId, profile.rules);
+        }
         const input = typeof body.input === "string" ? body.input.trim() : "";
         const locale = body.locale === "en" ? "en" : "zh-CN";
         if (!input || input.length > 4_000) {
@@ -2173,6 +2224,10 @@ export function createPreachermanServer(options = {}) {
           proposal = pluginToolRequested
             ? createPluginToolProposal({ id: `proposal_${randomUUID()}`, objective: input, locale, ...selectedPluginTool })
             : createPitchProposal({ id: `proposal_${randomUUID()}`, objective: input, locale });
+          if (body.characterId !== undefined && pluginToolRequested) {
+            await characterState.requireSkill(body.characterId, selectedPluginTool.toolName);
+            proposal.characterId = body.characterId;
+          }
           proposals.set(proposal.proposalId, proposal);
         }
         json(response, 200, { displayText: turn.message, speechText: turn.speechText || turn.message.slice(0, 80), action: turn.action, proposal, diagnostics: turn.diagnostics }, origin);
@@ -2508,6 +2563,7 @@ export function createPreachermanServer(options = {}) {
           const retryResult = await executePluginToolAsTask(qualifiedName, body.arguments ?? {}, {
             callerPluginId: run.pluginId || "preacherman-runtime",
             approved: body.approved === true,
+            characterId: run.characterId ?? null,
           });
           const storedRetry = await taskService.get(retryResult.task.taskId);
           json(response, 202, { run: { ...storedRetry, runId: storedRetry.taskId }, previousRunId: run.runId }, origin);
@@ -2624,6 +2680,8 @@ export function createPreachermanServer(options = {}) {
           try {
             localServicePort = server.address().port;
             await agentAccessRuntime.initialize(localServicePort);
+            await characterState.initialize();
+            characterState.startMaintenance();
             if (options.autoStartBreeze) {
               // Voice model loading must never hold up Home or the local API.
               void breezeSpeech.connect().catch(error => console.warn("Breeze startup:", error.message));
@@ -2640,6 +2698,7 @@ export function createPreachermanServer(options = {}) {
       });
     },
     async close() {
+      await characterState.close();
       preachermanExecutionReconciler.stop();
       for (const client of voiceProxy.clients) client.close();
       motionProxy.close();

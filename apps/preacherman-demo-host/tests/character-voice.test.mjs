@@ -141,7 +141,7 @@ test("voice chrome covers both themes without rendering transcript or reply cont
 test("offline recognition validates input, bounds workers and cancels without leaking children", async () => {
   const children = [], inputs = [], launches = [];
   let respond = true;
-  const speech = createLocalSpeechRecognition({ timeoutMs: 30, spawnImpl(executable, args, options) {
+  const speech = createLocalSpeechRecognition({ engine: "faster-whisper", timeoutMs: 30, spawnImpl(executable, args, options) {
     launches.push({ executable, args, options });
     const child = new EventEmitter(); children.push(child); child.stdout = new PassThrough(); child.stderr = new PassThrough();
     child.kill = () => { child.stopped = true; queueMicrotask(() => child.emit("close", 0)); };
@@ -152,7 +152,7 @@ test("offline recognition validates input, bounds workers and cancels without le
   } });
   try {
     await assert.rejects(speech.recognize({ audio: "!invalid" }), /Invalid speech audio/); assert.equal(children.length, 0);
-    assert.equal((await speech.status()).engine, "whisper");
+    assert.equal((await speech.status()).engine, "faster-whisper");
     assert.equal(launches[0].options.shell, false); assert.equal(launches[0].options.windowsHide, true);
     assert.equal(launches[0].options.env.OMP_NUM_THREADS, "4");
     respond = false;
@@ -174,7 +174,7 @@ test("voice conversation uses engine acceptance and stops after repeated recogni
   const exports = {}, states = [], spoken = [], chats = [];
   class Meter { start() { return Promise.resolve(true); } stop() {} dispose() {} }
   runInNewContext(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, {
-    exports, require: () => ({ MicrophoneMeter: Meter, speechWav: () => "audio" }),
+    exports, require: () => ({ MicrophoneMeter: Meter, speechWav: () => "audio", defaultCharacterMotion: characterId => ({ characterId, enabled: false }) }),
     AbortController, AbortSignal, crypto: { randomUUID: () => "session" }, setTimeout, clearTimeout,
     cancelAnimationFrame() {}, window: { dispatchEvent() {} }, CustomEvent: class {},
   });
