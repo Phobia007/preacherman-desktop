@@ -1,47 +1,48 @@
 {
   "schemaVersion": 1,
-  "buildId": "breeze-autostart-20261103",
+  "buildId": "speech-motion-20261103",
   "productVersion": "0.1.0",
-  "sourceTask": "Automatically start the installed D-drive Breeze TTS service when the desktop opens",
+  "sourceTask": "Connect Speech2Motion to character voice conversations, previews and settings",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Packaged sidecar starts Breeze without a browser; healthy services are reused; early Voice collection requests share startup and preserve character selections. Home stays nonblocking. Runtime and model remain in D:/AI/Breeze-TTS-2.",
-  "sourceCommit": "68caccb82014e938bbf413c70eac715ce43d40eb",
+  "sourceState": "Breeze sentences drive cancellable audio-clock motion; 40 upper-body mappings; character Action preferences; Motion Service reconnect and nonblocking Docker autostart reuse D:/Codex/speech2motion.",
+  "sourceCommit": "0f9de50ccf6b03c1be78ee048db6c3bbc1371a9e",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-03T16:23:16.7589284+08:00",
-  "deployedAt": "2026-11-03T16:23:46.3823186+08:00",
-  "verifiedAt": "2026-11-03T16:33:14.0609444+08:00",
-  "sizeBytes": 872737280,
-  "sha256": "868BDC6CB1D0E53D31AF3A2445EC1C671A013AECAB50D2EA606EF3C38BF8B83E",
+  "builtAt": "2026-11-03T19:00:52.3628539+08:00",
+  "deployedAt": "2026-11-03T19:02:41.8143821+08:00",
+  "verifiedAt": "2026-11-03T19:05:22.9505271+08:00",
+  "sizeBytes": 872740864,
+  "sha256": "D6FEE52F976A2A85F5416331875950059A82F48319BAF51904A89209BB4A89F1",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-11-03T16:19:48.4703811+08:00",
-  "sidecarSizeBytes": 93245440,
-  "sidecarSha256": "6B0F658DAD631DC52ECD38F6BEC42D71D402D979C1F53CA188FD9B4041DA2B9B",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\breeze-autostart-before-20261103\\preacherman-demo-host.exe",
-  "backupSha256": "576C9E62F9D0BE791D022821806B851D667128A88D948FE712A1153CE6F2C08D",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\breeze-autostart-before-20261103\\preacherman-service.exe",
-  "sidecarBackupSha256": "1A6F94CC4BB0CDC3A991C3A18643CEBDCB00A8F66D2B80A6989E40F061455857",
-  "rollbackBaselineCommit": "2632a17da1f8309774e0130bd7cfc280c121a28c",
-  "previousVerificationCommit": "2632a17da1f8309774e0130bd7cfc280c121a28c",
+  "sidecarBuiltAt": "2026-11-03T18:58:54.5555325+08:00",
+  "sidecarSizeBytes": 93270016,
+  "sidecarSha256": "EA2181E8C716DDB6E3B24B24C511371EDBD99BDA54C1CD88A351057A6644F89D",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\speech-motion-before-20261103\\preacherman-demo-host.exe",
+  "backupSha256": "868BDC6CB1D0E53D31AF3A2445EC1C671A013AECAB50D2EA606EF3C38BF8B83E",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\speech-motion-before-20261103\\preacherman-service.exe",
+  "sidecarBackupSha256": "6B0F658DAD631DC52ECD38F6BEC42D71D402D979C1F53CA188FD9B4041DA2B9B",
+  "rollbackBaselineCommit": "68caccb82014e938bbf413c70eac715ce43d40eb",
+  "previousVerificationCommit": "68caccb82014e938bbf413c70eac715ce43d40eb",
   "verification": {
-    "status": "passed",
+    "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "focusedTests": 23,
+      "focusedTests": 38,
       "focusedFailures": 0,
       "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical shortcut with Breeze initially stopped. Breeze starts without a web page; Cortana voices appear automatically and a real voice preview succeeds. Core navigation verified in both appearances. Original preferences restored.",
-    "nativeVisualVerification": "Reviewed native Home, Voice and core navigation in light/dark. No new UI layout or material changes.",
+    "nativeFlow": "Cold launch through canonical shortcut. Live motion streams preview on Cortana and DeepSeek, hold Apply persists per-character choice, Motion Service refreshes. Breeze preview and core navigation pass in both themes. Original preferences and motion settings restored.",
+    "nativeVisualVerification": "Reviewed native Home, Voice, Action, Motion Service and core navigation in light/dark. Existing model materials preserved.",
     "voiceService": {
       "status": 200,
       "breezeStatus": "connected",
       "voiceCount": 1,
       "selectedVoiceId": "breeze:cortana",
-      "waitMs": 6
+      "waitMs": 8
     },
     "previewAudioBytes": 486482,
+    "motionFrames": 14,
     "routes": [
       {
         "appearance": "light",
@@ -53,6 +54,18 @@
         "name": "Asset / Appearance / Voice",
         "ready": true,
         "count": 1
+      },
+      {
+        "appearance": "light",
+        "name": "Asset / Appearance / Action",
+        "ready": true,
+        "character": "cortana",
+        "frames": 7
+      },
+      {
+        "appearance": "light",
+        "name": "Asset / Settings / Motion Service",
+        "ready": true
       },
       {
         "appearance": "light",
@@ -89,6 +102,18 @@
         "name": "Asset / Appearance / Voice",
         "ready": true,
         "count": 1
+      },
+      {
+        "appearance": "dark",
+        "name": "Asset / Appearance / Action",
+        "ready": true,
+        "character": "ai-moe-deepseek",
+        "frames": 7
+      },
+      {
+        "appearance": "dark",
+        "name": "Asset / Settings / Motion Service",
+        "ready": true
       },
       {
         "appearance": "dark",
@@ -116,10 +141,12 @@
         "ready": true
       }
     ],
-    "console": [],
+    "console": [
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+    ],
     "newErrors": [],
     "preferencesRestored": true,
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\breeze-autostart-20261103",
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\speech-motion-20261103",
     "temporaryProcesses": []
   },
   "releaseAttempts": [
@@ -1447,7 +1474,7 @@
       "verifiedAt": "2026-10-26T18:49:47.359039+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\breeze-autostart-before-20261103\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\speech-motion-before-20261103\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1462,100 +1489,17 @@
     }
   ],
   "cleanup": {
-    "status": "passed",
-    "checkedAt": "2026-11-03T16:32:36.3807622+08:00",
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\breeze-autostart-20261103",
-    "normalShortcutHomeVerified": true,
-    "breezeReused": true,
-    "breezePid": 10152,
+    "status": "verified",
+    "verifiedAt": "2026-11-03T19:10:31.3680688+08:00",
+    "report": "D:/preacherman/output/playwright/speech-motion-20261103/cleanup-report.json",
+    "normalLaunch": true,
+    "desktopPid": 45452,
+    "temporaryListeners": [],
     "temporaryProcesses": [],
-    "debugPortClosed": true,
-    "cpuSamples": [
-      {
-        "PID": 10152,
-        "Name": "breeze-server",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 241.5
-      },
-      {
-        "PID": 7892,
-        "Name": "preacherman-demo-host",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 91.6
-      },
-      {
-        "PID": 20092,
-        "Name": "preacherman-service",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 78.9
-      },
-      {
-        "PID": 15744,
-        "Name": "conhost",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 10.2
-      },
-      {
-        "PID": 8672,
-        "Name": "msedgewebview2",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 138.6
-      },
-      {
-        "PID": 34872,
-        "Name": "msedgewebview2",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 16.1
-      },
-      {
-        "PID": 14184,
-        "Name": "msedgewebview2",
-        "CpuPercent": 1.69,
-        "MemoryMiB": 557.6
-      },
-      {
-        "PID": 35300,
-        "Name": "msedgewebview2",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 43.2
-      },
-      {
-        "PID": 31136,
-        "Name": "msedgewebview2",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 23.2
-      },
-      {
-        "PID": 12900,
-        "Name": "msedgewebview2",
-        "CpuPercent": 1.64,
-        "MemoryMiB": 1198.6
-      },
-      {
-        "PID": 13672,
-        "Name": "conhost",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 7.7
-      },
-      {
-        "PID": 14016,
-        "Name": "msedgewebview2",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 27.8
-      },
-      {
-        "PID": 15808,
-        "Name": "msedgewebview2",
-        "CpuPercent": 0.0,
-        "MemoryMiB": 22.0
-      }
-    ],
-    "gpuUtilizationPercent": 14,
-    "gpuMemoryMiB": 8537,
-    "scope": "Desktop, matching sidecar, WebView2 and the shared D-drive Breeze service remain intentionally running.",
-    "backupRetentionApplied": true,
-    "backupsKept": 3,
-    "prunedBytes": 914135539
+    "scope": "Canonical desktop and matching sidecar remain open. Shared Breeze and Docker Speech2Motion preserved. Preview, browser automation, build processes and debug listener have exited.",
+    "cpuPercent": 3.11,
+    "gpuPercent": 14,
+    "freeMemoryGiB": 16.19
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
@@ -1605,10 +1549,8 @@
   "backupRetention": {
     "status": "passed",
     "kept": 3,
-    "removed": 1,
-    "reclaimedBytes": 914137088,
-    "report": "D:/preacherman/output/playwright/ai-moe-import-20261029/backup-retention.json",
-    "verifiedAt": "2026-10-29T17:03:02.9536591+08:00",
-    "encodingRepair": "Added a UTF-8 BOM to three retained JSON manifests for Windows PowerShell 5 compatibility; JSON content and executable hashes unchanged."
+    "remainingCandidates": 0,
+    "report": "D:/preacherman/output/playwright/speech-motion-20261103/backup-retention.json",
+    "verifiedAt": "2026-11-03T19:10:36.4382948+08:00"
   }
 }
