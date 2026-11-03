@@ -55,6 +55,37 @@ function sourcePose(name, rotations) {
 }
 function direction(a, b) { return b.getWorldPosition(new Vector3()).sub(a.getWorldPosition(new Vector3())).normalize(); }
 
+test("Cortana face uses actual jaw and eye axes, holds until audio, and never accumulates on idle", () => {
+  const f = fixture(); let clock = null;
+  const jaw = f.nodes.get("b_jaw"), original = f.original.get(jaw).clone().normalize();
+  const delta = () => original.clone().invert().multiply(jaw.quaternion.clone().normalize());
+  const names = ["JawOpen", "MouthClose", "EyeLookOutLeft", "EyeLookInRight"];
+  const values = new Float32Array(120 * names.length);
+  for (let i = 0; i < 120; i++) values.set([i < 60 ? .5 : 1, 0, .5, .5], i * names.length);
+  const frame = (dt = 1 / 60, energy = 0) => { f.player.beginFrame(); f.player.update(dt, energy); };
+  try {
+    f.player.receive({ type: "face-started", streamId: "face", interactionEpoch: 1, characterId: "cortana", frameRate: 30, blendshapeNames: names, playbackTime: () => clock });
+    f.player.receive({ type: "face-frames", streamId: "face", values });
+    f.player.receive({ type: "face-ended", streamId: "face" });
+    frame(1); assert.ok(delta().angleTo(new Quaternion()) < 1e-5);
+    clock = .3; for (let i = 0; i < 180; i++) frame(1 / 60, 1);
+    assert.ok(Math.abs(delta().angleTo(new Quaternion()) - .12) < 1e-4, "energy fallback must not double the jaw angle");
+    assert.ok(delta().x > 0, "jaw opens down around the authored positive X axis");
+    f.root.updateMatrixWorld(true);
+    const eyeDelta = name => f.nodes.get(name).getWorldQuaternion(new Quaternion()).multiply(
+      f.nodes.get(name).parent.getWorldQuaternion(new Quaternion()).multiply(f.original.get(f.nodes.get(name))).invert());
+    assert.ok(eyeDelta("b_l_eye").angleTo(eyeDelta("b_r_eye")) < 1e-4, "different local axes must produce coherent gaze");
+    f.player.receive({ type: "face-started", streamId: "other", interactionEpoch: 2, characterId: "zima", frameRate: 30, blendshapeNames: names });
+    f.player.receive({ type: "face-cancelled", streamId: "face", reason: "barge-in" });
+    clock = 3; frame(.05); assert.ok(delta().angleTo(new Quaternion()) < .1, "discard unheard frames");
+    for (let i = 0; i < 30; i++) frame();
+    assert.ok(delta().angleTo(new Quaternion()) < 1e-4);
+    for (let i = 0; i < 60; i++) frame(1 / 60, .5);
+    assert.ok(Math.abs(delta().angleTo(new Quaternion()) - .12) < 1e-4, "unavailable face stream keeps bounded energy fallback");
+  } finally { f.player.dispose(); }
+  assert.deepEqual(jaw.quaternion.toArray(), f.original.get(jaw).toArray());
+});
+
 test("Cortana arm reference follows anatomical source directions without the old 90-degree axis error", () => {
   const f = fixture();
   try {

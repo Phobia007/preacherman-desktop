@@ -14,6 +14,7 @@ const cortanaRig = characterBindings.get("cortana")!;
 characterBindings.set("cortana", {
   ...cortanaRig,
   id: "speech2motion-cortana-anatomical-v2",
+  faceRig: "cortana-jaw-eyes",
   bones: { ...cortanaRig.bones, Spine: "b_spine0", Neck: "b_neck1" },
   calibration: {
     sourceToAvatar: [0, Math.SQRT1_2, 0, Math.SQRT1_2],

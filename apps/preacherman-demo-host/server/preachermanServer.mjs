@@ -55,7 +55,7 @@ import { createLocalAgentRegistry, createCodexCliAdapter, createDeepSeekHarnessA
 import { discoverLocalAgents } from "./local-agent/localAgentDiscovery.mjs";
 import { createWorkspaceSelection } from "./local-agent/workspaceSelection.mjs";
 import { createPreachermanAgentAccessRuntime } from "./preachermanAgentAccessRuntime.mjs";
-import { binaryServiceHealth, createBinaryWebSocketProxy } from "./speechMotionProxy.mjs";
+import { createBinaryWebSocketProxy } from "./speechMotionProxy.mjs";
 import { createCortanaVoiceTelemetry } from "./cortanaVoiceTelemetry.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
@@ -1364,6 +1364,11 @@ export function createPreachermanServer(options = {}) {
       ?? "ws://127.0.0.1:18083/api/v1/streaming_audio2face/ws",
     serviceName: "Audio2Face",
   });
+  const audioFaceService = createSpeechMotionService({
+    endpoint: env.PREACHERMAN_AUDIO2FACE_HEALTH_URL ?? "http://127.0.0.1:18083/health",
+    managed: !env.PREACHERMAN_AUDIO2FACE_HEALTH_URL && !env.PREACHERMAN_AUDIO2FACE_WS_URL,
+    compose: "D:\\Codex\\audio2face\\compose.yaml", port: 18083, serviceName: "Audio2Face",
+  });
   const executionConnections = createExecutionConnections({
     file: join(dataDirectory, "execution-connections.v1.json"),
     legacyKey: async () => (await runtimeEnv()).DEEPSEEK_API_KEY || "",
@@ -1547,9 +1552,7 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/face/health") {
-        json(response, 200, await binaryServiceHealth(
-          env.PREACHERMAN_AUDIO2FACE_HEALTH_URL ?? "http://127.0.0.1:18083/health",
-        ), origin);
+        json(response, 200, await audioFaceService.status(), origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/mcp/gateway") {
@@ -2604,7 +2607,10 @@ export function createPreachermanServer(options = {}) {
               // Voice model loading must never hold up Home or the local API.
               void breezeSpeech.connect().catch(error => console.warn("Breeze startup:", error.message));
             }
-            if (options.autoStartMotion) void speechMotionService.start();
+            if (options.autoStartMotion) {
+              void speechMotionService.start();
+              void audioFaceService.start();
+            }
             resolveListen(server.address());
           } catch (error) {
             server.close(() => reject(error));
@@ -2617,6 +2623,7 @@ export function createPreachermanServer(options = {}) {
       for (const client of voiceProxy.clients) client.close();
       motionProxy.close();
       speechMotionService.close();
+      audioFaceService.close();
       faceProxy.close();
       await preachermanPluginRuntime.close();
       codexConversation.close();

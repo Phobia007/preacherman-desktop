@@ -13,11 +13,13 @@ async function fixture() {
   }).outputText, { exports: audio, Intl });
   let source = await readFile(new URL("../src/audio/SpokenConversation.ts", import.meta.url), "utf8");
   source = source.replace('new URL("./voiceCapture.worklet.js?no-inline", import.meta.url)', '"capture.js"');
-  const motions = [], stoppedMotions = [];
+  const motions = [], faces = [], stoppedMotions = [];
   const motion = {};
   runInNewContext(ts.transpileModule(await readFile(new URL("../src/motion/SpokenMotionPlayback.ts", import.meta.url), "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
-  }).outputText, { exports: motion, require: () => ({ speechMotionRuntime: { start: async options => { motions.push(options); return true; }, cancel: epoch => stoppedMotions.push(epoch) }, motionStrength: { natural: 0.55 } }), AbortController, setTimeout, clearTimeout });
+  }).outputText, { exports: motion, require: () => ({ speechMotionRuntime: { start: async options => { motions.push(options); return true; },
+    startFaceStream(options) { const record = { ...options, chunks: [] }; faces.push(record); return { firstFrame: Promise.resolve(true), append(pcm) { record.chunks.push(pcm); }, finish() { record.finished = true; } }; },
+    cancel: epoch => stoppedMotions.push(epoch) }, motionStrength: { natural: 0.55 } }), AbortController, setTimeout, clearTimeout });
   const exports = {}, states = [], contexts = [], frames = new Set();
   let character = "cortana", sequence = 0;
   class Meter { starts = 0; stops = 0; start() { this.starts++; return Promise.resolve(true); } stop() { this.stops++; } dispose() {} }
@@ -29,7 +31,7 @@ async function fixture() {
     constructor() { contexts.push(this); }
     async resume() {}
     async close() { this.state = "closed"; }
-    async decodeAudioData() { return { duration: 1 }; }
+    async decodeAudioData() { return { duration: 1, length: 24000, sampleRate: 24000, numberOfChannels: 1, getChannelData: () => new Float32Array(24000).fill(.25) }; }
     createBufferSource() {
       const source = { connect() {}, disconnect() { this.disconnected = true; }, start() { this.started = true; }, stop() { this.stopped = true; this.onended?.(); } };
       this.sources.push(source); return source;
@@ -48,7 +50,7 @@ async function fixture() {
     atob: value => Buffer.from(value, "base64").toString("binary"), performance,
   });
   const voice = new exports.SpokenConversation(() => {}, state => states.push(state), () => character, () => ({ input: "", output: "" }), () => {});
-  return { voice, audio, states, contexts, frames, motions, stoppedMotions, setCharacter(value) { character = value; } };
+  return { voice, audio, states, contexts, frames, motions, faces, stoppedMotions, setCharacter(value) { character = value; } };
 }
 
 test("sentence chunks preserve English sentences, decimal values and Chinese punctuation", async () => {
@@ -233,7 +235,7 @@ test("an aborted provider response arriving late never starts playback or change
 
 
 test("speech motion uses decoded duration and audio clock, cancels even after all frames arrived", async () => {
-  const { voice, contexts, motions, stoppedMotions } = await fixture();
+  const { voice, contexts, motions, faces, stoppedMotions } = await fixture();
   const cancel = new AbortController();
   voice.request = async () => ({ audio: "YXVkaW8=" });
   voice.motion = { characterId: "cortana", supported: true, enabled: true, style: "natural" };
@@ -243,8 +245,26 @@ test("speech motion uses decoded duration and audio clock, cancels even after al
     assert.equal(motions.length, 1); assert.equal(motions[0].duration, 1);
     assert.equal(motions[0].characterId, "cortana"); assert.equal(motions[0].text, "Hello there.");
     contexts[0].currentTime = 0.64; assert.equal(motions[0].playbackTime(), 0.64);
+    assert.equal(faces.length, 1); assert.equal(faces[0].profile, "preacherman-arkit");
+    assert.equal(faces[0].playbackTime(), .64); assert.equal(faces[0].finished, true);
+    assert.equal(faces[0].chunks.reduce((n, pcm) => n + pcm.length, 0), 16000);
+    assert.equal(faces[0].chunks[0][0], 8192);
     cancel.abort(); await assert.rejects(running);
     assert.ok(stoppedMotions.includes(motions[0].interactionEpoch));
     assert.equal(motions[0].signal.aborted, true);
+    assert.equal(faces[0].signal.aborted, true);
   } finally { cancel.abort(); await running.catch(() => {}); voice.dispose(); }
+});
+
+test("Cortana lips still follow speech when body gestures are disabled; other rigs stay unchanged", async () => {
+  for (const characterId of ["cortana", "zima"]) {
+    const { voice, contexts, faces, motions } = await fixture();
+    const cancel = new AbortController(); voice.request = async () => ({ audio: "YXVkaW8=" });
+    voice.motion = { characterId, supported: true, enabled: false, style: "natural" };
+    const running = voice.speak("Hello.", cancel.signal, characterId);
+    try {
+      await tick(); assert.equal(motions.length, 0); assert.equal(faces.length, characterId === "cortana" ? 1 : 0);
+      assert.equal(contexts[0].sources[0].started, true);
+    } finally { cancel.abort(); await running.catch(() => {}); voice.dispose(); }
+  }
 });

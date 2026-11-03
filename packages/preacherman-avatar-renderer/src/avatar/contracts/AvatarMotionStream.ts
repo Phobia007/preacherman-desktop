@@ -32,6 +32,8 @@ export type AvatarMotionStreamEvent =
       readonly interactionEpoch: number;
       readonly frameRate: number;
       readonly blendshapeNames: readonly string[];
+      readonly characterId?: string;
+      readonly playbackTime?: () => number | null;
     }
   | { readonly type: "face-frames"; readonly streamId: string; readonly values: Float32Array }
   | { readonly type: "face-ended"; readonly streamId: string }
@@ -62,4 +64,6 @@ export interface AvatarMotionRigBinding {
   readonly rootTarget?: string;
   /** Optional Speech2Motion channel name to target morph-target name. */
   readonly faceChannels?: Readonly<Record<string, string>>;
+  /** Reduced ARKit mapping for Cortana's existing jaw and eyeball bones. */
+  readonly faceRig?: "cortana-jaw-eyes";
 }

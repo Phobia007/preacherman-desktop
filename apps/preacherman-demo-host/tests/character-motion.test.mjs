@@ -48,6 +48,19 @@ test("unrelated occupied port and custom endpoints never start another deploymen
   }
 });
 
+test("Audio2Face lifecycle reuses its installed D drive deployment", async () => {
+  let ready = false; const commands = [];
+  const service = createSpeechMotionService({ managed: true, compose: "D:\\Codex\\audio2face\\compose.yaml", port: 18083, serviceName: "Audio2Face",
+    health: async () => ({ state: ready ? "ready" : "unavailable" }), exists: async () => {}, portOccupied: async () => false,
+    run: async args => { commands.push(args); if (args[0] === "compose") ready = true; } });
+  try {
+    await service.start(); await service.start();
+    assert.equal(commands.filter(args => args[0] === "compose").length, 1);
+    assert.ok(commands[1].includes("D:\\Codex\\audio2face\\compose.yaml"));
+    assert.equal((await service.status()).state, "ready");
+  } finally { service.close(); }
+});
+
 test("motion pages use semantic tokens defined for light and dark", async () => {
   const styles = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
   const css = await readFile(new URL("../src/surfaces/asset/asset-action.css", import.meta.url), "utf8");

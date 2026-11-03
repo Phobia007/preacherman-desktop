@@ -185,7 +185,7 @@ export class SpokenConversation {
     try {
       const bytes = Uint8Array.from(atob(audio), char => char.charCodeAt(0));
       const buffer = await context.decodeAudioData(bytes.buffer); signal.throwIfAborted();
-      await motion.prepare(text, buffer.duration, this.sessionId, this.motion);
+      await motion.prepare(text, buffer.duration, this.sessionId, this.motion, buffer);
       signal.throwIfAborted();
       const source = context.createBufferSource(), analyser = context.createAnalyser(); analyser.fftSize = 512;
       source.buffer = buffer; source.connect(analyser); analyser.connect(context.destination);

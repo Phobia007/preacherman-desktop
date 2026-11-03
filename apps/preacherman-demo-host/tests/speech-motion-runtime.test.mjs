@@ -6,6 +6,10 @@ import ts from "typescript";
 import restPose from "../../../asset-library/digital-humans/assets/realtime-performance/v1/rigs/KQ-default.json" with { type: "json" };
 
 async function fixture() {
+  const protocol = {};
+  runInNewContext(ts.transpileModule(await readFile(new URL("../src/motion/audioFaceProtocol.ts", import.meta.url), "utf8"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  }).outputText, { exports: protocol, TextEncoder, TextDecoder });
   const sockets = [], events = [];
   class Socket {
     constructor() { sockets.push(this); }
@@ -18,6 +22,8 @@ async function fixture() {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText, { exports, require: name => name.endsWith(".json") ? restPose : {
     localServiceWebSocketUrl: () => "ws://fixture", decodeMotionResponse: () => sockets.at(-1).response,
+    decodeFaceResponse: () => sockets.at(-1).response, decodeFaceValues: protocol.decodeFaceValues,
+    encodeFaceStart() {}, encodeFaceBody() {}, encodeFaceEnd() {},
     encodeMotionStart() {}, encodeMotionBody() {}, encodeMotionEnd() {}, speechMotionKeywords: () => [],
   }, WebSocket: Socket, crypto, window: { setTimeout, clearTimeout }, ArrayBuffer, Float32Array });
   const runtime = new exports.SpeechMotionRuntime(); runtime.subscribe(e => events.push(e));
@@ -35,6 +41,30 @@ test("cancel settles a pending first frame and stale socket data never reaches t
     runtime.cancel(1); assert.equal(events.filter(e => e.type === "cancelled").length, 1);
     runtime.cancel(2); assert.equal(await second, false);
   } finally { runtime.cancel(); }
+});
+
+test("float16 face frames keep the audio clock and character, reject invalid input and ignore late chunks", async () => {
+  const { runtime, sockets, events } = await fixture();
+  const cancel = new AbortController(); const clock = () => .4;
+  try {
+    const face = runtime.startFaceStream({ sampleRate: 16000, interactionEpoch: 8, characterId: "cortana", profile: "preacherman-arkit", playbackTime: clock, signal: cancel.signal });
+    const socket = sockets.at(-1);
+    socket.receive({ className: "Audio2FaceV1ResponseChunkStart", dtype: "float16", blendshapeNames: ["JawOpen", "MouthClose"] });
+    assert.equal(events.at(-1).playbackTime, clock); assert.equal(events.at(-1).characterId, "cortana");
+    socket.receive({ className: "Audio2FaceV1ResponseChunkBody", data: new Uint8Array([0, 56, 0, 0]) });
+    assert.equal(await face.firstFrame, true); assert.deepEqual(Array.from(events.at(-1).values), [.5, 0]);
+    socket.receive({ className: "Audio2FaceV1ResponseChunkEnd" });
+    runtime.cancel(8); const count = events.length;
+    socket.receive({ className: "Audio2FaceV1ResponseChunkBody", data: new Uint8Array([0, 60, 0, 0]) });
+    assert.equal(events.length, count); assert.equal(events.at(-1).type, "face-cancelled");
+    const invalid = runtime.startFaceStream({ sampleRate: 16000, interactionEpoch: 9, signal: cancel.signal });
+    sockets.at(-1).receive({ className: "Audio2FaceV1ResponseChunkStart", dtype: "float16", blendshapeNames: ["JawOpen"] });
+    sockets.at(-1).receive({ className: "Audio2FaceV1ResponseChunkBody", data: new Uint8Array([0, 124]) });
+    assert.equal(await invalid.firstFrame, false); assert.equal(events.at(-1).type, "face-failed");
+    cancel.abort(); const before = sockets.length;
+    assert.equal(await runtime.startFaceStream({ sampleRate: 16000, interactionEpoch: 10, signal: cancel.signal }).firstFrame, false);
+    assert.equal(sockets.length, before);
+  } finally { cancel.abort(); runtime.cancel(); }
 });
 
 test("completed network streams remain cancellable; malformed matrices are rejected", async () => {

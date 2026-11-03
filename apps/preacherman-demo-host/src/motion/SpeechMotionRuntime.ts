@@ -15,6 +15,7 @@ import {
 } from "./speechMotionProtocol";
 import {
   decodeFaceResponse,
+  decodeFaceValues,
   encodeFaceBody,
   encodeFaceEnd,
   encodeFaceStart,
@@ -35,6 +36,9 @@ interface StartAudioFaceStreamOptions {
   readonly sampleRate: number;
   readonly interactionEpoch: number;
   readonly signal: AbortSignal;
+  readonly profile?: string;
+  readonly characterId?: string;
+  readonly playbackTime?: () => number | null;
 }
 
 export interface AudioFaceInputStream {
@@ -216,6 +220,7 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
   }
 
   startFaceStream(options: StartAudioFaceStreamOptions): AudioFaceInputStream {
+    if (options.signal.aborted) return { firstFrame: Promise.resolve(false), append() {}, finish() {} };
     this.cancelFace(undefined, "superseded");
     const id = `face_${crypto.randomUUID()}`;
     const socket = new WebSocket(localServiceWebSocketUrl("/api/face/audio2face"));
@@ -234,6 +239,7 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
     };
     this.activeFace = active;
 
+    let dtype = "", channels = 0, receivedValues = 0;
     const firstFrame = new Promise<boolean>((resolve) => {
       let settled = false;
       const settle = (ready: boolean) => {
@@ -248,6 +254,7 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
         active.terminal = true;
         this.emit(active, { type: "face-failed", streamId: id, error });
         settle(false);
+        socket.close();
       };
       const timeout = window.setTimeout(() => {
         fail(new Error("Audio2Face did not produce a frame before playback."));
@@ -263,7 +270,7 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
         if (this.activeFace !== active || options.signal.aborted) return;
         const faceSampleRate = 16_000;
         active.opened = true;
-        socket.send(encodeFaceStart(id, faceSampleRate));
+        socket.send(encodeFaceStart(id, faceSampleRate, options.profile));
         for (const pcm of active.pending.splice(0)) {
           const chunk = resamplePcm([pcm], active.inputSampleRate, faceSampleRate);
           socket.send(encodeFaceBody(
@@ -274,28 +281,32 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
         if (active.ending) socket.send(encodeFaceEnd(id));
       };
       socket.onmessage = (message) => {
-        if (this.activeFace !== active || !(message.data instanceof ArrayBuffer)) return;
+        if (this.activeFace !== active || active.terminal || !(message.data instanceof ArrayBuffer)) return;
         try {
           const response = decodeFaceResponse(message.data);
           if (response.className === "Audio2FaceV1ResponseChunkStart") {
-            if (response.dtype !== "float32") {
+            if (response.dtype !== "float32" && response.dtype !== "float16") {
               throw new Error(`Unsupported Audio2Face dtype: ${response.dtype}.`);
             }
+            dtype = response.dtype; channels = response.blendshapeNames.length;
+            if (!channels || channels > 256) throw new Error("Invalid Audio2Face channel count.");
             this.emit(active, {
               type: "face-started",
               streamId: id,
               interactionEpoch: options.interactionEpoch,
               frameRate: 30,
               blendshapeNames: response.blendshapeNames,
+              characterId: options.characterId,
+              playbackTime: options.playbackTime,
             });
           } else if (response.className === "Audio2FaceV1ResponseChunkBody") {
-            if (response.data.byteLength % 4 !== 0) {
-              throw new Error("Audio2Face returned an unaligned float32 frame chunk.");
-            }
+            const values = decodeFaceValues(response.data, dtype, channels);
+            receivedValues += values.length;
+            if (receivedValues > channels * 30 * 180) throw new Error("Audio2Face stream exceeds the sentence limit.");
             this.emit(active, {
               type: "face-frames",
               streamId: id,
-              values: new Float32Array(response.data.slice().buffer),
+              values,
             });
             active.ready = true;
             settle(true);

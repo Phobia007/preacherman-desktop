@@ -277,7 +277,8 @@ export function AvatarModel({
     const animationDelta = Math.min(deltaSeconds, 0.1);
     motionPlayer?.beginFrame();
     adapter.update(animationDelta);
-    motionPlayer?.update(animationDelta);
+    motionPlayer?.update(animationDelta, jawOpen);
+    if (motionRigBinding?.faceRig === "cortana-jaw-eyes") return;
     if (!root || jawOpen <= 0 || adapter instanceof ThreeKitanaAnimationAdapter) return;
     const jaw = profile.jawBone ? root.getObjectByName(profile.jawBone) : null;
     if (jaw) jaw.rotation.x += Math.min(1, jawOpen) * 0.22;

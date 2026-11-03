@@ -16,7 +16,7 @@ class Writer {
     if (value.length === 0) return;
     this.varint((field << 3) | 2);
     this.varint(value.length);
-    this.bytes.push(...value);
+    for (const byte of value) this.bytes.push(byte);
   }
 
   finish(): Uint8Array {
@@ -40,14 +40,32 @@ function base(className: string, requestId: string): Writer {
   return writer;
 }
 
-export function encodeFaceStart(requestId: string, sampleRate: number): Uint8Array {
+export function encodeFaceStart(requestId: string, sampleRate: number, profile = "KQ-default"): Uint8Array {
   const writer = base("StreamingAudio2FaceV1ChunkStart", requestId);
   writer.int32(3, sampleRate);
   writer.int32(4, 2);
   writer.int32(5, 1);
-  writer.string(6, "KQ-default");
-  writer.int32(8, 30);
+  writer.string(6, profile);
+  writer.int32(8, 10);
   return writer.finish();
+}
+
+/** The CPU Unitalker service emits IEEE 754 float16; older servers emit float32. */
+export function decodeFaceValues(data: Uint8Array, dtype: string, channels: number): Float32Array {
+  const size = dtype === "float16" ? 2 : dtype === "float32" ? 4 : 0;
+  if (!size || !channels || !data.length || data.length % (size * channels)) throw new Error("Invalid Audio2Face frame chunk.");
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  const values = new Float32Array(data.length / size);
+  for (let i = 0; i < values.length; i++) {
+    if (size === 4) values[i] = view.getFloat32(i * 4, true);
+    else {
+      const bits = view.getUint16(i * 2, true), exponent = (bits >>> 10) & 31, mantissa = bits & 1023;
+      const magnitude = exponent === 0 ? mantissa * 2 ** -24 : exponent === 31 ? (mantissa ? NaN : Infinity) : (1 + mantissa / 1024) * 2 ** (exponent - 15);
+      values[i] = (bits & 32768 ? -1 : 1) * magnitude;
+    }
+  }
+  if (!values.every(Number.isFinite)) throw new Error("Non-finite Audio2Face values.");
+  return values;
 }
 
 export function encodeFaceBody(requestId: string, pcmBytes: Uint8Array): Uint8Array {

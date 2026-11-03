@@ -4,20 +4,20 @@ import { connect } from "node:net";
 import { setTimeout as delay } from "node:timers/promises";
 import { binaryServiceHealth } from "./speechMotionProxy.mjs";
 
-const compose = "D:\\Codex\\speech2motion\\compose.yaml";
 const docker = "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe";
-function occupied() {
+function occupied(port) {
   return new Promise(resolve => {
-    const socket = connect({ host: "127.0.0.1", port: 18084 });
+    const socket = connect({ host: "127.0.0.1", port });
     const finish = value => { socket.destroy(); resolve(value); };
     socket.setTimeout(500); socket.once("connect", () => finish(true));
     socket.once("error", () => finish(false)); socket.once("timeout", () => finish(false));
   });
 }
 export function createSpeechMotionService({ endpoint, managed = !endpoint, health = () => binaryServiceHealth(endpoint),
+  compose = "D:\\Codex\\speech2motion\\compose.yaml", port = 18084, serviceName = "Speech2Motion",
   run = (args, signal) => new Promise((resolve, reject) => execFile(docker, args,
     { windowsHide: true, timeout: 45000, maxBuffer: 256 * 1024, signal }, error => error ? reject(error) : resolve())),
-  exists = () => access(compose), portOccupied = occupied, pause = delay,
+  exists = () => access(compose), portOccupied = () => occupied(port), pause = delay,
 } = {}) {
   const lifetime = new AbortController();
   let pending = null, phase = "idle", message = "";
@@ -31,10 +31,10 @@ export function createSpeechMotionService({ endpoint, managed = !endpoint, healt
         try {
           message = "";
           if ((await health()).state === "ready") { phase = "ready"; return; }
-          if (!managed) { message = "Reconnect the configured motion service."; return; }
+          if (!managed) { message = `Reconnect the configured ${serviceName} service.`; return; }
           await exists();
           // Never replace an unrelated listener or launch the old Python deployment.
-          if (await portOccupied()) throw new Error("The motion port is busy. Check the existing service.");
+          if (await portOccupied()) throw new Error(`The ${serviceName} port is busy. Check the existing service.`);
           phase = "starting";
           try { await run(["info", "--format", "{{.ServerVersion}}"], lifetime.signal); }
           catch {
@@ -52,11 +52,11 @@ export function createSpeechMotionService({ endpoint, managed = !endpoint, healt
             if ((await health()).state === "ready") { phase = "ready"; return; }
             await pause(1000, undefined, { signal: lifetime.signal });
           }
-          throw new Error("Motion is still warming up. Reconnect in a moment.");
+          throw new Error(`${serviceName} is still warming up. Reconnect in a moment.`);
         } catch (error) {
           phase = "unavailable";
-          message = error.code === "ENOENT" ? "The local Speech2Motion installation could not be found." :
-            error.code || error.killed ? "Could not start Speech2Motion. Check Docker Desktop and reconnect." : error.message;
+          message = error.code === "ENOENT" ? `The local ${serviceName} installation could not be found.` :
+            error.code || error.killed ? `Could not start ${serviceName}. Check Docker Desktop and reconnect.` : error.message;
         }
       })().finally(() => { pending = null; });
       return pending.then(status);

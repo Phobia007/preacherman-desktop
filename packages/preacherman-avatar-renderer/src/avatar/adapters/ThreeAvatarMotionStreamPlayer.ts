@@ -13,6 +13,7 @@ import type {
   AvatarMotionStreamEvent,
   AvatarMotionStreamMetadata,
 } from "../contracts/AvatarMotionStream";
+import { CortanaFaceDriver } from "./CortanaFaceDriver";
 
 const BLENDER_TO_GLTF = new Quaternion().setFromAxisAngle(
   new Vector3(1, 0, 0),
@@ -89,11 +90,16 @@ export class ThreeAvatarMotionStreamPlayer {
   private faceFrameRate = 30;
   private faceEnded = false;
   private faceFade = 0;
+  private faceCancelled = false;
+  private faceClock?: () => number | null;
+  private readonly faceDriver?: CortanaFaceDriver;
+  private readonly morphBase = new Map<MorphTargetState, number>();
 
   constructor(
     private readonly root: Object3D,
     private readonly binding: AvatarMotionRigBinding,
   ) {
+    if (binding.faceRig === "cortana-jaw-eyes") this.faceDriver = new CortanaFaceDriver(root);
     this.sourceToAvatar = binding.calibration
       ? new Quaternion().fromArray(binding.calibration.sourceToAvatar).multiply(BLENDER_TO_GLTF)
       : BLENDER_TO_GLTF.clone();
@@ -130,16 +136,20 @@ export class ThreeAvatarMotionStreamPlayer {
 
   receive(event: AvatarMotionStreamEvent): void {
     if (event.type === "face-started") {
+      if (event.characterId && event.characterId !== this.binding.characterId) return;
       this.faceStreamId = event.streamId;
       this.faceNames = event.blendshapeNames;
       this.faceValues = new Float32Array();
       this.faceElapsed = 0;
       this.faceFrameRate = event.frameRate;
       this.faceEnded = false;
+      this.faceCancelled = false;
+      this.faceClock = event.playbackTime;
       this.faceFade = 1;
       return;
     }
-    if (event.type === "face-frames" && event.streamId === this.faceStreamId) {
+    if (event.type === "face-frames" && event.streamId === this.faceStreamId && !this.faceEnded) {
+      if (!this.faceNames.length || event.values.length % this.faceNames.length || !event.values.every(Number.isFinite)) return;
       const joined = new Float32Array(this.faceValues.length + event.values.length);
       joined.set(this.faceValues);
       joined.set(event.values, this.faceValues.length);
@@ -151,6 +161,7 @@ export class ThreeAvatarMotionStreamPlayer {
       && event.streamId === this.faceStreamId
     ) {
       this.faceEnded = true;
+      if (event.type !== "face-ended") this.faceCancelled = true;
       return;
     }
     if (event.type === "started") {
@@ -181,14 +192,17 @@ export class ThreeAvatarMotionStreamPlayer {
     }
   }
 
-  update(deltaSeconds: number): void {
+  update(deltaSeconds: number, jawEnergy = 0): void {
     const metadata = this.metadata;
     if (metadata && this.fade > 0) this.updateBody(metadata, deltaSeconds);
-    this.updateFace(deltaSeconds);
+    this.updateFace(deltaSeconds, jawEnergy);
   }
 
   /** Restore the authored pose before the idle mixer runs, including unkeyed joints. */
   beginFrame(): void {
+    this.faceDriver?.beginFrame();
+    for (const [target, value] of this.morphBase) target.influences[target.index] = value;
+    this.morphBase.clear();
     for (const [bone, rotation] of this.basePose) bone.quaternion.copy(rotation);
     this.basePose.clear();
   }
@@ -321,23 +335,42 @@ export class ThreeAvatarMotionStreamPlayer {
     );
   }
 
-  private updateFace(deltaSeconds: number): void {
-    if (!this.faceStreamId || this.faceFade <= 0 || this.faceNames.length === 0) return;
+  private updateFace(deltaSeconds: number, jawEnergy: number): void {
+    const channels = new Map<string, number>();
+    let weight = 0;
     const frameCount = Math.floor(this.faceValues.length / this.faceNames.length);
-    if (frameCount === 0) return;
-    this.faceElapsed += Math.max(0, deltaSeconds);
-    const requestedFrame = Math.floor(this.faceElapsed * this.faceFrameRate);
-    const frame = Math.min(requestedFrame, frameCount - 1);
-    if (this.faceEnded && requestedFrame >= frameCount) {
-      this.faceFade = Math.max(0, this.faceFade - deltaSeconds / 0.18);
+    if (this.faceStreamId && this.faceFade > 0 && frameCount > 0) {
+      const audioTime = this.faceClock?.();
+      if (!this.faceCancelled && (!this.faceClock || audioTime !== null)) {
+        this.faceElapsed = this.faceClock ? Math.max(0, audioTime ?? 0) : this.faceElapsed + Math.max(0, deltaSeconds);
+      }
+      const requestedFrame = Math.floor(this.faceElapsed * this.faceFrameRate);
+      const frame = Math.min(requestedFrame, frameCount - 1);
+      if (this.faceCancelled || (this.faceEnded && requestedFrame >= frameCount)) {
+        this.faceFade = Math.max(0, this.faceFade - deltaSeconds / 0.10);
+      }
+      const fadeIn = this.faceClock ? Math.min(1, this.faceElapsed / 0.06) : 1;
+      // Never animate before audio starts or freeze a stale mouth while inference catches up.
+      const fresh = this.faceClock ? Math.max(0, 1 - Math.max(0, this.faceElapsed - frameCount / this.faceFrameRate) / 0.12) : 1;
+      weight = this.faceClock && audioTime === null ? 0 : this.faceFade * fadeIn * fresh;
+      const fraction = this.faceClock ? this.faceElapsed * this.faceFrameRate - requestedFrame : 0;
+      const next = Math.min(frame + 1, frameCount - 1);
+      const values = new Float32Array(this.faceNames.length);
+      this.faceNames.forEach((name, index) => {
+        const a = this.faceValues[frame * this.faceNames.length + index];
+        const b = this.faceValues[next * this.faceNames.length + index];
+        values[index] = a + (b - a) * fraction;
+        channels.set(normalizedChannel(name), values[index]);
+      });
+      this.applyFaceValues(
+        this.faceNames,
+        values,
+        0,
+        weight,
+      );
+      if (this.faceFade === 0) this.faceStreamId = null;
     }
-    this.applyFaceValues(
-      this.faceNames,
-      this.faceValues,
-      frame * this.faceNames.length,
-      this.faceFade,
-    );
-    if (this.faceFade === 0) this.faceStreamId = null;
+    this.faceDriver?.update(channels, weight, jawEnergy, deltaSeconds);
   }
 
   private applyFaceValues(
@@ -352,6 +385,7 @@ export class ThreeAvatarMotionStreamPlayer {
       if (!targets) return;
       const value = Math.max(0, Math.min(1, values[offset + index] ?? 0));
       for (const target of targets) {
+        if (!this.morphBase.has(target)) this.morphBase.set(target, target.influences[target.index]);
         target.influences[target.index] += (value - target.influences[target.index]) * weight;
       }
     });

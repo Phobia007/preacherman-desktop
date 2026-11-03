@@ -33,7 +33,9 @@ voice conversations through a second orchestrator.
 The Docker engine's existing disk is `D:\Docker\wsl\disk\docker_data.vhdx`.
 Weights, source, logs and verification artifacts also live on D:. The container
 uses `restart: unless-stopped`; Docker startup restarts it unless explicitly
-stopped. This installation does not add a Preacherman desktop startup hook.
+stopped. Preacherman now reuses or starts this installed container when the desktop
+opens, in parallel with its existing motion/voice startup. Missing services never
+block Home. The sidecar owns startup only; Docker remains shared after app exit.
 
 The original six MMD profiles remain available. The added `preacherman-arkit`
 profile exposes 51 named UniTalker/ARKit channels at 30 fps, without MMD renaming.
@@ -48,16 +50,27 @@ Both outputs were finite and time-varying. See `deployment/verification.json`.
 
 ### Character integration boundary
 
-Installing this service does not create facial blendshapes in a model. Cortana's
-current runtime GLB has no morph targets and only `b_jaw` as a relevant facial
-bone. She cannot reproduce 51 independent face channels without authored facial
-deformation or an explicit reduced mapping. Her newly calibrated body rig and
-current audio-energy mouth movement are unchanged.
+Cortana now uses a reduced `preacherman-arkit` mapping during real spoken replies.
+Her runtime GLB has no morph targets; its usable facial joints are `b_jaw`,
+`b_l_eye` and `b_r_eye`. JawOpen/MouthClose drive bounded jaw opening and eye-look
+channels drive subtle coherent gaze, with separate axes for the two eyeballs.
+Eyebrows, eyelids and independent lip shapes are not fabricated. These need
+authored facial deformation for a later full-expression pass.
 
-Next integration should share the existing audio clock and cancellation with
-Speech2Motion, map channels per character, clamp weights, and fall back to the
-current mouth animation when the service or channel mapping is unavailable.
-Do not apply the MMD naming/offset profile blindly to Cortana.
+The actual decoded playback audio is converted to mono 16 kHz PCM, sent through
+the existing local binary proxy, and decoded from the service's float16 frames
+(float32 is also supported). AudioContext playback time owns both facial and body
+timelines. Barge-in discards unheard motion and fades the heard facial pose to
+rest. Late/stale frames and other-character streams cannot drive Cortana.
+Each frame restores the authored bones before applying one bounded offset, so
+idle, body animation and the energy fallback cannot accumulate jaw rotation.
+Body motion can be disabled independently of face motion. Missing/late face
+output falls back to audio energy without delaying speech beyond the existing
+160 ms preparation budget. No audio/transcripts are persisted by this adapter.
+
+Focused checks and a live local PCM/face/playback/interrupt preview are recorded
+in `output/cortana-face-20261103/`. Authored mesh, textures and calibrated body
+retargeting remain intact. Other characters retain their existing behavior.
 
 ## Motion Data Viewer
 
