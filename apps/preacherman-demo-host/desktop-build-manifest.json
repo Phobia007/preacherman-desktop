@@ -1,201 +1,47 @@
 {
   "schemaVersion": 1,
-  "buildId": "ai-moe-import-20261029",
+  "buildId": "breeze-autostart-20261103",
   "productVersion": "0.1.0",
-  "sourceTask": "Import ten rigged AI Moe characters into Home, Asset and Gallery using the existing character pipeline",
+  "sourceTask": "Automatically start the installed D-drive Breeze TTS service when the desktop opens",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Ten 209-joint models with embedded textures and assigned idle clips; normalized display roots; transparent Asset portraits; local Gallery covers; empty biography slots; matching service catalog. Existing selection, hold activation, per-character execution and theme behavior preserved.",
-  "sourceCommit": "2632a17da1f8309774e0130bd7cfc280c121a28c",
+  "sourceState": "Packaged sidecar starts Breeze without a browser; healthy services are reused; early Voice collection requests share startup and preserve character selections. Home stays nonblocking. Runtime and model remain in D:/AI/Breeze-TTS-2.",
+  "sourceCommit": "68caccb82014e938bbf413c70eac715ce43d40eb",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-10-29T16:52:38.5864233+08:00",
-  "deployedAt": "2026-10-29T16:54:17.6710533+08:00",
-  "verifiedAt": "2026-10-29T17:09:31.1472128+08:00",
+  "builtAt": "2026-11-03T16:23:16.7589284+08:00",
+  "deployedAt": "2026-11-03T16:23:46.3823186+08:00",
+  "verifiedAt": "2026-11-03T16:33:14.0609444+08:00",
   "sizeBytes": 872737280,
-  "sha256": "576C9E62F9D0BE791D022821806B851D667128A88D948FE712A1153CE6F2C08D",
+  "sha256": "868BDC6CB1D0E53D31AF3A2445EC1C671A013AECAB50D2EA606EF3C38BF8B83E",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-10-29T16:48:47.3828634+08:00",
-  "sidecarSizeBytes": 93243904,
-  "sidecarSha256": "1A6F94CC4BB0CDC3A991C3A18643CEBDCB00A8F66D2B80A6989E40F061455857",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ai-moe-import-before-20261029\\preacherman-demo-host.exe",
-  "backupSha256": "F6614D296B34AE81B2B2DD84EF7DCE5F208BBD4DC367785387BE8C8590AC6C3E",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ai-moe-import-before-20261029\\preacherman-service.exe",
-  "sidecarBackupSha256": "C1F3939E43F6EC675FDAE8158526BF261CBC6B3107B5EEE98D24E6A090169C13",
-  "rollbackBaselineCommit": "4b5c1834630b187d01e457eab4ecc541947c0f54",
-  "previousVerificationCommit": "5fb2694a1ff90b8db788ff609bd2eecce734824f",
+  "sidecarBuiltAt": "2026-11-03T16:19:48.4703811+08:00",
+  "sidecarSizeBytes": 93245440,
+  "sidecarSha256": "6B0F658DAD631DC52ECD38F6BEC42D71D402D979C1F53CA188FD9B4041DA2B9B",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\breeze-autostart-before-20261103\\preacherman-demo-host.exe",
+  "backupSha256": "576C9E62F9D0BE791D022821806B851D667128A88D948FE712A1153CE6F2C08D",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\breeze-autostart-before-20261103\\preacherman-service.exe",
+  "sidecarBackupSha256": "1A6F94CC4BB0CDC3A991C3A18643CEBDCB00A8F66D2B80A6989E40F061455857",
+  "rollbackBaselineCommit": "2632a17da1f8309774e0130bd7cfc280c121a28c",
+  "previousVerificationCommit": "2632a17da1f8309774e0130bd7cfc280c121a28c",
   "verification": {
-    "status": "passed-with-recorded-baseline-diagnostics",
+    "status": "passed",
     "sourceChecks": {
-      "focusedTests": 64,
+      "focusedTests": 23,
       "focusedFailures": 0,
       "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical shortcut; all ten characters selected in Asset, activated onto Home, opened in Gallery, and resolved by the real local execution-profile service in both appearances. Biographies empty. Original active companion and appearance restored.",
-    "nativeVisualVerification": "Reviewed all ten real-model screenshots in light/dark, transparent Asset card grid, Gallery model detail and core navigation screenshots. After normal shortcut relaunch, visually confirmed Home and Task in the foreground. Further optional checks stopped at user request. Models retain authored materials and assigned idle clips.",
-    "models": [
-      {
-        "appearance": "light",
-        "id": "ai-moe-deepseek",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-claude",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-gpt",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-gemini",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-glm",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-grok",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-qwen",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-kimi",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-minimax",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "light",
-        "id": "ai-moe-doubao",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-deepseek",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-claude",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-gpt",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-gemini",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-glm",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-grok",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-qwen",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-kimi",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-minimax",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      },
-      {
-        "appearance": "dark",
-        "id": "ai-moe-doubao",
-        "asset": true,
-        "home": true,
-        "execution": true,
-        "gallery": true
-      }
-    ],
+    "nativeFlow": "Cold launch through canonical shortcut with Breeze initially stopped. Breeze starts without a web page; Cortana voices appear automatically and a real voice preview succeeds. Core navigation verified in both appearances. Original preferences restored.",
+    "nativeVisualVerification": "Reviewed native Home, Voice and core navigation in light/dark. No new UI layout or material changes.",
+    "voiceService": {
+      "status": 200,
+      "breezeStatus": "connected",
+      "voiceCount": 1,
+      "selectedVoiceId": "breeze:cortana",
+      "waitMs": 6
+    },
+    "previewAudioBytes": 486482,
     "routes": [
       {
         "appearance": "light",
@@ -204,8 +50,9 @@
       },
       {
         "appearance": "light",
-        "name": "Asset",
-        "ready": true
+        "name": "Asset / Appearance / Voice",
+        "ready": true,
+        "count": 1
       },
       {
         "appearance": "light",
@@ -225,11 +72,6 @@
       {
         "appearance": "light",
         "name": "Market",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Extension",
         "ready": true
       },
       {
@@ -244,8 +86,9 @@
       },
       {
         "appearance": "dark",
-        "name": "Asset",
-        "ready": true
+        "name": "Asset / Appearance / Voice",
+        "ready": true,
+        "count": 1
       },
       {
         "appearance": "dark",
@@ -269,21 +112,14 @@
       },
       {
         "appearance": "dark",
-        "name": "Extension",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
         "name": "Account",
         "ready": true
       }
     ],
-    "console": [
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
-    ],
+    "console": [],
     "newErrors": [],
     "preferencesRestored": true,
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\ai-moe-import-20261029",
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\breeze-autostart-20261103",
     "temporaryProcesses": []
   },
   "releaseAttempts": [
@@ -1611,7 +1447,7 @@
       "verifiedAt": "2026-10-26T18:49:47.359039+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\ai-moe-import-before-20261029\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\breeze-autostart-before-20261103\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1627,22 +1463,99 @@
   ],
   "cleanup": {
     "status": "passed",
+    "checkedAt": "2026-11-03T16:32:36.3807622+08:00",
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\breeze-autostart-20261103",
+    "normalShortcutHomeVerified": true,
+    "breezeReused": true,
+    "breezePid": 10152,
     "temporaryProcesses": [],
-    "verificationDirectory": "D:/preacherman/output/playwright/ai-moe-import-20261029",
-    "nativePid": 10700,
-    "sidecarPid": 39372,
-    "normalShortcutRelaunch": true,
-    "runtimeEvidence": "D:/preacherman/output/playwright/ai-moe-import-20261029/final-runtime.json",
-    "backupRetention": {
-      "status": "passed",
-      "kept": 3,
-      "removed": 1,
-      "reclaimedBytes": 914137088,
-      "report": "D:/preacherman/output/playwright/ai-moe-import-20261029/backup-retention.json",
-      "verifiedAt": "2026-10-29T17:03:02.9536591+08:00",
-      "encodingRepair": "Added a UTF-8 BOM to three retained JSON manifests for Windows PowerShell 5 compatibility; JSON content and executable hashes unchanged."
-    },
-    "scope": "Build and native verifier exited. Only the canonical desktop and matching local service remain from this task. Further optional visual checks stopped at user request."
+    "debugPortClosed": true,
+    "cpuSamples": [
+      {
+        "PID": 10152,
+        "Name": "breeze-server",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 241.5
+      },
+      {
+        "PID": 7892,
+        "Name": "preacherman-demo-host",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 91.6
+      },
+      {
+        "PID": 20092,
+        "Name": "preacherman-service",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 78.9
+      },
+      {
+        "PID": 15744,
+        "Name": "conhost",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 10.2
+      },
+      {
+        "PID": 8672,
+        "Name": "msedgewebview2",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 138.6
+      },
+      {
+        "PID": 34872,
+        "Name": "msedgewebview2",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 16.1
+      },
+      {
+        "PID": 14184,
+        "Name": "msedgewebview2",
+        "CpuPercent": 1.69,
+        "MemoryMiB": 557.6
+      },
+      {
+        "PID": 35300,
+        "Name": "msedgewebview2",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 43.2
+      },
+      {
+        "PID": 31136,
+        "Name": "msedgewebview2",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 23.2
+      },
+      {
+        "PID": 12900,
+        "Name": "msedgewebview2",
+        "CpuPercent": 1.64,
+        "MemoryMiB": 1198.6
+      },
+      {
+        "PID": 13672,
+        "Name": "conhost",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 7.7
+      },
+      {
+        "PID": 14016,
+        "Name": "msedgewebview2",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 27.8
+      },
+      {
+        "PID": 15808,
+        "Name": "msedgewebview2",
+        "CpuPercent": 0.0,
+        "MemoryMiB": 22.0
+      }
+    ],
+    "gpuUtilizationPercent": 14,
+    "gpuMemoryMiB": 8537,
+    "scope": "Desktop, matching sidecar, WebView2 and the shared D-drive Breeze service remain intentionally running.",
+    "backupRetentionApplied": true,
+    "backupsKept": 3,
+    "prunedBytes": 914135539
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
