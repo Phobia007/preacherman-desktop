@@ -1,0 +1,15 @@
+.asset-action__mark { position: absolute; inset: 24px 14px 44px; transform: skewX(14deg); display: grid; place-items: center; color: var(--demo-theme-market-text); }
+.asset-action__mark svg { height: 100%; max-height: 100px; width: 100%; }
+.asset-action__notes { margin: 26px 0 0 clamp(85px, 7vw, 135px); max-width: 280px; font-size: 13px; line-height: 1.8; color: var(--demo-theme-market-muted); }
+.asset-collection .asset-action__link { padding: 6px 0; border: 0; background: transparent; color: var(--demo-theme-market-text); }
+.asset-collection .asset-action__link:focus-visible { outline: 1px solid var(--demo-theme-market-focus); outline-offset: 4px; }
+.asset-collection .asset-action__link:hover { color: var(--demo-theme-market-focus); }
+.asset-action__error { color: var(--demo-theme-market-error); }
+.asset-action .asset-appearance__tile:disabled { opacity: .45; cursor: default; }
+.asset-collection .asset-action .asset-appearance__tile { height: clamp(120px, 15vh, 160px); }
+.asset-action .asset-appearance__selection { position: relative; inset: auto; width: min(330px, 34%); margin: 24px 0 0 clamp(85px, 7vw, 135px); pointer-events: auto; padding-bottom: 80px; }
+.asset-action .asset-appearance__caption { position: static; }
+.asset-action .asset-appearance__caption h2 { font-size: 32px; overflow-wrap: normal; }
+.asset-action .asset-appearance__caption p { margin-top: 12px; }
+.asset-action .asset-appearance__caption .asset-detail__rule { display: none; }
+.asset-action .asset-appearance__apply { position: static; margin-top: 20px; padding: 0; }

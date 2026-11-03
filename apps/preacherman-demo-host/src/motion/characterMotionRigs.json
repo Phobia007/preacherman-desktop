@@ -1,0 +1,666 @@
+{
+  "aerith-ff7re": {
+    "bones": {
+      "Spine": "C_Spine_b",
+      "Chest": "C_Spine_d",
+      "Neck": "C_Neck_a",
+      "Head": "C_Head_a",
+      "Left_shoulder": "L_Shoulder_a",
+      "Left_arm": "L_UpperArm_a",
+      "Left_elbow": "L_Forearm_a",
+      "Left_wrist": "L_Hand_a",
+      "Right_shoulder": "R_Shoulder_a",
+      "Right_arm": "R_UpperArm_a",
+      "Right_elbow": "R_Forearm_a",
+      "Right_wrist": "R_Hand_a"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-claude": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-deepseek": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-doubao": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-gemini": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-glm": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-gpt": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-grok": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-kimi": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-minimax": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "ai-moe-qwen": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "natural"
+  },
+  "apex-legend-pathfinder": {
+    "bones": {
+      "Spine": "def_c_spineA",
+      "Chest": "def_c_spineC",
+      "Neck": "def_c_neckA",
+      "Head": "def_c_head",
+      "Left_shoulder": "def_l_clav",
+      "Left_arm": "def_l_shoulder",
+      "Left_elbow": "def_l_forearm",
+      "Left_wrist": "def_l_wrist",
+      "Right_shoulder": "def_r_clav",
+      "Right_arm": "def_r_shoulder",
+      "Right_elbow": "def_r_forearm",
+      "Right_wrist": "def_r_wrist"
+    },
+    "defaultStyle": "subtle"
+  },
+  "black-cat-coastal-cat": {
+    "bones": {
+      "Spine": "spine_02",
+      "Chest": "spine_05",
+      "Neck": "neck_01",
+      "Head": "head",
+      "Left_shoulder": "clavicle_l",
+      "Left_arm": "upperarm_l",
+      "Left_elbow": "lowerarm_l",
+      "Left_wrist": "hand_l",
+      "Right_shoulder": "clavicle_r",
+      "Right_arm": "upperarm_r",
+      "Right_elbow": "lowerarm_r",
+      "Right_wrist": "hand_r"
+    },
+    "defaultStyle": "natural"
+  },
+  "black-widow-aquatic-assassin": {
+    "bones": {
+      "Spine": "spine_02",
+      "Chest": "spine_05",
+      "Neck": "neck_01",
+      "Head": "head",
+      "Left_shoulder": "clavicle_l",
+      "Left_arm": "upperarm_l",
+      "Left_elbow": "lowerarm_l",
+      "Left_wrist": "hand_l",
+      "Right_shoulder": "clavicle_r",
+      "Right_arm": "upperarm_r",
+      "Right_elbow": "lowerarm_r",
+      "Right_wrist": "hand_r"
+    },
+    "defaultStyle": "natural"
+  },
+  "clove-t-pose": {
+    "bones": {
+      "Spine": "Spine2",
+      "Chest": "Spine4",
+      "Neck": "Neck",
+      "Head": "Head",
+      "Left_shoulder": "L_Clavicle",
+      "Left_arm": "L_Shoulder",
+      "Left_elbow": "L_Elbow",
+      "Left_wrist": "L_Hand",
+      "Right_shoulder": "R_Clavicle",
+      "Right_arm": "R_Shoulder",
+      "Right_elbow": "R_Elbow",
+      "Right_wrist": "R_Hand"
+    },
+    "defaultStyle": "natural"
+  },
+  "cortana": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "natural"
+  },
+  "dark-knight": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "subtle"
+  },
+  "halloween-the-game-michael-myers-samhain": {
+    "bones": {
+      "Spine": "spine_02",
+      "Chest": "spine_05",
+      "Neck": "neck_01",
+      "Head": "head",
+      "Left_shoulder": "clavicle_l",
+      "Left_arm": "upperarm_l",
+      "Left_elbow": "lowerarm_l",
+      "Left_wrist": "hand_l",
+      "Right_shoulder": "clavicle_r",
+      "Right_arm": "upperarm_r",
+      "Right_elbow": "lowerarm_r",
+      "Right_wrist": "hand_r"
+    },
+    "defaultStyle": "subtle"
+  },
+  "halo-mk-v-model": {
+    "bones": {
+      "Spine": "spine.001",
+      "Chest": "spine.003",
+      "Neck": "spine.004",
+      "Head": "spine.006",
+      "Left_shoulder": "shoulder.L",
+      "Left_arm": "upper_arm.L",
+      "Left_elbow": "forearm.L",
+      "Left_wrist": "hand.L",
+      "Right_shoulder": "shoulder.R",
+      "Right_arm": "upper_arm.R",
+      "Right_elbow": "forearm.R",
+      "Right_wrist": "hand.R"
+    },
+    "defaultStyle": "subtle"
+  },
+  "iron-man-mark-1": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "subtle"
+  },
+  "iron-man-mark-85": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "subtle"
+  },
+  "jubilee-midnight-mutant": {
+    "bones": {
+      "Spine": "spine_02",
+      "Chest": "spine_05",
+      "Neck": "neck_01",
+      "Head": "head",
+      "Left_shoulder": "clavicle_l",
+      "Left_arm": "upperarm_l",
+      "Left_elbow": "lowerarm_l",
+      "Left_wrist": "hand_l",
+      "Right_shoulder": "clavicle_r",
+      "Right_arm": "upperarm_r",
+      "Right_elbow": "lowerarm_r",
+      "Right_wrist": "hand_r"
+    },
+    "defaultStyle": "natural"
+  },
+  "kitana-mk11-in-mk9-suit": {
+    "bones": {
+      "Spine": "spine 2",
+      "Chest": "spine 4",
+      "Neck": "head neck lower",
+      "Head": "head neck upper",
+      "Left_shoulder": "arm left shoulder 1",
+      "Left_arm": "arm left shoulder 2",
+      "Left_elbow": "arm left elbow",
+      "Left_wrist": "arm left wrist",
+      "Right_shoulder": "arm right shoulder 1",
+      "Right_arm": "arm right shoulder 2",
+      "Right_elbow": "arm right elbow",
+      "Right_wrist": "arm right wrist"
+    },
+    "defaultStyle": "natural"
+  },
+  "magik-soul-surfer": {
+    "bones": {
+      "Spine": "spine_02",
+      "Chest": "spine_05",
+      "Neck": "neck_01",
+      "Head": "head",
+      "Left_shoulder": "clavicle_l",
+      "Left_arm": "upperarm_l",
+      "Left_elbow": "lowerarm_l",
+      "Left_wrist": "hand_l",
+      "Right_shoulder": "clavicle_r",
+      "Right_arm": "upperarm_r",
+      "Right_elbow": "lowerarm_r",
+      "Right_wrist": "hand_r"
+    },
+    "defaultStyle": "natural"
+  },
+  "miles-variant-1": {
+    "bones": {
+      "Spine": "spine_01.x",
+      "Chest": "spine_03.x",
+      "Neck": "neck.x",
+      "Head": "head.x",
+      "Left_shoulder": "shoulder.l",
+      "Left_arm": "arm_stretch.l",
+      "Left_elbow": "forearm_stretch.l",
+      "Left_wrist": "hand.l",
+      "Right_shoulder": "shoulder.r",
+      "Right_arm": "arm_stretch.r",
+      "Right_elbow": "forearm_stretch.r",
+      "Right_wrist": "hand.r"
+    },
+    "defaultStyle": "natural"
+  },
+  "miles-variant-2": {
+    "bones": {
+      "Spine": "spine_01.x",
+      "Chest": "spine_03.x",
+      "Neck": "neck.x",
+      "Head": "head.x",
+      "Left_shoulder": "shoulder.l",
+      "Left_arm": "arm_stretch.l",
+      "Left_elbow": "forearm_stretch.l",
+      "Left_wrist": "hand.l",
+      "Right_shoulder": "shoulder.r",
+      "Right_arm": "arm_stretch.r",
+      "Right_elbow": "forearm_stretch.r",
+      "Right_wrist": "hand.r"
+    },
+    "defaultStyle": "natural"
+  },
+  "modural-robot-mecha-chimera-dyan-high-poly-mesh": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "subtle"
+  },
+  "nier-automata-2b": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "natural"
+  },
+  "nier-print-2b": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head"
+    },
+    "defaultStyle": "subtle"
+  },
+  "nier-print-9s": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head"
+    },
+    "defaultStyle": "subtle"
+  },
+  "proxima": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "natural"
+  },
+  "punk-magik": {
+    "bones": {
+      "Spine": "spine_02",
+      "Chest": "spine_05",
+      "Neck": "neck_01",
+      "Head": "head",
+      "Left_shoulder": "clavicle_l",
+      "Left_arm": "upperarm_l",
+      "Left_elbow": "lowerarm_l",
+      "Left_wrist": "hand_l",
+      "Right_shoulder": "clavicle_r",
+      "Right_arm": "upperarm_r",
+      "Right_elbow": "lowerarm_r",
+      "Right_wrist": "hand_r"
+    },
+    "defaultStyle": "natural"
+  },
+  "sanhua-wuthering-waves": {
+    "bones": {
+      "Spine": "spine_02",
+      "Chest": "spine_05",
+      "Neck": "neck_01",
+      "Head": "head",
+      "Left_shoulder": "clavicle_l",
+      "Left_arm": "upperarm_l",
+      "Left_elbow": "lowerarm_l",
+      "Left_wrist": "hand_l",
+      "Right_shoulder": "clavicle_r",
+      "Right_arm": "upperarm_r",
+      "Right_elbow": "lowerarm_r",
+      "Right_wrist": "hand_r"
+    },
+    "defaultStyle": "natural"
+  },
+  "scifi-girl-v01": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "natural"
+  },
+  "spartan-armour-mkv-halo-reach": {
+    "bones": {
+      "Spine": "mixamorig:Spine",
+      "Chest": "mixamorig:Spine2",
+      "Neck": "mixamorig:Neck",
+      "Head": "mixamorig:Head",
+      "Left_shoulder": "mixamorig:LeftShoulder",
+      "Left_arm": "mixamorig:LeftArm",
+      "Left_elbow": "mixamorig:LeftForeArm",
+      "Left_wrist": "mixamorig:LeftHand",
+      "Right_shoulder": "mixamorig:RightShoulder",
+      "Right_arm": "mixamorig:RightArm",
+      "Right_elbow": "mixamorig:RightForeArm",
+      "Right_wrist": "mixamorig:RightHand"
+    },
+    "defaultStyle": "subtle"
+  },
+  "stellar-blade-lily-stargazer-coat": {
+    "bones": {
+      "Spine": "Bip001-Spine",
+      "Chest": "Bip001-Spine2",
+      "Neck": "Bip001-Neck",
+      "Head": "Bip001-Head",
+      "Left_shoulder": "Bip001-L-Clavicle",
+      "Left_arm": "Bip001-L-UpperArm",
+      "Left_elbow": "Bip001-L-Forearm",
+      "Left_wrist": "Bip001-L-Hand",
+      "Right_shoulder": "Bip001-R-Clavicle",
+      "Right_arm": "Bip001-R-UpperArm",
+      "Right_elbow": "Bip001-R-Forearm",
+      "Right_wrist": "Bip001-R-Hand"
+    },
+    "defaultStyle": "natural"
+  },
+  "the-twins-atomic-heart": {
+    "bones": {
+      "Spine": "b_spine1",
+      "Chest": "b_spine3",
+      "Neck": "b_neck0",
+      "Head": "b_head",
+      "Left_shoulder": "b_l_clav",
+      "Left_arm": "b_l_upperarm",
+      "Left_elbow": "b_l_forearm",
+      "Left_wrist": "b_l_hand",
+      "Right_shoulder": "b_r_clav",
+      "Right_arm": "b_r_upperarm",
+      "Right_elbow": "b_r_forearm",
+      "Right_wrist": "b_r_hand"
+    },
+    "defaultStyle": "natural"
+  },
+  "tifa-ff7re": {
+    "bones": {
+      "Spine": "DEF-Spine_02",
+      "Chest": "DEF-Spine_04",
+      "Neck": "DEF-Neck_01",
+      "Head": "DEF-Head",
+      "Left_shoulder": "DEF-Shoulder.L",
+      "Left_arm": "DEF-Upperarm.L",
+      "Left_elbow": "DEF-Forearm.L",
+      "Left_wrist": "DEF-Hand.L",
+      "Right_shoulder": "DEF-Shoulder.R",
+      "Right_arm": "DEF-Upperarm.R",
+      "Right_elbow": "DEF-Forearm.R",
+      "Right_wrist": "DEF-Hand.R"
+    },
+    "defaultStyle": "natural"
+  },
+  "yuffie-ff7re": {
+    "bones": {
+      "Spine": "spine 2",
+      "Chest": "spine 4",
+      "Neck": "head neck lower",
+      "Head": "head neck upper",
+      "Left_shoulder": "arm left shoulder 1",
+      "Left_arm": "arm left shoulder 2",
+      "Left_elbow": "arm left elbow",
+      "Left_wrist": "arm left wrist",
+      "Right_shoulder": "arm right shoulder 1",
+      "Right_arm": "arm right shoulder 2",
+      "Right_elbow": "arm right elbow",
+      "Right_wrist": "arm right wrist"
+    },
+    "defaultStyle": "natural"
+  },
+  "zima": {
+    "bones": {
+      "Spine": "spine_01.x",
+      "Chest": "spine_03.x",
+      "Neck": "neck.x",
+      "Head": "head.x",
+      "Left_shoulder": "shoulder.l",
+      "Left_arm": "arm_stretch.l",
+      "Left_elbow": "forearm_stretch.l",
+      "Left_wrist": "hand.l",
+      "Right_shoulder": "shoulder.r",
+      "Right_arm": "arm_stretch.r",
+      "Right_elbow": "forearm_stretch.r",
+      "Right_wrist": "hand.r"
+    },
+    "defaultStyle": "natural"
+  }
+}

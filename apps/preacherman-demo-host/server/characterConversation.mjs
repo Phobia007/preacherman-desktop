@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile, rename, unlink } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { randomUUID } from "node:crypto";
 import characters from "../src/surfaces/asset/characters.json" with { type: "json" };
+import motionRigs from "../src/motion/characterMotionRigs.json" with { type: "json" };
 
 const fail = (message, statusCode = 400) => Object.assign(new Error(message), { statusCode });
 
@@ -42,7 +43,11 @@ export function createCharacterConversation({ file, connections, codex, listAgen
   }
   async function settings(id) {
     const saved = await profile(id); const shared = await connections.status();
-    return { ...shared, active: saved.execution, local: saved.execution?.mode === "cli" ? saved.execution : null, characterId: id };
+    return { ...shared, active: saved.execution, local: saved.execution?.mode === "cli" ? saved.execution : null, characterId: id, motion: motionConfig(id, saved) };
+  }
+  function motionConfig(id, saved) {
+    const rig = motionRigs[id];
+    return { characterId: id, supported: Boolean(rig), enabled: Boolean(rig) && (saved.motion?.enabled ?? true), style: saved.motion?.style ?? rig?.defaultStyle ?? "subtle" };
   }
   async function select(id, execution) {
     await profile(id);
@@ -100,6 +105,15 @@ export function createCharacterConversation({ file, connections, codex, listAgen
   };
   return {
     profile, settings, voiceSettings,
+    async motionSettings(id) { return motionConfig(id, await profile(id)); },
+    async saveMotion(id, input) {
+      identity(id);
+      if (!input || typeof input.enabled !== "boolean" || !["subtle", "natural", "expressive"].includes(input.style)) throw fail("Choose a valid motion style.");
+      if (input.enabled && !motionRigs[id]) throw fail("Speech motion is not available for this character.");
+      await profile(id);
+      const saved = await update(state => { state[id].motion = { enabled: input.enabled, style: input.style }; return structuredClone(state[id]); });
+      return motionConfig(id, saved);
+    },
     async connectBreeze(id, signal) {
       await profile(id); await breeze.connect(signal);
       return voiceSettings(id, signal);

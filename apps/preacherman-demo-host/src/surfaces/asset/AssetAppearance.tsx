@@ -1,3 +1,4 @@
+import { AssetAction } from "./AssetAction";
 import type { ModelId } from "../../preferences";
 import { AssetActivateButton } from "./AssetActivateButton";
 import characters from "./characters.json";
@@ -12,17 +13,18 @@ const emptyCopy = {
   Backgrounds: "No character backgrounds have been added yet.",
 };
 
-export function AssetAppearance({ character, category, activeModelId, onApply, enabled, onOpenVoiceService }: {
+export function AssetAppearance({ character, category, activeModelId, onApply, enabled, onOpenVoiceService, onOpenMotionService }: {
   character: Character; category: AppearanceCategory; activeModelId: ModelId | null;
   onApply: (modelId: ModelId) => void; enabled: boolean;
-  onOpenVoiceService: () => void;
+  onOpenVoiceService: () => void; onOpenMotionService: () => void;
 }) {
+  if (category === "Action") return <AssetAction character={character} enabled={enabled} onOpenService={onOpenMotionService} />;
   if (category === "Voice") return <AssetVoice character={character} enabled={enabled} onOpenService={onOpenVoiceService} />;
   if (category === "Accessories") return <AssetAccessories character={character} />;
   // Only advertise the shipped costume and its authored default action. New packs can
   // extend this catalogue later without pretending a recolor is a different costume.
-  const available = category === "Costume" || category === "Action";
-  const title = category === "Action" ? "Signature idle" : character.designation || "Original";
+  const available = category === "Costume";
+  const title = character.designation || "Original";
   const applied = activeModelId === character.id;
   return <div className="asset-appearance" data-category={category}>
     <div className="asset-appearance__collection">
@@ -32,7 +34,7 @@ export function AssetAppearance({ character, category, activeModelId, onApply, e
           <button type="button" className="asset-appearance__tile" aria-label={title} aria-pressed="true">
             <span className="asset-appearance__art"><img src={character.cardImage} alt="" /></span>
             <span className="asset-appearance__selected" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7" /></svg></span>
-            <span className="asset-appearance__tile-label">{category === "Action" ? "Idle" : "Original"}</span>
+            <span className="asset-appearance__tile-label">Original</span>
           </button>
           {Array.from({ length: 5 }, (_, index) => <span key={index} className="asset-appearance__slot" aria-hidden="true" />)}
         </div>

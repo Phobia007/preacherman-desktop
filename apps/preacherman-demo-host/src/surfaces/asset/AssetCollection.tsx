@@ -1,3 +1,5 @@
+import { speechMotionRuntime } from "../../motion/SpeechMotionRuntime";
+import { characterSpeechMotionBinding } from "../../motion/avatarRigBindings";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { InteractiveAvatarViewport, avatarDefaultActionId, isAvatarModelId } from "@preacherman/avatar-renderer";
 import { localAvatarAssetBaseUrl } from "../../avatar/avatarAssets";
@@ -98,6 +100,7 @@ function CharacterModel({ modelId, appearance, renderActive }: { modelId: ModelI
       else setZoom(current => zoomCompanion(current, event.key === "ArrowUp" ? -140 : 140));
     }}>
     <InteractiveAvatarViewport key={attempt} modelId={modelId} assetBaseUrl={localAvatarAssetBaseUrl(modelId)}
+      motionSource={speechMotionRuntime} motionRigBinding={characterSpeechMotionBinding(modelId)}
       actionId={avatarDefaultActionId(modelId)} quality="high" pose="standby" environment="cinematic" isolateCompanion
       appearance={appearance} platformStyle="ring" cameraFraming={zoom === 1 ? "portrait" : "full-body"} cameraZoom={zoom} renderActive={renderActive}
       onReady={ready} onError={failed} sceneContent={<CharacterCapture />} />
@@ -121,6 +124,8 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
   const character = characters.find(character => character.id === current)!;
   const choose = (id: string) => { setCurrent(id); setCategory("Costume"); setRequestedSetting(null); };
   const openVoice = () => { setRequestedSetting(null); setCategory("Voice"); section.select("Appearance"); };
+  const openAction = () => { setRequestedSetting(null); setCategory("Action"); section.select("Appearance"); };
+  const openMotionService = () => { setRequestedSetting("Motion Service"); section.select("Settings"); };
   const openVoiceService = () => { setRequestedSetting("Voice Service"); section.select("Settings"); };
   const modelVisible = sectionHasModel(section.requested);
   useLayoutEffect(() => { back.current?.focus({ preventScroll: true }); }, []);
@@ -178,9 +183,9 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
                 </div>}
               </div>}
               {section.displayed === "Appearance" && <div id="asset-appearance-panel" role="tabpanel" aria-labelledby={`asset-category-${category}`}>
-                <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} onOpenVoiceService={openVoiceService} />
+                <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} onOpenVoiceService={openVoiceService} onOpenMotionService={openMotionService} />
               </div>}
-              {section.displayed === "Settings" && <AssetSettings key={character.id} characterId={character.id} onFocusChange={setSettingsFocused} requestedItem={requestedSetting} onOpenVoice={openVoice} />}
+              {section.displayed === "Settings" && <AssetSettings key={character.id} characterId={character.id} onFocusChange={setSettingsFocused} requestedItem={requestedSetting} onOpenVoice={openVoice} onOpenAction={openAction} />}
               {section.displayed === "Skills" && <AssetSkills character={character} />}
               {section.displayed === "Info Map" && <AssetInfoMap character={character} />}
             </div>

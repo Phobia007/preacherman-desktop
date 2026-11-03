@@ -11,6 +11,7 @@ import {
   encodeMotionBody,
   encodeMotionEnd,
   encodeMotionStart,
+  speechMotionKeywords,
 } from "./speechMotionProtocol";
 import {
   decodeFaceResponse,
@@ -24,6 +25,10 @@ interface StartSpeechMotionOptions {
   readonly duration: number;
   readonly interactionEpoch: number;
   readonly signal: AbortSignal;
+  readonly characterId?: string;
+  readonly sessionId?: string;
+  readonly strength?: number;
+  readonly playbackTime?: () => number | null;
 }
 
 interface StartAudioFaceStreamOptions {
@@ -45,6 +50,7 @@ interface ActiveStream {
   readonly events: AvatarMotionStreamEvent[];
   ready: boolean;
   terminal: boolean;
+  settle?: (ready: boolean) => void;
 }
 
 interface ActiveFaceStream extends ActiveStream {
@@ -94,6 +100,7 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
   }
 
   start(options: StartSpeechMotionOptions): Promise<boolean> {
+    if (options.signal.aborted) return Promise.resolve(false);
     this.cancel(undefined, "superseded");
     const id = `motion_${crypto.randomUUID()}`;
     const socket = new WebSocket(localServiceWebSocketUrl("/api/motion/speech2motion"));
@@ -116,6 +123,9 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
         window.clearTimeout(timeout);
         resolve(ready);
       };
+      active.settle = settle;
+      let stride = 0;
+      let receivedValues = 0;
       const fail = (error: Error) => {
         if (this.active !== active || active.terminal) return;
         active.terminal = true;
@@ -134,8 +144,11 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
 
       socket.onopen = () => {
         if (this.active !== active || options.signal.aborted) return;
-        socket.send(encodeMotionStart(id));
-        socket.send(encodeMotionBody(id, options.text, options.duration));
+        socket.send(encodeMotionStart(id, options.characterId ? {
+          userId: `${options.characterId}:${options.sessionId ?? id}`,
+          synchronized: Boolean(options.playbackTime),
+        } : undefined));
+        socket.send(encodeMotionBody(id, options.text, options.duration, options.characterId ? speechMotionKeywords(options.text) : []));
         socket.send(encodeMotionEnd(id));
       };
       socket.onmessage = (message) => {
@@ -144,7 +157,7 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
           const response = decodeMotionResponse(message.data);
           // The official V3 service omits request_id on body chunks. Start/end
           // remain correlated and each browser socket carries one request only.
-          if (response.requestId && response.requestId !== id) return;
+          if (active.terminal || (response.requestId && response.requestId !== id)) return;
           if (response.className === "Speech2MotionV3ResponseChunkStart") {
             if (response.dtype !== "float32") {
               throw new Error(`Unsupported Speech2Motion dtype: ${response.dtype}.`);
@@ -152,6 +165,8 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
             if (response.restPoseId !== restPoseJson.id) {
               throw new Error(`Unsupported Speech2Motion rest pose: ${response.restPoseId}.`);
             }
+            if (!response.jointNames.length || response.jointNames.length > 128 || response.blendshapeNames.length > 256) throw new Error("Invalid motion skeleton.");
+            stride = response.jointNames.length * 9 + 6 + response.blendshapeNames.length;
             const metadata: AvatarMotionStreamMetadata = {
               streamId: id,
               interactionEpoch: options.interactionEpoch,
@@ -161,17 +176,23 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
               restPoseId: response.restPoseId,
               restJoints,
               timelineStartFrame: response.timelineStartFrame,
+              characterId: options.characterId,
+              strength: options.strength,
+              playbackTime: options.playbackTime,
             };
             this.emit(active, { type: "started", metadata });
           } else if (response.className === "Speech2MotionV3ResponseChunkBody") {
-            if (response.data.byteLength % 4 !== 0) {
+            if (!stride || !response.data.byteLength || response.data.byteLength % (4 * stride) !== 0) {
               throw new Error("Speech2Motion returned an unaligned float32 frame chunk.");
             }
             const copied = response.data.slice().buffer;
+            const values = new Float32Array(copied);
+            receivedValues += values.length;
+            if (receivedValues > stride * 30 * 180 || !values.every(Number.isFinite)) throw new Error("Invalid motion frames.");
             this.emit(active, {
               type: "frames",
               streamId: id,
-              values: new Float32Array(copied),
+              values,
             });
             active.ready = true;
             settle(true);
@@ -221,6 +242,7 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
         window.clearTimeout(timeout);
         resolve(ready);
       };
+      active.settle = settle;
       const fail = (error: Error) => {
         if (this.activeFace !== active || active.terminal) return;
         active.terminal = true;
@@ -321,10 +343,10 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
   cancel(interactionEpoch?: number, reason = "cancelled"): void {
     const active = this.active;
     if (active && (interactionEpoch === undefined || interactionEpoch === active.interactionEpoch)) {
-      if (!active.terminal) {
-        active.terminal = true;
-        this.emit(active, { type: "cancelled", streamId: active.id, reason });
-      }
+      // Network completion only means all frames arrived, not that playback ended.
+      active.terminal = true;
+      this.emit(active, { type: "cancelled", streamId: active.id, reason });
+      active.settle?.(false);
       active.socket.close();
       this.active = null;
     }
@@ -334,10 +356,9 @@ export class SpeechMotionRuntime implements AvatarMotionStreamSource {
   private cancelFace(interactionEpoch?: number, reason = "cancelled"): void {
     const active = this.activeFace;
     if (!active || (interactionEpoch !== undefined && interactionEpoch !== active.interactionEpoch)) return;
-    if (!active.terminal) {
-      active.terminal = true;
-      this.emit(active, { type: "face-cancelled", streamId: active.id, reason });
-    }
+    active.terminal = true;
+    this.emit(active, { type: "face-cancelled", streamId: active.id, reason });
+    active.settle?.(false);
     active.socket.close();
     this.activeFace = null;
   }

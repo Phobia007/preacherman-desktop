@@ -2,6 +2,8 @@ import { MicrophoneMeter, selectOutput, voiceFrame, type MicrophoneState, type O
 import { ConversationPhrase, speechWav, spokenSentences } from "./spokenAudio";
 import { SileroVad } from "./SileroVad";
 import { preachermanServiceRequest } from "../preacherman/capabilityClient";
+import { SpokenMotionPlayback } from "../motion/SpokenMotionPlayback";
+import { defaultCharacterMotion, type CharacterMotionSettings } from "../motion/characterMotion";
 
 export type ConversationVoiceState = MicrophoneState | "thinking" | "speaking";
 type Devices = { input: string; output: string };
@@ -23,6 +25,7 @@ export class SpokenConversation {
   private disposed = false;
   private hearing = false;
   private missedPhrases = 0;
+  private motion = defaultCharacterMotion("");
   constructor(
     private onFrame: (frame: ReturnType<typeof voiceFrame>) => void,
     private onState: (state: ConversationVoiceState) => void,
@@ -37,6 +40,7 @@ export class SpokenConversation {
     }, (source, context) => this.capture(source, context));
   }
   get active() { return this.cancellation !== null; }
+  setMotion(config: CharacterMotionSettings) { if (config.characterId === this.characterId) this.motion = config; }
   private async request<T>(path: string, body: unknown, signal: AbortSignal, timeout = 40000) {
     return preachermanServiceRequest<T>(path, { method: body === undefined ? "GET" : "POST", body: body === undefined ? undefined : JSON.stringify(body), signal: AbortSignal.any([signal, AbortSignal.timeout(timeout)]) });
   }
@@ -52,13 +56,14 @@ export class SpokenConversation {
       if (!id) throw new Error("Activate a character in Asset before starting a conversation.");
       this.characterId = id;
       const [config, status] = await Promise.all([
-        this.request<{ active: unknown }>(`/api/characters/${id}/execution`, undefined, cancellation.signal),
+        this.request<{ active: unknown; motion?: CharacterMotionSettings }>(`/api/characters/${id}/execution`, undefined, cancellation.signal),
         this.request<{ language: string | null; voiceLanguage?: VoiceLanguage }>(`/api/voice/local/status?characterId=${encodeURIComponent(id)}`, undefined, cancellation.signal),
       ]);
       if (!config.active) throw new Error("Choose Execution Mode in your character's Settings before starting a conversation.");
       if (!status.language) throw new Error("Local speech recognition is unavailable. Check the speech model installation.");
       cancellation.signal.throwIfAborted(); this.language = status.language;
       this.voiceLanguage = status.voiceLanguage || "unknown";
+      this.motion = config.motion ?? defaultCharacterMotion(id);
       return await this.listen(cancellation.signal);
     } catch (error) { if (!cancellation.signal.aborted) await this.failed(error instanceof Error ? error.message : "Voice conversation is unavailable."); return false; }
   }
@@ -163,7 +168,7 @@ export class SpokenConversation {
         speaking.throwIfAborted();
         if (!result) throw error;
         if (index + 1 < sentences.length) pending = synthesize(sentences[index + 1]);
-        await this.playAudio(result.audio, context, speaking);
+        await this.playAudio(result.audio, context, speaking, sentences[index]);
         // Conservatively acknowledge completed sentences; never guess where a word was cut.
         if (playback) playback.heardCharacters = text.indexOf(sentences[index], playback.heardCharacters) + sentences[index].length;
       }
@@ -174,11 +179,14 @@ export class SpokenConversation {
       if (this.playback === context) this.playback = null;
     }
   }
-  private async playAudio(audio: string, context: OutputContext, signal: AbortSignal) {
+  private async playAudio(audio: string, context: OutputContext, signal: AbortSignal, text: string) {
     let animation = 0;
+    const motion = new SpokenMotionPlayback(() => context.currentTime, signal);
     try {
       const bytes = Uint8Array.from(atob(audio), char => char.charCodeAt(0));
       const buffer = await context.decodeAudioData(bytes.buffer); signal.throwIfAborted();
+      await motion.prepare(text, buffer.duration, this.sessionId, this.motion);
+      signal.throwIfAborted();
       const source = context.createBufferSource(), analyser = context.createAnalyser(); analyser.fftSize = 512;
       source.buffer = buffer; source.connect(analyser); analyser.connect(context.destination);
       this.onState("speaking"); this.avatar("speaking");
@@ -204,9 +212,10 @@ export class SpokenConversation {
         signal.addEventListener("abort", abort, { once: true });
         source.onended = () => finish();
         if (signal.aborted) abort();
-        else { try { source.start(); animate(); } catch (error) { finish(error); } }
+        else { try { motion.start(); source.start(); animate(); } catch (error) { finish(error); } }
       });
     } finally {
+      motion.stop();
       cancelAnimationFrame(animation);
       if (this.animation === animation) this.animation = 0;
       if (this.playback === context) window.dispatchEvent(new CustomEvent("preacherman:avatar-jaw", { detail: 0 }));

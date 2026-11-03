@@ -1,6 +1,6 @@
 import { createPreachermanServer } from "./preachermanServer.mjs";
 
-const service = createPreachermanServer({ autoStartBreeze: true });
+const service = createPreachermanServer({ autoStartBreeze: true, autoStartMotion: true });
 service.listen().then((address) => {
   const port = typeof address === "object" && address ? address.port : 8787;
   console.log(`Preacherman local service listening on http://127.0.0.1:${port}`);

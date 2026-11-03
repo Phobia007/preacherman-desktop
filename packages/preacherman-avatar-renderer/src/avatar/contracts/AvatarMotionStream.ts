@@ -14,6 +14,10 @@ export interface AvatarMotionStreamMetadata {
   readonly restPoseId: string;
   readonly restJoints: readonly AvatarMotionRestJoint[];
   readonly timelineStartFrame: number;
+  /** Audio clock in seconds; null until the matching sentence starts playing. */
+  readonly playbackTime?: () => number | null;
+  readonly characterId?: string;
+  readonly strength?: number;
 }
 
 export type AvatarMotionStreamEvent =
@@ -40,6 +44,7 @@ export interface AvatarMotionStreamSource {
 
 export interface AvatarMotionRigBinding {
   readonly id: string;
+  readonly characterId?: string;
   /** Speech2Motion joint name to target avatar bone name. */
   readonly bones: Readonly<Record<string, string>>;
   readonly rootJoint?: string;

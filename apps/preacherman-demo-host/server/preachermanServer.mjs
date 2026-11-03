@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { createExecutionConnections } from "./executionConnections.mjs";
 import { createCodexConversation } from "./codexConversation.mjs";
 import { createCharacterConversation } from "./characterConversation.mjs";
+import { createSpeechMotionService } from "./speechMotionService.mjs";
 import { createWindowsSpeech } from "./windowsSpeech.mjs";
 import { createBreezeSpeech } from "./breezeSpeech.mjs";
 import { createLocalSpeechRecognition } from "./localSpeechRecognition.mjs";
@@ -1356,6 +1357,8 @@ export function createPreachermanServer(options = {}) {
     endpoint: env.PREACHERMAN_SPEECH_MOTION_WS_URL,
     serviceName: "Speech2Motion",
   });
+  const speechMotionService = createSpeechMotionService({ endpoint: env.PREACHERMAN_SPEECH_MOTION_HEALTH_URL,
+    managed: !env.PREACHERMAN_SPEECH_MOTION_HEALTH_URL && !env.PREACHERMAN_SPEECH_MOTION_WS_URL });
   const faceProxy = createBinaryWebSocketProxy({
     endpoint: env.PREACHERMAN_AUDIO2FACE_WS_URL
       ?? "ws://127.0.0.1:18083/api/v1/streaming_audio2face/ws",
@@ -1398,6 +1401,17 @@ export function createPreachermanServer(options = {}) {
 
     try {
       const url = new URL(request.url, "http://127.0.0.1");
+      const characterMotionRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/motion$/);
+      if (characterMotionRoute) {
+        response.setHeader("Cache-Control", "no-store");
+        if (request.method === "GET") { json(response, 200, await characterConversation.motionSettings(characterMotionRoute[1]), origin); return; }
+        if (request.method === "POST") { json(response, 200, await characterConversation.saveMotion(characterMotionRoute[1], await readJson(request, 1024)), origin); return; }
+        json(response, 405, { error: "Method not allowed." }, origin); return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/motion/connect") {
+        void speechMotionService.start();
+        json(response, 202, await speechMotionService.status(), origin); return;
+      }
       const voiceDraftRoute = url.pathname.match(/^\/api\/characters\/([a-z0-9-]+)\/voice(?:\/(service|options|preview|apply|connect|synthesize))?$/);
       if (voiceDraftRoute) {
         const [, id, action] = voiceDraftRoute;
@@ -1529,7 +1543,7 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/motion/health") {
-        json(response, 200, await binaryServiceHealth(env.PREACHERMAN_SPEECH_MOTION_HEALTH_URL), origin);
+        json(response, 200, await speechMotionService.status(), origin);
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/face/health") {
@@ -2590,6 +2604,7 @@ export function createPreachermanServer(options = {}) {
               // Voice model loading must never hold up Home or the local API.
               void breezeSpeech.connect().catch(error => console.warn("Breeze startup:", error.message));
             }
+            if (options.autoStartMotion) void speechMotionService.start();
             resolveListen(server.address());
           } catch (error) {
             server.close(() => reject(error));
@@ -2601,6 +2616,7 @@ export function createPreachermanServer(options = {}) {
       preachermanExecutionReconciler.stop();
       for (const client of voiceProxy.clients) client.close();
       motionProxy.close();
+      speechMotionService.close();
       faceProxy.close();
       await preachermanPluginRuntime.close();
       codexConversation.close();

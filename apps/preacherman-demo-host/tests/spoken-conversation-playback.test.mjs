@@ -13,11 +13,17 @@ async function fixture() {
   }).outputText, { exports: audio, Intl });
   let source = await readFile(new URL("../src/audio/SpokenConversation.ts", import.meta.url), "utf8");
   source = source.replace('new URL("./voiceCapture.worklet.js?no-inline", import.meta.url)', '"capture.js"');
+  const motions = [], stoppedMotions = [];
+  const motion = {};
+  runInNewContext(ts.transpileModule(await readFile(new URL("../src/motion/SpokenMotionPlayback.ts", import.meta.url), "utf8"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  }).outputText, { exports: motion, require: () => ({ speechMotionRuntime: { start: async options => { motions.push(options); return true; }, cancel: epoch => stoppedMotions.push(epoch) }, motionStrength: { natural: 0.55 } }), AbortController, setTimeout, clearTimeout });
   const exports = {}, states = [], contexts = [], frames = new Set();
   let character = "cortana", sequence = 0;
   class Meter { starts = 0; stops = 0; start() { this.starts++; return Promise.resolve(true); } stop() { this.stops++; } dispose() {} }
   class Context {
     state = "running";
+    currentTime = 0;
     destination = {};
     sources = [];
     constructor() { contexts.push(this); }
@@ -33,7 +39,7 @@ async function fixture() {
   runInNewContext(ts.transpileModule(source, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText, {
-    exports, require: name => name === "./spokenAudio" ? { ...audio, speechWav: () => "audio" } : {
+    exports, require: name => name.endsWith("/SpokenMotionPlayback") ? motion : name.endsWith("/characterMotion") ? { defaultCharacterMotion: id => ({ characterId: id, supported: true, enabled: true, style: "natural" }) } : name === "./spokenAudio" ? { ...audio, speechWav: () => "audio" } : {
       MicrophoneMeter: Meter, selectOutput: async () => {}, voiceFrame: () => ({}),
     },
     AbortController, AbortSignal, crypto: { randomUUID: () => "session" }, setTimeout, clearTimeout,
@@ -42,7 +48,7 @@ async function fixture() {
     atob: value => Buffer.from(value, "base64").toString("binary"), performance,
   });
   const voice = new exports.SpokenConversation(() => {}, state => states.push(state), () => character, () => ({ input: "", output: "" }), () => {});
-  return { voice, audio, states, contexts, frames, setCharacter(value) { character = value; } };
+  return { voice, audio, states, contexts, frames, motions, stoppedMotions, setCharacter(value) { character = value; } };
 }
 
 test("sentence chunks preserve English sentences, decimal values and Chinese punctuation", async () => {
@@ -223,4 +229,22 @@ test("an aborted provider response arriving late never starts playback or change
     await tick(); voice.interrupt(); provider.resolve({ text: "Stale reply" }); await running;
     assert.equal(spoken, 0); assert.equal(states.at(-1), "listening"); assert.equal(voice.active, true);
   } finally { voice.dispose(); }
+});
+
+
+test("speech motion uses decoded duration and audio clock, cancels even after all frames arrived", async () => {
+  const { voice, contexts, motions, stoppedMotions } = await fixture();
+  const cancel = new AbortController();
+  voice.request = async () => ({ audio: "YXVkaW8=" });
+  voice.motion = { characterId: "cortana", supported: true, enabled: true, style: "natural" };
+  const running = voice.speak("Hello there.", cancel.signal, "cortana");
+  try {
+    await tick();
+    assert.equal(motions.length, 1); assert.equal(motions[0].duration, 1);
+    assert.equal(motions[0].characterId, "cortana"); assert.equal(motions[0].text, "Hello there.");
+    contexts[0].currentTime = 0.64; assert.equal(motions[0].playbackTime(), 0.64);
+    cancel.abort(); await assert.rejects(running);
+    assert.ok(stoppedMotions.includes(motions[0].interactionEpoch));
+    assert.equal(motions[0].signal.aborted, true);
+  } finally { cancel.abort(); await running.catch(() => {}); voice.dispose(); }
 });

@@ -275,6 +275,7 @@ export function AvatarModel({
 
   useFrame((_, deltaSeconds) => {
     const animationDelta = Math.min(deltaSeconds, 0.1);
+    motionPlayer?.beginFrame();
     adapter.update(animationDelta);
     motionPlayer?.update(animationDelta);
     if (!root || jawOpen <= 0 || adapter instanceof ThreeKitanaAnimationAdapter) return;

@@ -19,6 +19,9 @@ class Writer {
     this.varint(encoded.length);
     this.bytes.push(...encoded);
   }
+  message(field: number, value: Uint8Array): void {
+    this.varint((field << 3) | 2); this.varint(value.length); this.bytes.push(...value);
+  }
 
   int32(field: number, value: number): void {
     if (value === 0) return;
@@ -55,14 +58,14 @@ function baseRequest(className: string, requestId: string): Writer {
   return writer;
 }
 
-export function encodeMotionStart(requestId: string): Uint8Array {
+export function encodeMotionStart(requestId: string, options?: { userId: string; synchronized: boolean }): Uint8Array {
   const writer = baseRequest("StreamingSpeech2MotionV3ChunkStart", requestId);
-  writer.string(3, "preacherman-desktop");
+  writer.string(3, options?.userId ?? "preacherman-desktop");
   writer.string(4, "KQ-default");
   writer.string(5, "python_backend");
-  writer.float(6, 0.35);
-  writer.float(7, 0.65);
-  writer.int32(12, 60);
+  writer.float(6, options?.synchronized ? 0 : 0.35);
+  writer.float(7, options?.synchronized ? 0 : 0.65);
+  writer.int32(12, options?.synchronized ? 30 : 60);
   return writer.finish();
 }
 
@@ -70,11 +73,30 @@ export function encodeMotionBody(
   requestId: string,
   text: string,
   duration: number,
+  keywords: readonly { index: number; keyword: string }[] = [],
 ): Uint8Array {
   const writer = baseRequest("StreamingSpeech2MotionV3ChunkBody", requestId);
   writer.float(15, duration);
   writer.string(16, text);
+  for (const cue of keywords) {
+    const nested = new Writer(); nested.int32(1, cue.index); nested.string(2, cue.keyword);
+    writer.message(19, nested.finish());
+  }
   return writer.finish();
+}
+
+/** English cues target the installed library; the spoken reply itself is untouched. */
+export function speechMotionKeywords(text: string): { index: number; keyword: string }[] {
+  const cues: { index: number; keyword: string }[] = [];
+  for (const [pattern, keyword] of [
+    [/\b(hello|hi|goodbye|bye)\b/i, "挥手"],
+    [/\b(thank you|thanks)\b/i, "感谢"],
+    [/\b(yes|of course|certainly)\b/i, "点头"],
+  ] as const) {
+    const found = pattern.exec(text);
+    if (found) cues.push({ index: Array.from(text.slice(0, found.index)).length, keyword });
+  }
+  return cues.sort((a, b) => a.index - b.index).slice(0, 2);
 }
 
 export function encodeMotionEnd(requestId: string): Uint8Array {

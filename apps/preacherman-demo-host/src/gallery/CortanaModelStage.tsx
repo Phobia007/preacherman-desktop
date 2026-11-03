@@ -11,10 +11,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { rotateCompanion, zoomCompanion } from "./homeCompanionControls";
 import { localAvatarAssetBaseUrl } from "../avatar/avatarAssets";
 import { useAvatarInteractionState } from "../live/LiveCoordinatorContext";
-import {
-  cortanaSpeechMotionBinding,
-  zimaSpeechMotionBinding,
-} from "../motion/avatarRigBindings";
+import { characterSpeechMotionBinding } from "../motion/avatarRigBindings";
 import type { ModelId } from "../preferences";
 import { speechMotionRuntime } from "../motion/SpeechMotionRuntime";
 
@@ -115,7 +112,7 @@ export function CortanaModelStage({
         environment={environment}
         isolateCompanion={isolateCompanion}
         motionSource={speechMotionRuntime}
-        motionRigBinding={modelId === "cortana" ? cortanaSpeechMotionBinding : modelId === "zima" ? zimaSpeechMotionBinding : undefined}
+        motionRigBinding={characterSpeechMotionBinding(modelId)}
         modelId={modelId}
         cameraFraming={cameraFraming}
         renderActive={renderActive}

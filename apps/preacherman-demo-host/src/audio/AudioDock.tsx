@@ -86,8 +86,10 @@ export function AudioDock({ characterId = null }: { characterId?: string | null 
   useEffect(() => { meter.current?.stop(); }, [characterId]);
   useEffect(() => {
     const stop = () => meter.current?.stop();
+    const motionChanged = (event: Event) => meter.current?.setMotion((event as CustomEvent).detail);
     window.addEventListener("preacherman-execution-changed", stop);
-    return () => window.removeEventListener("preacherman-execution-changed", stop);
+    window.addEventListener("preacherman-motion-changed", motionChanged);
+    return () => { window.removeEventListener("preacherman-execution-changed", stop); window.removeEventListener("preacherman-motion-changed", motionChanged); };
   }, []);
 
   useEffect(() => { meter.current?.setVisible(visible); }, [visible]);

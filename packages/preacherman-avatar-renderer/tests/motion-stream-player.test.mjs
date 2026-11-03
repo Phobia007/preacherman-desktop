@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { Bone, BufferGeometry, Group, Mesh, MeshBasicMaterial } from "three";
+import { Bone, BufferGeometry, Group, Mesh, MeshBasicMaterial, Quaternion } from "three";
 import { ThreeAvatarMotionStreamPlayer } from "../dist/index.js";
 
 test("realtime player consumes body and facial values on one frame clock", () => {
@@ -68,5 +68,36 @@ test("realtime player consumes body and facial values on one frame clock", () =>
 
   player.receive({ type: "ended", streamId: "stream-1" });
   player.update(1);
+  player.dispose();
+});
+
+test("audio time owns the pose; interruption discards buffered frames and restores idle", () => {
+  const root = new Group(), head = new Bone(), leg = new Bone();
+  const scaled = new Group(); scaled.scale.setScalar(0.01); root.add(scaled);
+  head.name = "mixamorigHead"; leg.name = "leg"; scaled.add(head, leg);
+  leg.quaternion.setFromAxisAngle({ x: 1, y: 0, z: 0 }, 0.15);
+  const originalLeg = leg.quaternion.clone(); let clock = null;
+  const player = new ThreeAvatarMotionStreamPlayer(root, { id: "ai", characterId: "ai", bones: { Head: "mixamorig:Head" } });
+  const metadata = { streamId: "speech", characterId: "ai", interactionEpoch: 1, frameRate: 30,
+    jointNames: ["Head"], blendshapeNames: [], restPoseId: "test", timelineStartFrame: 0,
+    playbackTime: () => clock, restJoints: [{ name: "Head", parent: null, matrix: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] }] };
+  const frames = new Float32Array(120 * 15);
+  for (let i = 0; i < 120; i++) {
+    const a = i < 60 ? 0.3 : 1.1, c = Math.cos(a), s = Math.sin(a);
+    frames.set([c,-s,0,s,c,0,0,0,1,0,0,0,0,0,0], i * 15);
+  }
+  player.receive({ type: "started", metadata }); player.receive({ type: "frames", streamId: "speech", values: frames });
+  player.receive({ type: "ended", streamId: "speech" });
+  player.update(10); assert.equal(head.quaternion.angleTo(new Quaternion()), 0);
+  clock = 0.2; player.beginFrame(); player.update(10);
+  assert.ok(Math.abs(head.quaternion.angleTo(new Quaternion()) - 0.3) < 0.001);
+  // Another character cannot steal this player's stream.
+  player.receive({ type: "started", metadata: { ...metadata, streamId: "other", characterId: "other" } });
+  player.receive({ type: "cancelled", streamId: "speech", reason: "barge-in" });
+  clock = 3; player.beginFrame(); player.update(0.08);
+  assert.ok(head.quaternion.angleTo(new Quaternion()) < 0.2, "must fade the heard pose, not jump to a buffered frame");
+  player.beginFrame(); player.update(0.2); player.beginFrame();
+  assert.ok(head.quaternion.angleTo(new Quaternion()) < 0.0001);
+  assert.ok(leg.quaternion.angleTo(originalLeg) < 0.0001);
   player.dispose();
 });

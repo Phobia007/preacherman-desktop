@@ -4,6 +4,7 @@ import {
   Mesh,
   Object3D,
   Quaternion,
+  PropertyBinding,
   Vector3,
 } from "three";
 import type {
@@ -71,6 +72,8 @@ export class ThreeAvatarMotionStreamPlayer {
   private ended = false;
   private fade = 0;
   private lastFrame = -1;
+  private cancelled = false;
+  private readonly basePose = new Map<Bone, Quaternion>();
   private sourceRest = new Map<string, AvatarMotionRestJoint>();
   private targetBones = new Map<string, TargetBoneState>();
   private morphTargets = new Map<string, MorphTargetState[]>();
@@ -91,13 +94,13 @@ export class ThreeAvatarMotionStreamPlayer {
     root.traverse((object) => {
       if (object instanceof Bone) {
         const target = [...Object.entries(binding.bones)]
-          .find(([, targetName]) => targetName === object.name);
+          .find(([, targetName]) => PropertyBinding.sanitizeNodeName(targetName) === object.name || targetName === object.name);
         if (target) {
           const restRoot = inverseRootWorld.clone().multiply(object.matrixWorld);
           this.targetBones.set(target[0], {
             bone: object,
             depth: boneDepth(object),
-            restRootQuaternion: new Quaternion().setFromRotationMatrix(restRoot),
+            restRootQuaternion: new Quaternion().setFromRotationMatrix(new Matrix4().extractRotation(restRoot)).normalize(),
           });
         }
       }
@@ -137,10 +140,12 @@ export class ThreeAvatarMotionStreamPlayer {
       return;
     }
     if (event.type === "started") {
+      if (event.metadata.characterId && this.binding.characterId !== event.metadata.characterId) return;
       this.metadata = event.metadata;
       this.values = new Float32Array();
       this.elapsed = Math.max(0, -event.metadata.timelineStartFrame / event.metadata.frameRate);
       this.ended = false;
+      this.cancelled = false;
       this.fade = 1;
       this.lastFrame = -1;
       this.sourceRest = new Map(event.metadata.restJoints.map((joint) => [joint.name, joint]));
@@ -156,6 +161,7 @@ export class ThreeAvatarMotionStreamPlayer {
       this.ended = true;
     } else {
       this.ended = true;
+      this.cancelled = true;
       this.fade = Math.min(this.fade, 0.999);
     }
   }
@@ -166,23 +172,38 @@ export class ThreeAvatarMotionStreamPlayer {
     this.updateFace(deltaSeconds);
   }
 
+  /** Restore the authored pose before the idle mixer runs, including unkeyed joints. */
+  beginFrame(): void {
+    for (const [bone, rotation] of this.basePose) bone.quaternion.copy(rotation);
+    this.basePose.clear();
+  }
+
   private updateBody(metadata: AvatarMotionStreamMetadata, deltaSeconds: number): void {
     const valuesPerFrame = metadata.jointNames.length * 9 + 6 + metadata.blendshapeNames.length;
     const frameCount = Math.floor(this.values.length / valuesPerFrame);
-    if (frameCount === 0) return;
+    if (frameCount === 0) { if (this.cancelled) this.metadata = null; return; }
 
-    this.elapsed += Math.max(0, deltaSeconds);
+    const audioTime = metadata.playbackTime?.();
+    if (!this.cancelled) {
+      if (metadata.playbackTime && audioTime === null) return;
+      this.elapsed = metadata.playbackTime
+        ? Math.max(0, (audioTime ?? 0) - metadata.timelineStartFrame / metadata.frameRate)
+        : this.elapsed + Math.max(0, deltaSeconds);
+    }
     const requestedFrame = Math.floor(this.elapsed * metadata.frameRate);
     const frame = Math.min(requestedFrame, frameCount - 1);
-    if (this.ended && requestedFrame >= frameCount) {
-      this.fade = Math.max(0, this.fade - deltaSeconds / 0.28);
+    if (this.cancelled || (this.ended && requestedFrame >= frameCount)) {
+      this.fade = Math.max(0, this.fade - deltaSeconds / (this.cancelled ? 0.16 : 0.28));
     }
-    this.applyFrame(frame, valuesPerFrame, this.fade);
+    const fadeIn = metadata.playbackTime ? Math.min(1, Math.max(0, audioTime ?? 0) / 0.18) : 1;
+    const strength = Math.max(0, Math.min(1, metadata.strength ?? 1));
+    this.applyFrame(frame, valuesPerFrame, this.fade * fadeIn * strength);
     this.lastFrame = frame;
     if (this.fade === 0) this.metadata = null;
   }
 
   dispose(): void {
+    this.beginFrame();
     this.metadata = null;
     this.values = new Float32Array();
     this.targetBones.clear();
@@ -218,7 +239,6 @@ export class ThreeAvatarMotionStreamPlayer {
       return pose;
     };
 
-    const desiredByBone = new Map<Bone, Quaternion>();
     const ordered = [...this.targetBones.entries()].sort((left, right) => left[1].depth - right[1].depth);
     for (const [sourceName, target] of ordered) {
       if (!jointIndex.has(sourceName)) continue;
@@ -229,13 +249,9 @@ export class ThreeAvatarMotionStreamPlayer {
         .multiply(new Quaternion().setFromRotationMatrix(matrix4(sourceRest.matrix)).invert());
       delta.premultiply(BLENDER_TO_GLTF).multiply(BLENDER_TO_GLTF_INVERSE);
       const desiredRoot = delta.multiply(target.restRootQuaternion.clone());
-      desiredByBone.set(target.bone, desiredRoot);
-
-      const parentDesired = target.bone.parent instanceof Bone
-        ? desiredByBone.get(target.bone.parent)
-        : undefined;
-      const parentRoot = parentDesired ?? this.rootRelativeQuaternion(target.bone.parent);
+      const parentRoot = this.rootRelativeQuaternion(target.bone.parent);
       const desiredLocal = parentRoot.clone().invert().multiply(desiredRoot);
+      this.basePose.set(target.bone, target.bone.quaternion.clone());
       target.bone.quaternion.slerp(desiredLocal, weight);
     }
 
