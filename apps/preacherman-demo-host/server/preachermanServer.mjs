@@ -2586,6 +2586,10 @@ export function createPreachermanServer(options = {}) {
           try {
             localServicePort = server.address().port;
             await agentAccessRuntime.initialize(localServicePort);
+            if (options.autoStartBreeze) {
+              // Voice model loading must never hold up Home or the local API.
+              void breezeSpeech.connect().catch(error => console.warn("Breeze startup:", error.message));
+            }
             resolveListen(server.address());
           } catch (error) {
             server.close(() => reject(error));

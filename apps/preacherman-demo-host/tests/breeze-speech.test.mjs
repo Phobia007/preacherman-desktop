@@ -3,6 +3,7 @@ import test from "node:test";
 import { mkdtemp, rm, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { EventEmitter } from "node:events";
 import { createBreezeSpeech } from "../server/breezeSpeech.mjs";
 import { createCharacterConversation } from "../server/characterConversation.mjs";
 import { createPreachermanServer } from "../server/preachermanServer.mjs";
@@ -23,6 +24,77 @@ function adapter(previewDirectory) {
   } });
   return { service, requests };
 }
+
+test("cold startup is shared with early voice reads and manual reconnect without opening a browser", async t => {
+  let online = false, launches = 0, spawned;
+  const ready = new Promise(resolve => { spawned = resolve; });
+  const child = new EventEmitter(); child.kill = () => child.emit("close", 1);
+  const service = createBreezeSpeech({ platform: "win32", accessImpl: async () => {},
+    request: async () => { if (!online) throw Error("offline"); return Response.json([{ id: "cortana", saved: true }]); },
+    spawnImpl(command, args, options) {
+      launches++;
+      assert.equal(command, "powershell.exe");
+      assert.equal(args.at(-1), "-NoBrowser");
+      assert.equal(args.at(-2), "D:\\AI\\Breeze-TTS-2\\Start-Breeze.ps1");
+      assert.equal(options.windowsHide, true); assert.equal(options.shell, false);
+      spawned(); return child;
+    },
+  });
+  t.after(() => service.close());
+  const automatic = service.connect();
+  const manual = service.connect();
+  const cancellation = new AbortController();
+  const cancelled = service.voices(cancellation.signal);
+  cancellation.abort(); await assert.rejects(cancelled, { name: "AbortError" });
+  let earlyResolved = false;
+  const early = service.voices().then(value => { earlyResolved = true; return value; });
+  await ready; assert.equal(earlyResolved, false); assert.equal(launches, 1);
+  online = true; child.emit("close", 0);
+  for (const voices of await Promise.all([automatic, manual, early])) assert.equal(voices[0].id, "breeze:cortana");
+  await service.connect(); assert.equal(launches, 1, "a healthy existing service is reused");
+});
+
+test("startup failure releases the shared attempt and allows a bounded retry", async t => {
+  let online = false, launches = 0, killed = 0;
+  const service = createBreezeSpeech({ platform: "win32", startupTimeoutMs: 10, accessImpl: async () => {},
+    request: async () => { if (!online) throw Error("offline"); return Response.json([]); },
+    spawnImpl() {
+      launches++; const child = new EventEmitter(); child.kill = () => { killed++; child.emit("close", 1); };
+      if (launches === 2) setImmediate(() => { online = true; child.emit("close", 0); });
+      return child;
+    },
+  });
+  t.after(() => service.close());
+  await assert.rejects(service.connect(), /could not start|timed out/);
+  assert.equal(killed, 1);
+  assert.deepEqual(await service.connect(), []); assert.equal(launches, 2);
+});
+
+test("closing during the initial probe never launches a late child", async () => {
+  let failProbe;
+  const probe = new Promise((_, reject) => { failProbe = reject; });
+  const service = createBreezeSpeech({ platform: "win32", accessImpl: async () => {}, request: () => probe,
+    spawnImpl() { assert.fail("closed service must not launch Breeze"); },
+  });
+  const pending = service.connect();
+  await service.close(); failProbe(Error("offline"));
+  await assert.rejects(pending, /closed/);
+});
+
+test("desktop listen remains available while Breeze starts or fails", async t => {
+  const directory = await mkdtemp(join(tmpdir(), "preacherman-breeze-startup-"));
+  let started = 0, rejectStartup;
+  const pending = new Promise((_, reject) => { rejectStartup = reject; });
+  const warning = t.mock.method(console, "warn", () => {});
+  const server = createPreachermanServer({ env: { PREACHERMAN_DATA_DIR: directory }, autoStartBreeze: true,
+    breezeSpeech: { connect() { started++; return pending; }, close() {} },
+  });
+  t.after(async () => { await server.close(); await rm(directory, { recursive: true, force: true }); });
+  const address = await server.listen(0);
+  assert.ok(address.port); assert.equal(started, 1);
+  rejectStartup(Error("installation missing")); await new Promise(resolve => setImmediate(resolve));
+  assert.equal(warning.mock.callCount(), 1); assert.equal(server.server.listening, true);
+});
 test("Breeze exposes saved voices only and completes streaming WAV headers without changing PCM", async t => {
   const directory = await mkdtemp(join(tmpdir(), "preacherman-breeze-adapter-"));
   const { service, requests } = adapter(directory);

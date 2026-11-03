@@ -10,6 +10,6 @@ export function characterVoiceRequest<T>(id: string, action = "", body?: unknown
   return preachermanServiceRequest<T>(`/api/characters/${encodeURIComponent(id)}/voice${action}`, {
     method: method || (body === undefined ? "GET" : "POST"),
     body: body === undefined ? undefined : JSON.stringify(body),
-    signal: AbortSignal.any([signal || new AbortController().signal, AbortSignal.timeout(action === "/connect" ? 200000 : action.startsWith("/preview") ? 20000 : 15000)]),
+    signal: AbortSignal.any([signal || new AbortController().signal, AbortSignal.timeout(action === "/connect" || action === "" ? 200000 : action.startsWith("/preview") ? 20000 : 15000)]),
   });
 }
