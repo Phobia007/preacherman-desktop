@@ -7,6 +7,32 @@ const characterBindings = new Map<string, AvatarMotionRigBinding>();
 for (const [characterId, rig] of Object.entries(characterRigs)) {
   characterBindings.set(characterId, { id: `speech2motion-upper-body:${characterId}`, characterId, bones: rig.bones });
 }
+// Cortana is authored facing +X, with the left arm along -Z. The source faces
+// +Z after Blender conversion. Her elbow bind pose also has a 30-degree bend.
+// Correct both reference frames instead of applying source rotations on top of it.
+const cortanaRig = characterBindings.get("cortana")!;
+characterBindings.set("cortana", {
+  ...cortanaRig,
+  id: "speech2motion-cortana-anatomical-v2",
+  bones: { ...cortanaRig.bones, Spine: "b_spine0", Neck: "b_neck1" },
+  calibration: {
+    sourceToAvatar: [0, Math.SQRT1_2, 0, Math.SQRT1_2],
+    anchor: { source: "Hips", target: "b_pelvis" },
+    aimChildren: {
+      Left_arm: { source: "Left_elbow", target: "b_l_forearm" },
+      Left_elbow: { source: "Left_wrist", target: "b_l_hand" },
+      Left_wrist: { source: "MiddleFinger1_L", target: "b_l_middle1" },
+      Right_arm: { source: "Right_elbow", target: "b_r_forearm" },
+      Right_elbow: { source: "Right_wrist", target: "b_r_hand" },
+      Right_wrist: { source: "MiddleFinger1_R", target: "b_r_middle1" },
+    },
+    jointLimits: {
+      Spine: 0.35, Chest: 0.45, Neck: 0.35, Head: 0.7,
+      Left_shoulder: 0.5, Right_shoulder: 0.5,
+      Left_wrist: 0.95, Right_wrist: 0.95,
+    },
+  },
+});
 export function characterSpeechMotionBinding(characterId: string): AvatarMotionRigBinding | undefined {
   return characterBindings.get(characterId);
 }

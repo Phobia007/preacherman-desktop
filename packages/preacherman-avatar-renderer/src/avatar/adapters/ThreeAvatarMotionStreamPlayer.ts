@@ -18,13 +18,14 @@ const BLENDER_TO_GLTF = new Quaternion().setFromAxisAngle(
   new Vector3(1, 0, 0),
   -Math.PI / 2,
 );
-const BLENDER_TO_GLTF_INVERSE = BLENDER_TO_GLTF.clone().invert();
 const IDENTITY_MATRIX = new Matrix4();
 
 interface TargetBoneState {
   readonly bone: Bone;
   readonly depth: number;
   readonly restRootQuaternion: Quaternion;
+  readonly restLocalQuaternion: Quaternion;
+  readonly restRootPosition: Vector3;
 }
 
 interface MorphTargetState {
@@ -75,6 +76,10 @@ export class ThreeAvatarMotionStreamPlayer {
   private cancelled = false;
   private readonly basePose = new Map<Bone, Quaternion>();
   private sourceRest = new Map<string, AvatarMotionRestJoint>();
+  private referenceRotations = new Map<string, Quaternion>();
+  private readonly restPositions = new Map<string, Vector3>();
+  private readonly sourceToAvatar: Quaternion;
+  private targetAnchor: { bone: Bone; rest: Quaternion } | null = null;
   private targetBones = new Map<string, TargetBoneState>();
   private morphTargets = new Map<string, MorphTargetState[]>();
   private faceStreamId: string | null = null;
@@ -89,18 +94,27 @@ export class ThreeAvatarMotionStreamPlayer {
     private readonly root: Object3D,
     private readonly binding: AvatarMotionRigBinding,
   ) {
+    this.sourceToAvatar = binding.calibration
+      ? new Quaternion().fromArray(binding.calibration.sourceToAvatar).multiply(BLENDER_TO_GLTF)
+      : BLENDER_TO_GLTF.clone();
     root.updateMatrixWorld(true);
     const inverseRootWorld = root.matrixWorld.clone().invert();
     root.traverse((object) => {
       if (object instanceof Bone) {
+        const restRoot = inverseRootWorld.clone().multiply(object.matrixWorld);
+        this.restPositions.set(object.name, new Vector3().setFromMatrixPosition(restRoot));
+        if (object.name === PropertyBinding.sanitizeNodeName(binding.calibration?.anchor.target ?? "")) {
+          this.targetAnchor = { bone: object, rest: new Quaternion().setFromRotationMatrix(new Matrix4().extractRotation(restRoot)).normalize() };
+        }
         const target = [...Object.entries(binding.bones)]
           .find(([, targetName]) => PropertyBinding.sanitizeNodeName(targetName) === object.name || targetName === object.name);
         if (target) {
-          const restRoot = inverseRootWorld.clone().multiply(object.matrixWorld);
           this.targetBones.set(target[0], {
             bone: object,
             depth: boneDepth(object),
             restRootQuaternion: new Quaternion().setFromRotationMatrix(new Matrix4().extractRotation(restRoot)).normalize(),
+            restLocalQuaternion: object.quaternion.clone(),
+            restRootPosition: new Vector3().setFromMatrixPosition(restRoot),
           });
         }
       }
@@ -149,6 +163,7 @@ export class ThreeAvatarMotionStreamPlayer {
       this.fade = 1;
       this.lastFrame = -1;
       this.sourceRest = new Map(event.metadata.restJoints.map((joint) => [joint.name, joint]));
+      this.calibrateReferencePose();
       return;
     }
     if (!this.metadata || event.streamId !== this.metadata.streamId) return;
@@ -197,7 +212,9 @@ export class ThreeAvatarMotionStreamPlayer {
     }
     const fadeIn = metadata.playbackTime ? Math.min(1, Math.max(0, audioTime ?? 0) / 0.18) : 1;
     const strength = Math.max(0, Math.min(1, metadata.strength ?? 1));
-    this.applyFrame(frame, valuesPerFrame, this.fade * fadeIn * strength);
+    const fraction = this.binding.calibration && !this.cancelled
+      ? this.elapsed * metadata.frameRate - requestedFrame : 0;
+    this.applyFrame(frame, valuesPerFrame, this.fade * fadeIn * strength, fraction);
     this.lastFrame = frame;
     if (this.fade === 0) this.metadata = null;
   }
@@ -212,10 +229,29 @@ export class ThreeAvatarMotionStreamPlayer {
     this.faceStreamId = null;
   }
 
-  private applyFrame(frame: number, valuesPerFrame: number, weight: number): void {
+  private calibrateReferencePose(): void {
+    this.referenceRotations.clear();
+    for (const [name, target] of this.targetBones) {
+      const reference = target.restRootQuaternion.clone();
+      const aim = this.binding.calibration?.aimChildren[name];
+      const source = this.sourceRest.get(name), child = aim && this.sourceRest.get(aim.source);
+      const targetChild = aim && this.restPositions.get(PropertyBinding.sanitizeNodeName(aim.target));
+      if (source && child && targetChild) {
+        const from = targetChild.clone().sub(target.restRootPosition).normalize();
+        const to = new Vector3().setFromMatrixPosition(matrix4(child.matrix))
+          .sub(new Vector3().setFromMatrixPosition(matrix4(source.matrix)))
+          .applyQuaternion(this.sourceToAvatar).normalize();
+        reference.premultiply(new Quaternion().setFromUnitVectors(from, to));
+      }
+      this.referenceRotations.set(name, reference);
+    }
+  }
+
+  private applyFrame(frame: number, valuesPerFrame: number, weight: number, fraction = 0): void {
     const metadata = this.metadata;
     if (!metadata) return;
     const frameOffset = frame * valuesPerFrame;
+    const nextOffset = Math.min(frame + 1, Math.floor(this.values.length / valuesPerFrame) - 1) * valuesPerFrame;
     const jointIndex = new Map(metadata.jointNames.map((name, index) => [name, index]));
     const sourceGlobal = new Map<string, Matrix4>();
 
@@ -228,6 +264,11 @@ export class ThreeAvatarMotionStreamPlayer {
       const basis = index === undefined
         ? IDENTITY_MATRIX
         : rotationMatrix(this.values, frameOffset + index * 9);
+      if (index !== undefined && fraction > 0 && nextOffset !== frameOffset) {
+        const from = new Quaternion().setFromRotationMatrix(basis).normalize();
+        const to = new Quaternion().setFromRotationMatrix(rotationMatrix(this.values, nextOffset + index * 9)).normalize();
+        basis.makeRotationFromQuaternion(from.slerp(to, fraction));
+      }
       const restMatrix = matrix4(rest.matrix);
       const parentRest = rest.parent ? this.sourceRest.get(rest.parent) : undefined;
       const pose = parentRest
@@ -240,17 +281,33 @@ export class ThreeAvatarMotionStreamPlayer {
     };
 
     const ordered = [...this.targetBones.entries()].sort((left, right) => left[1].depth - right[1].depth);
+    const anchorName = this.binding.calibration?.anchor.source;
+    const anchorRest = anchorName && this.sourceRest.get(anchorName);
+    const sourceAnchorCorrection = anchorRest && anchorName
+      ? new Quaternion().setFromRotationMatrix(matrix4(anchorRest.matrix))
+        .multiply(new Quaternion().setFromRotationMatrix(resolveSourceGlobal(anchorName)).invert())
+      : new Quaternion();
+    const targetAnchorDelta = this.targetAnchor
+      ? this.rootRelativeQuaternion(this.targetAnchor.bone).multiply(this.targetAnchor.rest.clone().invert())
+      : new Quaternion();
     for (const [sourceName, target] of ordered) {
       if (!jointIndex.has(sourceName)) continue;
       const sourcePose = resolveSourceGlobal(sourceName);
       const sourceRest = this.sourceRest.get(sourceName);
       if (!sourceRest) continue;
       const delta = new Quaternion().setFromRotationMatrix(sourcePose)
+        .premultiply(sourceAnchorCorrection)
         .multiply(new Quaternion().setFromRotationMatrix(matrix4(sourceRest.matrix)).invert());
-      delta.premultiply(BLENDER_TO_GLTF).multiply(BLENDER_TO_GLTF_INVERSE);
-      const desiredRoot = delta.multiply(target.restRootQuaternion.clone());
+      delta.premultiply(this.sourceToAvatar).multiply(this.sourceToAvatar.clone().invert());
+      const desiredRoot = delta.multiply((this.referenceRotations.get(sourceName) ?? target.restRootQuaternion).clone())
+        .premultiply(targetAnchorDelta);
       const parentRoot = this.rootRelativeQuaternion(target.bone.parent);
       const desiredLocal = parentRoot.clone().invert().multiply(desiredRoot);
+      const limit = this.binding.calibration?.jointLimits[sourceName];
+      if (limit !== undefined) {
+        const angle = target.restLocalQuaternion.angleTo(desiredLocal);
+        if (angle > limit) desiredLocal.copy(target.restLocalQuaternion.clone().slerp(desiredLocal, limit / angle));
+      }
       this.basePose.set(target.bone, target.bone.quaternion.clone());
       target.bone.quaternion.slerp(desiredLocal, weight);
     }

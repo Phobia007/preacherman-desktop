@@ -38,6 +38,25 @@ audio-energy lip movement remains in place. Native verification covers Cortana
 and the imported DeepSeek rig; other rigs share the verified upper-body mapping
 and can be tuned independently through Action.
 
+### Cortana anatomical calibration
+
+Cortana's packaged skin is authored facing +X, whereas the converted KQ source
+faces +Z. Her profile applies a +90-degree yaw to the source coordinate frame,
+aims arm/forearm/hand reference directions using the existing joint positions,
+and maps the lower spine and upper neck to `b_spine0` and `b_neck1`. It does not
+change mesh geometry, bind matrices, skin weights, textures, or bone lengths.
+The source pelvis rotation is removed from upper-body motion, which follows the
+target's authored pelvis instead. This prevents full-body source turns from
+twisting the stationary avatar's waist. Torso, clavicle, neck and wrist rotation
+limits plus quaternion interpolation constrain transitions. Other characters
+retain their existing bindings; this calibration must not be copied blindly.
+
+Regression tests use the packaged Cortana skeleton and KQ rest pose to check arm
+directions, root isolation, wrist limits, interpolation and exact idle restoration.
+Three fixed service captures are compared before/after in
+`output/cortana-calibration-20261103/`. This corrects retargeting; motion selection,
+finger articulation and character-specific acting remain separate work.
+
 ## Service ownership and lifecycle
 
 | Service | Address | Owner | Stop method |

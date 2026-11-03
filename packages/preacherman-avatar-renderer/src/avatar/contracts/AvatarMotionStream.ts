@@ -47,6 +47,17 @@ export interface AvatarMotionRigBinding {
   readonly characterId?: string;
   /** Speech2Motion joint name to target avatar bone name. */
   readonly bones: Readonly<Record<string, string>>;
+  /** Character-specific calibration; authored skin, joint positions and idle stay intact. */
+  readonly calibration?: {
+    /** Quaternion (x, y, z, w) from glTF-facing source coordinates to avatar coordinates. */
+    readonly sourceToAvatar: readonly [number, number, number, number];
+    /** Keep upper-body gestures relative to the authored pelvis, not source root turns. */
+    readonly anchor: { readonly source: string; readonly target: string };
+    /** Aim the reference bone at its anatomical child before applying source motion. */
+    readonly aimChildren: Readonly<Record<string, { source: string; target: string }>>;
+    /** Maximum local deviation from the character's bind pose, in radians. */
+    readonly jointLimits: Readonly<Record<string, number>>;
+  };
   readonly rootJoint?: string;
   readonly rootTarget?: string;
   /** Optional Speech2Motion channel name to target morph-target name. */
