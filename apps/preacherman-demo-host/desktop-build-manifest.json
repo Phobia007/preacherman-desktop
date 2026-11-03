@@ -1,45 +1,45 @@
 {
   "schemaVersion": 1,
-  "buildId": "speech-motion-20261103",
+  "buildId": "cortana-calibration-20261103",
   "productVersion": "0.1.0",
-  "sourceTask": "Connect Speech2Motion to character voice conversations, previews and settings",
+  "sourceTask": "Calibrate Cortana anatomical speech-motion retargeting",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Breeze sentences drive cancellable audio-clock motion; 40 upper-body mappings; character Action preferences; Motion Service reconnect and nonblocking Docker autostart reuse D:/Codex/speech2motion.",
-  "sourceCommit": "0f9de50ccf6b03c1be78ee048db6c3bbc1371a9e",
+  "sourceState": "Cortana-only source coordinate correction, anatomical arm references, pelvis-relative upper-body motion, joint limits and subframe interpolation; model assets and other rigs unchanged.",
+  "sourceCommit": "72df99121a6b9583e8ecc7ecd5894ec17a3bd19a",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-03T19:00:52.3628539+08:00",
-  "deployedAt": "2026-11-03T19:02:41.8143821+08:00",
-  "verifiedAt": "2026-11-03T19:05:22.9505271+08:00",
-  "sizeBytes": 872740864,
-  "sha256": "D6FEE52F976A2A85F5416331875950059A82F48319BAF51904A89209BB4A89F1",
+  "builtAt": "2026-11-03T21:40:26.2136907+08:00",
+  "deployedAt": "2026-11-03T21:41:18.1949373+08:00",
+  "verifiedAt": "2026-11-03T21:43:43.171687+08:00",
+  "sizeBytes": 872741888,
+  "sha256": "5792F3B72FA255237AACE49C3119B19B2F134BD1BAAB847F9D80674F5C596103",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-11-03T18:58:54.5555325+08:00",
   "sidecarSizeBytes": 93270016,
   "sidecarSha256": "EA2181E8C716DDB6E3B24B24C511371EDBD99BDA54C1CD88A351057A6644F89D",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\speech-motion-before-20261103\\preacherman-demo-host.exe",
-  "backupSha256": "868BDC6CB1D0E53D31AF3A2445EC1C671A013AECAB50D2EA606EF3C38BF8B83E",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\speech-motion-before-20261103\\preacherman-service.exe",
-  "sidecarBackupSha256": "6B0F658DAD631DC52ECD38F6BEC42D71D402D979C1F53CA188FD9B4041DA2B9B",
-  "rollbackBaselineCommit": "68caccb82014e938bbf413c70eac715ce43d40eb",
-  "previousVerificationCommit": "68caccb82014e938bbf413c70eac715ce43d40eb",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-calibration-before-20261103\\preacherman-demo-host.exe",
+  "backupSha256": "D6FEE52F976A2A85F5416331875950059A82F48319BAF51904A89209BB4A89F1",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-calibration-before-20261103\\preacherman-service.exe",
+  "sidecarBackupSha256": "EA2181E8C716DDB6E3B24B24C511371EDBD99BDA54C1CD88A351057A6644F89D",
+  "rollbackBaselineCommit": "0f9de50ccf6b03c1be78ee048db6c3bbc1371a9e",
+  "previousVerificationCommit": "0f9de50ccf6b03c1be78ee048db6c3bbc1371a9e",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "focusedTests": 38,
+      "focusedTests": 17,
       "focusedFailures": 0,
       "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold launch through canonical shortcut. Live motion streams preview on Cortana and DeepSeek, hold Apply persists per-character choice, Motion Service refreshes. Breeze preview and core navigation pass in both themes. Original preferences and motion settings restored.",
-    "nativeVisualVerification": "Reviewed native Home, Voice, Action, Motion Service and core navigation in light/dark. Existing model materials preserved.",
+    "nativeFlow": "Cold launch through canonical shortcut. Live calibrated motion streams preview on Cortana in both themes, hold Apply persists per-character choice, Motion Service refreshes. Breeze preview and core navigation pass in both themes. Original preferences and motion settings restored.",
+    "nativeVisualVerification": "Cortana Action viewed in light and dark. Fixed service captures compared before/after. Home, Voice, Motion Service and core navigation visually checked; Task confirmed after authored entry motion. No new console errors.",
     "voiceService": {
       "status": 200,
       "breezeStatus": "connected",
       "voiceCount": 1,
       "selectedVoiceId": "breeze:cortana",
-      "waitMs": 8
+      "waitMs": 10
     },
     "previewAudioBytes": 486482,
     "motionFrames": 14,
@@ -107,7 +107,7 @@
         "appearance": "dark",
         "name": "Asset / Appearance / Action",
         "ready": true,
-        "character": "ai-moe-deepseek",
+        "character": "cortana",
         "frames": 7
       },
       {
@@ -146,7 +146,7 @@
     ],
     "newErrors": [],
     "preferencesRestored": true,
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\speech-motion-20261103",
+    "verificationDirectory": "D:\\preacherman\\output\\cortana-calibration-20261103",
     "temporaryProcesses": []
   },
   "releaseAttempts": [
@@ -1474,7 +1474,7 @@
       "verifiedAt": "2026-10-26T18:49:47.359039+08:00"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\speech-motion-before-20261103\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-calibration-before-20261103\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1490,16 +1490,9 @@
   ],
   "cleanup": {
     "status": "verified",
-    "verifiedAt": "2026-11-03T19:10:31.3680688+08:00",
-    "report": "D:/preacherman/output/playwright/speech-motion-20261103/cleanup-report.json",
-    "normalLaunch": true,
-    "desktopPid": 45452,
-    "temporaryListeners": [],
-    "temporaryProcesses": [],
-    "scope": "Canonical desktop and matching sidecar remain open. Shared Breeze and Docker Speech2Motion preserved. Preview, browser automation, build processes and debug listener have exited.",
-    "cpuPercent": 3.11,
-    "gpuPercent": 14,
-    "freeMemoryGiB": 16.19
+    "verifiedAt": "2026-11-03T21:48:58.3638835+08:00",
+    "report": "D:/preacherman/output/cortana-calibration-20261103/cleanup-report.json",
+    "scope": "Normal canonical desktop and matching sidecar plus shared Breeze and Speech2Motion. Debug, preview, browser and build children exited."
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
@@ -1549,8 +1542,9 @@
   "backupRetention": {
     "status": "passed",
     "kept": 3,
-    "remainingCandidates": 0,
-    "report": "D:/preacherman/output/playwright/speech-motion-20261103/backup-retention.json",
-    "verifiedAt": "2026-11-03T19:10:36.4382948+08:00"
+    "removed": 1,
+    "reclaimedBytes": 918095015,
+    "verifiedAt": "2026-11-03T21:48:01.6426951+08:00",
+    "report": "D:/preacherman/output/cortana-calibration-20261103/backup-retention.json"
   }
 }
