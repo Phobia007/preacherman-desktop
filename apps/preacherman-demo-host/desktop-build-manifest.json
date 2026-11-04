@@ -1,40 +1,46 @@
 {
   "schemaVersion": 1,
-  "buildId": "interface-fonts-english-20261104",
+  "buildId": "package-trim-20261104",
   "productVersion": "0.1.0",
-  "sourceTask": "Unify all UI fonts to Clash Display, preserve Home Zodiak and Preacherman signature, and use English interface copy; backend unchanged",
+  "sourceTask": "Reduce the desktop package by removing verified retired artwork, fonts, donor jewelry resources and a duplicate video; backend unchanged",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Primary UI, canvas card labels and packaged embedded pages use Clash Display. Authored Task and Extension copy is English; legacy UI language preferences normalize to English. User content, search aliases, speech and backend remain unchanged.",
-  "sourceCommit": "cb4c0ef64751d2271b8ab8a092c2f4f6b7026734",
+  "sourceState": "215 obsolete public files removed with hash-matched retirement ledger. All existing character models, animations, textures, speech resources and active routes remain packaged. Task video alias points to identical canonical bytes.",
+  "sourceCommit": "822095912cc62e812f00dee201c7c953a33e2a48",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-04T10:46:27.9381063Z",
-  "deployedAt": "2026-11-04T10:47:01.7249008Z",
-  "verifiedAt": "2026-11-04T10:54:05.290710+00:00",
-  "sizeBytes": 872320512,
-  "sha256": "1D13DB5298A29AEC5CA1C0AFD85C70380B06A569F8406C2DC3392ED7154941E4",
+  "builtAt": "2026-11-04T11:12:27.8019115Z",
+  "deployedAt": "2026-11-04T11:13:03.4276239Z",
+  "verifiedAt": "2026-11-04T11:19:06.455192+00:00",
+  "sizeBytes": 756208128,
+  "sha256": "AA0B648C46BF2606A84A241F1692D1B21A99FB9F869B986380EE4CE84FDEDF7B",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-11-04T07:55:14.011166+08:00",
   "sidecarSizeBytes": 93306368,
   "sidecarSha256": "AA9D8203E39C945E3FEB29852BFCEFEBCE619EDB4B85971A72CFFC1F33433398",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\interface-fonts-before-20261104-184656\\preacherman-demo-host.exe",
-  "backupSha256": "AD4BB1E510CFF6FAAF5145454C310533EC175688B019AA1983706553B39E854A",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\interface-fonts-before-20261104-184656\\preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\package-trim-before-20261104-191259\\preacherman-demo-host.exe",
+  "backupSha256": "1D13DB5298A29AEC5CA1C0AFD85C70380B06A569F8406C2DC3392ED7154941E4",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\package-trim-before-20261104-191259\\preacherman-service.exe",
   "sidecarBackupSha256": "AA9D8203E39C945E3FEB29852BFCEFEBCE619EDB4B85971A72CFFC1F33433398",
-  "rollbackBaselineCommit": "85151891463ce2ecab70e568f95a851d0ec39a0e",
-  "previousVerificationCommit": "85151891463ce2ecab70e568f95a851d0ec39a0e",
+  "rollbackBaselineCommit": "cb4c0ef64751d2271b8ab8a092c2f4f6b7026734",
+  "previousVerificationCommit": "cb4c0ef64751d2271b8ab8a092c2f4f6b7026734",
   "verification": {
-    "status": "passed-with-recorded-external-network-diagnostic",
+    "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
+      "sourceCommit": "822095912cc62e812f00dee201c7c953a33e2a48",
+      "beforePublicBytes": 1261840167,
+      "afterPublicBytes": 1116655820,
+      "removedBytes": 145184351,
+      "removedFiles": 215,
+      "distRetiredAssetsAbsent": true,
+      "knownBaselineTest": "market-import: all Gallery portraits; Market has 17 cards vs 27 Gallery entries. Both source catalogs unchanged from prior deployed release.",
       "typecheck": "passed",
-      "focusedTests": 59,
-      "focusedFailures": 0,
-      "gitDiffCheck": "passed"
+      "focusedTestsPassed": 36,
+      "knownBaselineFailures": 1
     },
     "backendChanged": false,
     "sidecarRebuilt": false,
-    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension verified in light and dark appearance. Task creation copy and loaded fonts checked. Window restore, maximize, minimize and close passed.",
+    "nativeFlow": "Canonical shortcut cold launch. Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension in light and dark appearance; native controls checked. Retained standalone Market options checked without missing assets.",
     "routes": [
       {
         "mode": "dark",
@@ -133,180 +139,6 @@
         "ready": true
       }
     ],
-    "typography": [
-      {
-        "mode": "dark",
-        "label": "Settings",
-        "checked": 14,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Task iframe",
-        "checked": 5,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Task create dialog",
-        "checked": 13,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Task",
-        "checked": 4,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Gallery",
-        "checked": 7,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Market",
-        "checked": 12,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Account",
-        "checked": 18,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Asset",
-        "checked": 13,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Extension iframe",
-        "checked": 21,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Extension",
-        "checked": 8,
-        "bad": []
-      },
-      {
-        "mode": "dark",
-        "label": "Home",
-        "checked": 4,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Settings",
-        "checked": 14,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Task iframe",
-        "checked": 5,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Task create dialog",
-        "checked": 13,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Task",
-        "checked": 4,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Gallery",
-        "checked": 4,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Market",
-        "checked": 9,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Account",
-        "checked": 18,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Asset",
-        "checked": 13,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Extension iframe",
-        "checked": 21,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Extension",
-        "checked": 8,
-        "bad": []
-      },
-      {
-        "mode": "light",
-        "label": "Home",
-        "checked": 4,
-        "bad": []
-      }
-    ],
-    "fontFixture": {
-      "modes": [
-        {
-          "mode": "light",
-          "fonts": {
-            "description": "\"Clash Display\", sans-serif",
-            "button": "\"Clash Display\", sans-serif",
-            "account": "\"Clash Display\", sans-serif",
-            "provider": "\"Clash Display\", sans-serif",
-            "slogan": "\"Preacherman Home Zodiak\", Georgia, serif",
-            "signature": "\"Market Task Signature\", cursive"
-          },
-          "loaded": true
-        },
-        {
-          "mode": "dark",
-          "fonts": {
-            "description": "\"Clash Display\", sans-serif",
-            "button": "\"Clash Display\", sans-serif",
-            "account": "\"Clash Display\", sans-serif",
-            "provider": "\"Clash Display\", sans-serif",
-            "slogan": "\"Preacherman Home Zodiak\", Georgia, serif",
-            "signature": "\"Market Task Signature\", cursive"
-          },
-          "loaded": true
-        }
-      ],
-      "errors": [],
-      "passed": true
-    },
-    "taskDialogs": [
-      {
-        "mode": "dark",
-        "text": "Name\nDescription\nTask group\nWorkspace · Optional\nChoose workspace folder\nCard cover · Optional\nChoose cover image\nJPG / PNG / WebP · Up to 12 MB\nAdd task"
-      },
-      {
-        "mode": "light",
-        "text": "Name\nDescription\nTask group\nWorkspace · Optional\nChoose workspace folder\nCard cover · Optional\nChoose cover image\nJPG / PNG / WebP · Up to 12 MB\nAdd task"
-      }
-    ],
     "windowControls": {
       "restore": true,
       "maximize": true,
@@ -315,58 +147,117 @@
       "passed": true
     },
     "resourceSample": {
-      "SampledAt": "2026-11-04T10:55:27.5985100Z",
-      "NativePid": 8468,
-      "ProcessIds": [
-        8468,
-        3460,
-        18916,
-        10648,
-        25548,
-        18804,
-        30960,
-        18744,
-        10972,
-        30312
+      "RootPID": 12904,
+      "OwnedPIDs": [
+        12904,
+        32424,
+        324,
+        6508,
+        15916,
+        10924,
+        25760,
+        34624,
+        1588,
+        12680,
+        5916
       ],
-      "NormalizedCpuPercent": 2.73,
-      "WorkingSetMiB": 1855.0,
-      "Responding": true,
-      "Ownership": "Canonical executable, matching sidecar and WebView2 descendants created after this launch. Shared Weixin processes excluded and preserved."
+      "NormalizedCpuPercent": 5.87,
+      "WorkingSetMiB": 2116,
+      "SampleSeconds": 5.1078323,
+      "MeasuredAt": "2026-11-04T19:17:04.2728728+08:00"
     },
     "newErrors": [],
     "observedErrors": [
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "limitations": [
-      "Existing external network ERR_CONNECTION_CLOSED diagnostic; no new application console errors."
+      "market-import: all Gallery portraits; Market has 17 cards vs 27 Gallery entries. Both source catalogs unchanged from prior deployed release.",
+      "Existing external CMS/media CSP and ERR_CONNECTION_CLOSED diagnostics, independently recorded in output/account-evomap-20260915/native-report.json; no new application errors."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\ui-language-fonts\\native-report.json",
-      "D:\\preacherman\\output\\ui-language-fonts\\typography-report.json",
-      "D:\\preacherman\\output\\ui-language-fonts\\window-lifecycle.json",
-      "D:\\preacherman\\output\\ui-language-fonts\\resources.json",
-      "D:\\preacherman\\output\\ui-language-fonts\\production-build.log",
-      "D:\\preacherman\\output\\ui-language-fonts\\tests.log",
-      "D:\\preacherman\\output\\ui-language-fonts\\final-startup.json",
-      "D:\\preacherman\\output\\ui-language-fonts\\final-resources.json",
-      "D:\\preacherman\\output\\ui-language-fonts\\prune.log"
+      "D:\\preacherman\\output\\package-trim\\native-report.json",
+      "D:\\preacherman\\output\\package-trim\\source-checks.json",
+      "D:\\preacherman\\output\\package-trim\\footer-report.json",
+      "D:\\preacherman\\output\\package-trim\\window-lifecycle.json",
+      "D:\\preacherman\\output\\package-trim\\resources.json",
+      "D:\\preacherman\\output\\package-trim\\final-startup.json"
     ],
-    "finalNormalStartup": {
-      "NativePid": 8468,
+    "finalShortcutLaunch": {
+      "PID": 14032,
+      "Title": "Preacherman Desktop Demo",
       "Responding": true,
-      "WindowTitle": "Preacherman Desktop Demo",
       "Shortcut": "C:\\Users\\Administrator\\Desktop\\Preacherman Desktop Demo.lnk",
-      "Hash": "1D13DB5298A29AEC5CA1C0AFD85C70380B06A569F8406C2DC3392ED7154941E4",
-      "TemporaryProcesses": 0,
-      "TemporaryListeners": 0,
-      "NormalStartupVerified": true,
-      "SharedWeixinProcessesPreserved": 14
+      "Target": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
+      "SHA256": "AA0B648C46BF2606A84A241F1692D1B21A99FB9F869B986380EE4CE84FDEDF7B",
+      "DebugPortEnabled": false,
+      "StartedAt": "2026-11-04T19:19:40.8846083+08:00"
+    },
+    "finalResourceSample": {
+      "RootPID": 14032,
+      "OwnedPIDs": [
+        14032,
+        7796,
+        15032,
+        34348,
+        1452,
+        18688,
+        9428,
+        4800,
+        10652,
+        33480,
+        7836,
+        18160,
+        25192,
+        2992,
+        31008,
+        32188,
+        31948,
+        23840,
+        5676,
+        5724,
+        11280,
+        23848,
+        13628,
+        10540,
+        31648,
+        13872,
+        10924,
+        12680,
+        32400,
+        26272,
+        26708,
+        9064,
+        21684,
+        24512,
+        27088,
+        18720,
+        2088,
+        2440,
+        5788,
+        28796,
+        4940,
+        11444,
+        3332
+      ],
+      "NormalizedCpuPercent": 11.78,
+      "WorkingSetMiB": 1739,
+      "SampleSeconds": 5.0917861,
+      "MeasuredAt": "2026-11-04T19:19:46.7993853+08:00"
     },
     "backupRetention": {
       "applied": true,
       "backupsKept": 3,
-      "itemsRemoved": 1
+      "removedOldSets": 1,
+      "freedGiB": 0.9
     }
   },
   "releaseAttempts": [
@@ -1701,9 +1592,19 @@
       "deployedAt": "2026-11-04T10:47:01.7249008Z",
       "verifiedAt": "2026-11-04T10:54:05.290710+00:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\interface-fonts-before-20261104-184656"
+    },
+    {
+      "buildId": "package-trim-20261104",
+      "sourceCommit": "822095912cc62e812f00dee201c7c953a33e2a48",
+      "sha256": "AA0B648C46BF2606A84A241F1692D1B21A99FB9F869B986380EE4CE84FDEDF7B",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-11-04T11:13:03.4276239Z",
+      "verifiedAt": "2026-11-04T11:19:06.455192+00:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\package-trim-before-20261104-191259",
+      "buildNote": "Initial rustc process exited with STATUS_ACCESS_VIOLATION before deployment. Incremental retry completed with CARGO_BUILD_JOBS=1 after closing the owned desktop."
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\interface-fonts-before-20261104-184656\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\package-trim-before-20261104-191259\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1782,5 +1683,15 @@
     "observedPreviousSha256": "71072DE456979D7C8C6F633B80E845C3E81FA7D679090A554B0FC9979E5CDFB8",
     "expectedPreviousSha256": "534B443D5180E19C7D4927E13AA782BC0CB3A44402F18DB6F631E1C7BCC45E78",
     "handling": "Observed prior pair preserved as unverified diagnostic backup. Rollback points to the independently hash-verified Cortana transition release pair. New deployed pair is verified against its build artifacts."
+  },
+  "packageReduction": {
+    "previousExecutableBytes": 872320512,
+    "executableBytes": 756208128,
+    "savedExecutableBytes": 116112384,
+    "savedPercent": 13.31,
+    "previousPublicBytes": 1261840167,
+    "publicBytes": 1116655820,
+    "removedFiles": 215,
+    "retirementLedger": "docs/package-trim-20261104.json"
   }
 }
