@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "3c0e8aa031e424819b3c846e2e5b042bb88a9809",
+  "baselineExecutableBytes": 756208128,
+  "baselinePublicBytes": 1116655820,
+  "removedBytes": 260112372,
+  "files": [
+    {
+      "id": "sanhua-wuthering-waves",
+      "path": "assets/avatars/sanhua-wuthering-waves/sanhua-wuthering-waves-runtime.glb",
+      "bytes": 2842200,
+      "sha256": "32b5a98c947e27e6348500aeab410117ccf22b5ab7d7a77161e312de10cf7f9c",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "magik-soul-surfer",
+      "path": "assets/avatars/magik-soul-surfer/magik-soul-surfer-runtime.glb",
+      "bytes": 15739416,
+      "sha256": "f6bdf1a4c3fb4e00967694cd06480507a1bdb3c91b052f19a0182bf0b701b4ee",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "black-cat-coastal-cat",
+      "path": "assets/avatars/black-cat-coastal-cat/black-cat-coastal-cat-runtime.glb",
+      "bytes": 15952568,
+      "sha256": "2577009bd2f1c530c559276f2e2a18d5f05e503c8a9359fe85a9eb08a1a4f508",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "black-widow-aquatic-assassin",
+      "path": "assets/avatars/black-widow-aquatic-assassin/black-widow-aquatic-assassin-runtime.glb",
+      "bytes": 16125436,
+      "sha256": "cd5157529eb8a902b60a1a303c46655fb701c17418dfcad833cb226cd49ed789",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "miles-variant-1",
+      "path": "assets/avatars/miles-variant-1/miles-variant-1-runtime.glb",
+      "bytes": 1953864,
+      "sha256": "90c46c1a133f5ee5d615b3782a41760f327cdcd4764e145542ebd602b489813b",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "miles-variant-2",
+      "path": "assets/avatars/miles-variant-2/miles-variant-2-runtime.glb",
+      "bytes": 2877828,
+      "sha256": "3917d7bab077420cd4a21356e570c7905b3a1d4701b9b20a4ba11dc1d057858d",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "modural-robot-mecha-chimera-dyan-high-poly-mesh",
+      "path": "assets/avatars/modural-robot-mecha-chimera-dyan-high-poly-mesh/modural-robot-mecha-chimera-dyan-high-poly-mesh-runtime.glb",
+      "bytes": 50085616,
+      "sha256": "bf0f7b94fc3902021263dc358c326b40a3612bee2b569d361910bcd8e813e3df",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "dark-knight",
+      "path": "assets/avatars/dark-knight/dark-knight-runtime.glb",
+      "bytes": 10265364,
+      "sha256": "f42fb6f4dc2265de7e64e98571860895be1f0d4b6d3834af8aa77450dbefd5cb",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "scifi-girl-v01",
+      "path": "assets/avatars/scifi-girl-v01/scifi-girl-v01-runtime.glb",
+      "bytes": 35567720,
+      "sha256": "9c83e0f4440942efe049070de0a626fae72bf320e5fbf7e0933a421eda877b7c",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "proxima",
+      "path": "assets/avatars/proxima/proxima-runtime.glb",
+      "bytes": 22807436,
+      "sha256": "b164417731dc9c665b6ed65a85bf36a44eec0fa57709b26d89673f0d844f4965",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "iron-man-mark-1",
+      "path": "assets/avatars/iron-man-mark-1/iron-man-mark-1-runtime.glb",
+      "bytes": 11762360,
+      "sha256": "cf5c6169e104fd1cb7387c6cd2173fdbbc2035d88d26b34925a4458258d281df",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "nier-print-9s",
+      "path": "assets/avatars/nier-print-9s/nier-print-9s-runtime.glb",
+      "bytes": 37472544,
+      "sha256": "257790c1f35d3c2feb6e5497cdcd5b1aeb2d1738b4a232cf25ce7078bd02372d",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    },
+    {
+      "id": "nier-print-2b",
+      "path": "assets/avatars/nier-print-2b/nier-print-2b-runtime.glb",
+      "bytes": 36660020,
+      "sha256": "b0009bd96020a93fd854995aa8657f8bd234a937f4c4498ded0846342e260104",
+      "reason": "Withdrawn from all current character selection surfaces; retained only as a legacy preference ID"
+    }
+  ]
+}

@@ -8,6 +8,7 @@ const root = join(import.meta.dirname, "..");
 const publicRoot = join(root, "public");
 const read = path => readFile(join(root, path), "utf8");
 const cleanup = JSON.parse(await read("docs/package-trim-20261104.json"));
+const withdrawn = JSON.parse(await read("docs/withdrawn-models-20261104.json"));
 async function files(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   return (await Promise.all(entries.map(entry => entry.isDirectory()
@@ -15,10 +16,21 @@ async function files(dir) {
 }
 
 test("retired donor assets cannot silently return to the packaged public directory", async () => {
-  for (const file of cleanup.files) {
+  for (const file of [...cleanup.files, ...withdrawn.files]) {
     assert.ok(!file.path.includes(".."));
     assert.ok(file.reason && file.sha256);
     await assert.rejects(stat(join(publicRoot, file.path)), { code: "ENOENT" });
+  }
+});
+
+test("runtime model registry matches current characters and rejects withdrawn identities", async () => {
+  const { importedAvatarModels, isAvatarModelId } = await import("../../../packages/preacherman-avatar-renderer/dist/index.js");
+  const characters = JSON.parse(await read("src/surfaces/asset/characters.json"));
+  const registered = ["cortana", "zima", ...importedAvatarModels.map(model => model.id)];
+  assert.deepEqual(registered.sort(), characters.map(character => character.id).sort());
+  for (const file of withdrawn.files) {
+    assert.equal(isAvatarModelId(file.id), false, file.id);
+    assert.ok(!registered.includes(file.id));
   }
 });
 
@@ -61,6 +73,6 @@ test("package trim preserves fonts, speech resources and self-contained producti
   assert.equal(config.build.frontendDist, "../dist");
   const total = (await Promise.all((await files(publicRoot)).map(async p => (await stat(p)).size)))
     .reduce((sum, size) => sum + size, 0);
-  assert.ok(total <= cleanup.baselinePublicBytes - cleanup.removedBytes + 1024 * 1024,
+  assert.ok(total <= cleanup.baselinePublicBytes - cleanup.removedBytes - withdrawn.removedBytes + 1024 * 1024,
     `Public assets exceeded the verified trim budget: ${total}`);
 });

@@ -18,7 +18,8 @@ export const DEFAULT_PREFERENCES: DemoPreferences = {
 };
 
 const PREFERENCES_STORAGE_KEY = "preacherman.preferences";
-const WITHDRAWN_MODEL_IDS: readonly ModelId[] = [
+// Keep legacy IDs only for saved-preference migration, outside the runtime catalog.
+const WITHDRAWN_MODEL_IDS: readonly string[] = [
   "sanhua-wuthering-waves",
   "magik-soul-surfer",
   "black-cat-coastal-cat",
