@@ -167,11 +167,19 @@ for (const appearance of ["light", "dark"]) {
   });
 }
 
-test("every imported asset is packaged and matches its recorded hash", async () => {
+test("every retained imported asset is packaged and matches its recorded hash", async () => {
   const manifest = JSON.parse(await text(join(imported, "import-manifest.json")));
+  const cleanup = JSON.parse(await text(join(root, "docs/package-trim-20261104.json")));
+  const retired = new Map(cleanup.files.map(file => [file.path, file]));
   assert.ok(manifest.files.length > 100);
   for (const file of manifest.files) {
     assert.ok(!file.path.includes(".."));
+    const removed = retired.get(`market-love/${file.path}`);
+    if (removed) {
+      assert.equal(removed.sha256, file.sha256, file.path);
+      await assert.rejects(stat(join(imported, file.path)), { code: "ENOENT" });
+      continue;
+    }
     const bytes = await readFile(join(imported, file.path));
     assert.equal(bytes.length, file.bytes, file.path);
     assert.equal(createHash("sha256").update(bytes).digest("hex"), file.sha256, file.path);
