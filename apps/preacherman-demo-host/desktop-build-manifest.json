@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "buildId": "voice-speed-20261104",
+  "buildId": "state-engine-decoupled-20261104",
   "productVersion": "0.1.0",
-  "sourceTask": "Reduce voice reply latency with streaming audio and accelerated offline recognition",
+  "sourceTask": "Integrate character long-term memory, forgetting, emotion, relationships, skill memory and Info Map without frontend changes",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Character-scoped Breeze PCM streaming with immediate cancellation, underrun-aware audio clock and incremental Audio2Face. D-drive faster-whisper base CPU INT8 model warmed on voice activation; existing voice identity and Cortana transition envelopes preserved.",
-  "sourceCommit": "98c6ee60b7f20e3b9ea26b43e7e872c23e8016d0",
+  "sourceState": "Original authored character personas persist independently of API/CLI engines. Character-scoped local state adds lexical recall, reversible forgetting, bounded affect/rapport, approved plugin TaskRun experience and Info Map APIs. Frontend source unchanged; final-session playback acknowledgement and UI wiring remain documented follow-ups.",
+  "sourceCommit": "85151891463ce2ecab70e568f95a851d0ec39a0e",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-04T00:30:57.272363+08:00",
-  "deployedAt": "2026-11-04T00:31:51.0120747+08:00",
-  "verifiedAt": "2026-11-04T00:36:40.3722416+08:00",
+  "builtAt": "2026-11-04T07:57:49.2611973+08:00",
+  "deployedAt": "2026-11-04T08:02:33.6608951+08:00",
+  "verifiedAt": "2026-11-04T08:09:18.8016566+08:00",
   "sizeBytes": 872743936,
-  "sha256": "534B443D5180E19C7D4927E13AA782BC0CB3A44402F18DB6F631E1C7BCC45E78",
+  "sha256": "AD4BB1E510CFF6FAAF5145454C310533EC175688B019AA1983706553B39E854A",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-11-04T00:27:56.1258042+08:00",
-  "sidecarSizeBytes": 93274112,
-  "sidecarSha256": "3C64FCD5EAED5245137DDE931B8CA69567EFE0AD07C057CDEFFED1EF7AB4D0DA",
+  "sidecarBuiltAt": "2026-11-04T07:55:14.011166+08:00",
+  "sidecarSizeBytes": 93306368,
+  "sidecarSha256": "AA9D8203E39C945E3FEB29852BFCEFEBCE619EDB4B85971A72CFFC1F33433398",
   "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-speed-before-20261104\\preacherman-demo-host.exe",
   "backupSha256": "E671E5C12508E6844AB932D484CE520B0B96E48BB8E16F876E49158547EFBABD",
   "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-speed-before-20261104\\preacherman-service.exe",
@@ -25,73 +25,43 @@
   "rollbackBaselineCommit": "afc79c60cba61b3f7ee1289f92ded08d5068837a",
   "previousVerificationCommit": "afc79c60cba61b3f7ee1289f92ded08d5068837a",
   "verification": {
-    "status": "passed-with-recorded-baseline-diagnostics",
+    "status": "passed-with-recorded-external-network-diagnostic",
     "sourceChecks": {
-      "focusedTests": 47,
+      "focusedTests": 46,
+      "frontendSource": "unchanged",
       "focusedFailures": 0,
       "typecheck": "passed",
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold canonical shortcut launch. Real streaming Breeze speech plays before generation EOF, supports consecutive sentences and immediate interruption. Body and facial motion verified in both modes, core navigation and voice preview pass, preferences restored.",
-    "nativeVisualVerification": "Reviewed native Cortana speaking and release states in light and dark modes plus core navigation screenshots. Existing materials, appearance, and transition behavior preserved.",
-    "voiceService": {
-      "status": 200,
-      "breezeStatus": "connected",
-      "voiceCount": 1,
-      "selectedVoiceId": "breeze:cortana",
-      "waitMs": 7
-    },
-    "previewAudioBytes": 486482,
-    "firstAudio": [
+    "nativeFlow": "Cold canonical shortcut launch. State and Info Map endpoints preserve original personas for Cortana, ZIMA and Master Chief; registered skills exposed. Core Home, Task, Gallery, Market/Ledger, Account, Settings and Asset tabs exercised in light and dark modes. Preferences restored.",
+    "nativeVisualVerification": "Reviewed native screenshots of both appearances, authored models and core navigation. No frontend layout changes; existing materials and motion remain present.",
+    "characterState": [
       {
-        "appearance": "light",
-        "ms": 210,
-        "streamRequests": 1,
-        "streamCompleted": 0
+        "id": "cortana",
+        "persona": "Cortana",
+        "revision": 1,
+        "phase": "ready",
+        "nodes": 3,
+        "events": 1
       },
       {
-        "appearance": "dark",
-        "ms": 222,
-        "streamRequests": 3,
-        "streamCompleted": 1
+        "id": "zima",
+        "persona": "ZIMA",
+        "revision": 1,
+        "phase": "ready",
+        "nodes": 3,
+        "events": 1
+      },
+      {
+        "id": "halo-mk-v-model",
+        "persona": "Master Chief",
+        "revision": 1,
+        "phase": "ready",
+        "nodes": 3,
+        "events": 1
       }
     ],
-    "latency": {
-      "rounds": [
-        {
-          "recognitionMs": 515,
-          "chatMs": 1705,
-          "firstPcmMs": 342,
-          "playablePcmMs": 342,
-          "totalTtsMs": 1664,
-          "audioSeconds": 4.64,
-          "endOfSpeechToAudioEstimateMs": 3227
-        },
-        {
-          "recognitionMs": 475,
-          "chatMs": 1788,
-          "firstPcmMs": 241,
-          "playablePcmMs": 241,
-          "totalTtsMs": 1362,
-          "audioSeconds": 4,
-          "endOfSpeechToAudioEstimateMs": 3169
-        }
-      ],
-      "recognizer": {
-        "engine": "faster-whisper",
-        "warmupMs": 1503
-      }
-    },
-    "motionFrames": 14,
-    "faceFrames": 29,
-    "faceService": {
-      "state": "ready",
-      "endpoint": "http://127.0.0.1:18083/health",
-      "starting": false,
-      "phase": "ready",
-      "message": "",
-      "managed": true
-    },
+    "availableSkills": 1,
     "routes": [
       {
         "appearance": "light",
@@ -100,16 +70,23 @@
       },
       {
         "appearance": "light",
-        "name": "Asset / Appearance / Voice",
-        "ready": true,
-        "count": 1
+        "name": "Asset / Overview",
+        "ready": true
       },
       {
         "appearance": "light",
-        "name": "Cortana natural finish and consecutive sentences",
-        "ready": true,
-        "faceFrames": 20,
-        "motionFrames": 10
+        "name": "Asset / Settings",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Asset / Skills",
+        "ready": true
+      },
+      {
+        "appearance": "light",
+        "name": "Asset / Info Map",
+        "ready": true
       },
       {
         "appearance": "light",
@@ -143,16 +120,23 @@
       },
       {
         "appearance": "dark",
-        "name": "Asset / Appearance / Voice",
-        "ready": true,
-        "count": 1
+        "name": "Asset / Overview",
+        "ready": true
       },
       {
         "appearance": "dark",
-        "name": "Cortana interrupted finish",
-        "ready": true,
-        "faceFrames": 9,
-        "motionFrames": 4
+        "name": "Asset / Settings",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Asset / Skills",
+        "ready": true
+      },
+      {
+        "appearance": "dark",
+        "name": "Asset / Info Map",
+        "ready": true
       },
       {
         "appearance": "dark",
@@ -180,11 +164,82 @@
         "ready": true
       }
     ],
-    "console": [],
+    "console": [
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+    ],
     "newErrors": [],
+    "externalNetworkDiagnostics": [
+      {
+        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
+        "location": {
+          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
+        "location": {
+          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
+        "location": {
+          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
+        "location": {
+          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      }
+    ],
+    "reviewedConclusion": "All local APIs and 20 native route/theme checks passed. The sole console diagnostic is an unchanged frontend request to the external Supabase token-refresh endpoint failing at network transport. No credentials or account state were modified. Initial Asset Settings screenshot was taken during its existing framing animation; readiness-aware capture confirms complete content without reload.",
+    "resources": {
+      "sampleSeconds": 6,
+      "desktopTreeCpuPercent": 3.93,
+      "host": [
+        {
+          "ProcessId": 43932,
+          "ParentProcessId": 43588,
+          "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe"
+        }
+      ],
+      "temporaryBuildProcesses": [],
+      "memory": {
+        "FreePhysicalMemory": 17489392,
+        "TotalVisibleMemorySize": 33389708
+      }
+    },
     "preferencesRestored": true,
-    "verificationDirectory": "D:\\preacherman\\output\\voice-speed-20261104",
-    "temporaryProcesses": []
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\state-engine-decoupled-20261104",
+    "temporaryProcesses": [],
+    "normalLaunch": {
+      "normalShortcutLaunch": true,
+      "pid": 42764,
+      "windowTitle": "Preacherman Desktop Demo",
+      "windowHandle": 8982592,
+      "persona": "Cortana",
+      "personaRevision": 1,
+      "statePhase": "ready",
+      "debugPortPresent": false
+    }
   },
   "releaseAttempts": [
     {
@@ -1527,23 +1582,10 @@
   ],
   "cleanup": {
     "status": "verified",
-    "verificationDirectory": "D:\\preacherman\\output\\voice-speed-20261104",
-    "scope": "Desktop and matching sidecar plus shared D-drive Breeze and Docker Speech2Motion/Audio2Face services remain intentionally running.",
-    "resources": {
-      "desktopPid": 12352,
-      "responding": true,
-      "windowTitle": "Preacherman Desktop Demo",
-      "cpuPercent": 3.08,
-      "workingSetMB": 1805.6,
-      "temporaryProcesses": [],
-      "debugPortClosed": true,
-      "sharedPreviewPid": 32212
-    },
-    "retention": {
-      "backupsKept": 3,
-      "status": "pruned",
-      "removedGiB": 0.9
-    }
+    "verificationDirectory": "D:\\preacherman\\output\\playwright\\state-engine-decoupled-20261104",
+    "scope": "Canonical desktop and matching sidecar plus pre-existing shared services remain intentionally running.",
+    "checkedAt": "2026-11-04T08:10:56.2626310+08:00",
+    "retentionReport": "output/playwright/state-engine-decoupled-20261104/backup-retention.json"
   },
   "windowsInstaller": {
     "releaseTag": "windows-v0.1.0",
@@ -1597,5 +1639,11 @@
     "reclaimedBytes": 918095015,
     "verifiedAt": "2026-11-03T21:48:01.6426951+08:00",
     "report": "D:/preacherman/output/cortana-calibration-20261103/backup-retention.json"
+  },
+  "predeploymentObservation": {
+    "hashDrift": true,
+    "observedPreviousSha256": "71072DE456979D7C8C6F633B80E845C3E81FA7D679090A554B0FC9979E5CDFB8",
+    "expectedPreviousSha256": "534B443D5180E19C7D4927E13AA782BC0CB3A44402F18DB6F631E1C7BCC45E78",
+    "handling": "Observed prior pair preserved as unverified diagnostic backup. Rollback points to the independently hash-verified Cortana transition release pair. New deployed pair is verified against its build artifacts."
   }
 }
