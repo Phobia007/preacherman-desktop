@@ -1,45 +1,61 @@
 {
   "schemaVersion": 1,
-  "buildId": "withdrawn-models-20261104",
+  "buildId": "character-state-ui-20261104",
   "productVersion": "0.1.0",
-  "sourceTask": "Remove 13 previously withdrawn character models from the desktop package; preserve 27 current characters and legacy selection migration",
+  "sourceTask": "Integrate character memories, rules, skill experience and Info Map; bind subsequent voice/text conversations to the Activated character",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "13 retired GLB files and their runtime registrations removed. Current models, motion, authored textures, speech and UI preserved; backend and sidecar unchanged.",
-  "sourceCommit": "1411c7ea090f57537f0f69c48917c4f741b02e71",
+  "sourceState": "English semantic light/dark UI; real character state and task records; immediate spoken/displayed receipt confirmation; browsing does not reassign memory ownership.",
+  "sourceCommit": "acd77d94fa286cb39f6a31ef391affaf6682a6e3",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-04T12:36:39.5108407Z",
-  "deployedAt": "2026-11-04T12:37:19.8739993Z",
-  "verifiedAt": "2026-11-04T12:39:51.791920+00:00",
-  "sizeBytes": 606695424,
-  "sha256": "722A214457DD96C67AD3264C8AFF405851E26E906C6DF3BDFC977691CCCBE64A",
+  "builtAt": "2026-11-04T15:42:09.5836535Z",
+  "deployedAt": "2026-11-04T15:42:46.0443209Z",
+  "verifiedAt": "2026-11-04T15:46:54.532057+00:00",
+  "sizeBytes": 606701056,
+  "sha256": "1FE7332A74FF7B6C44F0D8AE0EFD0225545322D5D8CDF765E03E66A4DA2609AD",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-11-04T07:55:14.011166+08:00",
-  "sidecarSizeBytes": 93306368,
-  "sidecarSha256": "AA9D8203E39C945E3FEB29852BFCEFEBCE619EDB4B85971A72CFFC1F33433398",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdrawn-models-before-20261104-203716\\preacherman-demo-host.exe",
-  "backupSha256": "AA0B648C46BF2606A84A241F1692D1B21A99FB9F869B986380EE4CE84FDEDF7B",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdrawn-models-before-20261104-203716\\preacherman-service.exe",
+  "sidecarBuiltAt": "2026-11-04T15:37:18.803442+00:00",
+  "sidecarSizeBytes": 93308416,
+  "sidecarSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-state-before-20261104-234241\\preacherman-demo-host.exe",
+  "backupSha256": "722A214457DD96C67AD3264C8AFF405851E26E906C6DF3BDFC977691CCCBE64A",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-state-before-20261104-234241\\preacherman-service.exe",
   "sidecarBackupSha256": "AA9D8203E39C945E3FEB29852BFCEFEBCE619EDB4B85971A72CFFC1F33433398",
-  "rollbackBaselineCommit": "3c0e8aa",
-  "previousVerificationCommit": "822095912cc62e812f00dee201c7c953a33e2a48",
+  "rollbackBaselineCommit": "e34d337",
+  "previousVerificationCommit": "1411c7ea090f57537f0f69c48917c4f741b02e71",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "beforePublicBytes": 1116655820,
-      "afterPublicBytes": 856543448,
-      "removedBytes": 260112372,
-      "removedFiles": 13,
-      "distRetiredAssetsAbsent": true,
       "typecheck": "passed",
-      "rendererBuild": "passed",
-      "focusedTestsPassed": 8,
-      "backendChanged": false
+      "focusedTests": 54,
+      "focusedTestsPassed": 54,
+      "preview": {
+        "checks": [
+          "dark memory add/pin/delete; rules save; actual skill result; Info Map history",
+          "light memory add/pin/delete; rules save; actual skill result; Info Map history"
+        ],
+        "errors": [],
+        "passed": true
+      },
+      "rulesLayout": {
+        "checks": [
+          "dark Rules title/form separation and dismissal",
+          "light Rules title/form separation and dismissal"
+        ],
+        "errors": [],
+        "passed": true
+      },
+      "designDetector": [],
+      "designReview": {
+        "status": "pass",
+        "RulesTitleCollision": "resolved",
+        "openMaterialFindings": 0
+      }
     },
-    "backendChanged": false,
-    "sidecarRebuilt": false,
-    "nativeFlow": "Canonical shortcut cold launch. Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension in both appearances. Asset has exactly 27 current characters; Cortana detail loads in both themes. Native window controls verified.",
+    "backendChanged": true,
+    "sidecarRebuilt": true,
+    "nativeFlow": "Canonical shortcut cold Home launch; all eight core routes in both themes. Character Memory, forgetting policy, Rules, Skills, Info Map and History display live local state; previewing ZIMA preserves activation. Isolated preview tests cover memory mutations, rule revisions and actual approved plugin results. Original account, memory, voice and model configuration preserved.",
     "routes": [
       {
         "mode": "dark",
@@ -138,18 +154,6 @@
         "ready": true
       }
     ],
-    "characterDetails": [
-      {
-        "mode": "dark",
-        "id": "cortana",
-        "ready": true
-      },
-      {
-        "mode": "light",
-        "id": "cortana",
-        "ready": true
-      }
-    ],
     "windowControls": {
       "restore": true,
       "maximize": true,
@@ -158,28 +162,24 @@
       "passed": true
     },
     "resourceSample": {
-      "RootPID": 4896,
+      "RootPID": 39500,
       "OwnedPIDs": [
-        4896,
-        2860,
-        12052,
-        28136,
-        924,
-        11928,
-        35492,
-        16900,
-        29340,
-        1036,
-        32988,
-        35284,
-        31432,
-        14356,
-        3092
+        39500,
+        11688,
+        3540,
+        39752,
+        36900,
+        8408,
+        39816,
+        35336,
+        24364,
+        35644,
+        38388
       ],
-      "NormalizedCpuPercent": 4.88,
-      "WorkingSetMiB": 2133,
-      "SampleSeconds": 5.1222395999999994,
-      "MeasuredAt": "2026-11-04T20:38:56.9697544+08:00"
+      "NormalizedCpuPercent": 3.92,
+      "WorkingSetMiB": 2087,
+      "SampleSeconds": 5.1083256,
+      "MeasuredAt": "2026-11-04T23:46:32.9262362+08:00"
     },
     "newErrors": [],
     "localAssetFailures": [],
@@ -187,27 +187,31 @@
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "limitations": [
-      "Previously recorded external CMS/media CSP diagnostics; no new application errors."
+      "State remains local-profile/character scoped; no cloud account isolation or sync. Graph shows six recent memories; all retained memories are available in Memory. Skill demonstration frame is intentionally empty."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\withdrawn-models\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\withdrawn-models\\source-checks.json",
-      "D:\\preacherman\\output\\playwright\\withdrawn-models\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\withdrawn-models\\resources.json",
-      "D:\\preacherman\\output\\playwright\\withdrawn-models\\final-startup.json",
-      "D:\\preacherman\\output\\playwright\\withdrawn-models\\backup-retention.json"
+      "D:\\preacherman\\output\\playwright\\character-state\\native-report.json",
+      "D:\\preacherman\\output\\playwright\\character-state\\source-checks.json",
+      "D:\\preacherman\\output\\playwright\\character-state\\window-lifecycle.json",
+      "D:\\preacherman\\output\\playwright\\character-state\\resources.json",
+      "D:\\preacherman\\output\\playwright\\character-state\\preview-report.json",
+      "D:\\preacherman\\output\\playwright\\character-state\\rules-verdict-report.json"
     ],
-    "finalShortcutLaunch": {
-      "PID": 10884,
-      "Title": "Preacherman Desktop Demo",
-      "Responding": true,
-      "Shortcut": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
+    "normalShortcutLaunch": {
+      "Shortcut": "C:\\Users\\Administrator\\Desktop\\Preacherman Desktop Demo.lnk",
       "Target": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
-      "SHA256": "722A214457DD96C67AD3264C8AFF405851E26E906C6DF3BDFC977691CCCBE64A",
-      "StartedAt": "2026-11-04T20:40:28.5991378+08:00",
-      "DebugPortOpen": false
+      "Sha256": "1FE7332A74FF7B6C44F0D8AE0EFD0225545322D5D8CDF765E03E66A4DA2609AD",
+      "PID": 19908,
+      "WindowTitle": "Preacherman Desktop Demo",
+      "Responding": true,
+      "DebugPortOpen": false,
+      "VerifiedAt": "2026-11-04T23:48:04.0808097+08:00"
     },
-    "temporaryProcessesCleaned": true
+    "backupRetention": {
+      "applied": true,
+      "completeSetsRetained": 3,
+      "removedGiB": 0.9
+    }
   },
   "releaseAttempts": [
     {
@@ -1561,9 +1565,20 @@
       "verifiedAt": "2026-11-04T12:39:51.791920+00:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdrawn-models-before-20261104-203716",
       "buildNote": "Incremental build with one Cargo job and unchanged verified sidecar."
+    },
+    {
+      "buildId": "character-state-ui-20261104",
+      "sourceCommit": "acd77d94fa286cb39f6a31ef391affaf6682a6e3",
+      "sha256": "1FE7332A74FF7B6C44F0D8AE0EFD0225545322D5D8CDF765E03E66A4DA2609AD",
+      "sidecarSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-11-04T15:42:46.0443209Z",
+      "verifiedAt": "2026-11-04T15:46:54.532057+00:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-state-before-20261104-234241",
+      "build": "Incremental production Tauri executable and rebuilt matching sidecar; preserved Cargo cache; no installer."
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\withdrawn-models-before-20261104-203716\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-state-before-20261104-234241\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
