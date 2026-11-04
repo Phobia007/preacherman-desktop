@@ -1,244 +1,372 @@
 {
   "schemaVersion": 1,
-  "buildId": "state-engine-decoupled-20261104",
+  "buildId": "interface-fonts-english-20261104",
   "productVersion": "0.1.0",
-  "sourceTask": "Integrate character long-term memory, forgetting, emotion, relationships, skill memory and Info Map without frontend changes",
+  "sourceTask": "Unify all UI fonts to Clash Display, preserve Home Zodiak and Preacherman signature, and use English interface copy; backend unchanged",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Original authored character personas persist independently of API/CLI engines. Character-scoped local state adds lexical recall, reversible forgetting, bounded affect/rapport, approved plugin TaskRun experience and Info Map APIs. Frontend source unchanged; final-session playback acknowledgement and UI wiring remain documented follow-ups.",
-  "sourceCommit": "85151891463ce2ecab70e568f95a851d0ec39a0e",
+  "sourceState": "Primary UI, canvas card labels and packaged embedded pages use Clash Display. Authored Task and Extension copy is English; legacy UI language preferences normalize to English. User content, search aliases, speech and backend remain unchanged.",
+  "sourceCommit": "cb4c0ef64751d2271b8ab8a092c2f4f6b7026734",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-04T07:57:49.2611973+08:00",
-  "deployedAt": "2026-11-04T08:02:33.6608951+08:00",
-  "verifiedAt": "2026-11-04T08:09:18.8016566+08:00",
-  "sizeBytes": 872743936,
-  "sha256": "AD4BB1E510CFF6FAAF5145454C310533EC175688B019AA1983706553B39E854A",
+  "builtAt": "2026-11-04T10:46:27.9381063Z",
+  "deployedAt": "2026-11-04T10:47:01.7249008Z",
+  "verifiedAt": "2026-11-04T10:54:05.290710+00:00",
+  "sizeBytes": 872320512,
+  "sha256": "1D13DB5298A29AEC5CA1C0AFD85C70380B06A569F8406C2DC3392ED7154941E4",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-11-04T07:55:14.011166+08:00",
   "sidecarSizeBytes": 93306368,
   "sidecarSha256": "AA9D8203E39C945E3FEB29852BFCEFEBCE619EDB4B85971A72CFFC1F33433398",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-speed-before-20261104\\preacherman-demo-host.exe",
-  "backupSha256": "E671E5C12508E6844AB932D484CE520B0B96E48BB8E16F876E49158547EFBABD",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-speed-before-20261104\\preacherman-service.exe",
-  "sidecarBackupSha256": "9089B3D3E68AA8FC9C73B03574FB6F8F273F64D01493F5B237B65F09FD54BE11",
-  "rollbackBaselineCommit": "afc79c60cba61b3f7ee1289f92ded08d5068837a",
-  "previousVerificationCommit": "afc79c60cba61b3f7ee1289f92ded08d5068837a",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\interface-fonts-before-20261104-184656\\preacherman-demo-host.exe",
+  "backupSha256": "AD4BB1E510CFF6FAAF5145454C310533EC175688B019AA1983706553B39E854A",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\interface-fonts-before-20261104-184656\\preacherman-service.exe",
+  "sidecarBackupSha256": "AA9D8203E39C945E3FEB29852BFCEFEBCE619EDB4B85971A72CFFC1F33433398",
+  "rollbackBaselineCommit": "85151891463ce2ecab70e568f95a851d0ec39a0e",
+  "previousVerificationCommit": "85151891463ce2ecab70e568f95a851d0ec39a0e",
   "verification": {
     "status": "passed-with-recorded-external-network-diagnostic",
     "sourceChecks": {
-      "focusedTests": 46,
-      "frontendSource": "unchanged",
-      "focusedFailures": 0,
       "typecheck": "passed",
+      "focusedTests": 59,
+      "focusedFailures": 0,
       "gitDiffCheck": "passed"
     },
-    "nativeFlow": "Cold canonical shortcut launch. State and Info Map endpoints preserve original personas for Cortana, ZIMA and Master Chief; registered skills exposed. Core Home, Task, Gallery, Market/Ledger, Account, Settings and Asset tabs exercised in light and dark modes. Preferences restored.",
-    "nativeVisualVerification": "Reviewed native screenshots of both appearances, authored models and core navigation. No frontend layout changes; existing materials and motion remain present.",
-    "characterState": [
-      {
-        "id": "cortana",
-        "persona": "Cortana",
-        "revision": 1,
-        "phase": "ready",
-        "nodes": 3,
-        "events": 1
-      },
-      {
-        "id": "zima",
-        "persona": "ZIMA",
-        "revision": 1,
-        "phase": "ready",
-        "nodes": 3,
-        "events": 1
-      },
-      {
-        "id": "halo-mk-v-model",
-        "persona": "Master Chief",
-        "revision": 1,
-        "phase": "ready",
-        "nodes": 3,
-        "events": 1
-      }
-    ],
-    "availableSkills": 1,
+    "backendChanged": false,
+    "sidecarRebuilt": false,
+    "nativeFlow": "Canonical shortcut cold launch; Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension verified in light and dark appearance. Task creation copy and loaded fonts checked. Window restore, maximize, minimize and close passed.",
     "routes": [
       {
-        "appearance": "light",
+        "mode": "dark",
         "name": "Settings",
+        "surface": "settings",
         "ready": true
       },
       {
-        "appearance": "light",
-        "name": "Asset / Overview",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Asset / Settings",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Asset / Skills",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Asset / Info Map",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Gallery",
-        "ready": true
-      },
-      {
-        "appearance": "light",
-        "name": "Home",
-        "ready": true
-      },
-      {
-        "appearance": "light",
+        "mode": "dark",
         "name": "Task",
+        "surface": "workspace",
         "ready": true
       },
       {
-        "appearance": "light",
+        "mode": "dark",
+        "name": "Gallery",
+        "surface": "market",
+        "ready": true
+      },
+      {
+        "mode": "dark",
         "name": "Market",
+        "surface": "ledger",
         "ready": true
       },
       {
-        "appearance": "light",
+        "mode": "dark",
         "name": "Account",
+        "surface": "account",
         "ready": true
       },
       {
-        "appearance": "dark",
+        "mode": "dark",
+        "name": "Asset",
+        "surface": "asset",
+        "ready": true
+      },
+      {
+        "mode": "dark",
+        "name": "Extension",
+        "surface": "extension",
+        "ready": true
+      },
+      {
+        "mode": "dark",
+        "name": "Home",
+        "surface": "home",
+        "ready": true
+      },
+      {
+        "mode": "light",
         "name": "Settings",
+        "surface": "settings",
         "ready": true
       },
       {
-        "appearance": "dark",
-        "name": "Asset / Overview",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Asset / Settings",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Asset / Skills",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Asset / Info Map",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Gallery",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
-        "name": "Home",
-        "ready": true
-      },
-      {
-        "appearance": "dark",
+        "mode": "light",
         "name": "Task",
+        "surface": "workspace",
         "ready": true
       },
       {
-        "appearance": "dark",
+        "mode": "light",
+        "name": "Gallery",
+        "surface": "market",
+        "ready": true
+      },
+      {
+        "mode": "light",
         "name": "Market",
+        "surface": "ledger",
         "ready": true
       },
       {
-        "appearance": "dark",
+        "mode": "light",
         "name": "Account",
+        "surface": "account",
+        "ready": true
+      },
+      {
+        "mode": "light",
+        "name": "Asset",
+        "surface": "asset",
+        "ready": true
+      },
+      {
+        "mode": "light",
+        "name": "Extension",
+        "surface": "extension",
+        "ready": true
+      },
+      {
+        "mode": "light",
+        "name": "Home",
+        "surface": "home",
         "ready": true
       }
     ],
-    "console": [
-      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
-    ],
-    "newErrors": [],
-    "externalNetworkDiagnostics": [
+    "typography": [
       {
-        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
-        "location": {
-          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token",
-          "line": 0,
-          "column": 0,
-          "lineNumber": 0,
-          "columnNumber": 0
-        }
+        "mode": "dark",
+        "label": "Settings",
+        "checked": 14,
+        "bad": []
       },
       {
-        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
-        "location": {
-          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token",
-          "line": 0,
-          "column": 0,
-          "lineNumber": 0,
-          "columnNumber": 0
-        }
+        "mode": "dark",
+        "label": "Task iframe",
+        "checked": 5,
+        "bad": []
       },
       {
-        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
-        "location": {
-          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token",
-          "line": 0,
-          "column": 0,
-          "lineNumber": 0,
-          "columnNumber": 0
-        }
+        "mode": "dark",
+        "label": "Task create dialog",
+        "checked": 13,
+        "bad": []
       },
       {
-        "text": "Failed to load resource: net::ERR_CONNECTION_CLOSED",
-        "location": {
-          "url": "https://gzqmjzybaosxhkfgbxaz.supabase.co/auth/v1/token?grant_type=refresh_token",
-          "line": 0,
-          "column": 0,
-          "lineNumber": 0,
-          "columnNumber": 0
-        }
+        "mode": "dark",
+        "label": "Task",
+        "checked": 4,
+        "bad": []
+      },
+      {
+        "mode": "dark",
+        "label": "Gallery",
+        "checked": 7,
+        "bad": []
+      },
+      {
+        "mode": "dark",
+        "label": "Market",
+        "checked": 12,
+        "bad": []
+      },
+      {
+        "mode": "dark",
+        "label": "Account",
+        "checked": 18,
+        "bad": []
+      },
+      {
+        "mode": "dark",
+        "label": "Asset",
+        "checked": 13,
+        "bad": []
+      },
+      {
+        "mode": "dark",
+        "label": "Extension iframe",
+        "checked": 21,
+        "bad": []
+      },
+      {
+        "mode": "dark",
+        "label": "Extension",
+        "checked": 8,
+        "bad": []
+      },
+      {
+        "mode": "dark",
+        "label": "Home",
+        "checked": 4,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Settings",
+        "checked": 14,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Task iframe",
+        "checked": 5,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Task create dialog",
+        "checked": 13,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Task",
+        "checked": 4,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Gallery",
+        "checked": 4,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Market",
+        "checked": 9,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Account",
+        "checked": 18,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Asset",
+        "checked": 13,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Extension iframe",
+        "checked": 21,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Extension",
+        "checked": 8,
+        "bad": []
+      },
+      {
+        "mode": "light",
+        "label": "Home",
+        "checked": 4,
+        "bad": []
       }
     ],
-    "reviewedConclusion": "All local APIs and 20 native route/theme checks passed. The sole console diagnostic is an unchanged frontend request to the external Supabase token-refresh endpoint failing at network transport. No credentials or account state were modified. Initial Asset Settings screenshot was taken during its existing framing animation; readiness-aware capture confirms complete content without reload.",
-    "resources": {
-      "sampleSeconds": 6,
-      "desktopTreeCpuPercent": 3.93,
-      "host": [
+    "fontFixture": {
+      "modes": [
         {
-          "ProcessId": 43932,
-          "ParentProcessId": 43588,
-          "ExecutablePath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe"
+          "mode": "light",
+          "fonts": {
+            "description": "\"Clash Display\", sans-serif",
+            "button": "\"Clash Display\", sans-serif",
+            "account": "\"Clash Display\", sans-serif",
+            "provider": "\"Clash Display\", sans-serif",
+            "slogan": "\"Preacherman Home Zodiak\", Georgia, serif",
+            "signature": "\"Market Task Signature\", cursive"
+          },
+          "loaded": true
+        },
+        {
+          "mode": "dark",
+          "fonts": {
+            "description": "\"Clash Display\", sans-serif",
+            "button": "\"Clash Display\", sans-serif",
+            "account": "\"Clash Display\", sans-serif",
+            "provider": "\"Clash Display\", sans-serif",
+            "slogan": "\"Preacherman Home Zodiak\", Georgia, serif",
+            "signature": "\"Market Task Signature\", cursive"
+          },
+          "loaded": true
         }
       ],
-      "temporaryBuildProcesses": [],
-      "memory": {
-        "FreePhysicalMemory": 17489392,
-        "TotalVisibleMemorySize": 33389708
-      }
+      "errors": [],
+      "passed": true
     },
-    "preferencesRestored": true,
-    "verificationDirectory": "D:\\preacherman\\output\\playwright\\state-engine-decoupled-20261104",
-    "temporaryProcesses": [],
-    "normalLaunch": {
-      "normalShortcutLaunch": true,
-      "pid": 42764,
-      "windowTitle": "Preacherman Desktop Demo",
-      "windowHandle": 8982592,
-      "persona": "Cortana",
-      "personaRevision": 1,
-      "statePhase": "ready",
-      "debugPortPresent": false
+    "taskDialogs": [
+      {
+        "mode": "dark",
+        "text": "Name\nDescription\nTask group\nWorkspace · Optional\nChoose workspace folder\nCard cover · Optional\nChoose cover image\nJPG / PNG / WebP · Up to 12 MB\nAdd task"
+      },
+      {
+        "mode": "light",
+        "text": "Name\nDescription\nTask group\nWorkspace · Optional\nChoose workspace folder\nCard cover · Optional\nChoose cover image\nJPG / PNG / WebP · Up to 12 MB\nAdd task"
+      }
+    ],
+    "windowControls": {
+      "restore": true,
+      "maximize": true,
+      "minimize": true,
+      "closeRequested": true,
+      "passed": true
+    },
+    "resourceSample": {
+      "SampledAt": "2026-11-04T10:55:27.5985100Z",
+      "NativePid": 8468,
+      "ProcessIds": [
+        8468,
+        3460,
+        18916,
+        10648,
+        25548,
+        18804,
+        30960,
+        18744,
+        10972,
+        30312
+      ],
+      "NormalizedCpuPercent": 2.73,
+      "WorkingSetMiB": 1855.0,
+      "Responding": true,
+      "Ownership": "Canonical executable, matching sidecar and WebView2 descendants created after this launch. Shared Weixin processes excluded and preserved."
+    },
+    "newErrors": [],
+    "observedErrors": [
+      "Failed to load resource: net::ERR_CONNECTION_CLOSED"
+    ],
+    "limitations": [
+      "Existing external network ERR_CONNECTION_CLOSED diagnostic; no new application console errors."
+    ],
+    "evidence": [
+      "D:\\preacherman\\output\\ui-language-fonts\\native-report.json",
+      "D:\\preacherman\\output\\ui-language-fonts\\typography-report.json",
+      "D:\\preacherman\\output\\ui-language-fonts\\window-lifecycle.json",
+      "D:\\preacherman\\output\\ui-language-fonts\\resources.json",
+      "D:\\preacherman\\output\\ui-language-fonts\\production-build.log",
+      "D:\\preacherman\\output\\ui-language-fonts\\tests.log",
+      "D:\\preacherman\\output\\ui-language-fonts\\final-startup.json",
+      "D:\\preacherman\\output\\ui-language-fonts\\final-resources.json",
+      "D:\\preacherman\\output\\ui-language-fonts\\prune.log"
+    ],
+    "finalNormalStartup": {
+      "NativePid": 8468,
+      "Responding": true,
+      "WindowTitle": "Preacherman Desktop Demo",
+      "Shortcut": "C:\\Users\\Administrator\\Desktop\\Preacherman Desktop Demo.lnk",
+      "Hash": "1D13DB5298A29AEC5CA1C0AFD85C70380B06A569F8406C2DC3392ED7154941E4",
+      "TemporaryProcesses": 0,
+      "TemporaryListeners": 0,
+      "NormalStartupVerified": true,
+      "SharedWeixinProcessesPreserved": 14
+    },
+    "backupRetention": {
+      "applied": true,
+      "backupsKept": 3,
+      "itemsRemoved": 1
     }
   },
   "releaseAttempts": [
@@ -1564,9 +1692,18 @@
       "sha256": "F6614D296B34AE81B2B2DD84EF7DCE5F208BBD4DC367785387BE8C8590AC6C3E",
       "sidecarSha256": "C1F3939E43F6EC675FDAE8158526BF261CBC6B3107B5EEE98D24E6A090169C13",
       "verifiedAt": "2026-10-26T18:49:47.359039+08:00"
+    },
+    {
+      "buildId": "interface-fonts-english-20261104",
+      "sourceCommit": "cb4c0ef64751d2271b8ab8a092c2f4f6b7026734",
+      "sha256": "1D13DB5298A29AEC5CA1C0AFD85C70380B06A569F8406C2DC3392ED7154941E4",
+      "status": "passed-with-recorded-external-network-diagnostic",
+      "deployedAt": "2026-11-04T10:47:01.7249008Z",
+      "verifiedAt": "2026-11-04T10:54:05.290710+00:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\interface-fonts-before-20261104-184656"
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\voice-speed-before-20261104\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\interface-fonts-before-20261104-184656\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
