@@ -109,16 +109,31 @@ Automatic forgetting is reversible archival, not data erasure. Explicit deletion
 removes a memory from this store; it does not erase an active provider session,
 existing task artifacts or independent legacy global-memory records.
 
-## Frontend windows to wire later (no changes in this delivery)
+## Desktop integration (2026-11-04)
 
-| Existing window / controller | Next wiring |
+| Existing window / controller | Implemented behavior |
 | --- | --- |
-| Asset -> Info Map | Replace fixed level and empty area with rapport level, graph, event timeline, memory/task details and pagination. |
-| Asset -> Settings -> Memory | Bind the selected character's memories and policy; expose pin, restore, delete and forgetting controls. Do not silently reuse the global memory namespace. |
-| Asset -> Settings -> Instructions / Rules | Read/write that character's persistent rules and revision; handle edit conflicts. |
-| Asset -> Skills | Replace static example entries with registered tools, enable state, proficiency, review date and real execution history. |
-| Task / Gallery task proposal and approval | Carry the selected `characterId` into a proposal and retain the binding when confirming or retrying. Show the actual result reference. |
-| Bottom-right voice controller | Post playback acknowledgement on completion, interruption and stop, including the final session reply. No new text UI is required. |
+| Asset -> Info Map | Real rapport, mood, recent memory connections, paged events and task results. The graph shows up to six recent memories; Memory provides the complete retained list. |
+| Asset -> Settings -> Memory | Add, pin/unpin, delete with confirmation, restore archived memories by pinning, configure forgetting. No global-memory namespace reuse. |
+| Asset -> Settings -> Instructions / Rules | Revision-checked persistent rules; conflicts preserve the draft and allow explicit reload. |
+| Asset -> Skills | Registered tools only, per-character enable state, proficiency, success/failure totals, review date and last execution result. |
+| Task proposal and approval | Explicit `run plugin-id::tool-name` requests prepare a proposal bound to the activated character. Approve/decline remains explicit; confirmations and retries retain ownership. Existing Gallery is a visual search surface, not a second task executor. |
+| Bottom-right voice controller | Immediate confirmation on completion, interruption and stop, including the last reply. Only completed spoken sentences enter memory on interruption. No new conversation text UI. |
+
+The AppShell exposes its actual activated character, independently of the Asset
+preview selection. Task dispatch and voice turns capture ownership before any
+asynchronous request. Changing activation affects subsequent conversations;
+completion of an earlier reply or task stays with its original character.
+
+Task text chat preserves its selected API/CLI model while supplying that
+character's persona and recalled memories. Server conversation sessions are
+separate per character and task. Only the current message is accepted from the
+frame for character chat, so browsing an older task cannot import another
+character's transcript. Replies enter memory after the frame confirms display
+(`assistant_read`, `reply.displayed`); voice uses `assistant_heard` and
+`playback.confirmed`. Text chat does not require or contact TTS. Character text
+messages are limited to 4,000 characters. Unactivated generic Task chat retains
+its existing behavior and does not write a character's memory.
 
 Home, Appearance/Voice, models and Execution Mode need no new visual layout for
 this backend integration. Mood and rapport can be presented inside Info Map.

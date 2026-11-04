@@ -216,13 +216,15 @@ export function createCharacterConversation({ file, connections, codex, listAgen
       const { active } = await connections.save(draft, { activate: false });
       return select(id, active);
     },
-    async chat(id, { text, sessionId, playback, replyId = randomUUID() }, signal) {
+    async chat(id, { text, sessionId, playback, replyId = randomUUID(), channel = "voice", execution: selectedExecution }, signal) {
       const character = identity(id);
+      const isText = channel === "text";
       if (typeof text !== "string" || !text.trim() || text.length > 4000) throw fail("A spoken message is required.");
       if (typeof sessionId !== "string" || !/^[\w-]{16,80}$/.test(sessionId)) throw fail("A valid voice session is required.");
       if (typeof replyId !== "string" || !/^[\w-]{16,80}$/.test(replyId)) throw fail("A valid reply identifier is required.");
-      const saved = await profile(id); const execution = saved.execution;
+      const saved = await profile(id); const execution = isText && selectedExecution ? selectedExecution : saved.execution;
       if (!execution) throw fail("Choose an execution mode in this character's Settings first.", 409);
+      if (execution.mode === "cli" && execution.agentId !== "codex-cli") throw fail("This Agent does not support direct chat.", 409);
       const key = id + ":" + sessionId;
       if (busy.has(key)) throw fail("Wait for this character's reply.", 409);
       busy.add(key);
@@ -259,32 +261,33 @@ export function createCharacterConversation({ file, connections, codex, listAgen
         const persona = characterState?.persona ?? { ...character, rules: saved.rules };
         const personaInstructions = `You are ${persona.name}, the user's virtual companion in Preacherman. ` +
           `Character background: ${persona.designation}. ${persona.paragraphs.join(" ")} ` +
+          (isText ? "Speak naturally in first person, in the user's language. Keep replies concise. " :
           "Speak naturally in first person. Follow the spoken output language below. This is a voice-only conversation. " +
-          "Keep replies to one to three short spoken sentences unless more detail is requested. No Markdown or stage directions. " +
+          "Keep replies to one to three short spoken sentences unless more detail is requested. No Markdown or stage directions. ") +
           "You can converse and help plan; you cannot execute tools or claim to have performed actions. " +
           "Be honest that you are a virtual character if asked. " + persona.rules.join("\n");
         signal?.throwIfAborted();
-        const resolved = await resolveVoice(id, signal);
-        requireSelectedVoice(resolved);
-        const { voice } = resolved;
+        const resolved = isText ? null : await resolveVoice(id, signal);
+        if (resolved) requireSelectedVoice(resolved);
+        const voice = resolved?.voice;
         const voiceLanguage = voice?.language || "unknown";
         const spokenLanguage = voiceLanguage === "en"
           ? "Reply in English only, even when the user speaks Chinese. This character's selected voice supports English. "
           : voiceLanguage === "zh"
             ? "Reply in Simplified Chinese only, even when the user speaks English. This character's selected voice supports Chinese. "
             : "Reply in the user's language. ";
-        const spokenPersona = personaInstructions + "\nSpoken output language: " + spokenLanguage +
+        const spokenPersona = personaInstructions + (isText ? "" : "\nSpoken output language: " + spokenLanguage) +
           (characterState ? "\n" + characterState.contextText : "");
         const result = execution.mode === "cli"
-          ? await codex.chat({ messages, model: execution.model, personaInstructions: spokenPersona, voiceConversation: true, signal })
+          ? await codex.chat({ messages, model: execution.model, personaInstructions: spokenPersona, voiceConversation: !isText, signal })
           : await connections.chat({ connectionId: execution.connectionId, model: execution.model, messages, personaInstructions: spokenPersona, signal });
         signal?.throwIfAborted();
         const latest = await profile(id);
-        if (JSON.stringify(latest.execution) !== stamp) throw fail("Execution mode changed. Start a new conversation.", 409);
-        if (latest.selectedVoiceId !== resolved.saved.selectedVoiceId) throw fail("Voice selection changed. Start a new conversation.", 409);
+        if (!selectedExecution && JSON.stringify(latest.execution) !== stamp) throw fail("Execution mode changed. Start a new conversation.", 409);
+        if (resolved && latest.selectedVoiceId !== resolved.saved.selectedVoiceId) throw fail("Voice selection changed. Start a new conversation.", 409);
         if (typeof result.text !== "string" || !result.text.trim() || result.text.length > 6000) throw fail("The reply cannot be spoken. Please ask for a shorter answer.", 502);
         if (stateEngine) await stateEngine.recordTurn(id, { replyId, sessionId, userText: text.trim(), replyText: result.text,
-          personaRevision: characterState.persona.revision, recalledIds: characterState.recalledIds });
+          personaRevision: characterState.persona.revision, recalledIds: characterState.recalledIds, channel: isText ? "text" : "voice" });
         sessions.set(key, { execution: stamp, at: Date.now(), replyId, messages: [...messages, { role: "assistant", content: result.text }].slice(-20) });
         return { text: result.text, replyId, characterId: id, voiceLanguage, voiceId: voice?.voiceId || null, source: result.source || "api" };
       } finally { busy.delete(key); }

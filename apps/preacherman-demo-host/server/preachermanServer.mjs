@@ -1522,7 +1522,7 @@ export function createPreachermanServer(options = {}) {
           const cancellation = new AbortController();
           const disconnected = () => { if (!response.writableEnded) cancellation.abort(); };
           response.once("close", disconnected);
-          try { json(response, 200, await characterConversation.chat(id, body, cancellation.signal), origin); }
+          try { json(response, 200, await characterConversation.chat(id, { ...body, channel: "voice", execution: undefined }, cancellation.signal), origin); }
           finally { response.removeListener("close", disconnected); }
           return;
         }
@@ -1574,8 +1574,15 @@ export function createPreachermanServer(options = {}) {
         return;
       }
       if (url.pathname === "/api/execution/chat" && request.method === "POST") {
-        const { connectionId, model, messages } = await readJson(request, 512 * 1024);
-        json(response, 200, await executionConnections.chat({ connectionId, model, messages }), origin);
+        const { connectionId, model, messages, characterId, sessionId, replyId } = await readJson(request, 512 * 1024);
+        const cancellation = new AbortController();
+        const disconnected = () => { if (!response.writableEnded) cancellation.abort(); };
+        response.once("close", disconnected);
+        try {
+          const result = characterId ? await characterConversation.chat(characterId, { text: messages?.at(-1)?.role === "user" ? messages.at(-1).content : null, sessionId, replyId, channel: "text", execution: { mode: "api", connectionId, model } }, cancellation.signal)
+            : await executionConnections.chat({ connectionId, model, messages, signal: cancellation.signal });
+          json(response, 200, result, origin);
+        } finally { response.removeListener("close", disconnected); }
         return;
       }
       if (url.pathname === "/api/execution/codex-chat" && request.method === "POST") {
@@ -1585,7 +1592,11 @@ export function createPreachermanServer(options = {}) {
         const cancellation = new AbortController();
         const disconnected = () => { if (!response.writableEnded) cancellation.abort(); };
         response.once("close", disconnected);
-        try { json(response, 200, await codexConversation.chat({ messages: body.messages, model: body.model, signal: cancellation.signal }), origin); }
+        try {
+          const result = body.characterId ? await characterConversation.chat(body.characterId, { text: body.messages?.at(-1)?.role === "user" ? body.messages.at(-1).content : null, sessionId: body.sessionId, replyId: body.replyId, channel: "text", execution: { mode: "cli", agentId: local.agentId, model: body.model } }, cancellation.signal)
+            : await codexConversation.chat({ messages: body.messages, model: body.model, signal: cancellation.signal });
+          json(response, 200, result, origin);
+        }
         finally { response.removeListener("close", disconnected); }
         return;
       }

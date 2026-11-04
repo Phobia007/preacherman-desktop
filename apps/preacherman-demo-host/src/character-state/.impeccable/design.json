@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T15:36:14Z",
+  "title": "Design System: Preacherman Character State",
+  "extensions": {
+    "motion": [
+      { "name": "setting-focus", "value": "420ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Inherited focused title enlargement from scale(1) to scale(2); reduced motion preserves the final scale without animation." },
+      { "name": "asset-model-filter", "value": "420ms ease", "purpose": "The model slot blurs to 38px while the form stays clear; disabled for reduced motion." },
+      { "name": "asset-model-opacity", "value": "520ms ease", "purpose": "Inherited model-slot opacity transition; disabled for reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "profile-compact", "value": "1100px" },
+      { "name": "profile-stacked", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Panel Action",
+      "kind": "button",
+      "refersTo": "panel-action",
+      "description": "A quiet action using the live semantic theme roles.",
+      "html": "<button class=\"ds-panel-action\" type=\"button\">Refresh</button>",
+      "css": ".ds-panel-action{border:1px solid var(--demo-theme-market-border);border-radius:999px;background:transparent;color:var(--demo-theme-market-text);font:16px/1.55 var(--demo-font-primary);padding:10px 20px;cursor:pointer}.ds-panel-action:hover{background:var(--demo-theme-control-hover-bg);border-color:var(--demo-theme-market-focus)}.ds-panel-action:focus-visible{outline:1px solid var(--demo-theme-market-focus);outline-offset:4px}.ds-panel-action:disabled{cursor:wait;opacity:.5}"
+    },
+    {
+      "name": "Memory Field",
+      "kind": "input",
+      "refersTo": "memory-field",
+      "description": "A vertically resizable field with semantic placeholder and focus colors.",
+      "html": "<textarea class=\"ds-memory-field\" aria-label=\"Memory\" placeholder=\"Write a memory\"></textarea>",
+      "css": ".ds-memory-field{width:100%;box-sizing:border-box;resize:vertical;min-height:110px;max-height:400px;padding:18px 22px;border:1px solid var(--demo-theme-settings-border);border-radius:18px;color:var(--demo-theme-settings-text);background:var(--demo-theme-settings-surface);font:19px/1.6 var(--demo-font-primary);caret-color:var(--demo-theme-settings-text)}.ds-memory-field::placeholder{color:var(--demo-theme-settings-muted);opacity:1}.ds-memory-field:focus-visible{outline:1px solid var(--demo-theme-settings-focus);outline-offset:4px}"
+    },
+    {
+      "name": "Info Map Tabs",
+      "kind": "nav",
+      "description": "Text-only Map and History navigation with the active label in primary ink.",
+      "html": "<div class=\"ds-info-tabs\" role=\"tablist\" aria-label=\"Info Map views\"><button type=\"button\" role=\"tab\" aria-selected=\"true\">Map</button><button type=\"button\" role=\"tab\" aria-selected=\"false\" tabindex=\"-1\">History</button></div>",
+      "css": ".ds-info-tabs{display:flex;gap:28px}.ds-info-tabs button{padding:8px 0;border:0;border-radius:0;color:var(--demo-theme-market-muted);background:transparent;font:16px/1.55 var(--demo-font-primary);cursor:pointer}.ds-info-tabs button[aria-selected=true]{color:var(--demo-theme-market-text)}.ds-info-tabs button:focus-visible{outline:1px solid var(--demo-theme-market-focus);outline-offset:4px}"
+    },
+    {
+      "name": "Graph Node",
+      "kind": "chip",
+      "description": "An interactive pill that keeps its label clear of graph edges.",
+      "html": "<button class=\"ds-graph-node\" type=\"button\" aria-pressed=\"false\">Rapport</button>",
+      "css": ".ds-graph-node{border:1px solid var(--demo-theme-market-border);border-radius:999px;background:var(--demo-theme-home-canvas);color:var(--demo-theme-market-text);font:14px/1.55 var(--demo-font-primary);padding:8px 14px;white-space:nowrap;cursor:pointer}.ds-graph-node:is(:hover,[aria-pressed=true]){background:var(--demo-theme-control-hover-bg);border-color:var(--demo-theme-market-focus)}.ds-graph-node:focus-visible{outline:1px solid var(--demo-theme-market-focus);outline-offset:4px}"
+    },
+    {
+      "name": "Profile Panel",
+      "kind": "card",
+      "description": "A flat rectangular container; content and actions supply its hierarchy.",
+      "html": "<section class=\"ds-profile-panel\"><h2>Character</h2><p>Select a connection to explore it.</p></section>",
+      "css": ".ds-profile-panel{min-width:0;padding:32px 36px;border:1px solid var(--demo-theme-market-border);color:var(--demo-theme-market-text);background:transparent;font:18px/1.55 var(--demo-font-primary)}.ds-profile-panel h2{margin:0;font-size:36px;font-weight:300;line-height:1.2}.ds-profile-panel p{margin:18px 0;overflow-wrap:anywhere}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The existing Preacherman character workspace",
+    "overview": "This document extends the implemented Asset and Settings surfaces. It does not replace the root design world. The pinned direction is English-first Clash Display, quiet thin borders and pills, a large focused setting title on the left, and clear editing controls on the right. Info Map places the portrait and rapport on the left and the graph or history on the right.",
+    "keyCharacteristics": [
+      "The existing companion, shell, navigation, and desktop controls remain visually continuous.",
+      "Thin frames, restrained surfaces, and clear type carry the hierarchy.",
+      "Focus blurs the other setting choices and model while preserving readable form content.",
+      "Light and dark appearances use the same semantic roles."
+    ],
+    "rules": [
+      { "name": "The Appearance Rule", "body": "Preserve deliberate backgrounds, text, borders, icons, hover, focus, loading, and error states in both modes. Authored portraits and models retain their content colors. Native window controls remain legible above every surface.", "section": "colors" }
+    ],
+    "dos": [
+      "Do extend the existing Asset and Settings language with Clash Display, thin frames, and restrained pills.",
+      "Do keep the focused title left, the form right, and background choices and model blurred.",
+      "Do preserve the Rules-only wrap and check its painted bounds after the scale transform.",
+      "Do verify changed surfaces and native controls in both appearances, including console errors and keyboard focus."
+    ],
+    "donts": [
+      "Don't promote this scoped split composition into a redesign of unrelated routes.",
+      "Don't replace semantic theme roles with hard-coded page chrome.",
+      "Don't reassign conversation ownership when the user browses a character preview.",
+      "Don't invent backend state or populate the intentionally blank skill demonstration."
+    ]
+  }
+}

@@ -193,7 +193,7 @@ export function createStateEngineDecoupled({ file, now = Date.now, catalog = cha
           JSON.stringify({ observations: recalled, responseStyle: emotion.label, relationship: { conversations: record.relationship.turns, activeDays: record.relationship.activeDays } }) };
     },
     async hasTurn(id, replyId) { const record = await ensure(id); return record.receipts.some(item => item.id === replyId); },
-    recordTurn(id, { replyId, sessionId, userText, replyText, personaRevision, recalledIds = [] }) {
+    recordTurn(id, { replyId, sessionId, userText, replyText, personaRevision, recalledIds = [], channel = "voice" }) {
       idText(replyId, "reply id"); idText(sessionId, "session id");
       if (typeof replyText !== "string" || !replyText.trim() || replyText.length > 6000) throw fail("Invalid reply text.");
       const user = text(userText), reply = redact(replyText);
@@ -210,7 +210,7 @@ export function createStateEngineDecoupled({ file, now = Date.now, catalog = cha
           if (recalled) { recalled.recalls++; recalled.reinforcedAt = iso(now()); recalled.importance = Math.min(1, recalled.importance + 0.02); if (recalled.recalls >= 3) recalled.tier = "long-term"; }
         }
         record.receipts.push({ id: replyId, hash, sessionId }); record.receipts = record.receipts.slice(-LIMITS.receipts);
-        record.pending.push({ replyId, sessionId, text: reply, createdAt: iso(now()), heardCharacters: 0, complete: false, memoryId: null });
+        record.pending.push({ replyId, sessionId, text: reply, channel: channel === "text" ? "text" : "voice", createdAt: iso(now()), heardCharacters: 0, complete: false, memoryId: null });
         record.pending = record.pending.slice(-LIMITS.pending);
         relationshipUpdate(record, user);
         event(record, "turn.accepted", { turnId: replyId, memoryId: memory.id, personaRevision, playback: "unconfirmed" });
@@ -232,12 +232,12 @@ export function createStateEngineDecoupled({ file, now = Date.now, catalog = cha
         }
         if (count > 0) {
           const heard = pending.text.slice(0, count).trim();
-          if (heard) pending.memoryId = remember(record, heard, { source: "assistant_heard", importance: 0.35, key: playback.replyId }).id;
+          if (heard) pending.memoryId = remember(record, heard, { source: pending.channel === "text" ? "assistant_read" : "assistant_heard", importance: 0.35, key: playback.replyId }).id;
         }
         pending.heardCharacters = count; pending.complete = true; pending.interrupted = playback.interrupted;
         // No longer retain the generated, unheard continuation after acknowledgement.
         pending.text = pending.text.slice(0, count);
-        event(record, "playback.confirmed", { turnId: playback.replyId, heardCharacters: count, interrupted: playback.interrupted, memoryId: pending.memoryId });
+        event(record, pending.channel === "text" ? "reply.displayed" : "playback.confirmed", { turnId: playback.replyId, heardCharacters: count, interrupted: playback.interrupted, memoryId: pending.memoryId });
         return { accepted: true, duplicate: false };
       });
     },

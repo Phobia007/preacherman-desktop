@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Locale } from "../preferences";
+import { activeCharacterId } from "../character-state/activeCharacter";
 import { localServiceUrl } from "../serviceConfig";
 import { beginNewConversation, saveConversation, type LedgerMessage } from "../conversationLedger";
 import { openLocalSurface } from "../demo/screenRoute";
@@ -18,6 +19,7 @@ import { LocalAgentTaskLauncher, type LocalAgentTask } from "./LocalAgentTaskLau
 import "./ab-task-console.css";
 
 interface TaskProposal {
+  readonly characterId?: string;
   readonly proposalId: string;
   readonly kind?: "plugin-tool";
   readonly executor: string;
@@ -231,7 +233,7 @@ export function TaskWorkspaceProvider({ children, locale }: { readonly children:
     try {
       const response = await request<{ displayText: string; speechText?: string; proposal: TaskProposal | null; diagnostics: TurnDiagnostics }>("/api/agent/turn", {
         method: "POST",
-        body: JSON.stringify({ input: text, locale, history: [...messages, { role: "user", text }].slice(-10) }),
+        body: JSON.stringify({ input: text, locale, characterId: activeCharacterId(), history: [...messages, { role: "user", text }].slice(-10) }),
       });
       if (!coordinator.isConversationEpochCurrent(conversationEpoch)) return;
       setMessages((current) => [...current, { role: "assistant", text: response.displayText }]);

@@ -4,6 +4,9 @@ import "./settings-menu.css";
 import { ExecutionModeSettings } from "./ExecutionModeSettings";
 import { MotionServiceSettings } from "./MotionServiceSettings";
 import { VoiceServiceSettings } from "./VoiceServiceSettings";
+import { CharacterMemorySettings } from "../character-state/CharacterMemorySettings";
+import { CharacterRulesSettings } from "../character-state/CharacterRulesSettings";
+import { activeCharacterId } from "../character-state/activeCharacter";
 
 interface SettingsScreenProps {
   readonly appearance: Appearance;
@@ -42,6 +45,7 @@ export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desk
   const focusedButtonRef = useRef<HTMLButtonElement>(null);
   const returnButtonRef = useRef<HTMLButtonElement | null>(null);
   const Root = layout === "asset" ? "section" : "main";
+  const stateCharacterId = characterId ?? activeCharacterId();
 
   useEffect(() => {
     onFocusChange?.(Boolean(selected));
@@ -148,6 +152,9 @@ export function SettingsMenu({ locale, items = settingsMenuItems, layout = "desk
       {selected?.label === "Execution Mode" ? <ExecutionModeSettings key={characterId || "global"} characterId={characterId} /> : null}
       {selected?.label === "Motion Service" && characterId ? <MotionServiceSettings key={characterId} characterId={characterId} onOpenAction={onOpenAction} /> : null}
       {selected?.label === "Voice Service" && characterId ? <VoiceServiceSettings key={characterId} characterId={characterId} onOpenVoice={onOpenVoice} /> : null}
+      {selected?.label === "Memory" && stateCharacterId ? <CharacterMemorySettings key={stateCharacterId} characterId={stateCharacterId} /> : null}
+      {selected?.label === "Instructions / Rules" && stateCharacterId ? <CharacterRulesSettings key={stateCharacterId} characterId={stateCharacterId} /> : null}
+      {!stateCharacterId && ["Memory", "Instructions / Rules"].includes(selected?.label ?? "") && <section className="execution-mode"><p>Activate a character in Asset to manage its memory and rules.</p></section>}
     </Root>
   );
 }

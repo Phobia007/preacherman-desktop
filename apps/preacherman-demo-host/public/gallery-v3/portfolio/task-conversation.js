@@ -97,8 +97,9 @@ export const TaskConversation = {
     });
     const send = async () => {
       if (busy.value || readFailed.value || !draft.value.trim()) return;
-      if (!selected.value) { error.value = "Connect a model in Execution Mode, then select it for this task."; return; }
-      if (!selectionAvailable()) { error.value = "The selected model is unavailable. Choose another model before sending."; return; }
+      const skillRequest = /^(?:run|execute)\s+(?:(?:the\s+)?plugin\s+tool\s+)?[A-Za-z0-9_-]+::[A-Za-z0-9_.-]+(?:\s|$)/i.test(draft.value.trim());
+      if (!skillRequest && !selected.value) { error.value = "Connect a model in Execution Mode, then select it for this task."; return; }
+      if (!skillRequest && !selectionAvailable()) { error.value = "The selected model is unavailable. Choose another model before sending."; return; }
       if (files.value.length) { error.value = "Attachments currently store filenames only. Remove them before sending text."; return; }
       const [providerId, modelId] = selected.value.split("::");
       const text = draft.value.trim();
@@ -115,11 +116,12 @@ export const TaskConversation = {
       try {
         const context = boundedChatContext(updated);
         contextTrimmed.value = context.trimmed;
-        const result = await callHost({ action: "chat", selection: {providerId, modelId}, messages: context.messages });
+        const result = await callHost({ action: "chat", conversationId: task, selection: {providerId, modelId}, messages: context.messages });
         if (typeof result?.text !== "string" || !result.text.trim()) throw new Error("The model returned no text.");
-        const reply = {role:"assistant", text:result.text, files:[]};
+        const reply = {role:"assistant", text:result.text, files:[], characterId:result.characterId, proposal:result.proposal || null};
         try { persist([...messages.value, reply]); }
         catch { messages.value = [...messages.value, reply]; error.value = "The reply was received but could not be saved locally. Please copy it to keep it."; }
+        if (result.receiptId) { await nextTick(); await callHost({ action: "displayed", receiptId: result.receiptId }); }
       } catch (reason) { error.value = reason.message + " Your message is preserved and will not be resent automatically."; }
       finally { busy.value = false; scrollToLatest(); input.value?.focus(); }
     };
@@ -133,6 +135,17 @@ export const TaskConversation = {
         try { persist(updated); } catch { messages.value = updated; error.value = "Task status updated, but the local record could not be saved."; }
       } catch (reason) { error.value = reason.message; }
       finally { busy.value = false; scrollToLatest(); }
+    };
+    const proposalAction = async (index, approve) => {
+      if (busy.value) return;
+      const proposal = messages.value[index].proposal;
+      busy.value = true; error.value = "";
+      try {
+        const result = approve ? await callHost({ action: "confirm-proposal", proposalId:proposal.proposalId, objective:proposal.objective }) : null;
+        const updated = messages.value.map((message, at) => at === index ? {...message, proposal:null, task:result?.task, text:approve ? "Task submitted for " + (message.characterId || "this character") + "." : "Execution declined."} : message);
+        try { persist(updated); } catch { messages.value = updated; error.value = "The result could not be saved locally."; }
+      } catch (reason) { error.value = reason.message; }
+      finally { busy.value = false; }
     };
 
     const requestProviders = () => {
@@ -241,9 +254,17 @@ export const TaskConversation = {
         }, [
           element("small", {class:"task-chat__author"}, message.role === "assistant" ? "Preacherman" : "You"),
           message.text ? element("p", null, message.text) : null,
+          message.proposal ? element("div", {class:"task-chat__execution"}, [
+            element("p", null, "Character: " + message.characterId),
+            element("p", null, message.proposal.objective),
+            element("p", null, "Tool: " + (message.proposal.toolCall?.name || message.proposal.executor)),
+            element("button", {type:"button", disabled:busy.value, onClick:() => proposalAction(index, true)}, "Approve execution"),
+            element("button", {type:"button", disabled:busy.value, onClick:() => proposalAction(index, false)}, "Decline"),
+          ]) : null,
           message.task ? element("div", {class:"task-chat__execution"}, [
+            message.task.characterId ? element("p", null, "Character: " + message.task.characterId) : null,
             element("p", null, "Status: " + message.task.status),
-            element("p", null, "Executor: " + (message.task.executionSnapshot?.agentId || "Codex CLI") + " · Workspace: " + (message.task.executionSnapshot?.workspaceId || "") + " · workspace-write"),
+            element("p", null, "Executor: " + (message.task.toolCall?.name || message.task.executionSnapshot?.agentId || message.task.source || "Local task")),
             ...(message.task.pendingApproval ? [
               element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "approve")}, "Approve execution"),
               element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "reject")}, "Reject"),

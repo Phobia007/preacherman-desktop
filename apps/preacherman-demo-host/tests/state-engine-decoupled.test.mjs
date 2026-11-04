@@ -18,6 +18,25 @@ async function fixture(t) {
 }
 const turn = (replyId, overrides = {}) => ({ replyId, sessionId, userText: "Remember, my favorite color is cobalt.", replyText: "Heard sentence. Unheard private continuation.", personaRevision: 1, ...overrides });
 
+test("Task text conversations preserve character identity and memory without requiring a voice service", async t => {
+  const f = await fixture(t), requests = [];
+  const service = createCharacterConversation({ file: join(f.directory,"characters.json"), stateEngine:f.runtime,
+    connections:{status:async()=>({active:null}), chat:async args=>{requests.push(args);return {text:"A remembered reply."};}},
+    breeze:{voices:async()=>{throw Error("Text chat must not contact TTS");}} });
+  const execution = {mode:"api",connectionId:"chosen-model",model:"model"};
+  const reply = await service.chat("cortana",{text:"Remember that I prefer blue.",sessionId,replyId:"text-character-reply-01",channel:"text",execution});
+  assert.equal(reply.characterId,"cortana"); assert.equal(requests[0].connectionId,"chosen-model");
+  assert.match(requests[0].personaInstructions,/You are Cortana/); assert.doesNotMatch(requests[0].personaInstructions,/voice-only/);
+  assert.equal((await f.runtime.snapshot("cortana")).unconfirmedReplies,1);
+  assert.equal((await f.runtime.memories("zima")).total,0);
+  await service.chat("zima",{text:"My separate conversation.",sessionId,replyId:"text-character-reply-02",channel:"text",execution});
+  assert.equal(requests[1].messages.length,1); assert.doesNotMatch(requests[1].personaInstructions,/prefer blue/);
+  await f.runtime.acknowledge("cortana",sessionId,{replyId:reply.replyId,heardCharacters:reply.text.length,interrupted:false});
+  const memories = await f.runtime.memories("cortana"); assert.ok(memories.items.some(m=>m.source==="assistant_read"));
+  assert.ok((await f.runtime.infoMap("cortana")).events.items.some(e=>e.type==="reply.displayed"));
+  assert.equal((await f.runtime.snapshot("zima")).unconfirmedReplies,1);
+});
+
 test("our persona survives restart and stays isolated from memories, role switches and external persona fields", async t => {
   const f = await fixture(t);
   await f.runtime.ensure("cortana", ["Use my authored tone."]);
@@ -148,6 +167,7 @@ test("aborted replies and in-flight persona edits do not create a committed turn
 test("HTTP state, existing character chat, approval and real plugin task form one isolated backend flow", async t => {
   const directory = await mkdtemp(join(tmpdir(), "preacherman-state-http-"));
   const service = createPreachermanServer({ env: { PREACHERMAN_DATA_DIR: directory },
+    executionConnectionRequest: async (_url, options) => ({ choices: [{ message: options.body.tools ? { tool_calls: [{ function: { name: "connection_probe" } }] } : { content: "A displayed API reply." } }] }),
     codexConversation: { chat: async () => ({ text: "Heard sentence. Unheard private continuation." }), close() {} },
     breezeSpeech: { voices: async () => [], close: async () => {} } });
   t.after(async () => { await service.close(); await rm(directory, { recursive: true, force: true }); });
@@ -157,9 +177,17 @@ test("HTTP state, existing character chat, approval and real plugin task form on
     const result = await response.json(); assert.equal(response.status, expected, JSON.stringify(result)); return result;
   };
   const statePath = "/api/characters/cortana/state", skillId = "preacherman-runtime::task_summary";
+  const draft = { name: "Isolated test", protocol: "openai", baseUrl: "https://api.example.test", apiKey: "fixture-only-key", model: "test-model" };
+  await request("/api/settings/execution/test", "POST", draft);
+  const connection = await request("/api/settings/execution/save", "POST", draft);
+  const displayed = await request("/api/execution/chat", "POST", { characterId: "zima", sessionId, replyId: "http-text-reply-00000001", connectionId: connection.active.connectionId, model: draft.model, messages: [{ role: "user", content: "Remember this isolated text conversation." }] });
+  assert.equal(displayed.characterId, "zima");
+  assert.equal((await request("/api/characters/zima/state")).unconfirmedReplies, 1);
+  await request("/api/characters/zima/state/playback", "POST", { sessionId, playback: { replyId: displayed.replyId, heardCharacters: displayed.text.length, interrupted: false } });
+  assert.ok((await request("/api/characters/zima/state/memories")).items.some(item => item.source === "assistant_read"));
   assert.equal((await request(statePath)).persona.name, "Cortana");
   await request(statePath + "/memories", "POST", { text: "My favorite color is cobalt.", pinned: true }, 201);
-  assert.equal((await request("/api/characters/zima/state/memories")).total, 0);
+  assert.equal((await request("/api/characters/zima/state/memories")).items.some(item => item.text.includes("cobalt")), false);
   await request(statePath + "/skills", "PUT", { skillId, enabled: true });
   const proposed = await request("/api/agent/turn", "POST", { input: "Run the PREACHERMAN plugin status summary", locale: "en", characterId: "cortana" });
   assert.equal((await request(statePath)).skills[0].successes, 0);

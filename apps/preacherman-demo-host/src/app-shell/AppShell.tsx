@@ -112,6 +112,7 @@ export function AppShell({
     <div className="demo-app-viewport">
     <div
       className={`demo-app-shell${entering ? " demo-host--entering" : ""}`}
+      data-active-character={activeCharacterId ?? ""}
       data-active-surface={activeSurfaceType}
       data-navigation-phase={navigationPhase}
       data-navigation-target={navigationTarget}

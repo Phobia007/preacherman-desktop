@@ -23,6 +23,12 @@
   width: 54%;
   padding-inline: 32px 18px;
 }
+/* The authored focus doubles this label; keep its painted width inside the left column. */
+.asset-settings[data-settings-selection="Instructions / Rules"] .settings-menu__focused-item[aria-pressed="true"] {
+  max-width: 17%;
+  height: auto !important;
+  white-space: normal;
+}
 @media (prefers-reduced-motion: reduce) {
   .asset-detail--sections .asset-detail__model-slot,
   .asset-settings .settings-menu__frost { transition: none; }

@@ -20,7 +20,7 @@ async function fixture(fetchImpl) {
   }).outputText, { exports: motion, require: () => ({ speechMotionRuntime: { start: async options => { motions.push(options); return true; },
     startFaceStream(options) { const record = { ...options, chunks: [] }; faces.push(record); return { firstFrame: Promise.resolve(true), append(pcm) { record.chunks.push(pcm); }, finish() { record.finished = true; } }; },
     cancel: (epoch, reason) => { stoppedMotions.push(epoch); stopReasons.push(reason); } }, motionStrength: { natural: 0.55 } }), AbortController, setTimeout, clearTimeout });
-  const exports = {}, states = [], contexts = [], frames = new Set();
+  const exports = {}, states = [], contexts = [], frames = new Set(), receipts = [];
   let character = "cortana", sequence = 0;
   class Meter { starts = 0; stops = 0; start() { this.starts++; return Promise.resolve(true); } stop() { this.stops++; } dispose() {} }
   class Context {
@@ -41,7 +41,7 @@ async function fixture(fetchImpl) {
   runInNewContext(ts.transpileModule(source, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText, {
-    exports, fetch: fetchImpl, require: name => name.endsWith("/serviceConfig") ? { localServiceUrl: path => path } : name.endsWith("/SpokenMotionPlayback") ? motion : name.endsWith("/characterMotion") ? { defaultCharacterMotion: id => ({ characterId: id, supported: true, enabled: true, style: "natural" }) } : name === "./spokenAudio" ? { ...audio, speechWav: () => "audio" } : {
+    exports, fetch: fetchImpl, require: name => name.endsWith("/playbackReceipt") ? { confirmPlayback: (id, session, playback) => { receipts.push({ id, session, ...playback }); return Promise.resolve(true); } } : name.endsWith("/serviceConfig") ? { localServiceUrl: path => path } : name.endsWith("/SpokenMotionPlayback") ? motion : name.endsWith("/characterMotion") ? { defaultCharacterMotion: id => ({ characterId: id, supported: true, enabled: true, style: "natural" }) } : name === "./spokenAudio" ? { ...audio, speechWav: () => "audio" } : {
       MicrophoneMeter: Meter, selectOutput: async () => {}, voiceFrame: () => ({}),
     },
     AbortController, AbortSignal, crypto: { randomUUID: () => "session" }, setTimeout, clearTimeout,
@@ -50,8 +50,29 @@ async function fixture(fetchImpl) {
     atob: value => Buffer.from(value, "base64").toString("binary"), performance,
   });
   const voice = new exports.SpokenConversation(() => {}, state => states.push(state), () => character, () => ({ input: "", output: "" }), () => {});
-  return { voice, audio, states, contexts, frames, motions, faces, stoppedMotions, stopReasons, Motion: motion.SpokenMotionPlayback, setCharacter(value) { character = value; } };
+  return { voice, audio, states, contexts, frames, motions, faces, stoppedMotions, stopReasons, receipts, Motion: motion.SpokenMotionPlayback, setCharacter(value) { character = value; } };
 }
+
+test("final or interrupted playback is confirmed immediately to its original activated character", async () => {
+  for (const interrupted of [false, true]) {
+    const f = await fixture(); const playing = deferred();
+    f.voice.request = async path => path.endsWith("/execution") ? {active:{}} : path.includes("/status?") ? {language:"en"} : path.endsWith("/recognize") ? {accepted:true,text:"Hello"} : {text:"Hello. Another sentence."};
+    f.voice.speak = async (_text, signal, _id, _voice, playback) => {
+      playback.heardCharacters = 6;
+      if (interrupted) { await playing.promise; signal.throwIfAborted(); }
+      playback.heardCharacters = 24; playback.interrupted = false;
+    };
+    try {
+      await f.voice.start(); const session = f.voice.sessionId;
+      const running = f.voice.reply([new Float32Array(512)], f.voice.cancellation.signal);
+      await tick(); f.setCharacter("zima");
+      if (interrupted) { f.voice.stop(); playing.resolve(); }
+      await running;
+      assert.equal(f.receipts.length, 1); assert.equal(f.receipts[0].id, "cortana"); assert.equal(f.receipts[0].session, session);
+      assert.equal(f.receipts[0].interrupted, interrupted); assert.equal(f.receipts[0].heardCharacters, interrupted ? 6 : 24);
+    } finally { playing.resolve(); f.voice.dispose(); }
+  }
+});
 
 test("natural audio completion and barge-in select different motion release envelopes", async () => {
   for (const interrupted of [false, true]) {

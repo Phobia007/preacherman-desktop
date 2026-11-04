@@ -6,6 +6,7 @@ import { SpokenMotionPlayback } from "../motion/SpokenMotionPlayback";
 import { localServiceUrl } from "../serviceConfig";
 import { PcmSpeechPlayer } from "./PcmSpeechPlayer";
 import { defaultCharacterMotion, type CharacterMotionSettings } from "../motion/characterMotion";
+import { confirmPlayback } from "../character-state/playbackReceipt";
 
 export type ConversationVoiceState = MicrophoneState | "thinking" | "speaking";
 type Devices = { input: string; output: string };
@@ -114,6 +115,7 @@ export class SpokenConversation {
     const turn = new AbortController(); this.turn = turn;
     const signal = AbortSignal.any([sessionSignal, turn.signal]);
     const id = this.characterId;
+    const sessionId = this.sessionId;
     this.hearing = false; clearTimeout(this.idleTimer);
     this.onState("thinking"); this.avatar("thinking");
     try {
@@ -127,10 +129,16 @@ export class SpokenConversation {
           const previousPlayback = this.previousPlayback;
           const playback = { replyId: crypto.randomUUID(), heardCharacters: 0, interrupted: true };
           this.previousPlayback = playback;
-          const result = await this.request<{ text: string; voiceLanguage?: VoiceLanguage; voiceId?: string | null }>(`/api/characters/${id}/conversation`, { text: recognized.text, sessionId: this.sessionId, replyId: playback.replyId, playback: previousPlayback }, signal, 130000);
-          signal.throwIfAborted();
-          if (result.voiceLanguage) this.voiceLanguage = result.voiceLanguage;
-          await this.speak(result.text, signal, id, result.voiceId, playback);
+          const result = await this.request<{ text: string; voiceLanguage?: VoiceLanguage; voiceId?: string | null }>(`/api/characters/${id}/conversation`, { text: recognized.text, sessionId, replyId: playback.replyId, playback: previousPlayback }, signal, 130000);
+          try {
+            signal.throwIfAborted();
+            if (result.voiceLanguage) this.voiceLanguage = result.voiceLanguage;
+            await this.speak(result.text, signal, id, result.voiceId, playback);
+          } finally {
+            // This finalizer also runs on interruption, stop, and character changes.
+            // It owns the original character/session and is not cancelled with audio.
+            void confirmPlayback(id, sessionId, playback);
+          }
         } else {
           this.missedPhrases++;
           if (this.missedPhrases >= 2) {

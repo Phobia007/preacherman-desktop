@@ -186,8 +186,8 @@ function CharacterDetails({ initialId, appearance, renderActive, onBack, activeM
                 <AssetAppearance key={`${character.id}-${category}`} character={character} category={category} activeModelId={activeModelId} onApply={onActivate} enabled={activationEnabled && section.phase === "idle"} onOpenVoiceService={openVoiceService} onOpenMotionService={openMotionService} />
               </div>}
               {section.displayed === "Settings" && <AssetSettings key={character.id} characterId={character.id} onFocusChange={setSettingsFocused} requestedItem={requestedSetting} onOpenVoice={openVoice} onOpenAction={openAction} />}
-              {section.displayed === "Skills" && <AssetSkills character={character} />}
-              {section.displayed === "Info Map" && <AssetInfoMap character={character} />}
+              {section.displayed === "Skills" && <AssetSkills key={character.id} character={character} />}
+              {section.displayed === "Info Map" && <AssetInfoMap key={character.id} character={character} />}
             </div>
           </article>
         </div>

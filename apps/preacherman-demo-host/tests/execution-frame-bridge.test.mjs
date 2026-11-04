@@ -8,22 +8,44 @@ const source = await readFile(new URL("../src/execution/useExecutionFrameBridge.
 const compiled = (await transform(source.replace(/^import .*;$/gm, "").replace("export function", "function"), {loader:"ts", target:"es2022"})).code;
 function fixture(executionEnabled = true) {
   let cleanup, effect, observerCallback;
-  const handlers = new Map(), posts = [], calls = [];
+  const handlers = new Map(), posts = [], calls = [], receipts = [];
+  let active = null;
   const frame = {postMessage:data => posts.push(data)};
   const config = {connections:[{id:"connection",name:"Work API",model:"model",keySaved:true,apiKey:"never-forward"}],local:{agentId:"codex-cli",label:"Codex CLI",workspaceId:"workspace"},active:{mode:"api",connectionId:"connection",model:"model"}};
   const context = {
+    crypto, activeCharacterId: () => active, confirmPlayback: (...args) => receipts.push(args),
     useEffect:callback=>{effect=callback;}, AbortController, AbortSignal, location:{origin:"http://localhost"}, getComputedStyle:()=>({getPropertyValue:()=>"#fff"}),
     document:{querySelector:()=>null,documentElement:{dataset:{appearance:"dark"}}},
     MutationObserver:class {constructor(callback){observerCallback=callback;}observe(){}disconnect(){}},
     window:{addEventListener:(name,callback)=>handlers.set(name,callback),removeEventListener:name=>handlers.delete(name)},
-    preachermanServiceRequest:async(path,init)=>{calls.push({path,init});return path==="/api/settings/execution"?config:{text:"Reply",task:{taskId:"local-task",status:"awaiting-approval"}};},
+    preachermanServiceRequest:async(path,init)=>{calls.push({path,init});return path==="/api/settings/execution"?config:{text:"Reply",replyId:"reply-000000000000001",task:{taskId:"local-task",status:"awaiting-approval"}};},
   };
   vm.runInNewContext(compiled+"\nglobalThis.hook=useExecutionFrameBridge;",context);
   context.hook({current:{contentWindow:frame}}, executionEnabled);cleanup=effect();
   const receive=data=>handlers.get("message")({source:frame,origin:"http://localhost",data});
-  return {frame,posts,calls,config,handlers,receive,cleanup,theme:()=>observerCallback()};
+  return {frame,posts,calls,config,handlers,receive,cleanup,receipts,activate:id=>{active=id;},theme:()=>observerCallback()};
 }
 const settled=()=>new Promise(resolve=>setImmediate(resolve));
+
+test("activation is captured before dispatch; display acknowledgements stay with the original character", async () => {
+  const f = fixture();
+  try {
+    f.activate("cortana");
+    f.receive({type:"gallery-execution-request",requestId:"reply-first",action:"chat",conversationId:"task-one",selection:{providerId:"connection",modelId:"model"},messages:[{role:"user",content:"Remember my favorite color."}]});
+    f.activate("zima"); await settled();
+    const first = JSON.parse(f.calls.at(-1).init.body);
+    assert.equal(first.characterId, "cortana");
+    assert.equal(f.receipts.length, 0, "undisplayed text is not confirmed");
+    f.receive({type:"gallery-execution-request",requestId:"display",action:"displayed",receiptId:"reply-first"}); await settled();
+    assert.equal(f.receipts[0][0], "cortana"); assert.equal(f.receipts[0][1], first.sessionId);
+    f.receive({type:"gallery-execution-request",requestId:"reply-second",action:"chat",conversationId:"task-one",selection:{providerId:"connection",modelId:"model"},messages:[{role:"user",content:"New character."}]}); await settled();
+    const second = JSON.parse(f.calls.at(-1).init.body);
+    assert.equal(second.characterId, "zima"); assert.notEqual(first.sessionId, second.sessionId);
+    f.receive({type:"gallery-execution-request",requestId:"skill",action:"chat",messages:[{role:"user",content:"run preacherman-runtime::task_summary"}]}); await settled();
+    assert.equal(f.calls.at(-1).path, "/api/agent/turn"); assert.equal(JSON.parse(f.calls.at(-1).init.body).characterId, "zima");
+    assert.ok(!f.calls.some(c=>c.path.endsWith("/confirm")), "preparation never executes without approval");
+  } finally { f.cleanup(); }
+});
 
 test("both conversation frames receive only saved public connections and refresh after Settings changes",async()=>{
   const task=fixture(),gallery=fixture();

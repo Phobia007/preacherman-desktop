@@ -6,49 +6,31 @@ import vm from 'node:vm';
 import { transform } from 'esbuild';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-
 const read = path => readFile(new URL('../' + path, import.meta.url), 'utf8');
-const skills = JSON.parse(await read('src/surfaces/asset/skills.json'));
 const characters = JSON.parse(await read('src/surfaces/asset/characters.json'));
-const { code } = await transform(await read('src/surfaces/asset/AssetProfilePanels.tsx'), { loader: 'tsx', format: 'cjs', jsx: 'automatic' });
 const nativeRequire = createRequire(import.meta.url);
-const context = { module: { exports: {} }, require: id => id.endsWith('.css') ? {} : id === './skills.json' ? skills : nativeRequire(id) };
-vm.runInNewContext(code, context);
-const { AssetSkills, AssetInfoMap } = context.module.exports;
-
-test('ten Skills options use the packaged Extension catalog titles, descriptions and real local logos', async () => {
-  const html = await read('public/extension-marketplace/claude-marketplace.html');
-  const catalog = JSON.parse(html.match(/<script[^>]+id="catalog-data"[^>]*>([\s\S]*?)<\/script>/)[1]).items;
-  assert.equal(skills.length, 10);
-  assert.equal(new Set(skills.map(skill => skill.id)).size, 10);
-  for (const skill of skills) {
-    const source = catalog.find(item => item.slug === skill.id);
-    assert.equal(skill.name, source.title);
-    assert.equal(skill.description, source.oneLiner);
-    assert.ok(html.includes(skill.icon.replace('/extension-marketplace/', '')));
-    await access(new URL('../public' + skill.icon, import.meta.url));
+async function component(path, extra = {}) {
+  const { code } = await transform(await read(path), { loader:'tsx',format:'cjs',jsx:'automatic' });
+  const context={module:{exports:{}},AbortController,require:id=>id.endsWith('.css')?{}:extra[id]??(id.includes('useCharacterState')?{useCharacterState:()=>({state:null,loading:true,refresh:async()=>{}})}:id.includes('/client')?{}:id.includes('TaskReference')?{TaskReference:()=>null}:nativeRequire(id))};
+  vm.runInNewContext(code,context);return context.module.exports;
+}
+const {AssetInfoMap}=await component('src/surfaces/asset/AssetInfoMap.tsx');
+const {AssetSkills}=await component('src/surfaces/asset/AssetProfilePanels.tsx',{'./AssetInfoMap':{AssetInfoMap}});
+for(const appearance of ['light','dark']) test(`character panels preserve identity and honest loading in ${appearance}`,async()=>{
+  for(const character of characters){
+    const skills=renderToStaticMarkup(createElement('div',{'data-appearance':appearance},createElement(AssetSkills,{character})));
+    const map=renderToStaticMarkup(createElement('div',{'data-appearance':appearance},createElement(AssetInfoMap,{character})));
+    assert.ok(skills.includes(character.cardImage));assert.match(skills,/Loading registered skills/);
+    assert.doesNotMatch(skills,/Installed|Connected|Frontend Design|aria-checked="true"/);
+    assert.ok(map.includes(character.image));assert.match(map,/Loading character history/);
+    assert.match(map,/Rapport/);assert.doesNotMatch(map,/LV\. 1/,'level must come from real state');
+    assert.doesNotMatch(map+skills,/[\u3400-\u9fff]/);
+    await access(new URL('../public'+character.image,import.meta.url));
   }
-});
-
-for (const appearance of ['light', 'dark']) test(`Skills and Info Map preserve every character and intentionally empty frames in ${appearance}`, async () => {
-  for (const character of characters) {
-    const skillHtml = renderToStaticMarkup(createElement('div', { 'data-appearance': appearance }, createElement(AssetSkills, { character })));
-    assert.equal((skillHtml.match(/aria-pressed=/g) || []).length, 10);
-    assert.equal((skillHtml.match(/aria-pressed="true"/g) || []).length, 1);
-    assert.ok(skillHtml.includes(character.cardImage));
-    assert.match(skillHtml, /id="asset-skill-demonstration"[^>]+><\/section>/);
-    assert.doesNotMatch(skillHtml, /<video|<iframe|Connected|Installed|Play demo/);
-    const infoHtml = renderToStaticMarkup(createElement('div', { 'data-appearance': appearance }, createElement(AssetInfoMap, { character })));
-    assert.ok(infoHtml.includes(character.image));
-    assert.ok(infoHtml.includes('Rapport'));
-    assert.doesNotMatch(infoHtml + skillHtml, /[\u3400-\u9fff]/, 'New interface copy stays English');
-    assert.ok(infoHtml.includes('LV. 1'));
-    assert.match(infoHtml, /class="asset-profile__empty"[^>]+><\/section>/);
-    await access(new URL('../public' + character.image, import.meta.url));
+  const theme=await read('src/styles.css');
+  for(const path of ['src/surfaces/asset/asset-profile-panels.css','src/character-state/character-state.css']){
+    const css=await read(path);assert.doesNotMatch(css,/#[0-9a-f]{3,8}\b|rgba?\(/i);
+    for(const match of css.matchAll(/var\((--demo-theme-[a-z-]+)/g))assert.ok(theme.includes(match[1]),`missing theme token ${match[1]}`);
+    assert.match(css,/:focus-visible/);
   }
-  const css = await read('src/surfaces/asset/asset-profile-panels.css');
-  for (const token of ['market-text', 'market-muted', 'market-border', 'market-focus', 'control-hover-bg']) {
-    assert.ok(css.includes(`var(--demo-theme-${token})`));
-  }
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
 });

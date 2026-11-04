@@ -1,5 +1,7 @@
 import { useEffect, type RefObject } from "react";
 import { preachermanServiceRequest } from "../preacherman/capabilityClient";
+import { activeCharacterId } from "../character-state/activeCharacter";
+import { confirmPlayback } from "../character-state/playbackReceipt";
 
 const record = (value: unknown): Record<string, unknown> =>
   typeof value === "object" && value !== null ? value as Record<string, unknown> : {};
@@ -10,6 +12,8 @@ export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>, 
   useEffect(() => {
     const lifetime = new AbortController();
     let revision = 0;
+    const sessions = new Map<string, string>();
+    const receipts = new Map<string, { characterId: string; sessionId: string; replyId: string; heardCharacters: number; interrupted: boolean }>();
     const post = (message: unknown) => {
       if (!lifetime.signal.aborted) frameRef.current?.contentWindow?.postMessage(message, location.origin === "null" ? "*" : location.origin);
     };
@@ -48,9 +52,22 @@ export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>, 
     const dispatch = async (data: Record<string, unknown>) => {
       const requestId = data.requestId;
       if (typeof requestId !== "string" || requestId.length > 100) return;
+      // Capture before awaiting network requests: browsing or activating later cannot reassign this turn.
+      const characterId = activeCharacterId();
       try {
         let result: unknown;
         if (data.action === "chat") {
+          const sessionKey = `${characterId ?? "none"}:${String(data.conversationId ?? "task").slice(0, 120)}`;
+          if (!sessions.has(sessionKey)) sessions.set(sessionKey, crypto.randomUUID());
+          const sessionId = sessions.get(sessionKey)!;
+          const messages = Array.isArray(data.messages) ? data.messages : [];
+          const input = record(messages.at(-1)).content;
+          if (characterId && typeof input === "string" && input.length > 4000) throw new Error("Keep character messages within 4,000 characters.");
+          if (typeof input === "string" && /^(?:run|execute)\s+(?:(?:the\s+)?plugin\s+tool\s+)?[A-Za-z0-9_-]+::[A-Za-z0-9_.-]+(?:\s|$)/i.test(input.trim())) {
+            if (!characterId) throw new Error("Activate a character in Asset before running a skill.");
+            const turn = record(await request("/api/agent/turn", { input, locale: "en", characterId }));
+            result = { text: turn.displayText, proposal: turn.proposal, characterId };
+          } else {
           const settings = record(await request("/api/settings/execution"));
           const local = record(settings.local);
           const active = record(settings.active);
@@ -58,13 +75,28 @@ export function useExecutionFrameBridge(frameRef: RefObject<HTMLIFrameElement>, 
           if (typeof selection.providerId !== "string" || typeof selection.modelId !== "string") throw new Error("Connect a model in Settings → Execution Mode first.");
           if (selection.providerId === local.agentId) {
             if (local.agentId !== "codex-cli") throw new Error("This Agent does not support direct chat yet.");
-            result = await request("/api/execution/codex-chat", { model: selection.modelId, messages: data.messages });
+            result = await request("/api/execution/codex-chat", { model: selection.modelId, messages, characterId, sessionId, replyId: requestId });
           } else {
             result = await request("/api/execution/chat", {
               connectionId: selection.providerId === "deepseek" ? "legacy-deepseek" : selection.providerId,
-              model: selection.modelId, messages: data.messages,
+              model: selection.modelId, messages, characterId, sessionId, replyId: requestId,
             });
           }
+          const reply = record(result);
+          if (characterId && typeof reply.replyId === "string" && typeof reply.text === "string") {
+            if (receipts.size >= 64) receipts.delete(receipts.keys().next().value!);
+            receipts.set(requestId, { characterId, sessionId, replyId: reply.replyId, heardCharacters: reply.text.length, interrupted: false });
+            result = { ...reply, receiptId: requestId };
+          }
+          }
+        } else if (data.action === "displayed") {
+          const receipt = receipts.get(String(data.receiptId));
+          if (receipt) { receipts.delete(String(data.receiptId)); void confirmPlayback(receipt.characterId, receipt.sessionId, receipt); }
+          result = { accepted: Boolean(receipt) };
+        } else if (data.action === "confirm-proposal") {
+          if (typeof data.proposalId !== "string" || !/^[a-zA-Z0-9_-]{1,120}$/.test(data.proposalId)) throw new Error("Invalid proposal.");
+          const confirmed = record(await request(`/api/agent/proposals/${data.proposalId}/confirm`, { objective: data.objective }));
+          result = { task: confirmed.run };
         } else {
           if (typeof data.taskId !== "string" || !/^[a-zA-Z0-9_-]{1,120}$/.test(data.taskId)) throw new Error("Invalid task.");
           const path = "/api/tasks/" + encodeURIComponent(data.taskId);
