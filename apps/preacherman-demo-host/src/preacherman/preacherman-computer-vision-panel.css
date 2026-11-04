@@ -57,7 +57,7 @@
   background: var(--demo-theme-activate-fill);
   box-shadow: var(--demo-theme-activate-shadow);
   cursor: pointer;
-  font: 650 12px/1.2 Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 650 12px/1.2 var(--demo-font-primary, "Clash Display", sans-serif);
 }
 
 .demo-preacherman-computer-vision button:hover:not(:disabled) {
@@ -135,7 +135,7 @@
 
 .demo-preacherman-computer-vision code {
   color: var(--demo-theme-muted);
-  font: 500 9px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 500 9px/1.4 var(--demo-font-primary, "Clash Display", sans-serif);
 }
 
 .demo-preacherman-computer-vision__card > p,
@@ -249,7 +249,7 @@
   border-radius: 10px;
   color: var(--demo-theme-text);
   background: var(--demo-theme-surface);
-  font: 500 11px/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 500 11px/1.4 var(--demo-font-primary, "Clash Display", sans-serif);
 }
 
 .demo-preacherman-computer-vision__local-vision textarea {

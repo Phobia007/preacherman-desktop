@@ -190,7 +190,7 @@
   overflow: hidden;
   margin: 4px 0 0;
   color: var(--demo-theme-text);
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -29,7 +29,7 @@
   color: var(--demo-theme-text);
   background: var(--demo-theme-surface-elevated);
   box-shadow: 0 16px 44px -30px rgb(0 0 0 / 55%);
-  font: 500 10px/1.35 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 500 10px/1.35 var(--demo-font-primary, "Clash Display", sans-serif);
   pointer-events: none;
 }
 

@@ -10,15 +10,15 @@ export function openTaskLinkPicker({folio, appContext, task, anchor, candidates,
   overlay.setAttribute("popover", "manual");
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
-  overlay.setAttribute("aria-label", "选择关联任务");
+  overlay.setAttribute("aria-label", "Link a task");
   const cancel = node("button", "task-link-picker__cancel");
   cancel.type = "button";
-  cancel.setAttribute("aria-label", "返回任务");
-  cancel.title = "返回任务";
+  cancel.setAttribute("aria-label", "Back to task");
+  cancel.title = "Back to task";
   cancel.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>';
   const timeline = node("div", "task-link-picker__timeline");
   const strip = node("div", "task-link-picker__strip");
-  strip.setAttribute("aria-label", "已打开的任务卡片，可滚动或拖动");
+  strip.setAttribute("aria-label", "Open task cards. Scroll or drag to browse.");
   strip.tabIndex = 0;
   const error = node("p", "task-link-picker__error");
   error.setAttribute("role", "alert");
@@ -33,14 +33,14 @@ export function openTaskLinkPicker({folio, appContext, task, anchor, candidates,
   const select = id => {
     if (closing || disabled(id)) return;
     try { onSelect(id); void close(); }
-    catch { error.textContent = "关联未能保存，请重试。"; }
+    catch { error.textContent = "The link could not be saved. Please try again."; }
   };
   for (const item of candidates) {
     const card = node("button", "task-link-picker__card");
     card.type = "button";
     card.dataset.taskId = item.id;
     card.setAttribute("aria-disabled", String(disabled(item.id)));
-    card.setAttribute("aria-label", item.title + (item.id === task ? " · 当前任务" : linked.includes(item.id) ? " · 已关联" : ""));
+    card.setAttribute("aria-label", item.title + (item.id === task ? " · Current task" : linked.includes(item.id) ? " · Linked" : ""));
     card.style.aspectRatio = `${sheetRect.width} / ${sheetRect.height}`;
     card.style.setProperty("--sheet-width", sheetRect.width + "px");
     card.style.setProperty("--sheet-height", sheetRect.height + "px");

@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "Clash Display";
+  src: url("/gallery-v3/portfolio/assets/fonts/ClashDisplay-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+:root { --demo-font-primary: "Clash Display", sans-serif; }
+html body, html body * { font-family: var(--demo-font-primary) !important; }

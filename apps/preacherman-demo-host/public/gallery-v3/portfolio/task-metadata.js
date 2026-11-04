@@ -17,7 +17,7 @@ const LINKS_KEY = "preacherman.task.links";
 const OPENED_KEY = "preacherman.task.opened";
 const readObject = key => {
   const value = JSON.parse(localStorage.getItem(key) ?? "{}");
-  if (!value || Array.isArray(value) || typeof value !== "object") throw new Error("任务资料无法读取。");
+  if (!value || Array.isArray(value) || typeof value !== "object") throw new Error("Task details could not be read.");
   return value;
 };
 export function readTaskSettings(id, fallback = {}) {
@@ -26,9 +26,9 @@ export function readTaskSettings(id, fallback = {}) {
   return {...original, title: normalizeTitle(localStorage.getItem(titleStorageKey(id)) ?? original.title ?? fallback.title ?? ""), summary: original.summary ?? "", group: original.group ?? "", workspacePath: original.workspacePath ?? "", ...saved, id};
 }
 export function updateTaskSettings(id, values) {
-  if (deletedTaskIds().has(id)) throw new Error("任务已被删除。");
+  if (deletedTaskIds().has(id)) throw new Error("This task has been deleted.");
   const title = normalizeTitle(values.title ?? "");
-  if (!title) throw new Error("请填写任务名称。");
+  if (!title) throw new Error("Enter a task name.");
   const settings = readObject(SETTINGS_KEY);
   settings[id] = {...readTaskSettings(id), title, summary: String(values.summary ?? "").trim().slice(0, 2000), group: normalizeTitle(values.group ?? "").slice(0, 80), workspacePath: String(values.workspacePath ?? "").trim().slice(0, 4096), coverId: values.coverId ?? null};
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
@@ -53,19 +53,19 @@ export function savedTaskCoverIds() { return [...readTaskProjects().map(item => 
 export function relatedTaskProjects(currentId) {
   void titleRevision.value;
   const edges = JSON.parse(localStorage.getItem(LINKS_KEY) ?? "[]");
-  if (!Array.isArray(edges)) throw new Error("关联任务无法读取。");
+  if (!Array.isArray(edges)) throw new Error("Linked tasks could not be read.");
   const ids = new Set(edges.filter(edge => Array.isArray(edge) && edge.length === 2 && edge.includes(currentId)).map(edge => edge.find(id => id !== currentId)));
   const deleted = deletedTaskIds();
   return [...ids].filter(id => id && !deleted.has(id)).map(id => {
     const item = readTaskSettings(id, authoredTasks.get(id));
-    return {id, title: item.title || "未命名任务"};
+    return {id, title: item.title || "Untitled task"};
   });
 }
 export function linkTaskProjects(source, target) {
   const candidates = new Set([...authoredTasks.keys(), ...readTaskProjects().map(item => item.id)].filter(id => !deletedTaskIds().has(id)));
-  if (source === target || !candidates.has(source) || !candidates.has(target)) throw new Error("请选择其他可用任务。");
+  if (source === target || !candidates.has(source) || !candidates.has(target)) throw new Error("Choose another available task.");
   const edges = JSON.parse(localStorage.getItem(LINKS_KEY) ?? "[]");
-  if (!Array.isArray(edges)) throw new Error("关联任务无法读取。");
+  if (!Array.isArray(edges)) throw new Error("Linked tasks could not be read.");
   if (edges.some(edge => Array.isArray(edge) && edge.includes(source) && edge.includes(target))) return;
   localStorage.setItem(LINKS_KEY, JSON.stringify([...edges, [source, target]]));
   titleRevision.value++;
@@ -283,7 +283,7 @@ export const TaskCreateControl = {
     onUnmounted(() => overlay.value?.hidePopover());
     const open = () => window.dispatchEvent(new Event("preacherman:task-create-open"));
     return () => element("div", {ref:overlay, class:"task-create", popover:"manual"}, [
-      element("button", {type:"button", class:"task-create__button", title:"创建新对话", "aria-label":"创建新对话", "aria-haspopup":"dialog", "aria-controls":"task-create-dialog", "aria-expanded":"false", onClick:open}, [plusIcon()]),
+      element("button", {type:"button", class:"task-create__button", title:"New conversation", "aria-label":"New conversation", "aria-haspopup":"dialog", "aria-controls":"task-create-dialog", "aria-expanded":"false", onClick:open}, [plusIcon()]),
       null,
     ]);
   },
@@ -299,7 +299,7 @@ export const TaskMetadata = {
     const {to: navigate} = useNavigation();
     const error = ref("");
     let picker = null;
-    onMounted(() => { if (props.preview) return; try { rememberOpenedTask(task); } catch { error.value = "任务访问记录未能保存。"; } });
+    onMounted(() => { if (props.preview) return; try { rememberOpenedTask(task); } catch { error.value = "Task access history could not be saved."; } });
     onUnmounted(() => picker?.dispose());
     const settings = () => {
       error.value = "";
@@ -311,7 +311,7 @@ export const TaskMetadata = {
       try {
         picker = openTaskLinkPicker({folio, appContext:nuxt.vueApp._context, task, anchor:event.currentTarget, candidates:taskLinkCandidates(), linked:relatedTaskProjects(task).map(item=>item.id),
           onSelect:target => linkTaskProjects(task, target), onClose:()=>{picker=null;}});
-      } catch { error.value = "关联任务暂不可用，请重试。"; }
+      } catch { error.value = "The linked task is unavailable. Please try again."; }
     };
     return () => {
       void titleRevision.value;
@@ -319,20 +319,20 @@ export const TaskMetadata = {
       const related = relatedTaskProjects(task);
       return element("div", { class: "task-metadata", "data-task-id": task, tabindex: 0 }, [
         element("h1", { class: "task-metadata__heading" }, [
-          element("span", {class:"task-metadata__title"}, project.title || "未命名任务"),
-          element("button", {type:"button", class:"task-metadata__settings", title:"任务设置", "aria-label":"任务设置", onClick:settings}, [
+          element("span", {class:"task-metadata__title"}, project.title || "Untitled task"),
+          element("button", {type:"button", class:"task-metadata__settings", title:"Task settings", "aria-label":"Task settings", onClick:settings}, [
             element("svg", {viewBox:"14 14 52 52", fill:"none", stroke:"currentColor", "stroke-width":2.6, "stroke-linecap":"round", "stroke-linejoin":"round", "aria-hidden":"true"}, [
               element("path", {d:"M55.71,33.49L56.56,36.18L61.73,36.56L61.73,43.44L56.56,43.82L55.71,46.51L54.42,49.01L57.80,52.93L52.93,57.80L49.01,54.42L46.51,55.71L43.82,56.56L43.44,61.73L36.56,61.73L36.18,56.56L33.49,55.71L30.99,54.42L27.07,57.80L22.20,52.93L25.58,49.01L24.29,46.51L23.44,43.82L18.27,43.44L18.27,36.56L23.44,36.18L24.29,33.49L25.58,30.99L22.20,27.07L27.07,22.20L30.99,25.58L33.49,24.29L36.18,23.44L36.56,18.27L43.44,18.27L43.82,23.44L46.51,24.29L49.01,25.58L52.93,22.20L57.80,27.07L54.42,30.99Z"}), element("circle", {cx:40,cy:40,r:8.5}),
             ]),
           ]),
         ]),
         element("div", { class: "task-metadata__description" }, [
-          element("p", { class: "task-metadata__summary", "aria-label": "任务摘要" }, project.summary || "暂无任务摘要。"),
-          project.group ? element("p", {class:"task-metadata__group", "aria-label":"任务分组"}, project.group) : null,
-          project.workspacePath ? element("p", {class:"task-metadata__workspace", title:project.workspacePath, "aria-label":"工作区"}, project.workspacePath) : null,
+          element("p", { class: "task-metadata__summary", "aria-label": "Task summary" }, project.summary || "No task summary yet."),
+          project.group ? element("p", {class:"task-metadata__group", "aria-label":"Task group"}, project.group) : null,
+          project.workspacePath ? element("p", {class:"task-metadata__workspace", title:project.workspacePath, "aria-label":"Workspace"}, project.workspacePath) : null,
         ]),
         element("section", {class:"task-metadata__relations", "aria-labelledby":`task-relations-${task}`}, [
-          element("h2", {id:`task-relations-${task}`, class:"task-metadata__relations-title"}, "关联任务"),
+          element("h2", {id:`task-relations-${task}`, class:"task-metadata__relations-title"}, "Linked tasks"),
           related.length
             ? element("ul", {class:"task-metadata__relations-list"}, related.map(relation => element("li", {key:relation.id}, [
                 element("button", {type:"button", class:"task-metadata__relation", onClick:() => navigate(taskRoute(relation.id))}, [
@@ -340,8 +340,8 @@ export const TaskMetadata = {
                   element("span", {class:"task-metadata__relation-kind", "aria-hidden":"true"}, "↗"),
                 ]),
               ])))
-            : element("p", {class:"task-metadata__relations-empty"}, "暂无关联任务"),
-          element("button", {type:"button", class:"task-metadata__link-add", "aria-label":"关联任务", title:"关联任务", onClick:associate}, [plusIcon()]),
+            : element("p", {class:"task-metadata__relations-empty"}, "No linked tasks"),
+          element("button", {type:"button", class:"task-metadata__link-add", "aria-label":"Linked tasks", title:"Linked tasks", onClick:associate}, [plusIcon()]),
         ]),
         error.value ? element("p", { class: "task-metadata__error", role: "alert" }, error.value) : null,
       ]);

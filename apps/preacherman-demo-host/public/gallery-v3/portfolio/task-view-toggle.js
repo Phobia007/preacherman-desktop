@@ -23,9 +23,9 @@ export function createTaskViewToggle({element, ref, watch, useNavigation}) {
         class: "task-view-toggle",
         "data-od-id": "project-view-switcher",
         "data-mode": mode.value,
-        "aria-label": mode.value === "full" ? "切换到精选" : "切换到全部",
+        "aria-label": mode.value === "full" ? "Show featured" : "Show all",
         "aria-pressed": mode.value === "full",
-        title: mode.value === "full" ? "切换到精选" : "切换到全部",
+        title: mode.value === "full" ? "Show featured" : "Show all",
         onClick: toggle,
       }, [element("svg", {viewBox: "0 0 32 32", fill: "none", "aria-hidden": "true"}, [
         element("path", {class: "task-view-toggle__top", d: "M4 8 C8 8 12 8 16 8 C20 8 24 8 28 8"}),

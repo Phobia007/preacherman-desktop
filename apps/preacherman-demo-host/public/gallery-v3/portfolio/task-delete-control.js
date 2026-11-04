@@ -55,14 +55,14 @@ export const TaskDeleteControl = {
         return;
       }
       if (selecting.value) { clearSelection(); return; }
-      if (!props.folio.cards.length) { notice.value = "暂无可删除卡片"; return; }
+      if (!props.folio.cards.length) { notice.value = "No cards to delete"; return; }
       selecting.value = true;
       for (const card of props.folio.cards) {
         const el = card.el;
         originalAttributes.set(el, Object.fromEntries(["tabindex", "role", "aria-label", "aria-pressed", "data-task-delete-selectable"].map(key => [key, el.getAttribute(key)])));
         el.setAttribute("data-task-delete-selectable", "");
         el.setAttribute("tabindex", "0"); el.setAttribute("role", "button");
-        el.setAttribute("aria-label", "选择删除：" + el.querySelector("[data-title]").textContent);
+        el.setAttribute("aria-label", "Select to delete: " + el.querySelector("[data-title]").textContent);
         el.setAttribute("aria-pressed", "false");
       }
       frame = requestAnimationFrame(positionMarker);
@@ -106,10 +106,10 @@ export const TaskDeleteControl = {
         if (disposed) return;
         dialog.value.close();
         clearSelection();
-        notice.value = `已删除 ${count} 张卡片`;
+        notice.value = `Deleted ${count} cards`;
         button.value.focus({preventScroll:true});
       } catch {
-        if (!disposed) error.value = "未能完成删除，请重试或取消。";
+        if (!disposed) error.value = "Deletion could not be completed. Retry or cancel.";
       } finally { busy.value = false; }
     };
     const leave = event => { if (event.newState === "closed") { reset(); overlay.value?.hidePopover(); } };
@@ -130,21 +130,21 @@ export const TaskDeleteControl = {
     });
     const shield = event => event.stopPropagation();
     return () => mounted.value ? element("div", {ref:overlay, class:"task-delete", popover:"manual", onPointerdown:shield, onWheel:shield, onTouchstart:shield}, [
-      element("button", {ref:button, type:"button", class:"task-create__button task-delete__button", "aria-label":selected.value.length ? "确定删除所选卡片" : selecting.value ? "退出删除选择" : "删除卡片", "aria-pressed":selecting.value, onClick:start}, selected.value.length ? "确定" : [icon()]),
+      element("button", {ref:button, type:"button", class:"task-create__button task-delete__button", "aria-label":selected.value.length ? "Confirm deletion" : selecting.value ? "Exit selection" : "Delete cards", "aria-pressed":selecting.value, onClick:start}, selected.value.length ? "Confirm" : [icon()]),
       element("div", {class:"task-delete__status", role:"status"}, selecting.value ? [
-        element("p", {}, selected.value.length ? `已选择 ${selected.value.length} 张卡片，再次点击可取消选中` : "请选择要删除的卡片，可多选"),
-        element("button", {type:"button", class:"task-delete__cancel-selection", onClick:reset}, "取消选择"),
+        element("p", {}, selected.value.length ? `Selected ${selected.value.length} cards. Click again to deselect.` : "Select one or more cards to delete"),
+        element("button", {type:"button", class:"task-delete__cancel-selection", onClick:reset}, "Cancel selection"),
       ] : notice.value),
-      ...selected.value.map(card => element("div", {key:card.id, ref:el=>{el ? markers.set(card.id,el) : markers.delete(card.id);}, class:"task-delete__marker", "aria-hidden":"true"}, [icon(true), element("span", {}, "已选中")])),
+      ...selected.value.map(card => element("div", {key:card.id, ref:el=>{el ? markers.set(card.id,el) : markers.delete(card.id);}, class:"task-delete__marker", "aria-hidden":"true"}, [icon(true), element("span", {}, "Selected")])),
       element("dialog", {ref:dialog, class:"task-delete-dialog", "aria-labelledby":"task-delete-title", "aria-describedby":"task-delete-description", onCancel:event=>{event.preventDefault();cancelDialog();}, onClick:event=>{if(event.target===dialog.value)cancelDialog();}}, [
         element("div", {class:"task-delete-dialog__content", "aria-busy":busy.value}, [
-          element("h2", {id:"task-delete-title"}, `确定删除 ${selected.value.length} 张卡片？`),
+          element("h2", {id:"task-delete-title"}, `Delete ${selected.value.length} cards?`),
           element("p", {class:"task-delete-dialog__name"}, selected.value.map(card => card.title).join("、")),
-          element("p", {id:"task-delete-description"}, "所选卡片将从列表移除，不影响其他任务和原始图片。"),
+          element("p", {id:"task-delete-description"}, "Selected cards will be removed from the list. Other tasks and original images are kept."),
           error.value ? element("p", {class:"task-delete-dialog__error", role:"alert"}, error.value) : null,
           element("div", {class:"task-delete-dialog__actions"}, [
-            element("button", {type:"button", "data-cancel":"", disabled:busy.value, onClick:cancelDialog}, "取消"),
-            element("button", {type:"button", disabled:busy.value, onClick:confirm}, busy.value ? "删除中…" : "确定"),
+            element("button", {type:"button", "data-cancel":"", disabled:busy.value, onClick:cancelDialog}, "Cancel"),
+            element("button", {type:"button", disabled:busy.value, onClick:confirm}, busy.value ? "Deleting…" : "Confirm"),
           ]),
         ]),
       ]),

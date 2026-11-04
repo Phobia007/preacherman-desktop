@@ -95,7 +95,7 @@ test("new conversation cards persist without invented source relationships", () 
   assert.equal(augmented[1].images.length, 0);
   const relations = f.render().children[2];
   assert.equal(relations.children[1].tag,"p");
-  assert.equal(relations.children[2].props["aria-label"],"关联任务");
+  assert.equal(relations.children[2].props["aria-label"],"Linked tasks");
 });
 
 test("blank tasks retain the authored card material, caption and arrow instead of CSS wash overrides", () => {
@@ -382,7 +382,7 @@ test("authored cards retain their own title, summary state and creation provenan
   f.context.augmentTaskProjects([authored]);
   const detail = f.context.TaskMetadata.setup({slug:authored.slug,title:authored.title});
   assert.equal(detail().children[0].children[0].children,"Griflan");
-  assert.equal(detail().children[1].children[0].children,"暂无任务摘要。");
+  assert.equal(detail().children[1].children[0].children,"No task summary yet.");
   f.context.updateTaskSettings(authored.slug,{title:"独立任务"});
   f.mount();
   assert.equal(f.context.taskDisplayTitle(authored),"独立任务");

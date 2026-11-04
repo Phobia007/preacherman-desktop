@@ -19,16 +19,16 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   body.className = "task-create-dialog__body";
   body.setAttribute("role", "dialog");
   body.setAttribute("aria-modal", "true");
-  body.setAttribute("aria-label", "创建新对话");
+  body.setAttribute("aria-label", "New conversation");
   body.hidden = true;
   const form = document.createElement("form");
   form.className = "task-create-dialog__form";
   form.noValidate = true;
   const fields = {};
   for (const [name, label, multiline, limit] of [
-    ["title", "名称", false, 120],
-    ["summary", "任务简介", true, 2000],
-    ["group", "任务分组", false, 80],
+    ["title", "Name", false, 120],
+    ["summary", "Description", true, 2000],
+    ["group", "Task group", false, 80],
   ]) {
     const row = document.createElement("label");
     row.className = "task-create-dialog__field";
@@ -37,7 +37,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     const input = document.createElement(multiline ? "textarea" : "input");
     input.name = name;
     input.maxLength = limit;
-    input.placeholder = name === "title" ? "填写任务名称" : name === "summary" ? "描述这个任务要做什么" : "填写分组名称";
+    input.placeholder = name === "title" ? "Enter a task name" : name === "summary" ? "Describe what this task should do" : "Enter a group name";
     input.autocomplete = "off";
     input.required = name === "title";
     if (multiline) input.rows = 3;
@@ -49,25 +49,25 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   const workspaceRow = document.createElement("div");
   workspaceRow.className = "task-create-dialog__field";
   const workspaceCaption = document.createElement("span");
-  workspaceCaption.textContent = "工作区 · 可选";
+  workspaceCaption.textContent = "Workspace · Optional";
   const workspaceControls = document.createElement("div");
   workspaceControls.className = "task-create-dialog__cover-controls";
   const workspaceButton = document.createElement("button");
   workspaceButton.type = "button";
   workspaceButton.className = "task-create-dialog__workspace";
-  workspaceButton.setAttribute("aria-label", "选择工作文件夹");
+  workspaceButton.setAttribute("aria-label", "Choose workspace folder");
   const clearWorkspace = document.createElement("button");
   clearWorkspace.type = "button";
   clearWorkspace.className = "task-create-dialog__cover-remove";
   clearWorkspace.textContent = "×";
-  clearWorkspace.setAttribute("aria-label", "清除工作区");
+  clearWorkspace.setAttribute("aria-label", "Clear workspace");
   workspaceControls.append(workspaceButton, clearWorkspace);
   workspaceRow.append(workspaceCaption, workspaceControls);
   form.append(workspaceRow);
   const coverRow = document.createElement("div");
   coverRow.className = "task-create-dialog__field";
   const coverCaption = document.createElement("span");
-  coverCaption.textContent = "卡片封面 · 可选";
+  coverCaption.textContent = "Card cover · Optional";
   const coverControls = document.createElement("div");
   coverControls.className = "task-create-dialog__cover-controls";
   const coverPicker = document.createElement("input");
@@ -78,24 +78,24 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   const coverButton = document.createElement("button");
   coverButton.type = "button";
   coverButton.className = "task-create-dialog__cover";
-  coverButton.setAttribute("aria-label", "选择卡片封面");
+  coverButton.setAttribute("aria-label", "Choose card cover");
   const preview = document.createElement("img");
   preview.className = "task-create-dialog__cover-preview";
-  preview.alt = "封面预览";
+  preview.alt = "Cover preview";
   preview.hidden = true;
   const coverCopy = document.createElement("span");
   const coverName = document.createElement("span");
   coverName.className = "task-create-dialog__cover-name";
-  coverName.textContent = "选择封面图片";
+  coverName.textContent = "Choose cover image";
   const coverHint = document.createElement("small");
-  coverHint.textContent = "JPG / PNG / WebP · 最大 12 MB";
+  coverHint.textContent = "JPG / PNG / WebP · Up to 12 MB";
   coverCopy.append(coverName, coverHint);
   coverButton.append(preview, coverCopy);
   const removeCover = document.createElement("button");
   removeCover.type = "button";
   removeCover.className = "task-create-dialog__cover-remove";
-  removeCover.textContent = "移除";
-  removeCover.setAttribute("aria-label", "移除卡片封面");
+  removeCover.textContent = "Remove";
+  removeCover.setAttribute("aria-label", "Remove card cover");
   removeCover.hidden = true;
   coverControls.append(coverButton, removeCover, coverPicker);
   coverRow.append(coverCaption, coverControls);
@@ -145,7 +145,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
   let sheetStage = null;
   let dialogRevision = 0;
   const showWorkspace = () => {
-    workspaceButton.textContent = workspaceRequest ? "正在选择文件夹…" : workspacePath || "选择工作文件夹";
+    workspaceButton.textContent = workspaceRequest ? "Choosing folder…" : workspacePath || "Choose workspace folder";
     workspaceButton.title = workspacePath;
     workspaceButton.disabled = busy || !!workspaceRequest;
     clearWorkspace.hidden = !workspacePath;
@@ -173,8 +173,8 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     coverPreviewUrl = null;
     preview.removeAttribute("src");
     preview.hidden = removeCover.hidden = true;
-    coverName.textContent = "选择封面图片";
-    coverButton.setAttribute("aria-label", "选择卡片封面");
+    coverName.textContent = "Choose cover image";
+    coverButton.setAttribute("aria-label", "Choose card cover");
     coverPicker.value = "";
   };
   const clearError = () => {
@@ -192,7 +192,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     readingCover = true;
     submit.disabled = coverButton.disabled = removeCover.disabled = true;
     clearError();
-    coverName.textContent = "正在处理图片…";
+    coverName.textContent = "Processing image…";
     try {
       const prepared = await prepareTaskCover(file);
       if (disposed || revision !== coverRevision) return;
@@ -201,12 +201,12 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
       coverPreviewUrl = URL.createObjectURL(prepared);
       preview.src = coverPreviewUrl;
       preview.hidden = removeCover.hidden = false;
-      coverName.textContent = "更换封面图片";
-      coverButton.setAttribute("aria-label", "更换卡片封面");
+      coverName.textContent = "Change cover image";
+      coverButton.setAttribute("aria-label", "Change card cover");
     } catch (reason) {
       if (!disposed && revision === coverRevision) {
         error.textContent = reason.message;
-        coverName.textContent = coverBlob ? "更换封面图片" : "选择封面图片";
+        coverName.textContent = coverBlob ? "Change cover image" : "Choose cover image";
       }
     } finally {
       readingCover = false;
@@ -220,7 +220,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     if (workspaceRequest) return;
     clearError();
     if (!fields.title.value.trim()) {
-      error.textContent = "请填写任务名称。";
+      error.textContent = "Enter a task name.";
       fields.title.setAttribute("aria-invalid", "true");
       fields.title.setAttribute("aria-describedby", error.id);
       fields.title.focus();
@@ -244,7 +244,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
         if (disposed) { if (newCoverId) await discardTaskCover(newCoverId); return; }
         updateTaskSettings(editingId, {...values, coverId:newCoverId ?? savedCoverId});
       } else {
-        if (!folio.prepareTaskCreation) throw new Error("任务页面尚未就绪，请稍后重试。");
+        if (!folio.prepareTaskCreation) throw new Error("The task page is not ready. Please try again shortly.");
         arrive = await folio.prepareTaskCreation(values);
       }
       if (disposed) return;
@@ -255,7 +255,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
       arrive();
     } catch {
       if (newCoverId) await discardTaskCover(newCoverId).catch(() => {});
-      if (!disposed) error.textContent = editingId ? "修改未能保存，请保留填写内容后重试。" : "任务未能添加，请保留填写内容后重试。";
+      if (!disposed) error.textContent = editingId ? "Changes could not be saved. Keep your draft and try again." : "The task could not be added. Keep your draft and try again.";
     } finally {
       busy = false;
       submit.disabled = coverButton.disabled = removeCover.disabled = false;
@@ -295,7 +295,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
     workspacePath = record?.workspacePath ?? "";
     savedCoverId = record?.coverId ?? null;
     label.textContent = editingId ? "Save task" : "Add task";
-    body.setAttribute("aria-label", editingId ? "任务设置" : "创建新对话");
+    body.setAttribute("aria-label", editingId ? "Task settings" : "New conversation");
     showWorkspace();
     if (editingId) sheetStage = stageTaskSheet(folio, {hide:true});
     opened = true;
@@ -321,7 +321,7 @@ export function installTaskCreateDialog({folio, profileOpen, disc, textGroups, w
       await loadTaskCovers([savedCoverId]);
       if (opened && revision === dialogRevision && savedCoverId) {
         const url = taskCoverUrl(savedCoverId);
-        if (url) { preview.src = url; preview.hidden = removeCover.hidden = false; coverName.textContent = "更换封面图片"; }
+        if (url) { preview.src = url; preview.hidden = removeCover.hidden = false; coverName.textContent = "Change cover image"; }
       }
     }
   };

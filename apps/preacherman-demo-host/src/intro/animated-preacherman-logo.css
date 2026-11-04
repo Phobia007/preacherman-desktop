@@ -5,7 +5,7 @@
   overflow: hidden;
   color: var(--demo-theme-text);
   background: var(--demo-theme-canvas);
-  font-family: "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   isolation: isolate;
 }
 

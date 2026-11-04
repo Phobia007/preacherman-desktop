@@ -23,7 +23,7 @@ export function useTaskWorkspaceBridge(frameRef: RefObject<HTMLIFrameElement>) {
           signal:AbortSignal.any([controller.signal, AbortSignal.timeout(185000)]),
         });
         post({workspace: result.selection ? {path:result.selection.path} : null});
-      } catch { post({error:"无法选择工作文件夹，请重试。"}); }
+      } catch { post({error:"Could not select the workspace folder. Please try again."}); }
       finally { if (pending?.controller === controller) pending = undefined; }
     };
     const frame = frameRef.current;

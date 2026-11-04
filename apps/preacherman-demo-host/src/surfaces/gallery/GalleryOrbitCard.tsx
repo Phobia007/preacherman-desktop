@@ -31,7 +31,7 @@ export function GalleryOrbitCard({ card, index, playing, register }: { card: Gal
   const [media, setMedia] = useState<{ video: HTMLVideoElement; texture: VideoTexture; control: ReturnType<typeof manageGalleryCardMedia> } | null>(null);
   useEffect(() => {
     let disposed = false;
-    void document.fonts.load("100px nbarchitekt").then(() => { if (!disposed) setFontReady(true); });
+    void document.fonts.load('300 100px "Clash Display"').then(() => { if (!disposed) setFontReady(true); });
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     const sync = () => { motion.current = !query.matches; }; sync(); query.addEventListener("change", sync);
     return () => { disposed = true; query.removeEventListener("change", sync); };
@@ -68,7 +68,7 @@ export function GalleryOrbitCard({ card, index, playing, register }: { card: Gal
     ctx.fillStyle = "#000000"; ctx.fillRect(0, 0, 1024, 672);
     ctx.textAlign = "center"; ctx.fillStyle = "#ffffff";
     const size = Math.max(90, Math.min(117, 117 - (card.title.length - 5) * 1.8));
-    ctx.font = `${size}px nbarchitekt, monospace`;
+    ctx.font = `300 ${size}px "Clash Display", sans-serif`;
     const words = card.title.toUpperCase().split(/\s+/); const lines: string[] = []; let line = "";
     for (const word of words) { const next = line ? line + " " + word : word; if (line && ctx.measureText(next).width > 820) { lines.push(line); line = word; } else line = next; }
     if (line) lines.push(line);
@@ -77,7 +77,7 @@ export function GalleryOrbitCard({ card, index, playing, register }: { card: Gal
     if (logo) {
       const logoWidth = 260, logoHeight = logoWidth * logo.naturalHeight / logo.naturalWidth;
       ctx.drawImage(logo, 512 - logoWidth / 2, first - size - logoHeight - 28, logoWidth, logoHeight);
-    } else { ctx.font = "24px nbarchitekt, monospace"; ctx.fillText(card.client, 512, first - size - 30, 860); }
+    } else { ctx.font = '300 24px "Clash Display", sans-serif'; ctx.fillText(card.client, 512, first - size - 30, 860); }
     const result = new CanvasTexture(canvas); result.colorSpace = SRGBColorSpace; result.anisotropy = 4;
     return result;
   }, [card.title, card.client, fontReady, logo]);

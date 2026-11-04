@@ -215,7 +215,7 @@ export function TaskExperienceSurface({ hideProjectCards = false }: TaskExperien
             }}
             type="button"
           >
-            全部
+            All
           </button>
         </div>
       ) : null}

@@ -11,7 +11,7 @@ export function pickTaskWorkspace(signal) {
       if (event.data.error) reject(new Error(event.data.error));
       else resolve(event.data.workspace?.path ?? null);
     };
-    const timer = setTimeout(() => { cleanup(); post("cancel"); reject(new Error("文件夹选择超时，请重试。")); }, 190000);
+    const timer = setTimeout(() => { cleanup(); post("cancel"); reject(new Error("Folder selection timed out. Please try again.")); }, 190000);
     window.addEventListener("message", receive);
     signal.addEventListener("abort", cancel, {once:true});
     if (signal.aborted) cancel(); else post("pick");

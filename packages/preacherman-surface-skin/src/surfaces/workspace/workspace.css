@@ -9,7 +9,7 @@
   overflow: hidden;
   color: #111111;
   background: #f7f5f1;
-  font-family: "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   font-synthesis: none;
   isolation: isolate;
 }
@@ -21,7 +21,7 @@
   border: 0;
   color: inherit;
   background: transparent;
-  font-family: "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   cursor: pointer;
 }
 

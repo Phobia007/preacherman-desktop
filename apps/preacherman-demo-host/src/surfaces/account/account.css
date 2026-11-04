@@ -1,8 +1,4 @@
-@font-face {
-  font-family: "Account Harmony";
-  src: url("./assets/harmonyos-sans-sc.woff2") format("woff2");
-  font-display: swap;
-}
+
 .demo-app-shell[data-active-surface="account"] .demo-app-shell__scene {
   /* Home stays full-screen beneath the moving login panel, including mid-motion. */
   background: var(--demo-theme-home-canvas);
@@ -19,7 +15,7 @@
 .account-frost { position: absolute; left: 0; top: 0; width: 50%; height: 100%; animation: account-light 1050ms ease both; }
 .account {
   position: absolute; inset: 0; z-index: 2; display: flex; overflow: hidden;
-  color: var(--demo-theme-account-text); font-family: Arial, "Account Harmony", sans-serif;
+  color: var(--demo-theme-account-text); font-family: var(--demo-font-primary, "Clash Display", sans-serif);
 }
 .account__visual { position: relative; width: 50%; height: 100%; overflow: hidden; flex-shrink: 0; }
 .account__fade { animation: account-light 1050ms ease both; }
@@ -67,10 +63,10 @@
 .account[data-lens-active="false"] .account__lens { visibility: hidden; }
 .account[data-lens-active="true"] .account__visual { background: var(--demo-theme-account-glass); }
 .account[data-lens-active="true"] .account__mark, .account[data-lens-active="true"] .account__fade { visibility: hidden; }
-.account__profile { position: absolute; left: 50%; top: 50%; width: min(80%, 360px); transform: translate(-50%, -50%); text-align: center; color: var(--demo-theme-account-profile-text); font: 400 16px/1.5 "Market Task Profile", sans-serif; animation: account-profile 650ms ease both; }
+.account__profile { position: absolute; left: 50%; top: 50%; width: min(80%, 360px); transform: translate(-50%, -50%); text-align: center; color: var(--demo-theme-account-profile-text); font: 400 16px/1.5 var(--demo-font-primary, "Clash Display", sans-serif); animation: account-profile 650ms ease both; }
 .account__profile p { margin: 12px 0; }
 .account__profile p:first-child { font-size: 23px; }
-.account__dialog { width: min(420px, calc(100vw - 72px)); padding: 28px; border: 1px solid var(--demo-theme-account-border); border-radius: 12px; color: var(--demo-theme-account-text); background: var(--demo-theme-account-surface); font-family: Arial, "Account Harmony", sans-serif; }
+.account__dialog { width: min(420px, calc(100vw - 72px)); padding: 28px; border: 1px solid var(--demo-theme-account-border); border-radius: 12px; color: var(--demo-theme-account-text); background: var(--demo-theme-account-surface); font-family: var(--demo-font-primary, "Clash Display", sans-serif); }
 .account__dialog::backdrop { background: var(--demo-theme-account-dialog-backdrop); backdrop-filter: blur(6px); }
 .account__dialog h2 { margin: 0 0 12px; font-size: 24px; line-height: 32px; }
 .account__dialog p { color: var(--demo-theme-account-muted); font-size: 15px; line-height: 24px; }

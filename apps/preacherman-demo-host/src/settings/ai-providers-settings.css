@@ -6,7 +6,7 @@
 .ai-provider-settings {
   --provider-muted: color-mix(in srgb, var(--demo-theme-settings-text) 68%, var(--demo-theme-settings-canvas));
   color: var(--demo-theme-settings-text); background: var(--demo-theme-settings-canvas);
-  font: 400 15px/1.55 "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  font: 400 15px/1.55 var(--demo-font-primary, "Clash Display", sans-serif);
 }
 .ai-provider-settings *, .ai-provider-settings *::before, .ai-provider-settings *::after { box-sizing: border-box; }
 .ai-provider-settings ::selection { color: var(--demo-theme-settings-accent-text); background: var(--demo-theme-settings-accent); }

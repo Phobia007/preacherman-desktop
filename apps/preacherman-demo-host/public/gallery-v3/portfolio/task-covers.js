@@ -9,7 +9,7 @@ function openDatabase() {
     let expired = false;
     const timer = setTimeout(() => {
       expired = true;
-      reject(new Error("封面存储暂不可用，请稍后重试。"));
+      reject(new Error("Cover storage is unavailable. Please try again later."));
     }, 6000);
     request.onupgradeneeded = () => request.result.createObjectStore("covers");
     request.onerror = () => { clearTimeout(timer); reject(request.error); };
@@ -32,7 +32,7 @@ async function transact(mode, operation) {
     transaction.oncomplete = () => { clearTimeout(timer); resolve(request.result); };
     transaction.onabort = transaction.onerror = () => {
       clearTimeout(timer);
-      reject(transaction.error ?? new Error("封面未能保存，请重试。"));
+      reject(transaction.error ?? new Error("The cover could not be saved. Please try again."));
     };
   });
 }
@@ -67,19 +67,19 @@ export async function discardTaskCover(id) {
 
 export async function prepareTaskCover(file) {
   if (!file || !["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-    throw new Error("请选择 JPG、PNG 或 WebP 图片。");
+    throw new Error("Choose a JPG, PNG, or WebP image.");
   }
-  if (file.size > 12 * 1024 * 1024) throw new Error("图片不能超过 12 MB，请换一张较小的图片。");
+  if (file.size > 12 * 1024 * 1024) throw new Error("Choose an image smaller than 12 MB.");
   const source = URL.createObjectURL(file);
   const image = new Image();
   try {
     await new Promise((resolve, reject) => {
-      const timer = setTimeout(() => reject(new Error("图片读取超时，请重新选择。")), 10000);
+      const timer = setTimeout(() => reject(new Error("The image took too long to load. Please select it again.")), 10000);
       image.onload = () => { clearTimeout(timer); resolve(); };
-      image.onerror = () => { clearTimeout(timer); reject(new Error("图片无法读取，请换一张图片。")); };
+      image.onerror = () => { clearTimeout(timer); reject(new Error("The image could not be read. Please choose another.")); };
       image.src = source;
     });
-    if (!image.naturalWidth || !image.naturalHeight) throw new Error("图片没有有效尺寸，请重新选择。");
+    if (!image.naturalWidth || !image.naturalHeight) throw new Error("The image has no valid dimensions. Please choose another.");
     const scale = Math.min(1, 1600 / Math.max(image.naturalWidth, image.naturalHeight));
     const canvas = document.createElement("canvas");
     canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
@@ -87,7 +87,7 @@ export async function prepareTaskCover(file) {
     canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
     const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/webp", 0.82));
     canvas.width = canvas.height = 0;
-    if (!blob) throw new Error("图片未能处理，请重新选择。");
+    if (!blob) throw new Error("The image could not be processed. Please choose another.");
     return blob;
   } finally {
     image.onload = image.onerror = null;

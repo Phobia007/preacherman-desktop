@@ -13,7 +13,7 @@
   color: var(--demo-theme-text);
   background: color-mix(in srgb, var(--demo-theme-surface-elevated) 86%, transparent);
   box-shadow: var(--demo-theme-activate-shadow);
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   backdrop-filter: blur(24px) saturate(145%);
 }
 
@@ -120,7 +120,7 @@
   outline: none;
   color: var(--demo-theme-text);
   background: var(--demo-theme-control-hover-bg);
-  font: 500 11px/1.55 Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 500 11px/1.55 var(--demo-font-primary, "Clash Display", sans-serif);
   transition: border-color 160ms ease, background-color 160ms ease;
 }
 
@@ -155,7 +155,7 @@
   padding: 0 13px;
   border: 1px solid var(--demo-theme-activate-rest-border);
   border-radius: 999px;
-  font: 650 9px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 650 9px/1 var(--demo-font-primary, "Clash Display", sans-serif);
   letter-spacing: 0.06em;
   cursor: pointer;
   transition: color 160ms ease, background-color 160ms ease, transform 160ms ease, opacity 160ms ease;

@@ -76,7 +76,7 @@
   border-radius: 999px;
   color: var(--demo-theme-settings-text);
   background: transparent;
-  font: 500 13px/1 sans, sans-serif;
+  font: 500 13px/1 var(--demo-font-primary, "Clash Display", sans-serif);
   letter-spacing: .01em;
   cursor: pointer;
   transition:
@@ -107,7 +107,7 @@
 }
 
 .settings-v3__detail-content {
-  font: 500 14px/1.08 sans, sans-serif;
+  font: 500 14px/1.08 var(--demo-font-primary, "Clash Display", sans-serif);
 }
 
 .settings-v3__detail-content section > span,

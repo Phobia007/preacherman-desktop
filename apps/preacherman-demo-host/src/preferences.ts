@@ -97,10 +97,6 @@ function isAppearance(value: unknown): value is Appearance {
   return value === "light" || value === "dark";
 }
 
-function isLocale(value: unknown): value is Locale {
-  return value === "en" || value === "zh-CN";
-}
-
 function isModelId(value: unknown): value is ModelId {
   return isAvatarModelId(value);
 }
@@ -123,7 +119,8 @@ export function readPreferences(): DemoPreferences {
       appearance: isAppearance(stored?.appearance)
         ? stored.appearance
         : DEFAULT_PREFERENCES.appearance,
-      locale: isLocale(stored?.locale) ? stored.locale : DEFAULT_PREFERENCES.locale,
+      // Interface language is English; legacy language preferences remain readable.
+      locale: "en",
     };
   } catch {
     return DEFAULT_PREFERENCES;
@@ -132,7 +129,7 @@ export function readPreferences(): DemoPreferences {
 
 export function savePreferences(preferences: DemoPreferences): void {
   try {
-    window.localStorage.setItem(PREFERENCES_STORAGE_KEY, JSON.stringify(preferences));
+    window.localStorage.setItem(PREFERENCES_STORAGE_KEY, JSON.stringify({ ...preferences, locale: "en" }));
   } catch {
     // Preferences are still valid for the current session when storage is unavailable.
   }
@@ -140,6 +137,6 @@ export function savePreferences(preferences: DemoPreferences): void {
 
 export function applyPreferences(preferences: DemoPreferences): void {
   document.documentElement.dataset.appearance = preferences.appearance;
-  document.documentElement.lang = preferences.locale;
+  document.documentElement.lang = "en";
   document.documentElement.style.colorScheme = preferences.appearance;
 }

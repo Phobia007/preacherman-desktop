@@ -1,8 +1,4 @@
-@font-face {
-  font-family: nbarchitekt;
-  src: url("/active-theory-gallery/assets/fonts/NBArchitektStd-Regular-export/NBArchitektStd-Regular.woff2") format("woff2");
-  font-weight: 400; font-style: normal; font-display: swap;
-}
+
 .active-theory-gallery-surface {
   position: absolute;
   inset: 0;
@@ -48,7 +44,7 @@
   inset: 0;
   z-index: 4;
   pointer-events: none;
-  font-family: var(--demo-font-secondary);
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
 }
 .gallery-detail__control {
   display: grid;

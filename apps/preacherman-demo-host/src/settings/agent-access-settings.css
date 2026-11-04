@@ -99,7 +99,7 @@
   border-radius: 12px;
   color: var(--demo-theme-text);
   background: var(--demo-theme-canvas);
-  font: 10px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 10px/1.55 var(--demo-font-primary, "Clash Display", sans-serif);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -113,7 +113,7 @@
   border-radius: 999px;
   color: var(--demo-theme-activate-rest-text);
   background: var(--demo-theme-activate-rest-bg);
-  font: 650 10px/1 ui-sans-serif, system-ui, sans-serif;
+  font: 650 10px/1 var(--demo-font-primary, "Clash Display", sans-serif);
   cursor: pointer;
 }
 .agent-access-settings__button--primary { border-color: var(--demo-theme-activate-fill); color: var(--demo-theme-activate-fill-text); background: var(--demo-theme-activate-fill); }

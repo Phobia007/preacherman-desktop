@@ -10,13 +10,13 @@ export function installTaskCreateRail({folio, projects, root, track, resize, nex
     try {
       if (values.coverBlob) coverId = await saveTaskCover(values.coverBlob);
       const texture = await folio.texture(coverId ? taskCoverUrl(coverId) : projectRecord({}).src);
-      if (coverId && !texture) throw new Error("封面加载失败，请重新选择图片。");
-      if (disposed || !root.value?.isConnected) throw new Error("任务页面已关闭，请重新打开后添加。");
+      if (coverId && !texture) throw new Error("The cover could not be loaded. Please choose the image again.");
+      if (disposed || !root.value?.isConnected) throw new Error("The task page was closed. Reopen it to add a task.");
     } catch (error) {
       if (coverId) await discardTaskCover(coverId);
       throw error;
     }
-    if (disposed || !root.value?.isConnected) throw new Error("任务页面已关闭，请重新打开后添加。");
+    if (disposed || !root.value?.isConnected) throw new Error("The task page was closed. Reopen it to add a task.");
     const vertical = resize.small;
     const viewport = vertical ? resize.wh : resize.ww;
     const midpoint = card => {
@@ -59,11 +59,11 @@ export function installTaskCreateRail({folio, projects, root, track, resize, nex
     };
   };
   const remove = async (ids) => {
-    if (disposed || !root.value?.isConnected) throw new Error("任务页面已关闭。");
+    if (disposed || !root.value?.isConnected) throw new Error("The task page was closed.");
     const selected = new Set(ids);
     if (!selected.size) return;
     const indices = [...selected].map(id => projects.value.findIndex(project => project.slug === id));
-    if (indices.some(index => index < 0)) throw new Error("所选卡片已不存在，请重新选择。");
+    if (indices.some(index => index < 0)) throw new Error("The selected card no longer exists. Please choose another.");
     const index = Math.min(...indices);
     // Persist first: a failed write must leave every visible card intact.
     deleteTaskProjects([...selected]);

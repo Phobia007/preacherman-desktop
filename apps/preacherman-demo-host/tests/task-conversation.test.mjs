@@ -33,7 +33,7 @@ function fixture(initial = null, slug = "nathan-riley") {
   };
   const input = () => find(n => n.tag === "textarea").props;
   const submit = () => find(n => n.tag === "form").props.onSubmit({preventDefault() {}});
-  const sendButton = () => find(n => n.props["aria-label"] === "发送消息").props;
+  const sendButton = () => find(n => n.props["aria-label"] === "Send message").props;
   const connect = () => windowHandlers.message({source:context.parent,origin:context.location.origin,data:{
     type:"gallery-provider-catalog",providers:[{id:"fixture",label:"Fixture",kind:"api",models:[{id:"model",label:"Model"}]}],
     active:{mode:"api",connectionId:"fixture",model:"model"},
@@ -118,15 +118,15 @@ test("attachment selection stores names only and supports removal", () => {
   const f = fixture();
   const picker = f.find(n => n.props.type === "file").props;
   picker.onChange({target:{files:[{name:"brief.txt", secretBytes:"not read"}],value:""}});
-  f.find(n => n.props["aria-label"] === "移除附件 brief.txt").props.onClick();
+  f.find(n => n.props["aria-label"] === "Remove attachment brief.txt").props.onClick();
   assert.equal(f.sendButton().disabled,true);
   picker.onChange({target:{files:[{name:"brief.txt"}],value:""}});
   f.connect(); f.input().onInput({target:{value:"Attached draft"}});
   f.submit();
   const saved = f.storage.get("preacherman.task.nathan-riley.messages");
   assert.equal(saved,undefined);
-  assert.match(f.find(n => n.props.role === "alert").children,/尚不支持上传/);
-  assert.match(f.find(n => n.props.title?.startsWith("添加附件")).props.title,/不读取或上传/);
+  assert.match(f.find(n => n.props.role === "alert").children,/filenames only/);
+  assert.match(f.find(n => n.props.title?.startsWith("Add attachments")).props.title,/not read or uploaded/);
 });
 
 test("interaction shield is confined to the conversation; provider discovery stays in the parent bridge", () => {
@@ -144,7 +144,7 @@ test("divider and chat cover every task; semantic tokens exist in both appearanc
   const css = fs.readFileSync(new URL("task-conversation.css", root),"utf8");
   const runtime = fs.readFileSync(new URL("_nuxt/Dr-ZLxUY.js",root),"utf8");
   const tokens = fs.readFileSync(new URL("../src/styles.css",import.meta.url),"utf8");
-  assert.ok(css.includes('[data-gl="sheet"]:has(.task-metadata)::after'));
+  assert.ok(css.includes(':is([data-gl="sheet"], .task-link-picker__sheet):has(.task-metadata)::after'));
   assert.ok(css.includes("left: 50%"));
   assert.ok(css.includes("overflow: hidden"));
   assert.ok(css.includes("overscroll-behavior: contain"));
@@ -161,7 +161,7 @@ test("divider and chat cover every task; semantic tokens exist in both appearanc
 
 test("detail sheets ignore cover aspect ratios and keep the composer last", () => {
   const css = fs.readFileSync(new URL("task-conversation.css", root), "utf8");
-  assert.match(css, /\[data-gl="sheet"\]:has\(\.task-metadata\)\s*\{\s*aspect-ratio: auto;/);
+  assert.match(css, /:is\(\[data-gl="sheet"\], \.task-link-picker__sheet\):has\(\.task-metadata\)\s*\{\s*aspect-ratio: auto;/);
   assert.ok(css.includes('inset: 9rem 3rem 4rem 50%'));
   for (const slug of ['nathan-riley', 'dogelon-mars', 'discoveryland', 'task-example']) {
     const f = fixture(null, slug);
@@ -201,7 +201,7 @@ test("microphone is keyboard accessible and reports missing transcription withou
   const f = fixture();
   f.connect();
   f.input().onInput({target:{value:"保留草稿"}});
-  const mic = f.find(n => n.props["aria-label"] === "语音输入");
+  const mic = f.find(n => n.props["aria-label"] === "Voice input");
   assert.equal(mic.tag, "button");
   assert.equal(mic.props.type, "button");
   assert.notEqual(mic.props.disabled, true);
@@ -210,7 +210,7 @@ test("microphone is keyboard accessible and reports missing transcription withou
   assert.equal(f.input().value, "保留草稿");
   assert.equal(f.storage.size, 0);
   assert.equal(f.posted.length, posted);
-  assert.match(f.find(n => n.props.role === "status").children, /语音识别尚未配置/);
+  assert.match(f.find(n => n.props.role === "status").children, /Connect a speech recognition service/);
   f.input().onInput({target:{value:"继续编辑"}});
   assert.equal(f.find(n => n.props.id === "task-voice-status-nathan-riley"), null);
 });
@@ -219,7 +219,7 @@ test("text send keeps the user on the right and the returned reply on the left",
   const f = fixture();
   f.connect(); f.input().onInput({target:{value:"你好"}}); f.submit();
   assert.equal(f.find(n => n.tag === "article").props["data-role"], "user");
-  assert.match(f.find(n => n.props.role === "status").children, /正在请求/);
+  assert.match(f.find(n => n.props.role === "status").children, /Sending/);
   const request = f.posted.find(entry => entry.message.action === "chat").message;
   f.windowHandlers.message({source:f.context.parent,origin:"app://localhost",data:{type:"gallery-execution-result", requestId:request.requestId, result:{text:"你好，我在。"}}});
   await new Promise(setImmediate);

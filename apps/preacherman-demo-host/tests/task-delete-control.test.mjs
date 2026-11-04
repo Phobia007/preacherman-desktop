@@ -39,26 +39,26 @@ test("card selection is additive and toggleable with independent markers and cou
   assert.equal(f.cards[0].el.getAttribute("aria-pressed"),"true");
   assert.equal(f.cards[1].el.getAttribute("aria-pressed"),"true");
   assert.equal(f.render().children.filter(n=>n.props?.class==="task-delete__marker").length,2);
-  assert.match(f.render().children[1].children[0].children,/已选择 2 张/);
+  assert.match(f.render().children[1].children[0].children,/Selected 2 cards/);
   f.choose(0);
   assert.equal(f.cards[0].el.getAttribute("aria-pressed"),"false");
   assert.equal(f.cards[1].el.getAttribute("aria-pressed"),"true");
   f.choose(1,"keydown"," ");
-  assert.equal(f.button().props["aria-label"],"退出删除选择");
-  assert.match(f.render().children[1].children[0].children,/可多选/);
+  assert.equal(f.button().props["aria-label"],"Exit selection");
+  assert.match(f.render().children[1].children[0].children,/one or more/);
   f.unmount();assert.equal(f.listeners.size,0);
 });
 
 test("confirmation deletes the whole selection once and cancel retains selection",async()=>{
   const f=fixture();await f.mount();f.button().props.onClick();f.choose(0);f.choose(1,"keydown","Enter");
   f.button().props.onClick();
-  assert.equal(f.dialogContent().children[0].children,"确定删除 2 张卡片？");
+  assert.equal(f.dialogContent().children[0].children,"Delete 2 cards?");
   assert.equal(f.dialogContent().children[1].children,"one、two");
   f.dialogContent().children.at(-1).children[0].props.onClick();
   assert.equal(f.dialog.open,false);assert.deepEqual(f.calls,[]);
   f.button().props.onClick();await f.confirm();
   assert.deepEqual(f.calls,[["one","two"]]);assert.equal(f.dialog.open,false);
-  assert.equal(f.render().children[1].children,"已删除 2 张卡片");
+  assert.equal(f.render().children[1].children,"Deleted 2 cards");
   assert.equal(f.cards[0].el.getAttribute("role"),"link");
   assert.equal(f.cards[1].el.getAttribute("aria-pressed"),null);
   f.unmount();
@@ -72,7 +72,7 @@ test("failed batch retains selection for retry; Escape and teardown restore all 
   assert.ok(f.dialogContent().children.some(n=>n?.props?.role==="alert"));
   f.choose(0,"keydown","Escape");assert.equal(f.dialog.open,false);
   f.choose(0,"keydown","Escape");
-  assert.equal(f.button().props["aria-label"],"删除卡片");
+  assert.equal(f.button().props["aria-label"],"Delete cards");
   for(const {el} of f.cards)assert.equal(el.getAttribute("aria-pressed"),null);
   f.unmount();assert.equal(f.listeners.size,0);
 });

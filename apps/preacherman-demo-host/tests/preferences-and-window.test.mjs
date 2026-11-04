@@ -16,7 +16,7 @@ async function exists(path) {
   }
 }
 
-test("the desktop shell keeps persisted appearance and language preferences", async () => {
+test("the desktop shell preserves appearance and uses English interface preferences", async () => {
   const preferencesPath = join(sourceRoot, "preferences.ts");
   assert.equal(await exists(preferencesPath), true, "preferences module must exist");
 
@@ -32,7 +32,7 @@ test("the desktop shell keeps persisted appearance and language preferences", as
   assert.match(shell, /data-locale=\{locale\}/);
   assert.match(app, /<SettingsScreen\b/);
   assert.match(app, /onAppearanceChange=\{\(appearance\) => setPreferences/);
-  assert.match(app, /onLocaleChange=\{\(locale\) => setPreferences/);
+  assert.match(app, /onLocaleChange=\{\(\) => setPreferences/);
   assert.match(app, /readPreferences/);
   assert.match(app, /applyPreferences\(preferences\)/);
   assert.match(app, /savePreferences/);

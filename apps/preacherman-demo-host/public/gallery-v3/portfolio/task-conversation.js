@@ -69,7 +69,7 @@ export const TaskConversation = {
     const pending = new Map();
     const callHost = payload => new Promise((resolve, reject) => {
       const requestId = crypto.randomUUID();
-      const timer = setTimeout(() => { pending.delete(requestId); reject(new Error("请求超时，请检查连接后重试。")); }, 140000);
+      const timer = setTimeout(() => { pending.delete(requestId); reject(new Error("The request timed out. Check your connection and try again.")); }, 140000);
       pending.set(requestId, { resolve, reject, timer });
       parent.postMessage({ type: "gallery-execution-request", requestId, ...payload }, location.origin === "null" ? "*" : location.origin);
     });
@@ -83,7 +83,7 @@ export const TaskConversation = {
       selectionPinned = Boolean(selected.value);
     } catch {
       readFailed.value = true;
-      error.value = "本机记录无法读取，暂不能发送，以免覆盖原记录。";
+      error.value = "Local history could not be read. Sending is paused to protect existing records.";
     }
 
     const resize = () => {
@@ -97,15 +97,15 @@ export const TaskConversation = {
     });
     const send = async () => {
       if (busy.value || readFailed.value || !draft.value.trim()) return;
-      if (!selected.value) { error.value = "请先在 Execution Mode 接入模型，并选择当前任务的模型。"; return; }
-      if (!selectionAvailable()) { error.value = "已选模型当前不可用，请明确选择其他模型后再发送。"; return; }
-      if (files.value.length) { error.value = "附件目前只记录文件名，尚不支持上传。请先移除附件再发送文本。"; return; }
+      if (!selected.value) { error.value = "Connect a model in Execution Mode, then select it for this task."; return; }
+      if (!selectionAvailable()) { error.value = "The selected model is unavailable. Choose another model before sending."; return; }
+      if (files.value.length) { error.value = "Attachments currently store filenames only. Remove them before sending text."; return; }
       const [providerId, modelId] = selected.value.split("::");
       const text = draft.value.trim();
       const entry = {text, files:[], role:"user"};
       const updated = [...messages.value, entry];
       try { localStorage.setItem(modelStorageKey(task), selected.value); persist(updated); }
-      catch { error.value = "消息未能保存，内容仍在输入框中，请重试。"; return; }
+      catch { error.value = "The message could not be saved. Your draft is still in the input. Please try again."; return; }
       selectionPinned = true;
       draft.value = "";
       files.value = [];
@@ -116,11 +116,11 @@ export const TaskConversation = {
         const context = boundedChatContext(updated);
         contextTrimmed.value = context.trimmed;
         const result = await callHost({ action: "chat", selection: {providerId, modelId}, messages: context.messages });
-        if (typeof result?.text !== "string" || !result.text.trim()) throw new Error("模型未返回有效文本。");
+        if (typeof result?.text !== "string" || !result.text.trim()) throw new Error("The model returned no text.");
         const reply = {role:"assistant", text:result.text, files:[]};
         try { persist([...messages.value, reply]); }
-        catch { messages.value = [...messages.value, reply]; error.value = "回复已收到，但本机保存失败，请复制保留。"; }
-      } catch (reason) { error.value = reason.message + " 消息已保留，不会自动重发。"; }
+        catch { messages.value = [...messages.value, reply]; error.value = "The reply was received but could not be saved locally. Please copy it to keep it."; }
+      } catch (reason) { error.value = reason.message + " Your message is preserved and will not be resent automatically."; }
       finally { busy.value = false; scrollToLatest(); input.value?.focus(); }
     };
     const taskAction = async (index, action) => {
@@ -129,8 +129,8 @@ export const TaskConversation = {
       const current = messages.value[index].task;
       try {
         const result = await callHost({ action, taskId:current.taskId, approvalId:current.pendingApproval?.approvalId });
-        const updated = messages.value.map((message, at) => at === index ? {...message, task:result.task, text:result.task.localAgentSummary || result.task.error?.message || "本机任务 · " + result.task.status} : message);
-        try { persist(updated); } catch { messages.value = updated; error.value = "任务状态已更新，但本机记录未能保存。"; }
+        const updated = messages.value.map((message, at) => at === index ? {...message, task:result.task, text:result.task.localAgentSummary || result.task.error?.message || "Local task · " + result.task.status} : message);
+        try { persist(updated); } catch { messages.value = updated; error.value = "Task status updated, but the local record could not be saved."; }
       } catch (reason) { error.value = reason.message; }
       finally { busy.value = false; scrollToLatest(); }
     };
@@ -178,7 +178,7 @@ export const TaskConversation = {
     onUnmounted(() => {
       removeEventListener("message", receiveProviders);
       document.removeEventListener("pointerdown", closeOutside);
-      for (const operation of pending.values()) { clearTimeout(operation.timer); operation.reject(new Error("对话已关闭。")); }
+      for (const operation of pending.values()) { clearTimeout(operation.timer); operation.reject(new Error("Conversation closed.")); }
       pending.clear();
     });
 
@@ -191,7 +191,7 @@ export const TaskConversation = {
         error.value = "";
         modelOpen.value = false;
       } catch {
-        error.value = "模型选择未能保存，请重试。";
+        error.value = "The model selection could not be saved. Please try again.";
       }
     };
     const selectedLabel = () => {
@@ -199,10 +199,10 @@ export const TaskConversation = {
         const model = provider.models.find(candidate => selectionKey(provider.id, candidate.id) === selected.value);
         if (model) return model.label;
       }
-      if (providerState.value === "loading") return "正在识别模型";
-      if (providerState.value === "error") return "模型服务不可用";
-      if (selected.value) return "已选模型不可用 · 重新选择";
-      return providers.value.length ? "选择模型" : "未连接模型";
+      if (providerState.value === "loading") return "Finding models";
+      if (providerState.value === "error") return "Model service unavailable";
+      if (selected.value) return "Model unavailable · Choose another";
+      return providers.value.length ? "Choose model" : "No model connected";
     };
     const modelSelector = () => {
       const available = providers.value.length > 0;
@@ -211,11 +211,11 @@ export const TaskConversation = {
       }}, [
         element("button", {
           type:"button", class:"task-chat__tool task-chat__model", disabled:!available || busy.value,
-          title:available ? "选择当前任务使用的模型" : selectedLabel(),
+          title:available ? "Choose a model for this task" : selectedLabel(),
           "aria-haspopup":"listbox", "aria-expanded":modelOpen.value,
           onClick:() => { requestProviders(); modelOpen.value = !modelOpen.value; },
         }, [element("span", null, selectedLabel()), icon("chevron")]),
-        modelOpen.value ? element("div", {class:"task-chat__model-menu", role:"listbox", "aria-label":"可用模型"}, providers.value.map(provider =>
+        modelOpen.value ? element("div", {class:"task-chat__model-menu", role:"listbox", "aria-label":"Available models"}, providers.value.map(provider =>
           element("section", {key:provider.id, class:"task-chat__model-group", "aria-label":provider.label}, [
             element("h3", {class:"task-chat__model-provider"}, provider.label),
             ...provider.models.map(model => {
@@ -227,7 +227,7 @@ export const TaskConversation = {
       ]);
     };
 
-    return () => element("section", {class:"task-chat", "aria-label":"任务对话", "data-task-id":task,
+    return () => element("section", {class:"task-chat", "aria-label":"Task conversation", "data-task-id":task,
       onWheel:event => {
         event.stopPropagation();
         if (!event.ctrlKey && !event.target.closest?.(".task-chat__messages") && list.value) {
@@ -235,34 +235,34 @@ export const TaskConversation = {
           list.value.scrollTop += event.deltaY;
         }
       }}, [
-      element("div", {ref:list, class:"task-chat__messages", role:"log", "aria-label":"本机消息记录", "aria-live":"polite", tabindex:0,
+      element("div", {ref:list, class:"task-chat__messages", role:"log", "aria-label":"Local message history", "aria-live":"polite", tabindex:0,
         onVnodeMounted:scrollToLatest}, messages.value.map((message, index) => element("article", {
-          key:index, class:"task-chat__message", "data-role":message.role === "assistant" ? "assistant" : "user", "aria-label":message.role === "assistant" ? "模型回复" : "你的消息",
+          key:index, class:"task-chat__message", "data-role":message.role === "assistant" ? "assistant" : "user", "aria-label":message.role === "assistant" ? "Model reply" : "Your message",
         }, [
           element("small", {class:"task-chat__author"}, message.role === "assistant" ? "Preacherman" : "You"),
           message.text ? element("p", null, message.text) : null,
           message.task ? element("div", {class:"task-chat__execution"}, [
-            element("p", null, "状态：" + message.task.status),
-            element("p", null, "执行器：" + (message.task.executionSnapshot?.agentId || "Codex CLI") + " · 工作区：" + (message.task.executionSnapshot?.workspaceId || "") + " · workspace-write"),
+            element("p", null, "Status: " + message.task.status),
+            element("p", null, "Executor: " + (message.task.executionSnapshot?.agentId || "Codex CLI") + " · Workspace: " + (message.task.executionSnapshot?.workspaceId || "") + " · workspace-write"),
             ...(message.task.pendingApproval ? [
-              element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "approve")}, "批准执行"),
-              element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "reject")}, "拒绝"),
+              element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "approve")}, "Approve execution"),
+              element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "reject")}, "Reject"),
             ] : []),
-            element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "status")}, "刷新状态"),
-            ...(["running", "queued", "submitting"].includes(message.task.status) ? [element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "cancel")}, "取消任务")] : []),
+            element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "status")}, "Refresh status"),
+            ...(["running", "queued", "submitting"].includes(message.task.status) ? [element("button", {type:"button", disabled:busy.value, onClick:() => taskAction(index, "cancel")}, "Cancel task")] : []),
           ]) : null,
           ...message.files.map((name, index) => element("span", {key:index, class:"task-chat__file"}, [icon("file"), name])),
         ]))),
-      error.value || busy.value || contextTrimmed.value ? element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (busy.value ? "正在请求，请稍候…" : "本次仅发送限额内的近期上下文；完整记录仍保留在本机。")) : null,
-      voiceNotice.value ? element("p", {id:`task-voice-status-${task}`, class:"task-chat__status", role:"status"}, "语音识别尚未配置，请先接入识别服务。") : null,
+      error.value || busy.value || contextTrimmed.value ? element("p", {class:"task-chat__status", role:error.value ? "alert" : "status"}, error.value || (busy.value ? "Sending, please wait…" : "Only recent context within the limit is sent. Your full history stays on this device.")) : null,
+      voiceNotice.value ? element("p", {id:`task-voice-status-${task}`, class:"task-chat__status", role:"status"}, "Connect a speech recognition service to use voice input.") : null,
       element("form", {class:"task-chat__composer", onSubmit:event => {event.preventDefault(); send();}}, [
         files.value.length ? element("div", {class:"task-chat__attachments"}, files.value.map((name, index) => element("button", {
-          key:index, type:"button", class:"task-chat__attachment", title:"移除 " + name,
-          "aria-label":"移除附件 " + name, onClick:() => { files.value = files.value.filter((_, candidate) => candidate !== index); },
+          key:index, type:"button", class:"task-chat__attachment", title:"Remove " + name,
+          "aria-label":"Remove attachment " + name, onClick:() => { files.value = files.value.filter((_, candidate) => candidate !== index); },
         }, [icon("file"), element("span", null, name), icon("close")]))) : null,
         element("textarea", {
-          ref:input, class:"task-chat__input", rows:2, maxlength:20000, placeholder:"发送消息…",
-          "aria-label":"消息内容", value:draft.value,
+          ref:input, class:"task-chat__input", rows:2, maxlength:20000, placeholder:"Write a message…",
+          "aria-label":"Message", value:draft.value,
           onInput:event => {draft.value = event.target.value; voiceNotice.value = false; resize();},
           onKeydown:event => {
             event.stopPropagation();
@@ -272,20 +272,20 @@ export const TaskConversation = {
           },
         }),
         element("div", {class:"task-chat__toolbar"}, [
-          element("input", {ref:picker, type:"file", multiple:true, hidden:true, "aria-label":"选择附件（仅记录文件名）",
+          element("input", {ref:picker, type:"file", multiple:true, hidden:true, "aria-label":"Choose attachments (filenames only)",
             onChange:event => {
               files.value = [...files.value, ...Array.from(event.target.files ?? [], file => file.name)];
               event.target.value = "";
             }}),
-          element("button", {type:"button", class:"task-chat__tool task-chat__icon", title:"添加附件（此版本仅记录文件名，不读取或上传）", "aria-label":"添加附件", onClick:() => picker.value?.click()}, [icon("plus")]),
+          element("button", {type:"button", class:"task-chat__tool task-chat__icon", title:"Add attachments (filenames only; files are not read or uploaded)", "aria-label":"Add attachments", onClick:() => picker.value?.click()}, [icon("plus")]),
           element("span", {class:"task-chat__spacer"}),
           modelSelector(),
           element("button", {
-            type:"button", class:"task-chat__tool task-chat__icon", title:"语音输入（待配置识别服务）", "aria-label":"语音输入",
+            type:"button", class:"task-chat__tool task-chat__icon", title:"Voice input (recognition service required)", "aria-label":"Voice input",
             "aria-describedby":voiceNotice.value ? `task-voice-status-${task}` : undefined,
             onClick:() => { voiceNotice.value = true; },
           }, [icon("mic")]),
-          element("button", {type:"submit", class:"task-chat__send", "aria-label":"发送消息", title:"发送到所选模型", disabled:busy.value || readFailed.value || !draft.value.trim()}, [icon("up")]),
+          element("button", {type:"submit", class:"task-chat__send", "aria-label":"Send message", title:"Send to selected model", disabled:busy.value || readFailed.value || !draft.value.trim()}, [icon("up")]),
         ]),
       ]),
     ]);

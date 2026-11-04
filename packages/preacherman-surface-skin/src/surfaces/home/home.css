@@ -297,7 +297,7 @@
   gap: 2px;
   margin: 0;
   color: #111111;
-  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   font-size: 43px;
   font-weight: 400;
   line-height: 48px;
@@ -329,7 +329,7 @@
   outline: 0;
   color: #3f3b36;
   background: transparent;
-  font: 12px/16px Inter, sans-serif;
+  font: 12px/16px var(--demo-font-primary, "Clash Display", sans-serif);
 }
 
 .pm-conversation__composer textarea {
@@ -443,7 +443,7 @@
   top: 0;
   left: 0;
   margin: 0;
-  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   font-size: 19px;
   font-weight: 400;
   line-height: 22px;
@@ -470,7 +470,7 @@
   top: 1px;
   left: 5px;
   color: #5f5a54;
-  font-family: Arial, sans-serif;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   font-size: 9px;
   font-weight: 600;
   line-height: 12px;
@@ -761,7 +761,7 @@
 
 .pm-state-focus__current-card h2 {
   margin: 23px 0 16px;
-  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-family: var(--demo-font-primary, "Clash Display", sans-serif);
   font-size: 20px;
   font-weight: 400;
   line-height: 24px;
@@ -817,7 +817,7 @@
 }
 
 .pm-state-focus__integrity img { width: 18px; height: 18px; }
-.pm-state-focus__integrity strong { font-family: "Iowan Old Style", Baskerville, serif; font-size: 21px; font-weight: 400; }
+.pm-state-focus__integrity strong { font-family: var(--demo-font-primary, "Clash Display", sans-serif); font-size: 21px; font-weight: 400; }
 .pm-state-focus__integrity span { color: #7b756e; font-size: 10px; }
 
 .pm-state-focus__integrity-track {

@@ -92,7 +92,7 @@
   border-radius: 999px;
   color: var(--demo-theme-activate-rest-text);
   background: var(--demo-theme-activate-rest-bg);
-  font: 650 9px/30px Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 650 9px/30px var(--demo-font-primary, "Clash Display", sans-serif);
   text-decoration: none;
   cursor: pointer;
 }

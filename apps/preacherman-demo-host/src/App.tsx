@@ -64,7 +64,7 @@ const manifest: SurfaceManifest = {
   surfaceType: "workspace",
   schemaVersion: 1,
   surfaceId: "figma-281-538",
-  title: "Page 6 工作区 / conversation workspace",
+  title: "Page 6 / conversation workspace",
 };
 
 const projection: SurfaceProjection = {
@@ -353,7 +353,7 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
               appearance={preferences.appearance}
               locale={preferences.locale}
               onAppearanceChange={(appearance) => setPreferences((current) => ({ ...current, appearance }))}
-              onLocaleChange={(locale) => setPreferences((current) => ({ ...current, locale }))}
+              onLocaleChange={() => setPreferences((current) => ({ ...current, locale: "en" }))}
               requestedControl={requestedControl}
             />
           : activeSurfaceType === "ledger"
