@@ -53,7 +53,7 @@ export interface AvatarMotionRigBinding {
   readonly calibration?: {
     /** Quaternion (x, y, z, w) from glTF-facing source coordinates to avatar coordinates. */
     readonly sourceToAvatar: readonly [number, number, number, number];
-    /** Keep upper-body gestures relative to the authored pelvis, not source root turns. */
+    /** Retarget descendants relative to this pelvis; animate the anchor only when mapped. */
     readonly anchor: { readonly source: string; readonly target: string };
     /** Aim the reference bone at its anatomical child before applying source motion. */
     readonly aimChildren: Readonly<Record<string, { source: string; target: string }>>;
@@ -62,6 +62,12 @@ export interface AvatarMotionRigBinding {
   };
   readonly rootJoint?: string;
   readonly rootTarget?: string;
+  /** In-place support correction in avatar-root units; source travel is never applied. */
+  readonly grounding?: {
+    readonly feet: readonly string[];
+    readonly maxVertical: number;
+    readonly maxHorizontal: number;
+  };
   /** Optional Speech2Motion channel name to target morph-target name. */
   readonly faceChannels?: Readonly<Record<string, string>>;
   /** Reduced ARKit mapping for Cortana's existing jaw and eyeball bones. */

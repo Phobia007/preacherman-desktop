@@ -142,21 +142,73 @@ test("Cortana arm reference follows anatomical source directions without the old
       const actual = direction(f.nodes.get(binding.bones[source]), f.nodes.get(child.target));
       assert.ok(actual.dot(expected) > .999, `${source}: ${actual.dot(expected)}`);
     }
-    for (const name of ["b_pelvis", "b_l_thigh", "b_r_thigh", "b_l_calf", "b_r_calf"])
-      assert.deepEqual(f.nodes.get(name).quaternion.toArray(), f.original.get(f.nodes.get(name)).toArray(), name);
+    assert.ok(f.nodes.get("b_pelvis").quaternion.clone().normalize().angleTo(f.original.get(f.nodes.get("b_pelvis")).clone().normalize()) < 1e-5);
   } finally { f.player.dispose(); }
 });
 
-test("source pelvis turns cannot twist the anchored upper body; idle restores after cancellation", () => {
+test("source pelvis turns are bounded and source Root turns cannot twist the avatar; idle restores", () => {
   const f = fixture();
   try {
     play(f); const neutral = new Map([...f.nodes].map(([name, bone]) => [name, bone.quaternion.clone()]));
-    play(f, { Hips: new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), 1.5) });
+    play(f, { Root: new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), 1.5) });
     for (const target of Object.values(binding.bones)) assert.ok(f.nodes.get(target).quaternion.clone().normalize().angleTo(neutral.get(target).clone().normalize()) < 1e-5, target);
+    play(f, { Hips: new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), 1.5) });
+    const hips = f.nodes.get("b_pelvis");
+    assert.ok(Math.abs(hips.quaternion.angleTo(f.original.get(hips)) - .3) < 1e-5, "pelvis follows motion within its limit");
     f.player.receive({ type: "cancelled", streamId: "calibration", reason: "barge-in" });
     f.player.beginFrame(); f.player.update(.2); f.player.beginFrame();
     for (const [bone, original] of f.original) assert.deepEqual(bone.quaternion.toArray(), original.toArray(), bone.name);
   } finally { f.player.dispose(); }
+});
+
+test("Cortana full-body service captures move hips, knees and feet without sinking or travelling off the stage", () => {
+  // Saved real service response: varying body poses, including large source turns.
+  const meta = JSON.parse(readFileSync(new URL("./fixtures/cortana-speech-lower-body.json", import.meta.url), "utf8"));
+  const bytes = readFileSync(new URL("./fixtures/cortana-speech-lower-body.bin", import.meta.url));
+  const f = fixture();
+  const originalPosition = f.nodes.get("b_pelvis").position.clone();
+  const feet = binding.grounding.feet.map(name => f.nodes.get(name));
+  const heights = feet.map(bone => bone.getWorldPosition(new Vector3()).y);
+  const rotations = new Map();
+  let clock = 0;
+  try {
+    f.player.receive({type:"started",metadata:{streamId:"real",characterId:"cortana",interactionEpoch:1,frameRate:30,
+      jointNames:meta.jointNames,restJoints:rest,blendshapeNames:[],restPoseId:"KQ-default",timelineStartFrame:0,strength:.55,playbackTime:()=>clock}});
+    f.player.receive({type:"frames",streamId:"real",values:new Float32Array(bytes.buffer,bytes.byteOffset,bytes.length/4)});
+    for(let frame=0;frame<150;frame++) {
+      clock=frame/30; f.player.beginFrame();f.player.update(1/30);f.root.updateMatrixWorld(true);
+      const offset=f.nodes.get("b_pelvis").position.distanceTo(originalPosition);
+      assert.ok(offset <= Math.hypot(.18,.08)+1e-5, "bounded in-place support correction");
+      assert.ok(Math.min(...feet.map((bone,i)=>bone.getWorldPosition(new Vector3()).y-heights[i])) > -.005, "support never sinks into the platform");
+      for(const name of ["b_pelvis","b_l_thigh","b_r_thigh","b_l_calf","b_r_calf","b_l_foot","b_r_foot"]) {
+        const samples=rotations.get(name)??[];samples.push(f.nodes.get(name).quaternion.clone());rotations.set(name,samples);
+      }
+    }
+    for(const [name,samples] of rotations) assert.ok(Math.max(...samples.map(q=>q.angleTo(samples[0]))) > .01, name+" must vary with speech motion");
+  } finally { f.player.dispose(); }
+  assert.ok(f.nodes.get("b_pelvis").position.distanceTo(originalPosition)<1e-8);
+});
+
+test("lower-body entry and interruption are continuous, restore position, and do not affect another character", () => {
+  const f=fixture(true), hips=f.nodes.get("b_pelvis"), calf=f.nodes.get("b_l_calf");
+  const position=hips.position.clone(), idle=calf.quaternion.clone();
+  const step=dt=>{f.player.beginFrame();f.player.update(dt);};
+  try {
+    play(f, {Left_knee:new Quaternion().setFromAxisAngle(new Vector3(1,0,0),.7),
+      Right_leg:new Quaternion().setFromAxisAngle(new Vector3(1,0,0),.2),Hips:new Quaternion().setFromAxisAngle(new Vector3(0,0,1),.15)});
+    assert.ok(calf.quaternion.angleTo(idle)<1e-5);assert.ok(hips.position.distanceTo(position)<1e-5);
+    step(1/60);assert.ok(calf.quaternion.angleTo(idle)<.001);
+    step(.65);assert.ok(calf.quaternion.angleTo(idle)>.1);const visible=calf.quaternion.clone(), supported=hips.position.clone();
+    f.player.receive({type:"started",metadata:{streamId:"wrong",characterId:"zima",interactionEpoch:2,frameRate:30,jointNames:[],restJoints:rest,blendshapeNames:[],restPoseId:"KQ-default",timelineStartFrame:0}});
+    step(0);assert.ok(calf.quaternion.angleTo(visible)<1e-5);
+    f.player.receive({type:"cancelled",streamId:"calibration",reason:"barge-in"});
+    step(0);assert.ok(calf.quaternion.angleTo(visible)<1e-5);assert.ok(hips.position.distanceTo(supported)<1e-5);
+    step(.46);assert.ok(calf.quaternion.angleTo(idle)<1e-5);assert.ok(hips.position.distanceTo(position)<1e-8);
+    for(let i=0;i<100;i++)step(1/60);
+    assert.ok(hips.position.distanceTo(position)<1e-8);
+  } finally { f.player.dispose(); }
+  assert.equal(exports.characterSpeechMotionBinding("zima").grounding,undefined);
+  assert.equal(exports.characterSpeechMotionBinding("zima").bones.Left_knee,undefined);
 });
 
 test("calibrated wrist limits bound extreme rotations and subframe playback interpolates", () => {

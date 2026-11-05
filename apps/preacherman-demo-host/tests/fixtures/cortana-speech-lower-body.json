@@ -1,0 +1,18 @@
+{
+  "source": "Recorded local Speech2Motion V3 greeting; lower-body channels extracted without alteration.",
+  "restPoseId": "KQ-default",
+  "frameRate": 30,
+  "frameCount": 150,
+  "jointNames": [
+    "Root",
+    "Hips",
+    "Left_leg",
+    "Left_knee",
+    "Left_ankle",
+    "Left_toe",
+    "Right_leg",
+    "Right_knee",
+    "Right_ankle",
+    "Right_toe"
+  ]
+}

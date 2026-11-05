@@ -76,6 +76,8 @@ export class ThreeAvatarMotionStreamPlayer {
   private lastFrame = -1;
   private cancelled = false;
   private readonly basePose = new Map<Bone, Quaternion>();
+  private anchorBasePosition: Vector3 | null = null;
+  private readonly groundPoints: Object3D[] = [];
   private sourceRest = new Map<string, AvatarMotionRestJoint>();
   private referenceRotations = new Map<string, Quaternion>();
   private readonly restPositions = new Map<string, Vector3>();
@@ -110,6 +112,7 @@ export class ThreeAvatarMotionStreamPlayer {
     root.updateMatrixWorld(true);
     const inverseRootWorld = root.matrixWorld.clone().invert();
     root.traverse((object) => {
+      if (binding.grounding?.feet.some(name => PropertyBinding.sanitizeNodeName(name) === object.name)) this.groundPoints.push(object);
       if (object instanceof Bone) {
         const restRoot = inverseRootWorld.clone().multiply(object.matrixWorld);
         this.restPositions.set(object.name, new Vector3().setFromMatrixPosition(restRoot));
@@ -201,14 +204,20 @@ export class ThreeAvatarMotionStreamPlayer {
   }
 
   update(deltaSeconds: number, jawEnergy = 0): void {
+    // Sample the current authored idle after its mixer, before adding speech.
     const metadata = this.metadata;
+    const support = metadata || this.bodyBlend || this.bodyStreamId
+      ? this.groundPoints.map(point => this.root.worldToLocal(point.getWorldPosition(new Vector3()))) : [];
     const applied = metadata && this.fade > 0 ? this.updateBody(metadata, deltaSeconds) : false;
     if (this.binding.motionTransitions) this.blendBody(applied ? metadata!.streamId : null, deltaSeconds);
+    if (applied || this.bodyBlend || this.bodyStreamId) this.groundBody(support);
     this.updateFace(deltaSeconds, jawEnergy);
   }
 
   /** Restore the authored pose before the idle mixer runs, including unkeyed joints. */
   beginFrame(): void {
+    if (this.anchorBasePosition && this.targetAnchor) this.targetAnchor.bone.position.copy(this.anchorBasePosition);
+    this.anchorBasePosition = null;
     this.faceDriver?.beginFrame();
     for (const [target, value] of this.morphBase) target.influences[target.index] = value;
     this.morphBase.clear();
@@ -350,20 +359,27 @@ export class ThreeAvatarMotionStreamPlayer {
       ? new Quaternion().setFromRotationMatrix(matrix4(anchorRest.matrix))
         .multiply(new Quaternion().setFromRotationMatrix(resolveSourceGlobal(anchorName)).invert())
       : new Quaternion();
-    const targetAnchorDelta = this.targetAnchor
-      ? this.rootRelativeQuaternion(this.targetAnchor.bone).multiply(this.targetAnchor.rest.clone().invert())
-      : new Quaternion();
     for (const [sourceName, target] of ordered) {
       if (!jointIndex.has(sourceName)) continue;
       const sourcePose = resolveSourceGlobal(sourceName);
       const sourceRest = this.sourceRest.get(sourceName);
       if (!sourceRest) continue;
+      const isAnchor = sourceName === anchorName;
+      // A mapped pelvis gets its local tilt/turn, bounded by the character limit.
+      // Strip source Root travel/turns; descendants then follow the *applied* pelvis.
+      const anchorParent = isAnchor && sourceRest.parent ? this.sourceRest.get(sourceRest.parent) : undefined;
+      const correction = isAnchor
+        ? anchorParent ? new Quaternion().setFromRotationMatrix(matrix4(anchorParent.matrix))
+          .multiply(new Quaternion().setFromRotationMatrix(resolveSourceGlobal(anchorParent.name)).invert()) : new Quaternion()
+        : sourceAnchorCorrection;
       const delta = new Quaternion().setFromRotationMatrix(sourcePose)
-        .premultiply(sourceAnchorCorrection)
+        .premultiply(correction)
         .multiply(new Quaternion().setFromRotationMatrix(matrix4(sourceRest.matrix)).invert());
       delta.premultiply(this.sourceToAvatar).multiply(this.sourceToAvatar.clone().invert());
       const desiredRoot = delta.multiply((this.referenceRotations.get(sourceName) ?? target.restRootQuaternion).clone())
-        .premultiply(targetAnchorDelta);
+        .premultiply(!isAnchor && this.targetAnchor
+          ? this.rootRelativeQuaternion(this.targetAnchor.bone).multiply(this.targetAnchor.rest.clone().invert())
+          : new Quaternion());
       const parentRoot = this.rootRelativeQuaternion(target.bone.parent);
       const desiredLocal = parentRoot.clone().invert().multiply(desiredRoot);
       const limit = this.binding.calibration?.jointLimits[sourceName];
@@ -382,6 +398,28 @@ export class ThreeAvatarMotionStreamPlayer {
       blendshapeOffset,
       weight,
     );
+  }
+
+  private groundBody(support: Vector3[]): void {
+    const config = this.binding.grounding, anchor = this.targetAnchor?.bone;
+    if (!config || !anchor?.parent || !support.length) return;
+    this.root.updateMatrixWorld(true);
+    const current = this.groundPoints.map(point => this.root.worldToLocal(point.getWorldPosition(new Vector3())));
+    const lift = current.map((point, index) => point.y - support[index].y);
+    const lowest = Math.min(...lift);
+    // Low points carry the weight; a lifted foot is free to articulate. Smooth
+    // support weights avoid snapping from one foot to the other during a shift.
+    const offset = new Vector3(); let total = 0;
+    current.forEach((point, index) => {
+      const weight = Math.exp(-(lift[index] - lowest) / 0.02);
+      offset.addScaledVector(support[index].clone().sub(point), weight); total += weight;
+    });
+    offset.divideScalar(total); offset.y = 0; offset.clampLength(0, config.maxHorizontal);
+    offset.y = Math.max(-config.maxVertical, Math.min(config.maxVertical, -lowest));
+    this.anchorBasePosition = anchor.position.clone();
+    const position = this.root.worldToLocal(anchor.getWorldPosition(new Vector3())).add(offset);
+    anchor.position.copy(anchor.parent.worldToLocal(this.root.localToWorld(position)));
+    this.root.updateMatrixWorld(true);
   }
 
   private updateFace(deltaSeconds: number, jawEnergy: number): void {
