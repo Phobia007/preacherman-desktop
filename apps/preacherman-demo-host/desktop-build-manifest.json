@@ -1,61 +1,48 @@
 {
   "schemaVersion": 1,
-  "buildId": "character-state-ui-20261104",
+  "buildId": "cortana-lowerbody-20261105",
   "productVersion": "0.1.0",
-  "sourceTask": "Integrate character memories, rules, skill experience and Info Map; bind subsequent voice/text conversations to the Activated character",
+  "sourceTask": "Connect Cortana pelvis, legs, knees, ankles and toes to speech motion, with bounded support correction and existing smooth transitions",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "English semantic light/dark UI; real character state and task records; immediate spoken/displayed receipt confirmation; browsing does not reassign memory ownership.",
-  "sourceCommit": "acd77d94fa286cb39f6a31ef391affaf6682a6e3",
+  "sourceState": "Cortana-specific anatomical lower-body retargeting. Authored idle, textures, other character bindings and active-character ownership preserved.",
+  "sourceCommit": "b59fed9ff477ffcad9bcc227e52e9c7f9fab47e3",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-04T15:42:09.5836535Z",
-  "deployedAt": "2026-11-04T15:42:46.0443209Z",
-  "verifiedAt": "2026-11-04T15:46:54.532057+00:00",
-  "sizeBytes": 606701056,
-  "sha256": "1FE7332A74FF7B6C44F0D8AE0EFD0225545322D5D8CDF765E03E66A4DA2609AD",
+  "builtAt": "2026-11-05T11:37:50.0939346Z",
+  "deployedAt": "2026-11-05T11:40:28.0922229Z",
+  "verifiedAt": "2026-11-05T11:43:37.922756+00:00",
+  "sizeBytes": 606702592,
+  "sha256": "6510E279D71C592033BD45BF133E1D08987EDCA23A59C9108B1B27B1F3B4C3B9",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-11-04T15:37:18.803442+00:00",
   "sidecarSizeBytes": 93308416,
   "sidecarSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-state-before-20261104-234241\\preacherman-demo-host.exe",
-  "backupSha256": "722A214457DD96C67AD3264C8AFF405851E26E906C6DF3BDFC977691CCCBE64A",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-state-before-20261104-234241\\preacherman-service.exe",
-  "sidecarBackupSha256": "AA9D8203E39C945E3FEB29852BFCEFEBCE619EDB4B85971A72CFFC1F33433398",
-  "rollbackBaselineCommit": "e34d337",
-  "previousVerificationCommit": "1411c7ea090f57537f0f69c48917c4f741b02e71",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lowerbody-before-20261105-193939\\preacherman-demo-host.exe",
+  "backupSha256": "1FE7332A74FF7B6C44F0D8AE0EFD0225545322D5D8CDF765E03E66A4DA2609AD",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lowerbody-before-20261105-193939\\preacherman-service.exe",
+  "sidecarBackupSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
+  "rollbackBaselineCommit": "0be1239",
+  "previousVerificationCommit": "acd77d94fa286cb39f6a31ef391affaf6682a6e3",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "typecheck": "passed",
-      "focusedTests": 54,
-      "focusedTestsPassed": 54,
-      "preview": {
-        "checks": [
-          "dark memory add/pin/delete; rules save; actual skill result; Info Map history",
-          "light memory add/pin/delete; rules save; actual skill result; Info Map history"
-        ],
-        "errors": [],
-        "passed": true
+      "passed": true,
+      "focusedTests": 22,
+      "suites": {
+        "cortanaMotionCalibration": 8,
+        "characterMotion": 5,
+        "speechMotionRuntime": 3,
+        "speech2motionIntegration": 4,
+        "rendererMotionStream": 2
       },
-      "rulesLayout": {
-        "checks": [
-          "dark Rules title/form separation and dismissal",
-          "light Rules title/form separation and dismissal"
-        ],
-        "errors": [],
-        "passed": true
-      },
-      "designDetector": [],
-      "designReview": {
-        "status": "pass",
-        "RulesTitleCollision": "resolved",
-        "openMaterialFindings": 0
-      }
+      "hostTypecheck": true,
+      "rendererBuildAndTypecheck": true,
+      "recordedFramePreview": true
     },
-    "backendChanged": true,
-    "sidecarRebuilt": true,
-    "nativeFlow": "Canonical shortcut cold Home launch; all eight core routes in both themes. Character Memory, forgetting policy, Rules, Skills, Info Map and History display live local state; previewing ZIMA preserves activation. Isolated preview tests cover memory mutations, rule revisions and actual approved plugin results. Original account, memory, voice and model configuration preserved.",
+    "backendChanged": false,
+    "sidecarRebuilt": false,
+    "nativeFlow": "Canonical shortcut cold Home launch and eight core routes in both themes. Real Speech2Motion Natural preview in both themes, interruption and return to idle; actual Cortana voice playback with body motion. Full-body visual verification. Original activation and motion preferences preserved.",
     "routes": [
       {
         "mode": "dark",
@@ -154,6 +141,22 @@
         "ready": true
       }
     ],
+    "motion": [
+      {
+        "mode": "dark",
+        "frames": 7,
+        "interrupted": true
+      },
+      {
+        "mode": "light",
+        "frames": 7,
+        "interrupted": false
+      }
+    ],
+    "spokenReply": {
+      "passed": true,
+      "motionFrames": 7
+    },
     "windowControls": {
       "restore": true,
       "maximize": true,
@@ -162,24 +165,24 @@
       "passed": true
     },
     "resourceSample": {
-      "RootPID": 39500,
+      "RootPID": 52676,
       "OwnedPIDs": [
-        39500,
-        11688,
-        3540,
-        39752,
-        36900,
-        8408,
-        39816,
-        35336,
-        24364,
-        35644,
-        38388
+        52676,
+        55368,
+        55468,
+        46348,
+        54424,
+        51204,
+        49784,
+        61328,
+        1712,
+        13696,
+        52876
       ],
-      "NormalizedCpuPercent": 3.92,
-      "WorkingSetMiB": 2087,
-      "SampleSeconds": 5.1083256,
-      "MeasuredAt": "2026-11-04T23:46:32.9262362+08:00"
+      "NormalizedCpuPercent": 3.91,
+      "WorkingSetMiB": 2240,
+      "SampleSeconds": 5.1171456,
+      "MeasuredAt": "2026-11-05T19:42:44.8999863+08:00"
     },
     "newErrors": [],
     "localAssetFailures": [],
@@ -187,30 +190,30 @@
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "limitations": [
-      "State remains local-profile/character scoped; no cloud account isolation or sync. Graph shows six recent memories; all retained memories are available in Memory. Skill demonstration frame is intentionally empty."
+      "Bounded in-place lower-body motion and support correction, not walking navigation or a general foot IK/collision solver. Existing arm/body intersections are outside this change."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\playwright\\character-state\\native-report.json",
-      "D:\\preacherman\\output\\playwright\\character-state\\source-checks.json",
-      "D:\\preacherman\\output\\playwright\\character-state\\window-lifecycle.json",
-      "D:\\preacherman\\output\\playwright\\character-state\\resources.json",
-      "D:\\preacherman\\output\\playwright\\character-state\\preview-report.json",
-      "D:\\preacherman\\output\\playwright\\character-state\\rules-verdict-report.json"
+      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\native-report.json",
+      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\source-checks.json",
+      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\window-lifecycle.json",
+      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\resources.json",
+      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\preview-report.json"
     ],
-    "normalShortcutLaunch": {
+    "normalLaunch": {
       "Shortcut": "C:\\Users\\Administrator\\Desktop\\Preacherman Desktop Demo.lnk",
       "Target": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
-      "Sha256": "1FE7332A74FF7B6C44F0D8AE0EFD0225545322D5D8CDF765E03E66A4DA2609AD",
-      "PID": 19908,
+      "Sha256": "6510E279D71C592033BD45BF133E1D08987EDCA23A59C9108B1B27B1F3B4C3B9",
+      "PID": 50148,
       "WindowTitle": "Preacherman Desktop Demo",
       "Responding": true,
       "DebugPortOpen": false,
-      "VerifiedAt": "2026-11-04T23:48:04.0808097+08:00"
+      "VerifiedAt": "2026-11-05T19:43:46.8799848+08:00"
     },
     "backupRetention": {
       "applied": true,
-      "completeSetsRetained": 3,
-      "removedGiB": 0.9
+      "backupsKept": 3,
+      "removedSets": 1,
+      "evidence": "D:\\preacherman\\output\\cortana-lowerbody-20261105\\prune.log"
     }
   },
   "releaseAttempts": [
@@ -1576,9 +1579,20 @@
       "verifiedAt": "2026-11-04T15:46:54.532057+00:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-state-before-20261104-234241",
       "build": "Incremental production Tauri executable and rebuilt matching sidecar; preserved Cargo cache; no installer."
+    },
+    {
+      "buildId": "cortana-lowerbody-20261105",
+      "sourceCommit": "b59fed9ff477ffcad9bcc227e52e9c7f9fab47e3",
+      "sha256": "6510E279D71C592033BD45BF133E1D08987EDCA23A59C9108B1B27B1F3B4C3B9",
+      "sidecarSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-11-05T11:40:28.0922229Z",
+      "verifiedAt": "2026-11-05T11:43:37.922756+00:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lowerbody-before-20261105-193939",
+      "build": "Incremental production Tauri executable with verified unchanged sidecar; preserved Cargo cache; no installer."
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\character-state-before-20261104-234241\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lowerbody-before-20261105-193939\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
