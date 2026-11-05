@@ -68,4 +68,9 @@ jobs:
       - name: Create reviewable draft (native verification required before publication)
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" release/* --repo "$GITHUB_REPOSITORY" --draft --verify-tag --title "Preacherman $GITHUB_REF_NAME" --notes "Build artifacts only. Native installation, both themes, service setup and user-data isolation must be verified before publishing."
+        run: |
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release already exists; preserving its reviewed artifacts."
+            exit 0
+          fi
+          gh release create "$GITHUB_REF_NAME" release/* --repo "$GITHUB_REPOSITORY" --draft --verify-tag --title "Preacherman $GITHUB_REF_NAME" --notes "Build artifacts only. Native installation, both themes, service setup and user-data isolation must be verified before publishing."

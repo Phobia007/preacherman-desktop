@@ -1,43 +1,37 @@
 # Windows installer delivery
 
-The Windows x64 demo installer is published at [Windows Demo 0.1.0](https://github.com/Phobia007/preacherman-desktop/releases/tag/windows-v0.1.0).
+[Windows Demo 0.2.0](https://github.com/Phobia007/preacherman-desktop/releases/tag/windows-v0.2.0) is the current Windows x64 release.
 
-## Website download button
+Use [Preacherman-Setup.exe](https://github.com/Phobia007/preacherman-desktop/releases/latest/download/Preacherman-Setup.exe) as the shareable download link. The stable asset name is preserved across Latest releases. A Git source push alone does not update this installer.
 
-Use this public asset URL as the Windows download button's destination:
+## Published artifacts
 
-```text
-https://github.com/Phobia007/preacherman-desktop/releases/latest/download/Preacherman-Setup.exe
-```
+- Application source: `0c3973b896c5890223a01883d4e6183168d257e7`
+- Installer: `Preacherman-Setup.exe`, 628,045,675 bytes
+- Installer SHA-256: `5ffe15ede577cd8248c523d1200c6be04a4c6b786b1a1f89cc746c30bd60320e`
+- Local service setup: `Preacherman-Services.zip`, also packaged in the application
+- English NSIS installer, current-user scope, Windows x64
+- Unsigned; Windows may display an unknown-publisher prompt
+- Embedded WebView2 bootstrapper; missing WebView2 requires an internet connection
 
-It downloads the installer directly without a GitHub account or source-code deployment. The website itself was not changed as part of this release. Keep the asset name `Preacherman-Setup.exe` on future Latest releases to preserve this URL. A source push to `main` alone does not replace the published installer.
+`SHA256SUMS.txt` and `windows-installer-manifest.json` accompany the release. The desktop includes interface assets, fonts, the current character library and the matching application service. Large inference weights, Python and Docker images are downloaded separately by **Preacherman Local Services**, using pinned versions and checksums.
 
-For this exact version, use [the version-pinned installer](https://github.com/Phobia007/preacherman-desktop/releases/download/windows-v0.1.0/Preacherman-Setup.exe).
+## First use
 
-## Published artifact
+Install Docker Desktop with the WSL 2 Linux-container backend, then open **Preacherman Local Services** from the Start menu. Choose a runtime folder. After setup, open the desktop, use the demo email sign-in in Account, activate a character and configure your own API in **Asset > Settings > Execution Mode**.
 
-- Tag: `windows-v0.1.0`
-- Source snapshot: `4626e62b5e4c62445a53826fdd502b36ab389260`
-- Application source commit: `fdc02c321f72770b5487c2e5eb06940583fd95c6`
-- File: `Preacherman-Setup.exe`
-- Size: 696,889,586 bytes (approximately 697 MB)
-- SHA-256: `8144a294202e8831120328d433c909ed5691bacc2f2262a00dd2df502ace45da`
-- Installer: NSIS, Windows x64, current-user installation, English/Simplified Chinese
-- Signature: unsigned; Windows may display unknown-publisher or SmartScreen prompts
-- WebView2: embedded bootstrapper; an internet connection is required to install the runtime when it is missing
+Windows speech is available when a suitable language voice is installed. Breeze is optional and requires explicit acceptance of its research/non-commercial model terms. Configure personal voices in **Appearance > Voice**. API keys, memories, recordings and personal clones are not distributed. See [service setup](../deployment/windows/README.md).
 
-The application, matching local service, models, fonts and authored media are included. This remains a demo build; simulated account and purchase flows are not production services. No macOS artifact is included.
+## Verification and limits
 
-## Verification
+The executable and matching sidecar were deployed to the canonical desktop shortcut, with a verified rollback pair. Native cold startup, eight main routes, 27 character selection entries, Cortana detail, both themes, native window controls and console diagnostics passed. No new console errors were found relative to the existing baseline.
 
-The published file was installed in an isolated directory, launched through a shortcut, and uninstalled successfully. Both appearance modes, Home, Task, Gallery, Market/Ledger, Settings, Account, Asset and Extension, account guide actions, demo sign-in/sign-out, resizing and native window controls were checked. Console diagnostics were compared with the recorded verified cold-launch baseline; existing blocked external-resource diagnostics remain, with no new diagnostics detected.
+The actual installer was then installed in an isolated directory, launched through its shortcut, checked with a fresh profile and demo sign-in, and uninstalled. The Local Services shortcut and packaged setup files were verified. Prior registration, installation and the canonical shortcut were preserved. The installed executable differs only in Tauri's three-byte `UNK` to `NSS` installer marker; its sidecar matches exactly.
 
-The installed executable differs from the verified standalone desktop executable only in Tauri's three-byte `UNK` to `NSS` installer marker. The sidecar is identical. Original application registration, the previous installation and the canonical desktop shortcut were preserved. The canonical shortcut was reopened and resource/process cleanup was verified.
+A fresh private Python installation loaded offline Whisper successfully. Isolated Docker deployments returned 96 motion frames with 54 joints and 60 facial frames with 51 blendshapes. Test containers, workers and profiles were removed. This was an isolated-directory test on the maintainer's Windows machine, not certification across every GPU or Windows installation.
 
-Anonymous HTTP range requests to both the Latest and version-pinned URLs returned the expected Windows executable header and total size. GitHub's asset SHA-256 matches the local installer. Public `SHA256SUMS.txt` and `windows-installer-manifest.json` files accompany the release.
+Public release metadata and GitHub asset digests were verified. The local anonymous range-download probe hit a GitHub gateway timeout; this is recorded separately from the passed installation checks.
 
-Local verification evidence is in `output/windows-installer-20261009/` (ignored build output). The desktop deployment manifest records the public release and installer hashes separately from the standalone executable.
+This remains a personal-use/evaluation demo. Existing simulated account, purchase and unfinished task workflows are not hosted production services. Character motion support depends on the current rig integration. No macOS installer is included.
 
-## Future updates
-
-This release was packaged from the verified Windows build cache and uploaded manually. It does not establish an automatic build or publishing pipeline. A future release must package and test the updated application, upload an asset named `Preacherman-Setup.exe` with checksums, and explicitly mark that tested release as Latest. Keep published version tags and installers immutable so existing version-pinned links remain reproducible.
+Evidence: `output/github-release-20261105/` (ignored local output). Future CI builds create draft releases; native verification is required before publishing Latest. Published tags and artifacts remain immutable.

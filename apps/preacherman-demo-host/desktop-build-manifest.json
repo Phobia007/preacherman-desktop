@@ -1,45 +1,40 @@
 {
   "schemaVersion": 1,
-  "buildId": "plain-backdrop-20261105",
-  "productVersion": "0.1.0",
-  "sourceTask": "Remove the shared We Bring a New statement and background monogram; use solid scene colors in both appearance modes",
+  "buildId": "portable-windows-20261105",
+  "productVersion": "0.2.0",
+  "sourceTask": "Clean disposable caches and prepare a portable, independently installable GitHub Windows release with user-owned API configuration",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Shared decorative backdrop and light-mode gradient removed. Semantic light/dark canvas, models, authored content, navigation branding and controls preserved.",
-  "sourceCommit": "0a9fc4c28d73c5762e1765c717e1ce717e40c6d2",
+  "sourceState": "Portable runtime discovery, pinned local-service installer, safe cache cleanup, English NSIS setup and CI draft releases. Existing character assets and private state preserved.",
+  "sourceCommit": "0c3973b896c5890223a01883d4e6183168d257e7",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-05T12:24:30.9441949Z",
-  "deployedAt": "2026-11-05T12:25:46.5540206Z",
-  "verifiedAt": "2026-11-05T12:31:16.386402+00:00",
-  "sizeBytes": 606675968,
-  "sha256": "A74C58CA300C8539391000D0BF351D604BE6DD69F35A41CEF690F54458F524AF",
+  "builtAt": "2026-11-05T14:16:59.4322029Z",
+  "deployedAt": "2026-11-05T14:18:08.3032186Z",
+  "verifiedAt": "2026-11-05T14:19:47.252878+00:00",
+  "sizeBytes": 606676480,
+  "sha256": "639CF698531323BB74893C757B72281CBB8EA7D9A986F4705A46474DDBBB8AE3",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
-  "sidecarBuiltAt": "2026-11-04T15:37:18.803442+00:00",
-  "sidecarSizeBytes": 93308416,
-  "sidecarSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\plain-backdrop-before-20261105-202541\\preacherman-demo-host.exe",
-  "backupSha256": "6510E279D71C592033BD45BF133E1D08987EDCA23A59C9108B1B27B1F3B4C3B9",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\plain-backdrop-before-20261105-202541\\preacherman-service.exe",
+  "sidecarBuiltAt": "2026-11-05T14:09:16.449909+00:00",
+  "sidecarSizeBytes": 93310464,
+  "sidecarSha256": "A989D727FB44003D79E39CDEBB9505A70BDC455371BCDF0B8CEA3597D6758662",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\portable-release-before-20261105-221802\\preacherman-demo-host.exe",
+  "backupSha256": "A74C58CA300C8539391000D0BF351D604BE6DD69F35A41CEF690F54458F524AF",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\portable-release-before-20261105-221802\\preacherman-service.exe",
   "sidecarBackupSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
-  "rollbackBaselineCommit": "1f2f022",
-  "previousVerificationCommit": "b59fed9ff477ffcad9bcc227e52e9c7f9fab47e3",
+  "rollbackBaselineCommit": "8f17857",
+  "previousVerificationCommit": "0a9fc4c28d73c5762e1765c717e1ce717e40c6d2",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
-      "passed": true,
-      "focusedTests": 9,
+      "focusedTests": 23,
       "hostTypecheck": true,
-      "baselineFailures": {
-        "suite": "persistent-companion-scene.test.mjs",
-        "count": 5,
-        "confirmedUnchangedAt": "1f2f022",
-        "evidence": "D:\\preacherman\\output\\plain-backdrop-20261105\\baseline-tests.log"
-      }
+      "installerSafetyChecks": true,
+      "sourcePublicationPreflight": true
     },
-    "backendChanged": false,
-    "sidecarRebuilt": false,
-    "nativeFlow": "Canonical shortcut cold Home launch and eight core routes in both themes; Cortana detail opens. Background decoration absent, no gradient/pseudo overlay, and exact solid background pixels confirmed in each appearance. Native window controls verified; original appearance restored.",
+    "backendChanged": true,
+    "sidecarRebuilt": true,
+    "nativeFlow": "Canonical shortcut cold launch and eight core routes in both themes; Cortana detail, authored assets and native window controls verified.",
     "routes": [
       {
         "mode": "dark",
@@ -138,44 +133,6 @@
         "ready": true
       }
     ],
-    "backgrounds": [
-      {
-        "mode": "dark",
-        "background": "rgb(1, 4, 9)",
-        "image": "none",
-        "before": "none",
-        "after": "none"
-      },
-      {
-        "mode": "light",
-        "background": "rgb(237, 240, 242)",
-        "image": "none",
-        "before": "none",
-        "after": "none"
-      }
-    ],
-    "pixels": [
-      {
-        "mode": "dark",
-        "solidRGB": [
-          1,
-          4,
-          9
-        ],
-        "backgroundSampleCount": 16,
-        "passed": true
-      },
-      {
-        "mode": "light",
-        "solidRGB": [
-          237,
-          240,
-          242
-        ],
-        "backgroundSampleCount": 16,
-        "passed": true
-      }
-    ],
     "windowControls": {
       "restore": true,
       "maximize": true,
@@ -184,85 +141,94 @@
       "passed": true
     },
     "resourceSample": {
-      "RootPID": 50692,
+      "RootPID": 63440,
       "OwnedPIDs": [
-        50692,
-        59508,
-        55584,
-        48980,
-        51192,
-        48924,
-        62524,
-        53324,
-        53964,
-        61964,
-        54332
+        63440,
+        48636,
+        48900,
+        61400,
+        55000,
+        62212,
+        58968,
+        49960,
+        53532,
+        44332,
+        50200
       ],
-      "NormalizedCpuPercent": 3.94,
-      "WorkingSetMiB": 2027,
-      "SampleSeconds": 5.070192,
-      "MeasuredAt": "2026-11-05T20:30:49.4762582+08:00"
+      "NormalizedCpuPercent": 3.89,
+      "WorkingSetMiB": 1983.0,
+      "SampleSeconds": 5.1394151,
+      "MeasuredAt": "2026-11-05T22:19:44.7121330+08:00"
     },
     "newErrors": [],
     "localAssetFailures": [],
     "observedErrors": [
-      "Hydration completed but contains mismatches.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
-      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
-      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
-      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
-    "limitations": [
-      "Five pre-existing persistent-companion-scene source assertions also fail against the previous committed source; unaffected by this change."
+    "portableServiceTests": [
+      {
+        "service": "speech2motion-v3",
+        "state": "ready",
+        "jointCount": 54,
+        "frameCount": 96
+      },
+      {
+        "service": "audio2face-v1",
+        "state": "ready",
+        "blendshapeCount": 51,
+        "frameCount": 60
+      }
     ],
     "evidence": [
-      "D:\\preacherman\\output\\plain-backdrop-20261105\\native-report.json",
-      "D:\\preacherman\\output\\plain-backdrop-20261105\\source-checks.json",
-      "D:\\preacherman\\output\\plain-backdrop-20261105\\window-lifecycle.json",
-      "D:\\preacherman\\output\\plain-backdrop-20261105\\resources.json",
-      "D:\\preacherman\\output\\plain-backdrop-20261105\\pixels.json",
-      "D:\\preacherman\\output\\plain-backdrop-20261105\\home-light.png",
-      "D:\\preacherman\\output\\plain-backdrop-20261105\\home-dark.png"
+      "D:\\preacherman\\output\\github-release-20261105\\native-report.json",
+      "D:\\preacherman\\output\\github-release-20261105\\window-lifecycle.json",
+      "D:\\preacherman\\output\\github-release-20261105\\resources.json",
+      "D:\\preacherman\\output\\github-release-20261105\\service-smoke.json",
+      "D:\\preacherman\\output\\github-release-20261105\\managed-asr.json",
+      "D:\\preacherman\\output\\github-release-20261105\\installer-unit.log"
     ],
-    "normalLaunch": {
+    "finalResourceSample": {
+      "SampledAt": "2026-11-05T22:39:11.3138591+08:00",
+      "NativePid": 54928,
+      "StartedAt": "2026-11-05T22:32:01.3520175+08:00",
+      "WindowHandle": 17959566,
+      "Responding": true,
+      "NativeVisualVerified": true,
+      "ProcessIds": [
+        54928,
+        49536,
+        53988,
+        61496,
+        59068,
+        47324,
+        48584,
+        58340,
+        38464,
+        52492,
+        53096
+      ],
+      "NormalizedCpuPercent": 3.98,
+      "WorkingSetMiB": 1743.8,
+      "GpuDedicatedBytes": 3239051264.0,
+      "MaxGpuEngineUtilization": 6.0,
+      "FreeRamKiB": 16212152,
+      "TemporaryProcesses": [],
+      "Listeners": [],
+      "ShortcutTarget": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
+      "ShortcutArguments": "",
+      "CloseReleasedPair": true,
+      "OwnershipCheck": "Canonical executable path, descendant ancestry and creation time. Pre-existing unrelated Open Design browsers and services preserved."
+    },
+    "normalShortcutLaunch": {
       "Shortcut": "C:\\Users\\Administrator\\Desktop\\Preacherman Desktop Demo.lnk",
       "Target": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
-      "Sha256": "A74C58CA300C8539391000D0BF351D604BE6DD69F35A41CEF690F54458F524AF",
-      "PID": 62152,
+      "Sha256": "639CF698531323BB74893C757B72281CBB8EA7D9A986F4705A46474DDBBB8AE3",
+      "PID": 54928,
       "WindowTitle": "Preacherman Desktop Demo",
       "Responding": true,
       "DebugPortOpen": false,
-      "VerifiedAt": "2026-11-05T20:31:22.4464159+08:00"
-    },
-    "backupRetention": {
-      "applied": true,
-      "backupsKept": 3,
-      "removedSets": 1,
-      "evidence": "D:\\preacherman\\output\\plain-backdrop-20261105\\prune.log"
-    },
-    "consoleBaselineComparison": "D:\\preacherman\\output\\plain-backdrop-20261105\\console-baseline-comparison.json",
-    "nativeCheckNote": "Initial keyboard-only navigation run encountered drawer auto-close; pointer kept inside drawer for the complete cold-launch run. All sixteen route states passed. Console messages matched exact prior native diagnostics."
+      "VerifiedAt": "2026-11-05T22:32:03.3545577+08:00"
+    }
   },
   "releaseAttempts": [
     {
@@ -1649,9 +1615,20 @@
       "verifiedAt": "2026-11-05T12:31:16.386402+00:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\plain-backdrop-before-20261105-202541",
       "build": "Incremental production Tauri executable with verified unchanged sidecar; preserved Cargo cache; no installer."
+    },
+    {
+      "buildId": "portable-windows-20261105",
+      "sourceCommit": "0c3973b896c5890223a01883d4e6183168d257e7",
+      "sha256": "639CF698531323BB74893C757B72281CBB8EA7D9A986F4705A46474DDBBB8AE3",
+      "sidecarSha256": "A989D727FB44003D79E39CDEBB9505A70BDC455371BCDF0B8CEA3597D6758662",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-11-05T14:18:08.3032186Z",
+      "verifiedAt": "2026-11-05T14:19:47.252878+00:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\portable-release-before-20261105-221802",
+      "build": "Incremental production executable and changed sidecar; preserved Cargo cache. Installer packaging follows native verification."
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\plain-backdrop-before-20261105-202541\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\portable-release-before-20261105-221802\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
@@ -1670,60 +1647,44 @@
     "verificationDirectory": "D:\\preacherman\\output\\playwright\\state-engine-decoupled-20261104",
     "scope": "Canonical desktop and matching sidecar plus pre-existing shared services remain intentionally running.",
     "checkedAt": "2026-11-04T08:10:56.2626310+08:00",
-    "retentionReport": "output/playwright/state-engine-decoupled-20261104/backup-retention.json"
+    "retentionReport": "output/playwright/state-engine-decoupled-20261104/backup-retention.json",
+    "githubRelease20261105": {
+      "preExistingCacheBytesRemoved": 3601053314,
+      "temporaryInstallTestBytesReclaimed": 2351935488,
+      "modelsVoicesAndMemoriesPreserved": true,
+      "testContainersRemoved": true,
+      "evidenceDirectory": "output/github-release-20261105"
+    }
   },
   "windowsInstaller": {
-    "releaseTag": "windows-v0.1.0",
-    "sourceCommit": "4626e62b5e4c62445a53826fdd502b36ab389260",
-    "releaseUrl": "https://github.com/Phobia007/preacherman-desktop/releases/tag/windows-v0.1.0",
-    "latestDownloadUrl": "https://github.com/Phobia007/preacherman-desktop/releases/latest/download/Preacherman-Setup.exe",
-    "versionDownloadUrl": "https://github.com/Phobia007/preacherman-desktop/releases/download/windows-v0.1.0/Preacherman-Setup.exe",
-    "fileName": "Preacherman-Setup.exe",
-    "sizeBytes": 696889586,
-    "sha256": "8144A294202E8831120328D433C909ED5691BACC2F2262A00DD2DF502ACE45DA",
-    "signatureStatus": "NotSigned",
-    "installedExecutableSha256": "23CFDAB7AFAA0F25F313C5F7CC609D6BB97A99B0BAD6EC3A8F6955937BE05B00",
-    "sidecarSha256": "2465A32CAF878D0D6109C0975E5254F98CC1FA27CC7202FE574F5A367F90902E",
-    "payloadDifference": "Only the three-byte Tauri bundle type marker changes from UNK to NSS.",
-    "verification": {
-      "verifiedAt": "2026-10-09T09:16:21.66251+08:00",
-      "installation": "passed",
-      "nativeColdLaunch": "passed",
-      "themes": [
-        "light",
-        "dark"
-      ],
-      "surfaces": [
-        "Home",
-        "Task",
-        "Gallery",
-        "Market/Ledger",
-        "Settings",
-        "Account",
-        "Asset",
-        "Extension"
-      ],
-      "demoSignInAndSignOut": "passed",
-      "accountGuideActions": "passed",
-      "windowControls": "passed",
-      "uninstallation": "passed",
-      "priorInstallationAndShortcutPreserved": true,
-      "temporaryProcessesCleaned": true,
-      "console": "No new diagnostics relative to the recorded verified cold-launch baseline; existing blocked external-resource diagnostics remain."
+    "version": "0.2.0",
+    "tag": "windows-v0.2.0",
+    "releaseUrl": "https://github.com/Phobia007/preacherman-desktop/releases/tag/windows-v0.2.0",
+    "downloadUrl": "https://github.com/Phobia007/preacherman-desktop/releases/latest/download/Preacherman-Setup.exe",
+    "publishedAt": "2026-11-05T14:33:52Z",
+    "sourceCommit": "0c3973b896c5890223a01883d4e6183168d257e7",
+    "installerSha256": "5ffe15ede577cd8248c523d1200c6be04a4c6b786b1a1f89cc746c30bd60320e",
+    "installerSizeBytes": 628045675,
+    "installedExecutableSha256": "d0af9e7896f9f469c7e5be81e5317a575153b6e3a0c4f2ef162b3596555419f6",
+    "sidecarSha256": "a989d727fb44003d79e39cdebb9505a70bdc455371bcdf0b8cea3597d6758662",
+    "servicesZipSha256": "5a8fa1bdc64b2688dc5fc10e3ad872a497f557980a2303be49b33bac536a5059",
+    "status": "published-and-installed-copy-verified",
+    "publicDownloadCheck": {
+      "passed": false,
+      "metadataAndGitHubDigestVerified": true,
+      "rangeProbe": "Local anonymous range request received a GitHub download gateway timeout."
     },
-    "publicDownloadVerifiedAt": "2026-10-09T09:18:03.226087+08:00",
-    "canonicalShortcutRestoredAt": "2026-10-09T09:14:37.9732312+08:00",
-    "canonicalBinaryUnchanged": true,
-    "evidenceDirectory": "output/windows-installer-20261009",
-    "deliveryMethod": "Verified cached Tauri binaries bundled as NSIS and manually published; no automatic release pipeline added."
+    "canonicalShortcutRestoredAt": "2026-11-05T22:32:03.3545577+08:00",
+    "evidenceDirectory": "output/github-release-20261105",
+    "deliveryMethod": "Verified local production binaries packaged as NSIS; optional services installer included. CI emits reviewable drafts and preserves published artifacts."
   },
   "backupRetention": {
     "status": "passed",
     "kept": 3,
     "removed": 1,
-    "reclaimedBytes": 966158749,
-    "verifiedAt": "2026-11-04T20:39:55.7921725+08:00",
-    "report": "D:\\preacherman\\output\\playwright\\withdrawn-models\\backup-retention.json"
+    "reclaimedGiBRounded": 0.65,
+    "verifiedAt": "2026-11-05T14:39:11.662939+00:00",
+    "script": "tools/Prune-DesktopBackups.ps1 -Apply"
   },
   "predeploymentObservation": {
     "hashDrift": true,

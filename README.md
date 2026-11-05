@@ -12,8 +12,9 @@ and speech-driven animation. Bring your own AI provider API key.
 3. For local speech and animation, install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
    with the WSL 2 Linux-container backend. Open **Preacherman Local Services**
    from the Start menu and choose a runtime folder. D: is suggested when present.
-4. In **Asset**, activate a character. Open **Settings > Execution Mode**, enter
-   your own API endpoint, model and key, test the connection and save.
+4. Open **Account** and use the demo email sign-in to explore. In **Asset**, activate
+   a character. Open **Settings > Execution Mode**, enter your own API endpoint,
+   model and key, test the connection and save.
 5. Click the voice button in the bottom-right corner. Voice responses use Windows
    speech or an optional Breeze voice selected in **Appearance > Voice**.
 

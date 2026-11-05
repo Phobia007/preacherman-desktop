@@ -1,17 +1,19 @@
 # Local speech recognition and streamed playback
 
-The desktop service automatically uses the managed accelerated recognizer when both
-`D:\AI\PreachermanSpeech\venv\Scripts\python.exe` and
-`D:\AI\PreachermanSpeech\models\base\model.bin` exist. Otherwise it preserves the
-previous installed Python / Whisper base capability. Runtime paths cannot be supplied
-by a browser request. Models are never downloaded by the running desktop service.
+The desktop service uses the private accelerated recognizer at
+`<runtime root>\speech\venv\Scripts\python.exe`, with its model at
+`<runtime root>\speech\models\base\model.bin`. The Windows service installer records
+the selected root in the current user's `runtime-installation.json`. The existing
+`D:\AI\PreachermanSpeech` installation remains a compatibility fallback when no
+new root is configured. Runtime paths cannot be supplied by a browser request.
+Models are downloaded by the separate setup tool, never by the running desktop.
 
 The managed installation uses faster-whisper 1.2.1 and CTranslate2 CPU INT8, with four
 CPU threads, one worker and beam size 5. The multilingual model is the official
-`Systran/faster-whisper-base` conversion. Exact installed dependencies are recorded in
-`D:\AI\PreachermanSpeech\requirements.lock.txt`; model revision and SHA-256 are in
-`D:\AI\PreachermanSpeech\runtime-manifest.json`. Its venv, model, temporary files,
-pip cache and Hugging Face cache are all on D:. It does not reserve CUDA memory used
+`Systran/faster-whisper-base` conversion. Release dependencies are pinned in
+`deployment/windows/speech-requirements.txt`; model revision and SHA-256 are in
+`deployment/windows/runtime-assets.json`. Its venv, model, temporary files and
+download cache stay under the selected runtime root. It does not reserve CUDA memory used
 by the character renderer or Breeze.
 
 The recognizer is a hidden stdin/stdout Python child of `preacherman-service.exe`.
