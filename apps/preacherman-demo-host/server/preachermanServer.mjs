@@ -7,6 +7,7 @@ import { createSpeechMotionService } from "./speechMotionService.mjs";
 import { createWindowsSpeech } from "./windowsSpeech.mjs";
 import { createBreezeSpeech } from "./breezeSpeech.mjs";
 import { createLocalSpeechRecognition } from "./localSpeechRecognition.mjs";
+import { resolveRuntimeInstallation } from "./runtimeInstallation.mjs";
 import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
@@ -97,6 +98,7 @@ function readJson(request, maxBytes = MAX_BODY_BYTES) {
 
 export function createPreachermanServer(options = {}) {
   const env = options.env ?? process.env;
+  const runtimeInstallation = resolveRuntimeInstallation({ env });
   const fetchImpl = options.fetchImpl ?? fetch;
   const cortanaVoiceTelemetry = createCortanaVoiceTelemetry({ env, fetchImpl });
   const packageRoot = resolve(env.PREACHERMAN_PACKAGE_ROOT || process.cwd());
@@ -1370,6 +1372,7 @@ export function createPreachermanServer(options = {}) {
     serviceName: "Speech2Motion",
   });
   const speechMotionService = createSpeechMotionService({ endpoint: env.PREACHERMAN_SPEECH_MOTION_HEALTH_URL,
+    compose: runtimeInstallation.speechMotionCompose, docker: runtimeInstallation.docker,
     managed: !env.PREACHERMAN_SPEECH_MOTION_HEALTH_URL && !env.PREACHERMAN_SPEECH_MOTION_WS_URL });
   const faceProxy = createBinaryWebSocketProxy({
     endpoint: env.PREACHERMAN_AUDIO2FACE_WS_URL
@@ -1379,7 +1382,7 @@ export function createPreachermanServer(options = {}) {
   const audioFaceService = createSpeechMotionService({
     endpoint: env.PREACHERMAN_AUDIO2FACE_HEALTH_URL ?? "http://127.0.0.1:18083/health",
     managed: !env.PREACHERMAN_AUDIO2FACE_HEALTH_URL && !env.PREACHERMAN_AUDIO2FACE_WS_URL,
-    compose: "D:\\Codex\\audio2face\\compose.yaml", port: 18083, serviceName: "Audio2Face",
+    compose: runtimeInstallation.audioFaceCompose, docker: runtimeInstallation.docker, port: 18083, serviceName: "Audio2Face",
   });
   const executionConnections = createExecutionConnections({
     file: join(dataDirectory, "execution-connections.v1.json"),
@@ -1388,9 +1391,9 @@ export function createPreachermanServer(options = {}) {
   });
   const codexConversation = options.codexConversation ?? createCodexConversation({ directory: join(dataDirectory, "chat-session") });
   const windowsSpeech = options.windowsSpeech ?? createWindowsSpeech();
-  const breezeSpeech = options.breezeSpeech ?? createBreezeSpeech({ previewDirectory: join(dataDirectory, "breeze-previews") });
+  const breezeSpeech = options.breezeSpeech ?? createBreezeSpeech({ root: runtimeInstallation.breezeRoot, previewDirectory: join(dataDirectory, "breeze-previews") });
   const characterConversation = createCharacterConversation({ file: join(dataDirectory, "characters.v1.json"), connections: executionConnections, codex: codexConversation, listAgents: () => agentAccessRuntime.listLocalAgents(), breeze: breezeSpeech, windowsSpeech, stateEngine: characterState });
-  const speechRecognition = options.speechRecognition ?? createLocalSpeechRecognition();
+  const speechRecognition = options.speechRecognition ?? createLocalSpeechRecognition({ root: runtimeInstallation.speechRoot });
   const workspaceSelection = createWorkspaceSelection({
     file: join(dataDirectory, "local-agent-workspaces.v1.json"),
     ...(options.workspacePicker ? { picker: options.workspacePicker } : {}),

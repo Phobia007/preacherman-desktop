@@ -3,8 +3,8 @@ import { access } from "node:fs/promises";
 import { connect } from "node:net";
 import { setTimeout as delay } from "node:timers/promises";
 import { binaryServiceHealth } from "./speechMotionProxy.mjs";
+import { resolveRuntimeInstallation } from "./runtimeInstallation.mjs";
 
-const docker = "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe";
 function occupied(port) {
   return new Promise(resolve => {
     const socket = connect({ host: "127.0.0.1", port });
@@ -14,7 +14,7 @@ function occupied(port) {
   });
 }
 export function createSpeechMotionService({ endpoint, managed = !endpoint, health = () => binaryServiceHealth(endpoint),
-  compose = "D:\\Codex\\speech2motion\\compose.yaml", port = 18084, serviceName = "Speech2Motion",
+  compose = resolveRuntimeInstallation().speechMotionCompose, docker = resolveRuntimeInstallation().docker, port = 18084, serviceName = "Speech2Motion",
   run = (args, signal) => new Promise((resolve, reject) => execFile(docker, args,
     { windowsHide: true, timeout: 45000, maxBuffer: 256 * 1024, signal }, error => error ? reject(error) : resolve())),
   exists = () => access(compose), portOccupied = () => occupied(port), pause = delay,

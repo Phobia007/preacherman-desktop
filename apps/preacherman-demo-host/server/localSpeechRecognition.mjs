@@ -3,12 +3,9 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { existsSync } from "node:fs";
 import { validateSpeechAudio } from "./windowsSpeech.mjs";
+import { resolveRuntimeInstallation } from "./runtimeInstallation.mjs";
 
 const fail = (message, statusCode = 503) => Object.assign(new Error(message), { statusCode });
-const acceleratedRoot = "D:\\AI\\PreachermanSpeech";
-const acceleratedPython = join(acceleratedRoot, "venv", "Scripts", "python.exe");
-const acceleratedModel = join(acceleratedRoot, "models", "base");
-const acceleratedInstalled = process.platform === "win32" && existsSync(acceleratedPython) && existsSync(join(acceleratedModel, "model.bin"));
 
 // An installed, offline capability, like the local CLI. Never download a model or save microphone audio.
 // The program is bundled in the sidecar; all input is JSON on stdin, never executable code.
@@ -87,7 +84,9 @@ for line in sys.stdin:
 
 // One owned Python worker, no listening port. It reuses the CPU model across turns;
 // close(), a failed/cancelled request, or 90 seconds idle stop this exact child.
-export function createLocalSpeechRecognition({ spawnImpl = spawn, engine = acceleratedInstalled ? "faster-whisper" : "whisper",
+export function createLocalSpeechRecognition({ spawnImpl = spawn, root = resolveRuntimeInstallation().speechRoot,
+  acceleratedPython = join(root, "venv", "Scripts", "python.exe"), acceleratedModel = join(root, "models", "base"),
+  engine = process.platform === "win32" && existsSync(acceleratedPython) && existsSync(join(acceleratedModel, "model.bin")) ? "faster-whisper" : "whisper",
   python = engine === "faster-whisper" ? acceleratedPython : "python.exe",
   modelPath = engine === "faster-whisper" ? acceleratedModel : join(homedir(), ".cache", "whisper", "base.pt"),
   timeoutMs = 35000, idleMs = 90000 } = {}) {

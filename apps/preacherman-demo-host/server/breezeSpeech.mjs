@@ -4,12 +4,13 @@ import { createHash } from "node:crypto";
 import { join } from "node:path";
 import { describeBreezeVoice } from "./voiceIdentity.mjs";
 import { createVoicePreviewCache } from "./voicePreviewCache.mjs";
+import { resolveRuntimeInstallation } from "./runtimeInstallation.mjs";
 
 export const BREEZE_URL = "http://127.0.0.1:18760";
 const fail = (message, statusCode = 503) => Object.assign(new Error(message), { statusCode });
 
 // The installed service owns its model and lifetime. Never accept executable paths or URLs from the browser.
-export function createBreezeSpeech({ request = fetch, platform = process.platform, spawnImpl = spawn, accessImpl = access, previewDirectory, previewTimeoutMs = 15000, startupTimeoutMs = 190000 } = {}) {
+export function createBreezeSpeech({ request = fetch, platform = process.platform, root = resolveRuntimeInstallation().breezeRoot, spawnImpl = spawn, accessImpl = access, previewDirectory, previewTimeoutMs = 15000, startupTimeoutMs = 190000 } = {}) {
   let starting = null;
   let closed = false;
   const children = new Set();
@@ -36,7 +37,7 @@ export function createBreezeSpeech({ request = fetch, platform = process.platfor
       id: `breeze:${v.id}`, voiceId: v.id, name: v.id, description: typeof v.description === "string" ? v.description : "",
       ...describeBreezeVoice(v),
       revision: createHash("sha256").update(JSON.stringify([v.frames, v.ref_text, v.metadata,
-        platform === "win32" ? await stat(join("D:\\AI\\Breeze-TTS-2\\voices", v.id + ".breeze")).then(s => [s.size, s.mtimeMs]).catch(() => null) : null])).digest("hex"),
+        platform === "win32" ? await stat(join(root, "voices", v.id + ".breeze")).then(s => [s.size, s.mtimeMs]).catch(() => null) : null])).digest("hex"),
       provider: "breeze", model: "Breeze-TTS-2", hasPreview: true, source: "breeze",
     })));
   }
@@ -63,8 +64,8 @@ export function createBreezeSpeech({ request = fetch, platform = process.platfor
       // waits for the same startup rather than rendering an empty collection.
       try { return await readVoices(); } catch (error) { if (error.statusCode !== 503) throw error; }
       if (platform !== "win32") throw fail("Start Breeze TTS 2 before connecting.");
-      const launcher = "D:\\AI\\Breeze-TTS-2\\Start-Breeze.ps1";
-      await accessImpl(launcher).catch(() => { throw fail("Breeze is not installed at D:\\AI\\Breeze-TTS-2."); });
+      const launcher = join(root, "Start-Breeze.ps1");
+      await accessImpl(launcher).catch(() => { throw fail("Breeze is not installed. Run the Preacherman service installer, then reconnect."); });
       if (closed) throw fail("Breeze connection is closed.");
       await new Promise((resolve, reject) => {
         const child = spawnImpl("powershell.exe", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", launcher, "-NoBrowser"], { windowsHide: true, shell: false, stdio: "ignore" });

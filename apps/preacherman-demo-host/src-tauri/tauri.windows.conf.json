@@ -1,14 +1,16 @@
 {
   "bundle": {
     "externalBin": ["binaries/preacherman-service"],
+    "resources": {"../../../deployment/windows/": "service-setup/"},
     "windows": {
       "webviewInstallMode": {
         "type": "embedBootstrapper"
       },
       "nsis": {
-        "displayLanguageSelector": true,
+        "displayLanguageSelector": false,
         "installMode": "currentUser",
-        "languages": ["SimpChinese", "English"]
+        "languages": ["English"],
+        "installerHooks": "../../../deployment/windows/installer-hooks.nsh"
       }
     }
   }

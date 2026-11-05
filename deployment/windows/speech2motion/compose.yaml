@@ -1,0 +1,21 @@
+name: preacherman-speech2motion
+services:
+  speech2motion:
+    image: dlp3d/speech2motion@sha256:e24e5e27fd8506389128a295878b745b6ba93e326fb2912ddc056836bf8aeebf
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:18084:18084"
+    volumes:
+      - ./data:/workspace/speech2motion/data:ro
+      - ./logs:/workspace/speech2motion/logs
+    healthcheck:
+      test: ["CMD", "/opt/venv/bin/python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:18084/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

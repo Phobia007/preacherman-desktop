@@ -1,6 +1,6 @@
 [package]
 name = "preacherman-demo-host"
-version = "0.1.0"
+version = "0.2.0"
 description = "Minimal Tauri host for the first Preacherman Figma workspace surface"
 authors = ["Preacherman"]
 edition = "2021"

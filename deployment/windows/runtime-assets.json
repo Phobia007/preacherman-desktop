@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "python": {
+    "file": "python.3.12.3.nupkg",
+    "url": "https://www.nuget.org/api/v2/package/python/3.12.3",
+    "sha256": "03c935cd2f2eceb7de3cfb2eb98e163ab21eec12dce78eb833d15bc4dd3ecbf3"
+  },
+  "whisper": {
+    "repository": "Systran/faster-whisper-base",
+    "revision": "ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66",
+    "files": {
+      "config.json": "56a6d8110d311f19c8f0471e562832c7527f146b567275bfca59fcf7c184da9a",
+      "model.bin": "d01c3014881c9c6f3133c182f3d2887eb6ca1c789a7538c5c007196857a0a6a9",
+      "tokenizer.json": "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab",
+      "vocabulary.txt": "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913"
+    }
+  },
+  "motion": {
+    "file": "motion_data.zip",
+    "url": "https://drive.google.com/file/d/112pnjuIuNqADS-fAT6RUIAVPtb3VlWlq/view",
+    "mirror": "https://pan.baidu.com/s/1YCisRewRQQdYT-GzCZxu-w?pwd=wwqm",
+    "sha256": "a2b0db758aa3c9ebefdbb46b3166cfbe2d4dca9352f5ea8c1b5142ccc63c0ab5",
+    "image": "dlp3d/speech2motion@sha256:e24e5e27fd8506389128a295878b745b6ba93e326fb2912ddc056836bf8aeebf"
+  },
+  "face": {
+    "file": "unitalker_v0.4.0_base.onnx",
+    "url": "https://github.com/LazyBusyYang/CatStream/releases/download/a2f_cicd_files/unitalker_v0.4.0_base.onnx",
+    "sha256": "2f446ccaa0d5e901472e7214cdccd2373619d9cc5542c42abba47b29fd1f3fce",
+    "image": "dlp3d/audio2face@sha256:0376882ad687ba024b01554103a797aa849bd4763abc0323caf97e2dc4786517"
+  },
+  "breezeRuntime": {
+    "file": "breeze-tts-2-v0.1.3-windows-x64-vulkan.zip",
+    "url": "https://github.com/HoppouAI/Breeze-TTS-2.cpp/releases/download/v0.1.3/breeze-tts-2-v0.1.3-windows-x64-vulkan.zip",
+    "sha256": "d31feee5380e0609dc44b537d22cbe4f3cf8e93495756f3a580d8b448db79f7f"
+  },
+  "breezeModel": {
+    "file": "breeze-tts-2-q8_0.gguf",
+    "url": "https://huggingface.co/HoppouAI/Breeze-TTS-2.cpp/resolve/81b22bad9f05b99970e30c5ee5e4bbc52fedf2f8/breeze-tts-2-q8_0.gguf",
+    "sha256": "a02bcc4b69b0601032727f8040c4942149b1b73aa0f69022fe5aaa6a8f0ef879",
+    "license": "https://huggingface.co/BreezeBlue/Breeze-TTS-2/blob/main/LICENSE"
+  }
+}

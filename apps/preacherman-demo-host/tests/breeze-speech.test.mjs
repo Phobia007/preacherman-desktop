@@ -29,13 +29,13 @@ test("cold startup is shared with early voice reads and manual reconnect without
   let online = false, launches = 0, spawned;
   const ready = new Promise(resolve => { spawned = resolve; });
   const child = new EventEmitter(); child.kill = () => child.emit("close", 1);
-  const service = createBreezeSpeech({ platform: "win32", accessImpl: async () => {},
+  const service = createBreezeSpeech({ platform: "win32", root: join(tmpdir(), "Preacherman Runtime", "breeze"), accessImpl: async () => {},
     request: async () => { if (!online) throw Error("offline"); return Response.json([{ id: "cortana", saved: true }]); },
     spawnImpl(command, args, options) {
       launches++;
       assert.equal(command, "powershell.exe");
       assert.equal(args.at(-1), "-NoBrowser");
-      assert.equal(args.at(-2), "D:\\AI\\Breeze-TTS-2\\Start-Breeze.ps1");
+      assert.equal(args.at(-2), join(tmpdir(), "Preacherman Runtime", "breeze", "Start-Breeze.ps1"));
       assert.equal(options.windowsHide, true); assert.equal(options.shell, false);
       spawned(); return child;
     },

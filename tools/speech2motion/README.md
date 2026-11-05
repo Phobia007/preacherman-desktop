@@ -1,5 +1,10 @@
 # Speech2Motion local test integration
 
+> Legacy authoring/test setup. The desktop now uses the pinned Docker service.
+> For new installations use [the Windows service installer](../../deployment/windows/README.md).
+> The old temporary Python environment is disposable and can be recreated with
+> the setup script below; it is not required by the current desktop application.
+
 This directory keeps the reproducible Preacherman-side setup for the local
 Speech2Motion test service. The upstream checkout, Python environment, motion
 database, logs, and generated motion data live under `.runtime-tmp/speech2motion`

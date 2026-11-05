@@ -21,3 +21,18 @@ __pycache__/
 .DS_Store
 Thumbs.db
 /supabase/.temp/
+
+# Machine-local runtimes, browser caches, release archives and private user data.
+/.remotion/
+**/deployment-backups/
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.sample
+!**/.env.*.example
+!**/.env.*.sample
+**/.preacherman-demo/
+/deployment/downloads/
+/deployment/runtime/
+*.breeze
+*.part
