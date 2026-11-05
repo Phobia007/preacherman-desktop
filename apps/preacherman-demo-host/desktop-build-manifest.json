@@ -1,48 +1,45 @@
 {
   "schemaVersion": 1,
-  "buildId": "cortana-lowerbody-20261105",
+  "buildId": "plain-backdrop-20261105",
   "productVersion": "0.1.0",
-  "sourceTask": "Connect Cortana pelvis, legs, knees, ankles and toes to speech motion, with bounded support correction and existing smooth transitions",
+  "sourceTask": "Remove the shared We Bring a New statement and background monogram; use solid scene colors in both appearance modes",
   "sourceThread": "01a16498-2e4a-75d3-9d75-08df47e80be0",
-  "sourceState": "Cortana-specific anatomical lower-body retargeting. Authored idle, textures, other character bindings and active-character ownership preserved.",
-  "sourceCommit": "b59fed9ff477ffcad9bcc227e52e9c7f9fab47e3",
+  "sourceState": "Shared decorative backdrop and light-mode gradient removed. Semantic light/dark canvas, models, authored content, navigation branding and controls preserved.",
+  "sourceCommit": "0a9fc4c28d73c5762e1765c717e1ce717e40c6d2",
   "sourceWorkspace": "D:/preacherman",
   "shortcutPath": "C:/Users/Administrator/Desktop/Preacherman Desktop Demo.lnk",
   "executablePath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-demo-host.exe",
-  "builtAt": "2026-11-05T11:37:50.0939346Z",
-  "deployedAt": "2026-11-05T11:40:28.0922229Z",
-  "verifiedAt": "2026-11-05T11:43:37.922756+00:00",
-  "sizeBytes": 606702592,
-  "sha256": "6510E279D71C592033BD45BF133E1D08987EDCA23A59C9108B1B27B1F3B4C3B9",
+  "builtAt": "2026-11-05T12:24:30.9441949Z",
+  "deployedAt": "2026-11-05T12:25:46.5540206Z",
+  "verifiedAt": "2026-11-05T12:31:16.386402+00:00",
+  "sizeBytes": 606675968,
+  "sha256": "A74C58CA300C8539391000D0BF351D604BE6DD69F35A41CEF690F54458F524AF",
   "sidecarPath": "D:/preacherman/apps/preacherman-demo-host/src-tauri/target/release/preacherman-service.exe",
   "sidecarBuiltAt": "2026-11-04T15:37:18.803442+00:00",
   "sidecarSizeBytes": 93308416,
   "sidecarSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
-  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lowerbody-before-20261105-193939\\preacherman-demo-host.exe",
-  "backupSha256": "1FE7332A74FF7B6C44F0D8AE0EFD0225545322D5D8CDF765E03E66A4DA2609AD",
-  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lowerbody-before-20261105-193939\\preacherman-service.exe",
+  "backupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\plain-backdrop-before-20261105-202541\\preacherman-demo-host.exe",
+  "backupSha256": "6510E279D71C592033BD45BF133E1D08987EDCA23A59C9108B1B27B1F3B4C3B9",
+  "sidecarBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\plain-backdrop-before-20261105-202541\\preacherman-service.exe",
   "sidecarBackupSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
-  "rollbackBaselineCommit": "0be1239",
-  "previousVerificationCommit": "acd77d94fa286cb39f6a31ef391affaf6682a6e3",
+  "rollbackBaselineCommit": "1f2f022",
+  "previousVerificationCommit": "b59fed9ff477ffcad9bcc227e52e9c7f9fab47e3",
   "verification": {
     "status": "passed-with-recorded-baseline-diagnostics",
     "sourceChecks": {
       "passed": true,
-      "focusedTests": 22,
-      "suites": {
-        "cortanaMotionCalibration": 8,
-        "characterMotion": 5,
-        "speechMotionRuntime": 3,
-        "speech2motionIntegration": 4,
-        "rendererMotionStream": 2
-      },
+      "focusedTests": 9,
       "hostTypecheck": true,
-      "rendererBuildAndTypecheck": true,
-      "recordedFramePreview": true
+      "baselineFailures": {
+        "suite": "persistent-companion-scene.test.mjs",
+        "count": 5,
+        "confirmedUnchangedAt": "1f2f022",
+        "evidence": "D:\\preacherman\\output\\plain-backdrop-20261105\\baseline-tests.log"
+      }
     },
     "backendChanged": false,
     "sidecarRebuilt": false,
-    "nativeFlow": "Canonical shortcut cold Home launch and eight core routes in both themes. Real Speech2Motion Natural preview in both themes, interruption and return to idle; actual Cortana voice playback with body motion. Full-body visual verification. Original activation and motion preferences preserved.",
+    "nativeFlow": "Canonical shortcut cold Home launch and eight core routes in both themes; Cortana detail opens. Background decoration absent, no gradient/pseudo overlay, and exact solid background pixels confirmed in each appearance. Native window controls verified; original appearance restored.",
     "routes": [
       {
         "mode": "dark",
@@ -141,22 +138,44 @@
         "ready": true
       }
     ],
-    "motion": [
+    "backgrounds": [
       {
         "mode": "dark",
-        "frames": 7,
-        "interrupted": true
+        "background": "rgb(1, 4, 9)",
+        "image": "none",
+        "before": "none",
+        "after": "none"
       },
       {
         "mode": "light",
-        "frames": 7,
-        "interrupted": false
+        "background": "rgb(237, 240, 242)",
+        "image": "none",
+        "before": "none",
+        "after": "none"
       }
     ],
-    "spokenReply": {
-      "passed": true,
-      "motionFrames": 7
-    },
+    "pixels": [
+      {
+        "mode": "dark",
+        "solidRGB": [
+          1,
+          4,
+          9
+        ],
+        "backgroundSampleCount": 16,
+        "passed": true
+      },
+      {
+        "mode": "light",
+        "solidRGB": [
+          237,
+          240,
+          242
+        ],
+        "backgroundSampleCount": 16,
+        "passed": true
+      }
+    ],
     "windowControls": {
       "restore": true,
       "maximize": true,
@@ -165,56 +184,85 @@
       "passed": true
     },
     "resourceSample": {
-      "RootPID": 52676,
+      "RootPID": 50692,
       "OwnedPIDs": [
-        52676,
-        55368,
-        55468,
-        46348,
-        54424,
-        51204,
-        49784,
-        61328,
-        1712,
-        13696,
-        52876
+        50692,
+        59508,
+        55584,
+        48980,
+        51192,
+        48924,
+        62524,
+        53324,
+        53964,
+        61964,
+        54332
       ],
-      "NormalizedCpuPercent": 3.91,
-      "WorkingSetMiB": 2240,
-      "SampleSeconds": 5.1171456,
-      "MeasuredAt": "2026-11-05T19:42:44.8999863+08:00"
+      "NormalizedCpuPercent": 3.94,
+      "WorkingSetMiB": 2027,
+      "SampleSeconds": 5.070192,
+      "MeasuredAt": "2026-11-05T20:30:49.4762582+08:00"
     },
     "newErrors": [],
     "localAssetFailures": [],
     "observedErrors": [
+      "Hydration completed but contains mismatches.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=16&w=16' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=32&w=32' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=96&w=96' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=192&w=192' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=57&w=57' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=60&w=60' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=72&w=72' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=76&w=76' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=114&w=114' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=120&w=120' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=144&w=144' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=152&w=152' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786371616-face.png?auto=format&h=180&w=180' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://www.datocms-assets.com/223669/1786432901-dlc-thumbnail.jpg?auto=format&fit=max&w=1200' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Connecting to 'https://graphql.datocms.com/' violates the following Content Security Policy directive: \"connect-src 'self' https://gzqmjzybaosxhkfgbxaz.supabase.co ipc: http://ipc.localhost blob: http://127.0.0.1:* ws://127.0.0.1:*\". The action has been blocked.",
+      "Fetch API cannot load https://graphql.datocms.com/. Refused to connect because it violates the document's Content Security Policy.",
+      "Loading media from  'https://stream.mux.com/e79MwNWsJkhoNzhR02UVL3LRe1wexvcA9/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/X3NsXaLph6rhK6M9kgi24PWL9vfH7SSf/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading media from  'https://stream.mux.com/9AaOR02f5lWzxopxZCg54ZRXsxGe4SSE7/high.mp4' violates the following Content Security Policy directive: \"media-src 'self' data: blob: https://storage.googleapis.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/BV6q01JxClCQwHfNI2sVS76jGjg5isqkq/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/wt002Ew1EVcKEXR5K4PkB9G5l1OoW9jiV/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/Hb00nsAmF7R01kcTOmRr2tgpX3WjZkVYPN/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
+      "Loading the image 'https://image.mux.com/F7soo79aHLgeYDtjug6X599kMSZoBja4/thumbnail.jpg' violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://avatars.githubusercontent.com\". The action has been blocked.",
       "Failed to load resource: net::ERR_CONNECTION_CLOSED"
     ],
     "limitations": [
-      "Bounded in-place lower-body motion and support correction, not walking navigation or a general foot IK/collision solver. Existing arm/body intersections are outside this change."
+      "Five pre-existing persistent-companion-scene source assertions also fail against the previous committed source; unaffected by this change."
     ],
     "evidence": [
-      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\native-report.json",
-      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\source-checks.json",
-      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\window-lifecycle.json",
-      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\resources.json",
-      "D:\\preacherman\\output\\cortana-lowerbody-20261105\\preview-report.json"
+      "D:\\preacherman\\output\\plain-backdrop-20261105\\native-report.json",
+      "D:\\preacherman\\output\\plain-backdrop-20261105\\source-checks.json",
+      "D:\\preacherman\\output\\plain-backdrop-20261105\\window-lifecycle.json",
+      "D:\\preacherman\\output\\plain-backdrop-20261105\\resources.json",
+      "D:\\preacherman\\output\\plain-backdrop-20261105\\pixels.json",
+      "D:\\preacherman\\output\\plain-backdrop-20261105\\home-light.png",
+      "D:\\preacherman\\output\\plain-backdrop-20261105\\home-dark.png"
     ],
     "normalLaunch": {
       "Shortcut": "C:\\Users\\Administrator\\Desktop\\Preacherman Desktop Demo.lnk",
       "Target": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\preacherman-demo-host.exe",
-      "Sha256": "6510E279D71C592033BD45BF133E1D08987EDCA23A59C9108B1B27B1F3B4C3B9",
-      "PID": 50148,
+      "Sha256": "A74C58CA300C8539391000D0BF351D604BE6DD69F35A41CEF690F54458F524AF",
+      "PID": 62152,
       "WindowTitle": "Preacherman Desktop Demo",
       "Responding": true,
       "DebugPortOpen": false,
-      "VerifiedAt": "2026-11-05T19:43:46.8799848+08:00"
+      "VerifiedAt": "2026-11-05T20:31:22.4464159+08:00"
     },
     "backupRetention": {
       "applied": true,
       "backupsKept": 3,
       "removedSets": 1,
-      "evidence": "D:\\preacherman\\output\\cortana-lowerbody-20261105\\prune.log"
-    }
+      "evidence": "D:\\preacherman\\output\\plain-backdrop-20261105\\prune.log"
+    },
+    "consoleBaselineComparison": "D:\\preacherman\\output\\plain-backdrop-20261105\\console-baseline-comparison.json",
+    "nativeCheckNote": "Initial keyboard-only navigation run encountered drawer auto-close; pointer kept inside drawer for the complete cold-launch run. All sixteen route states passed. Console messages matched exact prior native diagnostics."
   },
   "releaseAttempts": [
     {
@@ -1590,9 +1638,20 @@
       "verifiedAt": "2026-11-05T11:43:37.922756+00:00",
       "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lowerbody-before-20261105-193939",
       "build": "Incremental production Tauri executable with verified unchanged sidecar; preserved Cargo cache; no installer."
+    },
+    {
+      "buildId": "plain-backdrop-20261105",
+      "sourceCommit": "0a9fc4c28d73c5762e1765c717e1ce717e40c6d2",
+      "sha256": "A74C58CA300C8539391000D0BF351D604BE6DD69F35A41CEF690F54458F524AF",
+      "sidecarSha256": "BC9338DFCD568E3D3897343F462E1DDB89387B5F8D1B0B705104C43D74BD4348",
+      "status": "passed-with-recorded-baseline-diagnostics",
+      "deployedAt": "2026-11-05T12:25:46.5540206Z",
+      "verifiedAt": "2026-11-05T12:31:16.386402+00:00",
+      "backup": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\plain-backdrop-before-20261105-202541",
+      "build": "Incremental production Tauri executable with verified unchanged sidecar; preserved Cargo cache; no installer."
     }
   ],
-  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\cortana-lowerbody-before-20261105-193939\\desktop-build-manifest.json",
+  "canonicalManifestBackupPath": "D:\\preacherman\\apps\\preacherman-demo-host\\src-tauri\\target\\release\\deployment-backups\\plain-backdrop-before-20261105-202541\\desktop-build-manifest.json",
   "rollbackHistory": [
     {
       "at": "2026-09-09T11:23:27.161Z",
