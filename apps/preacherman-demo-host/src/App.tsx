@@ -13,7 +13,6 @@ import { accountAuth } from "./auth/accountAuth";
 import { demoAccount } from "./auth/demoAccount";
 import { hasAccountAccess, requiresAccount } from "./auth/accountAccess";
 import { AccountGate } from "./surfaces/account/AccountGate";
-import { HomeBackdrop } from "./surfaces/home/HomeBackdrop";
 import "@preacherman/surface-skin/styles.css";
 import { createDemoActionLog } from "./actionLog";
 import { PreachermanFeaturePanel } from "./preacherman/PreachermanFeaturePanel";
@@ -414,7 +413,6 @@ export function App({ enteringOnMount = false }: AppProps = {}) {
       locale={preferences.locale}
       onNavigate={handleSurfaceNavigate}
       scene={<>
-        <HomeBackdrop />
         {activeSurfaceType === "account" ? <AccountFrost appearance={preferences.appearance} /> : null}
         {hasAccount && (sceneModelId || activeSurfaceType === "market") ? (
         <CortanaModelStage
